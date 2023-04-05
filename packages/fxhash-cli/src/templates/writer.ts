@@ -15,7 +15,7 @@ export function writeProjectToDisk({
     writeFileSync(path.join(rootDir, fileName), fileContent)
   })
   staticFiles.forEach(([fileName, staticFile]) => {
-    cpSync(path.join(__dirname, staticFile), path.join(rootDir, fileName), {
+    cpSync(path.join(__dirname, '..', staticFile), path.join(rootDir, fileName), {
       recursive: true,
     })
   })

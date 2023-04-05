@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { snippet_v1, snippet_v2 } from "@fxhash/fxhash-snippet"
 import { simpleTemplate } from "templates/simple/index"
 import { webpackTemplate } from "templates/webpack/index"
 import { writeProjectToDisk } from "templates/writer"
@@ -34,11 +33,16 @@ async function main() {
       },
     ]
   )
+  try {
+    writeProjectToDisk({
+      name,
+      template: TEMPLATE_CHOICES[template],
+    })
 
-  writeProjectToDisk({
-    name,
-    template: TEMPLATE_CHOICES[template],
-  })
+    console.log("New fx(hash) project created successfully!")
+  } catch (error: any) {
+    console.error(error.message)
+  }
 }
 
 main()

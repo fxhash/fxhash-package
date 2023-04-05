@@ -6,7 +6,9 @@ export const baseHtmlTemplate: BaseHtmlTemplate = `
         <head>
             <title><%- name %></title>
             <meta charset="utf-8">
-            <%- snippet %>
+            <script id="fxhash-snippet">
+                <%- snippet %>
+            </script>
             <%- head %>
         </head>
         <body> 

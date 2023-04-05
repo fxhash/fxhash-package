@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/index.js",
   "bin": {
-    "create-fxhash-project": "./dist/create-project.js"
+    "create-fxhash-project": "./dist/create-project.js",
+    "update-fxhash-snippet": "./dist/update-snippet.js"
   },
   "scripts": {
-    "start": "./dist/create-project.js",
     "clean": "rm -rf dist",
     "copy-static": "cp -rf src/static dist/static",
     "build": "npm run clean && tsc --declaration && tsc-alias && npm run copy-static",
@@ -19,7 +19,8 @@
   "dependencies": {
     "@fxhash/fxhash-snippet": "*",
     "ejs": "^3.1.9",
-    "inquirer": "^9.1.5"
+    "inquirer": "^9.1.5",
+    "inquirer-fuzzy-path": "^2.3.0"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.2",
