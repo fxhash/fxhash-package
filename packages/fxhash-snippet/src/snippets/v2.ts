@@ -1,5 +1,4 @@
 export const snippet_v2: string = `
-<script id="fxhash-snippet">
 //---- do not edit the following code (you can indent as you wish)
   let search = new URLSearchParams(window.location.search)
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
@@ -328,5 +327,4 @@ export const snippet_v2: string = `
   // END NEW
 
   //---- /do not edit the following code
-</script>
 `
