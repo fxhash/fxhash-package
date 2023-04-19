@@ -33,10 +33,11 @@ export const getFiles = (entry, extensions = [], excludeExtensions = []) => {
 }
 
 const extensions = ['.js', '.ts', '.jsx', '.tsx'];
+const excludes = ['.d.ts', '.test.js', '.test.ts', '.test.jsx', '.test.tsx']
 
 export default {
   input: [
-    ...getFiles('./src', extensions, ['.d.ts']),
+    ...getFiles('./src', extensions, excludes),
   ],
   output: {
     dir: "dist",
