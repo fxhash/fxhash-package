@@ -6,10 +6,13 @@ import { useContext } from "react"
 import { MainContext } from "context/MainContext"
 import { FxParamsContext } from "@fxhash/params/Context"
 import { FxParamDefinition, FxParamType } from "@fxhash/params/types"
+
 interface Props {
   url: string
   className?: string
 }
+
+
 export function Frame({ url, className }: Props) {
   const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
