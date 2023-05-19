@@ -12,7 +12,6 @@ interface Props {
   className?: string
 }
 
-
 export function Frame({ url, className }: Props) {
   const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)

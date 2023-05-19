@@ -46,7 +46,7 @@ export class WalletManager {
     // !todo: REMOVE THE SHUFFLE once tests are done
     // for now 1/2 of the traffic is going to go through the fxhash RPC endpoint
     // to test if it works properly with some pretty high traffic
-    let RPCS = [...process.env.NEXT_PUBLIC_RPC_NODES!.split(",")]
+    let RPCS = [...RPC_NODES!.split(",")]
     // 1/2 chances to shuffle the array, and so it's about 1/2 to always have the
     // fxhash RPC first
     // if (Math.random() < 1) {
@@ -57,7 +57,7 @@ export class WalletManager {
     this.instanciateBeaconWallet()
   }
 
-  instanciateBeaconWallet() {
+  instanciateBeaconWallet(): void {
     this.beaconWallet = new BeaconWallet({
       name: "fxhash",
       iconUrl: "https://tezostaquito.io/img/favicon.png",
@@ -78,7 +78,7 @@ export class WalletManager {
    * construct a fake wallet provider using autonomyIRL to be able to reuse
    * our beacon wallet implementation
    */
-  async connectAutonomyWallet() {
+  async connectAutonomyWallet(): Promise<string> {
     const { result: pkh } = await autonomyIRL.getAddress({
       chain: autonomyIRL.chain.tez,
     })
@@ -142,7 +142,7 @@ export class WalletManager {
     }
   }
 
-  async disconnect() {
+  async disconnect(): Promise<void> {
     try {
       await this.getBeaconWallet().disconnect()
     } catch (_) {
@@ -174,7 +174,7 @@ export class WalletManager {
     }
   }
 
-  cycleRpcNode() {
+  cycleRpcNode(): void {
     // re-arrange the RPC nodes array
     const out = this.rpcNodes.shift()!
     this.rpcNodes.push(out)
@@ -201,7 +201,7 @@ export class WalletManager {
     OperationClass: TContractOperation<Params>,
     params: Params,
     statusCallback: ContractOperationCallback
-  ) {
+  ): Promise<any> {
     // instanciate the class
     const contractOperation = new OperationClass(this, params)
 

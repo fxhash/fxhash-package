@@ -10,7 +10,7 @@ import {
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { IReserve } from "../../types/entities/Reserve"
 import { Collaboration, UserType } from "../../types/entities/User"
-import { mapReserveDefinition } from "utils/mapReserveDefinition"
+import { mapReserveDefinition } from "utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
 import { transformPricingFormToNumbers } from "../../utils/transformers/pricing"

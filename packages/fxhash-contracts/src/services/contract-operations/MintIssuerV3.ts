@@ -15,7 +15,7 @@ import {
 } from "../../types/Contracts"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
 import { MintGenerativeData } from "../../types/Mint"
-import { mapReserveDefinition } from "utils/mapReserveDefinition"
+import { mapReserveDefinition } from "utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"

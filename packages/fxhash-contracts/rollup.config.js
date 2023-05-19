@@ -5,6 +5,8 @@ import postCSS from "rollup-plugin-postcss"
 import peerDeps from "rollup-plugin-peer-deps-external"
 import json from '@rollup/plugin-json';
 import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
 
 export const getFiles = (entry, extensions = [], excludeExtensions = []) => {
   let fileNames = []
@@ -36,10 +38,18 @@ export const getFiles = (entry, extensions = [], excludeExtensions = []) => {
 const extensions = ['.js', '.ts', '.jsx', '.tsx'];
 const excludes = ['.d.ts', '.test.js', '.test.ts', '.test.jsx', '.test.tsx']
 
+const files = getFiles('./src', extensions, excludes).reduce((acc, f) => {
+  const p = path.relative(
+    'src',
+    f.slice(0, f.length - path.extname(f).length)
+  );
+  console.log(f, p)
+  acc[p] = fileURLToPath(new URL(f, import.meta.url))
+  return acc
+}, {})
+
 export default {
-  input: [
-    ...getFiles('./src', extensions, excludes),
-  ],
+  input: files,
   output: {
     dir: "dist",
     format: "esm",
@@ -50,6 +60,7 @@ export default {
   external: [
     "@taquito/beacon-wallet",
     "@taquito/taquito",
+    "next"
   ],
   plugins: [
     peerDeps(),

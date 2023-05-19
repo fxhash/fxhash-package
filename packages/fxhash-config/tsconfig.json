@@ -1,19 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "ES2022",
+    "module": "Node16",
+    "lib": ["ES2022"],
     "moduleResolution": "node",
     "rootDir": "src",
     "baseUrl": "src",
     "outDir": "dist",
-    "jsx": "react-jsx",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "alwaysStrict": true,
@@ -22,16 +15,11 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
     "strictNullChecks": false,
-    "isolatedModules": true,
-    "declaration": true,
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  "types": [
-    "typePatches"
-  ]
+  "include": ["src/**/*", "__tests__/**/*"],
+  "exclude": ["src/static/**"]
 }
