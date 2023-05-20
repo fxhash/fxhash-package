@@ -1,9 +1,6 @@
 import { FxhashContracts } from "../types/Contracts"
 import { DeepPartial } from "../types/DeepPartial"
-import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
-import { User } from "../types/entities/User"
-import { ObjktMetadata } from "../types/Metadata"
 
 export function getGentkUrl(gentk: Objkt): string {
   return gentk.slug ? `/gentk/slug/${gentk.slug}` : `/gentk/${gentk.id}`

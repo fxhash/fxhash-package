@@ -1,28 +1,29 @@
+import { config } from "@fxhash/config"
 import { TzktOperation } from "../types/Tzkt"
 import { fetchRetry } from "../utils/fetchRetry"
 import { sleep } from "../utils/sleep"
 
 export const API_BLOCKCHAIN_CONTRACT_STORAGE = (address: string) =>
-  `${process.env.NEXT_PUBLIC_TZKT_API}contracts/${address}/storage`
+  `${config.TZKT_API}contracts/${address}/storage`
 
 export const API_BLOCKCHAIN_CONTRACT_DETAILS = (address: string) =>
-  `${process.env.NEXT_PUBLIC_TZKT_API}contracts/${address}`
+  `${config.TZKT_API}contracts/${address}`
 
-export const API_CYCLES_LIST = `${process.env.NEXT_PUBLIC_TZKT_API}bigmaps/updates\
-?contract=${process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_CYCLES}\
+export const API_CYCLES_LIST = `${config.TZKT_API}bigmaps/updates\
+?contract=${config.TZ_CT_ADDRESS_CYCLES}\
 &path=cycles\
 &action=add_key\
 &limit=500`
 
 export const API_OPERATION = (hash: string) =>
-  `${process.env.NEXT_PUBLIC_TZKT_API}operations/${hash}`
+  `${config.TZKT_API}operations/${hash}`
 
 export const API_BLOCKCHAIN_CONTRACT_OPERATIONS = (
   address: string,
   cursorId: number,
   entrypoints: string[],
   limit: number = 1000
-) => `${process.env.NEXT_PUBLIC_TZKT_API}operations/transactions\
+) => `${config.TZKT_API}operations/transactions\
 ?target=${address}\
 &entrypoint.in=${entrypoints.join(",")}\
 &offset.cr=${cursorId}\
@@ -98,8 +99,8 @@ export async function isOperationApplied(
 }
 
 export const isTicketUsed = async (ticketId: number) => {
-  const url = `${process.env.NEXT_PUBLIC_TZKT_API}operations/transactions\
-?target=${process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MINT_TICKETS_V3}\
+  const url = `${config.TZKT_API}operations/transactions\
+?target=${config.TZ_CT_ADDRESS_MINT_TICKETS_V3}\
 &entrypoint.in=consume&parameter.token_id=${ticketId}&status=applied&limit=1`
 
   const result = await fetchRetry(url)
@@ -108,8 +109,8 @@ export const isTicketUsed = async (ticketId: number) => {
 }
 
 export const isTicketOwner = async (ticketId: number, address: string) => {
-  const url = `${process.env.NEXT_PUBLIC_TZKT_API}contracts\
-/${process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MINT_TICKETS_V3}\
+  const url = `${config.TZKT_API}contracts\
+/${config.TZ_CT_ADDRESS_MINT_TICKETS_V3}\
 /bigmaps/ledger/keys?key=${ticketId}&select=value`
 
   const result = await fetchRetry(url)

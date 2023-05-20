@@ -3,6 +3,8 @@
  * (Live Minting Events)
  */
 
+import { config } from "@fxhash/config"
+
 interface IMintPassPayload {
   token: string
   project: number
@@ -11,7 +13,7 @@ interface IMintPassPayload {
 
 export async function apiEventsSignPayload(payload: IMintPassPayload): Promise<any> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/sign-payload`,
+    `${config.API_EVENTS_ROOT!}/sign-payload`,
     {
       method: "POST",
       body: JSON.stringify(payload),

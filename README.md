@@ -8,6 +8,5 @@ fx(hash) javascript monorepository using lerna.js
 
 ## Developing
 
-- `yarn build:watch` will run lerna watchmode and run `build` step only on the package that changed
 - `yarn build` will build all packages
-
+- `yarn build:watch` will run lerna watchmode and run `build` step only on the package that changed

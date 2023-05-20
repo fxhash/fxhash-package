@@ -2,6 +2,9 @@
   "name": "@fxhash/contracts",
   "version": "1.0.0",
   "module": "true",
+  "exports": {
+    "./*": "./dist/*"
+  },
   "typesVersions": {
     "*": {
       "*": [
@@ -16,7 +19,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && rollup -c --bundleConfigAsCjs",
-    "build:watch": "npm run clean && rollup -w --bundleConfigAsCjs",
+    "build:watch": "npm run clean && rollup -c -w --bundleConfigAsCjs --no-watch.clearScreen",
     "test": "jest"
   },
   "dependencies": {
@@ -30,12 +33,12 @@
     "autonomy-irl-js": "^1.0.0",
     "classnames": "^2.3.2",
     "lodash.debounce": "^4.0.8",
-    "use-async-effect": "^2.2.7"
+    "use-async-effect": "^2.2.7",
+    "next": "12.2.6"
   },
   "peerDependencies": {
     "@fxhash/gql": "*",
     "@fxhash/config": "*",
-    "next": "12.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

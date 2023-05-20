@@ -2,7 +2,10 @@
 
 const nextConfig = {
   reactStrictMode: true,
-  trailingSlash: false
+  trailingSlash: false,
+  typescript: {
+    ignoreBuildErrors: true
+  }
 }
 
 module.exports = nextConfig

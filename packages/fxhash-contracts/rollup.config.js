@@ -43,10 +43,11 @@ const files = getFiles('./src', extensions, excludes).reduce((acc, f) => {
     'src',
     f.slice(0, f.length - path.extname(f).length)
   );
-  console.log(f, p)
   acc[p] = fileURLToPath(new URL(f, import.meta.url))
   return acc
 }, {})
+
+console.log(files)
 
 export default {
   input: files,
@@ -60,7 +61,8 @@ export default {
   external: [
     "@taquito/beacon-wallet",
     "@taquito/taquito",
-    "next"
+    "next",
+    "next/router",
   ],
   plugins: [
     peerDeps(),

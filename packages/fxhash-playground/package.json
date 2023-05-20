@@ -1,5 +1,5 @@
 {
-  "name": "fxhash-playground",
+  "name": "@fxhash/playground",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
   "dependencies": {
     "@fxhash/contracts": "*",
     "@fxhash/gql": "*",
+    "@fxhash/config": "*",
     "@next/font": "13.1.6",
     "axios": "^1.3.4",
     "classnames": "^2.3.2",

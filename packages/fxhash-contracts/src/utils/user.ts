@@ -1,4 +1,5 @@
-import {
+import { config }from "@fxhash/config"
+import{
   Collaboration,
   ConnectedUser,
   User,
@@ -301,8 +302,8 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
 
 // a list of User aliases
 export const UserAliases: Record<string, Partial<User>> = {
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!]: {
-    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
+  [config.TZ_CT_ADDRESS_MARKETPLACE_V1]: {
+    id: config.TZ_CT_ADDRESS_MARKETPLACE_V1,
     name: "fxhash marketplace v1.0",
     description: "The official fxhash [beta] marketplace, first version.",
     authorizations: Object.values(UserAuthorization),
@@ -311,8 +312,8 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!]: {
-    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
+  [config.TZ_CT_ADDRESS_MARKETPLACE_V2]: {
+    id: config.TZ_CT_ADDRESS_MARKETPLACE_V2,
     name: "fxhash marketplace 2.0",
     description: "The official marketplace 2.0 of fxhash.",
     authorizations: Object.values(UserAuthorization),
@@ -321,8 +322,8 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!]: {
-    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!,
+  [config.TZ_CT_ADDRESS_MARKETPLACE_V3]: {
+    id: config.TZ_CT_ADDRESS_MARKETPLACE_V3,
     name: "fxhash marketplace 3.0",
     description: "The official marketplace 3.0 of fxhash.",
     authorizations: Object.values(UserAuthorization),
@@ -331,14 +332,14 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!]: {
+  [config.TZ_CT_ADDRESS_GENTK_V2]: {
     id: "The minter of each iteration will get some royalties",
     name: "Minter",
     platformOwned: true,
     preventLink: true,
   },
 
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V3!]: {
+  [config.TZ_CT_ADDRESS_GENTK_V3]: {
     id: "The minter of each iteration will get some royalties",
     name: "Minter",
     platformOwned: true,

@@ -1,7 +1,6 @@
 import {
   ProcessRawTokenFeatureErrorType,
   ProcessRawTokenFeatureErrorTypes,
-  RawTokenFeatures,
   TokenFeature,
 } from "../types/Metadata"
 

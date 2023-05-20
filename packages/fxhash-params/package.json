@@ -20,7 +20,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && rollup -c --bundleConfigAsCjs",
-    "build:watch": "npm run clean && rollup -w --bundleConfigAsCjs",
+    "build:watch": "npm run clean && rollup -c -w --bundleConfigAsCjs --no-watch.clearScreen",
     "test": "jest"
   },
   "dependencies": {

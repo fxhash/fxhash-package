@@ -12,6 +12,7 @@ import {
 } from "../types/Contracts"
 import { isOperationApplied } from "./Blockchain"
 import { TContractOperation } from "./contract-operations/ContractOperation"
+import { config } from "@fxhash/config"
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -46,7 +47,7 @@ export class WalletManager {
     // !todo: REMOVE THE SHUFFLE once tests are done
     // for now 1/2 of the traffic is going to go through the fxhash RPC endpoint
     // to test if it works properly with some pretty high traffic
-    let RPCS = [...RPC_NODES!.split(",")]
+    const RPCS = [...config.RPC_NODES.split(",")]
     // 1/2 chances to shuffle the array, and so it's about 1/2 to always have the
     // fxhash RPC first
     // if (Math.random() < 1) {
@@ -62,7 +63,7 @@ export class WalletManager {
       name: "fxhash",
       iconUrl: "https://tezostaquito.io/img/favicon.png",
       // @ts-ignore
-      preferredNetwork: process.env.NEXT_PUBLIC_TZ_NET,
+      preferredNetwork: config.TZ_NET,
     })
   }
 
@@ -161,7 +162,7 @@ export class WalletManager {
       await this.getBeaconWallet().requestPermissions({
         network: {
           // @ts-ignore
-          type: process.env.NEXT_PUBLIC_TZ_NET,
+          type: config.TZ_NET,
         },
       })
 
