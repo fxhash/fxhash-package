@@ -1,0 +1,32 @@
+{
+  "name": "@fxhash/fxhash-cli",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "bin": {
+    "create-fxhash-project": "./dist/create-project.js",
+    "update-fxhash-snippet": "./dist/update-snippet.js"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "copy-static": "cp -rf src/static dist/static",
+    "build": "npm run clean && tsc --declaration && tsc-alias && npm run copy-static",
+    "build:watch": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\" \"node ./copy-static\")",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fxhash/fxhash-snippet": "*",
+    "ejs": "^3.1.9",
+    "inquirer": "^9.1.5",
+    "inquirer-fuzzy-path": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.2",
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^18.15.11",
+    "@types/prettier": "^2.7.2",
+    "chokidar": "^3.5.3"
+  }
+}
