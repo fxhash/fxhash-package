@@ -65,6 +65,9 @@ export interface IFxhashApis {
         backend: string;
         aggregator: string;
     };
+    events: {
+        liveBackend: string;
+    };
 }
 export interface IFxhashNetworkConfig {
     network: string;

@@ -67,6 +67,9 @@ export interface IFxhashApis {
     backend: string
     aggregator: string
   }
+  events: {
+    liveBackend: string
+  }
 }
 
 export interface IFxhashNetworkConfig {
@@ -243,6 +246,9 @@ const devApis: IFxhashApis = {
     backend: "https://events.fxhash-dev.xyz",
     aggregator: "_NONE",
   },
+  events: {
+    liveBackend: "_NONE",
+  },
 }
 
 // list of APIs prod leverages
@@ -270,6 +276,9 @@ const prdApis: IFxhashApis = {
   dashboard: {
     backend: "https://events.fxhash.xyz",
     aggregator: "NONE",
+  },
+  events: {
+    liveBackend: "_NONE",
   },
 }
 

@@ -118,6 +118,9 @@ const devApis = {
         backend: "https://events.fxhash-dev.xyz",
         aggregator: "_NONE",
     },
+    events: {
+        liveBackend: "_NONE",
+    },
 };
 // list of APIs prod leverages
 const prdApis = {
@@ -141,6 +144,9 @@ const prdApis = {
     dashboard: {
         backend: "https://events.fxhash.xyz",
         aggregator: "NONE",
+    },
+    events: {
+        liveBackend: "_NONE",
     },
 };
 exports.FxhashConfig = {
