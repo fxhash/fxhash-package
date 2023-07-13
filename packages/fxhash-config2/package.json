@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/**/*"],
+  "files": [
+    "dist/**/*"
+  ],
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist",
@@ -13,5 +15,6 @@
   },
   "dependencies": {
     "typescript": "^4.9.5"
-  }
+  },
+  "devDependencies": {}
 }

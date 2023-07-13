@@ -12,5 +12,6 @@
   },
   "dependencies": {
     "node-html-parser": "^6.1.5"
-  }
+  },
+  "devDependencies": {}
 }
