@@ -4,7 +4,6 @@
 
 ## Installation
 
-`yarn add @fxhash/contracts react react-dom @taquito/beacon-wallet @fxhash/gql`
+`pnpm add @fxhash/contracts react react-dom @taquito/beacon-wallet @fxhash/gql`
 
 ## Usage
-
