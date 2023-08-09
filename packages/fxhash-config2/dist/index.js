@@ -115,7 +115,7 @@ const devApis = {
         },
     },
     dashboard: {
-        backend: "https://events.fxhash-dev.xyz",
+        backend: "https://live-minting.fxhash-dev.xyz",
         aggregator: "_NONE",
     },
     events: {
