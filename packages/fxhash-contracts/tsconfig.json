@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "moduleResolution": "node",
     "rootDir": "src",
     "baseUrl": "src",
@@ -27,11 +23,9 @@
     "noImplicitThis": false,
     "strictNullChecks": false,
     "isolatedModules": true,
-    "declaration": true,
+    "declaration": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
-  "types": [
-    "typePatches"
-  ]
+  "types": ["typePatches"]
 }

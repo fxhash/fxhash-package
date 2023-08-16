@@ -23,6 +23,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@airgap/beacon-sdk": "3.3.4",
     "@apollo/client": "^3.7.14",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -31,6 +32,7 @@
     "@taquito/michelson-encoder": "^13.0.1",
     "@taquito/rpc": "^17.1.1",
     "@taquito/taquito": "^13.0.1",
+    "@taquito/utils": "17.1.0",
     "autonomy-irl-js": "^1.0.0",
     "classnames": "^2.3.2",
     "date-fns": "^2.30.0",
