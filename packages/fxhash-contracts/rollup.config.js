@@ -1,9 +1,8 @@
-import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import typescript from "rollup-plugin-typescript2"
 import postCSS from "rollup-plugin-postcss"
 import peerDeps from "rollup-plugin-peer-deps-external"
-import json from '@rollup/plugin-json';
+import json from "@rollup/plugin-json"
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -35,14 +34,11 @@ export const getFiles = (entry, extensions = [], excludeExtensions = []) => {
   return fileNames
 }
 
-const extensions = ['.js', '.ts', '.jsx', '.tsx'];
-const excludes = ['.d.ts', '.test.js', '.test.ts', '.test.jsx', '.test.tsx']
+const extensions = [".js", ".ts", ".jsx", ".tsx"]
+const excludes = [".d.ts", ".test.js", ".test.ts", ".test.jsx", ".test.tsx"]
 
-const files = getFiles('./src', extensions, excludes).reduce((acc, f) => {
-  const p = path.relative(
-    'src',
-    f.slice(0, f.length - path.extname(f).length)
-  );
+const files = getFiles("./src", extensions, excludes).reduce((acc, f) => {
+  const p = path.relative("src", f.slice(0, f.length - path.extname(f).length))
   acc[p] = fileURLToPath(new URL(f, import.meta.url))
   return acc
 }, {})
@@ -66,7 +62,6 @@ export default {
   ],
   plugins: [
     peerDeps(),
-    resolve(),
     commonjs(),
     typescript({
       tsconfig: "./tsconfig.json",
