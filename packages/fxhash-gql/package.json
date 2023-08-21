@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",
+    "@fxhash/config": "*",
     "graphql": "^16.6.0"
   },
   "peerDependencies": {
-    "@fxhash/config": "*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
