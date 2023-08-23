@@ -4,7 +4,7 @@ import {
   Wallet,
   WalletOperation,
 } from "@taquito/taquito"
-import { getGentkLocalIDFromObjkt } from "utils/entities/gentk"
+import { getGentkLocalIDFromObjkt } from "@/utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"

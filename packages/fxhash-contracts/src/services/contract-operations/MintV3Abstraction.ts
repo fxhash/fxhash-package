@@ -6,8 +6,8 @@ import {
 } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
-import { genTokCurrentPrice } from "utils/genTokCurrentPrice"
-import { isTicketOwner, isTicketUsed } from "services/Blockchain"
+import { genTokCurrentPrice } from "@/utils/genTokCurrentPrice"
+import { isTicketOwner, isTicketUsed } from "@/services/Blockchain"
 
 const isValidTicket = async (
   pkh: string,

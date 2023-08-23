@@ -1,13 +1,13 @@
-import { TzktOperation } from "types/Tzkt"
+import { TzktOperation } from "@/types/Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
-import { UserContext } from "context/User"
-import { TContractOperation } from "services/contract-operations/ContractOperation"
+import { UserContext } from "@/context/User"
+import { TContractOperation } from "@/services/contract-operations/ContractOperation"
 import {
   ContractOperationCallback,
   ContractOperationStatus,
   TContractOperationHookReturn,
-} from "types/Contracts"
+} from "@/types/Contracts"
 import { useIsMounted } from "./useIsMounted"
 // import { createOperationAppliedAlert } from "components/Alerts/OperationAppliedAlert"
 // import { MessageCenterContext } from "../context/MessageCenter"

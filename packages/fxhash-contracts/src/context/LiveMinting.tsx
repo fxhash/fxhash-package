@@ -1,15 +1,12 @@
 import { useRouter } from "next/router"
 import React, { PropsWithChildren, useState } from "react"
-import {
-  Qu_event,
-  Qu_eventMintPass,
-} from "@fxhash/gql/queries/events/events"
+import { Qu_event, Qu_eventMintPass } from "@fxhash/gql/queries/events/events"
 import { eventsClient } from "@fxhash/gql/apollo"
 import {
   LiveMintingEvent,
   LiveMintingPass,
 } from "../types/entities/LiveMinting"
-import { useClientAsyncEffect } from "hooks/useClientAsyncEffect"
+import { useClientAsyncEffect } from "@/hooks/useClientAsyncEffect"
 
 /**
  * The LiveMinting context exposes informations about an event and some extra
@@ -42,7 +39,7 @@ export function LiveMintingProvider({ children }: Props) {
 
   // make queries to the events backend
   useClientAsyncEffect(
-    async (isMounted) => {
+    async isMounted => {
       if (router.isReady) {
         try {
           // query the event

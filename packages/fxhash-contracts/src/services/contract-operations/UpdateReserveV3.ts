@@ -10,7 +10,7 @@ import {
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { IReserve } from "../../types/entities/Reserve"
 import { UserType } from "../../types/entities/User"
-import { mapReserveDefinition } from "utils/generative-token/reserve"
+import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packReserveData } from "../../utils/pack/reserves"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
@@ -36,7 +36,7 @@ export class UpdateReservesV3Operation extends ContractOperation<TUpdateReserves
 
   async call(): Promise<TransactionWalletOperation> {
     // let's build the reserve array (by packing)
-    const reserves = this.params.reserves.map((reserve) => ({
+    const reserves = this.params.reserves.map(reserve => ({
       amount: reserve.amount,
       method_id: mapReserveDefinition[reserve.method].id,
       data: packReserveData(reserve as any),
