@@ -22,7 +22,6 @@
     "noImplicitThis": false,
     "strictNullChecks": false,
     "isolatedModules": true,
-    "typeRoots": ["./src/types", "./node_modules/@types"],
     "paths": {
       "@/*": ["./src/*"]
     }
