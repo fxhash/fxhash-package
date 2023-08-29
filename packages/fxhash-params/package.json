@@ -21,7 +21,6 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup",
-    "build:watch": "tsup --watch",
     "dev": "pnpm run build --watch",
     "prepare": "pnpm root"
   },
