@@ -26,8 +26,7 @@
     "prepare": "pnpm root"
   },
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@fortawesome/react-fontawesome": "0.2.0",
     "classnames": "^2.3.2",
     "lodash.debounce": "^4.0.8",
     "react-colorful": "^5.6.1",
@@ -35,6 +34,7 @@
     "zod": "^3.21.4"
   },
   "peerDependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
