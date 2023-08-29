@@ -1,17 +1,17 @@
-import { TContractOperation } from "services/contract-operations/ContractOperation"
+import { TContractOperation } from "@/services/contract-operations/ContractOperation"
 import {
   IReserveConsumption,
   MintOperation,
   TMintOperationParams,
-} from "services/contract-operations/Mint"
+} from "@/services/contract-operations/Mint"
 import {
   MintV3Operation,
   TMintV3OperationParams,
-} from "services/contract-operations/MintV3"
+} from "@/services/contract-operations/MintV3"
 import {
   GenerativeToken,
   GenerativeTokenVersion,
-} from "types/entities/GenerativeToken"
+} from "@/types/entities/GenerativeToken"
 
 interface MintTransformer<T> {
   operation: TContractOperation<T>
@@ -28,7 +28,7 @@ export const mintOperationsByTokenVersion: Record<
 > = {
   PRE_V3: {
     operation: MintOperation,
-    getParams: (data) => {
+    getParams: data => {
       return {
         token: data.token,
         price: data.price,
@@ -38,7 +38,7 @@ export const mintOperationsByTokenVersion: Record<
   } as MintTransformer<TMintOperationParams>,
   V3: {
     operation: MintV3Operation,
-    getParams: (data) => {
+    getParams: data => {
       return {
         token: data.token,
         price: data.price,

@@ -8,7 +8,7 @@ import { TInputPricingFixed } from "../../services/parameters-builder/pricing-fi
 import { TInputPricing } from "../../services/parameters-builder/pricing/input"
 import { GenTokPricing } from "../../types/entities/GenerativeToken"
 import { GenTokPricingForm } from "../../types/Mint"
-import { genTokPricingToId } from "utils/genTokPricingToId"
+import { genTokPricingToId } from "@/utils/genTokPricingToId"
 
 /**
  * Packs the Pricing details of a PricingFixed form data

@@ -1,5 +1,5 @@
 import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
-import { GenerativeToken } from "types/entities/GenerativeToken"
+import { GenerativeToken } from "@/types/entities/GenerativeToken"
 import { FxhashContracts } from "../../types/Contracts"
 import { CollectionOffer } from "../../types/entities/Offer"
 import { displayMutez } from "../../utils/units"

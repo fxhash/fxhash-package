@@ -1,6 +1,6 @@
 import { addSeconds, differenceInSeconds, isAfter, isBefore } from "date-fns"
 import { useContext, useEffect, useRef, useState } from "react"
-import { UserContext } from "context/User"
+import { UserContext } from "@/context/User"
 import { ILiveMintingContext, LiveMintingContext } from "../context/LiveMinting"
 import { GenerativeToken, GenTokFlag } from "../types/entities/GenerativeToken"
 import { ConnectedUser, User } from "../types/entities/User"
@@ -8,7 +8,7 @@ import { clamp } from "../utils/math"
 import {
   getReservesAmount,
   reserveEligibleAmount,
-} from "utils/generative-token/reserve.js"
+} from "@/utils/generative-token/reserve.js"
 
 // an object which describes the state for Dutch Auction tokens
 export interface IDutchAuctionState {
