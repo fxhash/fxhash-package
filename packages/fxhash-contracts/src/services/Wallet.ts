@@ -6,6 +6,7 @@ import {
   Wallet,
   WalletProvider,
 } from "@taquito/taquito"
+import config from "@fxhash/config2"
 import autonomyIRL from "autonomy-irl-js"
 import {
   ContractOperationCallback,
@@ -45,16 +46,11 @@ export class TezosWalletManager {
   rpcNodes: string[]
 
   constructor() {
-    // !todo: REMOVE THE SHUFFLE once tests are done
-    // for now 1/2 of the traffic is going to go through the fxhash RPC endpoint
-    // to test if it works properly with some pretty high traffic
-    const RPCS = [...process.env.NEXT_PUBLIC_RPC_NODES!.split(",")]
-    // 1/2 chances to shuffle the array, and so it's about 1/2 to always have the
-    // fxhash RPC first
-    // if (Math.random() < 1) {
-    //   RPCS = shuffleArray(RPCS)
-    // }
-    this.rpcNodes = RPCS
+    const networkConfig =
+      process.env.NEXT_PUBLIC_TZ_NET === "mainnet"
+        ? config.networks.mainnet
+        : config.networks.testnet
+    this.rpcNodes = networkConfig.tez.apis.rpcs
     this.tezosToolkit = new TezosToolkit(this.rpcNodes[0])
     this.instanciateBeaconWallet()
   }
