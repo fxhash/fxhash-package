@@ -76,7 +76,7 @@ export class TezosWalletManager {
    * construct a fake wallet provider using autonomyIRL to be able to reuse
    * our beacon wallet implementation
    */
-  async connectAutonomyWallet() {
+  async connectAutonomyWallet(): Promise<string> {
     const { result: pkh } = await autonomyIRL.getAddress({
       chain: autonomyIRL.chain.tez,
     })
