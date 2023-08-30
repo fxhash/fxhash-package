@@ -11,7 +11,7 @@
     "clean": "rm -rf dist",
     "copy-static": "cp -rf src/static dist/static",
     "build": "npm run clean && tsc --declaration && tsc-alias && npm run copy-static",
-    "build:watch": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\" \"node ./copy-static\")",
+    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\" \"node ./copy-static\")",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

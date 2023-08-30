@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc --declaration && tsc-alias",
-    "build:watch": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
+    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
