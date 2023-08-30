@@ -1,14 +1,14 @@
-import { TzktOperation } from "./../types/Tzkt"
+import { TzktOperation } from "@/types/Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
-import { TAnyContractOperation } from "../services/operations/ContractOperation"
+import { UserContext } from "@/context/User"
+import { TAnyContractOperation } from "@/services/operations/ContractOperation"
 import {
   ContractOperationCallback,
   ContractOperationStatus,
   TAnyContractOperationHookReturn,
-} from "../types/Contracts"
+} from "@/types/Contracts"
 import { useIsMounted } from "./useIsMounted"
-import { UserContext } from "context/User"
 
 interface OptionsContractOperation {
   onSuccess?: (data: any) => void

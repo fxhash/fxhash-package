@@ -9,7 +9,7 @@ import {
 } from "../../types/Contracts"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
 import { MintGenerativeData } from "../../types/Mint"
-import { mapReserveDefinition } from "utils/generative-token/reserve"
+import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packMintIssuer } from "../../utils/pack/mint-issuer"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
@@ -60,7 +60,7 @@ export class TezosMintIssuerOperation extends TezosContractOperation<TMintIssuer
     const informations = numbered.informations!
 
     // let's build the reserves array
-    const reserves = distribution.reserves.map((reserve) => ({
+    const reserves = distribution.reserves.map(reserve => ({
       amount: reserve.amount,
       method_id: mapReserveDefinition[reserve.method].id,
       data: packReserveData(reserve),

@@ -4,9 +4,8 @@
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "moduleResolution": "node",
-    "rootDir": "src",
-    "baseUrl": "src",
     "outDir": "dist",
+    "baseUrl": ".",
     "jsx": "react-jsx",
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -23,9 +22,10 @@
     "noImplicitThis": false,
     "strictNullChecks": false,
     "isolatedModules": true,
-    "declaration": true
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  "types": ["typePatches"]
+  "exclude": ["node_modules"]
 }

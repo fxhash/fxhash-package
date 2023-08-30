@@ -1,17 +1,17 @@
 import {
   BlockchainType,
   TAnyContractOperation,
-} from "services/operations/ContractOperation"
-import { MintOperation, TMintOperationParams } from "services/operations/Mint"
+} from "@/services/operations/ContractOperation"
+import { MintOperation, TMintOperationParams } from "@/services/operations/Mint"
 import {
   MintV3Operation,
   TMintV3OperationParams,
-} from "services/operations/MintV3"
-import { IReserveConsumption } from "types/Reserve"
+} from "@/services/operations/MintV3"
+import { IReserveConsumption } from "@/types/Reserve"
 import {
   GenerativeToken,
   GenerativeTokenVersion,
-} from "types/entities/GenerativeToken"
+} from "@/types/entities/GenerativeToken"
 import { getChainFromToken } from "./generative-token"
 
 interface MintTransformer<T> {

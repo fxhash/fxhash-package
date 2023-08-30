@@ -8,9 +8,9 @@ import {
   IReserve,
   IReserveMintInput,
 } from "../../types/entities/Reserve"
-import { mapReserveDefinition } from "utils/generative-token/reserve.js"
-import { apiEventsSignPayload } from "services/apis/events.service"
-import { IReserveConsumption } from "types/Reserve"
+import { mapReserveDefinition } from "@/utils/generative-token/reserve"
+import { apiEventsSignPayload } from "@/services/apis/events.service"
+import { IReserveConsumption } from "@/types/Reserve"
 
 /**
  * Given a reserve from an input form, packs the data of the reserve and outputs

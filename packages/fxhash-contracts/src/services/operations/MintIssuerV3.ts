@@ -6,16 +6,16 @@ import {
 import {
   EBuildableParams,
   pack,
-} from "services/parameters-builder/BuildParameters"
-import { stringToByteString } from "utils/convert"
-import { getIpfsSlash } from "utils/ipfs"
+} from "@/services/parameters-builder/BuildParameters"
+import { stringToByteString } from "@/utils/convert"
+import { getIpfsSlash } from "@/utils/ipfs"
 import {
   FxhashCollabFactoryCalls,
   FxhashContracts,
 } from "../../types/Contracts"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
 import { MintGenerativeData } from "../../types/Mint"
-import { mapReserveDefinition } from "utils/generative-token/reserve"
+import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
@@ -66,7 +66,7 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
     const informations = numbered.informations!
 
     // let's build the reserves array
-    const reserves = distribution.reserves.map((reserve) => ({
+    const reserves = distribution.reserves.map(reserve => ({
       amount: reserve.amount,
       method_id: mapReserveDefinition[reserve.method].id,
       data: packReserveData(reserve),

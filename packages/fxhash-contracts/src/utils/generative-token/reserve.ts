@@ -1,14 +1,14 @@
-import { EReserveMethod, IReserve } from "types/entities/Reserve"
+import { EReserveMethod, IReserve } from "@/types/entities/Reserve"
 // import { TRenderReserveComponent } from "../components/GenerativeToken/Reserves/Reserve"
 // import { ReserveAccessList } from "../components/GenerativeToken/Reserves/ReserveAccessList";
 // import { ReserveMintPass } from "../components/GenerativeToken/Reserves/ReserveMintPass";
 // import { InputReserveMintPass } from "../components/Input/Reserves/InputReserveMintPass";
 // import { TInputReserve } from "services/parameters-builder/update-reserve/input";
 // import { InputReserveWhitelist } from "../components/Input/Reserves/InputReserveWhitelist";
-import { User } from "types/entities/User"
-import { GenerativeToken } from "types/entities/GenerativeToken"
-import { ILiveMintingContext } from "context/LiveMinting"
-import { IReserveConsumption } from "types/Reserve"
+import { User } from "@/types/entities/User"
+import { GenerativeToken } from "@/types/entities/GenerativeToken"
+import { ILiveMintingContext } from "@/context/LiveMinting"
+import { IReserveConsumption } from "@/types/Reserve"
 
 type TReserveEligibility = (
   reserve: IReserve,

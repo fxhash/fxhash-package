@@ -102,7 +102,7 @@ export class TezosWalletManager {
             mutez: true,
             entrypoint: op.parameter.entrypoint,
             parameters: op.parameter.value,
-            storageLimit: op.storageLimit.toString(),
+            storageLimit: op.storageLimit?.toString(),
           })),
           sourceAddress: pkh,
           metadata: {

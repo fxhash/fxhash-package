@@ -10,6 +10,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@apollo/client": "3.7.14",
     "@fxhash/contracts": "*",
     "@fxhash/gql": "*",
     "@fxhash/config": "*",

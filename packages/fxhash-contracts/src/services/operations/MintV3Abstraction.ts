@@ -1,15 +1,20 @@
-import { GenerativeToken } from "./../../types/entities/GenerativeToken"
 import {
   ContractAbstraction,
+  OpKind,
   TransactionWalletOperation,
   Wallet,
+  WalletOperation,
+  WalletParamsWithKind,
 } from "@taquito/taquito"
-import { FxhashContracts } from "../../types/Contracts"
-import { genTokCurrentPrice } from "utils/genTokCurrentPrice"
-import { isTicketOwner, isTicketUsed } from "services/Blockchain"
-import { prepareReserveConsumption } from "utils/pack/reserves"
+import { FxhashContracts } from "@/types/Contracts"
+import { GenerativeToken } from "@/types/entities/GenerativeToken"
+import { EReserveMethod } from "@/types/entities/Reserve"
+import { IReserveConsumption } from "@/types/Reserve"
+import { genTokCurrentPrice } from "@/utils/genTokCurrentPrice"
+import { isTicketOwner, isTicketUsed } from "@/services/Blockchain"
+import { prepareReserveConsumption } from "@/utils/pack/reserves"
 import { BlockchainType, TezosContractOperation } from "./ContractOperation"
-import { IReserveConsumption } from "types/Reserve"
+import { EBuildableParams, buildParameters } from "../parameters-builder/BuildParameters"
 
 const isValidTicket = async (
   pkh: string,
@@ -107,33 +112,84 @@ class TezosMintV3AbstractionOperation extends TezosContractOperation<TMintV3Abst
     return true
   }
 
-  async call(): Promise<TransactionWalletOperation> {
+  async call(): Promise<TransactionWalletOperation | WalletOperation> {
     await this.validate()
 
-    const ep = this.useTicket ? "mint_with_ticket" : "mint"
-    const params = this.useTicket
-      ? {
-          issuer_id: this.params.token.id,
-          ticket_id: this.ticketId,
-          input_bytes: this.params.inputBytes,
-          recipient: null,
-        }
-      : {
-          issuer_id: this.params.token.id,
-          referrer: null,
-          reserve_input: this.reserveInput,
-          create_ticket: null,
-          recipient: null,
-          input_bytes: this.params.inputBytes,
-        }
-    const options = this.useTicket
-      ? {}
-      : {
-          amount: genTokCurrentPrice(this.params.token),
-          mutez: true,
-        }
+    if (this.useTicket) {
+      return this.mintWithTicket()
+    }
 
-    return this.contract!.methodsObject[ep](params).send(options)
+    const ops = this.generateWalletOperations()
+    return this.manager.tezosToolkit.wallet.batch().with(ops).send()
+  }
+
+  private mintWithTicket(): Promise<TransactionWalletOperation> {
+    return this.contract!.methodsObject.mint_with_ticket({
+      issuer_id: this.params.token.id,
+      ticket_id: this.ticketId,
+      input_bytes: this.params.inputBytes,
+      recipient: null,
+    }).send()
+  }
+
+  private generateWalletOperations(): WalletParamsWithKind[] {
+    const ops: WalletParamsWithKind[] = []
+
+    // Add mint pass consumption operation if necessary
+    if (this.needsMintPassConsumption()) {
+      ops.push(this.createMintPassConsumptionOperation())
+    }
+
+    // Add main mint operation
+    ops.push(this.createMintOperation())
+
+    return ops
+  }
+
+  private needsMintPassConsumption(): boolean {
+    return this.params.consumeReserve?.method === EReserveMethod.MINT_PASS
+  }
+
+  private createMintPassConsumptionOperation(): WalletParamsWithKind {
+    return {
+      kind: OpKind.TRANSACTION,
+      to: this.params.consumeReserve!.data.reserveData,
+      amount: 0,
+      parameter: {
+        entrypoint: "consume_pass",
+        value: buildParameters(
+          {
+            payload: this.payloadPacked,
+            signature: this.payloadSignature,
+          },
+          EBuildableParams.MINT_PASS_CONSUME
+        ),
+      },
+      storageLimit: 120,
+    }
+  }
+
+  private createMintOperation(): WalletParamsWithKind {
+    return {
+      kind: OpKind.TRANSACTION,
+      to: FxhashContracts.ISSUER_V3,
+      amount: genTokCurrentPrice(this.params.token),
+      mutez: true,
+      parameter: {
+        entrypoint: "mint",
+        value: buildParameters(
+          {
+            issuer_id: this.params.token.id,
+            referrer: null,
+            reserve_input: this.reserveInput,
+            create_ticket: null,
+            recipient: null,
+            input_bytes: this.params.inputBytes,
+          },
+          EBuildableParams.MINT_V3
+        ),
+      },
+    }
   }
 
   success(): string {
