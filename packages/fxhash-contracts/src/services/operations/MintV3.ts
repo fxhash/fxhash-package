@@ -14,7 +14,7 @@ import {
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { BlockchainType, TezosContractOperation } from "./ContractOperation"
-import { IReserveConsumption } from "types/Reserve"
+import { IReserveConsumption } from "@/types/Reserve"
 
 export type TMintV3OperationParams = {
   token: GenerativeToken

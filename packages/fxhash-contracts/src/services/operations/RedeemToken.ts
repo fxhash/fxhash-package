@@ -3,9 +3,9 @@ import {
   TransactionWalletOperation,
   Wallet,
 } from "@taquito/taquito"
-import { Objkt } from "types/entities/Objkt"
-import { RedeemableDetails } from "types/entities/Redeemable"
-import { redeemTotalCost } from "utils/entities/redeem"
+import { Objkt } from "@/types/entities/Objkt"
+import { RedeemableDetails } from "@/types/entities/Redeemable"
+import { redeemTotalCost } from "@/utils/entities/redeem"
 import { BlockchainType, TezosContractOperation } from "./ContractOperation"
 
 export type TRedeemTokenParams = {

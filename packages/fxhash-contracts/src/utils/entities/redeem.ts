@@ -1,4 +1,4 @@
-import { RedeemableDetails } from "types/entities/Redeemable"
+import { RedeemableDetails } from "@/types/entities/Redeemable"
 
 export function redeemTotalCost(
   redeemable: RedeemableDetails,

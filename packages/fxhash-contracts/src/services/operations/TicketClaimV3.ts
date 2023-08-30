@@ -5,7 +5,7 @@ import {
 } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { BlockchainType, TezosContractOperation } from "./ContractOperation"
-import { ITaxationSettings } from "types/MintTicket"
+import { ITaxationSettings } from "@/types/MintTicket"
 
 export type TTicketClaimV3OperationParams = {
   ticketId: number

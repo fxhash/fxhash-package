@@ -1,4 +1,4 @@
-import { IAddress } from "types/Address"
+import { IAddress } from "@/types/Address"
 import { EventMedia } from "./EventMedia"
 import { GenerativeToken } from "./GenerativeToken"
 import { Redemption } from "./Redemption"
