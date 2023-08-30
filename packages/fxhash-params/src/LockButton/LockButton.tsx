@@ -10,7 +10,6 @@ interface LockButtonProps extends BaseButtonProps {
 
 export function LockButton(props: LockButtonProps) {
   const { isLocked, className, ...rest } = props
-  console.log("=")
   return (
     <IconButton
       color="secondary"

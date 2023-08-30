@@ -109,7 +109,6 @@ export const RuntimeContext = createContext(defaultRuntimeContext)
 
 type Props = PropsWithChildren<any>
 export function RuntimeProvider({ children }: Props) {
-  console.log("======>")
   const [state, setState] = useState<RuntimeState>({
     hash: "",
     minter: "",
