@@ -1,6 +1,13 @@
 {
   "name": "@fxhash/playground",
-  "version": "0.1.0",
+  "private": true,
+  "version": "1.0.0",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
   "private": true,
   "scripts": {
     "clean": "rm -rf .next",
