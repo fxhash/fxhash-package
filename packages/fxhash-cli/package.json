@@ -1,7 +1,13 @@
 {
   "name": "@fxhash/fxhash-cli",
+  "private": true,
   "version": "0.0.1",
-  "description": "",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
   "main": "src/index.js",
   "bin": {
     "create-fxhash-project": "./dist/create-project.js",
@@ -14,8 +20,6 @@
     "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\" \"node ./copy-static\")",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@fxhash/fxhash-snippet": "*",
     "ejs": "^3.1.9",

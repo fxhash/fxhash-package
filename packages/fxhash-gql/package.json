@@ -1,6 +1,13 @@
 {
   "name": "@fxhash/gql",
+  "private": true,
   "version": "1.0.0",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -18,7 +25,6 @@
   "files": [
     "dist"
   ],
-  "license": "MIT",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
