@@ -8,9 +8,9 @@
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
   },
-  "main": "lib/index.cjs",
-  "module": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "exports": {
     "./*": "./dist/*"
@@ -46,8 +46,8 @@
     "use-async-effect": "2.2.7"
   },
   "peerDependencies": {
-    "@fxhash/config": "*",
-    "@fxhash/gql": "*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
