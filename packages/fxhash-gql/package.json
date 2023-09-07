@@ -34,7 +34,7 @@
     "graphql": "16.7.1"
   },
   "peerDependencies": {
-    "@fxhash/config": "*",
+    "@fxhash/config": "workspace:*",
     "react": "^17",
     "react-dom": "^17"
   },
