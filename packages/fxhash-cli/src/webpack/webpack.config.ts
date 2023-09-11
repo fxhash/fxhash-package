@@ -1,12 +1,25 @@
+import { CWD_PATH } from "../constants"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import path from "path"
-import {WebpackConfiguration} from "webpack-dev-server"
-import { InjectHead} from "./plugins/InjectHead"
+import { WebpackConfiguration } from "webpack-dev-server"
+import { InjectHead } from "./plugins/InjectHead"
 
-export const baseConfig: WebpackConfiguration = {
-  entry: "./project/src/index.js",
+export interface WebpackConfigFactoryOptions {
+  projectPath: string
+  portStudio: number
+  portProject: number
+}
+
+export type WebpackConfigFactory = (
+  options: WebpackConfigFactoryOptions
+) => WebpackConfiguration
+
+export const createBaseConfig: WebpackConfigFactory = ({
+  projectPath = "project",
+}) => ({
+  entry: path.resolve(CWD_PATH, projectPath, "src", "index.js"),
   output: {
-    path: path.resolve(__dirname, "../../dist"),
+    path: path.resolve(CWD_PATH, "dist"),
     filename: "bundle.js",
     clean: true,
   },
@@ -20,7 +33,7 @@ export const baseConfig: WebpackConfiguration = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./project/public/index.html",
+      template: path.resolve(CWD_PATH, projectPath, "public", "index.html"),
       inject: "body",
       publicPath: "./",
       minify: false,
@@ -29,4 +42,4 @@ export const baseConfig: WebpackConfiguration = {
       inject: "caca !!",
     }),
   ],
-}
+})

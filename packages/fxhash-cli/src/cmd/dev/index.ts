@@ -4,13 +4,11 @@ import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
 import express from "express"
-import path from "path"
 import fs from "fs"
-import env, { ROOT_PATH, STATIC_PATH } from "../../constants"
-import {devConfig} from "../../webpack/webpack.config.dev"
-import {headlessConfig} from "../../webpack/webpack.config.headless"
-
-const __dirname = process.cwd()
+import env, { FXSTUDIO_PATH } from "../../constants"
+import { createDevConfig } from "../../webpack/webpack.config.dev"
+import { createHeadlessConfig } from "../../webpack/webpack.config.headless"
+import { autoUpdateTooklit } from "updates/changes"
 
 // very simple logger interface:
 const logger = {
@@ -21,10 +19,7 @@ const logger = {
   url: chalk.bold.blue,
 }
 
-// the environment config
-const webpackConfig = env.RUN_PROJECT == true ? devConfig : headlessConfig
-
-function padn(n:number, len:number = 2, char:string = "0"): string {
+function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
 }
 
@@ -50,31 +45,59 @@ function verifyFxlens(path: string): void {
 
 export const commandDev: CommandModule = {
   command: "dev",
-  describe:
-    "Start the dev environment",
-  handler: async () => {
+  describe: "Start the dev environment",
+  builder: yargs =>
+    yargs
+      .option("portStudio", {
+        type: "number",
+        default: env.PORT_FXSTUDIO,
+        describe: "The port the studio will be served on",
+      })
+      .option("portProject", {
+        type: "number",
+        default: env.PORT_FXPROJECT,
+        describe: "The port the projcet will be served on",
+      })
+      .option("projectPath", {
+        type: "string",
+        default: env.PROJECT_PATH,
+        describe: "The port the projcet will be served on",
+      }),
+  handler: async yargs => {
+    const portProject = yargs.portProject as number
+    const portStudio = yargs.portStudio as number
+    const projectPath = yargs.projectPath as string
+
     // commonly used variable for ease
-    const URL_FXLENS = `http://localhost:${env.PORT_FXSTUDIO}`
-    const URL_PROJECT = `http://localhost:${env.PORT_FXPROJECT}`
-    const PATH_FXLENS = path.join(__dirname, "..", "files", "fxlens")
+    const URL_FXLENS = `http://localhost:${portStudio}`
+    const URL_PROJECT = `http://localhost:${portProject}`
 
-    /*
-  try {
-    await autoUpdateTooklit({
-      onStartAnyways: () => {
-        console.log(chalk.dim("Starting anyways...\n\n"))
-      },
-      clearValidationMessage: true,
-    })
-  } catch (err) {
-    console.log(chalk.red.bold(`❗ ${err.message}`))
-    console.log(chalk.dim("Starting anyways...\n\n"))
-  }
-
-  */
+    try {
+      await autoUpdateTooklit({
+        onStartAnyways: () => {
+          console.log(chalk.dim("Starting anyways...\n\n"))
+        },
+        clearValidationMessage: true,
+      })
+    } catch (err) {
+      console.log(chalk.red.bold(`❗ ${err.message}`))
+      console.log(chalk.dim("Starting anyways...\n\n"))
+    }
 
     // do some checkups to see if fxlens is available, otherwise throw?
     // verifyFxlens(PATH_FXLENS)
+
+    const webpackConfigFactoryOptions = {
+      projectPath,
+      portStudio,
+      portProject,
+    }
+
+    // the environment config
+    const webpackConfig =
+      env.RUN_PROJECT == true
+        ? createDevConfig(webpackConfigFactoryOptions)
+        : createHeadlessConfig(webpackConfigFactoryOptions)
 
     // instanciate compiler and server
     const compiler = Webpack({
@@ -106,11 +129,10 @@ export const commandDev: CommandModule = {
       })
     }
 
-    // start the express server to serve static files from the /lib/fxstudio
-    // folder to port 3300
+    // start fxlens
     const app = express()
-    app.use(express.static(PATH_FXLENS))
-    app.listen(env.PORT_FXSTUDIO, () => {
+    app.use(express.static(FXSTUDIO_PATH))
+    app.listen(portStudio, () => {
       console.log(
         `${logger.success("[fxlens] fx(lens) is running on")} ${logger.url(
           URL_FXLENS

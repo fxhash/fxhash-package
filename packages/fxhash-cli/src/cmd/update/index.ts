@@ -7,7 +7,7 @@ import { format } from "prettier"
 export const commandUpdate: CommandModule = {
   command: "update",
   describe:
-    "List the tree of applications which can be bootstraped with apps:start",
+    "Update a project with the latest sdk",
   handler: async () => {
     const i = (await import("inquirer")).default
     i.registerPrompt("fuzzypath", (await import("inquirer-fuzzy-path")).default)

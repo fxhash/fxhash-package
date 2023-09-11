@@ -1,8 +1,7 @@
 {
   "plugins": ["prettier"],
-  "extends": ["@fxhash/eslint-config", "next/core-web-vitals"],
+  "extends": ["@fxhash/eslint-config"],
   "rules": {
-    "prettier/prettier": "error",
-    "react/no-unescaped-entities": "warn"
+    "prettier/prettier": "error"
   }
 }
