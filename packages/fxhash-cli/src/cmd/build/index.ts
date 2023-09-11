@@ -1,8 +1,9 @@
 import type { CommandModule } from "yargs"
 import Webpack, { Stats, WebpackError } from "webpack"
-import env from "../../constants"
+import env, { CWD_PATH } from "../../constants"
 import { createProdConfig } from "../../webpack/webpack.config.prod"
 import { logger } from "../../updates/logger"
+import { srcPathExists, validateProjecStructure } from "../../validate/index"
 
 export const commandBuild: CommandModule = {
   command: "build",
@@ -28,6 +29,8 @@ export const commandBuild: CommandModule = {
     const noMinify = yargs.noMinify as boolean
     const noZip = yargs.noZip as boolean
     const srcPath = yargs.srcPath as string
+
+    validateProjecStructure({ srcPath })
 
     const webpackConfigFactoryOptions = {
       srcPath,

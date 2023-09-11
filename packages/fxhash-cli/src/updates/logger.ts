@@ -91,6 +91,7 @@ export function loggerFactory() {
     success,
     progress,
     error,
+    errorExit: exitError,
     log: msg => console.log(chalk.white(msg)),
   }
 }

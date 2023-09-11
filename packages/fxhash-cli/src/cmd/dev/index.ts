@@ -4,43 +4,15 @@ import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
 import express from "express"
-import fs from "fs"
 import env, { FXSTUDIO_PATH } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
 import { createHeadlessConfig } from "../../webpack/webpack.config.headless"
 import { autoUpdateTooklit } from "../../updates/changes"
-
-// very simple logger interface:
-const logger = {
-  error: chalk.red.bold,
-  success: chalk.green.bold,
-  command: (txt: string) => chalk.bgWhite.bold(` ${txt} `),
-  infos: chalk.gray,
-  url: chalk.bold.blue,
-}
+import { logger } from "../../updates/logger"
+import { validateProjecStructure } from "../../validate/index"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
-}
-
-function verifyFxlens(path: string): void {
-  const files = fs.readdirSync(path)
-  // if no index.html, fxlens has not yet been initialized, throw an error
-  if (!files.includes("index.html")) {
-    console.log(logger.error("[error] fxlens is not installed\n"))
-    console.log(
-      `Have you tried running ${logger.command(
-        "npm install"
-      )} before ${logger.command("npm start")} ?`
-    )
-    console.log(
-      logger.infos(
-        "fxlens is pulled from its repository after npm install is called"
-      )
-    )
-    console.log()
-    process.exit(1)
-  }
 }
 
 export const commandDev: CommandModule = {
@@ -67,6 +39,8 @@ export const commandDev: CommandModule = {
     const portProject = yargs.portProject as number
     const portStudio = yargs.portStudio as number
     const srcPath = yargs.srcPath as string
+
+    validateProjecStructure({ srcPath })
 
     // commonly used variable for ease
     const URL_FXLENS = `http://localhost:${portStudio}`

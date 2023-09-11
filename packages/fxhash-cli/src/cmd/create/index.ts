@@ -3,9 +3,11 @@ import { createInterface } from "readline"
 import { simpleTemplate } from "../../templates/simple/index"
 import { writeProjectToDisk } from "../../templates/writer"
 import { logger } from "../../updates/logger"
+import { ejectedTemplate } from "../../templates/ejected/index"
 
 const TEMPLATE_CHOICES = {
   simple: simpleTemplate,
+  ejected: ejectedTemplate,
 }
 
 async function prompt(question: string): Promise<string> {
@@ -58,12 +60,12 @@ export const commandCreate: CommandModule = {
       return
     }
 
-    // const template = await chooseTemplate()
+    const template = await chooseTemplate()
 
     try {
       writeProjectToDisk({
         name,
-        template: simpleTemplate,
+        template: TEMPLATE_CHOICES[template],
       })
 
       logger.success("New fx(hash) project created successfully!")

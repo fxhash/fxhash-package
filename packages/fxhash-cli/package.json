@@ -12,8 +12,6 @@
     "fxhash": "./dist/index.js"
   },
   "scripts": {
-    "clean": "rm -rf dist",
-    "copy-static": "cp -rf src/static dist/static",
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "echo \"Error: no test specified\" && exit 1"

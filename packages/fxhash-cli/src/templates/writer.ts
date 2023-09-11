@@ -13,11 +13,9 @@ export function writeProjectToDisk({
   mkdirSync(rootDir)
   folders.forEach(folder => mkdirSync(path.join(rootDir, folder)))
   files.forEach(([fileName, fileContent]) => {
-    console.log("files", rootDir, fileName)
     writeFileSync(path.join(rootDir, fileName), fileContent)
   })
   staticFiles.forEach(([fileName, staticFile]) => {
-    console.log(STATIC_PATH, ROOT_PATH)
     cpSync(
       path.join(STATIC_PATH, "..", staticFile),
       path.join(rootDir, fileName),
