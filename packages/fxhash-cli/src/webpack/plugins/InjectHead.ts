@@ -1,9 +1,6 @@
 import fs from "fs"
-import path from "path"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-import { latest } from "@fxhash/fxhash-snippet"
-
-const SNIPPET_PATH = path.join(__dirname, "..", "..", "files", "snippet.js")
+import { SNIPPET_PATH } from "../../constants"
 
 export class InjectHead {
   options = null
@@ -17,7 +14,7 @@ export class InjectHead {
         "InjectHead",
         (data, callback) => {
           // load the snippet code from the file in lib
-          const snippet = latest
+          const snippet = fs.readFileSync(SNIPPET_PATH, "utf-8")
 
           // find the position of the </head> characters
           const match = /<head>/.exec(data.html)

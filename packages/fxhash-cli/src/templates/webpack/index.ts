@@ -5,9 +5,7 @@ import { TemplateFactoryResponse, TemplateUserConfig } from "templates/types"
 import { format } from "prettier"
 import { packageJson } from "./packageJson"
 
-export function webpackTemplate({
-  name = "webpack",
-}): TemplateFactoryResponse {
+export function webpackTemplate({ name = "webpack" }): TemplateFactoryResponse {
   const html = render(baseHtmlTemplate, {
     name,
     snippet: latest,

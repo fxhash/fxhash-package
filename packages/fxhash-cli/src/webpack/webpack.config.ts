@@ -6,8 +6,9 @@ import { InjectHead } from "./plugins/InjectHead"
 
 export interface WebpackConfigFactoryOptions {
   projectPath: string
-  portStudio: number
-  portProject: number
+  portStudio?: number
+  portProject?: number
+  minify?: boolean
 }
 
 export type WebpackConfigFactory = (

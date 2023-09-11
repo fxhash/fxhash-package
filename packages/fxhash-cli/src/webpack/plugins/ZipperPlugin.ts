@@ -1,8 +1,9 @@
 import path from "path"
 import AdmZip from "adm-zip"
+import { CWD_PATH } from "../../constants"
 
 const defaultOptions = {
-  outputPath: path.resolve(__dirname, "../../dist-zipped/project.zip")
+  outputPath: path.resolve(CWD_PATH, "dist-zipped/project.zip"),
 }
 
 /**
@@ -12,28 +13,23 @@ const defaultOptions = {
  * https://webpack.js.org/contribute/writing-a-plugin/
  */
 export class ZipperPlugin {
+  options = null
   constructor(options = {}) {
     this.options = {
       ...defaultOptions,
-      ...options
+      ...options,
     }
   }
 
   apply(compiler) {
     // Specify the event hook to attach to
-    compiler.hooks.done.tapAsync(
-      "ZipperPlugin",
-      (stats, callback) => {
-        const outputPath = stats.compilation.outputOptions.path
-        const zip = new AdmZip()
-        zip.addLocalFolder(outputPath)
-        zip.toBuffer()
-        zip.writeZip(this.options.outputPath)
-        callback()
-      }
-    )
+    compiler.hooks.done.tapAsync("ZipperPlugin", (stats, callback) => {
+      const outputPath = stats.compilation.outputOptions.path
+      const zip = new AdmZip()
+      zip.addLocalFolder(outputPath)
+      zip.toBuffer()
+      zip.writeZip(this.options.outputPath)
+      callback()
+    })
   }
 }
-
-module.exports = ZipperPlugin
-

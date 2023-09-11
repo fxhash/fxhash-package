@@ -2,7 +2,7 @@ import path from "path"
 import CopyPlugin from "copy-webpack-plugin"
 import { ZipperPlugin } from "./plugins/ZipperPlugin"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
-import {CWD_PATH} from "constants"
+import { CWD_PATH } from "../constants"
 
 export const createProdConfig: WebpackConfigFactory = options => {
   const { projectPath } = options

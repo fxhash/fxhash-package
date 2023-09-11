@@ -7,6 +7,7 @@ import { readLockFile, updateLockFile } from "./lockfile"
 import { logger } from "./logger"
 import yesno from "yesno"
 import chalk from "chalk"
+import {pullSnippet, saveSnippet} from "./snippet"
 
 const ghDownloader = new GHDownloader({})
 
@@ -32,6 +33,22 @@ const changesManager = {
       })
       // move download to ./lib/fxlens
       fs.renameSync(path.join(TMP_PATH, "build"), path.join(FXSTUDIO_PATH))
+      return sha
+    },
+  },
+  snippet: {
+    getVersion: async () => {
+      const { data } = await axios.get(
+        `https://api.github.com/repos/fxhash/fxhash-boilerplate/commits?path=lib/files/snippet.js&per_page=1`,
+        {
+          timeout: 1500,
+        }
+      )
+      return data[0].sha
+    },
+  update: async sha => {
+      const content = await pullSnippet()
+      await saveSnippet(content)
       return sha
     },
   },

@@ -6,7 +6,6 @@ import {writeProjectToDisk} from "templates/writer"
 
 const TEMPLATE_CHOICES = {
   simple: simpleTemplate,
-  webpack: webpackTemplate,
 }
 
 async function prompt(question: string): Promise<string> {
@@ -61,12 +60,12 @@ export const commandCreate: CommandModule = {
       return
     }
 
-    const template = await chooseTemplate()
+    // const template = await chooseTemplate()
 
     try {
       writeProjectToDisk({
         name,
-        template: TEMPLATE_CHOICES[template],
+        template: TEMPLATE_CHOICES[0],
       })
 
       console.log("New fx(hash) project created successfully!")
