@@ -22,7 +22,7 @@ export function simpleTemplate(): TemplateFactoryResponse {
     ],
     staticFiles: [
       ["src/index.js", "static/examples/params.js"],
-      ["src/LICENSE", "static/LICENSE"],
+      ["LICENSE", "static/LICENSE"],
     ],
   }
 }

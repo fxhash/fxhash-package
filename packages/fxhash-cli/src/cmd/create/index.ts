@@ -2,7 +2,7 @@ import type { CommandModule } from "yargs"
 import { createInterface } from "readline"
 import { simpleTemplate } from "../../templates/simple/index"
 import { writeProjectToDisk } from "../../templates/writer"
-import { logger } from "../../updates/logger"
+import { logger } from "../../utils/logger"
 import { ejectedTemplate } from "../../templates/ejected/index"
 
 const TEMPLATE_CHOICES = {

@@ -8,7 +8,7 @@ import env, { FXSTUDIO_PATH } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
 import { createHeadlessConfig } from "../../webpack/webpack.config.headless"
 import { autoUpdateTooklit } from "../../updates/changes"
-import { logger } from "../../updates/logger"
+import { logger } from "../../utils/logger"
 import { validateProjecStructure } from "../../validate/index"
 
 function padn(n: number, len = 2, char = "0"): string {
@@ -97,7 +97,7 @@ export const commandDev: CommandModule = {
             date.getMinutes()
           )}:${padn(date.getSeconds())}`
           console.log(
-            `${logger.success("[project] compiled successfully")} @ ${time}`
+            `${logger.successC("[project] compiled successfully")} @ ${time}`
           )
         }
       })
@@ -108,7 +108,7 @@ export const commandDev: CommandModule = {
     app.use(express.static(FXSTUDIO_PATH))
     app.listen(portStudio, () => {
       console.log(
-        `${logger.success("[fxlens] fx(lens) is running on")} ${logger.url(
+        `${logger.successC("[fxlens] fx(lens) is running on")} ${logger.url(
           URL_FXLENS
         )}`
       )
@@ -118,12 +118,12 @@ export const commandDev: CommandModule = {
       const target = `${URL_FXLENS}/?target=${URL_PROJECT}`
       const l =
         env.RUN_PROJECT === true
-          ? `${logger.success(
+          ? `${logger.successC(
               "[project] your project is running on"
             )} ${logger.url(URL_PROJECT)}`
-          : `${logger.success(
+          : `${logger.successC(
               "[project] your project might be running on, "
-            )} ${logger.url(URL_PROJECT)} ${logger.success(
+            )} ${logger.url(URL_PROJECT)} ${logger.successC(
               "but this is user specified so we don't really know"
             )}`
       console.log(l)

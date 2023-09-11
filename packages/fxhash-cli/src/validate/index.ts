@@ -1,7 +1,7 @@
 import { existsSync } from "fs"
 import path from "path"
 import { CWD_PATH } from "../constants"
-import { logger } from "../updates/logger"
+import { logger } from "../utils/logger"
 
 export function validateProjecStructure({ srcPath }) {
   try {

@@ -1,6 +1,6 @@
 import AdmZip from "adm-zip"
 import { rmSync } from "fs"
-import { logger } from "../../updates/logger"
+import { logger } from "../../utils/logger"
 
 interface ZipperPluginOptions {
   zipPath: string

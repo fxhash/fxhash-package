@@ -1,9 +1,9 @@
 import type { CommandModule } from "yargs"
 import Webpack, { Stats, WebpackError } from "webpack"
-import env, { CWD_PATH } from "../../constants"
+import env from "../../constants"
 import { createProdConfig } from "../../webpack/webpack.config.prod"
-import { logger } from "../../updates/logger"
-import { srcPathExists, validateProjecStructure } from "../../validate/index"
+import { logger } from "../../utils/logger"
+import { validateProjecStructure } from "../../validate/index"
 
 export const commandBuild: CommandModule = {
   command: "build",

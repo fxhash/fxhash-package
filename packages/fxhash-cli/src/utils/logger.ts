@@ -89,10 +89,12 @@ export function loggerFactory() {
     startStep: start,
     step,
     success,
+    successC: chalk.bold.green,
     progress,
     error,
     errorExit: exitError,
     log: msg => console.log(chalk.white(msg)),
+    url: chalk.bold.blue,
   }
 }
 
