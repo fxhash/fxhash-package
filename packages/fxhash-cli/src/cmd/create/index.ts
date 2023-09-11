@@ -1,8 +1,8 @@
 import type { CommandModule } from "yargs"
 import { createInterface } from "readline"
-import {simpleTemplate} from "templates/simple"
-import {webpackTemplate} from "templates/webpack"
-import {writeProjectToDisk} from "templates/writer"
+import { simpleTemplate } from "../../templates/simple/index"
+import { writeProjectToDisk } from "../../templates/writer"
+import { logger } from "../../updates/logger"
 
 const TEMPLATE_CHOICES = {
   simple: simpleTemplate,
@@ -24,10 +24,9 @@ async function prompt(question: string): Promise<string> {
 
 async function chooseTemplate(): Promise<string> {
   const templateChoices = Object.keys(TEMPLATE_CHOICES)
-
-  console.log("Available project templates:")
+  logger.log("Available project templates:")
   templateChoices.forEach((choice, index) => {
-    console.log(`${index + 1}. ${choice}`)
+    logger.log(`${index + 1}. ${choice}`)
   })
 
   const choiceIndex = await prompt(
@@ -40,7 +39,7 @@ async function chooseTemplate(): Promise<string> {
     selectedIndex < 1 ||
     selectedIndex > templateChoices.length
   ) {
-    console.error("Invalid template choice.")
+    logger.error("Invalid template choice.")
     return chooseTemplate()
   }
 
@@ -49,12 +48,11 @@ async function chooseTemplate(): Promise<string> {
 
 export const commandCreate: CommandModule = {
   command: "create",
-  describe:
-    "Create a new fx(hash) project",
+  describe: "Create a new fx(hash) project",
   handler: async () => {
     const name = await prompt("Project name: ")
     if (!/^([\w\d\s#-])+$/.test(name)) {
-      console.error(
+      logger.error(
         "Project name may only include letters, numbers, spaces, underscores, hashes, and dashes"
       )
       return
@@ -65,12 +63,12 @@ export const commandCreate: CommandModule = {
     try {
       writeProjectToDisk({
         name,
-        template: TEMPLATE_CHOICES[0],
+        template: simpleTemplate,
       })
 
-      console.log("New fx(hash) project created successfully!")
+      logger.success("New fx(hash) project created successfully!")
     } catch (error: any) {
-      console.error(error.message)
+      logger.error(error.message)
     }
   },
 }

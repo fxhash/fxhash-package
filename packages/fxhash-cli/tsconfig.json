@@ -5,7 +5,6 @@
     "lib": ["ES2022"],
     "moduleResolution": "node16",
     "rootDir": "src",
-    "baseUrl": "src",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

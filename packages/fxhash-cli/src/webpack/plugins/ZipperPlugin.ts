@@ -1,9 +1,9 @@
-import path from "path"
 import AdmZip from "adm-zip"
-import { CWD_PATH } from "../../constants"
+import { rmSync } from "fs"
+import { logger } from "../../updates/logger"
 
-const defaultOptions = {
-  outputPath: path.resolve(CWD_PATH, "dist-zipped/project.zip"),
+interface ZipperPluginOptions {
+  zipPath: string
 }
 
 /**
@@ -14,21 +14,21 @@ const defaultOptions = {
  */
 export class ZipperPlugin {
   options = null
-  constructor(options = {}) {
-    this.options = {
-      ...defaultOptions,
-      ...options,
-    }
+  constructor(options: ZipperPluginOptions) {
+    this.options = options
   }
 
   apply(compiler) {
     // Specify the event hook to attach to
     compiler.hooks.done.tapAsync("ZipperPlugin", (stats, callback) => {
+      const zipPath = this.options.zipPath
       const outputPath = stats.compilation.outputOptions.path
+      rmSync(zipPath, { force: true, recursive: true })
       const zip = new AdmZip()
       zip.addLocalFolder(outputPath)
       zip.toBuffer()
-      zip.writeZip(this.options.outputPath)
+      zip.writeZip(zipPath)
+      logger.log(`${zipPath} created`)
       callback()
     })
   }

@@ -1,40 +1,38 @@
 import type { CommandModule } from "yargs"
 import Webpack, { Stats, WebpackError } from "webpack"
-import chalk from "chalk"
 import env from "../../constants"
 import { createProdConfig } from "../../webpack/webpack.config.prod"
-
-// very simple logger interface:
-const logger = {
-  error: chalk.red.bold,
-  success: chalk.green.bold,
-  command: (txt: string) => chalk.bgWhite.bold(` ${txt} `),
-  infos: chalk.gray,
-  url: chalk.bold.blue,
-}
+import { logger } from "../../updates/logger"
 
 export const commandBuild: CommandModule = {
   command: "build",
   describe: "Create a build of the project that can be published on fx(hash)",
   builder: yargs =>
     yargs
-      .option("no-minify", {
+      .option("noMinify", {
         type: "boolean",
         default: false,
         describe: "Minify the code of the project",
       })
-      .option("projectPath", {
+      .option("noZip", {
+        type: "boolean",
+        default: false,
+        describe: "Minify the code of the project",
+      })
+      .option("srcPath", {
         type: "string",
-        default: env.PROJECT_PATH,
-        describe: "The port the projcet will be served on",
+        default: env.SRC_PATH,
+        describe: "The path to the project",
       }),
   handler: async yargs => {
     const noMinify = yargs.noMinify as boolean
-    const projectPath = yargs.projectPath as string
+    const noZip = yargs.noZip as boolean
+    const srcPath = yargs.srcPath as string
 
     const webpackConfigFactoryOptions = {
-      projectPath,
+      srcPath,
       minify: !noMinify,
+      zippify: !noZip,
     }
 
     // the environment config
@@ -47,19 +45,20 @@ export const commandBuild: CommandModule = {
         if (err || stats.hasErrors()) {
           // Handle errors here
           if (err) {
-            console.error(err.stack || err)
+            logger.error(err.stack || err)
             if (err.details) {
-              console.error(err.details)
+              logger.error(err.details)
             }
           }
 
           if (stats && stats.hasErrors()) {
             const info = stats.toJson()
-            info.errors.forEach(error => console.error(error))
+            info.errors.forEach(error => logger.error(error))
           }
         } else {
           // Compilation was successful
-          console.log("Webpack compilation successful.")
+          logger.log(`${webpackConfig.output.path} created`)
+          logger.success("Project compilation successful.")
         }
       }
     )

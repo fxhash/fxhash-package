@@ -1,26 +1,25 @@
-import { CWD_PATH } from "../constants"
+import { CWD_PATH, DIST_PATH } from "../constants"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import path from "path"
 import { WebpackConfiguration } from "webpack-dev-server"
 import { InjectHead } from "./plugins/InjectHead"
 
 export interface WebpackConfigFactoryOptions {
-  projectPath: string
+  srcPath: string
   portStudio?: number
   portProject?: number
   minify?: boolean
+  zippify?: boolean
 }
 
 export type WebpackConfigFactory = (
   options: WebpackConfigFactoryOptions
 ) => WebpackConfiguration
 
-export const createBaseConfig: WebpackConfigFactory = ({
-  projectPath = "project",
-}) => ({
-  entry: path.resolve(CWD_PATH, projectPath, "src", "index.js"),
+export const createBaseConfig: WebpackConfigFactory = ({ srcPath }) => ({
+  entry: path.resolve(CWD_PATH, srcPath, "index.js"),
   output: {
-    path: path.resolve(CWD_PATH, "dist"),
+    path: DIST_PATH,
     filename: "bundle.js",
     clean: true,
   },
@@ -34,7 +33,7 @@ export const createBaseConfig: WebpackConfigFactory = ({
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(CWD_PATH, projectPath, "public", "index.html"),
+      template: path.resolve(CWD_PATH, srcPath, "public", "index.html"),
       inject: "body",
       publicPath: "./",
       minify: false,

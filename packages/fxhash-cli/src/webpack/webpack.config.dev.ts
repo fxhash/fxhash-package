@@ -1,9 +1,9 @@
 import path from "path"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
-import env, { CWD_PATH } from "../constants"
+import { CWD_PATH } from "../constants"
 
 export const createDevConfig: WebpackConfigFactory = options => {
-  const { projectPath, portProject } = options
+  const { srcPath, portProject } = options
   const baseConfig = createBaseConfig(options)
   return {
     ...baseConfig,
@@ -16,7 +16,7 @@ export const createDevConfig: WebpackConfigFactory = options => {
       port: portProject,
       // server resources from the public folder, located in /project
       static: {
-        directory: path.resolve(CWD_PATH, projectPath, "public"),
+        directory: path.resolve(CWD_PATH, srcPath, "public"),
       },
       client: {
         overlay: {

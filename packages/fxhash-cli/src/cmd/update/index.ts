@@ -6,8 +6,7 @@ import { format } from "prettier"
 
 export const commandUpdate: CommandModule = {
   command: "update",
-  describe:
-    "Update a project with the latest sdk",
+  describe: "Update a project with the latest sdk",
   handler: async () => {
     const i = (await import("inquirer")).default
     i.registerPrompt("fuzzypath", (await import("inquirer-fuzzy-path")).default)

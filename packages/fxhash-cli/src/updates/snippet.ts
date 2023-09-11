@@ -26,4 +26,3 @@ export async function saveSnippet(content) {
     flag: "w",
   })
 }
-

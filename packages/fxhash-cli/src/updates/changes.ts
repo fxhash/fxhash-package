@@ -7,7 +7,7 @@ import { readLockFile, updateLockFile } from "./lockfile"
 import { logger } from "./logger"
 import yesno from "yesno"
 import chalk from "chalk"
-import {pullSnippet, saveSnippet} from "./snippet"
+import { pullSnippet, saveSnippet } from "./snippet"
 
 const ghDownloader = new GHDownloader({})
 
@@ -46,7 +46,7 @@ const changesManager = {
       )
       return data[0].sha
     },
-  update: async sha => {
+    update: async sha => {
       const content = await pullSnippet()
       await saveSnippet(content)
       return sha

@@ -1,8 +1,8 @@
 import { latest } from "@fxhash/fxhash-snippet"
-import { baseHtmlTemplate } from "templates/baseHtml"
 import { render } from "ejs"
-import { TemplateFactoryResponse, TemplateUserConfig } from "templates/types"
 import { format } from "prettier"
+import { baseHtmlTemplate } from "../baseHtml"
+import { TemplateFactoryResponse } from "../types"
 import { packageJson } from "./packageJson"
 
 export function webpackTemplate({ name = "webpack" }): TemplateFactoryResponse {

@@ -8,7 +8,7 @@ import fs from "fs"
 import env, { FXSTUDIO_PATH } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
 import { createHeadlessConfig } from "../../webpack/webpack.config.headless"
-import { autoUpdateTooklit } from "updates/changes"
+import { autoUpdateTooklit } from "../../updates/changes"
 
 // very simple logger interface:
 const logger = {
@@ -58,15 +58,15 @@ export const commandDev: CommandModule = {
         default: env.PORT_FXPROJECT,
         describe: "The port the projcet will be served on",
       })
-      .option("projectPath", {
+      .option("srcPath", {
         type: "string",
-        default: env.PROJECT_PATH,
-        describe: "The port the projcet will be served on",
+        default: env.SRC_PATH,
+        describe: "The path to the src of the project",
       }),
   handler: async yargs => {
     const portProject = yargs.portProject as number
     const portStudio = yargs.portStudio as number
-    const projectPath = yargs.projectPath as string
+    const srcPath = yargs.srcPath as string
 
     // commonly used variable for ease
     const URL_FXLENS = `http://localhost:${portStudio}`
@@ -88,7 +88,7 @@ export const commandDev: CommandModule = {
     // verifyFxlens(PATH_FXLENS)
 
     const webpackConfigFactoryOptions = {
-      projectPath,
+      srcPath,
       portStudio,
       portProject,
     }

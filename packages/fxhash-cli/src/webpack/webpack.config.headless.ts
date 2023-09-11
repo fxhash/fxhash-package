@@ -1,6 +1,5 @@
 import { InjectHead } from "./plugins/InjectHead"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
-import env from "../constants"
 
 export const createHeadlessConfig: WebpackConfigFactory = options => {
   const { portProject } = options

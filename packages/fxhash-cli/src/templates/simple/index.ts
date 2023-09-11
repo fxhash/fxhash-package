@@ -1,28 +1,28 @@
-import { baseHtmlTemplate } from "templates/baseHtml"
-import { snippet_v2 } from "@fxhash/fxhash-snippet"
+import { latest } from "@fxhash/fxhash-snippet"
 import { render } from "ejs"
-import { TemplateFactoryResponse } from "templates/types"
 import { format } from "prettier"
+import { baseHtmlTemplate } from "../baseHtml"
+import { TemplateFactoryResponse } from "../types"
 
 export function simpleTemplate(): TemplateFactoryResponse {
   const name = "simple"
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: snippet_v2,
+    snippet: latest,
     head: `<link rel="stylesheet" href="./style.css">`,
     entry: `<script src="./index.js"></script>`,
   })
   const pHtml = format(html, { parser: "html" })
   return {
     name,
+    folders: ["src", "src/public"],
     files: [
-      ["project/public/index.html", pHtml],
-      ["project/public/styles.css", ""],
+      ["src/public/index.html", pHtml],
+      ["src/public/styles.css", ""],
     ],
     staticFiles: [
-      ["project/src/index.js", "static/examples/params.js"],
-      ["project/public/LICENSE", "static/LICENSE"],
+      ["src/index.js", "static/examples/params.js"],
+      ["src/LICENSE", "static/LICENSE"],
     ],
-    folders: ["project", "project/public", "project/src"],
   }
 }
