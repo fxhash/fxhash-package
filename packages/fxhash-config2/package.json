@@ -1,16 +1,22 @@
 {
   "name": "@fxhash/config2",
+  "private": true,
   "version": "1.0.0",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
-  "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc --declaration",
-    "build:watch": "tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
+    "dev": "tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {},
