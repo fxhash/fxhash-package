@@ -1,5 +1,4 @@
 type BaseHtmlTemplate = string
-
 export const baseHtmlTemplate: BaseHtmlTemplate = `
     <!DOCTYPE html>
     <html>

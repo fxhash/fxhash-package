@@ -1,4 +1,4 @@
-import { snippet_v2 } from "@fxhash/fxhash-snippet"
+import { latest } from "@fxhash/fxhash-snippet"
 import { baseHtmlTemplate } from "templates/baseHtml"
 import { render } from "ejs"
 import { TemplateFactoryResponse, TemplateUserConfig } from "templates/types"
@@ -10,7 +10,7 @@ export function webpackTemplate({
 }): TemplateFactoryResponse {
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: snippet_v2,
+    snippet: latest,
     head: `<link rel="stylesheet" href="./style.css">`,
     entry: `<!-- WEBPACK will inject the bundle.js here -->`,
   })

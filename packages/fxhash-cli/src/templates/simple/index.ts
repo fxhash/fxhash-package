@@ -3,6 +3,7 @@ import { snippet_v2 } from "@fxhash/fxhash-snippet"
 import { render } from "ejs"
 import { TemplateFactoryResponse } from "templates/types"
 import { format } from "prettier"
+import { STATIC_PATH } from "constants"
 
 export function simpleTemplate(): TemplateFactoryResponse {
   const name = "simple"
