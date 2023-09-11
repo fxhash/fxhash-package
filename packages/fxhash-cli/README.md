@@ -37,9 +37,9 @@ Creates a bundled version the artwork.
 
 #### Options
 
-`--srcPath` The path to the source of the project. Default: `/src`
-`--noMinify` Disable minification when creating the bundle
-`--noZip` Disable the zip file creation
+`--srcPath` The path to the source of the project. Default: `/src`  
+`--noMinify` Disable minification when creating the bundle  
+`--noZip` Disable the zip file creation  
 
 
 ### `$ fxhash dev [options]`
@@ -48,9 +48,9 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 
 #### Options
 
-`--srcPath` The path to the source of the project. Default: `/src`
-`--portStudio` The port fxlens is served on. Default: `3300` 
-`--portProject` The port the project is served on. Default: `3301` 
+`--srcPath` The path to the source of the project. Default: `/src`  
+`--portStudio` The port fxlens is served on. Default: `3300`  
+`--portProject` The port the project is served on. Default: `3301`  
 
 
 ### `$ fxhash update [options]`
