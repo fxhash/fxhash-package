@@ -4,14 +4,8 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   typescript: {
-    ignoreBuildErrors: true,
-  },
-  webpack: (config) => {
-    // Used for connectkit to work with nextjs
-    config.resolve.fallback = { fs: false, net: false, tls: false }
-    config.externals.push("pino-pretty", "lokijs", "encoding")
-    return config
-  },
+    ignoreBuildErrors: true
+  }
 }
 
 module.exports = nextConfig
