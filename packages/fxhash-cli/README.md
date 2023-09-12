@@ -60,3 +60,14 @@ Will update the whole fxhash environment. It will download the latest version of
 #### Options
 
 `--inject` Inject the latest snippet into the html file. Default: `false`
+
+## Configuration with .env 
+
+The CLI accepts a `.env` file in the root folder. The `.env` file allows you to configure all options of the CLI an store them for your project, e.g.
+
+```
+srcPath=/app
+noMinify=true
+```
+
+> Note: Arguments passed to the command will always override the variables set in the `.env` file
