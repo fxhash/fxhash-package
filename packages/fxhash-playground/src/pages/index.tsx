@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useContext, useMemo } from "react"
-import { UserContext } from "@fxhash/contracts/context/User"
+import { UserContext, UserProvider } from "@fxhash/contracts/context/User"
 import { GenerativeToken } from "@fxhash/contracts/types/entities/GenerativeToken"
 import { useContractOperation } from "@fxhash/contracts/hooks/useContractOperation"
 import { useMintingState } from "@fxhash/contracts/hooks/useMintingState"
@@ -81,26 +81,26 @@ export default function Home(props) {
   }
   return (
     <>
-      <Head>
-        <title>playground</title>
-      </Head>
-      {!user && <button onClick={handleConnect}>connect</button>}
-      {user && (
-        <p>
-          Hi <b>{user.name}</b>{" "}
-          <button onClick={handleDisconnect}>logout</button>
-        </p>
-      )}
-      <h1>{token.metadata.name}</h1>
-      <img
-        width={300}
-        src={ipfsGatewayUrl(token.captureMedia.cid, EGatewayIpfs.FXHASH)}
-      />
-      <br />
-      <button onClick={handleMint}>mint</button>
-      <p>{loading && "loading"}</p>
-      <p>{success && "success"}</p>
-      <p>{error && "error"}</p>
+        <Head>
+          <title>playground</title>
+        </Head>
+        {!user && <button onClick={handleConnect}>connect</button>}
+        {user && (
+          <p>
+            Hi <b>{user.name}</b>{" "}
+            <button onClick={handleDisconnect}>logout</button>
+          </p>
+        )}
+        <h1>{token.metadata.name}</h1>
+        <img
+          width={300}
+          src={ipfsGatewayUrl(token.captureMedia.cid, EGatewayIpfs.FXHASH)}
+        />
+        <br />
+        <button onClick={handleMint}>mint</button>
+        <p>{loading && "loading"}</p>
+        <p>{success && "success"}</p>
+        <p>{error && "error"}</p>
     </>
   )
 }
