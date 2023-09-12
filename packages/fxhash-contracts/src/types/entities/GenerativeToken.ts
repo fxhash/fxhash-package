@@ -9,6 +9,7 @@ import { Split } from "./Split"
 import { User } from "./User"
 // import { ISettingsContext } from "../../context/Theme"
 import { MediaImage } from "./MediaImage"
+import { Redeemable } from "./Redeemable"
 import { MintTicket, MintTicketSettings } from "./MintTicket"
 
 export enum GenTokFlag {
@@ -35,6 +36,8 @@ export enum GenTokLabel {
   PFP = 103,
   AUDIO = 104,
   INCLUDE_PRERENDERED_COMPONENTS = 105,
+  CUSTOM_MINTING_INTERFACE = 106,
+  FXHACKATHON2023 = 302023,
 }
 
 export enum GenTokLabelGroup {
@@ -49,7 +52,7 @@ export interface GenTokLabelDefinition {
   group: GenTokLabelGroup
   description?: string
   icon?: string
-  showWarningSetting?: string//keyof ISettingsContext
+  showWarningSetting?: string //keyof ISettingsContext
   showWarningOn?: "preview" | "run"
 }
 
@@ -59,6 +62,13 @@ export const GenTokLabel_Params: GenTokLabelDefinition = {
   group: GenTokLabelGroup.HIGHLIGHT,
   description:
     "This piece is using the fx(params) module, letting collector play with parameters before minting",
+}
+
+export const GenTokLabel_Redeemable: GenTokLabelDefinition = {
+  label: "Redeemable",
+  shortLabel: "Redeemable",
+  group: GenTokLabelGroup.HIGHLIGHT,
+  description: "This project can be redeemed.",
 }
 
 export interface GenerativeTokenMarketStats {
@@ -120,6 +130,8 @@ export interface GenerativeToken {
   originalSupply: number
   supply: number
   balance: number
+  // defined for V3 only
+  iterationsCount?: number
   enabled: boolean
   royalties: number
   splitsPrimary: Split[]
@@ -139,10 +151,12 @@ export interface GenerativeToken {
   entireCollection?: Objkt[]
   articleMentions?: ArticleGenerativeTokenMention[]
   captureMedia?: MediaImage
+  redeemables: Redeemable[]
   underAuctionMintTickets: MintTicket[]
   mintTickets: MintTicket[]
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
+  gentkContractAddress: string
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
@@ -165,6 +179,7 @@ export interface GenerativeTokenFilters {
   locked_eq?: boolean
   mintOpened_eq?: boolean
   fxparams_eq?: boolean
+  redeemable_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {

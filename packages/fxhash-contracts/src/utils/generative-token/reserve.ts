@@ -8,7 +8,7 @@ import { EReserveMethod, IReserve } from "@/types/entities/Reserve"
 import { User } from "@/types/entities/User"
 import { GenerativeToken } from "@/types/entities/GenerativeToken"
 import { ILiveMintingContext } from "@/context/LiveMinting"
-import { IReserveConsumption } from "@/services/contract-operations/Mint.js"
+import { IReserveConsumption } from "@/types/Reserve"
 
 type TReserveEligibility = (
   reserve: IReserve,
