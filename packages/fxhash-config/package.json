@@ -8,18 +8,37 @@
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "npm run clean && tsc --declaration && tsc-alias",
-    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
-    "typescript": "5.0.4"
+    "typescript": "4.9.5",
+    "tsup": "7.2.0"
   }
 }
