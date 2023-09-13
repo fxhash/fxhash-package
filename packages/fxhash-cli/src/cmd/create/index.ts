@@ -1,51 +1,13 @@
 import type { CommandModule } from "yargs"
-import { createInterface } from "readline"
 import { simpleTemplate } from "../../templates/simple/index"
 import { writeProjectToDisk } from "../../templates/writer"
 import { logger } from "../../utils/logger"
 import { ejectedTemplate } from "../../templates/ejected/index"
+import { chooseFromPrompt, prompt } from "../../utils/prompts"
 
 const TEMPLATE_CHOICES = {
   simple: simpleTemplate,
   ejected: ejectedTemplate,
-}
-
-async function prompt(question: string): Promise<string> {
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  })
-
-  return new Promise<string>(resolve => {
-    rl.question(question, answer => {
-      rl.close()
-      resolve(answer)
-    })
-  })
-}
-
-async function chooseTemplate(): Promise<string> {
-  const templateChoices = Object.keys(TEMPLATE_CHOICES)
-  logger.log("Available project templates:")
-  templateChoices.forEach((choice, index) => {
-    logger.log(`${index + 1}. ${choice}`)
-  })
-
-  const choiceIndex = await prompt(
-    "Select a project template (enter the number): "
-  )
-  const selectedIndex = parseInt(choiceIndex, 10)
-
-  if (
-    isNaN(selectedIndex) ||
-    selectedIndex < 1 ||
-    selectedIndex > templateChoices.length
-  ) {
-    logger.error("Invalid template choice.")
-    return chooseTemplate()
-  }
-
-  return templateChoices[selectedIndex - 1]
 }
 
 export const commandCreate: CommandModule = {
@@ -60,7 +22,7 @@ export const commandCreate: CommandModule = {
       return
     }
 
-    const template = await chooseTemplate()
+    const template = await chooseFromPrompt(TEMPLATE_CHOICES)
 
     try {
       writeProjectToDisk({

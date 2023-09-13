@@ -37,9 +37,9 @@ Creates a bundled version the artwork.
 
 #### Options
 
-`--srcPath` The path to the source of the project. Default: `/src`  
 `--noMinify` Disable minification when creating the bundle  
 `--noZip` Disable the zip file creation  
+`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
 ### `$ fxhash dev [options]`
@@ -48,9 +48,9 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 
 #### Options
 
-`--srcPath` The path to the source of the project. Default: `/src`  
 `--portStudio` The port fxlens is served on. Default: `3300`  
 `--portProject` The port the project is served on. Default: `3301`  
+`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
 ### `$ fxhash update [options]`
@@ -60,6 +60,11 @@ Will update the whole fxhash environment. It will download the latest version of
 #### Options
 
 `--inject` Inject the latest snippet into the html file. Default: `false`
+
+### `$ fxhash eject`
+
+Will eject your project into a nested struture. It will copy all your code into a `srcPath` (Default: `/src`) and create a `package.json` file in the root of your project. This will allow you to configure any custom tooling you like while still being able to use the `@fxhash/cli` in your ejected project.
+
 
 ## Configuration with .env 
 

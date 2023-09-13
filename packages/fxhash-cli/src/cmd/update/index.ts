@@ -1,16 +1,16 @@
 import type { CommandModule } from "yargs"
 import chalk from "chalk"
-import env, { CWD_PATH } from "../../constants"
+import env from "../../constants"
 import { autoUpdateTooklit } from "../../updates/changes"
 import { logger } from "../../utils/logger"
 import { readFileSync, writeFileSync } from "fs"
 import { latest, replaceSnippet } from "@fxhash/fxhash-snippet"
-import path from "path"
 import { format } from "prettier"
-import { validateProjecStructure } from "../../validate/index"
+import { isEjectedProject, validateProjecStructure } from "../../validate/index"
+import { getProjectPaths } from "../../templates/paths"
 
 export const commandUpdate: CommandModule = {
-  command: "upgrade",
+  command: "update",
   describe: "Upgrade the fx(hash) environment",
   builder: yargs =>
     yargs
@@ -25,8 +25,11 @@ export const commandUpdate: CommandModule = {
         describe: "Inject the snippet into the html file",
       }),
   handler: async yargs => {
-    const srcPath = yargs.srcPath as string
     const inject = yargs.inject as boolean
+    const srcPathArg = yargs.srcPath as string
+
+    const isEjected = isEjectedProject(srcPathArg)
+    const srcPath = isEjected ? srcPathArg : ""
 
     try {
       await autoUpdateTooklit({
@@ -41,20 +44,14 @@ export const commandUpdate: CommandModule = {
     }
 
     if (inject) {
-      validateProjecStructure({ srcPath })
+      validateProjecStructure(srcPath)
+      const { htmlEntryPath } = getProjectPaths(srcPath)
       try {
-        const htmlFilePath = path.resolve(
-          CWD_PATH,
-          srcPath,
-          "public",
-          "index.html"
-        )
-
-        const indexHtml = readFileSync(htmlFilePath)
+        const indexHtml = readFileSync(htmlEntryPath)
         const html = indexHtml.toString()
         const newHtml = replaceSnippet(html, latest)
         const pNewHtml = format(newHtml, { parser: "html" })
-        writeFileSync(htmlFilePath, pNewHtml)
+        writeFileSync(htmlEntryPath, pNewHtml)
 
         logger.success(
           "Your project was updated with the latest fxhash-snippet!"

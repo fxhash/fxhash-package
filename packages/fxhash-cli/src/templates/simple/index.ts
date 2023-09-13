@@ -15,7 +15,7 @@ export function simpleTemplate(): TemplateFactoryResponse {
   const pHtml = format(html, { parser: "html" })
   return {
     name,
-    folders: ["public"],
+    folders: [],
     files: [
       ["index.html", pHtml],
       ["styles.css", ""],

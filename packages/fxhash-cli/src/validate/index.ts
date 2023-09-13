@@ -12,6 +12,13 @@ export function isEjectedProject(srcPath: string): boolean {
   )
 }
 
+export function isProjectEjectable(srcPath: string): boolean {
+  const packageJsonExists = existsSync(path.resolve(CWD_PATH, "package.json"))
+  if (packageJsonExists)
+    throw new Error("Project seems to already have a package.json")
+  return validateProjecStructure(srcPath)
+}
+
 export function validateProjecStructure(srcPath: string): boolean {
   try {
     const { rootPath, jsEntryPath, htmlEntryPath } = getProjectPaths(srcPath)

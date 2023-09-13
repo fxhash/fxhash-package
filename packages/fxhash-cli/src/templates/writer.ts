@@ -1,4 +1,4 @@
-import { STATIC_PATH, ROOT_PATH } from "../constants"
+import { STATIC_PATH } from "../constants"
 import { writeFileSync, rmSync, mkdirSync, cpSync } from "fs"
 import path from "path"
 import { TemplateUserConfig } from "./types"

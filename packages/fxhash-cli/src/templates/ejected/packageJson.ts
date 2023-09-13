@@ -5,7 +5,8 @@ export const packageJson = {
   author: "fxhash",
   license: "MIT",
   scripts: {
-    postinstall: "fxhash upgrade",
+    postinstall: "fxhash update",
+    update: "fxhash update --inject",
     start: "fxhash dev",
     build: "fxhash build",
   },
