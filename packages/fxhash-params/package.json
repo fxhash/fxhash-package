@@ -54,7 +54,7 @@
     "node-sass": "8.0.0",
     "postcss": "8.4.26",
     "tslib": "2.6.0",
-    "tsup": "7.2.0",
+    "tsup": "6.6.0",
     "typescript": "4.9.5"
   }
 }
