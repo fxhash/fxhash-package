@@ -1,8 +1,8 @@
-import { CWD_PATH, DIST_PATH } from "../constants"
+import { DIST_PATH } from "../constants"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-import path from "path"
 import { WebpackConfiguration } from "webpack-dev-server"
 import { InjectHead } from "./plugins/InjectHead"
+import { getProjectPaths } from "../templates/paths"
 
 export interface WebpackConfigFactoryOptions {
   srcPath: string
@@ -16,30 +16,31 @@ export type WebpackConfigFactory = (
   options: WebpackConfigFactoryOptions
 ) => WebpackConfiguration
 
-export const createBaseConfig: WebpackConfigFactory = ({ srcPath }) => ({
-  entry: path.resolve(CWD_PATH, srcPath, "index.js"),
-  output: {
-    path: DIST_PATH,
-    filename: "bundle.js",
-    clean: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
+export const createBaseConfig: WebpackConfigFactory = ({ srcPath }) => {
+  const { jsEntryPath, htmlEntryPath } = getProjectPaths(srcPath)
+  return {
+    entry: jsEntryPath,
+    output: {
+      path: DIST_PATH,
+      filename: "bundle.js",
+      clean: true,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: htmlEntryPath,
+        inject: "body",
+        publicPath: "./",
+        minify: false,
+      }),
+      new InjectHead(),
     ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(CWD_PATH, srcPath, "public", "index.html"),
-      inject: "body",
-      publicPath: "./",
-      minify: false,
-    }),
-    new InjectHead({
-      inject: "caca !!",
-    }),
-  ],
-})
+  }
+}

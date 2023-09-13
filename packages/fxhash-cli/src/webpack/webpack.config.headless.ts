@@ -10,11 +10,5 @@ export const createHeadlessConfig: WebpackConfigFactory = options => {
     devServer: {
       port: portProject + 1,
     },
-    plugins: [
-      ...(baseConfig.plugins as any[]),
-      new InjectHead({
-        inject: `<script>document.domain = "localhost"</script>`,
-      }),
-    ],
   }
 }

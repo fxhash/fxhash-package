@@ -3,7 +3,7 @@ import Webpack, { Stats, WebpackError } from "webpack"
 import env from "../../constants"
 import { createProdConfig } from "../../webpack/webpack.config.prod"
 import { logger } from "../../utils/logger"
-import { validateProjecStructure } from "../../validate/index"
+import { isEjectedProject, validateProjecStructure } from "../../validate/index"
 
 export const commandBuild: CommandModule = {
   command: "build",
@@ -28,9 +28,13 @@ export const commandBuild: CommandModule = {
   handler: async yargs => {
     const noMinify = yargs.noMinify as boolean
     const noZip = yargs.noZip as boolean
-    const srcPath = yargs.srcPath as string
+    const srcPathArg = yargs.srcPath as string
 
-    validateProjecStructure({ srcPath })
+    const isEjected = isEjectedProject(srcPathArg)
+
+    const srcPath = isEjected ? srcPathArg : ""
+
+    validateProjecStructure(srcPath)
 
     const webpackConfigFactoryOptions = {
       srcPath,

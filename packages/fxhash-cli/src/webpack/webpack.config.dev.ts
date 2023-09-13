@@ -1,10 +1,11 @@
-import path from "path"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
-import { CWD_PATH } from "../constants"
+import { getProjectPaths } from "../templates/paths"
+import { RemoveJsEntryScriptPlugin } from "./plugins/RemoveJsEntryPlugin"
 
 export const createDevConfig: WebpackConfigFactory = options => {
   const { srcPath, portProject } = options
   const baseConfig = createBaseConfig(options)
+  const { staticPath, jsEntryPath, rootPath } = getProjectPaths(srcPath)
   return {
     ...baseConfig,
     mode: "development",
@@ -14,9 +15,8 @@ export const createDevConfig: WebpackConfigFactory = options => {
       // https://webpack.js.org/concepts/hot-module-replacement/
       hot: false,
       port: portProject,
-      // server resources from the public folder, located in /project
       static: {
-        directory: path.resolve(CWD_PATH, srcPath, "public"),
+        directory: staticPath,
       },
       client: {
         overlay: {
@@ -25,6 +25,9 @@ export const createDevConfig: WebpackConfigFactory = options => {
         },
       },
     },
-    plugins: [...(baseConfig.plugins as any[])],
+    plugins: [
+      ...baseConfig.plugins,
+      new RemoveJsEntryScriptPlugin({ jsEntryPath, rootPath }),
+    ],
   }
 }

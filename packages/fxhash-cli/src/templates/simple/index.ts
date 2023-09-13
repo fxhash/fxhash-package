@@ -9,19 +9,19 @@ export function simpleTemplate(): TemplateFactoryResponse {
   const html = render(baseHtmlTemplate, {
     name,
     snippet: latest,
-    head: `<link rel="stylesheet" href="./style.css">`,
+    head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./index.js"></script>`,
   })
   const pHtml = format(html, { parser: "html" })
   return {
     name,
-    folders: ["src", "src/public"],
+    folders: ["public"],
     files: [
-      ["src/public/index.html", pHtml],
-      ["src/public/styles.css", ""],
+      ["index.html", pHtml],
+      ["styles.css", ""],
     ],
     staticFiles: [
-      ["src/index.js", "static/examples/params.js"],
+      ["index.js", "static/examples/params.js"],
       ["LICENSE", "static/LICENSE"],
     ],
   }

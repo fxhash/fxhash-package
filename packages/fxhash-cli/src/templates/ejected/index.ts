@@ -9,17 +9,17 @@ export function ejectedTemplate({ name = "ejected" }): TemplateFactoryResponse {
   const html = render(baseHtmlTemplate, {
     name,
     snippet: latest,
-    head: `<link rel="stylesheet" href="./style.css">`,
-    entry: `<!-- WEBPACK will inject the bundle.js here -->`,
+    head: `<link rel="stylesheet" href="./styles.css">`,
+    entry: `<script src="./index.js"></script>`,
   })
   const pHtml = format(html, { parser: "html" })
   const pkgJson = JSON.stringify({ ...packageJson, name }, null, 2)
   return {
     name,
-    folders: ["src", "src/public"],
+    folders: ["src"],
     files: [
-      ["src/public/index.html", pHtml],
-      ["src/public/styles.css", ""],
+      ["src/index.html", pHtml],
+      ["src/styles.css", ""],
       ["package.json", pkgJson],
     ],
     staticFiles: [

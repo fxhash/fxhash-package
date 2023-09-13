@@ -9,7 +9,7 @@ import { createDevConfig } from "../../webpack/webpack.config.dev"
 import { createHeadlessConfig } from "../../webpack/webpack.config.headless"
 import { autoUpdateTooklit } from "../../updates/changes"
 import { logger } from "../../utils/logger"
-import { validateProjecStructure } from "../../validate/index"
+import { isEjectedProject, validateProjecStructure } from "../../validate/index"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
@@ -33,14 +33,19 @@ export const commandDev: CommandModule = {
       .option("srcPath", {
         type: "string",
         default: env.SRC_PATH,
-        describe: "The path to the src of the project",
+        describe:
+          "The path to the src of the project. This setting is only relevant when your project is ejected.",
       }),
   handler: async yargs => {
     const portProject = yargs.portProject as number
     const portStudio = yargs.portStudio as number
-    const srcPath = yargs.srcPath as string
+    const srcPathArg = yargs.srcPath as string
 
-    validateProjecStructure({ srcPath })
+    const isEjected = isEjectedProject(srcPathArg)
+
+    const srcPath = isEjected ? srcPathArg : ""
+
+    validateProjecStructure(srcPath)
 
     // commonly used variable for ease
     const URL_FXLENS = `http://localhost:${portStudio}`

@@ -2,15 +2,11 @@ import { replaceSnippet } from "@fxhash/fxhash-snippet"
 import fs from "fs"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import { format } from "prettier"
+import { Compiler } from "webpack"
 import { SNIPPET_PATH } from "../../constants"
 
 export class InjectHead {
-  options = null
-  constructor(options) {
-    this.options = options
-  }
-
-  apply(compiler) {
+  apply(compiler: Compiler) {
     compiler.hooks.compilation.tap("InjectHead", compilation => {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         "InjectHead",

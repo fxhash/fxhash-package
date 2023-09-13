@@ -10,7 +10,7 @@ export const baseHtmlTemplate: BaseHtmlTemplate = `
             </script>
             <%- head %>
         </head>
-        <body> 
+        <body>
             <%- entry %>
         </body>
     </html>
