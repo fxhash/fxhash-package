@@ -30,10 +30,11 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
+    "@apollo/client": "3.8.1",
     "@airgap/beacon-sdk": "3.3.4",
-    "@apollo/client": "3.7.14",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
+    "@fxhash/config2": "workspace:*",
     "@taquito/beacon-wallet": "13.0.1",
     "@taquito/michel-codec": "13.0.1",
     "@taquito/michelson-encoder": "13.0.1",
@@ -51,8 +52,9 @@
     "@fxhash/config": "*",
     "@fxhash/config2": "*",
     "@fxhash/gql": "*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "18.2.0",
+    "react-colorful": "5.6.1",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@fxhash/config": "workspace:*",
