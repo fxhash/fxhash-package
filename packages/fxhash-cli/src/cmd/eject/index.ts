@@ -31,7 +31,7 @@ export const commandEject: CommandModule = {
       // Move all the existing files into the /src folder
       const files = readdirSync(CWD_PATH)
       const exclusions = [DIST_PATH, srcPath]
-      const name = path.dirname(CWD_PATH)
+      const name = path.basename(CWD_PATH)
       files.forEach(file => {
         const sourceFilePath = path.join(CWD_PATH, file)
         const targetFilePath = path.join(srcPath, file)
