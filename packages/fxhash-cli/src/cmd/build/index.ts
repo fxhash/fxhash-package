@@ -13,12 +13,12 @@ export const commandBuild: CommandModule = {
       .option("minify", {
         type: "boolean",
         default: false,
-        describe: "Minify the code of the project",
+        describe: "Enable minification when creating the bundle",
       })
       .option("noZip", {
         type: "boolean",
         default: false,
-        describe: "Create an zip file of the bundled code",
+        describe: "Disable the zip file creation",
       })
       .option("srcPath", {
         type: "string",

@@ -37,7 +37,7 @@ Creates a bundled version the artwork.
 
 #### Options
 
-`--noMinify` Disable minification when creating the bundle  
+`--minify` Enable minification when creating the bundle  
 `--noZip` Disable the zip file creation  
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
@@ -71,8 +71,10 @@ Will eject your project into a nested struture. It will copy all your code into 
 The CLI accepts a `.env` file in the root folder. The `.env` file allows you to configure all options of the CLI an store them for your project, e.g.
 
 ```
-srcPath=/app
-noMinify=true
+PORT_PROJECT=3301
+PORT_STUDIO=3300
+SRC_PATH=/src
+MINIFY=false
 ```
 
 > Note: Arguments passed to the command will always override the variables set in the `.env` file
