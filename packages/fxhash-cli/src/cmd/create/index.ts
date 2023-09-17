@@ -6,7 +6,7 @@ import { ejectedTemplate } from "../../templates/ejected/index"
 import { chooseFromPrompt, prompt } from "../../utils/prompts"
 
 const TEMPLATE_CHOICES = {
-  simple: simpleTemplate,
+  "simple (recommended)": simpleTemplate,
   ejected: ejectedTemplate,
 }
 
@@ -22,7 +22,11 @@ export const commandCreate: CommandModule = {
       return
     }
 
-    const template = await chooseFromPrompt(TEMPLATE_CHOICES)
+    const template = await chooseFromPrompt(TEMPLATE_CHOICES, {
+      title: "Available project templates:",
+      description:
+        "Select a project template (use arrow keys, press Enter, or Ctrl+C to exit)",
+    })
 
     try {
       writeProjectToDisk({
