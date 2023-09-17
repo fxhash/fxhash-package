@@ -10,7 +10,7 @@ export const commandBuild: CommandModule = {
   describe: "Create a build of the project that can be published on fx(hash)",
   builder: yargs =>
     yargs
-      .option("noMinify", {
+      .option("minify", {
         type: "boolean",
         default: false,
         describe: "Minify the code of the project",
@@ -18,7 +18,7 @@ export const commandBuild: CommandModule = {
       .option("noZip", {
         type: "boolean",
         default: false,
-        describe: "Minify the code of the project",
+        describe: "Create an zip file of the bundled code",
       })
       .option("srcPath", {
         type: "string",
@@ -26,7 +26,7 @@ export const commandBuild: CommandModule = {
         describe: "The path to the project",
       }),
   handler: async yargs => {
-    const noMinify = yargs.noMinify as boolean
+    const minify = yargs.minify as boolean
     const noZip = yargs.noZip as boolean
     const srcPathArg = yargs.srcPath as string
 
@@ -38,7 +38,7 @@ export const commandBuild: CommandModule = {
 
     const webpackConfigFactoryOptions = {
       srcPath,
-      minify: !noMinify,
+      minify,
       zippify: !noZip,
     }
 
