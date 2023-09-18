@@ -47,6 +47,8 @@ export type FxParamTypeMap = {
 
 export type FxParamUpdateMode = "page-reload" | "sync" | "code-driven"
 
+export type FxParamValue<Type extends FxParamType> = FxParamTypeMap[keyof FxParamTypeMap];
+
 export interface FxParamDefinition<Type extends FxParamType> {
   id: string
   name?: string
@@ -60,6 +62,8 @@ export interface FxParamDefinition<Type extends FxParamType> {
 
 export type hexString = `#${string}`
 
+export type FxParamProcessorTransformer<Type extends FxParamType> = (value: FxParamTypeMap[Type], definition?: FxParamDefinition<Type>) => FxParamTypeMap[Type]
+
 export interface FxParamProcessor<Type extends FxParamType> {
   serialize: (
     input: FxParamTypeMap[Type],
@@ -70,12 +74,15 @@ export interface FxParamProcessor<Type extends FxParamType> {
     definition: FxParamDefinition<Type>
   ) => FxParamTypeMap[Type]
   bytesLength: (definition: FxParamDefinition<Type>) => number
-  transform?: (input: string) => any
+  transform?: FxParamProcessorTransformer<Type>
+  constrain?: FxParamProcessorTransformer<Type>
   random: (definition: FxParamDefinition<Type>) => FxParamTypeMap[Type]
 }
 
 export type FxParamProcessors = {
   [T in FxParamType]: FxParamProcessor<T>
 }
+
+export type FxParamTranformType = "transform" | "constrain"
 
 export type FxParamsData = Record<string, any>
