@@ -30,8 +30,8 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
+    "@apollo/client": "3.8.1",
     "@airgap/beacon-sdk": "3.3.4",
-    "@apollo/client": "3.7.14",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@fxhash/config2": "workspace:*",
@@ -60,8 +60,8 @@
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@types/lodash.debounce": "4.0.7",
-    "@types/react": "17.0.62",
-    "@types/react-dom": "17.0.20",
+    "@types/react": "18.2.15",
+    "@types/react-dom": "18.2.7",
     "tslib": "2.6.0",
     "tsup": "6.6.0",
     "typescript": "4.9.5"
