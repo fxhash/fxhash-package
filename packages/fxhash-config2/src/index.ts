@@ -49,6 +49,7 @@ export interface IFxhashApis {
   website: string
   main: string
   file: string
+  fsEmulator: string
   extract: string
   media: string
   ipfsGateway: string
@@ -225,6 +226,7 @@ const devApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
   file: "https://file-api.fxhash-dev.xyz",
+  fsEmulator: "https://file-system.fxhash-dev.xyz", // placeholder
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
@@ -256,6 +258,7 @@ const prdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
   file: "https://file-api.fxhash.xyz",
+  fsEmulator: "https://file-system.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash.xyz",
