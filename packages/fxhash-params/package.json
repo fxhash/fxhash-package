@@ -13,12 +13,16 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "exports": {
-    "./*": "./dist/*"
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js",
+      "import": "./dist/*.js"
+    }
   },
   "typesVersions": {
     "*": {
       "*": [
-        "dist/*"
+        "./dist/*"
       ]
     }
   },
