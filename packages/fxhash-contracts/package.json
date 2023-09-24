@@ -30,8 +30,8 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
+    "@apollo/client": "3.8.1",
     "@airgap/beacon-sdk": "3.3.4",
-    "@apollo/client": "3.7.14",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@fxhash/config2": "workspace:*",
