@@ -226,7 +226,7 @@ const devApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
   file: "https://file-api.fxhash-dev.xyz",
-  fsEmulator: "https://file-system.fxhash-dev.xyz", // placeholder
+  fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
@@ -258,7 +258,7 @@ const prdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
   file: "https://file-api.fxhash.xyz",
-  fsEmulator: "https://file-system.fxhash.xyz", // placeholder
+  fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash.xyz",
