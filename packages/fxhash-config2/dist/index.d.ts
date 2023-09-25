@@ -1,4 +1,4 @@
-export interface ITezosContracts {
+interface ITezosContracts {
     allowed_mint: string;
     allowed_mint_issuer: string;
     allowed_mint_issuer_v3: string;
@@ -34,16 +34,16 @@ export interface ITezosContracts {
     user_moderation: string;
     user_register: string;
 }
-export interface ITezosApis {
+interface ITezosApis {
     tzktWebsite: string;
     tzkt: string;
     rpcs: string[];
 }
-export interface IEthContracts {
+interface IEthContracts {
 }
-export interface IEthApis {
+interface IEthApis {
 }
-export interface IFxhashApis {
+interface IFxhashApis {
     website: string;
     main: string;
     file: string;
@@ -69,15 +69,15 @@ export interface IFxhashApis {
         liveBackend: string;
     };
 }
-export interface IFxhashNetworkConfig {
+interface IFxhashNetworkConfig {
     network: string;
 }
-export interface IFxhashEnvConfig {
+interface IFxhashEnvConfig {
     envName: string;
 }
-export type TBlockchain = "tez" | "eth";
-export type TBlockchainNetwork = "testnet" | "mainnet";
-export type TEnv = "dev" | "prd";
+type TBlockchain = "tez" | "eth";
+type TBlockchainNetwork = "testnet" | "mainnet";
+type TEnv = "dev" | "prd";
 type TBlockchainContacts = {
     [B in TBlockchain]: {
         tez: ITezosContracts;
@@ -96,7 +96,7 @@ type TNetworkBlockchainConfig = {
         eth: IFxhashNetworkConfig;
     }[B];
 };
-export type IFxhashConfig = {
+type IFxhashConfig = {
     networks: {
         [N in TBlockchainNetwork]: {
             [B in TBlockchain]: {
@@ -113,5 +113,6 @@ export type IFxhashConfig = {
         };
     };
 };
-export declare const FxhashConfig: IFxhashConfig;
-export default FxhashConfig;
+declare const FxhashConfig: IFxhashConfig;
+
+export { FxhashConfig, IEthApis, IEthContracts, IFxhashApis, IFxhashConfig, IFxhashEnvConfig, IFxhashNetworkConfig, ITezosApis, ITezosContracts, TBlockchain, TBlockchainNetwork, TEnv, FxhashConfig as default };
