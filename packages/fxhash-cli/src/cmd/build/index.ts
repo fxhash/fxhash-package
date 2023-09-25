@@ -15,11 +15,6 @@ export const commandBuild: CommandModule = {
         default: false,
         describe: "Enable minification when creating the bundle",
       })
-      .option("noZip", {
-        type: "boolean",
-        default: false,
-        describe: "Disable the zip file creation",
-      })
       .option("srcPath", {
         type: "string",
         default: env.SRC_PATH,
@@ -27,7 +22,6 @@ export const commandBuild: CommandModule = {
       }),
   handler: async yargs => {
     const minify = yargs.minify as boolean
-    const noZip = yargs.noZip as boolean
     const srcPathArg = yargs.srcPath as string
 
     const isEjected = isEjectedProject(srcPathArg)
@@ -39,7 +33,7 @@ export const commandBuild: CommandModule = {
     const webpackConfigFactoryOptions = {
       srcPath,
       minify,
-      zippify: !noZip,
+      zippify: true,
     }
 
     // the environment config
@@ -64,7 +58,6 @@ export const commandBuild: CommandModule = {
           }
         } else {
           // Compilation was successful
-          logger.log(`${webpackConfig.output.path} created`)
           logger.success("Project compilation successful.")
         }
       }

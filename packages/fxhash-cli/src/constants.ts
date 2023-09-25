@@ -14,7 +14,7 @@ export default env
 
 // User folders (where the CLI is run)
 export const CWD_PATH = path.resolve(process.cwd())
-export const DIST_PATH = path.resolve(CWD_PATH, "dist")
+export const DIST_PATH = path.resolve(CWD_PATH, "upload")
 
 // CLI Internal folders
 export const ROOT_PATH = path.resolve(__dirname)

@@ -1,5 +1,7 @@
 import AdmZip from "adm-zip"
+import chalk from "chalk"
 import { rmSync } from "fs"
+import { basename } from "path"
 import { logger } from "../../utils/logger"
 
 interface ZipperPluginOptions {
@@ -28,7 +30,13 @@ export class ZipperPlugin {
       zip.addLocalFolder(outputPath)
       zip.toBuffer()
       zip.writeZip(zipPath)
-      logger.log(`${zipPath} created`)
+      logger.log(chalk.dim(`${zipPath} created`))
+      logger.log(
+        `Upload the ${basename(zipPath)} on ${logger.url(
+          "fxhash.xyz"
+        )} to mint your project.`
+      )
+      rmSync(outputPath, { force: true, recursive: true })
       callback()
     })
   }

@@ -30,7 +30,10 @@ export class RemoveJsEntryScriptPlugin {
           scriptTags.forEach(scriptTag => {
             if (scriptTag.hasAttribute("src")) {
               const scriptSrc = scriptTag.getAttribute("src")
-              const localScriptPath = path.resolve(this.options.rootPath, scriptSrc)
+              const localScriptPath = path.resolve(
+                this.options.rootPath,
+                scriptSrc
+              )
               if (localScriptPath === this.options.jsEntryPath) {
                 scriptTag.remove()
               }
