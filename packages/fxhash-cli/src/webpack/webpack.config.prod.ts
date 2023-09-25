@@ -8,7 +8,7 @@ import { getProjectPaths } from "../templates/paths"
 export const createProdConfig: WebpackConfigFactory = options => {
   const { srcPath, minify, zippify } = options
   const baseConfig = createBaseConfig(options)
-  const { staticPath, jsEntryPath, htmlEntryPath } = getProjectPaths(srcPath)
+  const { staticPath } = getProjectPaths(srcPath)
   const zipFilePath = baseConfig.output.path + ".zip"
   return {
     ...baseConfig,
@@ -25,7 +25,7 @@ export const createProdConfig: WebpackConfigFactory = options => {
             {
               from: staticPath,
               filter: async filePath => {
-                const filesNotToCopy = [jsEntryPath, htmlEntryPath, zipFilePath]
+                const filesNotToCopy = [zipFilePath]
                 const foldersNotToCopy = [DIST_PATH]
                 if (filesNotToCopy.some(file => filePath === file)) return false
                 if (

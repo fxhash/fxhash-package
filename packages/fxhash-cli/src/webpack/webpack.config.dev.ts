@@ -1,11 +1,10 @@
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
 import { getProjectPaths } from "../templates/paths"
-import { RemoveJsEntryScriptPlugin } from "./plugins/RemoveJsEntryPlugin"
 
 export const createDevConfig: WebpackConfigFactory = options => {
   const { srcPath, portProject } = options
   const baseConfig = createBaseConfig(options)
-  const { staticPath, jsEntryPath, rootPath } = getProjectPaths(srcPath)
+  const { staticPath } = getProjectPaths(srcPath)
   return {
     ...baseConfig,
     mode: "development",
@@ -25,9 +24,6 @@ export const createDevConfig: WebpackConfigFactory = options => {
         },
       },
     },
-    plugins: [
-      ...baseConfig.plugins,
-      new RemoveJsEntryScriptPlugin({ jsEntryPath, rootPath }),
-    ],
+    plugins: [...baseConfig.plugins],
   }
 }

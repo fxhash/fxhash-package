@@ -1,4 +1,3 @@
-import { InjectHead } from "./plugins/InjectHead"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
 
 export const createHeadlessConfig: WebpackConfigFactory = options => {

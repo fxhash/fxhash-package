@@ -1,5 +1,4 @@
-import { DIST_PATH } from "../constants"
-import HtmlWebpackPlugin from "html-webpack-plugin"
+import { DIST_PATH, JS_ENTRY_FILE_NAME } from "../constants"
 import { WebpackConfiguration } from "webpack-dev-server"
 import { InjectHead } from "./plugins/InjectHead"
 import { getProjectPaths } from "../templates/paths"
@@ -17,30 +16,14 @@ export type WebpackConfigFactory = (
 ) => WebpackConfiguration
 
 export const createBaseConfig: WebpackConfigFactory = ({ srcPath }) => {
-  const { jsEntryPath, htmlEntryPath } = getProjectPaths(srcPath)
+  const { jsEntryPath } = getProjectPaths(srcPath)
   return {
-    entry: jsEntryPath,
+    entry: { [JS_ENTRY_FILE_NAME]: jsEntryPath },
     output: {
       path: DIST_PATH,
-      filename: "bundle.js",
+      filename: "[name].js",
       clean: true,
     },
-    module: {
-      rules: [
-        {
-          test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
-        },
-      ],
-    },
-    plugins: [
-      new HtmlWebpackPlugin({
-        template: htmlEntryPath,
-        inject: "body",
-        publicPath: "./",
-        minify: false,
-      }),
-      new InjectHead(),
-    ],
+    plugins: [new InjectHead()],
   }
 }
