@@ -1,17 +1,17 @@
 import { useLazyQuery } from "@apollo/client"
 import { PropsWithChildren, useState, useRef, createContext } from "react"
 import { Qu_user } from "@fxhash/gql/queries/user"
-import type { WalletManager } from "services/Wallet"
-import { ConnectedUser } from "types/entities/User"
-import { useClientEffect } from "hooks/useClientEffect"
-import { useClientAsyncEffect } from "hooks/useClientAsyncEffect"
+import type { TezosWalletManager } from "@/services/Wallet"
+import { ConnectedUser } from "@/types/entities/User"
+import { useClientEffect } from "@/hooks/useClientEffect"
+import { useClientAsyncEffect } from "@/hooks/useClientAsyncEffect"
 // import { useUserAlerts } from "hooks/useUserAlerts"
 
 export interface UserContextType {
   autoConnectChecked: boolean
   user: ConnectedUser | null
   userFetched: boolean
-  walletManager: WalletManager | null
+  walletManager: TezosWalletManager | null
   isLiveMinting: boolean
   connect: (useAutonomy?: boolean) => Promise<void>
   disconnect: () => void
@@ -23,7 +23,7 @@ const defaultCtx: UserContextType = {
   userFetched: false,
   isLiveMinting: false,
   walletManager: null,
-  connect: () => new Promise((r) => r()),
+  connect: () => new Promise(r => r()),
   disconnect: () => {},
 }
 
@@ -96,7 +96,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     }
   }
 
-  useClientAsyncEffect(async (isMounted) => {
+  useClientAsyncEffect(async isMounted => {
     const initCtx: UserContextType = {
       ...defaultCtx,
       connect,
@@ -104,10 +104,10 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     }
 
     // lazy import of the Wallet manager here
-    const { WalletManager } = await import("services/Wallet")
+    const { TezosWalletManager } = await import("@/services/Wallet")
 
     // instanciate the manager
-    const manager = new WalletManager()
+    const manager = new TezosWalletManager()
     initCtx.walletManager = manager
 
     // check if user is already connected

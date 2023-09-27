@@ -1,20 +1,21 @@
-import { TContractOperation } from "services/contract-operations/ContractOperation"
 import {
-  IReserveConsumption,
-  MintOperation,
-  TMintOperationParams,
-} from "services/contract-operations/Mint"
+  BlockchainType,
+  TAnyContractOperation,
+} from "@/services/operations/ContractOperation"
+import { MintOperation, TMintOperationParams } from "@/services/operations/Mint"
 import {
   MintV3Operation,
   TMintV3OperationParams,
-} from "services/contract-operations/MintV3"
+} from "@/services/operations/MintV3"
+import { IReserveConsumption } from "@/types/Reserve"
 import {
   GenerativeToken,
   GenerativeTokenVersion,
-} from "types/entities/GenerativeToken"
+} from "@/types/entities/GenerativeToken"
+import { getChainFromToken } from "./generative-token"
 
 interface MintTransformer<T> {
-  operation: TContractOperation<T>
+  operation: TAnyContractOperation<T>
   getParams: (data: {
     token: GenerativeToken
     price: number
@@ -22,12 +23,11 @@ interface MintTransformer<T> {
   }) => T
 }
 
-export const mintOperationsByTokenVersion: Record<
-  GenerativeTokenVersion,
-  MintTransformer<any>
-> = {
+const mintOpsByVersion = (
+  blockchainType: BlockchainType
+): Record<GenerativeTokenVersion, MintTransformer<any>> => ({
   PRE_V3: {
-    operation: MintOperation,
+    operation: MintOperation.create(blockchainType),
     getParams: (data) => {
       return {
         token: data.token,
@@ -37,7 +37,7 @@ export const mintOperationsByTokenVersion: Record<
     },
   } as MintTransformer<TMintOperationParams>,
   V3: {
-    operation: MintV3Operation,
+    operation: MintV3Operation.create(blockchainType),
     getParams: (data) => {
       return {
         token: data.token,
@@ -48,12 +48,9 @@ export const mintOperationsByTokenVersion: Record<
       }
     },
   } as MintTransformer<TMintV3OperationParams>,
-}
-
-export const getMintOperationByTokenVersion = (
-  version: GenerativeTokenVersion
-): MintTransformer<any> => mintOperationsByTokenVersion[version]
+})
 
 export const getMintOperationByToken = (
   token: GenerativeToken
-): MintTransformer<any> => getMintOperationByTokenVersion(token.version)
+): MintTransformer<any> =>
+  mintOpsByVersion(getChainFromToken(token))[token.version]

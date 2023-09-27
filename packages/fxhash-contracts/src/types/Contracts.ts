@@ -70,15 +70,29 @@ export type ContractCallHookReturn<T> = {
   clear: () => void
 }
 
-export type TContractOperationHookReturn<Params> = {
+type TContractOperationHookReturn<Params, OpDataType, OperationType> = {
   state: ContractOperationStatus
   loading: boolean
   success: boolean
   error: boolean
   opHash: string | null
-  operation: WalletOperation | null
-  opData: TzktOperation[] | null
+  operation: OperationType | null
+  opData: OpDataType[] | null
   params: Params | null
   call: (data: Params) => void
   clear: () => void
 }
+
+type TTezosContractOperationHookReturn<Params> = TContractOperationHookReturn<
+  Params,
+  TzktOperation,
+  WalletOperation
+>
+
+// TODO: define appropriate types
+type TEthereumContractOperationHookReturn<Params> =
+  TContractOperationHookReturn<Params, any, any>
+
+export type TAnyContractOperationHookReturn<Params> =
+  | TTezosContractOperationHookReturn<Params>
+  | TEthereumContractOperationHookReturn<Params>

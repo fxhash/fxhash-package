@@ -1,27 +1,27 @@
-import { TzktOperation } from "types/Tzkt"
+import { TzktOperation } from "@/types/Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
-import { UserContext } from "context/User"
-import { TContractOperation } from "services/contract-operations/ContractOperation"
+import { UserContext } from "@/context/User"
+import { TAnyContractOperation } from "@/services/operations/ContractOperation"
 import {
   ContractOperationCallback,
   ContractOperationStatus,
-  TContractOperationHookReturn,
-} from "types/Contracts"
+  TAnyContractOperationHookReturn,
+} from "@/types/Contracts"
 import { useIsMounted } from "./useIsMounted"
-// import { createOperationAppliedAlert } from "components/Alerts/OperationAppliedAlert"
-// import { MessageCenterContext } from "../context/MessageCenter"
 
 interface OptionsContractOperation {
   onSuccess?: (data: any) => void
-  onContractOperationStatusInjected?: (message) => void
-  onContractOperationStatusError?: (message) => void
+  onError?: (error: any) => void
 }
 
+/**
+ * A
+ */
 export function useContractOperation<Params>(
-  OperationClass: TContractOperation<Params>,
+  OperationClass: TAnyContractOperation<Params>,
   options: OptionsContractOperation = {}
-): TContractOperationHookReturn<Params> {
+): TAnyContractOperationHookReturn<Params> {
   const [state, setState] = useState<ContractOperationStatus>(
     ContractOperationStatus.NONE
   )
@@ -86,17 +86,16 @@ export function useContractOperation<Params>(
             options.onSuccess(data)
           }
         } else if (status === ContractOperationStatus.ERROR) {
+          options.onError?.(data)
           setLoading(false)
           setError(true)
         }
       }
 
-      // even if not mounted anymore we call the handlers
+      // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
         // messageCenter.addMessage(createOperationAppliedAlert(data.message))
-        options.onContractOperationStatusInjected?.(data)
       } else if (status === ContractOperationStatus.ERROR) {
-        options.onContractOperationStatusError?.(data)
         // messageCenter.addMessage({
         //   type: "error",
         //   title: "An error occured",

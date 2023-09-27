@@ -1,7 +1,17 @@
 {
   "name": "@fxhash/contracts",
+  "private": true,
   "version": "1.0.0",
-  "module": "true",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
   "exports": {
     "./*": "./dist/*"
   },
@@ -15,51 +25,45 @@
   "files": [
     "dist"
   ],
-  "license": "MIT",
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "npm run clean && rollup -c --bundleConfigAsCjs",
-    "build:watch": "npm run clean && rollup -c -w --bundleConfigAsCjs --no-watch.clearScreen",
-    "test": "jest"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.14",
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
-    "@taquito/beacon-wallet": "^13.0.1",
-    "@taquito/michel-codec": "^13.0.1",
-    "@taquito/michelson-encoder": "^13.0.1",
-    "@taquito/taquito": "^13.0.1",
-    "autonomy-irl-js": "^1.0.0",
-    "classnames": "^2.3.2",
-    "lodash.debounce": "^4.0.8",
-    "use-async-effect": "^2.2.7",
-    "next": "12.2.6"
+    "@apollo/client": "3.8.1",
+    "@airgap/beacon-sdk": "3.3.4",
+    "@fortawesome/free-solid-svg-icons": "6.4.0",
+    "@fortawesome/react-fontawesome": "0.2.0",
+    "@fxhash/config2": "workspace:*",
+    "@taquito/beacon-wallet": "13.0.1",
+    "@taquito/michel-codec": "13.0.1",
+    "@taquito/michelson-encoder": "13.0.1",
+    "@taquito/rpc": "17.1.1",
+    "@taquito/taquito": "13.0.1",
+    "@taquito/utils": "17.1.0",
+    "autonomy-irl-js": "1.0.0",
+    "classnames": "2.3.2",
+    "date-fns": "2.30.0",
+    "lodash.debounce": "4.0.8",
+    "next": "12.2.6",
+    "use-async-effect": "2.2.7"
   },
   "peerDependencies": {
-    "@fxhash/gql": "*",
-    "@fxhash/config": "*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/config2": "workspace:*",
+    "react": "18.2.0",
+    "react-colorful": "5.6.1",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.1.0",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.2",
-    "@types/node-sass": "^4.11.3",
-    "@types/react": "^18.0.34",
-    "autoprefixer": "^10.4.14",
-    "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
-    "node-sass": "^8.0.0",
-    "postcss": "^8.4.21",
-    "rollup": "^3.20.2",
-    "rollup-plugin-dts": "^5.3.0",
-    "rollup-plugin-node-polyfills": "^0.2.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-typescript2": "^0.34.1",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.4"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@types/lodash.debounce": "4.0.7",
+    "@types/react": "18.2.15",
+    "@types/react-dom": "18.2.7",
+    "tslib": "2.6.0",
+    "tsup": "6.6.0",
+    "typescript": "4.9.5"
   }
 }

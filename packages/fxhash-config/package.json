@@ -1,15 +1,44 @@
 {
   "name": "@fxhash/config",
+  "private": true,
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "author": "fxhash",
   "license": "MIT",
-  "scripts": {
-    "clean": "rm -rf dist",
-    "build": "npm run clean && tsc --declaration && tsc-alias",
-    "build:watch": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
   },
-  "dependencies": {
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "18.7.13",
+    "tsc-alias": "1.8.5",
+    "typescript": "5.0.4",
+    "tsup": "6.6.0"
   }
 }
