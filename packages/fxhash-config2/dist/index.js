@@ -95,6 +95,8 @@ var devApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
   file: "https://file-api.fxhash-dev.xyz",
+  fsEmulator: "https://file-system.fxhash-dev.xyz",
+  // placeholder
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
@@ -121,6 +123,8 @@ var prdApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
   file: "https://file-api.fxhash.xyz",
+  fsEmulator: "https://file-system.fxhash.xyz",
+  // placeholder
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash.xyz",

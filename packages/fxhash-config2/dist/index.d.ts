@@ -47,6 +47,7 @@ interface IFxhashApis {
     website: string;
     main: string;
     file: string;
+    fsEmulator: string;
     extract: string;
     media: string;
     ipfsGateway: string;
