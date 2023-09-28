@@ -33,17 +33,17 @@ var tezosTestnetContracts = {
   token_moderation: "KT1BHfPDMRp2q48ZkmmnK7TRzQRdFnp6XVKq",
   treasury: "KT1MbDbRhZPs5TzZEXkT142ePoccFHfohBoo",
   user_moderation: "KT1LmZjoitx2itnB1qCbHMrT3V64RbuSPf3a",
-  user_register: "KT1XaikgmBDQANBvkFqyFhSpgAZJAXpiDFGE"
-};
+  user_register: "KT1XaikgmBDQANBvkFqyFhSpgAZJAXpiDFGE",
+}
 var tezosTestnetApis = {
   tzkt: "https://api.ghostnet.tzkt.io/v1/",
   tzktWebsite: "https://ghostnet.tzkt.io/",
   rpcs: [
     "https://ghostnet.ecadinfra.com",
     "https://ghostnet.smartpy.io",
-    "https://ghostnet.tezos.marigold.dev/"
-  ]
-};
+    "https://ghostnet.tezos.marigold.dev/",
+  ],
+}
 var tezosMainnetContracts = {
   allowed_mint: "KT1VDQwskdfHkSbA9W6CSEnxnh1u1XU8K8Gu",
   allowed_mint_issuer: "KT1Djz5ix2yEGmV7PMq3GYq17TvMMkd1anT2",
@@ -78,8 +78,8 @@ var tezosMainnetContracts = {
   token_moderation: "KT1HgVuzNWVvnX16fahbV2LrnpwifYKoFMRd",
   treasury: "KT1P2BXYb894MekrCcSrnidzQYPVqitLoVLc",
   user_moderation: "KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54",
-  user_register: "KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww"
-};
+  user_register: "KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww",
+}
 var tezosMainnetApis = {
   tzkt: "https://api.tzkt.io/v1/",
   tzktWebsite: "https://tzkt.io/",
@@ -88,9 +88,9 @@ var tezosMainnetApis = {
     "https://mainnet.smartpy.io",
     "https://mainnet.api.tez.ie",
     "https://teznode.letzbake.com",
-    "https://rpc.tzbeta.net"
-  ]
-};
+    "https://rpc.tzbeta.net",
+  ],
+}
 var devApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
@@ -101,23 +101,26 @@ var devApis = {
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   authority: {
-    api: "NONE"
+    api: "NONE",
   },
   capture: {
     lambdas: {
-      small: "https://u5not5l323zczuwnrzxwkt34ra0eyidj.lambda-url.us-east-1.on.aws/",
-      medium: "https://jgfz7a6km7fsqonej2sp3lqwvu0utnyy.lambda-url.us-east-1.on.aws/",
-      large: "https://fzezvbp2f74yturkj4akjyrq3e0zswhb.lambda-url.us-east-1.on.aws/"
-    }
+      small:
+        "https://u5not5l323zczuwnrzxwkt34ra0eyidj.lambda-url.us-east-1.on.aws/",
+      medium:
+        "https://jgfz7a6km7fsqonej2sp3lqwvu0utnyy.lambda-url.us-east-1.on.aws/",
+      large:
+        "https://fzezvbp2f74yturkj4akjyrq3e0zswhb.lambda-url.us-east-1.on.aws/",
+    },
   },
   dashboard: {
     backend: "https://live-minting.fxhash-dev.xyz",
-    aggregator: "_NONE"
+    aggregator: "_NONE",
   },
   events: {
-    liveBackend: "_NONE"
-  }
-};
+    liveBackend: "_NONE",
+  },
+}
 var prdApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
@@ -129,76 +132,76 @@ var prdApis = {
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
   authority: {
-    api: "NONE"
+    api: "NONE",
   },
   capture: {
     lambdas: {
-      small: "https://7sz7knaaw3obgqxjyv3m4e5myu0lsbdp.lambda-url.us-east-1.on.aws/",
-      medium: "https://tuupcq6eesbfk4veuzdfrhu7zm0zwuqy.lambda-url.us-east-1.on.aws/",
-      large: "https://bojj24y6ucxmsyfi4uccdmiliy0dzhji.lambda-url.us-east-1.on.aws/"
-    }
+      small:
+        "https://7sz7knaaw3obgqxjyv3m4e5myu0lsbdp.lambda-url.us-east-1.on.aws/",
+      medium:
+        "https://tuupcq6eesbfk4veuzdfrhu7zm0zwuqy.lambda-url.us-east-1.on.aws/",
+      large:
+        "https://bojj24y6ucxmsyfi4uccdmiliy0dzhji.lambda-url.us-east-1.on.aws/",
+    },
   },
   dashboard: {
     backend: "https://events.fxhash.xyz",
-    aggregator: "NONE"
+    aggregator: "NONE",
   },
   events: {
-    liveBackend: "_NONE"
-  }
-};
+    liveBackend: "_NONE",
+  },
+}
 var FxhashConfig = {
   networks: {
     testnet: {
       tez: {
         contracts: tezosTestnetContracts,
         config: {
-          network: "ghostnet"
+          network: "ghostnet",
         },
-        apis: tezosTestnetApis
+        apis: tezosTestnetApis,
       },
       eth: {
         contracts: null,
         config: {
-          network: "goerli"
+          network: "goerli",
         },
-        apis: null
-      }
+        apis: null,
+      },
     },
     mainnet: {
       tez: {
         contracts: tezosMainnetContracts,
         config: {
-          network: "ghostnet"
+          network: "ghostnet",
         },
-        apis: tezosMainnetApis
+        apis: tezosMainnetApis,
       },
       eth: {
         contracts: null,
         config: {
-          network: "goerli"
+          network: "goerli",
         },
-        apis: null
-      }
-    }
+        apis: null,
+      },
+    },
   },
   envs: {
     dev: {
       apis: devApis,
       config: {
-        envName: "development"
-      }
+        envName: "development",
+      },
     },
     prd: {
       apis: prdApis,
       config: {
-        envName: "production"
-      }
-    }
-  }
-};
-var src_default = FxhashConfig;
-export {
-  FxhashConfig,
-  src_default as default
-};
+        envName: "production",
+      },
+    },
+  },
+}
+var src_default = FxhashConfig
+export { FxhashConfig, src_default as default }
 //# sourceMappingURL=index.js.map
