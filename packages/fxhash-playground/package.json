@@ -18,19 +18,8 @@
     "worker_threads": false,
     "module": false
   },
-  "scripts": {
-    "clean": "rm -rf .next",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix"
-  },
   "dependencies": {
     "@apollo/client": "3.8.1",
-    "@fxhash/contracts": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/config": "workspace:*",
     "@fxhash/evm-sdk": "*",
     "@next/font": "13.1.6",
     "axios": "1.4.0",
@@ -42,7 +31,10 @@
     "react-dom": "18.2.0",
     "connectkit": "1.5.1",
     "viem": "1.6.4",
-    "wagmi": "1.3.10"
+    "wagmi": "1.3.10",
+    "@fxhash/contracts": "1.0.0",
+    "@fxhash/gql": "1.0.0",
+    "@fxhash/config": "1.0.0"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "1.0.0",
@@ -61,5 +53,13 @@
     "prettier": "2.8.8",
     "sass": "1.63.6",
     "typescript": "5.0.4"
+  },
+  "scripts": {
+    "clean": "rm -rf .next",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix"
   }
 }

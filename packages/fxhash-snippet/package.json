@@ -10,12 +10,6 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "scripts": {
-    "clean": "rm -rf dist",
-    "build": "npm run clean && tsc --declaration && tsc-alias",
-    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
     "node-html-parser": "6.1.5"
   },
@@ -23,5 +17,11 @@
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
     "typescript": "4.9.5"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc --declaration && tsc-alias",
+    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\")",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

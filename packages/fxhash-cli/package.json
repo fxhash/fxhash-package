@@ -13,13 +13,6 @@
     "create-fxhash-project": "./dist/create-project.js",
     "update-fxhash-snippet": "./dist/update-snippet.js"
   },
-  "scripts": {
-    "clean": "rm -rf dist",
-    "copy-static": "cp -rf src/static dist/static",
-    "build": "npm run clean && tsc --declaration && tsc-alias && npm run copy-static",
-    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\" \"node ./copy-static\")",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
     "@fxhash/fxhash-snippet": "*",
     "ejs": "3.1.9",
@@ -33,5 +26,12 @@
     "chokidar": "3.5.3",
     "tsc-alias": "1.8.5",
     "typescript": "4.9.5"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "copy-static": "cp -rf src/static dist/static",
+    "build": "npm run clean && tsc --declaration && tsc-alias && npm run copy-static",
+    "dev": "npm run clean && tsc && (concurrently \"tsc -w --declaration\" \"tsc-alias -w\" \"node ./copy-static\")",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
