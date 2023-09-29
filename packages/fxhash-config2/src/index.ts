@@ -33,6 +33,7 @@ export interface ITezosContracts {
   treasury: string
   user_moderation: string
   user_register: string
+  onchfs_files: string
 }
 
 export interface ITezosApis {
@@ -161,6 +162,7 @@ const tezosTestnetContracts: ITezosContracts = {
   treasury: "KT1MbDbRhZPs5TzZEXkT142ePoccFHfohBoo",
   user_moderation: "KT1LmZjoitx2itnB1qCbHMrT3V64RbuSPf3a",
   user_register: "KT1XaikgmBDQANBvkFqyFhSpgAZJAXpiDFGE",
+  onchfs_files: "KT1FA8AGGcJha6S6MqfBUiibwTaYhK8u7s9Q",
 }
 const tezosTestnetApis: ITezosApis = {
   tzkt: "https://api.ghostnet.tzkt.io/v1/",
@@ -208,6 +210,8 @@ const tezosMainnetContracts: ITezosContracts = {
   treasury: "KT1P2BXYb894MekrCcSrnidzQYPVqitLoVLc",
   user_moderation: "KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54",
   user_register: "KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww",
+  // TODO: set mainnet address here
+  onchfs_files: "TODO",
 }
 const tezosMainnetApis: ITezosApis = {
   tzkt: "https://api.tzkt.io/v1/",
