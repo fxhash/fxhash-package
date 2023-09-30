@@ -3,10 +3,7 @@ import { FxhashContracts } from "../../types/Contracts"
 import { BlockchainType, TezosContractOperation } from "./ContractOperation"
 import type { Inscription } from "onchfs"
 import Onchfs from "onchfs"
-
-function uint8hex(uint8: Uint8Array): string {
-  return [...uint8].map(x => x.toString(16).padStart(2, "0")).join("")
-}
+import { uint8hex } from "@/utils/convert"
 
 export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]
@@ -33,8 +30,6 @@ export class TezosOnchfsWriteOperation extends TezosContractOperation<TOnchfsWri
   bytesLength: number = 0
 
   async prepare() {
-    console.log("params inscriptions")
-    console.log(this.params.inscriptions)
     this.onchfsKt = await this.manager.getContract(FxhashContracts.ONCHFS_FILES)
     this.bytesLength = Onchfs.inscriptions.inscriptionsBytesLength(
       this.params.inscriptions
