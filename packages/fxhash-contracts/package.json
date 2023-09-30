@@ -30,8 +30,8 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.1",
     "@airgap/beacon-sdk": "3.3.4",
+    "@apollo/client": "3.8.1",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@fxhash/config2": "workspace:*",
@@ -50,8 +50,9 @@
   },
   "peerDependencies": {
     "@fxhash/config": "workspace:*",
-    "@fxhash/gql": "workspace:*",
     "@fxhash/config2": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "onchfs": "workspace:*",
     "react": "18.2.0",
     "react-colorful": "5.6.1",
     "react-dom": "18.2.0"

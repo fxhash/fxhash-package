@@ -45,14 +45,20 @@ export interface MintGenerativeParams {
 }
 
 export interface MintGenerativeData<N = string> {
+  // whether the project is stored on-chain
+  onChain?: boolean
   // if the project is authored as a collaboration
   collaboration?: Collaboration | null
+  // the s3 key pointing to the project zip
+  projectZipKey?: string
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
   // a hash to verify that the first matches
   authHash1?: string
   // the hash selector for the preview
   previewHash?: string
+  // the iteration selection for the preview
+  previewIteration?: number
   // the minter selection for the preview
   previewMinter?: string
   // the byte string of param values for the preview
@@ -75,6 +81,8 @@ export interface MintGenerativeData<N = string> {
   informations?: GenTokenInformationsForm
   // minted successful
   minted?: boolean
+  // version of the snippet the token is minted with
+  snippetVersion?: string | null
 }
 
 export interface GenTokenSettings {
