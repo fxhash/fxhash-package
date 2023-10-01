@@ -117,13 +117,11 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
       codex: {
         codex_entry: this.params.data.onChain
           ? {
-              type: 1,
-              value: stringToByteString(
-                getOnchfsSlash(this.params.data.cidUrlParams!)
-              ),
+              type: 2, // ONCHFS
+              value: this.params.data.cidUrlParams!,
             }
           : {
-              type: 0,
+              type: 0, // IPFS
               value: stringToByteString(
                 getIpfsSlash(this.params.data.cidUrlParams!)
               ),

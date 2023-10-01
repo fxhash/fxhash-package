@@ -58,7 +58,9 @@ export class TezosOnchfsWriteOperation extends TezosContractOperation<TOnchfsWri
   async call(): Promise<WalletOperation> {
     const batch = this.manager.tezosToolkit.wallet.batch()
 
+    console.log(this.params.inscriptions)
     for (const ins of this.params.inscriptions) {
+      console.log(this.inscriptionOperation(ins))
       batch.withContractCall(this.inscriptionOperation(ins))
     }
 
