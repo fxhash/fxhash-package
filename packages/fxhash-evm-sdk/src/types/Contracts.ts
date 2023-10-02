@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config"
+import { config } from "@fxhash/config2"
 import { TzktOperation } from "./Tzkt"
 
 // a value for the state of the transaction
@@ -24,27 +24,27 @@ export type ContractInteractionMethod<T> = (
 ) => any
 
 export const FxhashContracts = {
-  ISSUER: config.TZ_CT_ADDRESS_ISSUER!,
-  ISSUER_V3: config.TZ_CT_ADDRESS_ISSUER_V3!,
-  MINT_TICKETS_V3: config.TZ_CT_ADDRESS_MINT_TICKETS_V3!,
-  MARKETPLACE_V1: config.TZ_CT_ADDRESS_MARKETPLACE_V1!,
-  MARKETPLACE_V2: config.TZ_CT_ADDRESS_MARKETPLACE_V2!,
-  MARKETPLACE_V3: config.TZ_CT_ADDRESS_MARKETPLACE_V3!,
-  GENTK_V1: config.TZ_CT_ADDRESS_GENTK_V1!,
-  GENTK_V2: config.TZ_CT_ADDRESS_GENTK_V2!,
-  GENTK_V3: config.TZ_CT_ADDRESS_GENTK_V3!,
-  ARTICLES: config.TZ_CT_ADDRESS_ARTICLES!,
-  REGISTER: config.TZ_CT_ADDRESS_USERREGISTER!,
-  MODERATION: config.TZ_CT_ADDRESS_TOK_MODERATION!,
-  MODERATION_V3: config.TZ_CT_ADDRESS_TOK_MODERATION_V3!,
-  USER_MODERATION: config.TZ_CT_ADDRESS_USER_MODERATION!,
-  ARTICLE_MODERATION: config.TZ_CT_ADDRESS_ARTICLE_MODERATION!,
-  COLLAB_FACTORY: config.TZ_CT_ADDRESS_COLLAB_FACTORY!,
-  ETH_PROJECT_FACTORY: config.ETH_PROJECT_FACTORY,
-  ETH_SPLITS_FACTORY: config.ETH_SPLITS_FACTORY,
-  ETH_SPLITS_MAIN: config.ETH_SPLITS_MAIN,
-  ETH_SCRIPTY_STORAGE: config.ETH_SCRIPTY_STORAGE,
-  ETH_SCRIPTY_BUILDER: config.ETH_SCRIPTY_BUILDER,
+  ISSUER: config.tez.contracts.issuer_v2,
+  ISSUER_V3: config.tez.contracts.issuer_v3,
+  MINT_TICKETS_V3: config.tez.contracts.issuer_tickets,
+  MARKETPLACE_V1: config.tez.contracts.marketplace_v1,
+  MARKETPLACE_V2: config.tez.contracts.marketplace_v2,
+  MARKETPLACE_V3: config.tez.contracts.marketplace_v3,
+  GENTK_V1: config.tez.contracts.gentk_v1,
+  GENTK_V2: config.tez.contracts.gentk_v2,
+  GENTK_V3: config.tez.contracts.gentk_v3,
+  ARTICLES: config.tez.contracts.articles,
+  REGISTER: config.tez.contracts.user_register,
+  MODERATION: config.tez.contracts.token_moderation,
+  MODERATION_V3: config.tez.contracts.moderation_token_v3,
+  USER_MODERATION: config.tez.contracts.user_moderation,
+  ARTICLE_MODERATION: config.tez.contracts.moderation_articles,
+  COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
+  ETH_PROJECT_FACTORY: config.eth.contracts.project_factory,
+  ETH_SPLITS_FACTORY: config.eth.contracts.splits_factory,
+  ETH_SPLITS_MAIN: config.eth.contracts.splits_main,
+  ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
+  ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
 }
 
 export const FxhashCollabFactoryCalls = {

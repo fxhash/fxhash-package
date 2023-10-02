@@ -2,7 +2,7 @@ import {
   ContractOperationCallback,
   ContractOperationStatus,
 } from "../types/Contracts"
-import { config } from "@fxhash/config"
+import { config } from "@fxhash/config2"
 import { TContractOperation } from "./contract-operations/contractOperation"
 import { isOperationApplied } from "./Blockchain"
 import { Address, createWalletClient, http } from "viem"
@@ -49,7 +49,7 @@ export function getConfig(rpcUrl: string): Config {
       // Required API Keys
       publicClient: publicClient,
       chains: chains,
-      walletConnectProjectId: config.ETH_WALLET_CONNECT_ID,
+      walletConnectProjectId: config.config.ETH_WALLET_CONNECT_ID,
 
       // Required
       appName: "FXHASH",
@@ -71,7 +71,7 @@ export function getConfig(rpcUrl: string): Config {
  */
 export class WalletManager {
   walletClient: WalletClient | undefined
-  rpcNodes: string[] = [...config.ETH_RPC_NODES.split(",")]
+  rpcNodes: string[] = config.eth.apis.rpcs
   account: Address | undefined
 
   constructor(client) {

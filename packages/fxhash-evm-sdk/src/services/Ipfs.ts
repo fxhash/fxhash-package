@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config"
+import { config } from "@fxhash/config2"
 
 export enum EGatewayIpfs {
   FXHASH = "FXHASH",
@@ -12,9 +12,9 @@ export enum EGatewayIpfs {
 export function ipfsGatewayRoot(gateway: EGatewayIpfs): string {
   switch (gateway) {
     case EGatewayIpfs.FXHASH:
-      return config.IPFS_GATEWAY
+      return config.apis.ipfsGateway
     case EGatewayIpfs.FXHASH_SAFE:
-      return config.IPFS_GATEWAY_SAFE
+      return config.apis.ipfsGatewaySafe
     case EGatewayIpfs.IPFSIO:
     default:
       return "https://ipfs.io"
