@@ -1,8 +1,8 @@
-import { IEthApis } from "api/eth"
+import { ethTestnetApis, IEthApis } from "api/eth"
 import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
 import { IFxhashApis, fxhashDevApis, fxhashPrdApis  } from "api/fxhash"
 import { ITezosContracts, tezosMainnetContracts, tezosTestnetContracts } from "contracts/tezos"
-import { IEthContracts } from "contracts/eth"
+import { ethTestnetContracts, IEthContracts } from "contracts/eth"
 import {getConfigForEnv} from "utils"
 
 export interface IFxhashNetworkConfig {
@@ -11,6 +11,9 @@ export interface IFxhashNetworkConfig {
 
 export interface IFxhashEnvConfig {
   envName: string
+  gtMinPrice: string
+  // TODO: Refactor
+  ETH_WALLET_CONNECT_ID: string
 }
 
 // the variations supported by the config
@@ -79,11 +82,11 @@ export const FxhashConfig: IFxhashConfig = {
         apis: tezosTestnetApis,
       },
       eth: {
-        contracts: null,
+        contracts: ethTestnetContracts,
         config: {
           network: "goerli",
         },
-        apis: null,
+        apis: ethTestnetApis,
       },
     },
     mainnet: {
@@ -108,12 +111,18 @@ export const FxhashConfig: IFxhashConfig = {
       apis: fxhashDevApis,
       config: {
         envName: "development",
+        gtMinPrice: "0",
+        // TODO Refactor
+        ETH_WALLET_CONNECT_ID: ""
       },
     },
     prd: {
       apis: fxhashPrdApis,
       config: {
         envName: "production",
+        gtMinPrice: "0",
+        // TODO Refactor
+        ETH_WALLET_CONNECT_ID: ""
       },
     },
   },

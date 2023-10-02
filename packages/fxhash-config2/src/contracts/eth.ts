@@ -1,1 +1,15 @@
-export interface IEthContracts {}
+export interface IEthContracts {
+  project_factory: string
+  splits_factory: string
+  splits_main: string
+  scripty_storage: string
+  scripty_builder: string
+}
+
+export const ethTestnetContracts: IEthContracts = {
+  project_factory: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+  splits_factory: "",
+  splits_main: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+  scripty_storage: "0x13153F99bDc7b87531E52D8F310AeA5E9468ceB5",
+  scripty_builder: "0x18EEF3cC32083396853Eb46a89123B7A5da71d16",
+}
