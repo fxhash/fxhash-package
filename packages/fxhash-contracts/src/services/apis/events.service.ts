@@ -3,7 +3,7 @@
  * (Live Minting Events)
  */
 
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 
 interface IMintPassPayload {
   token: string

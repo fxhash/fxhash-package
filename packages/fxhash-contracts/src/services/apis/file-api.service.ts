@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 
 const ROOT = config.apis.file
 

@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 import { TzktOperation } from "../types/Tzkt"
 import { fetchRetry } from "../utils/fetchRetry"
 import { sleep } from "../utils/sleep"

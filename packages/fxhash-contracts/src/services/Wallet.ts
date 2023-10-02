@@ -6,7 +6,7 @@ import {
   Wallet,
   WalletProvider,
 } from "@taquito/taquito"
-import { devConfig, prdConfig } from "@fxhash/config2"
+import { devConfig, prdConfig } from "@fxhash/config"
 import autonomyIRL from "autonomy-irl-js"
 import {
   ContractOperationCallback,
@@ -47,7 +47,7 @@ export class TezosWalletManager {
 
   constructor() {
     // TODO: This can be replaced by importing the { config } from 
-    // "@fxhash/config2" and rely on the process.env.FXHASH_ENV
+    // "@fxhash/config" and rely on the process.env.FXHASH_ENV
     const networkConfig =
       process.env.NEXT_PUBLIC_TZ_NET === "mainnet"
         ? prdConfig

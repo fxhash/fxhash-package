@@ -3,7 +3,7 @@ import {
   FieldFunctionOptions,
   InMemoryCache,
 } from "@apollo/client"
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 
 /**
  * Given a set of existing data, incoming data and pagination arguments,

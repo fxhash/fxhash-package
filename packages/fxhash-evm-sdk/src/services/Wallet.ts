@@ -2,7 +2,7 @@ import {
   ContractOperationCallback,
   ContractOperationStatus,
 } from "../types/Contracts"
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 import { TContractOperation } from "./contract-operations/contractOperation"
 import { isOperationApplied } from "./Blockchain"
 import { Address, createWalletClient, http } from "viem"

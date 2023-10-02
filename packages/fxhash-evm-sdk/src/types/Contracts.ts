@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 import { TzktOperation } from "./Tzkt"
 
 // a value for the state of the transaction

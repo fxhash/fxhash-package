@@ -1,16 +1,43 @@
-import { FxHashConfig, devConfig } from "dev"
+import { IEthApis } from "api/eth"
+import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
+import { IFxhashApis, fxhashDevApis, fxhashPrdApis  } from "api/fxhash"
+import { ITezosContracts, tezosMainnetContracts, tezosTestnetContracts } from "contracts/tezos"
+import { IEthContracts } from "contracts/eth"
+import { IFxhashEnvConfig, IFxhashNetworkConfig, TBlockchain, TBlockchainNetwork, TEnv, IFxhashConfig, FxhashConfig, prdConfig, devConfig, IFxhashConfigSingleEnv} from "config"
 
-const defaultConfig =
-  process.env.NODE_ENV === "production" ? devConfig : devConfig
+let config = process.env.FXHASH_ENV === "prd" ? prdConfig : devConfig
 
-let config = defaultConfig
-
-function setConfig(userConfig: Partial<FxHashConfig>): FxHashConfig {
+function setConfig(userConfig: Partial<IFxhashConfigSingleEnv>): IFxhashConfigSingleEnv {
   config = {
     ...config,
-    ...userConfig,
+    ...userConfig
   }
   return config
 }
 
-export { devConfig, defaultConfig, setConfig, config }
+export {
+  IEthApis,
+  ITezosApis,
+  tezosTestnetApis,
+  tezosMainnetApis,
+  IFxhashApis,
+  fxhashDevApis,
+  fxhashPrdApis,
+  ITezosContracts,
+  tezosTestnetContracts,
+  tezosMainnetContracts,
+  IEthContracts,
+  IFxhashEnvConfig,
+  IFxhashNetworkConfig,
+  TBlockchain,
+  TBlockchainNetwork,
+  TEnv,
+  IFxhashConfig,
+  FxhashConfig,
+  devConfig,
+  prdConfig,
+  config,
+  setConfig
+}
+
+export default FxhashConfig

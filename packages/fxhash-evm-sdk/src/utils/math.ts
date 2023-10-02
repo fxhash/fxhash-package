@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 
 // clamps a value x in the range [min, max]
 export const clamp = (x: number, min: number, max: number) =>

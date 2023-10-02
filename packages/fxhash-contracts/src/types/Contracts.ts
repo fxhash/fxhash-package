@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config2"
+import { config } from "@fxhash/config"
 import { TzktOperation } from "./Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 

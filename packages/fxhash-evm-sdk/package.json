@@ -90,7 +90,6 @@
   },
   "peerDependencies": {
     "@fxhash/config": "workspace:*",
-    "@fxhash/config2": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "@reservoir0x/reservoir-sdk": "1.4.0",
