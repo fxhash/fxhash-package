@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config"
+import { config } from "@fxhash/config2"
 import { TzktOperation } from "./Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 
@@ -25,22 +25,22 @@ export type ContractInteractionMethod<T> = (
 ) => any
 
 export const FxhashContracts = {
-  ISSUER: config.TZ_CT_ADDRESS_ISSUER!,
-  ISSUER_V3: config.TZ_CT_ADDRESS_ISSUER_V3!,
-  MINT_TICKETS_V3: config.TZ_CT_ADDRESS_MINT_TICKETS_V3!,
-  MARKETPLACE_V1: config.TZ_CT_ADDRESS_MARKETPLACE_V1!,
-  MARKETPLACE_V2: config.TZ_CT_ADDRESS_MARKETPLACE_V2!,
-  MARKETPLACE_V3: config.TZ_CT_ADDRESS_MARKETPLACE_V3!,
-  GENTK_V1: config.TZ_CT_ADDRESS_GENTK_V1!,
-  GENTK_V2: config.TZ_CT_ADDRESS_GENTK_V2!,
-  GENTK_V3: config.TZ_CT_ADDRESS_GENTK_V3!,
-  ARTICLES: config.TZ_CT_ADDRESS_ARTICLES!,
-  REGISTER: config.TZ_CT_ADDRESS_USERREGISTER!,
-  MODERATION: config.TZ_CT_ADDRESS_TOK_MODERATION!,
-  MODERATION_V3: config.TZ_CT_ADDRESS_TOK_MODERATION_V3!,
-  USER_MODERATION: config.TZ_CT_ADDRESS_USER_MODERATION!,
-  ARTICLE_MODERATION: config.TZ_CT_ADDRESS_ARTICLE_MODERATION!,
-  COLLAB_FACTORY: config.TZ_CT_ADDRESS_COLLAB_FACTORY!,
+  ISSUER: config.tez.contracts.issuer_v2,
+  ISSUER_V3: config.tez.contracts.issuer_v3,
+  MINT_TICKETS_V3: config.tez.contracts.issuer_tickets,
+  MARKETPLACE_V1: config.tez.contracts.marketplace_v1,
+  MARKETPLACE_V2: config.tez.contracts.marketplace_v2,
+  MARKETPLACE_V3: config.tez.contracts.marketplace_v3,
+  GENTK_V1: config.tez.contracts.gentk_v1,
+  GENTK_V2: config.tez.contracts.gentk_v2,
+  GENTK_V3: config.tez.contracts.gentk_v3,
+  ARTICLES: config.tez.contracts.articles,
+  REGISTER: config.tez.contracts.user_register,
+  MODERATION: config.tez.contracts.moderation_token,
+  MODERATION_V3: config.tez.contracts.moderation_token_v3,
+  USER_MODERATION: config.tez.contracts.user_moderation,
+  ARTICLE_MODERATION: config.tez.contracts.moderation_articles,
+  COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
 }
 
 export const FxhashCollabFactoryCalls = {

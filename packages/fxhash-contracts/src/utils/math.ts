@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config"
+import { config } from "@fxhash/config2"
 
 // clamps a value x in the range [min, max]
 export const clamp = (x: number, min: number, max: number) =>
@@ -24,7 +24,7 @@ export function getDecimalsNumber(x: number): number {
 
 export function isPositive(value: number | undefined): boolean {
   return typeof value !== "undefined"
-    ? value >= parseFloat(config.GT_MIN_PRICE!)
+    ? value >= parseFloat(config.config.gtMinPrice)
     : true
 }
 
