@@ -145,6 +145,10 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
       for (const ins of metadataInscriptions) {
         batch.withContractCall(this.inscriptionOperation(ins))
       }
+      // set the params metadata to be onchfs
+      params.metadata = stringToByteString(
+        `onchfs://${uint8hex(metadataInode.cid)}`
+      )
     }
 
     // if collab, call the collab contract proposal EP instead
