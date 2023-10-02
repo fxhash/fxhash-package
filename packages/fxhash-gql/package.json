@@ -35,12 +35,14 @@
   },
   "peerDependencies": {
     "@fxhash/config": "workspace:*",
+    "@fxhash/config2": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
   },
   "devDependencies": {
     "@fxhash/config": "workspace:*",
+    "@fxhash/config2": "workspace:*",
     "tslib": "2.6.0",
     "tsup": "6.6.0",
     "typescript": "5.0.4"

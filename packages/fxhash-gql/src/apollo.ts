@@ -3,7 +3,7 @@ import {
   FieldFunctionOptions,
   InMemoryCache,
 } from "@apollo/client"
-import { config } from "@fxhash/config"
+import { config } from "@fxhash/config2"
 
 /**
  * Given a set of existing data, incoming data and pagination arguments,
@@ -36,7 +36,7 @@ export function cacheMergePaginatedField(
 }
 
 export const clientSideClient = new ApolloClient({
-  uri: config.API_ROOT,
+  uri: config.apis.main,
   cache: new InMemoryCache({
     typePolicies: {
       Article: {
@@ -140,7 +140,7 @@ export const clientSideClient = new ApolloClient({
 })
 
 export function createApolloClient(
-  uri = config.API_ROOT,
+  uri = config.apis.main,
   headers?: Record<string, any>
 ) : ApolloClient<any> {
   return new ApolloClient({
@@ -156,7 +156,7 @@ export function createApolloClient(
  * The client to connect to the events graphql endpoint
  */
 export const eventsClient = new ApolloClient({
-  uri: `${config.API_EVENTS_ROOT!}/graphql`,
+  uri: `${config.apis.dashboard.backend}/graphql`,
   cache: new InMemoryCache(),
   // ssrMode: true,
   // ssrForceFetchDelay: 1000
@@ -164,6 +164,6 @@ export const eventsClient = new ApolloClient({
 
 export const createEventsClient = () =>
   new ApolloClient({
-    uri: `${config.API_EVENTS_ROOT!}/graphql`,
+    uri: `${config.apis.dashboard.backend}/graphql`,
     cache: new InMemoryCache(),
   })
