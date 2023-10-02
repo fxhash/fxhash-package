@@ -5,7 +5,7 @@ import { ITezosContracts, tezosMainnetContracts, tezosTestnetContracts } from "c
 import { IEthContracts } from "contracts/eth"
 import { IFxhashEnvConfig, IFxhashNetworkConfig, TBlockchain, TBlockchainNetwork, TEnv, IFxhashConfig, FxhashConfig, prdConfig, devConfig, IFxhashConfigSingleEnv} from "config"
 
-let config = process.env.FXHASH_ENV === "prd" ? prdConfig : devConfig
+let config = (process.env.FXHASH_ENV === "prd" || process.env.FXHASH_ENV === "production" ) ? prdConfig : devConfig
 
 function setConfig(userConfig: Partial<IFxhashConfigSingleEnv>): IFxhashConfigSingleEnv {
   config = {
