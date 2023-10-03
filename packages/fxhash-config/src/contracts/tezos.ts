@@ -32,7 +32,8 @@ export interface ITezosContracts {
   token_moderation: string
   treasury: string
   user_moderation: string
-  user_register: string
+  user_register: string,
+  onchfs_files: string,
 }
 // The Tezos Smart Contracts addresses on testnet
 export const tezosTestnetContracts: ITezosContracts = {
@@ -70,6 +71,7 @@ export const tezosTestnetContracts: ITezosContracts = {
   treasury: "KT1MbDbRhZPs5TzZEXkT142ePoccFHfohBoo",
   user_moderation: "KT1LmZjoitx2itnB1qCbHMrT3V64RbuSPf3a",
   user_register: "KT1XaikgmBDQANBvkFqyFhSpgAZJAXpiDFGE",
+  onchfs_files: "KT1FA8AGGcJha6S6MqfBUiibwTaYhK8u7s9Q",
 }
 // The Tezos Smart Contracts on mainnet
 export const tezosMainnetContracts: ITezosContracts = {
@@ -107,4 +109,6 @@ export const tezosMainnetContracts: ITezosContracts = {
   treasury: "KT1P2BXYb894MekrCcSrnidzQYPVqitLoVLc",
   user_moderation: "KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54",
   user_register: "KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww",
+  // TODO: set mainnet address here 
+  onchfs_files: "TODO",
 }

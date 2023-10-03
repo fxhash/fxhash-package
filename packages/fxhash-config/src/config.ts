@@ -71,7 +71,7 @@ export type IFxhashConfigSingleEnv = {
   config: IFxhashEnvConfig;
 }
 
-export const FxhashConfig: IFxhashConfig = {
+export const fxhashConfig: IFxhashConfig = {
   networks: {
     testnet: {
       tez: {
