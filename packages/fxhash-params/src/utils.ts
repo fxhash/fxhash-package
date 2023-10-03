@@ -8,6 +8,7 @@ import {
   FxParamsData,
   FxParamValue,
   FxParamTranformType,
+  FxParamTransformationTypeMap,
   FxParamProcessorTransformer,
 } from "./types"
 
@@ -190,8 +191,26 @@ export const ParameterProcessors: FxParamProcessors = {
       return input as hexString
     },
     bytesLength: () => 4,
-    transform: (input) => {
-      return `#${completeHexColor(input)}`
+    transform: (input: string) => {
+      const color = completeHexColor(input)
+      const r = parseInt(color.slice(0, 2), 16)
+      const g = parseInt(color.slice(2, 4), 16)
+      const b = parseInt(color.slice(4, 6), 16)
+      const a = parseInt(color.slice(6, 8), 16)
+      return {
+        hex: {
+          rgb: "#" + input.slice(0, 6),
+          rgba: "#" + input,
+        },
+        obj: {
+          rgb: { r, g, b },
+          rgba: { r, g, b, a },
+        },
+        arr: {
+          rgb: [r, g, b],
+          rgba: [r, g, b, a],
+        },
+      }
     },
     constrain: (value) => {
       const hex = value.replace("#", "")
@@ -353,22 +372,31 @@ export function deserializeParams(
   definition: FxParamDefinition<FxParamType>[],
   options: { withTransform?: boolean, transformType?: FxParamTranformType }
 ) {
-  const params: Record<string, FxParamValue<FxParamType>> = {}
+  const params: Record<string, FxParamValue<FxParamType> | FxParamTransformationTypeMap[FxParamType]> = {}
+  console.log(bytes, definition, options)
   for (const def of definition) {
     const processor = ParameterProcessors[
       def.type as FxParamType
     ] as FxParamProcessor<FxParamType>
+    const transformer = options.withTransform && processor[options.transformType || "transform"] as FxParamProcessorTransformer<FxParamType>
+    if (!bytes) {
+      let v
+      if (typeof def.default === "undefined") v = processor.random(def)
+      else v = def.default
+      params[def.id] = transformer ? transformer(v, def) : v
+      continue
+    }
     // extract the length from the bytes & shift the initial bytes string
     const bytesLen = processor.bytesLength(def)
     const valueBytes = bytes.substring(0, bytesLen * 2)
     bytes = bytes.substring(bytesLen * 2)
     // deserialize the bytes into the params
     const val = processor.deserialize(valueBytes, def) as FxParamValue<FxParamType>
-    const transformer = options.withTransform && processor[options.transformType || "transform"] as FxParamProcessorTransformer<FxParamType>
-    params[def.id] = transformer ? transformer(val) : val
+    params[def.id] = transformer ? transformer(val, def) : val
   }
   return params
 }
+
 
 // Consolidates parameters from both a params object provided by the token
 // and the dat object of params, which is stored by the controls component.
@@ -444,7 +472,7 @@ export function jsonStringifyBigint(data: any): string {
 }
 
 
-export const processParam = (paramId: string, value: FxParamValue<FxParamType>, definitions: FxParamDefinition<FxParamType>[], transformType: FxParamTranformType): FxParamValue<FxParamType> => {
+export const processParam = (paramId: string, value: FxParamValue<FxParamType>, definitions: FxParamDefinition<FxParamType>[], transformType: FxParamTranformType): FxParamValue<FxParamType> | FxParamTransformationTypeMap[FxParamType] => {
     const definition = definitions.find(d => d.id === paramId)
     const processor = ParameterProcessors[definition.type]
     const transformer = (processor[transformType] as FxParamProcessorTransformer<FxParamType>)
