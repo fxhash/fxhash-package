@@ -93,14 +93,14 @@ export const FxhashConfig: IFxhashConfig = {
       tez: {
         contracts: tezosMainnetContracts,
         config: {
-          network: "ghostnet",
+          network: "mainnet",
         },
         apis: tezosMainnetApis,
       },
       eth: {
         contracts: null,
         config: {
-          network: "goerli",
+          network: "mainnet",
         },
         apis: null,
       },
