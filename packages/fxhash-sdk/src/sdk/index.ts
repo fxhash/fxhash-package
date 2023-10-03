@@ -1,11 +1,11 @@
 import { FxHashApi, FxHashExecutionContext } from "../types"
-import { processors } from "./processors"
 import { createFxRandom, getRandomHash } from "./math"
 import {
   serializeParams,
   processParams,
   processParam,
   deserializeParams,
+  ParameterProcessors,
 } from "@fxhash/params/utils"
 
 export function createFxhashSdk(window, options): FxHashApi {
@@ -33,7 +33,7 @@ export function createFxhashSdk(window, options): FxHashApi {
 
   const $fx = {
     _version: "3.3.0",
-    _processors: processors,
+    _processors: ParameterProcessors,
     // where params def & features will be stored
     _params: undefined,
     _features: undefined,
