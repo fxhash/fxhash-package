@@ -1,7 +1,11 @@
 import { render } from "ejs"
 import { readFileSync } from "fs"
 import { format } from "prettier"
-import { JS_ENTRY_FILE_NAME } from "../../constants"
+import {
+  HTML_ENTRY_FILE_NAME,
+  JS_ENTRY_FILE_NAME,
+  SDK_FILE_NAME,
+} from "../../constants"
 import { baseHtmlTemplate } from "../baseHtml"
 import { TemplateFactoryResponse } from "../types"
 import { packageJson } from "./packageJson"
@@ -11,7 +15,7 @@ export async function ejectedTemplate({
 }): Promise<TemplateFactoryResponse> {
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: `<script src="./fxhash.js"></script>`,
+    snippet: `<script src="./${SDK_FILE_NAME}.js"></script>`,
     head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
@@ -23,10 +27,10 @@ export async function ejectedTemplate({
     name,
     folders: ["src"],
     files: [
-      ["src/index.html", pHtml],
+      [`src/${HTML_ENTRY_FILE_NAME}.html`, pHtml],
       ["src/styles.css", ""],
       ["package.json", pkgJson],
-      ["fxhash.js", sdkContent],
+      [`${SDK_FILE_NAME}.js`, sdkContent],
     ],
     staticFiles: [
       [`src/${JS_ENTRY_FILE_NAME}.js`, "static/examples/params.js"],

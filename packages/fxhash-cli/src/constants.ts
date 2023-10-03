@@ -13,6 +13,8 @@ const env = {
 export default env
 
 export const JS_ENTRY_FILE_NAME = "index"
+export const SDK_FILE_NAME = "fxhash"
+export const HTML_ENTRY_FILE_NAME = "index"
 
 // User folders (where the CLI is run)
 export const CWD_PATH = path.resolve(process.cwd())

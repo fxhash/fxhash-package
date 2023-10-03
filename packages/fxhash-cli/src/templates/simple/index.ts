@@ -1,7 +1,11 @@
 import { render } from "ejs"
 import { format } from "prettier"
 import { readFileSync } from "fs"
-import { JS_ENTRY_FILE_NAME } from "../../constants"
+import {
+  HTML_ENTRY_FILE_NAME,
+  JS_ENTRY_FILE_NAME,
+  SDK_FILE_NAME,
+} from "../../constants"
 import { baseHtmlTemplate } from "../baseHtml"
 import { TemplateFactoryResponse } from "../types"
 
@@ -9,7 +13,7 @@ export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
   const name = "simple"
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: `<script src="./fxhash.js"></script>`,
+    snippet: `<script src=./${SDK_FILE_NAME}.js"></script>`,
     head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
@@ -20,9 +24,9 @@ export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
     name,
     folders: [],
     files: [
-      ["index.html", pHtml],
+      [`${HTML_ENTRY_FILE_NAME}.html`, pHtml],
       ["styles.css", ""],
-      ["fxhash.js", sdkContent],
+      [`${SDK_FILE_NAME}.js`, sdkContent],
     ],
     staticFiles: [
       [`${JS_ENTRY_FILE_NAME}.js`, "static/examples/params.js"],
