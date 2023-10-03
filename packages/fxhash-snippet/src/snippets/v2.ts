@@ -144,7 +144,7 @@ export const snippet_v2: string = `
         return hex.slice(0, 8).padEnd(8, "f")
       },
       random: () =>
-        \`${[...Array(8)]
+        \`\${[...Array(8)]
           .map(() => Math.floor(Math.random() * 16).toString(16))
           .join("")}\`,
       },

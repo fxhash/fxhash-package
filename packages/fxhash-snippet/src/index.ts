@@ -1,8 +1,14 @@
-import { fxhashSnippetNode, htmlToNodes, replaceNodeContents, replaceSnippet } from "utils/html";
-import { snippet_v1 } from "./snippets/v1";
-import { snippet_v2 } from "./snippets/v2";
+import {
+  fxhashSnippetNode,
+  htmlToNodes,
+  replaceNodeContents,
+  replaceSnippet,
+} from "utils/html"
+import { snippet_v1 } from "./snippets/v1"
+import { snippet_v2 } from "./snippets/v2"
+import { snippet_v3 } from "./snippets/v3"
 
-const latest = snippet_v2
+const latest = snippet_v3
 
 export {
   snippet_v1,
@@ -11,5 +17,5 @@ export {
   htmlToNodes,
   fxhashSnippetNode,
   replaceNodeContents,
-  replaceSnippet
+  replaceSnippet,
 }
