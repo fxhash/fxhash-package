@@ -33,6 +33,7 @@ export interface ITezosContracts {
   treasury: string
   user_moderation: string
   user_register: string
+  onchfs_files: string
 }
 
 export interface ITezosApis {
@@ -49,10 +50,12 @@ export interface IFxhashApis {
   website: string
   main: string
   file: string
+  fsEmulator: string
   extract: string
   media: string
   ipfsGateway: string
   ipfsGatewaySafe: string
+  onchfsProxy: string
   authority: {
     api: string
   }
@@ -160,6 +163,7 @@ const tezosTestnetContracts: ITezosContracts = {
   treasury: "KT1MbDbRhZPs5TzZEXkT142ePoccFHfohBoo",
   user_moderation: "KT1LmZjoitx2itnB1qCbHMrT3V64RbuSPf3a",
   user_register: "KT1XaikgmBDQANBvkFqyFhSpgAZJAXpiDFGE",
+  onchfs_files: "KT1FA8AGGcJha6S6MqfBUiibwTaYhK8u7s9Q",
 }
 const tezosTestnetApis: ITezosApis = {
   tzkt: "https://api.ghostnet.tzkt.io/v1/",
@@ -207,6 +211,8 @@ const tezosMainnetContracts: ITezosContracts = {
   treasury: "KT1P2BXYb894MekrCcSrnidzQYPVqitLoVLc",
   user_moderation: "KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54",
   user_register: "KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww",
+  // TODO: set mainnet address here
+  onchfs_files: "TODO",
 }
 const tezosMainnetApis: ITezosApis = {
   tzkt: "https://api.tzkt.io/v1/",
@@ -225,6 +231,8 @@ const devApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
   file: "https://file-api.fxhash-dev.xyz",
+  fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
+  onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
@@ -256,6 +264,8 @@ const prdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
   file: "https://file-api.fxhash.xyz",
+  fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
+  onchfsProxy: "https://onchfs.fxhash2.xyz",
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash.xyz",
