@@ -29,7 +29,7 @@ export const commandCreate: CommandModule = {
     })
 
     try {
-      writeProjectToDisk({
+      await writeProjectToDisk({
         name,
         template: TEMPLATE_CHOICES[template],
       })

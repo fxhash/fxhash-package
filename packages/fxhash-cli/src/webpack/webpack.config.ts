@@ -1,6 +1,5 @@
 import { DIST_PATH, JS_ENTRY_FILE_NAME } from "../constants"
 import { WebpackConfiguration } from "webpack-dev-server"
-import { InjectHead } from "./plugins/InjectHead"
 import { getProjectPaths } from "../templates/paths"
 
 export interface WebpackConfigFactoryOptions {
@@ -24,6 +23,6 @@ export const createBaseConfig: WebpackConfigFactory = ({ srcPath }) => {
       filename: "[name].js",
       clean: true,
     },
-    plugins: [new InjectHead()],
+    plugins: [],
   }
 }

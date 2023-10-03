@@ -3,11 +3,15 @@ import { writeFileSync, rmSync, mkdirSync, cpSync } from "fs"
 import path from "path"
 import { TemplateUserConfig } from "./types"
 
-export function writeProjectToDisk({
+export async function writeProjectToDisk({
   template,
   name,
-}: TemplateUserConfig): void {
-  const { files = [], staticFiles = [], folders = [] } = template({ name })
+}: TemplateUserConfig): Promise<void> {
+  const {
+    files = [],
+    staticFiles = [],
+    folders = [],
+  } = await template({ name })
   const rootDir = path.join(process.cwd(), name)
   rmSync(rootDir, { force: true, recursive: true })
   mkdirSync(rootDir)
