@@ -7,6 +7,7 @@ export interface IFxhashApis {
   media: string
   ipfsGateway: string
   ipfsGatewaySafe: string
+  onchfsProxy: string
   authority: {
     api: string
   }
@@ -33,9 +34,10 @@ export const fxhashDevApis: IFxhashApis = {
   file: "https://file-api.fxhash-dev.xyz",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
-  media: "https://media.fxhash.xyz",
+  media: "https://media.fxhash-dev.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
+  onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
   authority: {
     api: "NONE",
   },
@@ -68,6 +70,7 @@ export const fxhashPrdApis: IFxhashApis = {
   media: "https://media.fxhash.xyz",
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
+  onchfsProxy: "https://onchfs.fxhash2.xyz",
   authority: {
     api: "NONE",
   },
