@@ -42,9 +42,20 @@ export interface ITezosApis {
   rpcs: string[]
 }
 
-export interface IEthContracts {}
+export interface IEthContracts {
+  chain_id: number
+  reservoir_zone: string
+  project_factory: string
+  slits_factory: string
+  splits_main: string
+  scripty_storage: string
+  scripty_builder: string
+}
 
-export interface IEthApis {}
+export interface IEthApis {
+  rpc_nodes: string
+  reservoir_api: string
+}
 
 export interface IFxhashApis {
   website: string
@@ -125,6 +136,36 @@ export type IFxhashConfig = {
       config: IFxhashEnvConfig
     }
   }
+}
+
+const ethDevContracts: IEthContracts = {
+  chain_id: 31337,
+  reservoir_zone: "",
+  project_factory: "0xcaa7B1B6F4AcFD3dBFB3535144d474c0816A2A8B",
+  slits_factory: "",
+  splits_main: "0x67C3a8BEdED95E705982506da4757A5f419Dc513",
+  scripty_storage: "0x30a970169C85bAc4686eAFb9435C1af8aac9c6A1",
+  scripty_builder: "0x9C14ffB81f2362a3d2EdCbd83dA73B1a970974c8",
+}
+
+const ethTestContracts: IEthContracts = {
+  chain_id: 5,
+  reservoir_zone: "0xAee17A0E6e98e832112fD0A26dA22C4e812AA7F5",
+  project_factory: "0x34ED5378335dd7DC1b51d058fd9d6edb6b435489",
+  slits_factory: "0xC06935D9E1454FCcEAE2BE0977725D58aFC55aFf",
+  splits_main: "0x2ed6c4B5dA6378c7897AC67Ba9e43102Feb694EE",
+  scripty_storage: "0x4e2f40eef8DFBF200f3f744a9733Afe2E9F83D28",
+  scripty_builder: "0xccd7E419f1EEc86fa748c9079584e3a89312f11C",
+}
+
+const ethDevApis: IEthApis = {
+  rpc_nodes: "https://ganache.fxhash-dev.xyz/",
+  reservoir_api: ""
+}
+
+const ethTestnetApis: IEthApis = {
+  rpc_nodes: "https://rpc-goerli.fxhash-dev.xyz/",
+  reservoir_api: "https://api-goerli.reservoir.tools"
 }
 
 // The Tezos Smart Contracts addresses on testnet
@@ -303,11 +344,11 @@ export const FxhashConfig: IFxhashConfig = {
         apis: tezosTestnetApis,
       },
       eth: {
-        contracts: null,
+        contracts: ethTestContracts,
         config: {
           network: "goerli",
         },
-        apis: null,
+        apis: ethTestnetApis,
       },
     },
     mainnet: {

@@ -2,34 +2,37 @@ import Head from "next/head"
 import { useContext, useEffect, useState } from "react"
 
 import { UserContext as EthUserContext } from "@fxhash/evm-sdk/context/User"
-import { useContractOperation } from "@fxhash/contracts/hooks/useContractOperation"
+import { getConfig } from "@fxhash/evm-sdk/services/Wallet"
+
 import { ConnectKitButton } from "connectkit"
-import { MintIssuerV3Operation, type TMintIssuerV3OperationParams } from "@fxhash/evm-sdk/services/contract-operations/MintIssuerV3"
-import { UploadOnchainCodeOperation, type TUploadOnchainCodeOperationParams } from "@fxhash/evm-sdk/services/contract-operations/UploadOnchainCode"
+import {
+  UploadOnchainCodeOperation,
+  type TUploadOnchainCodeOperationParams,
+} from "@fxhash/evm-sdk/services/operations/UploadOnchainCode"
 
 import { CaptureMode, CaptureTriggerMode } from "@fxhash/contracts/types/Mint"
 import { ScriptUpload } from "@fxhash/evm-sdk/types/OnChainCode"
 
+import { WagmiConfig } from "wagmi"
+import { ConnectKitProvider } from "connectkit"
 import {
-  Config,
-  WagmiConfig
-} from "wagmi"
-import { ConnectKitProvider } from "connectkit";
+  MintEthIssuerV1Operation,
+  TMintEthIssuerV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/MintIssuerEthV1"
+import {
+  MintFixedPriceEthV1Operation,
+  TMintFixedPriceEthV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/MintFixedPriceEthV1"
+import { listToken } from "@fxhash/evm-sdk/services/operations/Marketplace"
+import { parseEther } from "viem"
 
 export default function EthPlayground(props: any) {
-  let { connect, walletManager } = useContext(EthUserContext);
+  const { connect, walletManager } = useContext(EthUserContext)
+  const tokenId =
+    "0x7c4b13b5893cd82f371c5e28f12fb2f37542bbc5:37874328891959367057980953554699571553718588281221769671817266699907421437953"
+  const expiration = `${Math.floor(new Date().getTime() / 1000) + 1000000}`
 
-  let wagmiConfig: Config | undefined = undefined
-  if(walletManager) {
-    wagmiConfig = walletManager?.getCurrentConfig()
-  }
-
-  const { state, loading, success, call, error, opHash, opData, clear } =
-  useContractOperation<TMintIssuerV3OperationParams>(
-    MintIssuerV3Operation
-  )
-
-  const params: TMintIssuerV3OperationParams = {
+  const paramsMintIssuer: TMintEthIssuerV1OperationParams = {
     data: {
       distribution: {
         enabled: true,
@@ -38,61 +41,71 @@ export default function EthPlayground(props: any) {
         pricing: {
           pricingFixed: {
             price: "1000000",
-            opensAt: new Date(),
+            opensAt: new Date(0),
           },
           pricingDutchAuction: {
-            levels: []
-          }
+            levels: [],
+          },
         },
         splitsPrimary: [
           {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            pct: 500000
+            pct: 500000,
           },
           {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92267",
-            pct: 500000
-          }
+            pct: 500000,
+          },
         ],
         splitsSecondary: [
           {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            pct: 100
-          }
+            pct: 100,
+          },
         ],
-        reserves: []
-      }
+        reserves: [],
+      },
     },
     metadata: {
-      artifactUri: "",
+      artifactUri: "qdqsdqsdsq",
       name: "",
       symbol: "",
-      displayUri: "",
-      thumbnailUri: "",
+      displayUri: "dqsdqsdqsd",
+      thumbnailUri: "qsdqsdqsdqsd",
       description: "",
       childrenDescription: "",
       tags: [],
-      generativeUri: "",
+      generativeUri: "dqsdqsdqsdq",
       authenticityHash: "",
       capture: {
         mode: CaptureMode.CUSTOM,
-        triggerMode: CaptureTriggerMode.FN_TRIGGER
+        triggerMode: CaptureTriggerMode.FN_TRIGGER,
       },
       decimals: 0,
       params: {
         definition: undefined,
         inputBytesSize: 0,
-      }
+      },
     },
     metadataBytes: "",
     ticketMetadataBytes: "",
   }
-  const createProjectOperation = new MintIssuerV3Operation(walletManager!, params)
+
+  const mintFixedPriceParams: TMintFixedPriceEthV1OperationParams = {
+    price: 1000000000000,
+    mintId: 0,
+    token: "0x41cafcfaa979cc5130cc891d4f1136e0b35fba83",
+  }
+  const createProjectOperation = new MintEthIssuerV1Operation(
+    walletManager!,
+    paramsMintIssuer
+  )
+  const mintFixedOperation = new MintFixedPriceEthV1Operation(
+    walletManager!,
+    mintFixedPriceParams
+  )
 
   const handleConnect = async () => {
-    if(!wagmiConfig && walletManager) {
-      wagmiConfig = walletManager?.getCurrentConfig()
-    }
     await connect()
   }
 
@@ -100,30 +113,51 @@ export default function EthPlayground(props: any) {
     createProjectOperation.call()
   }
 
+  const handleListToken = async () => {
+    await listToken(
+      [
+        {
+          token: tokenId,
+          weiPrice: parseEther("0.00000000001").toString(),
+          orderbook: "reservoir",
+          orderKind: "seaport-v1.5",
+          expirationTime: expiration,
+        },
+      ],
+      walletManager.walletClient!
+    )
+  }
+
+  const handleMintFixed = () => {
+    mintFixedOperation.call()
+  }
+
   // State to hold the uploaded files
-  const [uploadedFiles, setUploadedFiles] = useState<ScriptUpload[] | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<ScriptUpload[] | null>(
+    null
+  )
 
   // Handler for file upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const files = e.target.files
     if (files) {
-      let scriptUploads: ScriptUpload[] = [];
-        for (let i = 0; i < files.length; i++) {
-          const fileReader = new FileReader();
-          const file = files[i];
-          fileReader.readAsText(file);
-          fileReader.onload = async () => {
-            const fileData = fileReader.result as string;
-            scriptUploads.push({
-              scriptName: file.name,
-              scriptContent: fileData,
-              scriptDetails: "",
-        })
-        setUploadedFiles(scriptUploads);
+      const scriptUploads: ScriptUpload[] = []
+      for (let i = 0; i < files.length; i++) {
+        const fileReader = new FileReader()
+        const file = files[i]
+        fileReader.readAsText(file)
+        fileReader.onload = async () => {
+          const fileData = fileReader.result as string
+          scriptUploads.push({
+            scriptName: file.name,
+            scriptContent: fileData,
+            scriptDetails: "",
+          })
+          setUploadedFiles(scriptUploads)
+        }
       }
     }
   }
-};
 
   // Handler to show uploaded files (For demonstration)
   const upload = () => {
@@ -131,33 +165,32 @@ export default function EthPlayground(props: any) {
       const params: TUploadOnchainCodeOperationParams = {
         uploadRequests: uploadedFiles,
       }
-      const uploadOperation = new UploadOnchainCodeOperation(walletManager!, params)
+      const uploadOperation = new UploadOnchainCodeOperation(
+        walletManager!,
+        params
+      )
       uploadOperation.call()
-  }};
+    }
+  }
 
   return (
     <>
       {/* File Upload Section */}
-      <input
-        type="file"
-        multiple
-        onChange={handleFileUpload}
-      />
+      <input type="file" multiple onChange={handleFileUpload} />
       <button onClick={upload}>Upload to ETH</button>
       <button onClick={handleConnect}>connect</button>
 
-        {wagmiConfig && (<WagmiConfig config={wagmiConfig!}>
-          <ConnectKitProvider>
-            <Head>
-              <title>playground</title>
-            </Head>
-              <ConnectKitButton />
-              <button onClick={handleCreateProject}>createProject</button>
-              <p>{loading && "loading"}</p>
-              <p>{success && "success"}</p>
-              <p>{error && "error"}</p>
-          </ConnectKitProvider>
-        </WagmiConfig>)}
+      <WagmiConfig config={getConfig()}>
+        <ConnectKitProvider>
+          <Head>
+            <title>playground</title>
+          </Head>
+          <ConnectKitButton />
+          <button onClick={handleCreateProject}>createProject</button>
+          <button onClick={handleMintFixed}>mintFixed</button>
+          <button onClick={handleListToken}>listToken</button>
+        </ConnectKitProvider>
+      </WagmiConfig>
     </>
   )
 }
