@@ -126,7 +126,6 @@ export const commandAdd: CommandModule = {
             logger.success(
               "We have injected the script into your html entry file successfully."
             )
-            logger.log(chalk.dim(htmlEntryPath))
           } catch (error: any) {
             logger.error("Error injecting fxhash-snippet into")
             logger.errorExit(error.message)
