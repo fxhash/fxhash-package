@@ -54,7 +54,7 @@ export const commandUpdate: CommandModule = {
         writeFileSync(htmlEntryPath, pNewHtml)
 
         logger.success(
-          "Your project was updated with the latest fxhash-snippet!"
+          "Your project was updated with the latest fxhash-snippet! ʕᵔᴥᵔʔ"
         )
       } catch (error: any) {
         logger.error("Error injecting fxhash-snippet into")

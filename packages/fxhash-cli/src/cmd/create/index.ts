@@ -34,7 +34,7 @@ export const commandCreate: CommandModule = {
         template: TEMPLATE_CHOICES[template],
       })
 
-      logger.success("New fx(hash) project created successfully!")
+      logger.success("New fx(hash) project created successfully! ♥‿♥")
     } catch (error: any) {
       logger.error(error.message)
     }
