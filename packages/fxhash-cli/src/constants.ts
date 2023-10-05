@@ -7,6 +7,7 @@ const env = {
   PORT_FXPROJECT: 3301,
   RUN_PROJECT: true,
   SRC_PATH: "src",
+  NO_ZIP: false,
   ...process.env,
 }
 
@@ -15,10 +16,12 @@ export default env
 export const JS_ENTRY_FILE_NAME = "index"
 export const SDK_FILE_NAME = "fxhash"
 export const HTML_ENTRY_FILE_NAME = "index"
+export const WEBPACK_CONFIG_DEV_FILE_NAME = "webpack.config.dev"
+export const WEBPACK_CONFIG_PROD_FILE_NAME = "webpack.config.prod"
+export const DIST_FOLDER_NAME = "upload"
 
 // User folders (where the CLI is run)
 export const CWD_PATH = path.resolve(process.cwd())
-export const DIST_PATH = path.resolve(CWD_PATH, "upload")
 
 // CLI Internal folders
 export const ROOT_PATH = path.resolve(__dirname)

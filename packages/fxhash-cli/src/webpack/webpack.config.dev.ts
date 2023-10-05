@@ -2,9 +2,9 @@ import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
 import { getProjectPaths } from "../templates/paths"
 
 export const createDevConfig: WebpackConfigFactory = options => {
-  const { srcPath, portProject } = options
+  const { srcPath, portProject, rootPath } = options
   const baseConfig = createBaseConfig(options)
-  const { staticPath } = getProjectPaths(srcPath)
+  const { staticPath } = getProjectPaths(srcPath, rootPath)
   return {
     ...baseConfig,
     mode: "development",

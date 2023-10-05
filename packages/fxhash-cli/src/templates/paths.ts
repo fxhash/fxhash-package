@@ -4,8 +4,8 @@ import {
   JS_ENTRY_FILE_NAME,
   HTML_ENTRY_FILE_NAME,
   SDK_FILE_NAME,
+  DIST_FOLDER_NAME,
 } from "../constants"
-import { isEjectedProject } from "../validate/index"
 
 export interface FxhashProjectStructure {
   rootPath: string
@@ -13,21 +13,30 @@ export interface FxhashProjectStructure {
   htmlEntryPath: string
   staticPath: string
   fxhashSdkPath: string
+  distPath: string
 }
 
-export function getProjectPaths(srcPath: string): FxhashProjectStructure {
-  const isEjected = isEjectedProject(srcPath)
-  const rootPath = path.resolve(CWD_PATH, isEjected ? srcPath : "")
-  const jsEntryPath = path.resolve(rootPath, `${JS_ENTRY_FILE_NAME}.js`)
-  const htmlEntryPath = path.resolve(rootPath, `${HTML_ENTRY_FILE_NAME}.html`)
-  const fxhashSdkPath = path.resolve(rootPath, `${SDK_FILE_NAME}.js`)
-  const staticPath = path.resolve(rootPath)
+export function getProjectPaths(
+  srcPath: string,
+  rootPath?: string
+): FxhashProjectStructure {
+  const resolvedRootPath = path.resolve(CWD_PATH, rootPath || "")
+  const distPath = path.resolve(resolvedRootPath, DIST_FOLDER_NAME)
+  const resolvedSrcPath = path.resolve(resolvedRootPath, srcPath)
+  const jsEntryPath = path.resolve(resolvedSrcPath, `${JS_ENTRY_FILE_NAME}.js`)
+  const htmlEntryPath = path.resolve(
+    resolvedSrcPath,
+    `${HTML_ENTRY_FILE_NAME}.html`
+  )
+  const fxhashSdkPath = path.resolve(resolvedSrcPath, `${SDK_FILE_NAME}.js`)
+  const staticPath = path.resolve(resolvedSrcPath)
 
   return {
-    rootPath,
+    rootPath: resolvedRootPath,
     jsEntryPath,
     htmlEntryPath,
     staticPath,
     fxhashSdkPath,
+    distPath,
   }
 }

@@ -20,6 +20,7 @@ export async function prompt(question: string): Promise<string> {
 interface ChooseFromPromptOptions {
   title: string
   description: string
+  hideIndex?: boolean
 }
 
 export async function chooseFromPrompt(
@@ -38,10 +39,11 @@ export async function chooseFromPrompt(
     function printChoices() {
       logger.log(options.title)
       templateChoices.forEach((choice, index) => {
+        const num = !options.hideIndex ? `${index + 1}. ` : ""
         if (index === selectedIndex) {
-          logger.log(chalk.cyan(`> ${index + 1}. ${choice}`)) // Highlight the selected choice
+          logger.log(chalk.cyan(`> ${num}${choice}`)) // Highlight the selected choice
         } else {
-          logger.log(`  ${index + 1}. ${choice}`)
+          logger.log(`${num}${choice}     `)
         }
       })
       logger.log(chalk.dim(options.description))
@@ -77,6 +79,21 @@ export async function chooseFromPrompt(
       }
     })
   })
+}
+
+const YESNO_CHOICES = {
+  no: false,
+  yes: true,
+}
+
+const YESNO_OPTIONS_DEFAULT: ChooseFromPromptOptions = {
+  title: "Are you sure",
+  description: "The change can't be reversed.",
+}
+
+export async function yesno(options = YESNO_OPTIONS_DEFAULT): Promise<boolean> {
+  const choice = await chooseFromPrompt(YESNO_CHOICES, options)
+  return YESNO_CHOICES[choice]
 }
 
 function hideCursor() {

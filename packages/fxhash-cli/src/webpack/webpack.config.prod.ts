@@ -1,14 +1,13 @@
 import CopyPlugin from "copy-webpack-plugin"
 import path from "path"
-import { DIST_PATH } from "../constants"
 import { ZipperPlugin } from "./plugins/ZipperPlugin"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
 import { getProjectPaths } from "../templates/paths"
 
 export const createProdConfig: WebpackConfigFactory = options => {
-  const { srcPath, minify, zippify } = options
+  const { srcPath, minify, zippify, rootPath } = options
   const baseConfig = createBaseConfig(options)
-  const { staticPath } = getProjectPaths(srcPath)
+  const { staticPath, distPath } = getProjectPaths(srcPath, rootPath)
   const zipFilePath = baseConfig.output.path + ".zip"
   return {
     ...baseConfig,
@@ -26,7 +25,7 @@ export const createProdConfig: WebpackConfigFactory = options => {
               from: staticPath,
               filter: async filePath => {
                 const filesNotToCopy = [zipFilePath]
-                const foldersNotToCopy = [DIST_PATH]
+                const foldersNotToCopy = [distPath]
                 if (filesNotToCopy.some(file => filePath === file)) return false
                 if (
                   foldersNotToCopy.some(

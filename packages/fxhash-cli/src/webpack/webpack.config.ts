@@ -1,4 +1,4 @@
-import { DIST_PATH, JS_ENTRY_FILE_NAME } from "../constants"
+import { JS_ENTRY_FILE_NAME } from "../constants"
 import { WebpackConfiguration } from "webpack-dev-server"
 import { getProjectPaths } from "../templates/paths"
 
@@ -8,18 +8,22 @@ export interface WebpackConfigFactoryOptions {
   portProject?: number
   minify?: boolean
   zippify?: boolean
+  rootPath?: string
 }
 
 export type WebpackConfigFactory = (
   options: WebpackConfigFactoryOptions
 ) => WebpackConfiguration
 
-export const createBaseConfig: WebpackConfigFactory = ({ srcPath }) => {
-  const { jsEntryPath } = getProjectPaths(srcPath)
+export const createBaseConfig: WebpackConfigFactory = ({
+  srcPath,
+  rootPath,
+}) => {
+  const { jsEntryPath, distPath } = getProjectPaths(srcPath, rootPath)
   return {
     entry: { [JS_ENTRY_FILE_NAME]: jsEntryPath },
     output: {
-      path: DIST_PATH,
+      path: distPath,
       filename: "[name].js",
       clean: true,
     },

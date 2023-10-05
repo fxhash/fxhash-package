@@ -1,6 +1,10 @@
 import { existsSync } from "fs"
 import path from "path"
-import { CWD_PATH } from "../constants"
+import {
+  CWD_PATH,
+  WEBPACK_CONFIG_DEV_FILE_NAME,
+  WEBPACK_CONFIG_PROD_FILE_NAME,
+} from "../constants"
 import { getProjectPaths } from "../templates/paths"
 import { logger } from "../utils/logger"
 
@@ -8,13 +12,25 @@ export function isEjectedProject(srcPath: string): boolean {
   const projectPath = path.resolve(CWD_PATH, srcPath)
   return (
     existsSync(projectPath) &&
-    existsSync(path.resolve(CWD_PATH, "package.json"))
+    existsSync(path.resolve(CWD_PATH, "package.json")) &&
+    existsSync(path.resolve(CWD_PATH, `${WEBPACK_CONFIG_DEV_FILE_NAME}.js`)) &&
+    existsSync(path.resolve(CWD_PATH, `${WEBPACK_CONFIG_PROD_FILE_NAME}.js`))
   )
 }
 
 export function isProjectEjectable(srcPath: string): boolean {
   const packageJsonExists = existsSync(path.resolve(CWD_PATH, "package.json"))
   if (packageJsonExists) throw new Error("Project already has a package.json")
+  const devWebpackConfig = existsSync(
+    path.resolve(CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME + ".js")
+  )
+  if (devWebpackConfig)
+    throw new Error("Project already has a webpack.dev.config")
+  const prodWebpackConfig = existsSync(
+    path.resolve(CWD_PATH, WEBPACK_CONFIG_PROD_FILE_NAME + ".js")
+  )
+  if (prodWebpackConfig)
+    throw new Error("Project already has a webpack.prod.config")
   return validateProjecStructure(srcPath)
 }
 

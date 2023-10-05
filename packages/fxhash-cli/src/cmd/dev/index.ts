@@ -1,41 +1,49 @@
 import type { CommandModule } from "yargs"
-import Webpack from "webpack"
+import Webpack, { Configuration } from "webpack"
 import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
 import express from "express"
-import env, { FXSTUDIO_PATH } from "../../constants"
+import env, {
+  CWD_PATH,
+  FXSTUDIO_PATH,
+  WEBPACK_CONFIG_DEV_FILE_NAME,
+} from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
-import { createHeadlessConfig } from "../../webpack/webpack.config.headless"
 import { autoUpdateTooklit } from "../../updates/changes"
 import { logger } from "../../utils/logger"
 import { isEjectedProject, validateProjecStructure } from "../../validate/index"
+import path from "path"
+import { existsSync } from "fs"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
 }
 
+export function devCommandBuilder(yargs) {
+  return yargs
+    .option("portStudio", {
+      type: "number",
+      default: env.PORT_FXSTUDIO,
+      describe: "The port the studio will be served on",
+    })
+    .option("portProject", {
+      type: "number",
+      default: env.PORT_FXPROJECT,
+      describe: "The port the projcet will be served on",
+    })
+    .option("srcPath", {
+      type: "string",
+      default: env.SRC_PATH,
+      describe:
+        "The path to the src of the project. This setting is only relevant when your project is ejected.",
+    })
+}
+
 export const commandDev: CommandModule = {
   command: "dev",
   describe: "Start the dev environment",
-  builder: yargs =>
-    yargs
-      .option("portStudio", {
-        type: "number",
-        default: env.PORT_FXSTUDIO,
-        describe: "The port the studio will be served on",
-      })
-      .option("portProject", {
-        type: "number",
-        default: env.PORT_FXPROJECT,
-        describe: "The port the projcet will be served on",
-      })
-      .option("srcPath", {
-        type: "string",
-        default: env.SRC_PATH,
-        describe:
-          "The path to the src of the project. This setting is only relevant when your project is ejected.",
-      }),
+  builder: devCommandBuilder,
   handler: async yargs => {
     const portProject = yargs.portProject as number
     const portStudio = yargs.portStudio as number
@@ -63,7 +71,7 @@ export const commandDev: CommandModule = {
       console.log(chalk.dim("Starting anyways...\n\n"))
     }
 
-    // do some checkups to see if fxlens is available, otherwise throw?
+    // TODO:do some checkups to see if fxlens is available, otherwise throw?
     // verifyFxlens(PATH_FXLENS)
 
     const webpackConfigFactoryOptions = {
@@ -72,11 +80,22 @@ export const commandDev: CommandModule = {
       portProject,
     }
 
-    // the environment config
-    const webpackConfig =
-      env.RUN_PROJECT == true
-        ? createDevConfig(webpackConfigFactoryOptions)
-        : createHeadlessConfig(webpackConfigFactoryOptions)
+    let webpackConfig: Configuration
+
+    // If the project is ejected we want to use the webpack config local to the project
+    if (isEjected) {
+      const localDevConfigPath = path.resolve(
+        CWD_PATH,
+        WEBPACK_CONFIG_DEV_FILE_NAME + ".js"
+      )
+      if (!existsSync(localDevConfigPath)) {
+        throw new Error(`Could not find webpack config: ${localDevConfigPath}`)
+      }
+      webpackConfig = (await import(localDevConfigPath)).default
+    } else {
+      // otherwise we load the cli internal webpack configuration
+      webpackConfig = createDevConfig(webpackConfigFactoryOptions)
+    }
 
     // instanciate compiler and server
     const compiler = Webpack({
@@ -90,23 +109,21 @@ export const commandDev: CommandModule = {
     })
     const server = new WebpackDevServer(webpackConfig.devServer, compiler)
 
-    if (env.RUN_PROJECT === true) {
-      // hook the compilation done event to print custom logs
-      compiler.hooks.done.tap("project", stats => {
-        const hasErrors = stats.hasErrors()
-        if (hasErrors) {
-          console.log(logger.error("[project] compilation has failed"))
-        } else {
-          const date = new Date()
-          const time = `${padn(date.getHours())}:${padn(
-            date.getMinutes()
-          )}:${padn(date.getSeconds())}`
-          console.log(
-            `${logger.successC("[project] compiled successfully")} @ ${time}`
-          )
-        }
-      })
-    }
+    // hook the compilation done event to print custom logs
+    compiler.hooks.done.tap("project", stats => {
+      const hasErrors = stats.hasErrors()
+      if (hasErrors) {
+        console.log(logger.error("[project] compilation has failed"))
+      } else {
+        const date = new Date()
+        const time = `${padn(date.getHours())}:${padn(
+          date.getMinutes()
+        )}:${padn(date.getSeconds())}`
+        console.log(
+          `${logger.successC("[project] compiled successfully")} @ ${time}`
+        )
+      }
+    })
 
     // start fxlens
     const app = express()
