@@ -29,22 +29,22 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
-    "@fxhash/params": "workspace:*",
-    "node-html-parser": "6.1.5"
+    "node-html-parser": "6.1.5",
+    "@fxhash/params": "1.0.0"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/prettier-config": "workspace:*",
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
     "tslib": "2.6.0",
     "tsup": "7.2.0",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "@fxhash/eslint-config": "1.0.0",
+    "@fxhash/prettier-config": "1.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }
