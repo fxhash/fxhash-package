@@ -39,7 +39,7 @@
     "@fxhash/evm-sdk": "1.0.0"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "1.0.0",
+    "@fxhash/eslint-config": "1.0.2",
     "@fxhash/prettier-config": "1.0.0",
     "@types/eslint": "8.44.0",
     "@types/eslint-config-prettier": "6.11.0",
