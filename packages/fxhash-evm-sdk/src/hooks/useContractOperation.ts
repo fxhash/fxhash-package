@@ -1,7 +1,7 @@
 import { TzktOperation } from "@/types/Tzkt"
 import { useContext, useRef, useState } from "react"
 import { UserContext } from "@/context/User"
-import { TContractOperation } from "../services/contract-operations/contractOperation"
+import { TContractOperation } from "@/services/operations/contractOperation"
 import {
   ContractOperationCallback,
   ContractOperationStatus,

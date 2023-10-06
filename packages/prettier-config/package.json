@@ -1,0 +1,14 @@
+{
+  "name": "@fxhash/prettier-config",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "1.0.0",
+  "author": "fxhash",
+  "license": "MIT",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/prettier": "2.7.3",
+    "prettier": "2.8.8"
+  }
+}

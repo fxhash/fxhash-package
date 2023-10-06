@@ -45,6 +45,8 @@ export const FxhashContracts = {
   ETH_SPLITS_MAIN: config.eth.contracts.splits_main,
   ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
   ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
+  ETH_SEAPORT_ZONE: config.eth.contracts.seaport_zone,
+  ETH_FIXED_PRICE_MINTER_V1: config.eth.contract.fixed_price_minter_v1,
 }
 
 export const FxhashCollabFactoryCalls = {
