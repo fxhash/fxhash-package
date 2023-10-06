@@ -3,7 +3,7 @@
 The fx(hash) CLI exposes all toolkit features through a single CLI. 
 
 > The usage of the CLI is totally optional for publishing art on the fx(hash) platform. 
-> The CLI is only provides a few tools that should help you in the development process.
+> The CLI is only provides tools that should help you in the development process.
 
 ## Usage
 
@@ -33,12 +33,12 @@ Create a new project in a single step. The terminal will ask you to provide a na
 
 ### `fxhash build [options]`
 
-Creates a bundled version the artwork. 
+Creates a bundled version the artwork. The output file will be called `upload.zip` and can be uploaded as it is on fxhash.xyz.
 
 #### Options
 
-`--minify` Enable minification when creating the bundle  
-`--noZip` Disable the zip file creation  
+`--minify` Enable minification when creating the bundle. Default: `false` 
+`--noZip` Disable the zip file creation. Default: `false` 
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
@@ -50,10 +50,12 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 
 `--portStudio` The port fxlens is served on. Default: `3300`  
 `--portProject` The port the project is served on. Default: `3301`  
-`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
+`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src` 
 
 
 ### `$ fxhash update [options]`
+
+> Note not fully working yet
 
 Will update the whole fxhash environment. It will download the latest version of fxlens and the fxhash-snippet. Optionally you can inject the latest snippet into your html file.
 
@@ -63,8 +65,16 @@ Will update the whole fxhash environment. It will download the latest version of
 
 ### `$ fxhash eject`
 
+`--srcPath` The path to eject the code into. If you set a custom path here you also must specify this path to the other commands.
+
 Will eject your project into a nested struture. It will copy all your code into a `srcPath` (Default: `/src`) and create a `package.json` file in the root of your project. This will allow you to configure any custom tooling you like while still being able to use the `@fxhash/cli` in your ejected project.
 
+### `$ fxhash add [package@version]`
+
+`--list` Lists all existing libraries that can be imported
+`--inject` Will also inject a <script /> tag into your projects html entry point pointing to the downloaded library
+
+Install an existing libaries. Beside being a convenience feature. This ensure that you are reusing existing libraries from the onchfs, which reduces the costs of storing your project on-chain 😎.
 
 ## Configuration with .env 
 
@@ -77,4 +87,5 @@ SRC_PATH=/src
 MINIFY=false
 ```
 
-> Note: Arguments passed to the command will always override the variables set in the `.env` file
+> ⚠️  Note: Arguments passed to the command will always override the variables set in the `.env` file
+
