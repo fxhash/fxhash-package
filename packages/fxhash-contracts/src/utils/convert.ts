@@ -18,6 +18,10 @@ export function stringToByteString(str: string): string {
   return bytesToString(bytes)
 }
 
+export function uint8hex(uint8: Uint8Array): string {
+  return [...uint8].map(x => x.toString(16).padStart(2, "0")).join("")
+}
+
 export function processRawTokenFeatures(rawFeatures: any): TokenFeature[] {
   try {
     const features: TokenFeature[] = []
@@ -73,7 +77,7 @@ export function hexStringToString(str: string): string {
   return str.length > 1
     ? String.fromCharCode.apply(
         null,
-        str.match(/.{2}/g)!.map((hx) => parseInt(hx, 16))
+        str.match(/.{2}/g)!.map(hx => parseInt(hx, 16))
       )
     : ""
 }

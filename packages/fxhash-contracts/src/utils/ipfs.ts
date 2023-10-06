@@ -1,7 +1,11 @@
-import { ipfsGatewayUrl } from "services/Ipfs"
+import { ipfsGatewayUrl } from "@/services/Ipfs"
 
 export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
+}
+
+export function getOnchfsSlash(cid: string): string {
+  return `onchfs://${cid}`
 }
 
 /**

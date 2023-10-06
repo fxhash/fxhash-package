@@ -13,6 +13,7 @@ import {
 } from "../validation"
 import { SafeParseError, SafeParseSuccess, z } from "zod"
 import { ControllerInvalid } from "./Invalid"
+import { BytesController } from "./Bytes"
 
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
@@ -38,6 +39,11 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   string: {
     type: "string",
     controller: StringController,
+    handler: (e) => e.target.value,
+  },
+  bytes: {
+    type: "bytes",
+    controller: BytesController,
     handler: (e) => e.target.value,
   },
   boolean: {
@@ -83,13 +89,16 @@ export function ParameterController(props: ParameterControllerProps) {
     onChange(parameter.id, value)
   }
 
-  if (parsedDefinition && !parsedDefinition.success)
+  if (parsedDefinition && parsedDefinition.success === false) {
     return (
       <ControllerInvalid
         definition={parameter}
-        error={(parsedDefinition as SafeParseError<any>).error}
+        error={parsedDefinition.error}
       />
     )
+  }
+
+  const isCodeDriven = parameter.update === "code-driven"
 
   return (
     <Controller
@@ -99,6 +108,7 @@ export function ParameterController(props: ParameterControllerProps) {
       onChange={handleChangeParam}
       // TODO: This should be properly casted
       options={parameter.options as any}
+      isCodeDriven={isCodeDriven}
     />
   )
 }
