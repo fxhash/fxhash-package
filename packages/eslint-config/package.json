@@ -1,0 +1,16 @@
+{
+  "name": "@fxhash/eslint-config",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "1.0.0",
+  "author": "fxhash",
+  "license": "MIT",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/eslint": "8.44.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint": "8.45.0"
+  }
+}

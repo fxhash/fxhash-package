@@ -41,6 +41,7 @@ export const FxhashContracts = {
   USER_MODERATION: config.TZ_CT_ADDRESS_USER_MODERATION!,
   ARTICLE_MODERATION: config.TZ_CT_ADDRESS_ARTICLE_MODERATION!,
   COLLAB_FACTORY: config.TZ_CT_ADDRESS_COLLAB_FACTORY!,
+  ONCHFS_FILES: config.TZ_CT_ADDRESS_ONCHFS_FILES!,
 }
 
 export const FxhashCollabFactoryCalls = {
