@@ -1,7 +1,7 @@
-import { ethers } from "ethers"
+import { toHex } from "viem"
 
 export function stringToBytes(str: string): string {
-  return ethers.utils.hexlify(ethers.utils.toUtf8Bytes(str))
+  return toHex(str)
 }
 
 export function chunkSubstr(str: string, size: number): string[] {

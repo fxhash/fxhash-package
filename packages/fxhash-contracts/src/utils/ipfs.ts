@@ -4,6 +4,10 @@ export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
 }
 
+export function getOnchfsSlash(cid: string): string {
+  return `onchfs://${cid}`
+}
+
 /**
  * Generic method to get a display url based on a CID and a hash.
  * This function also accepts a transform method so that the base URL can be

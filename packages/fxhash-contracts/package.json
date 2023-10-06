@@ -25,45 +25,46 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
+    "@airgap/beacon-sdk": "4.0.10",
     "@apollo/client": "3.8.1",
-    "@airgap/beacon-sdk": "3.3.4",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "@fxhash/config2": "workspace:*",
-    "@taquito/beacon-wallet": "13.0.1",
-    "@taquito/michel-codec": "13.0.1",
-    "@taquito/michelson-encoder": "13.0.1",
-    "@taquito/rpc": "17.1.1",
-    "@taquito/taquito": "13.0.1",
-    "@taquito/utils": "17.1.0",
+    "@taquito/beacon-wallet": "17.3.1",
+    "@taquito/michel-codec": "17.3.1",
+    "@taquito/michelson-encoder": "17.3.1",
+    "@taquito/rpc": "17.3.1",
+    "@taquito/taquito": "17.3.1",
+    "@taquito/utils": "17.3.1",
     "autonomy-irl-js": "1.0.0",
     "classnames": "2.3.2",
     "date-fns": "2.30.0",
     "lodash.debounce": "4.0.8",
-    "next": "12.2.6",
-    "use-async-effect": "2.2.7"
+    "next": "13.4.19",
+    "use-async-effect": "2.2.7",
+    "@fxhash/config2": "1.0.0"
   },
   "peerDependencies": {
-    "@fxhash/config": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/config2": "workspace:*",
     "react": "18.2.0",
     "react-colorful": "5.6.1",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "@fxhash/config": "1.0.0",
+    "@fxhash/config2": "1.0.0",
+    "@fxhash/gql": "1.0.0",
+    "onchfs": "1.0.0"
   },
   "devDependencies": {
-    "@fxhash/config": "workspace:*",
-    "@fxhash/gql": "workspace:*",
     "@types/lodash.debounce": "4.0.7",
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "tslib": "2.6.0",
     "tsup": "6.6.0",
-    "typescript": "4.9.5"
+    "typescript": "5.0.4",
+    "@fxhash/config": "1.0.0",
+    "@fxhash/gql": "1.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }

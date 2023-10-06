@@ -129,3 +129,4 @@ dist
 .pnp.*
 
 #src/contracts
+junit.xml
