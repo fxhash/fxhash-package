@@ -1,5 +1,6 @@
-import { FxhashContracts } from "../../types/Contracts"
+import { FxhashContracts } from "@/types/Contracts"
 import { ContractOperation } from "./contractOperation"
+import { ABI as ScriptyStorageABI } from "@/contracts/ScriptyStorage"
 import {
   BaseError,
   ContractFunctionRevertedError,
@@ -7,7 +8,7 @@ import {
 } from "viem"
 import { ScriptUpload } from "@/types/OnChainCode"
 import { chunkSubstr, stringToBytes } from "@/utils/scripty/utils"
-import { ABI } from "@/contracts/ScriptyBuilder"
+import { getConfig } from "../Wallet"
 
 export type TUploadOnchainCodeOperationParams = {
   uploadRequests: ScriptUpload[]
@@ -30,11 +31,10 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
       console.log("File size: ", request.scriptContent.length)
       const fileChunks = chunkSubstr(request.scriptContent, 10000)
       try {
-        const { request: createScriptRequest } = await this.manager
-          .getCurrentConfig()
-          .publicClient.simulateContract({
+        const { request: createScriptRequest } =
+          await getConfig().publicClient.simulateContract({
             address: FxhashContracts.ETH_SCRIPTY_STORAGE as `0x${string}`,
-            abi: ABI,
+            abi: ScriptyStorageABI,
             functionName: "createScript",
             args: [request.scriptName, stringToBytes(request.scriptName)],
             account: account,
@@ -45,9 +45,10 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
           account: account,
         })
 
-        const createScriptReceipt = await this.manager
-          .getCurrentConfig()
-          .publicClient.waitForTransactionReceipt({ hash: createScriptHash })
+        const createScriptReceipt =
+          await getConfig().publicClient.waitForTransactionReceipt({
+            hash: createScriptHash,
+          })
 
         if (createScriptReceipt.status != "success") {
           console.log("Failed to create on chain script: ")
@@ -62,11 +63,10 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
             console.log(
               `Uploading chunk ${i} (size: ${chunk.length}) for script ${request.scriptName}`
             )
-            const { request: createChunkRequest } = await this.manager
-              .getCurrentConfig()
-              .publicClient.simulateContract({
+            const { request: createChunkRequest } =
+              await getConfig().publicClient.simulateContract({
                 address: FxhashContracts.ETH_SCRIPTY_STORAGE as `0x${string}`,
-                abi: ABI,
+                abi: ScriptyStorageABI,
                 functionName: "addChunkToScript",
                 args: [request.scriptName, stringToBytes(chunk)],
                 account: account,
@@ -78,9 +78,10 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
                 account: account,
               })
 
-            const uploadChunkReceipt = await this.manager
-              .getCurrentConfig()
-              .publicClient.waitForTransactionReceipt({ hash: uploadChunkHash })
+            const uploadChunkReceipt =
+              await getConfig().publicClient.waitForTransactionReceipt({
+                hash: uploadChunkHash,
+              })
 
             lastReceipt = uploadChunkReceipt
             if (uploadChunkReceipt.status != "success") {
