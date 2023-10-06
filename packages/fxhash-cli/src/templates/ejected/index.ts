@@ -24,7 +24,7 @@ export async function ejectedTemplate({
   })
   const pHtml = format(html, { parser: "html" })
   const pkgJson = JSON.stringify({ ...packageJson, name }, null, 2)
-  const sdkPath = require.resolve("@fxhash/sdk")
+  const sdkPath = require.resolve("@fxhash/project-sdk")
   const sdkContent = readFileSync(sdkPath, "utf-8")
 
   const pWebpackDevConfig = format(
