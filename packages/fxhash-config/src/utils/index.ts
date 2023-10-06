@@ -8,7 +8,7 @@ export function getBlockchainNetworkForEnv(env: TEnv): TBlockchainNetwork {
 export function getConfigForEnv(env: TEnv): IFxhashConfigSingleEnv {
   const blockchainNetwork = getBlockchainNetworkForEnv(env)
   return {
-    ...fxhashConfig.networks[blockhainNetwork],
+    ...fxhashConfig.networks[blockchainNetwork],
     ...fxhashConfig.envs[env],
   } 
 }
