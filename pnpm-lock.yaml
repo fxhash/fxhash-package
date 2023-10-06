@@ -667,7 +667,7 @@ importers:
   packages/project-sdk:
     dependencies:
       '@fxhash/params':
-        specifier: 0.0.1
+        specifier: 0.0.2
         version: link:../fxhash-params
       node-html-parser:
         specifier: 6.1.5
