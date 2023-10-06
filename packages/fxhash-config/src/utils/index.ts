@@ -1,6 +1,6 @@
 import {TEnv, fxhashConfig, TBlockchainNetwork, IFxhashConfigSingleEnv} from "config";
 
-export function getBlockhainNEtworkForEnv(env: TEnv): TBlockchainNetwork {
+export function getBlockchainNetworkForEnv(env: TEnv): TBlockchainNetwork {
   return env === "prd" ? "mainnet" : "testnet"
 }
 
