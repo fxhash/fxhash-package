@@ -37,7 +37,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "static"
   ],
   "scripts": {
     "build": "tsup",
