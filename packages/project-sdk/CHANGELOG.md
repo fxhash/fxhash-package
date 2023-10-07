@@ -1,5 +1,13 @@
 # @fxhash/project-sdk
 
+## 0.0.7
+
+### Patch Changes
+
+- 595c19c: Release CLI test
+- Updated dependencies [595c19c]
+  - @fxhash/params@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes
