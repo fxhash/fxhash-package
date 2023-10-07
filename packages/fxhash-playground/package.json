@@ -18,20 +18,8 @@
     "worker_threads": false,
     "module": false
   },
-  "scripts": {
-    "clean": "rm -rf .next",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix"
-  },
   "dependencies": {
     "@apollo/client": "3.8.1",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/contracts": "workspace:*",
-    "@fxhash/evm-sdk": "workspace:*",
-    "@fxhash/gql": "workspace:*",
     "@next/font": "13.1.6",
     "@reservoir0x/reservoir-sdk": "1.4.0",
     "axios": "1.4.0",
@@ -44,11 +32,13 @@
     "react-dom": "18.2.0",
     "viem": "1.6.4",
     "wagmi": "1.3.10",
-    "sass": "1.63.6"
+    "sass": "1.63.6",
+    "@fxhash/config": "0.0.1",
+    "@fxhash/contracts": "0.0.1",
+    "@fxhash/evm-sdk": "0.0.1",
+    "@fxhash/gql": "0.0.1"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/prettier-config": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/eslint-config-prettier": "6.11.0",
     "@types/eslint-plugin-prettier": "3.1.0",
@@ -61,6 +51,16 @@
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.8.8",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/prettier-config": "1.0.2"
+  },
+  "scripts": {
+    "clean": "rm -rf .next",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix"
   }
 }
