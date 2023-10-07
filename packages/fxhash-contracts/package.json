@@ -51,7 +51,7 @@
     "@fxhash/config2": "1.0.0",
     "@fxhash/config": "0.0.5",
     "@fxhash/gql": "0.0.5",
-    "onchfs": "1.0.0"
+    "onchfs": "0.0.0"
   },
   "devDependencies": {
     "@types/lodash.debounce": "4.0.7",
@@ -61,7 +61,8 @@
     "tsup": "6.6.0",
     "typescript": "5.0.4",
     "@fxhash/config": "0.0.5",
-    "@fxhash/gql": "0.0.5"
+    "@fxhash/gql": "0.0.5",
+    "onchfs": "0.0.0"
   },
   "scripts": {
     "build": "tsup",
