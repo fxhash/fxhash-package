@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/contracts",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -49,8 +49,8 @@
     "react-colorful": "5.6.1",
     "react-dom": "18.2.0",
     "@fxhash/config2": "1.0.0",
-    "@fxhash/config": "0.0.4",
-    "@fxhash/gql": "0.0.4",
+    "@fxhash/config": "0.0.5",
+    "@fxhash/gql": "0.0.5",
     "onchfs": "1.0.0"
   },
   "devDependencies": {
@@ -60,8 +60,8 @@
     "tslib": "2.6.0",
     "tsup": "6.6.0",
     "typescript": "5.0.4",
-    "@fxhash/config": "0.0.4",
-    "@fxhash/gql": "0.0.4"
+    "@fxhash/config": "0.0.5",
+    "@fxhash/gql": "0.0.5"
   },
   "scripts": {
     "build": "tsup",

@@ -1,5 +1,11 @@
 # @fxhash/config
 
+## 0.0.5
+
+### Patch Changes
+
+- 3d9f0f7: Relase CLI test
+
 ## 0.0.4
 
 ### Patch Changes

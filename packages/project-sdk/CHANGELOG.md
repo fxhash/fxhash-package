@@ -1,5 +1,13 @@
 # @fxhash/project-sdk
 
+## 0.0.6
+
+### Patch Changes
+
+- 3d9f0f7: Relase CLI test
+- Updated dependencies [3d9f0f7]
+  - @fxhash/params@0.0.6
+
 ## 0.0.5
 
 ### Patch Changes
