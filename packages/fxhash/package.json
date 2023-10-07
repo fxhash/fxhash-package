@@ -15,8 +15,7 @@
   },
   "main": "./index.js",
   "dependencies": {
-    "@fxhash/cli": "workspace:*"
+    "@fxhash/cli": "0.0.7"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
