@@ -344,6 +344,12 @@ importers:
       '@babel/preset-typescript':
         specifier: 7.22.15
         version: 7.22.15
+      '@fxhash/config':
+        specifier: 0.0.1
+        version: link:../fxhash-config
+      '@fxhash/config2':
+        specifier: 1.0.0
+        version: link:../fxhash-config2
       '@fxhash/eslint-config':
         specifier: 1.0.2
         version: link:../eslint-config
