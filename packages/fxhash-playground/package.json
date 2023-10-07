@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/playground",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -34,9 +34,9 @@
     "wagmi": "1.3.10",
     "sass": "1.63.6",
     "@fxhash/config": "0.0.1",
-    "@fxhash/contracts": "1.0.0",
-    "@fxhash/gql": "1.0.0",
-    "@fxhash/evm-sdk": "1.0.0"
+    "@fxhash/contracts": "0.0.1",
+    "@fxhash/evm-sdk": "0.0.1",
+    "@fxhash/gql": "0.0.1"
   },
   "devDependencies": {
     "@types/eslint": "8.44.0",
@@ -52,8 +52,8 @@
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.8.8",
     "typescript": "5.0.4",
-    "@fxhash/prettier-config": "1.0.2",
-    "@fxhash/eslint-config": "1.0.2"
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/prettier-config": "1.0.2"
   },
   "scripts": {
     "clean": "rm -rf .next",

@@ -281,7 +281,7 @@ importers:
         specifier: 0.0.1
         version: link:../fxhash-config
       '@fxhash/gql':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-gql
       '@types/lodash.debounce':
         specifier: 4.0.7
@@ -308,7 +308,7 @@ importers:
         specifier: 3.8.1
         version: 3.8.1(react-dom@18.2.0)(react@18.2.0)
       '@fxhash/gql':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-gql
       '@web3modal/ethereum':
         specifier: 2.7.1
@@ -539,13 +539,13 @@ importers:
         specifier: 0.0.1
         version: link:../fxhash-config
       '@fxhash/contracts':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-contracts
       '@fxhash/evm-sdk':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-evm-sdk
       '@fxhash/gql':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-gql
       '@next/font':
         specifier: 13.1.6
