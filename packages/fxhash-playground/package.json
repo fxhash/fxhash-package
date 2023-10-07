@@ -52,8 +52,13 @@
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.8.8",
     "typescript": "5.0.4",
+<<<<<<< HEAD
     "@fxhash/eslint-config": "1.0.2",
     "@fxhash/prettier-config": "1.0.2"
+=======
+    "@fxhash/prettier-config": "1.0.2",
+    "@fxhash/eslint-config": "1.0.2"
+>>>>>>> main
   },
   "scripts": {
     "clean": "rm -rf .next",
