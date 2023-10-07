@@ -1,5 +1,11 @@
 # @fxhash/fxhash-snippet
 
+## 0.0.3
+
+### Patch Changes
+
+- 71dc023: release CLI
+
 ## 0.0.2
 
 ### Patch Changes
