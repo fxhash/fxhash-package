@@ -1,5 +1,11 @@
 # @fxhash/params
 
+## 0.0.4
+
+### Patch Changes
+
+- 82733e6: Release CLI test
+
 ## 0.0.3
 
 ### Patch Changes
