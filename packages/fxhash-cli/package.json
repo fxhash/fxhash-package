@@ -39,6 +39,7 @@
     "@apollo/client": "3.7.17",
     "@fxhash/config": "*",
     "@fxhash/project-sdk": "*",
+    "@fxhash/fxhash-snippet": "*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
