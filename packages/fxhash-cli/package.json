@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.2",
+  "version": "0.0.7",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -11,12 +11,18 @@
     "access": "public"
   },
   "bin": {
-    "fxhash": "./dist/index.js"
+    "fxhash-add": "./dist/add.js",
+    "fxhash-build": "./dist/build.js",
+    "fxhash-create": "./dist/create.js",
+    "fxhash-dev": "./dist/dev.js",
+    "fxhash-eject": "./dist/eject.js",
+    "fxhash-update": "./dist/update.js"
   },
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
+    ".": "./dist/index.js",
     "./*": {
       "types": "./dist/*.d.ts",
       "require": "./dist/*.js",
@@ -40,9 +46,9 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.17",
-    "@fxhash/config": "*",
-    "@fxhash/project-sdk": "*",
-    "@fxhash/fxhash-snippet": "*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/project-sdk": "workspace:*",
+    "@fxhash/fxhash-snippet": "workspace:*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
