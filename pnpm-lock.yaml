@@ -27,19 +27,25 @@ importers:
         specifier: 8.45.0
         version: 8.45.0
 
+  packages/fxhash:
+    dependencies:
+      '@fxhash/cli':
+        specifier: 0.0.7
+        version: link:../fxhash-cli
+
   packages/fxhash-cli:
     dependencies:
       '@apollo/client':
         specifier: 3.7.17
         version: 3.7.17(graphql@16.7.1)
       '@fxhash/config':
-        specifier: '*'
+        specifier: 0.0.6
         version: link:../fxhash-config
       '@fxhash/fxhash-snippet':
-        specifier: '*'
+        specifier: 0.0.7
         version: link:../fxhash-snippet
       '@fxhash/project-sdk':
-        specifier: '*'
+        specifier: 0.0.7
         version: link:../project-sdk
       '@octokit/rest':
         specifier: 20.0.1
