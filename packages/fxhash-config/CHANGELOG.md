@@ -1,5 +1,11 @@
 # @fxhash/config
 
+## 0.0.6
+
+### Patch Changes
+
+- 595c19c: Release CLI test
+
 ## 0.0.5
 
 ### Patch Changes

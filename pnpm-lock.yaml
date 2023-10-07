@@ -287,10 +287,10 @@ importers:
         version: 2.2.7(react@18.2.0)
     devDependencies:
       '@fxhash/config':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-config
       '@fxhash/gql':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-gql
       '@types/lodash.debounce':
         specifier: 4.0.7
@@ -320,7 +320,7 @@ importers:
         specifier: 3.8.1
         version: 3.8.1(graphql@16.7.1)(react-dom@18.2.0)(react@18.2.0)
       '@fxhash/gql':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-gql
       '@web3modal/ethereum':
         specifier: 2.7.1
@@ -357,7 +357,7 @@ importers:
         specifier: 7.22.15
         version: 7.22.15(@babel/core@7.23.0)
       '@fxhash/config':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-config
       '@fxhash/config2':
         specifier: 1.0.0
@@ -439,7 +439,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       '@fxhash/config':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-config
       tslib:
         specifier: 2.6.0
@@ -560,16 +560,16 @@ importers:
         specifier: 3.8.1
         version: 3.8.1(graphql@16.7.1)(react-dom@18.2.0)(react@18.2.0)
       '@fxhash/config':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-config
       '@fxhash/contracts':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-contracts
       '@fxhash/evm-sdk':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-evm-sdk
       '@fxhash/gql':
-        specifier: 0.0.5
+        specifier: 0.0.6
         version: link:../fxhash-gql
       '@next/font':
         specifier: 13.1.6
@@ -665,7 +665,7 @@ importers:
     devDependencies:
       '@esbuild-plugins/node-modules-polyfill':
         specifier: 0.2.2
-        version: 0.2.2(esbuild@0.18.20)
+        version: 0.2.2(esbuild@0.19.4)
       '@fxhash/eslint-config':
         specifier: 1.0.2
         version: link:../eslint-config
@@ -697,7 +697,7 @@ importers:
   packages/project-sdk:
     dependencies:
       '@fxhash/params':
-        specifier: 0.0.6
+        specifier: 0.0.7
         version: link:../fxhash-params
       node-html-parser:
         specifier: 6.1.5
@@ -705,7 +705,7 @@ importers:
     devDependencies:
       '@esbuild-plugins/node-modules-polyfill':
         specifier: 0.2.2
-        version: 0.2.2(esbuild@0.18.20)
+        version: 0.2.2(esbuild@0.19.4)
       '@fxhash/eslint-config':
         specifier: 1.0.2
         version: link:../eslint-config
@@ -2394,12 +2394,12 @@ packages:
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==}
     dev: false
 
-  /@esbuild-plugins/node-modules-polyfill@0.2.2(esbuild@0.18.20):
+  /@esbuild-plugins/node-modules-polyfill@0.2.2(esbuild@0.19.4):
     resolution: {integrity: sha512-LXV7QsWJxRuMYvKbiznh+U1ilIop3g2TeKRzUxOG5X3YITc8JyyTa90BmLwqqv0YnX4v32CSlG+vsziZp9dMvA==}
     peerDependencies:
       esbuild: '*'
     dependencies:
-      esbuild: 0.18.20
+      esbuild: 0.19.4
       escape-string-regexp: 4.0.0
       rollup-plugin-node-polyfills: 0.2.1
     dev: true
