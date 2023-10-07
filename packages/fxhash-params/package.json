@@ -1,6 +1,5 @@
 {
   "name": "@fxhash/params",
-  "private": true,
   "version": "0.0.2",
   "author": "fxhash",
   "license": "MIT",

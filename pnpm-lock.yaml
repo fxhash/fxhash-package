@@ -278,7 +278,7 @@ importers:
         version: 2.2.7(react@18.2.0)
     devDependencies:
       '@fxhash/config':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-config
       '@fxhash/gql':
         specifier: 1.0.0
@@ -344,6 +344,12 @@ importers:
       '@babel/preset-typescript':
         specifier: 7.22.15
         version: 7.22.15
+      '@fxhash/config':
+        specifier: 0.0.1
+        version: link:../fxhash-config
+      '@fxhash/config2':
+        specifier: 1.0.0
+        version: link:../fxhash-config2
       '@fxhash/eslint-config':
         specifier: 1.0.2
         version: link:../eslint-config
@@ -415,7 +421,7 @@ importers:
         version: 16.7.1
     devDependencies:
       '@fxhash/config':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-config
       tslib:
         specifier: 2.6.0
@@ -530,7 +536,7 @@ importers:
         specifier: 3.8.1
         version: 3.8.1(react-dom@18.2.0)(react@18.2.0)
       '@fxhash/config':
-        specifier: 1.0.0
+        specifier: 0.0.1
         version: link:../fxhash-config
       '@fxhash/contracts':
         specifier: 1.0.0
