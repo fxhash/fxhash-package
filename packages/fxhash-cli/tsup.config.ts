@@ -2,7 +2,15 @@ import { defineConfig, Options } from "tsup"
 
 export default defineConfig((options: Options) => [
   {
-    entry: ["src/index.ts"],
+    entry: [
+      "src/index.ts",
+      "src/add.ts",
+      "src/build.ts",
+      "src/create.ts",
+      "src/dev.ts",
+      "src/eject.ts",
+      "src/update.ts",
+    ],
     outDir: "dist",
     format: ["cjs"],
     splitting: true,

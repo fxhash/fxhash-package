@@ -11,12 +11,18 @@
     "access": "public"
   },
   "bin": {
-    "fxhash": "./dist/index.js"
+    "fxhash-add": "./dist/add.js",
+    "fxhash-build": "./dist/build.js",
+    "fxhash-create": "./dist/create.js",
+    "fxhash-dev": "./dist/dev.js",
+    "fxhash-eject": "./dist/eject.js",
+    "fxhash-update": "./dist/update.js"
   },
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
+    ".": "./dist/index.js",
     "./*": {
       "types": "./dist/*.d.ts",
       "require": "./dist/*.js",
@@ -31,13 +37,11 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "static"
   ],
   "dependencies": {
     "@apollo/client": "3.7.17",
-    "@fxhash/config": "*",
-    "@fxhash/project-sdk": "*",
-    "@fxhash/fxhash-snippet": "*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
@@ -60,7 +64,10 @@
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
     "yargs": "17.7.2",
-    "yesno": "0.4.0"
+    "yesno": "0.4.0",
+    "@fxhash/config": "0.0.6",
+    "@fxhash/project-sdk": "0.0.7",
+    "@fxhash/fxhash-snippet": "0.0.7"
   },
   "devDependencies": {
     "@types/adm-zip": "0.5.0",
