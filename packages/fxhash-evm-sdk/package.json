@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/evm-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "use-async-effect": "2.2.7",
-    "@fxhash/gql": "0.0.1"
+    "@fxhash/gql": "0.0.2"
   },
   "devDependencies": {
     "@babel/preset-env": "7.22.10",
@@ -58,7 +58,7 @@
     "wagmi": "1.3.10",
     "@fxhash/eslint-config": "1.0.2",
     "@fxhash/prettier-config": "1.0.2",
-    "@fxhash/config": "0.0.1",
+    "@fxhash/config": "0.0.2",
     "@fxhash/config2": "1.0.0"
   },
   "peerDependencies": {
@@ -67,7 +67,7 @@
     "react-dom": "18.2.0",
     "viem": "1.6.4",
     "wagmi": "1.3.10",
-    "@fxhash/config": "0.0.1",
+    "@fxhash/config": "0.0.2",
     "@fxhash/config2": "1.0.0"
   },
   "scripts": {
