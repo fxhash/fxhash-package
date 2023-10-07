@@ -1,11 +1,14 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "bin": {
     "fxhash": "./dist/index.js"

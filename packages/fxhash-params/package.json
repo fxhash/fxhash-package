@@ -1,11 +1,14 @@
 {
   "name": "@fxhash/params",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",

@@ -1,5 +1,11 @@
 # @fxhash/config
 
+## 0.0.3
+
+### Patch Changes
+
+- 82733e6: Release CLI test
+
 ## 0.0.2
 
 ### Patch Changes
