@@ -1,5 +1,12 @@
 # @fxhash/gql
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [3d9f0f7]
+  - @fxhash/config@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes

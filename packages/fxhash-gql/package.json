@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/gql",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -33,13 +33,13 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4",
-    "@fxhash/config": "0.0.4"
+    "@fxhash/config": "0.0.5"
   },
   "devDependencies": {
     "tslib": "2.6.0",
     "tsup": "6.6.0",
     "typescript": "5.0.4",
-    "@fxhash/config": "0.0.4"
+    "@fxhash/config": "0.0.5"
   },
   "scripts": {
     "build": "tsup",
