@@ -1,5 +1,11 @@
 # @fxhash/cli
 
+## 0.0.8
+
+### Patch Changes
+
+- 55e37eb: Publish CLI and fxhash npx
+
 ## 0.0.7
 
 ### Patch Changes

@@ -30,7 +30,7 @@ importers:
   packages/fxhash:
     dependencies:
       '@fxhash/cli':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-cli
 
   packages/fxhash-cli:
