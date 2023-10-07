@@ -1,5 +1,11 @@
 # @fxhash/params
 
+## 0.0.5
+
+### Patch Changes
+
+- 71327c6: Release CLI with build
+
 ## 0.0.4
 
 ### Patch Changes

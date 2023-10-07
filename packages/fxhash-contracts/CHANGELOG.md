@@ -1,5 +1,13 @@
 # @fxhash/contracts
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [71327c6]
+  - @fxhash/config@0.0.4
+  - @fxhash/gql@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes
