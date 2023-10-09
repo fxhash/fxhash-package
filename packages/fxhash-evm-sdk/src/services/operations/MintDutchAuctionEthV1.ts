@@ -1,17 +1,16 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { ContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
+import { ABI as DAMinterABI } from "@/abi/DutchAuctionMinter"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { getConfig } from "../Wallet"
 
-export type TMintFixedPriceEthV1OperationParams = {
+export type TMintDAEthV1OperationParams = {
   token: string
   price: number
-  mintId: number
   amount: number
 }
 
@@ -19,21 +18,16 @@ export type TMintFixedPriceEthV1OperationParams = {
  * Mint an unique iteration of a Generative Token
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
-export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPriceEthV1OperationParams> {
+export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
     const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
-      abi: FixedPriceMinterABI,
+      address: FxhashContracts.ETH_DUTCH_AUCTION as `0x${string}`,
+      abi: DAMinterABI,
       functionName: "buy",
-      args: [
-        this.params.token,
-        this.params.mintId,
-        this.params.amount,
-        account,
-      ],
+      args: [this.params.token, this.params.amount, account],
       account: account,
       value: this.params.price,
     }

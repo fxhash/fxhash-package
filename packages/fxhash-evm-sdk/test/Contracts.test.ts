@@ -2,6 +2,7 @@ import { config as dotenvConfig } from "dotenv"
 import {
   createPublicClient,
   createWalletClient,
+  encodePacked,
   getContract,
   http,
   numberToHex,
@@ -11,11 +12,11 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { FxhashContracts } from "@/types/Contracts"
-import { ABI as FixedPriceMinterABI } from "@/contracts/FixedPriceMinter"
-import { ABI as IssuerFactoryABI } from "@/contracts/FxIssuerFactory"
+import { FxhashContracts } from "@/contracts/Contracts"
+import { ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
+import { ABI as IssuerFactoryABI } from "@/abi/FxIssuerFactory"
 import { privateKeyToAccount } from "viem/accounts"
-import { ABI as ISplitsMainABI } from "@/contracts/ISplitsMain"
+import { ABI as ISplitsMainABI } from "@/abi/ISplitsMain"
 
 dotenvConfig()
 
@@ -32,7 +33,7 @@ describe("createProject", () => {
     transport: http(),
   })
 
-  it("should create a project", async () => {
+  it("should create a fixed price project", async () => {
     const splitsPrimary = [
       {
         address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -101,6 +102,104 @@ describe("createProject", () => {
               allocation: 100,
             },
             params: numberToHex(1000),
+          },
+        ],
+        splitsSecondary.map(split => split.address as `0x${string}`),
+        splitsSecondary.map(split => BigInt(split.pct)),
+      ],
+      account: account,
+    }
+    const receipt = await simulateAndExecuteContract(
+      publicClient,
+      walletClient,
+      args
+    )
+    console.log(receipt)
+    expect(receipt.transactionHash).toBeDefined()
+  })
+
+  it("should create a dutch auction project", async () => {
+    const splitsPrimary = [
+      {
+        address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        pct: 500000,
+      },
+      {
+        address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92267",
+        pct: 500000,
+      },
+    ]
+
+    const splitsSecondary = [
+      {
+        address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        pct: 100,
+      },
+    ]
+
+    const splitsFactory = getContract({
+      address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
+      abi: ISplitsMainABI,
+      walletClient: walletClient,
+      publicClient: publicClient,
+    })
+
+    const splitsAddress = await splitsFactory.read.predictImmutableSplitAddress(
+      [
+        splitsPrimary.map(split => split.address as `0x${string}`),
+        splitsPrimary.map(split => split.pct),
+        0,
+      ]
+    )
+
+    const dutchAuctionParams = {
+      prices: [BigInt(1000), BigInt(900), BigInt(800)],
+      stepLength: BigInt(100),
+      refunded: false,
+    }
+
+    const account = walletClient.account.address
+    const args: SimulateAndExecuteContractRequest = {
+      address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
+      abi: IssuerFactoryABI,
+      functionName: "createProject",
+      args: [
+        account,
+        splitsAddress,
+        {
+          enabled: true,
+          onchain: false,
+          supply: 100,
+          contractURI: "",
+        },
+        {
+          baseURI: "",
+          imageURI: "",
+          animation: {
+            bodyTags: [],
+            headTags: [],
+          },
+          attributes: {
+            bodyTags: [],
+            headTags: [],
+          },
+        },
+        [
+          {
+            minter: FxhashContracts.ETH_DUTCH_AUCTION,
+            reserveInfo: {
+              startTime: new Date().getTime(),
+              endTime: new Date().getTime() + 999999,
+              allocation: 100,
+            },
+            params: encodePacked(
+              ["uint256[]", "uint256", "bool"],
+              [
+                dutchAuctionParams.prices,
+                dutchAuctionParams.stepLength,
+                dutchAuctionParams.refunded,
+              ]
+            ),
           },
         ],
         splitsSecondary.map(split => split.address as `0x${string}`),

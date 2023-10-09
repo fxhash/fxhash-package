@@ -1,7 +1,7 @@
 import {
   ContractOperationCallback,
   ContractOperationStatus,
-} from "../types/Contracts"
+} from "../contracts/Contracts"
 import { config } from "@fxhash/config"
 import { TContractOperation } from "@/services/operations/contractOperation"
 import { isOperationApplied } from "./Blockchain"
