@@ -61,6 +61,11 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "NotEnded",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "NotStarted",
     type: "error",
   },
@@ -82,6 +87,12 @@ export const ABI = [
         internalType: "address",
         name: "token",
         type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "reserveId",
+        type: "uint256",
       },
       {
         components: [
@@ -130,7 +141,7 @@ export const ABI = [
         type: "tuple",
       },
     ],
-    name: "DutchAuctionMintDetails",
+    name: "MintDetailsSet",
     type: "event",
   },
   {
@@ -144,12 +155,18 @@ export const ABI = [
       },
       {
         indexed: true,
+        internalType: "uint256",
+        name: "reserveId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
         internalType: "address",
         name: "buyer",
         type: "address",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "address",
         name: "to",
         type: "address",
@@ -181,6 +198,12 @@ export const ABI = [
       },
       {
         indexed: true,
+        internalType: "uint256",
+        name: "reserveId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
         internalType: "address",
         name: "buyer",
         type: "address",
@@ -206,18 +229,24 @@ export const ABI = [
       },
       {
         indexed: true,
+        internalType: "uint256",
+        name: "reserveId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
         internalType: "address",
-        name: "receiver",
+        name: "creator",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "proceeds",
         type: "uint256",
       },
     ],
-    name: "SaleProceedsWithdrawn",
+    name: "Withdrawn",
     type: "event",
   },
   {
@@ -226,6 +255,11 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     name: "auctionInfo",
@@ -253,6 +287,11 @@ export const ABI = [
       },
       {
         internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
         name: "_amount",
         type: "uint256",
       },
@@ -273,6 +312,11 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
       {
         internalType: "address",
@@ -299,6 +343,11 @@ export const ABI = [
         type: "address",
       },
       {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "",
         type: "address",
@@ -321,6 +370,11 @@ export const ABI = [
         internalType: "address",
         name: "_token",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
       },
     ],
     name: "getPrice",
@@ -346,6 +400,11 @@ export const ABI = [
         name: "",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
     name: "lastPrice",
     outputs: [
@@ -366,6 +425,11 @@ export const ABI = [
         type: "address",
       },
       {
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "_who",
         type: "address",
@@ -382,6 +446,11 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     name: "reserves",
@@ -411,6 +480,11 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     name: "saleProceeds",
@@ -465,6 +539,11 @@ export const ABI = [
         internalType: "address",
         name: "_token",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
       },
     ],
     name: "withdraw",

@@ -1,41 +1,45 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { ContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as DAMinterABI } from "@/abi/DutchAuctionMinter"
+import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { getConfig } from "../Wallet"
 
-export type TMintDAEthV1OperationParams = {
+export type TCreateTicketEthV1OperationParams = {
   token: string
-  price: number
-  amount: number
-  reserveId: number
+  gracePeriod: number
+  baseURI: string
 }
 
 /**
- * Mint an unique iteration of a Generative Token using Dutch Auction pricing minter
- * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
+ * Create a new mint ticket contract
+ * @dev contract interface:
+ * function createTicket(
+ *      address _owner,
+ *      address _genArt721,
+ *      uint48 _gracePeriod,
+ *      string calldata _baseURI
+ *  )
  */
-export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1OperationParams> {
+export class CreateTicketEthV1Operation extends ContractOperation<TCreateTicketEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
     const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
-      abi: DAMinterABI,
-      functionName: "buy",
+      address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
+      abi: MintTicketFactoryABI,
+      functionName: "createTicket",
       args: [
-        this.params.token,
-        this.params.reserveId,
-        this.params.amount,
         account,
+        this.params.token,
+        this.params.gracePeriod,
+        this.params.baseURI,
       ],
       account: account,
-      value: this.params.price,
     }
     return simulateAndExecuteContract(
       getConfig().publicClient,
@@ -45,6 +49,6 @@ export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1Operatio
   }
 
   success(): string {
-    return `Successfully minted dutch auction token ${this.params.token} for ${this.params.price} ETH`
+    return `Successfully minted mint ticket ${this.params.token}`
   }
 }

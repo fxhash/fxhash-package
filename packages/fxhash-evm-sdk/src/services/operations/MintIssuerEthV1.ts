@@ -55,7 +55,7 @@ export type TMintEthIssuerV1OperationParams = {
 }
 
 /**
- * Mint an unique iteration of a Generative Token
+ * Call the Issuer factory to create a new project
  */
 export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type

@@ -26,6 +26,14 @@ import {
   MintDAEthV1Operation,
   TMintDAEthV1OperationParams,
 } from "@fxhash/evm-sdk/services/operations/MintDutchAuctionEthV1"
+import {
+  MintTicketEthV1Operation,
+  TMintTicketEthV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/MintTicketEthV1"
+import {
+  CreateTicketEthV1Operation,
+  TCreateTicketEthV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/CreateTicketEthV1"
 import { listToken } from "@fxhash/evm-sdk/services/operations/Marketplace"
 import {
   encodeAbiParameters,
@@ -69,7 +77,7 @@ export default function EthPlayground(props: any) {
     },
     mintInfo: [
       {
-        minter: "0xD935876c9E718992BCB56937f43429DCC9ba8f89",
+        minter: "0x7736ee02D5B3CAD6E43DB372149b1d4bf13C79A4",
         reserveInfo: {
           startTime: 0,
           endTime: new Date().getTime() + 9999,
@@ -94,7 +102,7 @@ export default function EthPlayground(props: any) {
     ...paramsMintIssuerFixed,
     mintInfo: [
       {
-        minter: "0xa21DEE517111cEF1F3eb9a60A368D738b7eC7A45",
+        minter: "0xED5157cD2a86dF96df64A6B7633c0e4192Da928e",
         reserveInfo: {
           startTime: new Date().getTime() + 100,
           endTime: new Date().getTime() + 500,
@@ -117,16 +125,29 @@ export default function EthPlayground(props: any) {
   }
 
   const mintFixedPriceParams: TMintFixedPriceEthV1OperationParams = {
-    price: 10000,
+    price: price,
     mintId: 0,
-    token: "0x41cafcfaa979cc5130cc891d4f1136e0b35fba83",
+    token: "0xd2aa6e24e49ef36b8f886a7e230d009e9a4410e3",
     amount: 1,
   }
 
   const mintDAParams: TMintDAEthV1OperationParams = {
-    price: 10000,
-    token: "0x9c80b32109ed0a6579be6b4ae0e6a4dbe16f3d27",
+    price: price,
+    token: "0x62B6A22f94AA80B4a0BF849F6EB69bCf111De2ad",
+    reserveId: 0,
     amount: 1,
+  }
+
+  const createTicketParams: TCreateTicketEthV1OperationParams = {
+    gracePeriod: 86_400,
+    token: "0x41cafcfaa979cc5130cc891d4f1136e0b35fba83",
+    baseURI: "baseURI://",
+  }
+
+  const mintTicketParams: TMintTicketEthV1OperationParams = {
+    ticket: "0x680f5E153fF524ec2c8624Aa99D96e6acBE31cF6",
+    amount: 1,
+    payment: price,
   }
 
   const createProjectFixedOperation = new MintEthIssuerV1Operation(
@@ -142,6 +163,10 @@ export default function EthPlayground(props: any) {
     mintFixedPriceParams
   )
   const mintDAOperation = new MintDAEthV1Operation(walletManager!, mintDAParams)
+  const mintTicketperation = new MintTicketEthV1Operation(
+    walletManager!,
+    mintTicketParams
+  )
 
   const handleConnect = async () => {
     await connect()
@@ -155,20 +180,10 @@ export default function EthPlayground(props: any) {
     createProjectDAOperation.call()
   }
 
-  const handleListToken = async () => {
-    await listToken(
-      [
-        {
-          token: tokenId,
-          weiPrice: parseEther("0.00000000001").toString(),
-          orderbook: "reservoir",
-          orderKind: "seaport-v1.5",
-          expirationTime: expiration,
-        },
-      ],
-      walletManager.walletClient!
-    )
-  }
+  const createTicketOperation = new CreateTicketEthV1Operation(
+    walletManager!,
+    createTicketParams
+  )
 
   const handleMintFixed = () => {
     mintFixedOperation.call()
@@ -178,6 +193,14 @@ export default function EthPlayground(props: any) {
     mintDAOperation.call()
   }
 
+  const handleMintTicket = () => {
+    mintTicketperation.call()
+  }
+
+  const handleCreateTicket = () => {
+    createTicketOperation.call()
+  }
+
   const handleListToken = async () => {
     await listToken(
       [
@@ -191,10 +214,6 @@ export default function EthPlayground(props: any) {
       ],
       walletManager.walletClient!
     )
-  }
-
-  const handleMintFixed = () => {
-    mintFixedOperation.call()
   }
 
   // State to hold the uploaded files
@@ -253,8 +272,10 @@ export default function EthPlayground(props: any) {
           <ConnectKitButton />
           <button onClick={handleCreateProjectFixed}>createProjectFixed</button>
           <button onClick={handleCreateProjectDA}>createProjectDA</button>
+          <button onClick={handleCreateTicket}>createTicket</button>
           <button onClick={handleMintFixed}>mintFixed</button>
           <button onClick={handleMintDA}>mintDA</button>
+          <button onClick={handleMintTicket}>mintTicket</button>
           <button onClick={handleListToken}>listToken</button>
         </ConnectKitProvider>
       </WagmiConfig>

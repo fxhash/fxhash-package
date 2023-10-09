@@ -8,13 +8,13 @@ import { isOperationApplied } from "./Blockchain"
 import { Address, createWalletClient, http } from "viem"
 import { createConfig, configureChains } from "wagmi"
 import { type WalletClient } from "wagmi"
-import { mainnet, goerli, hardhat } from "wagmi/chains"
+import { mainnet, sepolia, hardhat } from "wagmi/chains"
 import { Config } from "wagmi"
 import { getDefaultConfig } from "connectkit"
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 
 //list of supported chains by the SDK
-export const chains = [mainnet, goerli, hardhat]
+export const chains = [mainnet, sepolia, hardhat]
 //Since the configuration of SDK is only for one chain at a time, we select the one configured
 export const CURRENT_CHAIN = chains.find(
   chain => chain.id === parseInt(config.ETH_CHAIN_ID)

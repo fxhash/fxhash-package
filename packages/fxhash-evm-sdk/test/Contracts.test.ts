@@ -186,7 +186,7 @@ describe("createProject", () => {
         },
         [
           {
-            minter: FxhashContracts.ETH_DUTCH_AUCTION,
+            minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
             reserveInfo: {
               startTime: new Date().getTime(),
               endTime: new Date().getTime() + 999999,

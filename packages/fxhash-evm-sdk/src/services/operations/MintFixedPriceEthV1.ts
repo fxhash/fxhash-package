@@ -16,7 +16,7 @@ export type TMintFixedPriceEthV1OperationParams = {
 }
 
 /**
- * Mint an unique iteration of a Generative Token
+ * Mint an unique iteration of a Generative Token using the Fixed Priced minter
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
 export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPriceEthV1OperationParams> {
