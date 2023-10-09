@@ -5,19 +5,15 @@ The fx(hash) CLI exposes all toolkit features through a single CLI.
 > The usage of the CLI is totally optional for publishing art on the fx(hash) platform. 
 > The CLI is only provides tools that should help you in the development process.
 
-## Usage
+## Prerequisits
 
-```
-npx fxhash <command> [args]
-```
-
-You can run all commands via `npx` if you don't want to install the `@fxhash/cli` package manually.
-
+- `node >= 18.18.0`
+- `npm >= 9.8.1`
 
 ## Installation
 
 ```
-npm install @fxhash/cli
+npm install -g @fxhash/cli
 ```
 
 Will install the cli into your local environment making all commands accessible through script tags. Optionally you can install the cli with `-g` flag to make it globally available in your terminal.
@@ -26,12 +22,12 @@ Will install the cli into your local environment making all commands accessible 
 ## API
 
 
-### `$ fxhash create`
+### `$ fxhash-create`
 
 Create a new project in a single step. The terminal will ask you to provide a name and you can choose one of the predefined templates.
 
 
-### `fxhash build [options]`
+### `$ fxhash-build [options]`
 
 Creates a bundled version the artwork. The output file will be called `upload.zip` and can be uploaded as it is on fxhash.xyz.
 
@@ -42,7 +38,7 @@ Creates a bundled version the artwork. The output file will be called `upload.zi
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
-### `$ fxhash dev [options]`
+### `$ fxhash-dev [options]`
 
 Starts a development environment for the artwork. Each time `fxhash dev` is run the environment will check for updates and will keep itself up-to-date.
 
@@ -53,9 +49,7 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src` 
 
 
-### `$ fxhash update [options]`
-
-> Note not fully working yet
+### `$ fxhash-update [options]`
 
 Will update the whole fxhash environment. It will download the latest version of fxlens and the fxhash-snippet. Optionally you can inject the latest snippet into your html file.
 
@@ -63,18 +57,23 @@ Will update the whole fxhash environment. It will download the latest version of
 
 `--inject` Inject the latest snippet into the html file. Default: `false`
 
-### `$ fxhash eject`
+### `$ fxhash-eject`
 
 `--srcPath` The path to eject the code into. If you set a custom path here you also must specify this path to the other commands.
 
 Will eject your project into a nested struture. It will copy all your code into a `srcPath` (Default: `/src`) and create a `package.json` file in the root of your project. This will allow you to configure any custom tooling you like while still being able to use the `@fxhash/cli` in your ejected project.
 
-### `$ fxhash add [package@version]`
+### `$ fxhash-add <package@version>`
 
 `--list` Lists all existing libraries that can be imported
 `--inject` Will also inject a <script /> tag into your projects html entry point pointing to the downloaded library
 
 Install an existing libaries. Beside being a convenience feature. This ensure that you are reusing existing libraries from the onchfs, which reduces the costs of storing your project on-chain 😎.
+
+### `$ @fxhash/cli <command> [args]`
+
+The package also exposes a main entry-point where you can access each command respectively. Please note that you only write the actually command name when using the main entry point. So instead of `$ fxhash-dev` you can use `$ @fxhash/cli dev`. 
+
 
 ## Configuration with .env 
 
