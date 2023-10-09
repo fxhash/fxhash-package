@@ -41,6 +41,7 @@ import {
   parseAbiParameters,
   parseEther,
 } from "viem"
+import { config } from "@fxhash/config"
 
 export default function EthPlayground(props: any) {
   const { connect, walletManager } = useContext(EthUserContext)
@@ -77,7 +78,7 @@ export default function EthPlayground(props: any) {
     },
     mintInfo: [
       {
-        minter: "0x7736ee02D5B3CAD6E43DB372149b1d4bf13C79A4",
+        minter: config.ETH_FIXED_PRICE_MINTER_V1,
         reserveInfo: {
           startTime: 0,
           endTime: new Date().getTime() + 9999,
@@ -102,10 +103,10 @@ export default function EthPlayground(props: any) {
     ...paramsMintIssuerFixed,
     mintInfo: [
       {
-        minter: "0xED5157cD2a86dF96df64A6B7633c0e4192Da928e",
+        minter: config.ETH_DUTCH_AUCTION_V1,
         reserveInfo: {
-          startTime: new Date().getTime() + 100,
-          endTime: new Date().getTime() + 500,
+          startTime: parseInt((new Date().getTime() / 1000).toFixed(0)),
+          endTime: parseInt((new Date().getTime() / 1000 + 400).toFixed(0)),
           allocation: BigInt(1000),
         },
         params: encodeAbiParameters(
@@ -127,13 +128,13 @@ export default function EthPlayground(props: any) {
   const mintFixedPriceParams: TMintFixedPriceEthV1OperationParams = {
     price: price,
     mintId: 0,
-    token: "0xd2aa6e24e49ef36b8f886a7e230d009e9a4410e3",
+    token: "0xc334cf6b32ee992c3999a3987f74c81154236f13",
     amount: 1,
   }
 
   const mintDAParams: TMintDAEthV1OperationParams = {
-    price: price,
-    token: "0x62B6A22f94AA80B4a0BF849F6EB69bCf111De2ad",
+    price: 700,
+    token: "0x68ced53942ed3ed628c300bd806bf9d23a67477e",
     reserveId: 0,
     amount: 1,
   }

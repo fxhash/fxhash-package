@@ -31,6 +31,11 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "InvalidReserve",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidTimes",
     type: "error",
   },
@@ -57,6 +62,12 @@ export const ABI = [
         internalType: "address",
         name: "token",
         type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "reserveId",
+        type: "uint256",
       },
       {
         indexed: false,
@@ -103,8 +114,14 @@ export const ABI = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "mintId",
+        name: "reserveId",
         type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "buyer",
+        type: "address",
       },
       {
         indexed: false,
@@ -113,7 +130,7 @@ export const ABI = [
         type: "uint256",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "address",
         name: "to",
         type: "address",
@@ -138,6 +155,12 @@ export const ABI = [
         type: "address",
       },
       {
+        indexed: true,
+        internalType: "address",
+        name: "creator",
+        type: "address",
+      },
+      {
         indexed: false,
         internalType: "uint256",
         name: "proceeds",
@@ -156,7 +179,7 @@ export const ABI = [
       },
       {
         internalType: "uint256",
-        name: "_mintId",
+        name: "_reserveId",
         type: "uint256",
       },
       {

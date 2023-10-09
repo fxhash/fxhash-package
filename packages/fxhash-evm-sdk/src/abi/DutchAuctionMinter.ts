@@ -41,6 +41,16 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "InvalidPriceCurve",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidReserve",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidStep",
     type: "error",
   },
@@ -125,9 +135,9 @@ export const ABI = [
             type: "uint256[]",
           },
           {
-            internalType: "uint256",
+            internalType: "uint248",
             name: "stepLength",
-            type: "uint256",
+            type: "uint248",
           },
           {
             internalType: "bool",
@@ -136,7 +146,7 @@ export const ABI = [
           },
         ],
         indexed: false,
-        internalType: "struct IDutchAuction.DAInfo",
+        internalType: "struct AuctionInfo",
         name: "daInfo",
         type: "tuple",
       },
@@ -265,9 +275,9 @@ export const ABI = [
     name: "auctionInfo",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint248",
         name: "stepLength",
-        type: "uint256",
+        type: "uint248",
       },
       {
         internalType: "bool",
@@ -381,12 +391,7 @@ export const ABI = [
     outputs: [
       {
         internalType: "uint256",
-        name: "step",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "price",
+        name: "",
         type: "uint256",
       },
     ],
