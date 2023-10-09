@@ -4,8 +4,8 @@ This package works as an alias for the `@fxhash/cli`, so that it can be called v
 
 ## Prerequisits
 
-- `node >= 18.18.0`
-- `npm >= 9.8.1`
+- `node >= 18.0.0`
+- `npm >= 9.0.0`
 
 ## Usage
 

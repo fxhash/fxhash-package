@@ -7,8 +7,8 @@ The fx(hash) CLI exposes all toolkit features through a single CLI.
 
 ## Prerequisits
 
-- `node >= 18.18.0`
-- `npm >= 9.8.1`
+- `node >= 18.0.0`
+- `npm >= 9.0.0`
 
 ## Installation
 
