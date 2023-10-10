@@ -2,7 +2,11 @@ import type { CommandModule } from "yargs"
 import { CWD_PATH } from "../../constants"
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import path, { isAbsolute } from "path"
-import { DEFAULT_CAPTURE_SETTINGS, fetchExtract } from "../../capture/index"
+import {
+  DEFAULT_CAPTURE_SETTINGS,
+  fetchExtract,
+  CaptureTriggerMode,
+} from "../../capture/index"
 import { urlWithHashAndParams } from "../../capture/url"
 import { getRandomFxhash, getRandomTezosAddress } from "../../capture/math"
 import { logger } from "../../utils/logger"
@@ -40,6 +44,31 @@ export const commandCapture: CommandModule = {
         type: "string",
         default: null,
         describe: "Inputbytes you want to use for the capture",
+      })
+      .option("x", {
+        type: "number",
+        default: 800,
+        describe: "The width in pixels. Capped at 2560",
+      })
+      .option("y", {
+        type: "number",
+        default: 800,
+        describe: "The height in pixels. Capped at 2560",
+      })
+      .option("trigger", {
+        type: "string",
+        default: "DELAY",
+        describe: "The trigger mode. Either DELAY or FN_TRIGGER",
+      })
+      .option("delay", {
+        type: "number",
+        default: 3000,
+        describe: "The delay in ms for the trigger mode DELAY",
+      })
+      .option("selector", {
+        type: "string",
+        default: null,
+        describe: "The id of the canvas element to capture",
       }),
   handler: async yargs => {
     const zipFileArg = yargs.zip as string
@@ -47,6 +76,17 @@ export const commandCapture: CommandModule = {
     const minterArg = yargs.minter as string
     const iterationArg = yargs.iteration as number
     const inputBytesArg = yargs.inputBytes as string
+    const xArg = yargs.x as number
+    const yArg = yargs.y as number
+    const triggerArg = yargs.trigger as CaptureTriggerMode
+    const delayArg = yargs.delay as number
+    const selectorArg = yargs.selector as string
+    if (Object.keys(CaptureTriggerMode).every(mode => mode !== triggerArg)) {
+      throw new Error(
+        `Argument 'trigger' must be either DELAY or FN_TRIGGER. Got: ${triggerArg}`
+      )
+    }
+
     try {
       let zipPath = zipFileArg
       if (!isAbsolute(zipPath)) {
@@ -75,6 +115,11 @@ export const commandCapture: CommandModule = {
         async () =>
           await fetchExtract({
             ...DEFAULT_CAPTURE_SETTINGS,
+            triggerMode: triggerArg,
+            delay: delayArg,
+            resX: Math.min(xArg, 2560),
+            resY: Math.min(yArg, 2560),
+            canvasSelector: selectorArg,
             cid: urlWithHashAndParams(
               data.projectCid,
               {
