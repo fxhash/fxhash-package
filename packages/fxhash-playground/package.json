@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/playground",
   "private": true,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -33,11 +33,10 @@
     "sass": "1.63.6",
     "viem": "1.14.0",
     "wagmi": "1.3.10",
-    "sass": "1.63.6",
-    "@fxhash/config": "0.0.6",
-    "@fxhash/contracts": "0.0.6",
-    "@fxhash/evm-sdk": "0.0.6",
-    "@fxhash/gql": "0.0.6"
+    "@fxhash/config": "0.0.7",
+    "@fxhash/contracts": "0.0.7",
+    "@fxhash/evm-sdk": "0.0.7",
+    "@fxhash/gql": "0.0.7"
   },
   "devDependencies": {
     "@types/eslint": "8.44.0",
