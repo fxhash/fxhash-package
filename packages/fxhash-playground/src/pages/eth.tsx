@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 
 import { UserContext as EthUserContext } from "@fxhash/evm-sdk/context/User"
 import { getConfig } from "@fxhash/evm-sdk/services/Wallet"
@@ -10,7 +10,6 @@ import {
   type TUploadOnchainCodeOperationParams,
 } from "@fxhash/evm-sdk/services/operations/UploadOnchainCode"
 
-import { CaptureMode, CaptureTriggerMode } from "@fxhash/contracts/types/Mint"
 import { ScriptUpload } from "@fxhash/evm-sdk/types/OnChainCode"
 
 import { WagmiConfig } from "wagmi"
@@ -23,8 +22,26 @@ import {
   MintFixedPriceEthV1Operation,
   TMintFixedPriceEthV1OperationParams,
 } from "@fxhash/evm-sdk/services/operations/MintFixedPriceEthV1"
+import {
+  MintDAEthV1Operation,
+  TMintDAEthV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/MintDutchAuctionEthV1"
+import {
+  MintTicketEthV1Operation,
+  TMintTicketEthV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/MintTicketEthV1"
+import {
+  CreateTicketEthV1Operation,
+  TCreateTicketEthV1OperationParams,
+} from "@fxhash/evm-sdk/services/operations/CreateTicketEthV1"
 import { listToken } from "@fxhash/evm-sdk/services/operations/Marketplace"
-import { parseEther } from "viem"
+import {
+  encodeAbiParameters,
+  numberToHex,
+  parseAbiParameters,
+  parseEther,
+} from "viem"
+import { config } from "@fxhash/config"
 
 export default function EthPlayground(props: any) {
   const { connect, walletManager } = useContext(EthUserContext)
@@ -32,85 +49,157 @@ export default function EthPlayground(props: any) {
     "0x7c4b13b5893cd82f371c5e28f12fb2f37542bbc5:37874328891959367057980953554699571553718588281221769671817266699907421437953"
   const expiration = `${Math.floor(new Date().getTime() / 1000) + 1000000}`
 
-  const paramsMintIssuer: TMintEthIssuerV1OperationParams = {
-    data: {
-      distribution: {
-        enabled: true,
-        editions: "100",
-        royalties: "0",
-        pricing: {
-          pricingFixed: {
-            price: "1000000",
-            opensAt: new Date(0),
-          },
-          pricingDutchAuction: {
-            levels: [],
-          },
+  const price = 10000
+  const supply = 1000
+  const dutchAuctionParams = {
+    prices: [BigInt(1000), BigInt(900), BigInt(800), BigInt(700)],
+    stepLength: BigInt(100),
+    refunded: false,
+  }
+
+  const paramsMintIssuerFixed: TMintEthIssuerV1OperationParams = {
+    projectInfo: {
+      enabled: true,
+      supply: BigInt(supply),
+      onchain: false,
+      contractURI: "contractURI://",
+    },
+    metadataInfo: {
+      baseURI: "baseURI://",
+      imageURI: "imageURI://",
+      animation: {
+        bodyTags: [],
+        headTags: [],
+      },
+      attributes: {
+        bodyTags: [],
+        headTags: [],
+      },
+    },
+    mintInfo: [
+      {
+        minter: config.ETH_FIXED_PRICE_MINTER_V1,
+        reserveInfo: {
+          startTime: 0,
+          endTime: new Date().getTime() + 9999,
+          allocation: BigInt(supply),
         },
-        splitsPrimary: [
-          {
-            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            pct: 500000,
-          },
-          {
-            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92267",
-            pct: 500000,
-          },
-        ],
-        splitsSecondary: [
-          {
-            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            pct: 100,
-          },
-        ],
-        reserves: [],
+        params: numberToHex(price, { size: 32 }),
       },
-    },
-    metadata: {
-      artifactUri: "qdqsdqsdsq",
-      name: "",
-      symbol: "",
-      displayUri: "dqsdqsdqsd",
-      thumbnailUri: "qsdqsdqsdqsd",
-      description: "",
-      childrenDescription: "",
-      tags: [],
-      generativeUri: "dqsdqsdqsdq",
-      authenticityHash: "",
-      capture: {
-        mode: CaptureMode.CUSTOM,
-        triggerMode: CaptureTriggerMode.FN_TRIGGER,
+    ],
+    primaryReceivers: [
+      "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b41",
+      "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42",
+    ],
+    primaryBasisPoints: [500000, 500000],
+    royaltiesReceivers: [
+      "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b41",
+      "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42",
+    ],
+    basisPoints: [500, 500],
+  }
+
+  const paramsMintIssuerDA: TMintEthIssuerV1OperationParams = {
+    ...paramsMintIssuerFixed,
+    mintInfo: [
+      {
+        minter: config.ETH_DUTCH_AUCTION_V1,
+        reserveInfo: {
+          startTime: parseInt((new Date().getTime() / 1000).toFixed(0)),
+          endTime: parseInt((new Date().getTime() / 1000 + 400).toFixed(0)),
+          allocation: BigInt(1000),
+        },
+        params: encodeAbiParameters(
+          parseAbiParameters(
+            "(uint256[] prices, uint256 stepLength, bool refunded)"
+          ),
+          [
+            {
+              prices: dutchAuctionParams.prices,
+              stepLength: dutchAuctionParams.stepLength,
+              refunded: dutchAuctionParams.refunded,
+            },
+          ]
+        ),
       },
-      decimals: 0,
-      params: {
-        definition: undefined,
-        inputBytesSize: 0,
-      },
-    },
-    metadataBytes: "",
-    ticketMetadataBytes: "",
+    ],
   }
 
   const mintFixedPriceParams: TMintFixedPriceEthV1OperationParams = {
-    price: 1000000000000,
+    price: price,
     mintId: 0,
-    token: "0x41cafcfaa979cc5130cc891d4f1136e0b35fba83",
+    token: "0xc334cf6b32ee992c3999a3987f74c81154236f13",
+    amount: 1,
   }
-  const createProjectOperation = new MintEthIssuerV1Operation(
+
+  const mintDAParams: TMintDAEthV1OperationParams = {
+    price: 700,
+    token: "0x68ced53942ed3ed628c300bd806bf9d23a67477e",
+    reserveId: 0,
+    amount: 1,
+  }
+
+  const createTicketParams: TCreateTicketEthV1OperationParams = {
+    gracePeriod: 86_400,
+    token: "0x41cafcfaa979cc5130cc891d4f1136e0b35fba83",
+    baseURI: "baseURI://",
+  }
+
+  const mintTicketParams: TMintTicketEthV1OperationParams = {
+    ticket: "0x680f5E153fF524ec2c8624Aa99D96e6acBE31cF6",
+    amount: 1,
+    payment: price,
+  }
+
+  const createProjectFixedOperation = new MintEthIssuerV1Operation(
     walletManager!,
-    paramsMintIssuer
+    paramsMintIssuerFixed
+  )
+  const createProjectDAOperation = new MintEthIssuerV1Operation(
+    walletManager!,
+    paramsMintIssuerDA
   )
   const mintFixedOperation = new MintFixedPriceEthV1Operation(
     walletManager!,
     mintFixedPriceParams
+  )
+  const mintDAOperation = new MintDAEthV1Operation(walletManager!, mintDAParams)
+  const mintTicketperation = new MintTicketEthV1Operation(
+    walletManager!,
+    mintTicketParams
   )
 
   const handleConnect = async () => {
     await connect()
   }
 
-  const handleCreateProject = () => {
-    createProjectOperation.call()
+  const handleCreateProjectFixed = () => {
+    createProjectFixedOperation.call()
+  }
+
+  const handleCreateProjectDA = () => {
+    createProjectDAOperation.call()
+  }
+
+  const createTicketOperation = new CreateTicketEthV1Operation(
+    walletManager!,
+    createTicketParams
+  )
+
+  const handleMintFixed = () => {
+    mintFixedOperation.call()
+  }
+
+  const handleMintDA = () => {
+    mintDAOperation.call()
+  }
+
+  const handleMintTicket = () => {
+    mintTicketperation.call()
+  }
+
+  const handleCreateTicket = () => {
+    createTicketOperation.call()
   }
 
   const handleListToken = async () => {
@@ -126,10 +215,6 @@ export default function EthPlayground(props: any) {
       ],
       walletManager.walletClient!
     )
-  }
-
-  const handleMintFixed = () => {
-    mintFixedOperation.call()
   }
 
   // State to hold the uploaded files
@@ -186,8 +271,12 @@ export default function EthPlayground(props: any) {
             <title>playground</title>
           </Head>
           <ConnectKitButton />
-          <button onClick={handleCreateProject}>createProject</button>
+          <button onClick={handleCreateProjectFixed}>createProjectFixed</button>
+          <button onClick={handleCreateProjectDA}>createProjectDA</button>
+          <button onClick={handleCreateTicket}>createTicket</button>
           <button onClick={handleMintFixed}>mintFixed</button>
+          <button onClick={handleMintDA}>mintDA</button>
+          <button onClick={handleMintTicket}>mintTicket</button>
           <button onClick={handleListToken}>listToken</button>
         </ConnectKitProvider>
       </WagmiConfig>

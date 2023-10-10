@@ -1,5 +1,4 @@
 import { config } from "@fxhash/config"
-import { TzktOperation } from "./Tzkt"
 
 // a value for the state of the transaction
 export enum ContractOperationStatus {
@@ -46,7 +45,9 @@ export const FxhashContracts = {
   ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
   ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
   ETH_SEAPORT_ZONE: config.eth.contracts.seaport_zone,
-  ETH_FIXED_PRICE_MINTER_V1: config.eth.contract.fixed_price_minter_v1,
+  ETH_FIXED_PRICE_MINTER_V1: config.eth.contracts.fixed_price_minter_v1,
+  ETH_DUTCH_AUCTION_V1: config.eth.contracts.dutch_auction_v1,
+  ETH_MINT_TICKETS_FACTORY_V1: config.eth.contracts.mint_ticket_factory_v1,
 }
 
 export const FxhashCollabFactoryCalls = {
@@ -83,7 +84,7 @@ export type TContractOperationHookReturn<Params> = {
   error: boolean
   opHash: string | null
   operation: any | null
-  opData: TzktOperation[] | null
+  opData: any[] | null
   params: Params | null
   call: (data: Params) => void
   clear: () => void

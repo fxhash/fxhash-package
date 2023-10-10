@@ -3,6 +3,11 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "_roleRegistry",
+        type: "address",
+      },
+      {
+        internalType: "address",
         name: "_implementation",
         type: "address",
       },
@@ -40,6 +45,11 @@ export const ABI = [
   {
     inputs: [],
     name: "InvalidPrimaryReceiver",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NotAuthorized",
     type: "error",
   },
   {
@@ -526,6 +536,19 @@ export const ABI = [
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "roleRegistry",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

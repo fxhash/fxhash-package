@@ -16,4 +16,6 @@ export const ethTestnetContracts: IEthContracts = {
   scripty_builder: "0x18EEF3cC32083396853Eb46a89123B7A5da71d16",
   seaport_zone: "0xAee17A0E6e98e832112fD0A26dA22C4e812AA7F5",
   fixed_price_minter_v1: "0xD935876c9E718992BCB56937f43429DCC9ba8f89",
+  dutch_auction_v1: "0x137c874829d31ffc8497a2762ee4cdc01848d941",
+  mint_ticket_factory_v1: "0x1c2eeeb924982d592de2d53291c1bba14ed9db9d",
 }

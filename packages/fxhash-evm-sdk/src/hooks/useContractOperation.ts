@@ -1,4 +1,3 @@
-import { TzktOperation } from "@/types/Tzkt"
 import { useContext, useRef, useState } from "react"
 import { UserContext } from "@/context/User"
 import { TContractOperation } from "@/services/operations/contractOperation"
@@ -6,7 +5,7 @@ import {
   ContractOperationCallback,
   ContractOperationStatus,
   TContractOperationHookReturn,
-} from "@/types/Contracts"
+} from "@/contracts/Contracts"
 import { useIsMounted } from "./useIsMounted"
 // import { createOperationAppliedAlert } from "components/Alerts/OperationAppliedAlert"
 // import { MessageCenterContext } from "../context/MessageCenter"
@@ -30,7 +29,7 @@ export function useContractOperation<Params>(
   const [opHash, setOpHash] = useState<string | null>(null)
   //TODO: to fix any
   const [operation, setOperation] = useState<any | null>(null)
-  const [opData, setOpData] = useState<TzktOperation[] | null>(null)
+  const [opData, setOpData] = useState<any[] | null>(null)
   const [params, setParams] = useState<Params | null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
