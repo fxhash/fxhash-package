@@ -3,7 +3,7 @@
 The fx(hash) CLI exposes all toolkit features through a single CLI. 
 
 > The usage of the CLI is totally optional for publishing art on the fx(hash) platform. 
-> The CLI is only provides tools that should help you in the development process.
+> The CLI only provides tools that should help you in the development process.
 
 ## Prerequisits
 
@@ -33,9 +33,9 @@ Creates a bundled version the artwork. The output file will be called `upload.zi
 
 #### Options
 
-`--minify` Enable minification when creating the bundle. Default: `false` 
-`--noZip` Disable the zip file creation. Default: `false` 
-`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`
+`--minify` Enable minification when creating the bundle. Default: `false`  
+`--noZip` Disable the zip file creation. Default: `false`  
+`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
 ### `$ fxhash-dev [options]`
@@ -46,7 +46,7 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 
 `--portStudio` The port fxlens is served on. Default: `3300`  
 `--portProject` The port the project is served on. Default: `3301`  
-`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src` 
+`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
 ### `$ fxhash-update [options]`
@@ -55,7 +55,7 @@ Will update the whole fxhash environment. It will download the latest version of
 
 #### Options
 
-`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src` 
+`--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 
 
 ### `$ fxhash-eject`
@@ -73,8 +73,8 @@ Install an existing libaries. Beside being a convenience feature. This ensure th
 
 #### Options
 
-`--list` Lists all existing libraries that can be imported
-`--inject` Will also inject a <script /> tag into your projects html entry point pointing to the downloaded library
+`--list` Lists all existing libraries that can be imported  
+`--inject` Will also inject a `<script />` tag into your projects html entry point pointing to the downloaded library  
 
 
 ### `$ fxhash-capture [args]`
@@ -83,16 +83,16 @@ With the capture command you can test your bundled project agains the fx(hash) c
 
 #### Options
 
-`--zip` The path (absolute or relative) to the project's zip file you want to create the capture of. Default: `upload.zip`
-`--hash` The hash that is injected when the capture is taken. Default: random value
-`--minter` The minter address that is injected when the capture is taken. Default: random value
-`--iteration` The iteration number that is injeted when the capture is taken. Default: 1
-`--inputBytes` The inputBytes that are injected when the capture is taken. Default: `undefined`
-`--x` The width in pixels. Capped at 2560. Default: 800
-`--y` The height in pixels. Capped at 2550. Default: 800
-`--trigger` The trigger mode. Either DELAY or FN_TRIGGER. Default: `delay`
-`--delay` The delay in ms for the trigger mode DELAY. Default: 3000
-`--selector` The id of the canvas element to capture.
+`--zip` The path (absolute or relative) to the project's zip file you want to create the capture of. Default: `upload.zip`  
+`--hash` The hash that is injected when the capture is taken. Default: random value  
+`--minter` The minter address that is injected when the capture is taken. Default: random value  
+`--iteration` The iteration number that is injeted when the capture is taken. Default: 1  
+`--inputBytes` The inputBytes that are injected when the capture is taken. Default: `undefined`  
+`--x` The width in pixels. Capped at 2560. Default: `800`  
+`--y` The height in pixels. Capped at 2550. Default: `800`  
+`--trigger` The trigger mode. Either DELAY or FN_TRIGGER. Default: `delay`  
+`--delay` The delay in ms for the trigger mode DELAY. Default: `3000`  
+`--selector` The id of the canvas element to capture.  
 
 
 ### `$ @fxhash/cli <command> [args]`
