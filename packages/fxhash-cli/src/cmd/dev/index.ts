@@ -10,11 +10,14 @@ import env, {
   WEBPACK_CONFIG_DEV_FILE_NAME,
 } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
-import { autoUpdateTooklit } from "../../updates/changes"
 import { logger } from "../../utils/logger"
 import { isEjectedProject, validateProjecStructure } from "../../validate/index"
 import path from "path"
 import { existsSync } from "fs"
+import { updateToolkit } from "../../updates/toolkit/toolkit"
+import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
+import { projectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
+import { getProjectPaths } from "../../templates/paths"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
@@ -54,18 +57,20 @@ export const commandDev: CommandModule = {
     const srcPath = isEjected ? srcPathArg : ""
 
     validateProjecStructure(srcPath)
+    const project = getProjectPaths(srcPath)
 
     // commonly used variable for ease
     const URL_FXLENS = `http://localhost:${portStudio}`
     const URL_PROJECT = `http://localhost:${portProject}`
 
     try {
-      await autoUpdateTooklit({
-        onStartAnyways: () => {
-          console.log(chalk.dim("Starting anyways...\n\n"))
+      await updateToolkit(
+        {
+          fxlens: fxlensUpdateConfig,
+          "@fxhash/project-sdk": projectSdkUpdateConfig,
         },
-        clearValidationMessage: true,
-      })
+        project
+      )
     } catch (err) {
       console.log(chalk.red.bold(`❗ ${err.message}`))
       console.log(chalk.dim("Starting anyways...\n\n"))

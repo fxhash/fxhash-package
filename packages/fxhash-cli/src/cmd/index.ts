@@ -5,6 +5,7 @@ import { commandUpdate } from "./update/index"
 import { commandBuild } from "./build/index"
 import { commandEject } from "./eject/index"
 import { commandAdd } from "./add/index"
+import { commandCapture } from "./capture/index"
 
 export const commands: CommandModule[] = [
   commandCreate,
@@ -13,4 +14,5 @@ export const commands: CommandModule[] = [
   commandBuild,
   commandEject,
   commandAdd,
+  commandCapture,
 ]

@@ -41,14 +41,12 @@
     "date-fns": "2.30.0",
     "lodash.debounce": "4.0.8",
     "next": "13.4.19",
-    "use-async-effect": "2.2.7",
-    "@fxhash/config2": "1.0.0"
+    "use-async-effect": "2.2.7"
   },
   "peerDependencies": {
     "react": "18.2.0",
     "react-colorful": "5.6.1",
     "react-dom": "18.2.0",
-    "@fxhash/config2": "1.0.0",
     "@fxhash/config": "0.0.6",
     "@fxhash/gql": "0.0.6",
     "onchfs": "0.0.0"

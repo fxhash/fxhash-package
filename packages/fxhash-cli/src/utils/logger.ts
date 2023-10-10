@@ -76,8 +76,9 @@ export function loggerFactory() {
   const step = async (name, fn, onSuccess = success) => {
     start(name)
     try {
-      await fn()
-      onSuccess?.(null)
+      const res = await fn()
+      onSuccess?.(res)
+      return res
     } catch (err) {
       error(err)
       throw err

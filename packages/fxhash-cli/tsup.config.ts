@@ -4,12 +4,14 @@ export default defineConfig((options: Options) => [
   {
     entry: [
       "src/index.ts",
+      "src/fxhashCli.ts",
       "src/add.ts",
       "src/build.ts",
       "src/create.ts",
       "src/dev.ts",
       "src/eject.ts",
       "src/update.ts",
+      "src/capture.ts",
     ],
     outDir: "dist",
     format: ["cjs"],
