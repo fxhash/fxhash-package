@@ -11,6 +11,7 @@ export default defineConfig((options: Options) => [
       "src/dev.ts",
       "src/eject.ts",
       "src/update.ts",
+      "src/capture.ts",
     ],
     outDir: "dist",
     format: ["cjs"],
