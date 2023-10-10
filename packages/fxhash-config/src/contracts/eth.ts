@@ -6,6 +6,8 @@ export interface IEthContracts {
   scripty_builder: string
   seaport_zone: string
   fixed_price_minter_v1: string
+  dutch_auction_v1: string
+  mint_ticket_factory_v1: string
 }
 
 export const ethTestnetContracts: IEthContracts = {
