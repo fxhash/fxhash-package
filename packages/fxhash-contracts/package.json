@@ -41,8 +41,7 @@
     "date-fns": "2.30.0",
     "lodash.debounce": "4.0.8",
     "next": "13.4.19",
-    "use-async-effect": "2.2.7",
-    "@fxhash/config2": "1.0.0"
+    "use-async-effect": "2.2.7"
   },
   "peerDependencies": {
     "react": "18.2.0",
