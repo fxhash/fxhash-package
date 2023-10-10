@@ -302,8 +302,8 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
 
 // a list of User aliases
 export const UserAliases: Record<string, Partial<User>> = {
-  [config.TZ_CT_ADDRESS_MARKETPLACE_V1]: {
-    id: config.TZ_CT_ADDRESS_MARKETPLACE_V1,
+  [config.tez.contracts.marketplace_v1]: {
+    id: config.tez.contracts.marketplace_v1,
     name: "fxhash marketplace v1.0",
     description: "The official fxhash [beta] marketplace, first version.",
     authorizations: Object.values(UserAuthorization),
@@ -312,8 +312,8 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
-  [config.TZ_CT_ADDRESS_MARKETPLACE_V2]: {
-    id: config.TZ_CT_ADDRESS_MARKETPLACE_V2,
+  [config.tez.contracts.marketplace_v2]: {
+    id: config.tez.contracts.marketplace_v2,
     name: "fxhash marketplace 2.0",
     description: "The official marketplace 2.0 of fxhash.",
     authorizations: Object.values(UserAuthorization),
@@ -322,8 +322,8 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
-  [config.TZ_CT_ADDRESS_MARKETPLACE_V3]: {
-    id: config.TZ_CT_ADDRESS_MARKETPLACE_V3,
+  [config.tez.contracts.marketplace_v3]: {
+    id: config.tez.contracts.marketplace_v3,
     name: "fxhash marketplace 3.0",
     description: "The official marketplace 3.0 of fxhash.",
     authorizations: Object.values(UserAuthorization),
@@ -332,14 +332,14 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
-  [config.TZ_CT_ADDRESS_GENTK_V2]: {
+  [config.tez.contracts.gentk_v2]: {
     id: "The minter of each iteration will get some royalties",
     name: "Minter",
     platformOwned: true,
     preventLink: true,
   },
 
-  [config.TZ_CT_ADDRESS_GENTK_V3]: {
+  [config.tez.contracts.gentk_v3]: {
     id: "The minter of each iteration will get some royalties",
     name: "Minter",
     platformOwned: true,

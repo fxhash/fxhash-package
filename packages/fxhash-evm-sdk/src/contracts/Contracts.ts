@@ -1,6 +1,4 @@
 import { config } from "@fxhash/config"
-import { TzktOperation } from "./Tzkt"
-import type { WalletOperation } from "@taquito/taquito"
 
 // a value for the state of the transaction
 export enum ContractOperationStatus {
@@ -36,12 +34,20 @@ export const FxhashContracts = {
   GENTK_V3: config.tez.contracts.gentk_v3,
   ARTICLES: config.tez.contracts.articles,
   REGISTER: config.tez.contracts.user_register,
-  MODERATION: config.tez.contracts.moderation_token,
+  MODERATION: config.tez.contracts.token_moderation,
   MODERATION_V3: config.tez.contracts.moderation_token_v3,
   USER_MODERATION: config.tez.contracts.user_moderation,
   ARTICLE_MODERATION: config.tez.contracts.moderation_articles,
   COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
-  ONCHFS_FILES: config.tez.contracts.onchfs_files,
+  ETH_PROJECT_FACTORY: config.eth.contracts.project_factory,
+  ETH_SPLITS_FACTORY: config.eth.contracts.splits_factory,
+  ETH_SPLITS_MAIN: config.eth.contracts.splits_main,
+  ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
+  ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
+  ETH_SEAPORT_ZONE: config.eth.contracts.seaport_zone,
+  ETH_FIXED_PRICE_MINTER_V1: config.eth.contracts.fixed_price_minter_v1,
+  ETH_DUTCH_AUCTION_V1: config.eth.contracts.dutch_auction_v1,
+  ETH_MINT_TICKETS_FACTORY_V1: config.eth.contracts.mint_ticket_factory_v1,
 }
 
 export const FxhashCollabFactoryCalls = {
@@ -71,29 +77,15 @@ export type ContractCallHookReturn<T> = {
   clear: () => void
 }
 
-type TContractOperationHookReturn<Params, OpDataType, OperationType> = {
+export type TContractOperationHookReturn<Params> = {
   state: ContractOperationStatus
   loading: boolean
   success: boolean
   error: boolean
   opHash: string | null
-  operation: OperationType | null
-  opData: OpDataType[] | null
+  operation: any | null
+  opData: any[] | null
   params: Params | null
   call: (data: Params) => void
   clear: () => void
 }
-
-type TTezosContractOperationHookReturn<Params> = TContractOperationHookReturn<
-  Params,
-  TzktOperation,
-  WalletOperation
->
-
-// TODO: define appropriate types
-type TEthereumContractOperationHookReturn<Params> =
-  TContractOperationHookReturn<Params, any, any>
-
-export type TAnyContractOperationHookReturn<Params> =
-  | TTezosContractOperationHookReturn<Params>
-  | TEthereumContractOperationHookReturn<Params>

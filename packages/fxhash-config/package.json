@@ -39,7 +39,6 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "18.7.13",
-    "tsc-alias": "1.8.5",
     "typescript": "5.0.4",
     "tsup": "6.6.0"
   }

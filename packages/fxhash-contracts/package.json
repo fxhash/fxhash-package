@@ -34,7 +34,6 @@
     "@apollo/client": "3.8.1",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "@fxhash/config2": "workspace:*",
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/michel-codec": "17.3.1",
     "@taquito/michelson-encoder": "17.3.1",
@@ -50,7 +49,6 @@
   },
   "peerDependencies": {
     "@fxhash/config": "workspace:*",
-    "@fxhash/config2": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "onchfs": "workspace:*",
     "react": "18.2.0",
