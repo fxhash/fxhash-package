@@ -14,6 +14,7 @@ export interface IFxhashEnvConfig {
   gtMinPrice: string
   // TODO: Refactor
   ETH_WALLET_CONNECT_ID: string
+  ETH_CHAIN_ID: string
 }
 
 // the variations supported by the config
@@ -113,7 +114,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "development",
         gtMinPrice: "0",
         // TODO Refactor
-        ETH_WALLET_CONNECT_ID: ""
+        ETH_WALLET_CONNECT_ID: "",
+        ETH_CHAIN_ID: "11155111",
       },
     },
     prd: {
@@ -122,7 +124,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "production",
         gtMinPrice: "0",
         // TODO Refactor
-        ETH_WALLET_CONNECT_ID: ""
+        ETH_WALLET_CONNECT_ID: "",
+        ETH_CHAIN_ID: "11155111",
       },
     },
   },
