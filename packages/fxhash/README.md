@@ -2,6 +2,9 @@
 
 This package works as an alias for the `@fxhash/cli`, so that it can be called via `npx fxhash`
 
+> The usage of the CLI is totally optional for publishing art on the fx(hash) platform. 
+> The CLI is only provides tools that should help you in the development process.
+
 ## Prerequisits
 
 - `node >= 18.0.0`
@@ -9,12 +12,13 @@ This package works as an alias for the `@fxhash/cli`, so that it can be called v
 
 ## Usage
 
+You can run all commands via `npx`.
+
 ```
 npx fxhash <command> [args]
 ```
 
-You can run all commands via `npx`.
-Alternatively you can also install this package globally on your computer. 
+Alternatively you can install the package with `-g` flag to make it globally available in your terminal. 
 
 ```
 npm install -g fxhash
@@ -80,7 +84,7 @@ Install an existing libaries. Beside being a convenience feature. This ensure th
 
 ### `$ fxhash capture [args]`
 
-With the capture command you can test your bundled project agains the fx(hash) capture module. For params token you currently __must__ provide the inputBytes yourself. You can copy the inputBytes from the url when you are running the `fxhash-dev` command.
+With the capture command you can test your bundled project agains the fx(hash) capture module. For params token you currently __must__ provide the inputBytes yourself. You can copy the inputBytes from the url when you are running the `fxhash dev` command.
 
 #### Options
 

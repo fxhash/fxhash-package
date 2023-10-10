@@ -16,7 +16,7 @@ The fx(hash) CLI exposes all toolkit features through a single CLI.
 npm install -g @fxhash/cli
 ```
 
-Will install the cli into your local environment making all commands accessible through script tags. Optionally you can install the cli with `-g` flag to make it globally available in your terminal.
+Will install the package into your local environment making all commands accessible through script tags. Optionally you can install the package with `-g` flag to make it globally available in your terminal.
 
 
 ## API
