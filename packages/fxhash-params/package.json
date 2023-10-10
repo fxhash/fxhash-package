@@ -1,24 +1,30 @@
 {
   "name": "@fxhash/params",
-  "private": true,
-  "version": "1.0.0",
+  "version": "0.0.7",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "exports": {
-    "./*": "./dist/*"
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.cjs",
+      "import": "./dist/*.js"
+    }
   },
   "typesVersions": {
     "*": {
       "*": [
-        "dist/*"
+        "./dist/*"
       ]
     }
   },

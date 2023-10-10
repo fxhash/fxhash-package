@@ -1,0 +1,52 @@
+{
+  "name": "@fxhash/project-sdk",
+  "version": "0.0.7",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.global.js",
+  "module": "./dist/index.global.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.global.js",
+      "import": "./dist/index.global.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@fxhash/params": "workspace:*",
+    "node-html-parser": "6.1.5"
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-modules-polyfill": "0.2.2",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/prettier-config": "workspace:*",
+    "@types/node": "18.7.13",
+    "tsc-alias": "1.8.5",
+    "tslib": "2.6.0",
+    "tsup": "7.2.0",
+    "typescript": "4.9.5"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/playground",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -21,7 +21,6 @@
   "scripts": {
     "clean": "rm -rf .next",
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
