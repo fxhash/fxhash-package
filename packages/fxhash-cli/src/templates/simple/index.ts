@@ -1,26 +1,35 @@
-import { baseHtmlTemplate } from "templates/baseHtml"
-import { snippet_v2 } from "@fxhash/fxhash-snippet"
 import { render } from "ejs"
-import { TemplateFactoryResponse } from "templates/types"
 import { format } from "prettier"
+import { readFileSync } from "fs"
+import {
+  HTML_ENTRY_FILE_NAME,
+  JS_ENTRY_FILE_NAME,
+  SDK_FILE_NAME,
+} from "../../constants"
+import { baseHtmlTemplate } from "../baseHtml"
+import { TemplateFactoryResponse } from "../types"
 
-export function simpleTemplate(): TemplateFactoryResponse {
+export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
   const name = "simple"
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: snippet_v2,
-    head: `<link rel="stylesheet" href="./style.css">`,
-    entry: `<script src="./index.js"></script>`,
+    snippet: `<script src="./${SDK_FILE_NAME}.js"></script>`,
+    head: `<link rel="stylesheet" href="./styles.css">`,
+    entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
   const pHtml = format(html, { parser: "html" })
+  const sdkPath = require.resolve("@fxhash/project-sdk")
+  const sdkContent = readFileSync(sdkPath, "utf-8")
   return {
     name,
+    folders: [],
     files: [
-      ["index.html", pHtml],
+      [`${HTML_ENTRY_FILE_NAME}.html`, pHtml],
       ["styles.css", ""],
+      [`${SDK_FILE_NAME}.js`, sdkContent],
     ],
     staticFiles: [
-      ["index.js", "static/examples/params.js"],
+      [`${JS_ENTRY_FILE_NAME}.js`, "static/examples/params.js"],
       ["LICENSE", "static/LICENSE"],
     ],
   }

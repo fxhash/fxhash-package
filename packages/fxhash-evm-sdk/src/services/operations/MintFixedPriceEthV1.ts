@@ -1,7 +1,7 @@
-import { FxhashContracts } from "@/types/Contracts"
+import { FxhashContracts } from "@/contracts/Contracts"
 import { ContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as FixedPriceMinterABI } from "@/contracts/FixedPriceMinter"
+import { ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -12,10 +12,11 @@ export type TMintFixedPriceEthV1OperationParams = {
   token: string
   price: number
   mintId: number
+  amount: number
 }
 
 /**
- * Mint an unique iteration of a Generative Token
+ * Mint an unique iteration of a Generative Token using the Fixed Priced minter
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
 export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPriceEthV1OperationParams> {
@@ -27,7 +28,12 @@ export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPr
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
       abi: FixedPriceMinterABI,
       functionName: "buy",
-      args: [this.params.token, this.params.mintId, 1, account],
+      args: [
+        this.params.token,
+        this.params.mintId,
+        this.params.amount,
+        account,
+      ],
       account: account,
       value: this.params.price,
     }

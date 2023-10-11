@@ -10,9 +10,9 @@ import {
   ReservoirPlaceBidParams,
 } from "@/services/reservoir/types"
 import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api"
-import { FxhashContracts } from "@/types/Contracts"
-import { ABI as RESERVOIR_ABI } from "@/contracts/Reservoir"
-import { ABI as RESERVOIR_SEAPORT_MODULE_ABI } from "@/contracts/ReservoirSeaportModule"
+import { FxhashContracts } from "@/contracts/Contracts"
+import { ABI as RESERVOIR_ABI } from "@/abi/Reservoir"
+import { ABI as RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
 import { config } from "@fxhash/config"
 
 const stepHandler = (steps, path) => {}
@@ -78,7 +78,7 @@ function overrideSellStepsParameters(steps: Execute): void {
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.ETH_RESERVOIR_API,
+        baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
       stepHandler,
@@ -115,7 +115,7 @@ export const placeBid = async (
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.ETH_RESERVOIR_API,
+        baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
       stepHandler,
@@ -151,7 +151,7 @@ export const buyToken = async (
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.ETH_RESERVOIR_API,
+        baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
       stepHandler,

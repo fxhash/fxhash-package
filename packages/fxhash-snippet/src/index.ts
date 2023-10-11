@@ -13,6 +13,7 @@ const latest = snippet_v3
 export {
   snippet_v1,
   snippet_v2,
+  snippet_v3,
   latest,
   htmlToNodes,
   fxhashSnippetNode,

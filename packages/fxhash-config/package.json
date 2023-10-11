@@ -1,12 +1,14 @@
 {
   "name": "@fxhash/config",
-  "private": true,
-  "version": "1.0.0",
+  "version": "0.0.6",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -37,7 +39,6 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "18.7.13",
-    "tsc-alias": "1.8.5",
     "typescript": "5.0.4",
     "tsup": "6.6.0"
   }

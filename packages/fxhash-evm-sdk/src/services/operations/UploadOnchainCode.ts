@@ -1,6 +1,6 @@
-import { FxhashContracts } from "@/types/Contracts"
+import { FxhashContracts } from "@/contracts/Contracts"
 import { ContractOperation } from "./contractOperation"
-import { ABI as ScriptyStorageABI } from "@/contracts/ScriptyStorage"
+import { ABI as ScriptyStorageABI } from "@/abi/ScriptyStorage"
 import {
   BaseError,
   ContractFunctionRevertedError,

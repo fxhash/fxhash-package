@@ -23,8 +23,8 @@ export enum API_METHODS {
 createClient({
   chains: [
     {
-      id: parseInt(config.ETH_CHAIN_ID),
-      baseApiUrl: config.ETH_RESERVOIR_API,
+      id: parseInt(config.config.ETH_CHAIN_ID),
+      baseApiUrl: config.eth.apis.reservoir,
       active: true,
       apiKey: RESERVOIR_API_KEY,
     },
@@ -40,7 +40,7 @@ export async function fetchReservoir<T>(
   body: string
 ): Promise<T> {
   try {
-    const response = await fetch(`${config.ETH_RESERVOIR_API}${path}`, {
+    const response = await fetch(`${config.eth.apis.reservoir}${path}`, {
       method: method,
       body: body,
       headers: headers,

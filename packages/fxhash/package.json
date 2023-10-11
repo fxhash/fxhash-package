@@ -1,0 +1,26 @@
+{
+  "name": "fxhash",
+  "version": "0.0.2",
+  "author": "fxhash",
+  "license": "MIT",
+  "engines" : {
+    "npm" : ">=9.0.0",
+    "node" : ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "fxhash": "./index.js"
+  },
+  "main": "./index.js",
+  "dependencies": {
+    "@fxhash/cli": "workspace:*"
+  },
+  "devDependencies": {
+  }
+}
