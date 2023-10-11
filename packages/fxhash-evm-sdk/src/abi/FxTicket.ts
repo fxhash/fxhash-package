@@ -41,6 +41,11 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "UnauthorizedRedeemer",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "UnregisteredMinter",
     type: "error",
   },
@@ -404,9 +409,9 @@ export const ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "_newPrice",
-        type: "uint128",
+        type: "uint80",
       },
     ],
     name: "claim",
@@ -547,9 +552,9 @@ export const ABI = [
     name: "getForeclosureTime",
     outputs: [
       {
-        internalType: "uint128",
+        internalType: "uint48",
         name: "",
-        type: "uint128",
+        type: "uint48",
       },
     ],
     stateMutability: "pure",
@@ -896,9 +901,9 @@ export const ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "_newPrice",
-        type: "uint128",
+        type: "uint80",
       },
     ],
     name: "setPrice",
@@ -949,24 +954,24 @@ export const ABI = [
     name: "taxes",
     outputs: [
       {
-        internalType: "uint128",
+        internalType: "uint48",
         name: "gracePeriod",
-        type: "uint128",
+        type: "uint48",
       },
       {
-        internalType: "uint128",
+        internalType: "uint48",
         name: "foreclosureTime",
-        type: "uint128",
+        type: "uint48",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "currentPrice",
-        type: "uint128",
+        type: "uint80",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "depositAmount",
-        type: "uint128",
+        type: "uint80",
       },
     ],
     stateMutability: "view",

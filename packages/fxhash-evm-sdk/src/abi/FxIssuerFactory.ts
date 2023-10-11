@@ -15,12 +15,12 @@ export const ABI = [
         components: [
           {
             internalType: "uint128",
-            name: "feeShare",
+            name: "lockTime",
             type: "uint128",
           },
           {
             internalType: "uint128",
-            name: "lockTime",
+            name: "referrerShare",
             type: "uint128",
           },
           {
@@ -36,6 +36,11 @@ export const ABI = [
     ],
     stateMutability: "nonpayable",
     type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "InvalidInputSize",
+    type: "error",
   },
   {
     inputs: [],
@@ -65,12 +70,12 @@ export const ABI = [
         components: [
           {
             internalType: "uint128",
-            name: "feeShare",
+            name: "lockTime",
             type: "uint128",
           },
           {
             internalType: "uint128",
-            name: "lockTime",
+            name: "referrerShare",
             type: "uint128",
           },
           {
@@ -157,12 +162,12 @@ export const ABI = [
     outputs: [
       {
         internalType: "uint128",
-        name: "feeShare",
+        name: "lockTime",
         type: "uint128",
       },
       {
         internalType: "uint128",
-        name: "lockTime",
+        name: "referrerShare",
         type: "uint128",
       },
       {
@@ -182,26 +187,68 @@ export const ABI = [
         type: "address",
       },
       {
-        internalType: "address",
-        name: "_primaryReceiver",
-        type: "address",
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "symbol",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "primaryReceiver",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "randomizer",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "renderer",
+            type: "address",
+          },
+          {
+            internalType: "uint256[]",
+            name: "tagIds",
+            type: "uint256[]",
+          },
+        ],
+        internalType: "struct InitInfo",
+        name: "_initInfo",
+        type: "tuple",
       },
       {
         components: [
-          {
-            internalType: "bool",
-            name: "enabled",
-            type: "bool",
-          },
           {
             internalType: "bool",
             name: "onchain",
             type: "bool",
           },
           {
-            internalType: "uint240",
-            name: "supply",
-            type: "uint240",
+            internalType: "bool",
+            name: "mintEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "burnEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "uint120",
+            name: "maxSupply",
+            type: "uint120",
+          },
+          {
+            internalType: "uint120",
+            name: "inputSize",
+            type: "uint120",
           },
           {
             internalType: "string",
@@ -557,12 +604,12 @@ export const ABI = [
         components: [
           {
             internalType: "uint128",
-            name: "feeShare",
+            name: "lockTime",
             type: "uint128",
           },
           {
             internalType: "uint128",
-            name: "lockTime",
+            name: "referrerShare",
             type: "uint128",
           },
           {

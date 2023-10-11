@@ -1,9 +1,13 @@
 import { ethTestnetApis, IEthApis } from "api/eth"
 import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
-import { IFxhashApis, fxhashDevApis, fxhashPrdApis  } from "api/fxhash"
-import { ITezosContracts, tezosMainnetContracts, tezosTestnetContracts } from "contracts/tezos"
+import { IFxhashApis, fxhashDevApis, fxhashPrdApis } from "api/fxhash"
+import {
+  ITezosContracts,
+  tezosMainnetContracts,
+  tezosTestnetContracts,
+} from "contracts/tezos"
 import { ethTestnetContracts, IEthContracts } from "contracts/eth"
-import {getConfigForEnv} from "utils"
+import { getConfigForEnv } from "utils"
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -12,9 +16,6 @@ export interface IFxhashNetworkConfig {
 export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
-  // TODO: Refactor
-  ETH_WALLET_CONNECT_ID: string
-  ETH_CHAIN_ID: string
 }
 
 // the variations supported by the config
@@ -63,13 +64,13 @@ export type IFxhashConfig = {
 
 export type IFxhashConfigSingleEnv = {
   [B in TBlockchain]: {
-    contracts: TBlockchainContacts[B];
-    config: TNetworkBlockchainConfig[B];
-    apis: TBlockchainApis[B];
-  };
+    contracts: TBlockchainContacts[B]
+    config: TNetworkBlockchainConfig[B]
+    apis: TBlockchainApis[B]
+  }
 } & {
-  apis: IFxhashApis;
-  config: IFxhashEnvConfig;
+  apis: IFxhashApis
+  config: IFxhashEnvConfig
 }
 
 export const fxhashConfig: IFxhashConfig = {
@@ -85,7 +86,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethTestnetContracts,
         config: {
-          network: "goerli",
+          network: "Sepolia",
         },
         apis: ethTestnetApis,
       },
@@ -101,7 +102,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: null,
         config: {
-          network: "mainnet",
+          network: "Mainnet",
         },
         apis: null,
       },
@@ -113,9 +114,6 @@ export const fxhashConfig: IFxhashConfig = {
       config: {
         envName: "development",
         gtMinPrice: "0",
-        // TODO Refactor
-        ETH_WALLET_CONNECT_ID: "",
-        ETH_CHAIN_ID: "11155111",
       },
     },
     prd: {
@@ -123,9 +121,6 @@ export const fxhashConfig: IFxhashConfig = {
       config: {
         envName: "production",
         gtMinPrice: "0",
-        // TODO Refactor
-        ETH_WALLET_CONNECT_ID: "",
-        ETH_CHAIN_ID: "11155111",
       },
     },
   },

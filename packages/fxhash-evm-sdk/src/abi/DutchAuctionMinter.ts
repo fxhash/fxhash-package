@@ -56,11 +56,6 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: "InvalidTimes",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "InvalidToken",
     type: "error",
   },
@@ -85,23 +80,18 @@ export const ABI = [
     type: "error",
   },
   {
-    inputs: [],
-    name: "TooMany",
-    type: "error",
-  },
-  {
     anonymous: false,
     inputs: [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
@@ -124,16 +114,11 @@ export const ABI = [
         ],
         indexed: false,
         internalType: "struct ReserveInfo",
-        name: "reserve",
+        name: "_reserve",
         type: "tuple",
       },
       {
         components: [
-          {
-            internalType: "uint256[]",
-            name: "prices",
-            type: "uint256[]",
-          },
           {
             internalType: "uint248",
             name: "stepLength",
@@ -144,10 +129,15 @@ export const ABI = [
             name: "refunded",
             type: "bool",
           },
+          {
+            internalType: "uint256[]",
+            name: "prices",
+            type: "uint256[]",
+          },
         ],
         indexed: false,
         internalType: "struct AuctionInfo",
-        name: "daInfo",
+        name: "_daInfo",
         type: "tuple",
       },
     ],
@@ -160,37 +150,37 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "buyer",
+        name: "_buyer",
         type: "address",
       },
       {
         indexed: false,
         internalType: "address",
-        name: "to",
+        name: "_to",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "_amount",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "price",
+        name: "_price",
         type: "uint256",
       },
     ],
@@ -203,25 +193,25 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "buyer",
+        name: "_buyer",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "refundAmount",
+        name: "_refundAmount",
         type: "uint256",
       },
     ],
@@ -234,25 +224,25 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "creator",
+        name: "_creator",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "proceeds",
+        name: "_proceeds",
         type: "uint256",
       },
     ],
@@ -320,64 +310,6 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "cumulativeMintCost",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "cumulativeMints",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "_token",
         type: "address",
       },
@@ -388,30 +320,6 @@ export const ABI = [
       },
     ],
     name: "getPrice",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "lastPrice",
     outputs: [
       {
         internalType: "uint256",
@@ -443,6 +351,30 @@ export const ABI = [
     name: "refund",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "refundInfo",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "lastPrice",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

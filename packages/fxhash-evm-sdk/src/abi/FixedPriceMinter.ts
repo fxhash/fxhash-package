@@ -98,6 +98,18 @@ export const ABI = [
         name: "reserve",
         type: "tuple",
       },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "openEdition",
+        type: "bool",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "timeUnlimited",
+        type: "bool",
+      },
     ],
     name: "MintDetailsSet",
     type: "event",

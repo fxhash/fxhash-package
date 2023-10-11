@@ -17,7 +17,7 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 export const chains = [mainnet, sepolia, hardhat]
 //Since the configuration of SDK is only for one chain at a time, we select the one configured
 export const CURRENT_CHAIN = chains.find(
-  chain => chain.id === parseInt(config.config.ETH_CHAIN_ID)
+  chain => chain.name === config.eth.config.network
 )
 
 const rpcUrls = config.eth.apis.rpcs

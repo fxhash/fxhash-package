@@ -3,11 +3,6 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "_contractRegistry",
-        type: "address",
-      },
-      {
-        internalType: "address",
         name: "_roleRegistry",
         type: "address",
       },
@@ -27,12 +22,22 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "BurnInactive",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidAmount",
     type: "error",
   },
   {
     inputs: [],
-    name: "InvalidReserveTime",
+    name: "InvalidEndTime",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidInputSize",
     type: "error",
   },
   {
@@ -42,7 +47,17 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "InvalidStartTime",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "LengthMismatch",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "MintActive",
     type: "error",
   },
   {
@@ -225,6 +240,25 @@ export const ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: "ProjectDeleted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
         name: "_primaryReceiver",
@@ -234,18 +268,28 @@ export const ABI = [
         components: [
           {
             internalType: "bool",
-            name: "enabled",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "onchain",
             type: "bool",
           },
           {
-            internalType: "uint240",
-            name: "supply",
-            type: "uint240",
+            internalType: "bool",
+            name: "mintEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "burnEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "uint120",
+            name: "maxSupply",
+            type: "uint120",
+          },
+          {
+            internalType: "uint120",
+            name: "inputSize",
+            type: "uint120",
           },
           {
             internalType: "string",
@@ -256,6 +300,206 @@ export const ABI = [
         indexed: false,
         internalType: "struct ProjectInfo",
         name: "_projectInfo",
+        type: "tuple",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "baseURI",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "imageURI",
+            type: "string",
+          },
+          {
+            components: [
+              {
+                components: [
+                  {
+                    internalType: "string",
+                    name: "name",
+                    type: "string",
+                  },
+                  {
+                    internalType: "address",
+                    name: "contractAddress",
+                    type: "address",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "contractData",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "enum HTMLTagType",
+                    name: "tagType",
+                    type: "uint8",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagOpen",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagClose",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagContent",
+                    type: "bytes",
+                  },
+                ],
+                internalType: "struct HTMLTag[]",
+                name: "headTags",
+                type: "tuple[]",
+              },
+              {
+                components: [
+                  {
+                    internalType: "string",
+                    name: "name",
+                    type: "string",
+                  },
+                  {
+                    internalType: "address",
+                    name: "contractAddress",
+                    type: "address",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "contractData",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "enum HTMLTagType",
+                    name: "tagType",
+                    type: "uint8",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagOpen",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagClose",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagContent",
+                    type: "bytes",
+                  },
+                ],
+                internalType: "struct HTMLTag[]",
+                name: "bodyTags",
+                type: "tuple[]",
+              },
+            ],
+            internalType: "struct HTMLRequest",
+            name: "animation",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                components: [
+                  {
+                    internalType: "string",
+                    name: "name",
+                    type: "string",
+                  },
+                  {
+                    internalType: "address",
+                    name: "contractAddress",
+                    type: "address",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "contractData",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "enum HTMLTagType",
+                    name: "tagType",
+                    type: "uint8",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagOpen",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagClose",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagContent",
+                    type: "bytes",
+                  },
+                ],
+                internalType: "struct HTMLTag[]",
+                name: "headTags",
+                type: "tuple[]",
+              },
+              {
+                components: [
+                  {
+                    internalType: "string",
+                    name: "name",
+                    type: "string",
+                  },
+                  {
+                    internalType: "address",
+                    name: "contractAddress",
+                    type: "address",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "contractData",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "enum HTMLTagType",
+                    name: "tagType",
+                    type: "uint8",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagOpen",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagClose",
+                    type: "bytes",
+                  },
+                  {
+                    internalType: "bytes",
+                    name: "tagContent",
+                    type: "bytes",
+                  },
+                ],
+                internalType: "struct HTMLTag[]",
+                name: "bodyTags",
+                type: "tuple[]",
+              },
+            ],
+            internalType: "struct HTMLRequest",
+            name: "attributes",
+            type: "tuple",
+          },
+        ],
+        indexed: false,
+        internalType: "struct MetadataInfo",
+        name: "_metadataInfo",
         type: "tuple",
       },
       {
@@ -300,6 +544,19 @@ export const ABI = [
       },
     ],
     name: "ProjectInitialized",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256[]",
+        name: "_tagIds",
+        type: "uint256[]",
+      },
+    ],
+    name: "ProjectTags",
     type: "event",
   },
   {
@@ -423,6 +680,19 @@ export const ABI = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -484,32 +754,6 @@ export const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "burn",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "contractRegistry",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "contractURI",
     outputs: [
@@ -551,14 +795,14 @@ export const ABI = [
     name: "genArtInfo",
     outputs: [
       {
-        internalType: "bytes",
-        name: "fxParams",
-        type: "bytes",
-      },
-      {
         internalType: "bytes32",
         name: "seed",
         type: "bytes32",
+      },
+      {
+        internalType: "bytes",
+        name: "fxParams",
+        type: "bytes",
       },
     ],
     stateMutability: "view",
@@ -615,26 +859,73 @@ export const ABI = [
         type: "address",
       },
       {
-        internalType: "address",
-        name: "_primaryReceiver",
-        type: "address",
+        internalType: "uint256",
+        name: "_lockTime",
+        type: "uint256",
       },
       {
         components: [
           {
-            internalType: "bool",
-            name: "enabled",
-            type: "bool",
+            internalType: "string",
+            name: "name",
+            type: "string",
           },
+          {
+            internalType: "string",
+            name: "symbol",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "primaryReceiver",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "randomizer",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "renderer",
+            type: "address",
+          },
+          {
+            internalType: "uint256[]",
+            name: "tagIds",
+            type: "uint256[]",
+          },
+        ],
+        internalType: "struct InitInfo",
+        name: "_initInfo",
+        type: "tuple",
+      },
+      {
+        components: [
           {
             internalType: "bool",
             name: "onchain",
             type: "bool",
           },
           {
-            internalType: "uint240",
-            name: "supply",
-            type: "uint240",
+            internalType: "bool",
+            name: "mintEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "burnEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "uint120",
+            name: "maxSupply",
+            type: "uint120",
+          },
+          {
+            internalType: "uint120",
+            name: "inputSize",
+            type: "uint120",
           },
           {
             internalType: "string",
@@ -951,18 +1242,28 @@ export const ABI = [
         components: [
           {
             internalType: "bool",
-            name: "enabled",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "onchain",
             type: "bool",
           },
           {
-            internalType: "uint240",
-            name: "supply",
-            type: "uint240",
+            internalType: "bool",
+            name: "mintEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "burnEnabled",
+            type: "bool",
+          },
+          {
+            internalType: "uint120",
+            name: "maxSupply",
+            type: "uint120",
+          },
+          {
+            internalType: "uint120",
+            name: "inputSize",
+            type: "uint120",
           },
           {
             internalType: "string",
@@ -1191,12 +1492,30 @@ export const ABI = [
         type: "address",
       },
       {
+        internalType: "bytes",
+        name: "_fxParams",
+        type: "bytes",
+      },
+    ],
+    name: "mintParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
         internalType: "uint256",
         name: "_amount",
         type: "uint256",
       },
     ],
-    name: "mint",
+    name: "mintRandom",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1234,8 +1553,26 @@ export const ABI = [
         name: "_to",
         type: "address",
       },
+      {
+        internalType: "bytes",
+        name: "_fxParams",
+        type: "bytes",
+      },
     ],
-    name: "ownerMint",
+    name: "ownerMintParams",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+    ],
+    name: "ownerMintRandom",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1261,6 +1598,26 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "randomizer",
     outputs: [
       {
@@ -1275,9 +1632,9 @@ export const ABI = [
   {
     inputs: [
       {
-        internalType: "uint240",
+        internalType: "uint120",
         name: "_supply",
-        type: "uint240",
+        type: "uint120",
       },
     ],
     name: "reduceSupply",
@@ -1515,6 +1872,19 @@ export const ABI = [
   {
     inputs: [
       {
+        internalType: "uint256[]",
+        name: "_tagIds",
+        type: "uint256[]",
+      },
+    ],
+    name: "setTags",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "_tokenId",
         type: "uint256",
@@ -1539,7 +1909,7 @@ export const ABI = [
     inputs: [
       {
         internalType: "bytes4",
-        name: "_interfaceId",
+        name: "interfaceId",
         type: "bytes4",
       },
     ],
@@ -1570,13 +1940,6 @@ export const ABI = [
   {
     inputs: [],
     name: "toggleMint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "toggleOnchain",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1674,6 +2037,13 @@ export const ABI = [
       },
     ],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
