@@ -1,5 +1,16 @@
 # @fxhash/cli
 
+## 0.0.9
+
+### Patch Changes
+
+- de4df14: - Add `caputure` command
+  - Update readme
+- Updated dependencies [de4df14]
+- Updated dependencies [de4df14]
+  - @fxhash/project-sdk@0.0.8
+  - @fxhash/config@0.0.7
+
 ## 0.0.8
 
 ### Patch Changes

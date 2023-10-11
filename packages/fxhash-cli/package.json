@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "fxhash",
   "license": "MIT",
   "engines": {
@@ -76,8 +76,8 @@
     "webpack-dev-server": "4.15.1",
     "yargs": "17.7.2",
     "yesno": "0.4.0",
-    "@fxhash/config": "0.0.6",
-    "@fxhash/project-sdk": "0.0.7",
+    "@fxhash/config": "0.0.7",
+    "@fxhash/project-sdk": "0.0.8",
     "@fxhash/fxhash-snippet": "0.0.7"
   },
   "devDependencies": {

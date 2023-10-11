@@ -1,5 +1,11 @@
 # @fxhash/config
 
+## 0.0.7
+
+### Patch Changes
+
+- de4df14: Release unified config module
+
 ## 0.0.6
 
 ### Patch Changes

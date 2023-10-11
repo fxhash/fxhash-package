@@ -1,5 +1,11 @@
 # @fxhash/project-sdk
 
+## 0.0.8
+
+### Patch Changes
+
+- de4df14: Fix issue importing from ParamProcessor
+
 ## 0.0.7
 
 ### Patch Changes
