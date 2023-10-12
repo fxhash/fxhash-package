@@ -3,6 +3,7 @@ import path from "path"
 import { ZipperPlugin } from "./plugins/ZipperPlugin"
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
 import { getProjectPaths } from "../templates/paths"
+import TerserPlugin from "terser-webpack-plugin"
 
 export const createProdConfig: WebpackConfigFactory = options => {
   const { srcPath, minify, zippify, rootPath } = options
@@ -14,6 +15,12 @@ export const createProdConfig: WebpackConfigFactory = options => {
     mode: "production",
     optimization: {
       minimize: minify,
+      minimizer: [
+        // Never minify the @fxhash/project-sdk
+        new TerserPlugin({
+          exclude: /.*fxhash\.js.*/,
+        }),
+      ],
     },
     // add the zipper plugin to the list of plugins
     plugins: [
