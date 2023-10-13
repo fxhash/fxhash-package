@@ -8,7 +8,10 @@ import TerserPlugin from "terser-webpack-plugin"
 export const createProdConfig: WebpackConfigFactory = options => {
   const { srcPath, minify, zippify, rootPath } = options
   const baseConfig = createBaseConfig(options)
-  const { staticPath, distPath } = getProjectPaths(srcPath, rootPath)
+  const { staticPath, distPath, jsEntryPath } = getProjectPaths(
+    srcPath,
+    rootPath
+  )
   const zipFilePath = baseConfig.output.path + ".zip"
   return {
     ...baseConfig,
@@ -16,9 +19,9 @@ export const createProdConfig: WebpackConfigFactory = options => {
     optimization: {
       minimize: minify,
       minimizer: [
-        // Never minify the @fxhash/project-sdk
+        // Only minify the project and none of the dependencies
         new TerserPlugin({
-          exclude: /fxhash\.js/,
+          include: path.basename(jsEntryPath),
         }),
       ],
     },
