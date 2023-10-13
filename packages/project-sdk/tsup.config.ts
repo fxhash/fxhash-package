@@ -2,7 +2,14 @@ import { defineConfig } from "tsup"
 
 export default defineConfig([
   {
-    entry: ["src/index.ts"],
+    entry: {
+      fxhash: "src/index.ts",
+    },
+    outExtension({ format }) {
+      return {
+        js: `.js`,
+      }
+    },
     outDir: "dist",
     format: ["iife"],
     platform: "browser",
