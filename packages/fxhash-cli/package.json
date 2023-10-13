@@ -74,11 +74,12 @@
     "tar": "6.2.0",
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
+    "terser-webpack-plugin": "5.3.9",
     "yargs": "17.7.2",
     "yesno": "0.4.0",
     "@fxhash/config": "0.0.7",
-    "@fxhash/project-sdk": "0.0.8",
-    "@fxhash/fxhash-snippet": "0.0.7"
+    "@fxhash/fxhash-snippet": "0.0.7",
+    "@fxhash/project-sdk": "0.0.8"
   },
   "devDependencies": {
     "@types/adm-zip": "0.5.0",

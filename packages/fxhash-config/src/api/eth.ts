@@ -8,3 +8,4 @@ export const ethTestnetApis: IEthApis = {
   reservoir: "https://api-sepolia.reservoir.tools",
 }
 
+
