@@ -18,7 +18,7 @@ export const createProdConfig: WebpackConfigFactory = options => {
       minimizer: [
         // Never minify the @fxhash/project-sdk
         new TerserPlugin({
-          exclude: /.*fxhash\.js.*/,
+          exclude: /fxhash\.js/,
         }),
       ],
     },
