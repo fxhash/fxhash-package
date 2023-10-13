@@ -59,7 +59,8 @@
     "tsup": "6.6.0",
     "typescript": "5.0.4",
     "@fxhash/config": "0.0.7",
-    "@fxhash/gql": "0.0.7"
+    "@fxhash/gql": "0.0.7",
+    "onchfs": "0.0.0"
   },
   "scripts": {
     "build": "tsup",
