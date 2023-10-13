@@ -40,7 +40,7 @@
     return sfc32(matcher(fxhash, start));
   }
 
-  // ../fxhash-params/dist/chunk-SDPENM2L.js
+  // ../fxhash-params/dist/chunk-FZWZHHQ2.js
   function completeHexColor(hexCode) {
     let hex = hexCode.replace("#", "");
     if (hex.length === 6) {
@@ -311,7 +311,6 @@
   }
   function deserializeParams(bytes, definition, options) {
     const params = {};
-    console.log(bytes, definition, options);
     for (const def of definition) {
       const processor = ParameterProcessors[def.type];
       const transformer = options.withTransform && processor[options.transformType || "transform"];
@@ -440,7 +439,7 @@
       preview: fxpreview,
       isPreview: isFxpreview,
       params: function(definition) {
-        this._params = definition;
+        this._params = definition.map((def) => ({ ...def, version: this._version }));
         this._rawValues = deserializeParams(initialInputBytes, definition, {
           withTransform: true,
           transformType: "constrain"
