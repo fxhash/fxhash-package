@@ -110,13 +110,13 @@ export function createFxhashSdk(window, options): FxHashApi {
     isPreview: isFxpreview,
     params: function (definition) {
       this._params = definition.map(def => ({ ...def, version: this._version }))
-      this._rawValues = deserializeParams(initialInputBytes, definition, {
+      this._rawValues = deserializeParams(initialInputBytes, this._params, {
         withTransform: true,
         transformType: "constrain",
       })
       this._paramValues = processParams(
         this._rawValues,
-        definition,
+        this._params,
         "transform"
       )
       this._updateInputBytes()
