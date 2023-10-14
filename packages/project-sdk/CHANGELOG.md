@@ -1,5 +1,11 @@
 # @fxhash/project-sdk
 
+## 0.0.10
+
+### Patch Changes
+
+- 3bd0883: Use definitions with version
+
 ## 0.0.9
 
 ### Patch Changes

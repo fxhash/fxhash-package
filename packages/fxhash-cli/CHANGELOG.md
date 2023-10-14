@@ -1,5 +1,13 @@
 # @fxhash/cli
 
+## 0.0.11
+
+### Patch Changes
+
+- 3bd0883: Use definitions with version
+- Updated dependencies [3bd0883]
+  - @fxhash/project-sdk@0.0.10
+
 ## 0.0.10
 
 ### Patch Changes

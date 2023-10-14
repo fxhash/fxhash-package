@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.5
+
+### Patch Changes
+
+- 3bd0883: Use definitions with version
+- Updated dependencies [3bd0883]
+  - @fxhash/cli@0.0.11
+
 ## 0.0.4
 
 ### Patch Changes
