@@ -5,11 +5,11 @@ export const packageJson = {
   license: "MIT",
   scripts: {
     postinstall: "fxhash update",
-    update: "fxhash update --inject",
+    update: "fxhash update",
     start: "fxhash dev",
     build: "fxhash build",
   },
   devDependencies: {
-    "@fxhash/cli": "1.0.0",
+    fxhash: "latest",
   },
 }
