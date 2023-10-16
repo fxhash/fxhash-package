@@ -33,7 +33,7 @@ importers:
   packages/fxhash:
     dependencies:
       '@fxhash/cli':
-        specifier: 0.0.11
+        specifier: 0.0.12
         version: link:../fxhash-cli
 
   packages/fxhash-cli:
@@ -42,7 +42,7 @@ importers:
         specifier: 3.7.17
         version: 3.7.17(graphql@16.7.1)
       '@fxhash/config':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-config
       '@fxhash/fxhash-snippet':
         specifier: 0.0.7
@@ -299,10 +299,10 @@ importers:
         version: 2.2.7(react@18.2.0)
     devDependencies:
       '@fxhash/config':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-config
       '@fxhash/gql':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-gql
       '@types/lodash.debounce':
         specifier: 4.0.7
@@ -332,7 +332,7 @@ importers:
         specifier: 3.8.1
         version: 3.8.1(graphql@16.7.1)(react-dom@18.2.0)(react@18.2.0)
       '@fxhash/gql':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-gql
       '@web3modal/ethereum':
         specifier: 2.7.1
@@ -369,7 +369,7 @@ importers:
         specifier: 7.22.15
         version: 7.22.15(@babel/core@7.23.0)
       '@fxhash/config':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-config
       '@fxhash/eslint-config':
         specifier: 1.0.2
@@ -448,7 +448,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       '@fxhash/config':
-        specifier: 0.0.7
+        specifier: 0.0.8
         version: link:../fxhash-config
       tslib:
         specifier: 2.6.0
