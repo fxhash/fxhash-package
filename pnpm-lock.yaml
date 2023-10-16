@@ -523,6 +523,12 @@ importers:
         specifier: 3.21.4
         version: 3.21.4
     devDependencies:
+      '@fxhash/eslint-config':
+        specifier: 1.0.2
+        version: link:../eslint-config
+      '@fxhash/prettier-config':
+        specifier: 1.0.2
+        version: link:../prettier-config
       '@types/lodash.debounce':
         specifier: 4.0.7
         version: 4.0.7

@@ -1,16 +1,15 @@
 export const packageJson = {
   name: "fxhash-project",
-  version: "3.0.0",
+  version: "1.0.0",
   description: "A generative artwork",
-  author: "fxhash",
   license: "MIT",
   scripts: {
     postinstall: "fxhash update",
-    update: "fxhash update --inject",
+    update: "fxhash update",
     start: "fxhash dev",
     build: "fxhash build",
   },
   devDependencies: {
-    "@fxhash/cli": "1.0.0",
+    fxhash: "latest",
   },
 }
