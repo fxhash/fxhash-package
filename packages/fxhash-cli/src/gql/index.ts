@@ -1,4 +1,5 @@
 import { ApolloClient, InMemoryCache, QueryOptions } from "@apollo/client"
+import { prdConfig } from "@fxhash/config"
 /**
  * For server side rendering we need to instanciate a new client on every
  * request, otherwise we will run into stale cache issues (some requests will
@@ -6,7 +7,7 @@ import { ApolloClient, InMemoryCache, QueryOptions } from "@apollo/client"
  */
 
 export const apolloFxHashClient = new ApolloClient({
-  uri: `https://live-minting.fxhash-dev.xyz/graphql/graphql`,
+  uri: `${prdConfig.apis.dashboard.backend}/graphql/graphql`,
   cache: new InMemoryCache(),
 })
 
