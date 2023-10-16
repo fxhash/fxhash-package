@@ -5,11 +5,12 @@ import { ModuleUpdater } from "./toolkit"
 import { getSha256 } from "./utils"
 
 const PROJECT_SDK_SHA_KEY = "project-sdk"
+const PROJECT_SDK_DIST_ENTRY = "dist/fxhash.js"
 
 export const projectSdkUpdateConfig: ModuleUpdater = {
   requiresUpdate: async ({ fxhashSdkPath }) => {
     const files = await readFilesFromPackageTarball("@fxhash/project-sdk", [
-      "dist/index.global.js",
+      PROJECT_SDK_DIST_ENTRY,
     ])
     let currentSha = ""
     if (existsSync(fxhashSdkPath)) {
@@ -25,7 +26,7 @@ export const projectSdkUpdateConfig: ModuleUpdater = {
   },
   update: async (latestVersion, { fxhashSdkPath }) => {
     const files = await readFilesFromPackageTarball("@fxhash/project-sdk", [
-      "dist/index.global.js",
+      PROJECT_SDK_DIST_ENTRY,
     ])
     const sdkFile = readFileSync(files.files[0])
     writeFileSync(fxhashSdkPath, sdkFile)
