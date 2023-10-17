@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.6
+
+### Patch Changes
+
+- 61beac2: use @fxhash/config in cli and hookup to prod api
+- Updated dependencies [61beac2]
+  - @fxhash/cli@0.0.12
+
 ## 0.0.5
 
 ### Patch Changes

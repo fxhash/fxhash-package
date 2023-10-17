@@ -1,5 +1,11 @@
 # @fxhash/config
 
+## 0.0.8
+
+### Patch Changes
+
+- a2849db: Add tezos onchfs_files contract
+
 ## 0.0.7
 
 ### Patch Changes
