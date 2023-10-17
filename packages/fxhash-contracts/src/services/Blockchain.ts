@@ -4,26 +4,26 @@ import { fetchRetry } from "../utils/fetchRetry"
 import { sleep } from "../utils/sleep"
 
 export const API_BLOCKCHAIN_CONTRACT_STORAGE = (address: string) =>
-  `${config.TZKT_API}contracts/${address}/storage`
+  `${config.tez.apis.tzkt}contracts/${address}/storage`
 
 export const API_BLOCKCHAIN_CONTRACT_DETAILS = (address: string) =>
-  `${config.TZKT_API}contracts/${address}`
+  `${config.tez.apis.tzkt}contracts/${address}`
 
-export const API_CYCLES_LIST = `${config.TZKT_API}bigmaps/updates\
-?contract=${config.TZ_CT_ADDRESS_CYCLES}\
+export const API_CYCLES_LIST = `${config.tez.apis.tzkt}bigmaps/updates\
+?contract=${config.tez.contracts.cycles}\
 &path=cycles\
 &action=add_key\
 &limit=500`
 
 export const API_OPERATION = (hash: string) =>
-  `${config.TZKT_API}operations/${hash}`
+  `${config.tez.apis.tzkt}operations/${hash}`
 
 export const API_BLOCKCHAIN_CONTRACT_OPERATIONS = (
   address: string,
   cursorId: number,
   entrypoints: string[],
-  limit: number = 1000
-) => `${config.TZKT_API}operations/transactions\
+  limit = 1000
+) => `${config.tez.apis.tzkt}operations/transactions\
 ?target=${address}\
 &entrypoint.in=${entrypoints.join(",")}\
 &offset.cr=${cursorId}\
@@ -41,8 +41,8 @@ export const API_BLOCKCHAIN_CONTRACT_OPERATIONS = (
  */
 export async function isOperationApplied(
   hash: string,
-  intervalMs: number = 5000,
-  maxDurationMs: number = 60000
+  intervalMs = 5000,
+  maxDurationMs = 60000
 ): Promise<TzktOperation[]> {
   // will be set if the max duration promise reaches the end
   let stopped = false
@@ -99,8 +99,8 @@ export async function isOperationApplied(
 }
 
 export const isTicketUsed = async (ticketId: number) => {
-  const url = `${config.TZKT_API}operations/transactions\
-?target=${config.TZ_CT_ADDRESS_MINT_TICKETS_V3}\
+  const url = `${config.tez.apis.tzkt}operations/transactions\
+?target=${config.tez.contracts.issuer_tickets}\
 &entrypoint.in=consume&parameter.token_id=${ticketId}&status=applied&limit=1`
 
   const result = await fetchRetry(url)
@@ -109,8 +109,8 @@ export const isTicketUsed = async (ticketId: number) => {
 }
 
 export const isTicketOwner = async (ticketId: number, address: string) => {
-  const url = `${config.TZKT_API}contracts\
-/${config.TZ_CT_ADDRESS_MINT_TICKETS_V3}\
+  const url = `${config.tez.apis.tzkt}contracts\
+/${config.tez.contracts.issuer_tickets}\
 /bigmaps/ledger/keys?key=${ticketId}&select=value`
 
   const result = await fetchRetry(url)

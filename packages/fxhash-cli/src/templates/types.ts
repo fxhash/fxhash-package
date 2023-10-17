@@ -22,4 +22,4 @@ interface TemplateOpions {
 
 export type TemplateFactory<T extends TemplateType> = (
   options: TemplateOpions[T]
-) => TemplateFactoryResponse
+) => Promise<TemplateFactoryResponse>

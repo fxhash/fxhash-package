@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/gql",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.7",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -30,18 +30,18 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.7.14",
+    "@apollo/client": "3.8.1",
     "graphql": "16.7.1"
   },
   "peerDependencies": {
-    "@fxhash/config": "*",
-    "react": "^17",
-    "react-dom": "^17"
+    "@fxhash/config": "workspace:*",
+    "react-dom": "18.2.0",
+    "typescript": "5.0.4"
   },
   "devDependencies": {
     "@fxhash/config": "workspace:*",
     "tslib": "2.6.0",
-    "tsup": "7.2.0",
-    "typescript": "4.9.5"
+    "tsup": "6.6.0",
+    "typescript": "5.0.4"
   }
 }

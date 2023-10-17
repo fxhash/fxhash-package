@@ -1,18 +1,20 @@
 import { BeaconWallet } from "@taquito/beacon-wallet"
+import { char2Bytes } from "@taquito/utils"
 import {
   ContractAbstraction,
   TezosToolkit,
   Wallet,
   WalletProvider,
 } from "@taquito/taquito"
+import { devConfig, prdConfig } from "@fxhash/config"
 import autonomyIRL from "autonomy-irl-js"
 import {
   ContractOperationCallback,
   ContractOperationStatus,
 } from "../types/Contracts"
 import { isOperationApplied } from "./Blockchain"
-import { TContractOperation } from "./contract-operations/ContractOperation"
-import { config } from "@fxhash/config"
+import { RequestSignPayloadInput, SigningType } from "@airgap/beacon-sdk"
+import { TAnyContractOperation } from "./operations/ContractOperation"
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -37,33 +39,30 @@ export enum EWalletOperations {
  * so that the rest of the app is simpler to write
  * It is responsible for handlinf interactions with the contracts as well
  */
-export class WalletManager {
+export class TezosWalletManager {
   beaconWallet: BeaconWallet | null = null
   tezosToolkit: TezosToolkit
   contracts: Record<string, ContractAbstraction<Wallet> | null> = {}
   rpcNodes: string[]
 
   constructor() {
-    // !todo: REMOVE THE SHUFFLE once tests are done
-    // for now 1/2 of the traffic is going to go through the fxhash RPC endpoint
-    // to test if it works properly with some pretty high traffic
-    const RPCS = [...config.RPC_NODES.split(",")]
-    // 1/2 chances to shuffle the array, and so it's about 1/2 to always have the
-    // fxhash RPC first
-    // if (Math.random() < 1) {
-    //   RPCS = shuffleArray(RPCS)
-    // }
-    this.rpcNodes = RPCS
+    // TODO: This can be replaced by importing the { config } from 
+    // "@fxhash/config" and rely on the process.env.FXHASH_ENV
+    const networkConfig =
+      process.env.NEXT_PUBLIC_TZ_NET === "mainnet"
+        ? prdConfig
+        : devConfig
+    this.rpcNodes = networkConfig.tez.apis.rpcs
     this.tezosToolkit = new TezosToolkit(this.rpcNodes[0])
     this.instanciateBeaconWallet()
   }
 
-  instanciateBeaconWallet(): void {
+  instanciateBeaconWallet() {
     this.beaconWallet = new BeaconWallet({
       name: "fxhash",
       iconUrl: "https://tezostaquito.io/img/favicon.png",
-      // @ts-ignore
-      preferredNetwork: config.TZ_NET,
+      // @ts-expect-error string not assignable to enum
+      preferredNetwork: process.env.NEXT_PUBLIC_TZ_NET,
     })
   }
 
@@ -101,14 +100,14 @@ export class WalletManager {
             mutez: true,
             entrypoint: op.parameter.entrypoint,
             parameters: op.parameter.value,
-            storageLimit: op.storageLimit.toString(),
+            storageLimit: op.storageLimit?.toString(),
           })),
           sourceAddress: pkh,
           metadata: {
             metadata: {
               name: "fxhash",
               description:
-                "The tezos platform for artists and collectors to live out their passion for generative art.",
+                "The open platform for artists and collectors to live out their passion for generative art.",
               url: "https://fxhash.xyz",
               // icons: ["url_icon"],
             },
@@ -143,7 +142,7 @@ export class WalletManager {
     }
   }
 
-  async disconnect(): Promise<void> {
+  async disconnect() {
     try {
       await this.getBeaconWallet().disconnect()
     } catch (_) {
@@ -161,8 +160,8 @@ export class WalletManager {
     try {
       await this.getBeaconWallet().requestPermissions({
         network: {
-          // @ts-ignore
-          type: config.TZ_NET,
+          // @ts-expect-error string not assignable to enum
+          type: process.env.NEXT_PUBLIC_TZ_NET,
         },
       })
 
@@ -175,7 +174,7 @@ export class WalletManager {
     }
   }
 
-  cycleRpcNode(): void {
+  cycleRpcNode() {
     // re-arrange the RPC nodes array
     const out = this.rpcNodes.shift()!
     this.rpcNodes.push(out)
@@ -199,10 +198,10 @@ export class WalletManager {
    * if operation is applied... etc)
    */
   async runContractOperation<Params>(
-    OperationClass: TContractOperation<Params>,
+    OperationClass: TAnyContractOperation<Params>,
     params: Params,
     statusCallback: ContractOperationCallback
-  ): Promise<any> {
+  ) {
     // instanciate the class
     const contractOperation = new OperationClass(this, params)
 
@@ -246,6 +245,41 @@ export class WalletManager {
           )
         }
       }
+    }
+  }
+
+  /**
+   * Sign a bytes payload with the wallet currently synced
+   */
+  async signPayload(bytes: string) {
+    const payload: RequestSignPayloadInput = {
+      signingType: SigningType.MICHELINE,
+      payload: bytes,
+      sourceAddress: await this.tezosToolkit.wallet.pkh(),
+    }
+    return await this.beaconWallet?.client.requestSignPayload(payload)
+  }
+
+  /**
+   * Crafts a string to enhance the payload with application, time and generic
+   * sign payload message.
+   */
+  private stringPayloadCraft(string: string) {
+    return `Tezos Signed Message: fxhash ${new Date().toISOString()} ${string}`
+  }
+
+  /**
+   * Sign a string payload with the wallet currently synced
+   */
+  async signString(string: string) {
+    const payload = this.stringPayloadCraft(string)
+    const bytes = char2Bytes(payload)
+    const payloadBytes = `050100${char2Bytes("" + bytes.length)}${bytes}`
+
+    return {
+      payload,
+      payloadBytes,
+      signature: await this.signPayload(payloadBytes),
     }
   }
 
