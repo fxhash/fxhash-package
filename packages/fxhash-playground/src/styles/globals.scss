@@ -1,4 +1,4 @@
-@use './variables';
+@use "./variables";
 
 :root {
   // Font variable is injected by @next/font in /containers/Root
@@ -47,7 +47,7 @@
 }
 
 ::-webkit-scrollbar {
-//   width: 0px;
+  //   width: 0px;
 }
 
 html,
@@ -63,11 +63,19 @@ main {
   scroll-behavior: smooth;
 }
 
-html, body, main, #__next {
+html,
+body,
+main,
+#__next {
   height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   line-height: 1;
 }
@@ -85,7 +93,8 @@ a {
   box-sizing: border-box;
 }
 
-input, button {
+input,
+button {
   font-family: var(--font-sans);
   font-size: var(--font-size-button);
   font-weight: 400;
@@ -98,4 +107,28 @@ input, button {
   }
   body {
   }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Blue */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}
+
+.spinner-container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
 }

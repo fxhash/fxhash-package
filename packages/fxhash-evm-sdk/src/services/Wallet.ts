@@ -60,7 +60,7 @@ export function getConfig(): Config {
     getDefaultConfig({
       publicClient: publicClient,
       chains: [CURRENT_CHAIN],
-      walletConnectProjectId: config.config.ETH_WALLET_CONNECT_ID,
+      walletConnectProjectId: config.config.walletConnectId,
       // Required
       appName: "FXHASH",
 

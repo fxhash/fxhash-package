@@ -1,33 +1,34 @@
 import { ContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as MintTicketABI } from "@/abi/FxTicket"
+import { ABI as TicketRedeemerABI } from "@/abi/TicketRedeemer"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { getConfig } from "../Wallet"
+import { config } from "@fxhash/config"
 
-export type TMintTicketEthV1OperationParams = {
-  amount: number
-  payment: number
+export type TRedeemTicketEthV1OperationParams = {
   ticket: string
+  tokenId: number
+  params: string
 }
 
 /**
- * Mint an unique iteration of a Mint Ticket
+ * Redeem an unique iteration of a Mint Ticket to transform it into the actual underlying token
  * @dev contract interface:
- * function mint(address _to, uint256 _amount, uint256 _payment)
+ * function redeem(address _ticket, uint256 _tokenId, bytes calldata _fxParams)
  */
-export class MintTicketEthV1Operation extends ContractOperation<TMintTicketEthV1OperationParams> {
+export class RedeemTicketEthV1Operation extends ContractOperation<TRedeemTicketEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
     const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
-      address: this.params.ticket as `0x${string}`,
-      abi: MintTicketABI,
-      functionName: "mint",
-      args: [account, this.params.amount, this.params.payment],
+      address: config.eth.contracts.ticket_redeemer_v1 as `0x${string}`,
+      abi: TicketRedeemerABI,
+      functionName: "redeem",
+      args: [this.params.ticket, this.params.tokenId, this.params.params],
       account: account,
     }
     return simulateAndExecuteContract(
@@ -38,6 +39,6 @@ export class MintTicketEthV1Operation extends ContractOperation<TMintTicketEthV1
   }
 
   success(): string {
-    return `Successfully minted mint ticket ${this.params.ticket}`
+    return `Successfully redeemed mint ticket ${this.params.ticket} - ${this.params.tokenId}`
   }
 }

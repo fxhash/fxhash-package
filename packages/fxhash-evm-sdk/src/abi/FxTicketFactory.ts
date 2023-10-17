@@ -3,8 +3,18 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "_admin",
+        type: "address",
+      },
+      {
+        internalType: "address",
         name: "_implementation",
         type: "address",
+      },
+      {
+        internalType: "uint48",
+        name: "_gracePeriod",
+        type: "uint48",
       },
     ],
     stateMutability: "nonpayable",
@@ -22,8 +32,32 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "InvalidRedeemer",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidToken",
     type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint48",
+        name: "_gracePeriod",
+        type: "uint48",
+      },
+    ],
+    name: "GracePeriodUpdated",
+    type: "event",
   },
   {
     anonymous: false,
@@ -75,13 +109,13 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "_owner",
+        name: "_mintTicket",
         type: "address",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "_mintTicket",
+        name: "_owner",
         type: "address",
       },
     ],
@@ -101,6 +135,11 @@ export const ABI = [
         type: "address",
       },
       {
+        internalType: "address",
+        name: "_redeemer",
+        type: "address",
+      },
+      {
         internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
@@ -109,6 +148,45 @@ export const ABI = [
         internalType: "string",
         name: "_baseURI",
         type: "string",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "minter",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "uint64",
+                name: "startTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint64",
+                name: "endTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint128",
+                name: "allocation",
+                type: "uint128",
+              },
+            ],
+            internalType: "struct ReserveInfo",
+            name: "reserveInfo",
+            type: "tuple",
+          },
+          {
+            internalType: "bytes",
+            name: "params",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct MintInfo[]",
+        name: "_mintInfo",
+        type: "tuple[]",
       },
     ],
     name: "createTicket",
@@ -130,6 +208,19 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "minGracePeriod",
+    outputs: [
+      {
+        internalType: "uint48",
+        name: "",
+        type: "uint48",
       },
     ],
     stateMutability: "view",
@@ -177,6 +268,19 @@ export const ABI = [
   {
     inputs: [
       {
+        internalType: "uint48",
+        name: "_gracePeriod",
+        type: "uint48",
+      },
+    ],
+    name: "setGracePeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_implementation",
         type: "address",
@@ -192,9 +296,9 @@ export const ABI = [
     name: "ticketId",
     outputs: [
       {
-        internalType: "uint96",
+        internalType: "uint48",
         name: "",
-        type: "uint96",
+        type: "uint48",
       },
     ],
     stateMutability: "view",
@@ -203,9 +307,9 @@ export const ABI = [
   {
     inputs: [
       {
-        internalType: "uint96",
+        internalType: "uint48",
         name: "",
-        type: "uint96",
+        type: "uint48",
       },
     ],
     name: "tickets",

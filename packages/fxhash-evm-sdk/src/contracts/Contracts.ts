@@ -48,6 +48,7 @@ export const FxhashContracts = {
   ETH_FIXED_PRICE_MINTER_V1: config.eth.contracts.fixed_price_minter_v1,
   ETH_DUTCH_AUCTION_V1: config.eth.contracts.dutch_auction_minter_v1,
   ETH_MINT_TICKETS_FACTORY_V1: config.eth.contracts.mint_ticket_factory_v1,
+  ETH_TICKET_REDEEMER_V1: config.eth.contracts.ticket_redeemer_v1,
 }
 
 export const FxhashCollabFactoryCalls = {

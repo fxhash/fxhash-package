@@ -15,7 +15,7 @@ export type TUploadOnchainCodeOperationParams = {
 }
 
 /**
- * Mint an unique iteration of a Generative Token
+ * Upload code on chain using Scripty.sol
  */
 export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchainCodeOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type

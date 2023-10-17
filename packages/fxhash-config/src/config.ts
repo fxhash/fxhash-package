@@ -16,6 +16,7 @@ export interface IFxhashNetworkConfig {
 export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
+  walletConnectId: string
 }
 
 // the variations supported by the config
@@ -114,6 +115,7 @@ export const fxhashConfig: IFxhashConfig = {
       config: {
         envName: "development",
         gtMinPrice: "0",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
       },
     },
     prd: {
@@ -121,6 +123,7 @@ export const fxhashConfig: IFxhashConfig = {
       config: {
         envName: "production",
         gtMinPrice: "0",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
       },
     },
   },

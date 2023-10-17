@@ -10,9 +10,9 @@ import { getConfig } from "../Wallet"
 
 export type TMintFixedPriceEthV1OperationParams = {
   token: string
-  price: number
+  price: bigint
   mintId: number
-  amount: number
+  amount: bigint
 }
 
 /**

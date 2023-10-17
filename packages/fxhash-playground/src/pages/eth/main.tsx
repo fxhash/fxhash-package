@@ -27,13 +27,9 @@ import {
   TMintDAEthV1OperationParams,
 } from "@fxhash/evm-sdk/services/operations/MintDutchAuctionEthV1"
 import {
-  MintTicketEthV1Operation,
-  TMintTicketEthV1OperationParams,
-} from "@fxhash/evm-sdk/services/operations/MintTicketEthV1"
-import {
   CreateTicketEthV1Operation,
   TCreateTicketEthV1OperationParams,
-} from "@fxhash/evm-sdk/services/operations/CreateTicketEthV1"
+} from "@fxhash/evm-sdk/services/operations/TicketCreateEthV1"
 import { listToken } from "@fxhash/evm-sdk/services/operations/Marketplace"
 import {
   encodeAbiParameters,
@@ -78,7 +74,7 @@ export default function EthPlayground(props: any) {
     },
     mintInfo: [
       {
-        minter: config.ETH_FIXED_PRICE_MINTER_V1,
+        minter: config.eth.contracts!.fixed_price_minter_v1,
         reserveInfo: {
           startTime: 0,
           endTime: new Date().getTime() + 9999,
@@ -103,7 +99,7 @@ export default function EthPlayground(props: any) {
     ...paramsMintIssuerFixed,
     mintInfo: [
       {
-        minter: config.ETH_DUTCH_AUCTION_V1,
+        minter: config.eth.contracts!.dutch_auction_minter_v1,
         reserveInfo: {
           startTime: parseInt((new Date().getTime() / 1000).toFixed(0)),
           endTime: parseInt((new Date().getTime() / 1000 + 400).toFixed(0)),
@@ -145,12 +141,6 @@ export default function EthPlayground(props: any) {
     baseURI: "baseURI://",
   }
 
-  const mintTicketParams: TMintTicketEthV1OperationParams = {
-    ticket: "0x680f5E153fF524ec2c8624Aa99D96e6acBE31cF6",
-    amount: 1,
-    payment: price,
-  }
-
   const createProjectFixedOperation = new MintEthIssuerV1Operation(
     walletManager!,
     paramsMintIssuerFixed
@@ -164,10 +154,6 @@ export default function EthPlayground(props: any) {
     mintFixedPriceParams
   )
   const mintDAOperation = new MintDAEthV1Operation(walletManager!, mintDAParams)
-  const mintTicketperation = new MintTicketEthV1Operation(
-    walletManager!,
-    mintTicketParams
-  )
 
   const handleConnect = async () => {
     await connect()
@@ -192,10 +178,6 @@ export default function EthPlayground(props: any) {
 
   const handleMintDA = () => {
     mintDAOperation.call()
-  }
-
-  const handleMintTicket = () => {
-    mintTicketperation.call()
   }
 
   const handleCreateTicket = () => {
@@ -276,7 +258,6 @@ export default function EthPlayground(props: any) {
           <button onClick={handleCreateTicket}>createTicket</button>
           <button onClick={handleMintFixed}>mintFixed</button>
           <button onClick={handleMintDA}>mintDA</button>
-          <button onClick={handleMintTicket}>mintTicket</button>
           <button onClick={handleListToken}>listToken</button>
         </ConnectKitProvider>
       </WagmiConfig>

@@ -10,8 +10,8 @@ import { getConfig } from "../Wallet"
 
 export type TMintDAEthV1OperationParams = {
   token: string
-  price: number
-  amount: number
+  price: bigint
+  amount: bigint
   reserveId: number
 }
 

@@ -3,6 +3,11 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "_admin",
+        type: "address",
+      },
+      {
+        internalType: "address",
         name: "_roleRegistry",
         type: "address",
       },
@@ -10,28 +15,6 @@ export const ABI = [
         internalType: "address",
         name: "_implementation",
         type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "uint128",
-            name: "lockTime",
-            type: "uint128",
-          },
-          {
-            internalType: "uint128",
-            name: "referrerShare",
-            type: "uint128",
-          },
-          {
-            internalType: "string",
-            name: "defaultMetadata",
-            type: "string",
-          },
-        ],
-        internalType: "struct ConfigInfo",
-        name: "_configInfo",
-        type: "tuple",
       },
     ],
     stateMutability: "nonpayable",
@@ -56,42 +39,6 @@ export const ABI = [
     inputs: [],
     name: "NotAuthorized",
     type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "uint128",
-            name: "lockTime",
-            type: "uint128",
-          },
-          {
-            internalType: "uint128",
-            name: "referrerShare",
-            type: "uint128",
-          },
-          {
-            internalType: "string",
-            name: "defaultMetadata",
-            type: "string",
-          },
-        ],
-        indexed: false,
-        internalType: "struct ConfigInfo",
-        name: "_configInfo",
-        type: "tuple",
-      },
-    ],
-    name: "ConfigUpdated",
-    type: "event",
   },
   {
     anonymous: false,
@@ -143,41 +90,18 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "_owner",
+        name: "_genArtToken",
         type: "address",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "_genArtToken",
+        name: "_owner",
         type: "address",
       },
     ],
     name: "ProjectCreated",
     type: "event",
-  },
-  {
-    inputs: [],
-    name: "configInfo",
-    outputs: [
-      {
-        internalType: "uint128",
-        name: "lockTime",
-        type: "uint128",
-      },
-      {
-        internalType: "uint128",
-        name: "referrerShare",
-        type: "uint128",
-      },
-      {
-        internalType: "string",
-        name: "defaultMetadata",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
   },
   {
     inputs: [
@@ -273,186 +197,9 @@ export const ABI = [
             type: "string",
           },
           {
-            components: [
-              {
-                components: [
-                  {
-                    internalType: "string",
-                    name: "name",
-                    type: "string",
-                  },
-                  {
-                    internalType: "address",
-                    name: "contractAddress",
-                    type: "address",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "contractData",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "enum HTMLTagType",
-                    name: "tagType",
-                    type: "uint8",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagOpen",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagClose",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagContent",
-                    type: "bytes",
-                  },
-                ],
-                internalType: "struct HTMLTag[]",
-                name: "headTags",
-                type: "tuple[]",
-              },
-              {
-                components: [
-                  {
-                    internalType: "string",
-                    name: "name",
-                    type: "string",
-                  },
-                  {
-                    internalType: "address",
-                    name: "contractAddress",
-                    type: "address",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "contractData",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "enum HTMLTagType",
-                    name: "tagType",
-                    type: "uint8",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagOpen",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagClose",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagContent",
-                    type: "bytes",
-                  },
-                ],
-                internalType: "struct HTMLTag[]",
-                name: "bodyTags",
-                type: "tuple[]",
-              },
-            ],
-            internalType: "struct HTMLRequest",
-            name: "animation",
-            type: "tuple",
-          },
-          {
-            components: [
-              {
-                components: [
-                  {
-                    internalType: "string",
-                    name: "name",
-                    type: "string",
-                  },
-                  {
-                    internalType: "address",
-                    name: "contractAddress",
-                    type: "address",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "contractData",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "enum HTMLTagType",
-                    name: "tagType",
-                    type: "uint8",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagOpen",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagClose",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagContent",
-                    type: "bytes",
-                  },
-                ],
-                internalType: "struct HTMLTag[]",
-                name: "headTags",
-                type: "tuple[]",
-              },
-              {
-                components: [
-                  {
-                    internalType: "string",
-                    name: "name",
-                    type: "string",
-                  },
-                  {
-                    internalType: "address",
-                    name: "contractAddress",
-                    type: "address",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "contractData",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "enum HTMLTagType",
-                    name: "tagType",
-                    type: "uint8",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagOpen",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagClose",
-                    type: "bytes",
-                  },
-                  {
-                    internalType: "bytes",
-                    name: "tagContent",
-                    type: "bytes",
-                  },
-                ],
-                internalType: "struct HTMLTag[]",
-                name: "bodyTags",
-                type: "tuple[]",
-              },
-            ],
-            internalType: "struct HTMLRequest",
-            name: "attributes",
-            type: "tuple",
+            internalType: "bytes",
+            name: "onchainData",
+            type: "bytes",
           },
         ],
         internalType: "struct MetadataInfo",
@@ -596,36 +343,6 @@ export const ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "uint128",
-            name: "lockTime",
-            type: "uint128",
-          },
-          {
-            internalType: "uint128",
-            name: "referrerShare",
-            type: "uint128",
-          },
-          {
-            internalType: "string",
-            name: "defaultMetadata",
-            type: "string",
-          },
-        ],
-        internalType: "struct ConfigInfo",
-        name: "_configInfo",
-        type: "tuple",
-      },
-    ],
-    name: "setConfig",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {

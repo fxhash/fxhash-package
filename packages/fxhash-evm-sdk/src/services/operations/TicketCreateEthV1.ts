@@ -12,6 +12,17 @@ export type TCreateTicketEthV1OperationParams = {
   token: string
   gracePeriod: number
   baseURI: string
+  mintInfo: [
+    {
+      minter: string
+      reserveInfo: {
+        startTime: number
+        endTime: number
+        allocation: bigint
+      }
+      params: string
+    }
+  ]
 }
 
 /**
@@ -36,8 +47,10 @@ export class CreateTicketEthV1Operation extends ContractOperation<TCreateTicketE
       args: [
         account,
         this.params.token,
+        FxhashContracts.ETH_TICKET_REDEEMER_V1,
         this.params.gracePeriod,
         this.params.baseURI,
+        this.params.mintInfo,
       ],
       account: account,
     }

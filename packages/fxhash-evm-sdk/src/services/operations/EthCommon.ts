@@ -1,10 +1,22 @@
+import { FxhashContracts } from "@/contracts/Contracts"
+import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
   PublicClient,
   TransactionReceipt,
   WalletClient,
+  concat,
+  encodeAbiParameters,
+  fromHex,
+  getContract,
+  getContractAddress,
+  keccak256,
+  toBytes,
+  toHex,
 } from "viem"
+import { getConfig } from "../Wallet"
+import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
 
 //Type definition of the parameters for the simulateContract function
 export interface SimulateAndExecuteContractRequest {
@@ -13,7 +25,7 @@ export interface SimulateAndExecuteContractRequest {
   functionName: string
   args: any[]
   account: string
-  value?: number
+  value?: bigint
 }
 
 /**
@@ -81,4 +93,54 @@ export async function simulateAndExecuteContract(
     //handle any error from the execution
     handleContractError(error)
   }
+}
+
+export async function predictTicketContractAddress(
+  nonceAddress: string,
+  walletClient: WalletClient,
+  publicClient: PublicClient
+): Promise<string> {
+  const salt = encodeAbiParameters(
+    [
+      { name: "address", type: "address" },
+      { name: "nonce", type: "uint256" },
+    ],
+    [
+      nonceAddress as `0x${string}`,
+      await getTicketFactoryUserNonce(nonceAddress, walletClient, publicClient),
+    ]
+  )
+  return getContractAddress({
+    bytecode: toHex(
+      concat([
+        fromHex("0x3d602d80600a3d3981f3363d3d373d3d3d363d73", "bytes"),
+        fromHex(
+          config.eth.contracts.mint_ticket_impl_V1 as `0x${string}`,
+          "bytes"
+        ),
+        fromHex("0x5af43d82803e903d91602b57fd5bf3", "bytes"),
+      ])
+    ),
+    from: config.eth.contracts.mint_ticket_factory_v1 as `0x${string}`,
+    opcode: "CREATE2",
+    salt: keccak256(salt),
+  })
+}
+
+export async function getTicketFactoryUserNonce(
+  nonceAddress: string,
+  walletClient: WalletClient,
+  publicClient: PublicClient
+): Promise<bigint> {
+  const ticketFactory = getContract({
+    address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
+    abi: MintTicketFactoryABI,
+    walletClient: walletClient,
+    publicClient: publicClient,
+  })
+  const nonce = await ticketFactory.read.nonces([nonceAddress])
+  if (typeof nonce !== "bigint") {
+    throw Error("Could not get nonce")
+  }
+  return nonce
 }
