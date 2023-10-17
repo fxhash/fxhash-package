@@ -1,15 +1,16 @@
 import { useLazyQuery } from "@apollo/client"
 import { PropsWithChildren, useState, useRef, createContext } from "react"
 import { Qu_user } from "@fxhash/gql/queries/user"
-import { WalletManager } from "@/services/Wallet"
-import { createWalletClient, custom } from "viem"
-import { hardhat } from "viem/chains"
-import { ConnectedUser } from "@/types/entities/User"
+import { CURRENT_CHAIN, WalletManager } from "@/services/Wallet"
+import { createWalletClient, custom, Address } from "viem"
 import { useClientEffect } from "@/hooks/useClientEffect"
+import { useClientAsyncEffect } from "@/hooks/useClientAsyncEffect"
+import "viem/window"
 
 export interface UserContextType {
   autoConnectChecked: boolean
-  user: ConnectedUser | null
+  //TODO: to replace later by a real user type
+  user: any | null
   userFetched: boolean
   walletManager: WalletManager | null
   isLiveMinting: boolean
@@ -66,10 +67,6 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       const ctx = ctxRef.current
 
       if (ctx.walletManager) {
-        const [account] = await (window as any).ethereum.request({
-          method: "eth_requestAccounts",
-        })
-        ctx.walletManager.walletClient.account = account
         const address = await ctx.walletManager.connect()
         console.log("logged in with address:", address)
         if (address) {
@@ -102,7 +99,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     }
   }
 
-  useClientEffect(() => {
+  useClientAsyncEffect(async () => {
     console.log("🚧 Initializing walletManager in UserProvider...")
     const initCtx: UserContextType = {
       ...defaultCtx,
@@ -110,33 +107,43 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       disconnect,
     }
 
-    // instanciate the manager
-    const client = createWalletClient({
-      chain: hardhat,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion
-      transport: custom((window as any).ethereum!),
-    })
-    const manager = new WalletManager(client)
-    initCtx.walletManager = manager
-
-    // check if user is already connected
-    const currentAccount = manager.walletClient.account
-    if (currentAccount) {
-      initCtx.user = {
-        id: currentAccount.address,
-        authorizations: [],
-      }
-      getUser({
-        variables: {
-          id: currentAccount.address,
-        },
+    if (window.ethereum) {
+      const [account]: Address[] = await window.ethereum.request({
+        method: "eth_requestAccounts",
+        params: [],
       })
+
+      // instanciate the manager
+      const client = createWalletClient({
+        account: account,
+        chain: CURRENT_CHAIN,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion
+        transport: custom(window.ethereum),
+      })
+      const manager = new WalletManager(client)
+      initCtx.walletManager = manager
+
+      // check if user is already connected
+      const currentAccount = manager.walletClient.account
+      if (currentAccount) {
+        initCtx.user = {
+          id: currentAccount.address,
+          authorizations: [],
+        }
+        getUser({
+          variables: {
+            id: currentAccount.address,
+          },
+        })
+      }
+
+      initCtx.autoConnectChecked = true
+
+      // move data to context
+      setContext(initCtx)
+    } else {
+      //TODO: implement falback
     }
-
-    initCtx.autoConnectChecked = true
-
-    // move data to context
-    setContext(initCtx)
   }, [])
 
   return <UserContext.Provider value={context}>{children}</UserContext.Provider>

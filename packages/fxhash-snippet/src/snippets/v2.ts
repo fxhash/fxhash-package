@@ -1,4 +1,4 @@
-export const snippet_v2: string = `
+export const snippet_v2 = `
 //---- do not edit the following code (you can indent as you wish)
   let search = new URLSearchParams(window.location.search)
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
@@ -144,7 +144,7 @@ export const snippet_v2: string = `
         return hex.slice(0, 8).padEnd(8, "f")
       },
       random: () =>
-        \`${[...Array(8)]
+        \`\${[...Array(8)]
           .map(() => Math.floor(Math.random() * 16).toString(16))
           .join("")}\`,
       },

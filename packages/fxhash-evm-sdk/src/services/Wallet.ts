@@ -1,19 +1,26 @@
 import {
   ContractOperationCallback,
   ContractOperationStatus,
-} from "../types/Contracts"
+} from "../contracts/Contracts"
 import { config } from "@fxhash/config"
-import { TContractOperation } from "./contract-operations/contractOperation"
+import { TContractOperation } from "@/services/operations/contractOperation"
 import { isOperationApplied } from "./Blockchain"
 import { Address, createWalletClient, http } from "viem"
 import { createConfig, configureChains } from "wagmi"
 import { type WalletClient } from "wagmi"
-import { mainnet, goerli, hardhat } from "wagmi/chains"
+import { mainnet, sepolia, hardhat } from "wagmi/chains"
 import { Config } from "wagmi"
 import { getDefaultConfig } from "connectkit"
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 
-export const chains = [mainnet, goerli, hardhat]
+//list of supported chains by the SDK
+export const chains = [mainnet, sepolia, hardhat]
+//Since the configuration of SDK is only for one chain at a time, we select the one configured
+export const CURRENT_CHAIN = chains.find(
+  chain => chain.id === parseInt(config.config.ETH_CHAIN_ID)
+)
+
+const rpcUrls = config.eth.apis.rpcs
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -33,6 +40,7 @@ export enum EWalletOperations {
   BAN_USER = "BAN_USER",
 }
 
+//Wrapper to get the proper provider for the chain with the corresponding configured RPC URL
 export function getProvider(rpcUrl: string): any {
   return jsonRpcProvider({
     rpc: chain => {
@@ -42,15 +50,17 @@ export function getProvider(rpcUrl: string): any {
   })
 }
 
-export function getConfig(rpcUrl: string): Config {
-  const { publicClient } = configureChains(chains, [getProvider(rpcUrl)])
+//WAGMI config that will be used for the wallet client
+export function getConfig(): Config {
+  const { publicClient } = configureChains(
+    chains,
+    rpcUrls.map(rpcUrl => getProvider(rpcUrl))
+  )
   return createConfig(
     getDefaultConfig({
-      // Required API Keys
       publicClient: publicClient,
-      chains: chains,
-      walletConnectProjectId: config.ETH_WALLET_CONNECT_ID,
-
+      chains: [CURRENT_CHAIN],
+      walletConnectProjectId: config.config.ETH_WALLET_CONNECT_ID,
       // Required
       appName: "FXHASH",
 
@@ -71,7 +81,6 @@ export function getConfig(rpcUrl: string): Config {
  */
 export class WalletManager {
   walletClient: WalletClient | undefined
-  rpcNodes: string[] = [...config.ETH_RPC_NODES.split(",")]
   account: Address | undefined
 
   constructor(client) {
@@ -79,26 +88,21 @@ export class WalletManager {
   }
 
   async disconnect(): Promise<void> {
-    try {
-      //TBD
-    } catch (_) {
-      /**
-       * If an autonomy wallet is connected, then the disconnect method will throw an error
-       * because it's a fake wallet provider. We can ignore this error
-       */
-    }
-    //this.ethereumClient = undefined
-  }
-
-  getCurrentConfig(): Config {
-    return getConfig(this.rpcNodes[0])
+    this.walletClient = undefined
   }
 
   async connect(): Promise<string | false> {
     try {
-      const [address] = await this.walletClient.requestAddresses()
-      this.account = address
-      return address
+      const [account] = await this.walletClient.requestAddresses()
+      if (!this.walletClient) {
+        this.walletClient = createWalletClient({
+          account: account,
+          chain: CURRENT_CHAIN,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          transport: http(rpcUrls[0]),
+        })
+      }
+      return account
     } catch (error) {
       console.log(error)
       return false
@@ -107,18 +111,16 @@ export class WalletManager {
 
   cycleRpcNode(): void {
     // re-arrange the RPC nodes array
-    const out = this.rpcNodes.shift()
-    this.rpcNodes.push(out)
-    console.log(`update RPC provider: ${this.rpcNodes[0]}`)
+    const out = rpcUrls.shift()
+    rpcUrls.push(out)
+    console.log(`update RPC provider: ${rpcUrls[0]}`)
+    const account = this.walletClient?.account
     //TODO see how to do that
     const client = createWalletClient({
-      chain: mainnet,
+      account: account,
+      chain: CURRENT_CHAIN,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      transport: http(this.rpcNodes[0]),
-    })
-
-    chains.forEach(chain => {
-      client.addChain({ chain: chain })
+      transport: http(rpcUrls[0]),
     })
     this.walletClient = client
   }
@@ -148,7 +150,7 @@ export class WalletManager {
 
     // we create a loop over the number of available nodes, representing retry
     // operations on failure. (exits under certain criteria)
-    for (let i = 0; i < this.rpcNodes.length + 2; i++) {
+    for (let i = 0; i < rpcUrls.length + 2; i++) {
       try {
         // run the preparations
         statusCallback?.(ContractOperationStatus.CALLING)
@@ -174,7 +176,7 @@ export class WalletManager {
         console.log({ err })
 
         // if network error, and the nodes have not been all tried
-        if (this.canErrorBeCycled(err) && i < this.rpcNodes.length) {
+        if (this.canErrorBeCycled(err) && i < rpcUrls.length) {
           this.cycleRpcNode()
           // retry after RPCs were swapped
           continue
