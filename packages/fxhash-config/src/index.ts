@@ -20,19 +20,17 @@ import {
   IFxhashConfigSingleEnv,
 } from "config"
 
-const PRD_ENVS = ["prd", "production"]
-const ACCEPTED_ENVS = [
-  "FXHASH_ENV",
-  "NEXT_PUBLIC_FXHASH_ENV",
-  "REACT_APP_FXHASH_ENV",
-]
 const isProd = (() => {
-  for (const ENV_NAME in ACCEPTED_ENVS) {
-    if (PRD_ENVS.includes(process?.env?.[ENV_NAME])) {
-      return true
-    }
-  }
-  return false
+  // We can't destructure process.envs
+  // https://nextjs.org/docs/pages/api-reference/next-config-js/env
+  return (
+    process.env.FXHASH_ENV === 'prd' ||
+    process.env.FXHASH_ENV === 'production' ||
+    process.env.NEXT_PUBLIC_FXHASH_ENV === 'prd' ||
+    process.env.NEXT_PUBLIC_FXHASH_ENV === 'production' ||
+    process.env.REACT_APP_FXHASH_ENV === 'prd' ||
+    process.env.REACT_APP_FXHASH_ENV === 'production'
+  );
 })()
 
 let config = isProd ? prdConfig : devConfig
