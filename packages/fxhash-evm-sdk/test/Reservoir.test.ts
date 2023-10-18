@@ -29,14 +29,14 @@ describe("Reservoir tests", () => {
         "0xe4a14b2ed60d4c8e6c2848bc0e3d1f067c3201dd100534ab236dd6228aca6eac"
       ),
       chain: sepolia,
-      transport: http(config.ETH_RPC_NODES),
+      transport: http(config.eth.apis.rpcs[0]),
     })
     buyerWalletClient = createWalletClient({
       account: privateKeyToAccount(
         "0x6750ae5b7fbe998d17246403bf37dc4a1602af76cfa0c4ccabf63458fb47bb30"
       ),
       chain: sepolia,
-      transport: http(config.ETH_RPC_NODES),
+      transport: http(config.eth.apis.rpcs[0]),
     })
   })
   describe("Reservoir SDK tests", () => {
@@ -171,3 +171,4 @@ describe("Reservoir tests", () => {
     })
   })
 })
+

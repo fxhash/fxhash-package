@@ -1,4 +1,4 @@
-export const snippet_v2: string = `
+export const snippet_v2 = `
 //---- do not edit the following code (you can indent as you wish)
   let search = new URLSearchParams(window.location.search)
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
