@@ -11,7 +11,6 @@ export interface UserContextType {
   autoConnectChecked: boolean
   //TODO: to replace later by a real user type
   user: any | null
-  userFetched: boolean
   walletManager: WalletManager | null
   isLiveMinting: boolean
   connect: (useAutonomy?: boolean) => Promise<void>
@@ -21,7 +20,6 @@ export interface UserContextType {
 const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
-  userFetched: false,
   isLiveMinting: false,
   walletManager: null,
   connect: () => new Promise(r => r()),
@@ -55,7 +53,6 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       setContext({
         ...context,
         user: userData.user,
-        userFetched: true,
       })
     }
   }, [userData])
