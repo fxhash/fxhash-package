@@ -34,8 +34,6 @@ const isProd = (() => {
 })()
 
 let config = isProd ? prdConfig : devConfig
-//TODO: REMOVE - hotfix
-config = prdConfig
 
 function setConfig(
   userConfig: Partial<IFxhashConfigSingleEnv>
