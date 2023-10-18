@@ -1,5 +1,11 @@
 # @fxhash/project-sdk
 
+## 0.0.11
+
+### Patch Changes
+
+- a29cb84: Fix preview trigger
+
 ## 0.0.10
 
 ### Patch Changes

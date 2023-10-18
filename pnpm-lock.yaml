@@ -33,7 +33,7 @@ importers:
   packages/fxhash:
     dependencies:
       '@fxhash/cli':
-        specifier: 0.0.12
+        specifier: 0.0.13
         version: link:../fxhash-cli
 
   packages/fxhash-cli:
@@ -48,7 +48,7 @@ importers:
         specifier: 0.0.7
         version: link:../fxhash-snippet
       '@fxhash/project-sdk':
-        specifier: 0.0.10
+        specifier: 0.0.11
         version: link:../project-sdk
       '@octokit/rest':
         specifier: 20.0.1
