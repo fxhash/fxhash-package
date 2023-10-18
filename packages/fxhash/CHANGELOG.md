@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.7
+
+### Patch Changes
+
+- a29cb84: Fix preview trigger
+- Updated dependencies [a29cb84]
+  - @fxhash/cli@0.0.13
+
 ## 0.0.6
 
 ### Patch Changes
