@@ -1,8 +1,24 @@
 export const ABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "_contractRegistry",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_roleRegistry",
+        type: "address",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "AllocationExceeded",
+    type: "error",
   },
   {
     inputs: [],
@@ -26,7 +42,22 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "InvalidEndTime",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidPrice",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidStartTime",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "MintActive",
     type: "error",
   },
   {
@@ -37,6 +68,16 @@ export const ABI = [
   {
     inputs: [],
     name: "UnauthorizedAccount",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "UnauthorizedMinter",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "UnauthorizedRedeemer",
     type: "error",
   },
   {
@@ -243,9 +284,61 @@ export const ABI = [
       },
       {
         indexed: true,
+        internalType: "address",
+        name: "_redeemer",
+        type: "address",
+      },
+      {
+        indexed: true,
         internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "_baseURI",
+        type: "string",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "minter",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "uint64",
+                name: "startTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint64",
+                name: "endTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint128",
+                name: "allocation",
+                type: "uint128",
+              },
+            ],
+            internalType: "struct ReserveInfo",
+            name: "reserveInfo",
+            type: "tuple",
+          },
+          {
+            internalType: "bytes",
+            name: "params",
+            type: "bytes",
+          },
+        ],
+        indexed: false,
+        internalType: "struct MintInfo[]",
+        name: "_mintInfo",
+        type: "tuple[]",
       },
     ],
     name: "TicketInitialized",
@@ -313,6 +406,25 @@ export const ABI = [
     ],
     name: "Withdraw",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "activeMinters",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
@@ -404,14 +516,27 @@ export const ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "_newPrice",
-        type: "uint128",
+        type: "uint80",
       },
     ],
     name: "claim",
     outputs: [],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "contractRegistry",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -547,9 +672,9 @@ export const ABI = [
     name: "getForeclosureTime",
     outputs: [
       {
-        internalType: "uint128",
+        internalType: "uint48",
         name: "",
-        type: "uint128",
+        type: "uint48",
       },
     ],
     stateMutability: "pure",
@@ -634,6 +759,11 @@ export const ABI = [
         type: "address",
       },
       {
+        internalType: "address",
+        name: "_redeemer",
+        type: "address",
+      },
+      {
         internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
@@ -642,6 +772,45 @@ export const ABI = [
         internalType: "string",
         name: "_baseURI",
         type: "string",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "minter",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "uint64",
+                name: "startTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint64",
+                name: "endTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint128",
+                name: "allocation",
+                type: "uint128",
+              },
+            ],
+            internalType: "struct ReserveInfo",
+            name: "reserveInfo",
+            type: "tuple",
+          },
+          {
+            internalType: "bytes",
+            name: "params",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct MintInfo[]",
+        name: "_mintInfo",
+        type: "tuple[]",
       },
     ],
     name: "initialize",
@@ -696,25 +865,6 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "_minter",
-        type: "address",
-      },
-    ],
-    name: "isMinter",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "_to",
         type: "address",
       },
@@ -732,6 +882,25 @@ export const ABI = [
     name: "mint",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "minters",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -801,9 +970,82 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "redeemer",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "minter",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "uint64",
+                name: "startTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint64",
+                name: "endTime",
+                type: "uint64",
+              },
+              {
+                internalType: "uint128",
+                name: "allocation",
+                type: "uint128",
+              },
+            ],
+            internalType: "struct ReserveInfo",
+            name: "reserveInfo",
+            type: "tuple",
+          },
+          {
+            internalType: "bytes",
+            name: "params",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct MintInfo[]",
+        name: "_mintInfo",
+        type: "tuple[]",
+      },
+    ],
+    name: "registerMinters",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "roleRegistry",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -896,9 +1138,9 @@ export const ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "_newPrice",
-        type: "uint128",
+        type: "uint80",
       },
     ],
     name: "setPrice",
@@ -949,24 +1191,24 @@ export const ABI = [
     name: "taxes",
     outputs: [
       {
-        internalType: "uint128",
+        internalType: "uint48",
         name: "gracePeriod",
-        type: "uint128",
+        type: "uint48",
       },
       {
-        internalType: "uint128",
+        internalType: "uint48",
         name: "foreclosureTime",
-        type: "uint128",
+        type: "uint48",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "currentPrice",
-        type: "uint128",
+        type: "uint80",
       },
       {
-        internalType: "uint128",
+        internalType: "uint80",
         name: "depositAmount",
-        type: "uint128",
+        type: "uint80",
       },
     ],
     stateMutability: "view",
