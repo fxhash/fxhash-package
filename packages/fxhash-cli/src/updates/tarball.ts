@@ -4,15 +4,22 @@ import { execSync } from "child_process"
 import { TMP_PATH } from "../constants"
 import fs from "fs"
 import path from "path"
-import { ValidProjectSdkFiles } from "../validate/index"
+
+export type ValidProjectSdkFiles = {
+  packageJson: string
+  files: string[]
+}
 
 export async function readFilesFromPackageTarball(
   packageName: string,
   filesToRead: string[]
 ): Promise<ValidProjectSdkFiles> {
+  if (!fs.existsSync(TMP_PATH)) {
+    fs.mkdirSync(TMP_PATH, { recursive: true })
+  }
   const tarball = execSync(`npm pack ${packageName}`, {
     cwd: TMP_PATH,
-    stdio: [null, null, null]
+    stdio: [null, null, null],
   })
     .toString()
     .trim()

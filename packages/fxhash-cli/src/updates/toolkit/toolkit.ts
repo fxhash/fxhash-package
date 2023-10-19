@@ -41,11 +41,9 @@ export async function updateToolkit(
         const updatedVersion = await logger.step(
           `downloading update for ${moduleName}`,
           async () => await moduleConfig.update(latestVersion, project),
-          async latestVersion => {
+          async () => {
             logger.clear()
-            if (!latestVersion) {
-              logger.success(`${moduleName} updated successfully`)
-            }
+            logger.success(`${moduleName} updated successfully`)
           }
         )
 
