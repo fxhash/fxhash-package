@@ -3,15 +3,14 @@ import { PropsWithChildren, useState, useRef, createContext } from "react"
 import { Qu_user } from "@fxhash/gql/queries/user"
 import { CURRENT_CHAIN, WalletManager } from "@/services/Wallet"
 import { createWalletClient, custom, Address } from "viem"
-import { ConnectedUser } from "@/types/entities/User"
 import { useClientEffect } from "@/hooks/useClientEffect"
 import { useClientAsyncEffect } from "@/hooks/useClientAsyncEffect"
 import "viem/window"
 
 export interface UserContextType {
   autoConnectChecked: boolean
-  user: ConnectedUser | null
-  userFetched: boolean
+  //TODO: to replace later by a real user type
+  user: any | null
   walletManager: WalletManager | null
   isLiveMinting: boolean
   connect: (useAutonomy?: boolean) => Promise<void>
@@ -21,7 +20,6 @@ export interface UserContextType {
 const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
-  userFetched: false,
   isLiveMinting: false,
   walletManager: null,
   connect: () => new Promise(r => r()),
@@ -55,7 +53,6 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       setContext({
         ...context,
         user: userData.user,
-        userFetched: true,
       })
     }
   }, [userData])

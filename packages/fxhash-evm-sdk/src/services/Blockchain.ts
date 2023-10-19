@@ -1,5 +1,3 @@
-import { config } from "@fxhash/config"
-
 /**
  * Given an operation hash, checks if the operation was included in the blockchain (check it the
  * status is applied, etc...)

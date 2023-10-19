@@ -45,7 +45,34 @@ export type FxParamTypeMap = {
   }[Type]
 }
 
+export type FxParamTransformationTypeMap = {
+  [Type in FxParamType]: {
+    number: number
+    bigint: bigint
+    boolean: boolean
+    color: {
+      hex:{
+        rgb: string
+        rgba: string
+      }
+      obj: {
+        rgb: { r: number, g: number, b: number},
+        rgba: { r: number, g: number, b: number, a:number},
+      }
+      arr: {
+        rgb: [number, number, number],
+        rgba: [number, number, number, number]
+      }
+    }
+    string: string
+    bytes: Uint8Array
+    select: string
+  }[Type]
+}
+
 export type FxParamUpdateMode = "page-reload" | "sync" | "code-driven"
+
+export type FxParamValue<Type extends FxParamType> = FxParamTypeMap[keyof FxParamTypeMap];
 
 export interface FxParamDefinition<Type extends FxParamType> {
   id: string
@@ -60,6 +87,10 @@ export interface FxParamDefinition<Type extends FxParamType> {
 
 export type hexString = `#${string}`
 
+export type FxParamProcessorTransformer<Type extends FxParamType> = (value: FxParamTypeMap[Type], definition?: FxParamDefinition<Type>) => FxParamTransformationTypeMap[Type]
+
+export type FxParamProcessorConstrainer<Type extends FxParamType> = (value: FxParamTypeMap[Type], definition?: FxParamDefinition<Type>) => FxParamTypeMap[Type]
+
 export interface FxParamProcessor<Type extends FxParamType> {
   serialize: (
     input: FxParamTypeMap[Type],
@@ -70,12 +101,15 @@ export interface FxParamProcessor<Type extends FxParamType> {
     definition: FxParamDefinition<Type>
   ) => FxParamTypeMap[Type]
   bytesLength: (definition: FxParamDefinition<Type>) => number
-  transform?: (input: string) => any
+  transform?: FxParamProcessorTransformer<Type>
+  constrain?: FxParamProcessorConstrainer<Type>
   random: (definition: FxParamDefinition<Type>) => FxParamTypeMap[Type]
 }
 
 export type FxParamProcessors = {
   [T in FxParamType]: FxParamProcessor<T>
 }
+
+export type FxParamTranformType = "transform" | "constrain"
 
 export type FxParamsData = Record<string, any>

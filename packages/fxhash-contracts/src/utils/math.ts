@@ -24,7 +24,7 @@ export function getDecimalsNumber(x: number): number {
 
 export function isPositive(value: number | undefined): boolean {
   return typeof value !== "undefined"
-    ? value >= parseFloat(config.GT_MIN_PRICE!)
+    ? value >= parseFloat(config.config.gtMinPrice)
     : true
 }
 
