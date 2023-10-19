@@ -3,9 +3,9 @@
   "version": "0.0.7",
   "author": "fxhash",
   "license": "MIT",
-  "engines" : {
-    "npm" : ">=9.0.0",
-    "node" : ">=18.0.0"
+  "engines": {
+    "npm": ">=9.0.0",
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,7 @@
   },
   "main": "./index.js",
   "dependencies": {
-    "@fxhash/cli": "workspace:*"
+    "@fxhash/cli": "0.0.13"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

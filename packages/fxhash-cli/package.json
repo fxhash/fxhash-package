@@ -46,16 +46,8 @@
     "dist",
     "static"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
     "@apollo/client": "3.7.17",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/fxhash-snippet": "workspace:*",
-    "@fxhash/project-sdk": "workspace:*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
@@ -84,11 +76,12 @@
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
     "yargs": "17.7.2",
-    "yesno": "0.4.0"
+    "yesno": "0.4.0",
+    "@fxhash/config": "0.0.8",
+    "@fxhash/project-sdk": "0.0.11",
+    "@fxhash/fxhash-snippet": "0.0.7"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/prettier-config": "workspace:*",
     "@types/adm-zip": "0.5.0",
     "@types/chalk": "2.2.0",
     "@types/ejs": "3.1.2",
@@ -116,6 +109,13 @@
     "tsc-alias": "1.8.5",
     "tslib": "2.6.0",
     "tsup": "7.2.0",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/prettier-config": "1.0.2"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
