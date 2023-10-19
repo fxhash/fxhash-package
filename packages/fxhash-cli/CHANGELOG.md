@@ -1,5 +1,11 @@
 # @fxhash/cli
 
+## 0.0.14
+
+### Patch Changes
+
+- d7f35e7: Create tmp folder in case it doesnt exist
+
 ## 0.0.13
 
 ### Patch Changes
