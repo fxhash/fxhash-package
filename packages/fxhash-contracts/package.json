@@ -1,0 +1,69 @@
+{
+  "name": "@fxhash/contracts",
+  "private": true,
+  "version": "0.0.8",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    "./*": "./dist/*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@airgap/beacon-sdk": "4.0.10",
+    "@apollo/client": "3.8.1",
+    "@fortawesome/free-solid-svg-icons": "6.4.0",
+    "@fortawesome/react-fontawesome": "0.2.0",
+    "@taquito/beacon-wallet": "17.3.1",
+    "@taquito/michel-codec": "17.3.1",
+    "@taquito/michelson-encoder": "17.3.1",
+    "@taquito/rpc": "17.3.1",
+    "@taquito/taquito": "17.3.1",
+    "@taquito/utils": "17.3.1",
+    "autonomy-irl-js": "1.0.0",
+    "classnames": "2.3.2",
+    "date-fns": "2.30.0",
+    "lodash.debounce": "4.0.8",
+    "next": "13.4.19",
+    "use-async-effect": "2.2.7"
+  },
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-colorful": "5.6.1",
+    "react-dom": "18.2.0",
+    "@fxhash/config": "0.0.8",
+    "@fxhash/gql": "0.0.8",
+    "onchfs": "0.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "4.0.7",
+    "@types/react": "18.2.15",
+    "@types/react-dom": "18.2.7",
+    "tslib": "2.6.0",
+    "tsup": "6.6.0",
+    "typescript": "5.0.4",
+    "@fxhash/config": "0.0.8",
+    "@fxhash/gql": "0.0.8",
+    "onchfs": "0.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  }
+}
