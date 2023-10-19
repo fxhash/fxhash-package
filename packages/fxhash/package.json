@@ -1,6 +1,6 @@
 {
   "name": "fxhash",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "fxhash",
   "license": "MIT",
   "engines": {
@@ -19,7 +19,7 @@
   },
   "main": "./index.js",
   "dependencies": {
-    "@fxhash/cli": "0.0.13"
+    "@fxhash/cli": "0.0.14"
   },
   "devDependencies": {}
 }
