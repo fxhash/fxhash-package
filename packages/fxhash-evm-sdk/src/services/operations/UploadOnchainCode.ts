@@ -8,7 +8,6 @@ import {
 } from "viem"
 import { ScriptUpload } from "@/types/OnChainCode"
 import { chunkSubstr, stringToBytes } from "@/utils/scripty/utils"
-import { getConfig } from "../Wallet"
 
 export type TUploadOnchainCodeOperationParams = {
   uploadRequests: ScriptUpload[]
@@ -32,7 +31,7 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
       const fileChunks = chunkSubstr(request.scriptContent, 10000)
       try {
         const { request: createScriptRequest } =
-          await getConfig().publicClient.simulateContract({
+          await this.manager.publicClient.simulateContract({
             address: FxhashContracts.ETH_SCRIPTY_STORAGE as `0x${string}`,
             abi: ScriptyStorageABI,
             functionName: "createScript",
@@ -46,7 +45,7 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
         })
 
         const createScriptReceipt =
-          await getConfig().publicClient.waitForTransactionReceipt({
+          await this.manager.publicClient.waitForTransactionReceipt({
             hash: createScriptHash,
           })
 
@@ -64,7 +63,7 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
               `Uploading chunk ${i} (size: ${chunk.length}) for script ${request.scriptName}`
             )
             const { request: createChunkRequest } =
-              await getConfig().publicClient.simulateContract({
+              await this.manager.publicClient.simulateContract({
                 address: FxhashContracts.ETH_SCRIPTY_STORAGE as `0x${string}`,
                 abi: ScriptyStorageABI,
                 functionName: "addChunkToScript",
@@ -79,7 +78,7 @@ export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchain
               })
 
             const uploadChunkReceipt =
-              await getConfig().publicClient.waitForTransactionReceipt({
+              await this.manager.publicClient.waitForTransactionReceipt({
                 hash: uploadChunkHash,
               })
 

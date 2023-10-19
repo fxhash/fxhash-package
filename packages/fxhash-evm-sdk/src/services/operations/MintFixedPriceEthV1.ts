@@ -6,7 +6,6 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { getConfig } from "../Wallet"
 
 export type TMintFixedPriceEthV1OperationParams = {
   token: string
@@ -37,11 +36,7 @@ export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPr
       account: account,
       value: this.params.price,
     }
-    return simulateAndExecuteContract(
-      getConfig().publicClient,
-      this.manager.walletClient,
-      args
-    )
+    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

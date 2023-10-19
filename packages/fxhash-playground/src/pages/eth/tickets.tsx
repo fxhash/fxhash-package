@@ -4,11 +4,11 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext as EthUserContext } from "@fxhash/evm-sdk/context/User"
 import { getConfig } from "@fxhash/evm-sdk/services/Wallet"
 
-import { ConnectKitButton } from "connectkit"
+import { ConnectKitButton, getDefaultConfig } from "connectkit"
 
 import { predictTicketContractAddress } from "@fxhash/evm-sdk/services/operations/EthCommon"
 
-import { WagmiConfig } from "wagmi"
+import { WagmiConfig, createConfig } from "wagmi"
 import { ConnectKitProvider } from "connectkit"
 import {
   MintEthIssuerV1Operation,
@@ -88,8 +88,7 @@ export default function EthPlayground(props: any) {
     setIsLoading(true)
     const predictedAddress = await predictTicketContractAddress(
       walletManager?.walletClient.account.address,
-      walletManager?.walletClient,
-      getConfig().publicClient
+      walletManager
     )
     const encodedPredictedAddress = encodeAbiParameters(
       [{ name: "address", type: "address" }],
@@ -294,7 +293,7 @@ export default function EthPlayground(props: any) {
   }
   return (
     <>
-      <WagmiConfig config={getConfig()}>
+      <WagmiConfig config={createConfig(getDefaultConfig(getConfig()))}>
         <ConnectKitProvider>
           <Head>
             <title>playground</title>

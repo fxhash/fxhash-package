@@ -7,7 +7,6 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { getConfig } from "../Wallet"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -68,7 +67,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
       abi: ISplitsMainABI,
       walletClient: this.manager.walletClient,
-      publicClient: getConfig().publicClient,
+      publicClient: this.manager.publicClient,
     })
 
     //get the address from the wallet
@@ -102,11 +101,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       account: account,
     }
     //simulate the transaction and execute it, will throw an error if it fails
-    return simulateAndExecuteContract(
-      getConfig().publicClient,
-      this.manager.walletClient,
-      args
-    )
+    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

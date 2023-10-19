@@ -5,7 +5,6 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { getConfig } from "../Wallet"
 
 export type TClaimTicketEthV1OperationParams = {
   ticket: string
@@ -32,11 +31,7 @@ export class ClaimTicketEthV1Operation extends ContractOperation<TClaimTicketEth
       account: account,
       value: this.params.value,
     }
-    return simulateAndExecuteContract(
-      getConfig().publicClient,
-      this.manager.walletClient,
-      args
-    )
+    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

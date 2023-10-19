@@ -5,7 +5,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { getConfig } from "../Wallet"
+
 import { config } from "@fxhash/config"
 
 export type TRedeemTicketEthV1OperationParams = {
@@ -31,11 +31,7 @@ export class RedeemTicketEthV1Operation extends ContractOperation<TRedeemTicketE
       args: [this.params.ticket, this.params.tokenId, this.params.params],
       account: account,
     }
-    return simulateAndExecuteContract(
-      getConfig().publicClient,
-      this.manager.walletClient,
-      args
-    )
+    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

@@ -3,20 +3,18 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
-  PublicClient,
   TransactionReceipt,
-  WalletClient,
   concat,
   encodeAbiParameters,
   fromHex,
   getContract,
   getContractAddress,
   keccak256,
-  toBytes,
   toHex,
 } from "viem"
-import { getConfig } from "../Wallet"
+
 import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
+import { WalletManager } from "../Wallet"
 
 //Type definition of the parameters for the simulateContract function
 export interface SimulateAndExecuteContractRequest {
@@ -67,26 +65,27 @@ export function handleContractError(error: any): never {
  * @returns a Promise that resolves to a TransactionReceipt object.
  */
 export async function simulateAndExecuteContract(
-  publicClient: PublicClient,
-  walletClient: WalletClient,
+  walletManager: WalletManager,
   args: SimulateAndExecuteContractRequest
 ): Promise<TransactionReceipt> {
   //fetch the account from the wallet
-  const account = walletClient.account
+  const account = walletManager.walletClient.account
   try {
     //simulate the contract call
-    const { request } = await publicClient.simulateContract(args)
+    const { request } = await walletManager.publicClient.simulateContract(args)
 
     //TODO: process the actual request result
 
     //execute the contract call
-    const hash = await walletClient.writeContract({
+    const hash = await walletManager.walletClient.writeContract({
       ...request,
       account: account,
     })
 
     //wait for the transaction receipt
-    const receipt = await publicClient.waitForTransactionReceipt({ hash })
+    const receipt = await walletManager.publicClient.waitForTransactionReceipt({
+      hash,
+    })
     console.log("tx success: ", receipt)
     return receipt
   } catch (error) {
@@ -97,8 +96,7 @@ export async function simulateAndExecuteContract(
 
 export async function predictTicketContractAddress(
   nonceAddress: string,
-  walletClient: WalletClient,
-  publicClient: PublicClient
+  walletManager: WalletManager
 ): Promise<string> {
   const salt = encodeAbiParameters(
     [
@@ -107,7 +105,7 @@ export async function predictTicketContractAddress(
     ],
     [
       nonceAddress as `0x${string}`,
-      await getTicketFactoryUserNonce(nonceAddress, walletClient, publicClient),
+      await getTicketFactoryUserNonce(nonceAddress, walletManager),
     ]
   )
   return getContractAddress({
@@ -129,14 +127,13 @@ export async function predictTicketContractAddress(
 
 export async function getTicketFactoryUserNonce(
   nonceAddress: string,
-  walletClient: WalletClient,
-  publicClient: PublicClient
+  walletManager: WalletManager
 ): Promise<bigint> {
   const ticketFactory = getContract({
     address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
     abi: MintTicketFactoryABI,
-    walletClient: walletClient,
-    publicClient: publicClient,
+    walletClient: walletManager.walletClient,
+    publicClient: walletManager.publicClient,
   })
   const nonce = await ticketFactory.read.nonces([nonceAddress])
   if (typeof nonce !== "bigint") {
