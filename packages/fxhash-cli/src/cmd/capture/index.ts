@@ -11,9 +11,7 @@ import { urlWithHashAndParams } from "../../capture/url"
 import { getRandomFxhash, getRandomTezosAddress } from "../../capture/math"
 import { logger } from "../../utils/logger"
 import chalk from "chalk"
-
-// TODO: use config
-const fsEmulator = "https://fs-emulator.fxhash-dev.xyz"
+import { devConfig } from "@fxhash/config"
 
 export const commandCapture: CommandModule = {
   command: "capture",
@@ -105,7 +103,7 @@ export const commandCapture: CommandModule = {
       const formData = new FormData()
       formData.append("file", new Blob([buffer]))
 
-      const response = await fetch(`${fsEmulator}/upload`, {
+      const response = await fetch(`${devConfig.apis.fsEmulator}/upload`, {
         method: "POST",
         body: formData,
       })

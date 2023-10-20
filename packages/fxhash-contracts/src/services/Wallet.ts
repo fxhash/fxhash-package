@@ -15,6 +15,7 @@ import {
 import { isOperationApplied } from "./Blockchain"
 import { RequestSignPayloadInput, SigningType } from "@airgap/beacon-sdk"
 import { TAnyContractOperation } from "./operations/ContractOperation"
+import { BlockchainNetwork } from "@/types/entities/Account"
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -34,12 +35,43 @@ export enum EWalletOperations {
   BAN_USER = "BAN_USER",
 }
 
+const TEZOS_SIGNING_PREFIX = "050100"
+const TEZOS_SIGN_IN_MESSAGE = "Tezos Signed Message: sign in to fxhash.xyz"
+const FXHASH_TERMS_OF_SERVICE =
+  "Agree to terms: https://www.fxhash.xyz/doc/legal/terms.pdf"
+
+/**
+ * Formats a sign-in payload for a given Tezos address.
+ *
+ * @param {string} address - The Tezos address to include in the payload.
+ * @return {string} - The formatted payload.
+ */
+const formatSignInPayload = (address: string): string =>
+  `${TEZOS_SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
+
+/**
+ * Encodes the payload into the desired format.
+ *
+ * @param {string} payload - The payload to encode.
+ * @return {string} - The encoded payload.
+ */
+const encodeSignInPayload = (payload: string): string => {
+  const bytes = char2Bytes(payload)
+  return TEZOS_SIGNING_PREFIX + char2Bytes(bytes.length.toString()) + bytes
+}
+
 /**
  * The Wallet Manager class can be used to interract with Taquito API, by providing a level of abstration
  * so that the rest of the app is simpler to write
  * It is responsible for handlinf interactions with the contracts as well
  */
 export class TezosWalletManager {
+  authorization: {
+    network: BlockchainNetwork
+    payload: string
+    signature: string
+    publicKey: string
+  } | null = null
   beaconWallet: BeaconWallet | null = null
   tezosToolkit: TezosToolkit
   contracts: Record<string, ContractAbstraction<Wallet> | null> = {}
@@ -88,12 +120,12 @@ export class TezosWalletManager {
       "getPKH" | "mapTransferParamsToWalletParams" | "sendOperations"
     > = {
       getPKH: () => pkh,
-      mapTransferParamsToWalletParams: (params) => {
+      mapTransferParamsToWalletParams: params => {
         return params()
       },
-      sendOperations: async (operations) => {
+      sendOperations: async operations => {
         const { result } = await autonomyIRL.sendTransaction({
-          transactions: operations.map((op) => ({
+          transactions: operations.map(op => ({
             kind: "transaction",
             destination: op.to,
             amount: op.amount.toString(),
@@ -151,9 +183,24 @@ export class TezosWalletManager {
        * because it's a fake wallet provider. We can ignore this error
        */
     }
+    this.authorization = null
     this.tezosToolkit.setWalletProvider(undefined)
     this.beaconWallet = null
     this.contracts = {}
+  }
+
+  async signMessage(message: string) {
+    if (!this.beaconWallet) throw new Error("no wallet connected")
+    const { signature } = await this.beaconWallet.client.requestSignPayload({
+      signingType: SigningType.MICHELINE,
+      payload: message,
+    })
+    const activeAccount = await this.beaconWallet.client.getActiveAccount()
+    if (!activeAccount) throw new Error("no active account")
+    return {
+      pk: activeAccount.publicKey,
+      sig: signature,
+    }
   }
 
   async connect(): Promise<string | false> {
@@ -168,8 +215,21 @@ export class TezosWalletManager {
       const userAddress = await this.getBeaconWallet().getPKH()
       this.tezosToolkit.setWalletProvider(this.getBeaconWallet())
 
+      const payload = formatSignInPayload(userAddress)
+      const payloadBytes = encodeSignInPayload(payload)
+      const { sig, pk } = await this.signMessage(payloadBytes)
+
+      this.authorization = {
+        payload: payloadBytes,
+        signature: sig,
+        publicKey: pk,
+        network: BlockchainNetwork.TEZOS,
+      }
+
       return userAddress
     } catch (err) {
+      console.error("An error occurred during connect operation:", err)
+      await this.disconnect()
       return false
     }
   }

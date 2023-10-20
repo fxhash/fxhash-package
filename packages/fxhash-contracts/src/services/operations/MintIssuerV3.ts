@@ -21,9 +21,8 @@ import Onchfs, { Inscription } from "onchfs"
 export type TMintIssuerV3OperationParams = {
   data: MintGenerativeData<string>
   metadata: GenerativeTokenMetadata
-  metadataBytes: string
-  // todo: have some better data for ticket settings ?
-  ticketMetadataBytes: string
+  ipfsMetadataBytes?: string
+  ticketMetadataBytes?: string
 }
 
 export class MintIssuerV3Operation {
@@ -47,6 +46,18 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
   onchfsKt: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
+    // do some verification to check input is valid
+    if (this.params.data.params!.inputBytesSize > 0) {
+      if (!this.params.ticketMetadataBytes) {
+        throw new Error(`Params project must have metadata for their tickets`)
+      }
+    }
+    if (!this.params.data.onChain) {
+      if (!this.params.ipfsMetadataBytes) {
+        throw new Error(`Off-chain projects must have metadata on ipfs`)
+      }
+    }
+
     this.contract = await this.manager.getContract(
       this.params.data.collaboration?.id || FxhashContracts.ISSUER_V3
     )
@@ -99,7 +110,7 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
     const params = {
       amount: distribution.editions!,
       enabled: !!distribution.enabled,
-      metadata: this.params.metadataBytes,
+      metadata: this.params.ipfsMetadataBytes,
       pricing: packedPricing,
       primary_split: distribution.splitsPrimary,
       reserves: reserves,

@@ -53,7 +53,6 @@ export async function ejectedTemplate({
     ],
     staticFiles: [
       [`src/${JS_ENTRY_FILE_NAME}.js`, "static/examples/params.js"],
-      [".gitignore", "static/.gitignore"],
       ["LICENSE", "static/LICENSE"],
     ],
   }

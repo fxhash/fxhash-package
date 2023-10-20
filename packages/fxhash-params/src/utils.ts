@@ -373,7 +373,6 @@ export function deserializeParams(
   options: { withTransform?: boolean, transformType?: FxParamTranformType }
 ) {
   const params: Record<string, FxParamValue<FxParamType> | FxParamTransformationTypeMap[FxParamType]> = {}
-  console.log(bytes, definition, options)
   for (const def of definition) {
     const processor = ParameterProcessors[
       def.type as FxParamType

@@ -23,9 +23,8 @@ export function createFxhashSdk(window, options): FxHashApi {
   const isFxpreview = search.get("preview") === "1"
   // call this method to trigger the preview
   function fxpreview() {
-    console.log("FXPREVIEW")
-    // window.dispatchEvent(new Event("fxhash-preview"))
-    // setTimeout(() => fxpreview(), 500)
+    window.dispatchEvent(new Event("fxhash-preview"))
+    setTimeout(() => fxpreview(), 500)
   }
   // get the byte params from the URL
   const searchParams = window.location.hash
@@ -109,14 +108,14 @@ export function createFxhashSdk(window, options): FxHashApi {
     preview: fxpreview,
     isPreview: isFxpreview,
     params: function (definition) {
-      this._params = definition
-      this._rawValues = deserializeParams(initialInputBytes, definition, {
+      this._params = definition.map(def => ({ ...def, version: this._version }))
+      this._rawValues = deserializeParams(initialInputBytes, this._params, {
         withTransform: true,
         transformType: "constrain",
       })
       this._paramValues = processParams(
         this._rawValues,
-        definition,
+        this._params,
         "transform"
       )
       this._updateInputBytes()
