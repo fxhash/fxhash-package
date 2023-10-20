@@ -28,9 +28,6 @@ export const fxlensUpdateConfig: ModuleUpdater = {
     }
   },
   update: async latestVersion => {
-    if (!fs.existsSync(TMP_PATH)) {
-      fs.mkdirSync(TMP_PATH, { recursive: true })
-    }
     await ghDownloader.download("fxhash", "fxlens", "build", {
       output: TMP_PATH,
     })
