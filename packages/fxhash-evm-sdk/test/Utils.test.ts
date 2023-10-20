@@ -4,6 +4,7 @@ import {
   fromHex,
   getContractAddress,
   keccak256,
+  slice,
   toBytes,
   toHex,
 } from "viem"
@@ -26,5 +27,16 @@ describe("createProject", () => {
       salt: toBytes(0),
     })
     expect(ticketAddress).toEqual("0xDb807b799addfeA3c4Ba0741C9f6DDAfbFa50F3b")
+  })
+
+  it("should correctly decode tax info", async () => {
+    const hexPaylod =
+      "0x0000000002d8e3a6e610000000038d7ea4c683e80000652fbe650000652e3600"
+    const gracePeriod = fromHex(slice(hexPaylod, 26, 32), "number")
+    const foreclosureTime = fromHex(slice(hexPaylod, 20, 26), "number")
+    const currentPrice = fromHex(slice(hexPaylod, 10, 20), "bigint")
+    const depositAmount = fromHex(slice(hexPaylod, 0, 10), "bigint")
+
+    console.log(gracePeriod)
   })
 })
