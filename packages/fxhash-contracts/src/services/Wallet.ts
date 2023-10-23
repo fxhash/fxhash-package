@@ -220,7 +220,7 @@ export class TezosWalletManager {
       const { sig, pk } = await this.signMessage(payloadBytes)
 
       this.authorization = {
-        payload: payloadBytes,
+        payload,
         signature: sig,
         publicKey: pk,
         network: BlockchainNetwork.TEZOS,
