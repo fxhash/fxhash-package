@@ -78,12 +78,10 @@ export class TezosWalletManager {
   rpcNodes: string[]
 
   constructor() {
-    // TODO: This can be replaced by importing the { config } from 
+    // TODO: This can be replaced by importing the { config } from
     // "@fxhash/config" and rely on the process.env.FXHASH_ENV
     const networkConfig =
-      process.env.NEXT_PUBLIC_TZ_NET === "mainnet"
-        ? prdConfig
-        : devConfig
+      process.env.NEXT_PUBLIC_TZ_NET === "mainnet" ? prdConfig : devConfig
     this.rpcNodes = networkConfig.tez.apis.rpcs
     this.tezosToolkit = new TezosToolkit(this.rpcNodes[0])
     this.instanciateBeaconWallet()
@@ -220,7 +218,7 @@ export class TezosWalletManager {
       const { sig, pk } = await this.signMessage(payloadBytes)
 
       this.authorization = {
-        payload: payloadBytes,
+        payload,
         signature: sig,
         publicKey: pk,
         network: BlockchainNetwork.TEZOS,
