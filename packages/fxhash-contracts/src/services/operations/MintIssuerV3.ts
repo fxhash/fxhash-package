@@ -107,6 +107,7 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
       data: packReserveData(reserve),
     }))
 
+
     const params = {
       amount: distribution.editions!,
       enabled: !!distribution.enabled,
@@ -129,12 +130,12 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
         codex_entry: this.params.data.onChain
           ? {
               type: 2, // ONCHFS
-              value: this.params.metadata.generativeUri!,
+              value: this.params.metadata.generativeUri.split("://")[1],
             }
           : {
               type: 0, // IPFS
               value: stringToByteString(
-                this.params.metadata.generativeUri!
+                this.params.metadata.generativeUri
               ),
             },
       },
