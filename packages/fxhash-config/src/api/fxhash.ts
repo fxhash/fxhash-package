@@ -1,6 +1,7 @@
 export interface IFxhashApis {
   website: string
   main: string
+  hasura: string
   file: string
   fsEmulator: string
   extract: string
@@ -31,6 +32,7 @@ export interface IFxhashApis {
 export const fxhashDevApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
+  hasura: "https://api.fxhash.xyz/v2",
   file: "https://file-api.fxhash-dev.xyz",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
@@ -64,6 +66,7 @@ export const fxhashDevApis: IFxhashApis = {
 export const fxhashPrdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
+  hasura: "https://api.fxhash.xyz/v2",
   file: "https://file-api.fxhash.xyz",
   fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
