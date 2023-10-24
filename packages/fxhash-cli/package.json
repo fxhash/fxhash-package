@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.13",
+  "version": "0.0.12",
   "author": "fxhash",
   "license": "MIT",
   "engines": {
@@ -80,9 +80,9 @@
     "sha1": "1.1.1",
     "style-loader": "3.3.3",
     "tar": "6.2.0",
-    "terser-webpack-plugin": "5.3.9",
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
+    "terser-webpack-plugin": "5.3.9",
     "yargs": "17.7.2",
     "yesno": "0.4.0"
   },
@@ -102,7 +102,6 @@
     "@types/node": "20.6.0",
     "@types/prettier": "2.7.3",
     "@types/sha1": "1.1.3",
-    "@types/tar": "6.1.6",
     "@types/webpack": "5.28.2",
     "@types/webpack-dev-server": "4.7.2",
     "@types/yargs": "17.0.24",
