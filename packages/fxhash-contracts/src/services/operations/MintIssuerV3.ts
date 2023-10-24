@@ -134,7 +134,7 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
           : {
               type: 0, // IPFS
               value: stringToByteString(
-                getIpfsSlash(this.params.metadata.generativeUri!)
+                this.params.metadata.generativeUri!
               ),
             },
       },
