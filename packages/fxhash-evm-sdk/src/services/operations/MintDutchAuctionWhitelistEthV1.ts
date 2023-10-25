@@ -13,6 +13,17 @@ import {
   getWhitelistTree,
 } from "@/utils/whitelist"
 
+/**
+ * The above type represents the parameters required for a MintDutchAuctionWhitelistEthV1 operation in
+ * TypeScript.
+ * @property {string} token - A string representing the token address or identifier.
+ * @property {bigint} price - The `price` property represents the starting price of the Dutch auction.
+ * It is of type `bigint`, which means it can hold large integer values.
+ * @property {bigint} amount - The `amount` property represents the quantity or number of tokens being
+ * auctioned in the Dutch auction.
+ * @property {number} reserveId - The `reserveId` property is a number that represents the identifier
+ * of a reserve in the Mint Dutch Auction Whitelist Eth V1 operation.
+ */
 export type TMintDutchAuctionWhitelistEthV1OperationParams = {
   token: string
   price: bigint
@@ -20,6 +31,8 @@ export type TMintDutchAuctionWhitelistEthV1OperationParams = {
   reserveId: number
 }
 
+/* The MintDutchAutionWhitelistEthV1Operation class is responsible for minting a fixed price token with
+a whitelist in a Dutch auction on the Ethereum network. */
 export class MintDutchAutionWhitelistEthV1Operation extends ContractOperation<TMintDutchAuctionWhitelistEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}

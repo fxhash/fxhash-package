@@ -8,7 +8,7 @@ import {
 } from "@/services/operations/EthCommon"
 
 /**
- * The TMintDAEthV1OperationParams type represents the parameters required for a mint operation in a
+ * The TMintDAMintPassEthV1OperationParams type represents the parameters required for a mint operation in a
  * decentralized exchange.
  * @property {string} token - A string representing the token being used in the operation.
  * @property {bigint} price - The `price` property is of type `bigint`, which represents an arbitrary
@@ -19,18 +19,20 @@ import {
  * @property {number} reserveId - The `reserveId` property is a number that represents the identifier
  * of a reserve.
  */
-export type TMintDAEthV1OperationParams = {
+export type TMintDAMintPassEthV1OperationParams = {
   token: string
   price: bigint
   amount: bigint
   reserveId: number
+  index: number
+  signature: string
 }
 
 /**
  * Mint an unique iteration of a Generative Token using Dutch Auction pricing minter
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
-export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1OperationParams> {
+export class MintDAMintPassEthV1Operation extends ContractOperation<TMintDAMintPassEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
@@ -38,12 +40,14 @@ export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1Operatio
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       abi: DAMinterABI,
-      functionName: "buy",
+      functionName: "buyMintPass",
       args: [
         this.params.token,
         this.params.reserveId,
         this.params.amount,
         account,
+        this.params.index,
+        this.params.signature,
       ],
       account: account,
       value: this.params.price,
@@ -52,6 +56,6 @@ export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1Operatio
   }
 
   success(): string {
-    return `Successfully minted dutch auction token ${this.params.token} for ${this.params.price} ETH`
+    return `Successfully minted dutch auction token ${this.params.token} for ${this.params.price} ETH using mint pass`
   }
 }
