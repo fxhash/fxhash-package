@@ -53,7 +53,10 @@ export type WagmiConfig = {
   appIcon: string
 }
 
-//Returns the public client to access blockchain data
+/**
+ * The function `getPublicClient` returns a public client object with a specified chain and transport.
+ * @returns a public client object.
+ */
 export function getPublicClient(): PublicClient {
   return createPublicClient({
     chain: CURRENT_CHAIN,
@@ -61,7 +64,11 @@ export function getPublicClient(): PublicClient {
   })
 }
 
-//Wrapper to provider the WAGMI config for the wallet
+/**
+ * The getConfig function returns a configuration object for the WAGMI, including details
+ * such as the app name, description, URL, and icon.
+ * @returns The function `getConfig()` is returning an object of type `WagmiConfig`.
+ */
 export function getConfig(): WagmiConfig {
   return {
     publicClient: getPublicClient(),
@@ -79,11 +86,8 @@ export function getConfig(): WagmiConfig {
   }
 }
 
-/**
- * The Wallet Manager class can be used to interract with Taquito API, by providing a level of abstration
- * so that the rest of the app is simpler to write
- * It is responsible for handlinf interactions with the contracts as well
- */
+/* The `WalletManager` class manages the connection to a wallet client, handles RPC node cycling, and
+provides a generic method for running contract operations with error handling and retry logic. */
 export class WalletManager {
   walletClient: WalletClient | undefined
   publicClient: PublicClient

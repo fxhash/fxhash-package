@@ -46,7 +46,7 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: "InvalidSig",
+    name: "InvalidSignature",
     type: "error",
   },
   {
@@ -122,19 +122,19 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "price",
+        name: "_price",
         type: "uint256",
       },
       {
@@ -157,19 +157,19 @@ export const ABI = [
         ],
         indexed: false,
         internalType: "struct ReserveInfo",
-        name: "reserve",
+        name: "_reserveInfo",
         type: "tuple",
       },
       {
         indexed: false,
         internalType: "bool",
-        name: "openEdition",
+        name: "_openEdition",
         type: "bool",
       },
       {
         indexed: false,
         internalType: "bool",
-        name: "timeUnlimited",
+        name: "_timeUnlimited",
         type: "bool",
       },
     ],
@@ -182,37 +182,37 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "buyer",
+        name: "_buyer",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "_amount",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "address",
-        name: "to",
+        name: "_to",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "price",
+        name: "_price",
         type: "uint256",
       },
     ],
@@ -225,19 +225,19 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "creator",
+        name: "_creator",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "proceeds",
+        name: "_proceeds",
         type: "uint256",
       },
     ],
@@ -285,14 +285,14 @@ export const ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint256[]",
-        name: "_indexes",
-        type: "uint256[]",
-      },
-      {
         internalType: "address",
         name: "_to",
         type: "address",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_indexes",
+        type: "uint256[]",
       },
       {
         internalType: "bytes32[][]",
@@ -395,7 +395,7 @@ export const ABI = [
       },
       {
         internalType: "address",
-        name: "_user",
+        name: "_claimer",
         type: "address",
       },
     ],
@@ -418,7 +418,7 @@ export const ABI = [
         type: "address",
       },
     ],
-    name: "lastUpdated",
+    name: "latestUpdates",
     outputs: [
       {
         internalType: "uint256",

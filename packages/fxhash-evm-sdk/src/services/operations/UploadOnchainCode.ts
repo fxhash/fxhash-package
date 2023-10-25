@@ -7,7 +7,7 @@ import {
   TransactionReceipt,
 } from "viem"
 import { ScriptUpload } from "@/types/OnChainCode"
-import { chunkSubstr, stringToBytes } from "@/utils/scripty/utils"
+import { chunkSubstr, stringToBytes } from "@/utils/scripty"
 
 export type TUploadOnchainCodeOperationParams = {
   uploadRequests: ScriptUpload[]

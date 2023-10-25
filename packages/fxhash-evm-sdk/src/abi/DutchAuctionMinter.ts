@@ -61,7 +61,7 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: "InvalidSig",
+    name: "InvalidSignature",
     type: "error",
   },
   {
@@ -176,20 +176,20 @@ export const ABI = [
         ],
         indexed: false,
         internalType: "struct ReserveInfo",
-        name: "_reserve",
+        name: "_reserveInfo",
         type: "tuple",
       },
       {
         components: [
           {
-            internalType: "uint248",
-            name: "stepLength",
-            type: "uint248",
-          },
-          {
             internalType: "bool",
             name: "refunded",
             type: "bool",
+          },
+          {
+            internalType: "uint248",
+            name: "stepLength",
+            type: "uint248",
           },
           {
             internalType: "uint256[]",
@@ -199,7 +199,7 @@ export const ABI = [
         ],
         indexed: false,
         internalType: "struct AuctionInfo",
-        name: "_daInfo",
+        name: "_auctionInfo",
         type: "tuple",
       },
     ],
@@ -324,17 +324,17 @@ export const ABI = [
         type: "uint256",
       },
     ],
-    name: "auctionInfo",
+    name: "auctions",
     outputs: [
-      {
-        internalType: "uint248",
-        name: "stepLength",
-        type: "uint248",
-      },
       {
         internalType: "bool",
         name: "refunded",
         type: "bool",
+      },
+      {
+        internalType: "uint248",
+        name: "stepLength",
+        type: "uint248",
       },
     ],
     stateMutability: "view",
@@ -381,14 +381,14 @@ export const ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint256[]",
-        name: "_indexes",
-        type: "uint256[]",
-      },
-      {
         internalType: "address",
         name: "_to",
         type: "address",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_indexes",
+        type: "uint256[]",
       },
       {
         internalType: "bytes32[][]",
@@ -491,7 +491,7 @@ export const ABI = [
       },
       {
         internalType: "address",
-        name: "_user",
+        name: "_claimer",
         type: "address",
       },
     ],
@@ -538,7 +538,7 @@ export const ABI = [
         type: "address",
       },
     ],
-    name: "lastUpdated",
+    name: "latestUpdates",
     outputs: [
       {
         internalType: "uint256",
@@ -587,7 +587,7 @@ export const ABI = [
       },
       {
         internalType: "address",
-        name: "_who",
+        name: "_buyer",
         type: "address",
       },
     ],
@@ -609,7 +609,7 @@ export const ABI = [
         type: "uint256",
       },
     ],
-    name: "refundInfo",
+    name: "refunds",
     outputs: [
       {
         internalType: "uint256",
@@ -704,7 +704,7 @@ export const ABI = [
       },
       {
         internalType: "bytes",
-        name: "_mintData",
+        name: "_mintDetails",
         type: "bytes",
       },
     ],

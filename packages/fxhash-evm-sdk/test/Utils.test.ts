@@ -1,3 +1,9 @@
+import {
+  WhitelistEntry,
+  getUserWhitelistIndex,
+  getWhitelistTree,
+} from "@/utils/whitelist"
+import { StandardMerkleTree } from "@openzeppelin/merkle-tree"
 import { config as dotenvConfig } from "dotenv"
 import {
   concat,
@@ -38,5 +44,31 @@ describe("createProject", () => {
     const depositAmount = fromHex(slice(hexPaylod, 0, 10), "bigint")
 
     console.log(gracePeriod)
+  })
+
+  it("should correctly set a whitelist, get proof and validate it", async () => {
+    const address0 = "0xBF0BbF31149e8FA7183Cb6eD96a1D2Ab947B8368"
+    const address1 = "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42"
+    const amount = 1
+    const whitelist: WhitelistEntry[] = [
+      {
+        address: address0,
+        amount: amount,
+      },
+      {
+        address: address1,
+        amount: amount,
+      },
+    ]
+    const tree = getWhitelistTree(whitelist)
+    const index = getUserWhitelistIndex(whitelist, address0)
+    const proof = tree.getProof(index)
+    const verified = StandardMerkleTree.verify(
+      tree.root,
+      ["address", "uint256"],
+      [address0, amount.toString()],
+      proof
+    )
+    expect(verified).toEqual(true)
   })
 })
