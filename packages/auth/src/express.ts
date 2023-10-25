@@ -3,6 +3,16 @@ import { hasRole, verifyAuthToken } from "@/authentication"
 import { AuthRole } from "@/types/roles"
 
 /**
+ * Returns the fxhash authentication token if it's present in the request
+ * (first looks for cookies, then x-fxhash-token header).
+ * @param req Express request
+ * @returns A fxhash token present in the request
+ */
+export function getTokenFromRequest(req: Request): string | undefined {
+  return req.cookies?.token || req.headers["x-fxhash-token"]
+}
+
+/**
  * If there is a token cookie in the request, decodes the token cookie and
  * populates the fxhashUser property in the request object for further
  * processing.
@@ -14,7 +24,8 @@ export function fxhashAuthInjectionMiddleware(
   _: Response,
   next: NextFunction
 ) {
-  const token = req.cookies.token
+  console.log(req.cookies)
+  const token = req.cookies?.token || req.headers["x-fxhash-token"]
   if (!token || req.fxhashUser) return next()
   // if there is a token cookie, verify the cookie
   try {
