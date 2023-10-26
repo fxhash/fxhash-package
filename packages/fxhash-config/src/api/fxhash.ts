@@ -36,7 +36,7 @@ export const fxhashDevApis: IFxhashApis = {
   file: "https://file-api.fxhash-dev.xyz",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
-  media: "https://media.fxhash-dev.xyz",
+  media: "https://media.dev.fxhash-dev.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
