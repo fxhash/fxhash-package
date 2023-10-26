@@ -10,7 +10,6 @@ import { useClientAsyncEffect } from "@/hooks/useClientAsyncEffect"
 export interface UserContextType {
   autoConnectChecked: boolean
   user: ConnectedUser | null
-  userFetched: boolean
   walletManager: TezosWalletManager | null
   isLiveMinting: boolean
   connect: (useAutonomy?: boolean) => Promise<void>
@@ -20,7 +19,6 @@ export interface UserContextType {
 const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
-  userFetched: false,
   isLiveMinting: false,
   walletManager: null,
   connect: () => new Promise(r => r()),
@@ -51,7 +49,6 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       setContext({
         ...context,
         user: userData.user,
-        userFetched: true,
       })
     }
   }, [userData])
