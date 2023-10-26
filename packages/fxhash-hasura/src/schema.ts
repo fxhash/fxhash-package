@@ -101,6 +101,154 @@ export type Account_select_column = 'id' | 'status' | 'username'
 export type Account_update_column = 'id' | 'status' | 'username'
 
 
+/** columns and relationships of "Media" */
+export interface Media {
+    bucketId: Scalars['String']
+    createdAt: Scalars['timestamp']
+    etag: Scalars['String']
+    id: Scalars['uuid']
+    name: Scalars['String']
+    s3key: Scalars['String']
+    size: Scalars['Int']
+    updatedAt: Scalars['timestamp']
+    uploaderId: (Scalars['uuid'] | null)
+    __typename: 'Media'
+}
+
+
+/** aggregated selection of "Media" */
+export interface Media_aggregate {
+    aggregate: (Media_aggregate_fields | null)
+    nodes: Media[]
+    __typename: 'Media_aggregate'
+}
+
+
+/** aggregate fields of "Media" */
+export interface Media_aggregate_fields {
+    avg: (Media_avg_fields | null)
+    count: Scalars['Int']
+    max: (Media_max_fields | null)
+    min: (Media_min_fields | null)
+    stddev: (Media_stddev_fields | null)
+    stddev_pop: (Media_stddev_pop_fields | null)
+    stddev_samp: (Media_stddev_samp_fields | null)
+    sum: (Media_sum_fields | null)
+    var_pop: (Media_var_pop_fields | null)
+    var_samp: (Media_var_samp_fields | null)
+    variance: (Media_variance_fields | null)
+    __typename: 'Media_aggregate_fields'
+}
+
+
+/** aggregate avg on columns */
+export interface Media_avg_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_avg_fields'
+}
+
+
+/** unique or primary key constraints on table "Media" */
+export type Media_constraint = 'Media_pkey'
+
+
+/** aggregate max on columns */
+export interface Media_max_fields {
+    bucketId: (Scalars['String'] | null)
+    createdAt: (Scalars['timestamp'] | null)
+    etag: (Scalars['String'] | null)
+    id: (Scalars['uuid'] | null)
+    name: (Scalars['String'] | null)
+    s3key: (Scalars['String'] | null)
+    size: (Scalars['Int'] | null)
+    updatedAt: (Scalars['timestamp'] | null)
+    uploaderId: (Scalars['uuid'] | null)
+    __typename: 'Media_max_fields'
+}
+
+
+/** aggregate min on columns */
+export interface Media_min_fields {
+    bucketId: (Scalars['String'] | null)
+    createdAt: (Scalars['timestamp'] | null)
+    etag: (Scalars['String'] | null)
+    id: (Scalars['uuid'] | null)
+    name: (Scalars['String'] | null)
+    s3key: (Scalars['String'] | null)
+    size: (Scalars['Int'] | null)
+    updatedAt: (Scalars['timestamp'] | null)
+    uploaderId: (Scalars['uuid'] | null)
+    __typename: 'Media_min_fields'
+}
+
+
+/** response of any mutation on the table "Media" */
+export interface Media_mutation_response {
+    /** number of rows affected by the mutation */
+    affected_rows: Scalars['Int']
+    /** data from the rows affected by the mutation */
+    returning: Media[]
+    __typename: 'Media_mutation_response'
+}
+
+
+/** select columns of table "Media" */
+export type Media_select_column = 'bucketId' | 'createdAt' | 'etag' | 'id' | 'name' | 's3key' | 'size' | 'updatedAt' | 'uploaderId'
+
+
+/** aggregate stddev on columns */
+export interface Media_stddev_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_stddev_fields'
+}
+
+
+/** aggregate stddev_pop on columns */
+export interface Media_stddev_pop_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_stddev_pop_fields'
+}
+
+
+/** aggregate stddev_samp on columns */
+export interface Media_stddev_samp_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_stddev_samp_fields'
+}
+
+
+/** aggregate sum on columns */
+export interface Media_sum_fields {
+    size: (Scalars['Int'] | null)
+    __typename: 'Media_sum_fields'
+}
+
+
+/** update columns of table "Media" */
+export type Media_update_column = 'bucketId' | 'createdAt' | 'etag' | 'id' | 'name' | 's3key' | 'size' | 'updatedAt' | 'uploaderId'
+
+
+/** aggregate var_pop on columns */
+export interface Media_var_pop_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_var_pop_fields'
+}
+
+
+/** aggregate var_samp on columns */
+export interface Media_var_samp_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_var_samp_fields'
+}
+
+
+/** aggregate variance on columns */
+export interface Media_variance_fields {
+    size: (Scalars['Float'] | null)
+    __typename: 'Media_variance_fields'
+}
+
+
 /** columns and relationships of "Profile" */
 export interface Profile {
     accountId: Scalars['uuid']
@@ -204,7 +352,7 @@ export interface Project {
 export interface ProjectMedia {
     /** An object relationship */
     ProjectMedia_Project: Project
-    mediaId: Scalars['String']
+    mediaId: Scalars['uuid']
     projectId: Scalars['uuid']
     __typename: 'ProjectMedia'
 }
@@ -233,7 +381,7 @@ export type ProjectMedia_constraint = 'ProjectMedia_projectId_mediaId_key'
 
 /** aggregate max on columns */
 export interface ProjectMedia_max_fields {
-    mediaId: (Scalars['String'] | null)
+    mediaId: (Scalars['uuid'] | null)
     projectId: (Scalars['uuid'] | null)
     __typename: 'ProjectMedia_max_fields'
 }
@@ -241,7 +389,7 @@ export interface ProjectMedia_max_fields {
 
 /** aggregate min on columns */
 export interface ProjectMedia_min_fields {
-    mediaId: (Scalars['String'] | null)
+    mediaId: (Scalars['uuid'] | null)
     projectId: (Scalars['uuid'] | null)
     __typename: 'ProjectMedia_min_fields'
 }
@@ -559,6 +707,10 @@ export interface mutation_root {
     delete_Account: (Account_mutation_response | null)
     /** delete single row from the table: "Account" */
     delete_Account_by_pk: (Account | null)
+    /** delete data from the table: "Media" */
+    delete_Media: (Media_mutation_response | null)
+    /** delete single row from the table: "Media" */
+    delete_Media_by_pk: (Media | null)
     /** delete data from the table: "Profile" */
     delete_Profile: (Profile_mutation_response | null)
     /** delete single row from the table: "Profile" */
@@ -581,6 +733,10 @@ export interface mutation_root {
     insert_Account: (Account_mutation_response | null)
     /** insert a single row into the table: "Account" */
     insert_Account_one: (Account | null)
+    /** insert data into the table: "Media" */
+    insert_Media: (Media_mutation_response | null)
+    /** insert a single row into the table: "Media" */
+    insert_Media_one: (Media | null)
     /** insert data into the table: "Profile" */
     insert_Profile: (Profile_mutation_response | null)
     /** insert a single row into the table: "Profile" */
@@ -607,6 +763,12 @@ export interface mutation_root {
     update_Account_by_pk: (Account | null)
     /** update multiples rows of table: "Account" */
     update_Account_many: ((Account_mutation_response | null)[] | null)
+    /** update data of the table: "Media" */
+    update_Media: (Media_mutation_response | null)
+    /** update single row of the table: "Media" */
+    update_Media_by_pk: (Media | null)
+    /** update multiples rows of table: "Media" */
+    update_Media_many: ((Media_mutation_response | null)[] | null)
     /** update data of the table: "Profile" */
     update_Profile: (Profile_mutation_response | null)
     /** update single row of the table: "Profile" */
@@ -649,6 +811,12 @@ export interface query_root {
     Account_aggregate: Account_aggregate
     /** fetch data from the table: "Account" using primary key columns */
     Account_by_pk: (Account | null)
+    /** fetch data from the table: "Media" */
+    Media: Media[]
+    /** fetch aggregated fields from the table: "Media" */
+    Media_aggregate: Media_aggregate
+    /** fetch data from the table: "Media" using primary key columns */
+    Media_by_pk: (Media | null)
     /** fetch data from the table: "Profile" */
     Profile: Profile[]
     /** fetch aggregated fields from the table: "Profile" */
@@ -689,6 +857,14 @@ export interface subscription_root {
     Account_by_pk: (Account | null)
     /** fetch data from the table in a streaming manner: "Account" */
     Account_stream: Account[]
+    /** fetch data from the table: "Media" */
+    Media: Media[]
+    /** fetch aggregated fields from the table: "Media" */
+    Media_aggregate: Media_aggregate
+    /** fetch data from the table: "Media" using primary key columns */
+    Media_by_pk: (Media | null)
+    /** fetch data from the table in a streaming manner: "Media" */
+    Media_stream: Media[]
     /** fetch data from the table: "Profile" */
     Profile: Profile[]
     /** fetch aggregated fields from the table: "Profile" */
@@ -973,6 +1149,204 @@ export interface BlockchainNetwork_comparison_exp {_eq?: (Scalars['BlockchainNet
 export interface Int_comparison_exp {_eq?: (Scalars['Int'] | null),_gt?: (Scalars['Int'] | null),_gte?: (Scalars['Int'] | null),_in?: (Scalars['Int'][] | null),_is_null?: (Scalars['Boolean'] | null),_lt?: (Scalars['Int'] | null),_lte?: (Scalars['Int'] | null),_neq?: (Scalars['Int'] | null),_nin?: (Scalars['Int'][] | null)}
 
 
+/** columns and relationships of "Media" */
+export interface MediaGenqlSelection{
+    bucketId?: boolean | number
+    createdAt?: boolean | number
+    etag?: boolean | number
+    id?: boolean | number
+    name?: boolean | number
+    s3key?: boolean | number
+    size?: boolean | number
+    updatedAt?: boolean | number
+    uploaderId?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregated selection of "Media" */
+export interface Media_aggregateGenqlSelection{
+    aggregate?: Media_aggregate_fieldsGenqlSelection
+    nodes?: MediaGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate fields of "Media" */
+export interface Media_aggregate_fieldsGenqlSelection{
+    avg?: Media_avg_fieldsGenqlSelection
+    count?: { __args: {columns?: (Media_select_column[] | null), distinct?: (Scalars['Boolean'] | null)} } | boolean | number
+    max?: Media_max_fieldsGenqlSelection
+    min?: Media_min_fieldsGenqlSelection
+    stddev?: Media_stddev_fieldsGenqlSelection
+    stddev_pop?: Media_stddev_pop_fieldsGenqlSelection
+    stddev_samp?: Media_stddev_samp_fieldsGenqlSelection
+    sum?: Media_sum_fieldsGenqlSelection
+    var_pop?: Media_var_pop_fieldsGenqlSelection
+    var_samp?: Media_var_samp_fieldsGenqlSelection
+    variance?: Media_variance_fieldsGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate avg on columns */
+export interface Media_avg_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** Boolean expression to filter rows from the table "Media". All fields are combined with a logical 'AND'. */
+export interface Media_bool_exp {_and?: (Media_bool_exp[] | null),_not?: (Media_bool_exp | null),_or?: (Media_bool_exp[] | null),bucketId?: (String_comparison_exp | null),createdAt?: (timestamp_comparison_exp | null),etag?: (String_comparison_exp | null),id?: (uuid_comparison_exp | null),name?: (String_comparison_exp | null),s3key?: (String_comparison_exp | null),size?: (Int_comparison_exp | null),updatedAt?: (timestamp_comparison_exp | null),uploaderId?: (uuid_comparison_exp | null)}
+
+
+/** input type for incrementing numeric columns in table "Media" */
+export interface Media_inc_input {size?: (Scalars['Int'] | null)}
+
+
+/** input type for inserting data into table "Media" */
+export interface Media_insert_input {bucketId?: (Scalars['String'] | null),createdAt?: (Scalars['timestamp'] | null),etag?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),name?: (Scalars['String'] | null),s3key?: (Scalars['String'] | null),size?: (Scalars['Int'] | null),updatedAt?: (Scalars['timestamp'] | null),uploaderId?: (Scalars['uuid'] | null)}
+
+
+/** aggregate max on columns */
+export interface Media_max_fieldsGenqlSelection{
+    bucketId?: boolean | number
+    createdAt?: boolean | number
+    etag?: boolean | number
+    id?: boolean | number
+    name?: boolean | number
+    s3key?: boolean | number
+    size?: boolean | number
+    updatedAt?: boolean | number
+    uploaderId?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate min on columns */
+export interface Media_min_fieldsGenqlSelection{
+    bucketId?: boolean | number
+    createdAt?: boolean | number
+    etag?: boolean | number
+    id?: boolean | number
+    name?: boolean | number
+    s3key?: boolean | number
+    size?: boolean | number
+    updatedAt?: boolean | number
+    uploaderId?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** response of any mutation on the table "Media" */
+export interface Media_mutation_responseGenqlSelection{
+    /** number of rows affected by the mutation */
+    affected_rows?: boolean | number
+    /** data from the rows affected by the mutation */
+    returning?: MediaGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** on_conflict condition type for table "Media" */
+export interface Media_on_conflict {constraint: Media_constraint,update_columns?: Media_update_column[],where?: (Media_bool_exp | null)}
+
+
+/** Ordering options when selecting data from "Media". */
+export interface Media_order_by {bucketId?: (order_by | null),createdAt?: (order_by | null),etag?: (order_by | null),id?: (order_by | null),name?: (order_by | null),s3key?: (order_by | null),size?: (order_by | null),updatedAt?: (order_by | null),uploaderId?: (order_by | null)}
+
+
+/** primary key columns input for table: Media */
+export interface Media_pk_columns_input {id: Scalars['uuid']}
+
+
+/** input type for updating data in table "Media" */
+export interface Media_set_input {bucketId?: (Scalars['String'] | null),createdAt?: (Scalars['timestamp'] | null),etag?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),name?: (Scalars['String'] | null),s3key?: (Scalars['String'] | null),size?: (Scalars['Int'] | null),updatedAt?: (Scalars['timestamp'] | null),uploaderId?: (Scalars['uuid'] | null)}
+
+
+/** aggregate stddev on columns */
+export interface Media_stddev_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate stddev_pop on columns */
+export interface Media_stddev_pop_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate stddev_samp on columns */
+export interface Media_stddev_samp_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** Streaming cursor of the table "Media" */
+export interface Media_stream_cursor_input {
+/** Stream column input with initial value */
+initial_value: Media_stream_cursor_value_input,
+/** cursor ordering */
+ordering?: (cursor_ordering | null)}
+
+
+/** Initial value of the column from where the streaming should start */
+export interface Media_stream_cursor_value_input {bucketId?: (Scalars['String'] | null),createdAt?: (Scalars['timestamp'] | null),etag?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),name?: (Scalars['String'] | null),s3key?: (Scalars['String'] | null),size?: (Scalars['Int'] | null),updatedAt?: (Scalars['timestamp'] | null),uploaderId?: (Scalars['uuid'] | null)}
+
+
+/** aggregate sum on columns */
+export interface Media_sum_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface Media_updates {
+/** increments the numeric columns with given value of the filtered values */
+_inc?: (Media_inc_input | null),
+/** sets the columns of the filtered rows to the given values */
+_set?: (Media_set_input | null),
+/** filter the rows which have to be updated */
+where: Media_bool_exp}
+
+
+/** aggregate var_pop on columns */
+export interface Media_var_pop_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate var_samp on columns */
+export interface Media_var_samp_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** aggregate variance on columns */
+export interface Media_variance_fieldsGenqlSelection{
+    size?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
 /** columns and relationships of "Profile" */
 export interface ProfileGenqlSelection{
     accountId?: boolean | number
@@ -1184,11 +1558,11 @@ export interface ProjectMedia_aggregate_fieldsGenqlSelection{
 
 
 /** Boolean expression to filter rows from the table "ProjectMedia". All fields are combined with a logical 'AND'. */
-export interface ProjectMedia_bool_exp {ProjectMedia_Project?: (Project_bool_exp | null),_and?: (ProjectMedia_bool_exp[] | null),_not?: (ProjectMedia_bool_exp | null),_or?: (ProjectMedia_bool_exp[] | null),mediaId?: (String_comparison_exp | null),projectId?: (uuid_comparison_exp | null)}
+export interface ProjectMedia_bool_exp {ProjectMedia_Project?: (Project_bool_exp | null),_and?: (ProjectMedia_bool_exp[] | null),_not?: (ProjectMedia_bool_exp | null),_or?: (ProjectMedia_bool_exp[] | null),mediaId?: (uuid_comparison_exp | null),projectId?: (uuid_comparison_exp | null)}
 
 
 /** input type for inserting data into table "ProjectMedia" */
-export interface ProjectMedia_insert_input {ProjectMedia_Project?: (Project_obj_rel_insert_input | null),mediaId?: (Scalars['String'] | null),projectId?: (Scalars['uuid'] | null)}
+export interface ProjectMedia_insert_input {ProjectMedia_Project?: (Project_obj_rel_insert_input | null),mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
 
 
 /** aggregate max on columns */
@@ -1229,7 +1603,7 @@ export interface ProjectMedia_order_by {ProjectMedia_Project?: (Project_order_by
 
 
 /** input type for updating data in table "ProjectMedia" */
-export interface ProjectMedia_set_input {mediaId?: (Scalars['String'] | null),projectId?: (Scalars['uuid'] | null)}
+export interface ProjectMedia_set_input {mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
 
 
 /** Streaming cursor of the table "ProjectMedia" */
@@ -1241,7 +1615,7 @@ ordering?: (cursor_ordering | null)}
 
 
 /** Initial value of the column from where the streaming should start */
-export interface ProjectMedia_stream_cursor_value_input {mediaId?: (Scalars['String'] | null),projectId?: (Scalars['uuid'] | null)}
+export interface ProjectMedia_stream_cursor_value_input {mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
 
 export interface ProjectMedia_updates {
 /** sets the columns of the filtered rows to the given values */
@@ -1791,6 +2165,12 @@ export interface mutation_rootGenqlSelection{
     where: Account_bool_exp} })
     /** delete single row from the table: "Account" */
     delete_Account_by_pk?: (AccountGenqlSelection & { __args: {id: Scalars['uuid']} })
+    /** delete data from the table: "Media" */
+    delete_Media?: (Media_mutation_responseGenqlSelection & { __args: {
+    /** filter the rows which have to be deleted */
+    where: Media_bool_exp} })
+    /** delete single row from the table: "Media" */
+    delete_Media_by_pk?: (MediaGenqlSelection & { __args: {id: Scalars['uuid']} })
     /** delete data from the table: "Profile" */
     delete_Profile?: (Profile_mutation_responseGenqlSelection & { __args: {
     /** filter the rows which have to be deleted */
@@ -1831,6 +2211,18 @@ export interface mutation_rootGenqlSelection{
     object: Account_insert_input, 
     /** upsert condition */
     on_conflict?: (Account_on_conflict | null)} })
+    /** insert data into the table: "Media" */
+    insert_Media?: (Media_mutation_responseGenqlSelection & { __args: {
+    /** the rows to be inserted */
+    objects: Media_insert_input[], 
+    /** upsert condition */
+    on_conflict?: (Media_on_conflict | null)} })
+    /** insert a single row into the table: "Media" */
+    insert_Media_one?: (MediaGenqlSelection & { __args: {
+    /** the row to be inserted */
+    object: Media_insert_input, 
+    /** upsert condition */
+    on_conflict?: (Media_on_conflict | null)} })
     /** insert data into the table: "Profile" */
     insert_Profile?: (Profile_mutation_responseGenqlSelection & { __args: {
     /** the rows to be inserted */
@@ -1905,6 +2297,24 @@ export interface mutation_rootGenqlSelection{
     update_Account_many?: (Account_mutation_responseGenqlSelection & { __args: {
     /** updates to execute, in order */
     updates: Account_updates[]} })
+    /** update data of the table: "Media" */
+    update_Media?: (Media_mutation_responseGenqlSelection & { __args: {
+    /** increments the numeric columns with given value of the filtered values */
+    _inc?: (Media_inc_input | null), 
+    /** sets the columns of the filtered rows to the given values */
+    _set?: (Media_set_input | null), 
+    /** filter the rows which have to be updated */
+    where: Media_bool_exp} })
+    /** update single row of the table: "Media" */
+    update_Media_by_pk?: (MediaGenqlSelection & { __args: {
+    /** increments the numeric columns with given value of the filtered values */
+    _inc?: (Media_inc_input | null), 
+    /** sets the columns of the filtered rows to the given values */
+    _set?: (Media_set_input | null), pk_columns: Media_pk_columns_input} })
+    /** update multiples rows of table: "Media" */
+    update_Media_many?: (Media_mutation_responseGenqlSelection & { __args: {
+    /** updates to execute, in order */
+    updates: Media_updates[]} })
     /** update data of the table: "Profile" */
     update_Profile?: (Profile_mutation_responseGenqlSelection & { __args: {
     /** sets the columns of the filtered rows to the given values */
@@ -2026,6 +2436,32 @@ export interface query_rootGenqlSelection{
     where?: (Account_bool_exp | null)} })
     /** fetch data from the table: "Account" using primary key columns */
     Account_by_pk?: (AccountGenqlSelection & { __args: {id: Scalars['uuid']} })
+    /** fetch data from the table: "Media" */
+    Media?: (MediaGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Media_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Media_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Media_bool_exp | null)} })
+    /** fetch aggregated fields from the table: "Media" */
+    Media_aggregate?: (Media_aggregateGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Media_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Media_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Media_bool_exp | null)} })
+    /** fetch data from the table: "Media" using primary key columns */
+    Media_by_pk?: (MediaGenqlSelection & { __args: {id: Scalars['uuid']} })
     /** fetch data from the table: "Profile" */
     Profile?: (ProfileGenqlSelection & { __args?: {
     /** distinct select on columns */
@@ -2193,6 +2629,40 @@ export interface subscription_rootGenqlSelection{
     cursor: (Account_stream_cursor_input | null)[], 
     /** filter the rows returned */
     where?: (Account_bool_exp | null)} })
+    /** fetch data from the table: "Media" */
+    Media?: (MediaGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Media_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Media_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Media_bool_exp | null)} })
+    /** fetch aggregated fields from the table: "Media" */
+    Media_aggregate?: (Media_aggregateGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Media_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Media_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Media_bool_exp | null)} })
+    /** fetch data from the table: "Media" using primary key columns */
+    Media_by_pk?: (MediaGenqlSelection & { __args: {id: Scalars['uuid']} })
+    /** fetch data from the table in a streaming manner: "Media" */
+    Media_stream?: (MediaGenqlSelection & { __args: {
+    /** maximum number of rows returned in a single batch */
+    batch_size: Scalars['Int'], 
+    /** cursor to stream the results returned by the query */
+    cursor: (Media_stream_cursor_input | null)[], 
+    /** filter the rows returned */
+    where?: (Media_bool_exp | null)} })
     /** fetch data from the table: "Profile" */
     Profile?: (ProfileGenqlSelection & { __args?: {
     /** distinct select on columns */
@@ -2426,6 +2896,118 @@ export type SubscriptionGenqlSelection = subscription_rootGenqlSelection
     export const isAccount_mutation_response = (obj?: { __typename?: any } | null): obj is Account_mutation_response => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isAccount_mutation_response"')
       return Account_mutation_response_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_possibleTypes: string[] = ['Media']
+    export const isMedia = (obj?: { __typename?: any } | null): obj is Media => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia"')
+      return Media_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_aggregate_possibleTypes: string[] = ['Media_aggregate']
+    export const isMedia_aggregate = (obj?: { __typename?: any } | null): obj is Media_aggregate => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_aggregate"')
+      return Media_aggregate_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_aggregate_fields_possibleTypes: string[] = ['Media_aggregate_fields']
+    export const isMedia_aggregate_fields = (obj?: { __typename?: any } | null): obj is Media_aggregate_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_aggregate_fields"')
+      return Media_aggregate_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_avg_fields_possibleTypes: string[] = ['Media_avg_fields']
+    export const isMedia_avg_fields = (obj?: { __typename?: any } | null): obj is Media_avg_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_avg_fields"')
+      return Media_avg_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_max_fields_possibleTypes: string[] = ['Media_max_fields']
+    export const isMedia_max_fields = (obj?: { __typename?: any } | null): obj is Media_max_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_max_fields"')
+      return Media_max_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_min_fields_possibleTypes: string[] = ['Media_min_fields']
+    export const isMedia_min_fields = (obj?: { __typename?: any } | null): obj is Media_min_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_min_fields"')
+      return Media_min_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_mutation_response_possibleTypes: string[] = ['Media_mutation_response']
+    export const isMedia_mutation_response = (obj?: { __typename?: any } | null): obj is Media_mutation_response => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_mutation_response"')
+      return Media_mutation_response_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_stddev_fields_possibleTypes: string[] = ['Media_stddev_fields']
+    export const isMedia_stddev_fields = (obj?: { __typename?: any } | null): obj is Media_stddev_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_stddev_fields"')
+      return Media_stddev_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_stddev_pop_fields_possibleTypes: string[] = ['Media_stddev_pop_fields']
+    export const isMedia_stddev_pop_fields = (obj?: { __typename?: any } | null): obj is Media_stddev_pop_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_stddev_pop_fields"')
+      return Media_stddev_pop_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_stddev_samp_fields_possibleTypes: string[] = ['Media_stddev_samp_fields']
+    export const isMedia_stddev_samp_fields = (obj?: { __typename?: any } | null): obj is Media_stddev_samp_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_stddev_samp_fields"')
+      return Media_stddev_samp_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_sum_fields_possibleTypes: string[] = ['Media_sum_fields']
+    export const isMedia_sum_fields = (obj?: { __typename?: any } | null): obj is Media_sum_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_sum_fields"')
+      return Media_sum_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_var_pop_fields_possibleTypes: string[] = ['Media_var_pop_fields']
+    export const isMedia_var_pop_fields = (obj?: { __typename?: any } | null): obj is Media_var_pop_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_var_pop_fields"')
+      return Media_var_pop_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_var_samp_fields_possibleTypes: string[] = ['Media_var_samp_fields']
+    export const isMedia_var_samp_fields = (obj?: { __typename?: any } | null): obj is Media_var_samp_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_var_samp_fields"')
+      return Media_var_samp_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Media_variance_fields_possibleTypes: string[] = ['Media_variance_fields']
+    export const isMedia_variance_fields = (obj?: { __typename?: any } | null): obj is Media_variance_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMedia_variance_fields"')
+      return Media_variance_fields_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2772,6 +3354,34 @@ export const enumAccountUpdateColumn = {
    id: 'id' as const,
    status: 'status' as const,
    username: 'username' as const
+}
+
+export const enumMediaConstraint = {
+   Media_pkey: 'Media_pkey' as const
+}
+
+export const enumMediaSelectColumn = {
+   bucketId: 'bucketId' as const,
+   createdAt: 'createdAt' as const,
+   etag: 'etag' as const,
+   id: 'id' as const,
+   name: 'name' as const,
+   s3key: 's3key' as const,
+   size: 'size' as const,
+   updatedAt: 'updatedAt' as const,
+   uploaderId: 'uploaderId' as const
+}
+
+export const enumMediaUpdateColumn = {
+   bucketId: 'bucketId' as const,
+   createdAt: 'createdAt' as const,
+   etag: 'etag' as const,
+   id: 'id' as const,
+   name: 'name' as const,
+   s3key: 's3key' as const,
+   size: 'size' as const,
+   updatedAt: 'updatedAt' as const,
+   uploaderId: 'uploaderId' as const
 }
 
 export const enumProfileConstraint = {
