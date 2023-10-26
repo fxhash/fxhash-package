@@ -18,78 +18,6 @@ columns and relationships of "Account"
 """
 type Account {
   """An array relationship"""
-  Account_Profiles(
-    """distinct select on columns"""
-    distinct_on: [Profile_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [Profile_order_by!]
-
-    """filter the rows returned"""
-    where: Profile_bool_exp
-  ): [Profile!]!
-
-  """An aggregate relationship"""
-  Account_Profiles_aggregate(
-    """distinct select on columns"""
-    distinct_on: [Profile_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [Profile_order_by!]
-
-    """filter the rows returned"""
-    where: Profile_bool_exp
-  ): Profile_aggregate!
-
-  """An array relationship"""
-  Account_Wallets(
-    """distinct select on columns"""
-    distinct_on: [Wallet_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [Wallet_order_by!]
-
-    """filter the rows returned"""
-    where: Wallet_bool_exp
-  ): [Wallet!]!
-
-  """An aggregate relationship"""
-  Account_Wallets_aggregate(
-    """distinct select on columns"""
-    distinct_on: [Wallet_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [Wallet_order_by!]
-
-    """filter the rows returned"""
-    where: Wallet_bool_exp
-  ): Wallet_aggregate!
-
-  """An array relationship"""
   authoredProjects(
     """distinct select on columns"""
     distinct_on: [Project_select_column!]
@@ -161,8 +89,80 @@ type Account {
     where: Project_bool_exp
   ): Project_aggregate!
   id: uuid!
+
+  """An array relationship"""
+  profile(
+    """distinct select on columns"""
+    distinct_on: [Profile_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Profile_order_by!]
+
+    """filter the rows returned"""
+    where: Profile_bool_exp
+  ): [Profile!]!
+
+  """An aggregate relationship"""
+  profile_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Profile_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Profile_order_by!]
+
+    """filter the rows returned"""
+    where: Profile_bool_exp
+  ): Profile_aggregate!
   status: AccountStatus!
   username: String!
+
+  """An array relationship"""
+  wallets(
+    """distinct select on columns"""
+    distinct_on: [Wallet_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Wallet_order_by!]
+
+    """filter the rows returned"""
+    where: Wallet_bool_exp
+  ): [Wallet!]!
+
+  """An aggregate relationship"""
+  wallets_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Wallet_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Wallet_order_by!]
+
+    """filter the rows returned"""
+    where: Wallet_bool_exp
+  ): Wallet_aggregate!
 }
 
 scalar AccountStatus
@@ -190,17 +190,6 @@ type Account_aggregate {
   nodes: [Account!]!
 }
 
-input Account_aggregate_bool_exp {
-  count: Account_aggregate_bool_exp_count
-}
-
-input Account_aggregate_bool_exp_count {
-  arguments: [Account_select_column!]
-  distinct: Boolean
-  filter: Account_bool_exp
-  predicate: Int_comparison_exp!
-}
-
 """
 aggregate fields of "Account"
 """
@@ -211,32 +200,9 @@ type Account_aggregate_fields {
 }
 
 """
-order by aggregate values of table "Account"
-"""
-input Account_aggregate_order_by {
-  count: order_by
-  max: Account_max_order_by
-  min: Account_min_order_by
-}
-
-"""
-input type for inserting array relation for remote table "Account"
-"""
-input Account_arr_rel_insert_input {
-  data: [Account_insert_input!]!
-
-  """upsert condition"""
-  on_conflict: Account_on_conflict
-}
-
-"""
 Boolean expression to filter rows from the table "Account". All fields are combined with a logical 'AND'.
 """
 input Account_bool_exp {
-  Account_Profiles: Profile_bool_exp
-  Account_Profiles_aggregate: Profile_aggregate_bool_exp
-  Account_Wallets: Wallet_bool_exp
-  Account_Wallets_aggregate: Wallet_aggregate_bool_exp
   _and: [Account_bool_exp!]
   _not: Account_bool_exp
   _or: [Account_bool_exp!]
@@ -245,8 +211,12 @@ input Account_bool_exp {
   curatedProjects: Project_bool_exp
   curatedProjects_aggregate: Project_aggregate_bool_exp
   id: uuid_comparison_exp
+  profile: Profile_bool_exp
+  profile_aggregate: Profile_aggregate_bool_exp
   status: AccountStatus_comparison_exp
   username: String_comparison_exp
+  wallets: Wallet_bool_exp
+  wallets_aggregate: Wallet_aggregate_bool_exp
 }
 
 """
@@ -268,13 +238,13 @@ enum Account_constraint {
 input type for inserting data into table "Account"
 """
 input Account_insert_input {
-  Account_Profiles: Profile_arr_rel_insert_input
-  Account_Wallets: Wallet_arr_rel_insert_input
   authoredProjects: Project_arr_rel_insert_input
   curatedProjects: Project_arr_rel_insert_input
   id: uuid
+  profile: Profile_arr_rel_insert_input
   status: AccountStatus
   username: String
+  wallets: Wallet_arr_rel_insert_input
 }
 
 """aggregate max on columns"""
@@ -284,29 +254,11 @@ type Account_max_fields {
   username: String
 }
 
-"""
-order by max() on columns of table "Account"
-"""
-input Account_max_order_by {
-  id: order_by
-  status: order_by
-  username: order_by
-}
-
 """aggregate min on columns"""
 type Account_min_fields {
   id: uuid
   status: AccountStatus
   username: String
-}
-
-"""
-order by min() on columns of table "Account"
-"""
-input Account_min_order_by {
-  id: order_by
-  status: order_by
-  username: order_by
 }
 
 """
@@ -341,13 +293,13 @@ input Account_on_conflict {
 
 """Ordering options when selecting data from "Account"."""
 input Account_order_by {
-  Account_Profiles_aggregate: Profile_aggregate_order_by
-  Account_Wallets_aggregate: Wallet_aggregate_order_by
   authoredProjects_aggregate: Project_aggregate_order_by
   curatedProjects_aggregate: Project_aggregate_order_by
   id: order_by
+  profile_aggregate: Profile_aggregate_order_by
   status: order_by
   username: order_by
+  wallets_aggregate: Wallet_aggregate_order_by
 }
 
 """primary key columns input for table: Account"""
@@ -459,10 +411,50 @@ type Media {
   etag: String!
   id: uuid!
   name: String!
+
+  """An array relationship"""
+  project(
+    """distinct select on columns"""
+    distinct_on: [ProjectMedia_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ProjectMedia_order_by!]
+
+    """filter the rows returned"""
+    where: ProjectMedia_bool_exp
+  ): [ProjectMedia!]!
+
+  """An aggregate relationship"""
+  project_aggregate(
+    """distinct select on columns"""
+    distinct_on: [ProjectMedia_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ProjectMedia_order_by!]
+
+    """filter the rows returned"""
+    where: ProjectMedia_bool_exp
+  ): ProjectMedia_aggregate!
   s3key: String!
   size: Int!
   updatedAt: timestamp!
+
+  """An object relationship"""
+  uploader: Account
   uploaderId: uuid
+  url: String!
 }
 
 """
@@ -507,9 +499,12 @@ input Media_bool_exp {
   etag: String_comparison_exp
   id: uuid_comparison_exp
   name: String_comparison_exp
+  project: ProjectMedia_bool_exp
+  project_aggregate: ProjectMedia_aggregate_bool_exp
   s3key: String_comparison_exp
   size: Int_comparison_exp
   updatedAt: timestamp_comparison_exp
+  uploader: Account_bool_exp
   uploaderId: uuid_comparison_exp
 }
 
@@ -539,9 +534,11 @@ input Media_insert_input {
   etag: String
   id: uuid
   name: String
+  project: ProjectMedia_arr_rel_insert_input
   s3key: String
   size: Int
   updatedAt: timestamp
+  uploader: Account_obj_rel_insert_input
   uploaderId: uuid
 }
 
@@ -583,6 +580,16 @@ type Media_mutation_response {
 }
 
 """
+input type for inserting object relation for remote table "Media"
+"""
+input Media_obj_rel_insert_input {
+  data: Media_insert_input!
+
+  """upsert condition"""
+  on_conflict: Media_on_conflict
+}
+
+"""
 on_conflict condition type for table "Media"
 """
 input Media_on_conflict {
@@ -598,9 +605,11 @@ input Media_order_by {
   etag: order_by
   id: order_by
   name: order_by
+  project_aggregate: ProjectMedia_aggregate_order_by
   s3key: order_by
   size: order_by
   updatedAt: order_by
+  uploader: Account_order_by
   uploaderId: order_by
 }
 
@@ -1024,9 +1033,14 @@ input Profile_updates {
 columns and relationships of "Project"
 """
 type Project {
+  """An object relationship"""
+  author: Account!
   authorId: uuid!
   blockchain: BlockchainNetwork
   createdAt: timestamp!
+
+  """An object relationship"""
+  curator: Account
   curatorId: uuid
   description: String
   id: uuid!
@@ -1035,13 +1049,10 @@ type Project {
     path: String
   ): jsonb
 
-  """An object relationship"""
-  projectAuthor: Account!
-
   """An array relationship"""
-  projectCurator(
+  projectMedias(
     """distinct select on columns"""
-    distinct_on: [Account_select_column!]
+    distinct_on: [ProjectMedia_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -1050,16 +1061,16 @@ type Project {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [Account_order_by!]
+    order_by: [ProjectMedia_order_by!]
 
     """filter the rows returned"""
-    where: Account_bool_exp
-  ): [Account!]!
+    where: ProjectMedia_bool_exp
+  ): [ProjectMedia!]!
 
   """An aggregate relationship"""
-  projectCurator_aggregate(
+  projectMedias_aggregate(
     """distinct select on columns"""
-    distinct_on: [Account_select_column!]
+    distinct_on: [ProjectMedia_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -1068,11 +1079,11 @@ type Project {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [Account_order_by!]
+    order_by: [ProjectMedia_order_by!]
 
     """filter the rows returned"""
-    where: Account_bool_exp
-  ): Account_aggregate!
+    where: ProjectMedia_bool_exp
+  ): ProjectMedia_aggregate!
   releaseAt: timestamp
   state: ProjectState!
   storage: Storage
@@ -1084,9 +1095,14 @@ type Project {
 columns and relationships of "ProjectMedia"
 """
 type ProjectMedia {
+  index: smallint!
+
   """An object relationship"""
-  ProjectMedia_Project: Project!
+  media: Media!
   mediaId: uuid!
+
+  """An object relationship"""
+  project: Project!
   projectId: uuid!
 }
 
@@ -1098,24 +1114,84 @@ type ProjectMedia_aggregate {
   nodes: [ProjectMedia!]!
 }
 
+input ProjectMedia_aggregate_bool_exp {
+  count: ProjectMedia_aggregate_bool_exp_count
+}
+
+input ProjectMedia_aggregate_bool_exp_count {
+  arguments: [ProjectMedia_select_column!]
+  distinct: Boolean
+  filter: ProjectMedia_bool_exp
+  predicate: Int_comparison_exp!
+}
+
 """
 aggregate fields of "ProjectMedia"
 """
 type ProjectMedia_aggregate_fields {
+  avg: ProjectMedia_avg_fields
   count(columns: [ProjectMedia_select_column!], distinct: Boolean): Int!
   max: ProjectMedia_max_fields
   min: ProjectMedia_min_fields
+  stddev: ProjectMedia_stddev_fields
+  stddev_pop: ProjectMedia_stddev_pop_fields
+  stddev_samp: ProjectMedia_stddev_samp_fields
+  sum: ProjectMedia_sum_fields
+  var_pop: ProjectMedia_var_pop_fields
+  var_samp: ProjectMedia_var_samp_fields
+  variance: ProjectMedia_variance_fields
+}
+
+"""
+order by aggregate values of table "ProjectMedia"
+"""
+input ProjectMedia_aggregate_order_by {
+  avg: ProjectMedia_avg_order_by
+  count: order_by
+  max: ProjectMedia_max_order_by
+  min: ProjectMedia_min_order_by
+  stddev: ProjectMedia_stddev_order_by
+  stddev_pop: ProjectMedia_stddev_pop_order_by
+  stddev_samp: ProjectMedia_stddev_samp_order_by
+  sum: ProjectMedia_sum_order_by
+  var_pop: ProjectMedia_var_pop_order_by
+  var_samp: ProjectMedia_var_samp_order_by
+  variance: ProjectMedia_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ProjectMedia"
+"""
+input ProjectMedia_arr_rel_insert_input {
+  data: [ProjectMedia_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: ProjectMedia_on_conflict
+}
+
+"""aggregate avg on columns"""
+type ProjectMedia_avg_fields {
+  index: Float
+}
+
+"""
+order by avg() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_avg_order_by {
+  index: order_by
 }
 
 """
 Boolean expression to filter rows from the table "ProjectMedia". All fields are combined with a logical 'AND'.
 """
 input ProjectMedia_bool_exp {
-  ProjectMedia_Project: Project_bool_exp
   _and: [ProjectMedia_bool_exp!]
   _not: ProjectMedia_bool_exp
   _or: [ProjectMedia_bool_exp!]
+  index: smallint_comparison_exp
+  media: Media_bool_exp
   mediaId: uuid_comparison_exp
+  project: Project_bool_exp
   projectId: uuid_comparison_exp
 }
 
@@ -1124,30 +1200,59 @@ unique or primary key constraints on table "ProjectMedia"
 """
 enum ProjectMedia_constraint {
   """
-  unique or primary key constraint on columns "mediaId", "projectId"
+  unique or primary key constraint on columns "index", "mediaId", "projectId"
   """
-  ProjectMedia_projectId_mediaId_key
+  ProjectMedia_index_projectId_mediaId_key
+}
+
+"""
+input type for incrementing numeric columns in table "ProjectMedia"
+"""
+input ProjectMedia_inc_input {
+  index: smallint
 }
 
 """
 input type for inserting data into table "ProjectMedia"
 """
 input ProjectMedia_insert_input {
-  ProjectMedia_Project: Project_obj_rel_insert_input
+  index: smallint
+  media: Media_obj_rel_insert_input
   mediaId: uuid
+  project: Project_obj_rel_insert_input
   projectId: uuid
 }
 
 """aggregate max on columns"""
 type ProjectMedia_max_fields {
+  index: smallint
   mediaId: uuid
   projectId: uuid
 }
 
+"""
+order by max() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_max_order_by {
+  index: order_by
+  mediaId: order_by
+  projectId: order_by
+}
+
 """aggregate min on columns"""
 type ProjectMedia_min_fields {
+  index: smallint
   mediaId: uuid
   projectId: uuid
+}
+
+"""
+order by min() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_min_order_by {
+  index: order_by
+  mediaId: order_by
+  projectId: order_by
 }
 
 """
@@ -1172,8 +1277,10 @@ input ProjectMedia_on_conflict {
 
 """Ordering options when selecting data from "ProjectMedia"."""
 input ProjectMedia_order_by {
-  ProjectMedia_Project: Project_order_by
+  index: order_by
+  media: Media_order_by
   mediaId: order_by
+  project: Project_order_by
   projectId: order_by
 }
 
@@ -1181,6 +1288,9 @@ input ProjectMedia_order_by {
 select columns of table "ProjectMedia"
 """
 enum ProjectMedia_select_column {
+  """column name"""
+  index
+
   """column name"""
   mediaId
 
@@ -1192,8 +1302,45 @@ enum ProjectMedia_select_column {
 input type for updating data in table "ProjectMedia"
 """
 input ProjectMedia_set_input {
+  index: smallint
   mediaId: uuid
   projectId: uuid
+}
+
+"""aggregate stddev on columns"""
+type ProjectMedia_stddev_fields {
+  index: Float
+}
+
+"""
+order by stddev() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_stddev_order_by {
+  index: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type ProjectMedia_stddev_pop_fields {
+  index: Float
+}
+
+"""
+order by stddev_pop() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_stddev_pop_order_by {
+  index: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type ProjectMedia_stddev_samp_fields {
+  index: Float
+}
+
+"""
+order by stddev_samp() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_stddev_samp_order_by {
+  index: order_by
 }
 
 """
@@ -1209,14 +1356,30 @@ input ProjectMedia_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input ProjectMedia_stream_cursor_value_input {
+  index: smallint
   mediaId: uuid
   projectId: uuid
+}
+
+"""aggregate sum on columns"""
+type ProjectMedia_sum_fields {
+  index: smallint
+}
+
+"""
+order by sum() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_sum_order_by {
+  index: order_by
 }
 
 """
 update columns of table "ProjectMedia"
 """
 enum ProjectMedia_update_column {
+  """column name"""
+  index
+
   """column name"""
   mediaId
 
@@ -1225,11 +1388,50 @@ enum ProjectMedia_update_column {
 }
 
 input ProjectMedia_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: ProjectMedia_inc_input
+
   """sets the columns of the filtered rows to the given values"""
   _set: ProjectMedia_set_input
 
   """filter the rows which have to be updated"""
   where: ProjectMedia_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type ProjectMedia_var_pop_fields {
+  index: Float
+}
+
+"""
+order by var_pop() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_var_pop_order_by {
+  index: order_by
+}
+
+"""aggregate var_samp on columns"""
+type ProjectMedia_var_samp_fields {
+  index: Float
+}
+
+"""
+order by var_samp() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_var_samp_order_by {
+  index: order_by
+}
+
+"""aggregate variance on columns"""
+type ProjectMedia_variance_fields {
+  index: Float
+}
+
+"""
+order by variance() on columns of table "ProjectMedia"
+"""
+input ProjectMedia_variance_order_by {
+  index: order_by
 }
 
 scalar ProjectState
@@ -1308,16 +1510,17 @@ input Project_bool_exp {
   _and: [Project_bool_exp!]
   _not: Project_bool_exp
   _or: [Project_bool_exp!]
+  author: Account_bool_exp
   authorId: uuid_comparison_exp
   blockchain: BlockchainNetwork_comparison_exp
   createdAt: timestamp_comparison_exp
+  curator: Account_bool_exp
   curatorId: uuid_comparison_exp
   description: String_comparison_exp
   id: uuid_comparison_exp
   pricing: jsonb_comparison_exp
-  projectAuthor: Account_bool_exp
-  projectCurator: Account_bool_exp
-  projectCurator_aggregate: Account_aggregate_bool_exp
+  projectMedias: ProjectMedia_bool_exp
+  projectMedias_aggregate: ProjectMedia_aggregate_bool_exp
   releaseAt: timestamp_comparison_exp
   state: ProjectState_comparison_exp
   storage: Storage_comparison_exp
@@ -1360,15 +1563,16 @@ input Project_delete_key_input {
 input type for inserting data into table "Project"
 """
 input Project_insert_input {
+  author: Account_obj_rel_insert_input
   authorId: uuid
   blockchain: BlockchainNetwork
   createdAt: timestamp
+  curator: Account_obj_rel_insert_input
   curatorId: uuid
   description: String
   id: uuid
   pricing: jsonb
-  projectAuthor: Account_obj_rel_insert_input
-  projectCurator: Account_arr_rel_insert_input
+  projectMedias: ProjectMedia_arr_rel_insert_input
   releaseAt: timestamp
   state: ProjectState
   storage: Storage
@@ -1472,15 +1676,16 @@ input Project_on_conflict {
 
 """Ordering options when selecting data from "Project"."""
 input Project_order_by {
+  author: Account_order_by
   authorId: order_by
   blockchain: order_by
   createdAt: order_by
+  curator: Account_order_by
   curatorId: order_by
   description: order_by
   id: order_by
   pricing: order_by
-  projectAuthor: Account_order_by
-  projectCurator_aggregate: Account_aggregate_order_by
+  projectMedias_aggregate: ProjectMedia_aggregate_order_by
   releaseAt: order_by
   state: order_by
   storage: order_by
@@ -2646,6 +2851,9 @@ type mutation_root {
   update data of the table: "ProjectMedia"
   """
   update_ProjectMedia(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ProjectMedia_inc_input
+
     """sets the columns of the filtered rows to the given values"""
     _set: ProjectMedia_set_input
 
@@ -3083,6 +3291,24 @@ type query_root {
   fetch data from the table: "_prisma_migrations" using primary key columns
   """
   _prisma_migrations_by_pk(id: String!): _prisma_migrations
+  mediaFullUrl(s3key: String!): String!
+}
+
+scalar smallint
+
+"""
+Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'.
+"""
+input smallint_comparison_exp {
+  _eq: smallint
+  _gt: smallint
+  _gte: smallint
+  _in: [smallint!]
+  _is_null: Boolean
+  _lt: smallint
+  _lte: smallint
+  _neq: smallint
+  _nin: [smallint!]
 }
 
 type subscription_root {

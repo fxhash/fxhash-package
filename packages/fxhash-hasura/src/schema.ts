@@ -13,6 +13,7 @@ export type Scalars = {
     Storage: any,
     String: string,
     jsonb: any,
+    smallint: any,
     timestamp: any,
     timestamptz: any,
     uuid: any,
@@ -22,14 +23,6 @@ export type Scalars = {
 /** columns and relationships of "Account" */
 export interface Account {
     /** An array relationship */
-    Account_Profiles: Profile[]
-    /** An aggregate relationship */
-    Account_Profiles_aggregate: Profile_aggregate
-    /** An array relationship */
-    Account_Wallets: Wallet[]
-    /** An aggregate relationship */
-    Account_Wallets_aggregate: Wallet_aggregate
-    /** An array relationship */
     authoredProjects: Project[]
     /** An aggregate relationship */
     authoredProjects_aggregate: Project_aggregate
@@ -38,8 +31,16 @@ export interface Account {
     /** An aggregate relationship */
     curatedProjects_aggregate: Project_aggregate
     id: Scalars['uuid']
+    /** An array relationship */
+    profile: Profile[]
+    /** An aggregate relationship */
+    profile_aggregate: Profile_aggregate
     status: Scalars['AccountStatus']
     username: Scalars['String']
+    /** An array relationship */
+    wallets: Wallet[]
+    /** An aggregate relationship */
+    wallets_aggregate: Wallet_aggregate
     __typename: 'Account'
 }
 
@@ -108,10 +109,17 @@ export interface Media {
     etag: Scalars['String']
     id: Scalars['uuid']
     name: Scalars['String']
+    /** An array relationship */
+    project: ProjectMedia[]
+    /** An aggregate relationship */
+    project_aggregate: ProjectMedia_aggregate
     s3key: Scalars['String']
     size: Scalars['Int']
     updatedAt: Scalars['timestamp']
+    /** An object relationship */
+    uploader: (Account | null)
     uploaderId: (Scalars['uuid'] | null)
+    url: Scalars['String']
     __typename: 'Media'
 }
 
@@ -326,19 +334,21 @@ export type Profile_update_column = 'accountId' | 'description' | 'instagram' | 
 
 /** columns and relationships of "Project" */
 export interface Project {
+    /** An object relationship */
+    author: Account
     authorId: Scalars['uuid']
     blockchain: (Scalars['BlockchainNetwork'] | null)
     createdAt: Scalars['timestamp']
+    /** An object relationship */
+    curator: (Account | null)
     curatorId: (Scalars['uuid'] | null)
     description: (Scalars['String'] | null)
     id: Scalars['uuid']
     pricing: (Scalars['jsonb'] | null)
-    /** An object relationship */
-    projectAuthor: Account
     /** An array relationship */
-    projectCurator: Account[]
+    projectMedias: ProjectMedia[]
     /** An aggregate relationship */
-    projectCurator_aggregate: Account_aggregate
+    projectMedias_aggregate: ProjectMedia_aggregate
     releaseAt: (Scalars['timestamp'] | null)
     state: Scalars['ProjectState']
     storage: (Scalars['Storage'] | null)
@@ -350,9 +360,12 @@ export interface Project {
 
 /** columns and relationships of "ProjectMedia" */
 export interface ProjectMedia {
+    index: Scalars['smallint']
     /** An object relationship */
-    ProjectMedia_Project: Project
+    media: Media
     mediaId: Scalars['uuid']
+    /** An object relationship */
+    project: Project
     projectId: Scalars['uuid']
     __typename: 'ProjectMedia'
 }
@@ -368,19 +381,35 @@ export interface ProjectMedia_aggregate {
 
 /** aggregate fields of "ProjectMedia" */
 export interface ProjectMedia_aggregate_fields {
+    avg: (ProjectMedia_avg_fields | null)
     count: Scalars['Int']
     max: (ProjectMedia_max_fields | null)
     min: (ProjectMedia_min_fields | null)
+    stddev: (ProjectMedia_stddev_fields | null)
+    stddev_pop: (ProjectMedia_stddev_pop_fields | null)
+    stddev_samp: (ProjectMedia_stddev_samp_fields | null)
+    sum: (ProjectMedia_sum_fields | null)
+    var_pop: (ProjectMedia_var_pop_fields | null)
+    var_samp: (ProjectMedia_var_samp_fields | null)
+    variance: (ProjectMedia_variance_fields | null)
     __typename: 'ProjectMedia_aggregate_fields'
 }
 
 
+/** aggregate avg on columns */
+export interface ProjectMedia_avg_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_avg_fields'
+}
+
+
 /** unique or primary key constraints on table "ProjectMedia" */
-export type ProjectMedia_constraint = 'ProjectMedia_projectId_mediaId_key'
+export type ProjectMedia_constraint = 'ProjectMedia_index_projectId_mediaId_key'
 
 
 /** aggregate max on columns */
 export interface ProjectMedia_max_fields {
+    index: (Scalars['smallint'] | null)
     mediaId: (Scalars['uuid'] | null)
     projectId: (Scalars['uuid'] | null)
     __typename: 'ProjectMedia_max_fields'
@@ -389,6 +418,7 @@ export interface ProjectMedia_max_fields {
 
 /** aggregate min on columns */
 export interface ProjectMedia_min_fields {
+    index: (Scalars['smallint'] | null)
     mediaId: (Scalars['uuid'] | null)
     projectId: (Scalars['uuid'] | null)
     __typename: 'ProjectMedia_min_fields'
@@ -406,11 +436,60 @@ export interface ProjectMedia_mutation_response {
 
 
 /** select columns of table "ProjectMedia" */
-export type ProjectMedia_select_column = 'mediaId' | 'projectId'
+export type ProjectMedia_select_column = 'index' | 'mediaId' | 'projectId'
+
+
+/** aggregate stddev on columns */
+export interface ProjectMedia_stddev_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_stddev_fields'
+}
+
+
+/** aggregate stddev_pop on columns */
+export interface ProjectMedia_stddev_pop_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_stddev_pop_fields'
+}
+
+
+/** aggregate stddev_samp on columns */
+export interface ProjectMedia_stddev_samp_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_stddev_samp_fields'
+}
+
+
+/** aggregate sum on columns */
+export interface ProjectMedia_sum_fields {
+    index: (Scalars['smallint'] | null)
+    __typename: 'ProjectMedia_sum_fields'
+}
 
 
 /** update columns of table "ProjectMedia" */
-export type ProjectMedia_update_column = 'mediaId' | 'projectId'
+export type ProjectMedia_update_column = 'index' | 'mediaId' | 'projectId'
+
+
+/** aggregate var_pop on columns */
+export interface ProjectMedia_var_pop_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_var_pop_fields'
+}
+
+
+/** aggregate var_samp on columns */
+export interface ProjectMedia_var_samp_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_var_samp_fields'
+}
+
+
+/** aggregate variance on columns */
+export interface ProjectMedia_variance_fields {
+    index: (Scalars['Float'] | null)
+    __typename: 'ProjectMedia_variance_fields'
+}
 
 
 /** aggregated selection of "Project" */
@@ -845,6 +924,7 @@ export interface query_root {
     _prisma_migrations_aggregate: _prisma_migrations_aggregate
     /** fetch data from the table: "_prisma_migrations" using primary key columns */
     _prisma_migrations_by_pk: (_prisma_migrations | null)
+    mediaFullUrl: Scalars['String']
     __typename: 'query_root'
 }
 
@@ -914,54 +994,6 @@ export type Subscription = subscription_root
 /** columns and relationships of "Account" */
 export interface AccountGenqlSelection{
     /** An array relationship */
-    Account_Profiles?: (ProfileGenqlSelection & { __args?: {
-    /** distinct select on columns */
-    distinct_on?: (Profile_select_column[] | null), 
-    /** limit the number of rows returned */
-    limit?: (Scalars['Int'] | null), 
-    /** skip the first n rows. Use only with order_by */
-    offset?: (Scalars['Int'] | null), 
-    /** sort the rows by one or more columns */
-    order_by?: (Profile_order_by[] | null), 
-    /** filter the rows returned */
-    where?: (Profile_bool_exp | null)} })
-    /** An aggregate relationship */
-    Account_Profiles_aggregate?: (Profile_aggregateGenqlSelection & { __args?: {
-    /** distinct select on columns */
-    distinct_on?: (Profile_select_column[] | null), 
-    /** limit the number of rows returned */
-    limit?: (Scalars['Int'] | null), 
-    /** skip the first n rows. Use only with order_by */
-    offset?: (Scalars['Int'] | null), 
-    /** sort the rows by one or more columns */
-    order_by?: (Profile_order_by[] | null), 
-    /** filter the rows returned */
-    where?: (Profile_bool_exp | null)} })
-    /** An array relationship */
-    Account_Wallets?: (WalletGenqlSelection & { __args?: {
-    /** distinct select on columns */
-    distinct_on?: (Wallet_select_column[] | null), 
-    /** limit the number of rows returned */
-    limit?: (Scalars['Int'] | null), 
-    /** skip the first n rows. Use only with order_by */
-    offset?: (Scalars['Int'] | null), 
-    /** sort the rows by one or more columns */
-    order_by?: (Wallet_order_by[] | null), 
-    /** filter the rows returned */
-    where?: (Wallet_bool_exp | null)} })
-    /** An aggregate relationship */
-    Account_Wallets_aggregate?: (Wallet_aggregateGenqlSelection & { __args?: {
-    /** distinct select on columns */
-    distinct_on?: (Wallet_select_column[] | null), 
-    /** limit the number of rows returned */
-    limit?: (Scalars['Int'] | null), 
-    /** skip the first n rows. Use only with order_by */
-    offset?: (Scalars['Int'] | null), 
-    /** sort the rows by one or more columns */
-    order_by?: (Wallet_order_by[] | null), 
-    /** filter the rows returned */
-    where?: (Wallet_bool_exp | null)} })
-    /** An array relationship */
     authoredProjects?: (ProjectGenqlSelection & { __args?: {
     /** distinct select on columns */
     distinct_on?: (Project_select_column[] | null), 
@@ -1010,8 +1042,56 @@ export interface AccountGenqlSelection{
     /** filter the rows returned */
     where?: (Project_bool_exp | null)} })
     id?: boolean | number
+    /** An array relationship */
+    profile?: (ProfileGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Profile_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Profile_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Profile_bool_exp | null)} })
+    /** An aggregate relationship */
+    profile_aggregate?: (Profile_aggregateGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Profile_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Profile_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Profile_bool_exp | null)} })
     status?: boolean | number
     username?: boolean | number
+    /** An array relationship */
+    wallets?: (WalletGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Wallet_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Wallet_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Wallet_bool_exp | null)} })
+    /** An aggregate relationship */
+    wallets_aggregate?: (Wallet_aggregateGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (Wallet_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (Wallet_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (Wallet_bool_exp | null)} })
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1029,10 +1109,6 @@ export interface Account_aggregateGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface Account_aggregate_bool_exp {count?: (Account_aggregate_bool_exp_count | null)}
-
-export interface Account_aggregate_bool_exp_count {arguments?: (Account_select_column[] | null),distinct?: (Scalars['Boolean'] | null),filter?: (Account_bool_exp | null),predicate: Int_comparison_exp}
-
 
 /** aggregate fields of "Account" */
 export interface Account_aggregate_fieldsGenqlSelection{
@@ -1044,22 +1120,12 @@ export interface Account_aggregate_fieldsGenqlSelection{
 }
 
 
-/** order by aggregate values of table "Account" */
-export interface Account_aggregate_order_by {count?: (order_by | null),max?: (Account_max_order_by | null),min?: (Account_min_order_by | null)}
-
-
-/** input type for inserting array relation for remote table "Account" */
-export interface Account_arr_rel_insert_input {data: Account_insert_input[],
-/** upsert condition */
-on_conflict?: (Account_on_conflict | null)}
-
-
 /** Boolean expression to filter rows from the table "Account". All fields are combined with a logical 'AND'. */
-export interface Account_bool_exp {Account_Profiles?: (Profile_bool_exp | null),Account_Profiles_aggregate?: (Profile_aggregate_bool_exp | null),Account_Wallets?: (Wallet_bool_exp | null),Account_Wallets_aggregate?: (Wallet_aggregate_bool_exp | null),_and?: (Account_bool_exp[] | null),_not?: (Account_bool_exp | null),_or?: (Account_bool_exp[] | null),authoredProjects?: (Project_bool_exp | null),authoredProjects_aggregate?: (Project_aggregate_bool_exp | null),curatedProjects?: (Project_bool_exp | null),curatedProjects_aggregate?: (Project_aggregate_bool_exp | null),id?: (uuid_comparison_exp | null),status?: (AccountStatus_comparison_exp | null),username?: (String_comparison_exp | null)}
+export interface Account_bool_exp {_and?: (Account_bool_exp[] | null),_not?: (Account_bool_exp | null),_or?: (Account_bool_exp[] | null),authoredProjects?: (Project_bool_exp | null),authoredProjects_aggregate?: (Project_aggregate_bool_exp | null),curatedProjects?: (Project_bool_exp | null),curatedProjects_aggregate?: (Project_aggregate_bool_exp | null),id?: (uuid_comparison_exp | null),profile?: (Profile_bool_exp | null),profile_aggregate?: (Profile_aggregate_bool_exp | null),status?: (AccountStatus_comparison_exp | null),username?: (String_comparison_exp | null),wallets?: (Wallet_bool_exp | null),wallets_aggregate?: (Wallet_aggregate_bool_exp | null)}
 
 
 /** input type for inserting data into table "Account" */
-export interface Account_insert_input {Account_Profiles?: (Profile_arr_rel_insert_input | null),Account_Wallets?: (Wallet_arr_rel_insert_input | null),authoredProjects?: (Project_arr_rel_insert_input | null),curatedProjects?: (Project_arr_rel_insert_input | null),id?: (Scalars['uuid'] | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null)}
+export interface Account_insert_input {authoredProjects?: (Project_arr_rel_insert_input | null),curatedProjects?: (Project_arr_rel_insert_input | null),id?: (Scalars['uuid'] | null),profile?: (Profile_arr_rel_insert_input | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null),wallets?: (Wallet_arr_rel_insert_input | null)}
 
 
 /** aggregate max on columns */
@@ -1072,10 +1138,6 @@ export interface Account_max_fieldsGenqlSelection{
 }
 
 
-/** order by max() on columns of table "Account" */
-export interface Account_max_order_by {id?: (order_by | null),status?: (order_by | null),username?: (order_by | null)}
-
-
 /** aggregate min on columns */
 export interface Account_min_fieldsGenqlSelection{
     id?: boolean | number
@@ -1084,10 +1146,6 @@ export interface Account_min_fieldsGenqlSelection{
     __typename?: boolean | number
     __scalar?: boolean | number
 }
-
-
-/** order by min() on columns of table "Account" */
-export interface Account_min_order_by {id?: (order_by | null),status?: (order_by | null),username?: (order_by | null)}
 
 
 /** response of any mutation on the table "Account" */
@@ -1112,7 +1170,7 @@ export interface Account_on_conflict {constraint: Account_constraint,update_colu
 
 
 /** Ordering options when selecting data from "Account". */
-export interface Account_order_by {Account_Profiles_aggregate?: (Profile_aggregate_order_by | null),Account_Wallets_aggregate?: (Wallet_aggregate_order_by | null),authoredProjects_aggregate?: (Project_aggregate_order_by | null),curatedProjects_aggregate?: (Project_aggregate_order_by | null),id?: (order_by | null),status?: (order_by | null),username?: (order_by | null)}
+export interface Account_order_by {authoredProjects_aggregate?: (Project_aggregate_order_by | null),curatedProjects_aggregate?: (Project_aggregate_order_by | null),id?: (order_by | null),profile_aggregate?: (Profile_aggregate_order_by | null),status?: (order_by | null),username?: (order_by | null),wallets_aggregate?: (Wallet_aggregate_order_by | null)}
 
 
 /** primary key columns input for table: Account */
@@ -1156,10 +1214,37 @@ export interface MediaGenqlSelection{
     etag?: boolean | number
     id?: boolean | number
     name?: boolean | number
+    /** An array relationship */
+    project?: (ProjectMediaGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (ProjectMedia_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (ProjectMedia_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (ProjectMedia_bool_exp | null)} })
+    /** An aggregate relationship */
+    project_aggregate?: (ProjectMedia_aggregateGenqlSelection & { __args?: {
+    /** distinct select on columns */
+    distinct_on?: (ProjectMedia_select_column[] | null), 
+    /** limit the number of rows returned */
+    limit?: (Scalars['Int'] | null), 
+    /** skip the first n rows. Use only with order_by */
+    offset?: (Scalars['Int'] | null), 
+    /** sort the rows by one or more columns */
+    order_by?: (ProjectMedia_order_by[] | null), 
+    /** filter the rows returned */
+    where?: (ProjectMedia_bool_exp | null)} })
     s3key?: boolean | number
     size?: boolean | number
     updatedAt?: boolean | number
+    /** An object relationship */
+    uploader?: AccountGenqlSelection
     uploaderId?: boolean | number
+    url?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1201,7 +1286,7 @@ export interface Media_avg_fieldsGenqlSelection{
 
 
 /** Boolean expression to filter rows from the table "Media". All fields are combined with a logical 'AND'. */
-export interface Media_bool_exp {_and?: (Media_bool_exp[] | null),_not?: (Media_bool_exp | null),_or?: (Media_bool_exp[] | null),bucketId?: (String_comparison_exp | null),createdAt?: (timestamp_comparison_exp | null),etag?: (String_comparison_exp | null),id?: (uuid_comparison_exp | null),name?: (String_comparison_exp | null),s3key?: (String_comparison_exp | null),size?: (Int_comparison_exp | null),updatedAt?: (timestamp_comparison_exp | null),uploaderId?: (uuid_comparison_exp | null)}
+export interface Media_bool_exp {_and?: (Media_bool_exp[] | null),_not?: (Media_bool_exp | null),_or?: (Media_bool_exp[] | null),bucketId?: (String_comparison_exp | null),createdAt?: (timestamp_comparison_exp | null),etag?: (String_comparison_exp | null),id?: (uuid_comparison_exp | null),name?: (String_comparison_exp | null),project?: (ProjectMedia_bool_exp | null),project_aggregate?: (ProjectMedia_aggregate_bool_exp | null),s3key?: (String_comparison_exp | null),size?: (Int_comparison_exp | null),updatedAt?: (timestamp_comparison_exp | null),uploader?: (Account_bool_exp | null),uploaderId?: (uuid_comparison_exp | null)}
 
 
 /** input type for incrementing numeric columns in table "Media" */
@@ -1209,7 +1294,7 @@ export interface Media_inc_input {size?: (Scalars['Int'] | null)}
 
 
 /** input type for inserting data into table "Media" */
-export interface Media_insert_input {bucketId?: (Scalars['String'] | null),createdAt?: (Scalars['timestamp'] | null),etag?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),name?: (Scalars['String'] | null),s3key?: (Scalars['String'] | null),size?: (Scalars['Int'] | null),updatedAt?: (Scalars['timestamp'] | null),uploaderId?: (Scalars['uuid'] | null)}
+export interface Media_insert_input {bucketId?: (Scalars['String'] | null),createdAt?: (Scalars['timestamp'] | null),etag?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),name?: (Scalars['String'] | null),project?: (ProjectMedia_arr_rel_insert_input | null),s3key?: (Scalars['String'] | null),size?: (Scalars['Int'] | null),updatedAt?: (Scalars['timestamp'] | null),uploader?: (Account_obj_rel_insert_input | null),uploaderId?: (Scalars['uuid'] | null)}
 
 
 /** aggregate max on columns */
@@ -1255,12 +1340,18 @@ export interface Media_mutation_responseGenqlSelection{
 }
 
 
+/** input type for inserting object relation for remote table "Media" */
+export interface Media_obj_rel_insert_input {data: Media_insert_input,
+/** upsert condition */
+on_conflict?: (Media_on_conflict | null)}
+
+
 /** on_conflict condition type for table "Media" */
 export interface Media_on_conflict {constraint: Media_constraint,update_columns?: Media_update_column[],where?: (Media_bool_exp | null)}
 
 
 /** Ordering options when selecting data from "Media". */
-export interface Media_order_by {bucketId?: (order_by | null),createdAt?: (order_by | null),etag?: (order_by | null),id?: (order_by | null),name?: (order_by | null),s3key?: (order_by | null),size?: (order_by | null),updatedAt?: (order_by | null),uploaderId?: (order_by | null)}
+export interface Media_order_by {bucketId?: (order_by | null),createdAt?: (order_by | null),etag?: (order_by | null),id?: (order_by | null),name?: (order_by | null),project_aggregate?: (ProjectMedia_aggregate_order_by | null),s3key?: (order_by | null),size?: (order_by | null),updatedAt?: (order_by | null),uploader?: (Account_order_by | null),uploaderId?: (order_by | null)}
 
 
 /** primary key columns input for table: Media */
@@ -1482,41 +1573,43 @@ where: Profile_bool_exp}
 
 /** columns and relationships of "Project" */
 export interface ProjectGenqlSelection{
+    /** An object relationship */
+    author?: AccountGenqlSelection
     authorId?: boolean | number
     blockchain?: boolean | number
     createdAt?: boolean | number
+    /** An object relationship */
+    curator?: AccountGenqlSelection
     curatorId?: boolean | number
     description?: boolean | number
     id?: boolean | number
     pricing?: { __args: {
     /** JSON select path */
     path?: (Scalars['String'] | null)} } | boolean | number
-    /** An object relationship */
-    projectAuthor?: AccountGenqlSelection
     /** An array relationship */
-    projectCurator?: (AccountGenqlSelection & { __args?: {
+    projectMedias?: (ProjectMediaGenqlSelection & { __args?: {
     /** distinct select on columns */
-    distinct_on?: (Account_select_column[] | null), 
+    distinct_on?: (ProjectMedia_select_column[] | null), 
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null), 
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null), 
     /** sort the rows by one or more columns */
-    order_by?: (Account_order_by[] | null), 
+    order_by?: (ProjectMedia_order_by[] | null), 
     /** filter the rows returned */
-    where?: (Account_bool_exp | null)} })
+    where?: (ProjectMedia_bool_exp | null)} })
     /** An aggregate relationship */
-    projectCurator_aggregate?: (Account_aggregateGenqlSelection & { __args?: {
+    projectMedias_aggregate?: (ProjectMedia_aggregateGenqlSelection & { __args?: {
     /** distinct select on columns */
-    distinct_on?: (Account_select_column[] | null), 
+    distinct_on?: (ProjectMedia_select_column[] | null), 
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null), 
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null), 
     /** sort the rows by one or more columns */
-    order_by?: (Account_order_by[] | null), 
+    order_by?: (ProjectMedia_order_by[] | null), 
     /** filter the rows returned */
-    where?: (Account_bool_exp | null)} })
+    where?: (ProjectMedia_bool_exp | null)} })
     releaseAt?: boolean | number
     state?: boolean | number
     storage?: boolean | number
@@ -1529,9 +1622,12 @@ export interface ProjectGenqlSelection{
 
 /** columns and relationships of "ProjectMedia" */
 export interface ProjectMediaGenqlSelection{
+    index?: boolean | number
     /** An object relationship */
-    ProjectMedia_Project?: ProjectGenqlSelection
+    media?: MediaGenqlSelection
     mediaId?: boolean | number
+    /** An object relationship */
+    project?: ProjectGenqlSelection
     projectId?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
@@ -1546,41 +1642,89 @@ export interface ProjectMedia_aggregateGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface ProjectMedia_aggregate_bool_exp {count?: (ProjectMedia_aggregate_bool_exp_count | null)}
+
+export interface ProjectMedia_aggregate_bool_exp_count {arguments?: (ProjectMedia_select_column[] | null),distinct?: (Scalars['Boolean'] | null),filter?: (ProjectMedia_bool_exp | null),predicate: Int_comparison_exp}
+
 
 /** aggregate fields of "ProjectMedia" */
 export interface ProjectMedia_aggregate_fieldsGenqlSelection{
+    avg?: ProjectMedia_avg_fieldsGenqlSelection
     count?: { __args: {columns?: (ProjectMedia_select_column[] | null), distinct?: (Scalars['Boolean'] | null)} } | boolean | number
     max?: ProjectMedia_max_fieldsGenqlSelection
     min?: ProjectMedia_min_fieldsGenqlSelection
+    stddev?: ProjectMedia_stddev_fieldsGenqlSelection
+    stddev_pop?: ProjectMedia_stddev_pop_fieldsGenqlSelection
+    stddev_samp?: ProjectMedia_stddev_samp_fieldsGenqlSelection
+    sum?: ProjectMedia_sum_fieldsGenqlSelection
+    var_pop?: ProjectMedia_var_pop_fieldsGenqlSelection
+    var_samp?: ProjectMedia_var_samp_fieldsGenqlSelection
+    variance?: ProjectMedia_variance_fieldsGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
 
 
+/** order by aggregate values of table "ProjectMedia" */
+export interface ProjectMedia_aggregate_order_by {avg?: (ProjectMedia_avg_order_by | null),count?: (order_by | null),max?: (ProjectMedia_max_order_by | null),min?: (ProjectMedia_min_order_by | null),stddev?: (ProjectMedia_stddev_order_by | null),stddev_pop?: (ProjectMedia_stddev_pop_order_by | null),stddev_samp?: (ProjectMedia_stddev_samp_order_by | null),sum?: (ProjectMedia_sum_order_by | null),var_pop?: (ProjectMedia_var_pop_order_by | null),var_samp?: (ProjectMedia_var_samp_order_by | null),variance?: (ProjectMedia_variance_order_by | null)}
+
+
+/** input type for inserting array relation for remote table "ProjectMedia" */
+export interface ProjectMedia_arr_rel_insert_input {data: ProjectMedia_insert_input[],
+/** upsert condition */
+on_conflict?: (ProjectMedia_on_conflict | null)}
+
+
+/** aggregate avg on columns */
+export interface ProjectMedia_avg_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by avg() on columns of table "ProjectMedia" */
+export interface ProjectMedia_avg_order_by {index?: (order_by | null)}
+
+
 /** Boolean expression to filter rows from the table "ProjectMedia". All fields are combined with a logical 'AND'. */
-export interface ProjectMedia_bool_exp {ProjectMedia_Project?: (Project_bool_exp | null),_and?: (ProjectMedia_bool_exp[] | null),_not?: (ProjectMedia_bool_exp | null),_or?: (ProjectMedia_bool_exp[] | null),mediaId?: (uuid_comparison_exp | null),projectId?: (uuid_comparison_exp | null)}
+export interface ProjectMedia_bool_exp {_and?: (ProjectMedia_bool_exp[] | null),_not?: (ProjectMedia_bool_exp | null),_or?: (ProjectMedia_bool_exp[] | null),index?: (smallint_comparison_exp | null),media?: (Media_bool_exp | null),mediaId?: (uuid_comparison_exp | null),project?: (Project_bool_exp | null),projectId?: (uuid_comparison_exp | null)}
+
+
+/** input type for incrementing numeric columns in table "ProjectMedia" */
+export interface ProjectMedia_inc_input {index?: (Scalars['smallint'] | null)}
 
 
 /** input type for inserting data into table "ProjectMedia" */
-export interface ProjectMedia_insert_input {ProjectMedia_Project?: (Project_obj_rel_insert_input | null),mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
+export interface ProjectMedia_insert_input {index?: (Scalars['smallint'] | null),media?: (Media_obj_rel_insert_input | null),mediaId?: (Scalars['uuid'] | null),project?: (Project_obj_rel_insert_input | null),projectId?: (Scalars['uuid'] | null)}
 
 
 /** aggregate max on columns */
 export interface ProjectMedia_max_fieldsGenqlSelection{
+    index?: boolean | number
     mediaId?: boolean | number
     projectId?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
+
+
+/** order by max() on columns of table "ProjectMedia" */
+export interface ProjectMedia_max_order_by {index?: (order_by | null),mediaId?: (order_by | null),projectId?: (order_by | null)}
 
 
 /** aggregate min on columns */
 export interface ProjectMedia_min_fieldsGenqlSelection{
+    index?: boolean | number
     mediaId?: boolean | number
     projectId?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
+
+
+/** order by min() on columns of table "ProjectMedia" */
+export interface ProjectMedia_min_order_by {index?: (order_by | null),mediaId?: (order_by | null),projectId?: (order_by | null)}
 
 
 /** response of any mutation on the table "ProjectMedia" */
@@ -1599,11 +1743,47 @@ export interface ProjectMedia_on_conflict {constraint: ProjectMedia_constraint,u
 
 
 /** Ordering options when selecting data from "ProjectMedia". */
-export interface ProjectMedia_order_by {ProjectMedia_Project?: (Project_order_by | null),mediaId?: (order_by | null),projectId?: (order_by | null)}
+export interface ProjectMedia_order_by {index?: (order_by | null),media?: (Media_order_by | null),mediaId?: (order_by | null),project?: (Project_order_by | null),projectId?: (order_by | null)}
 
 
 /** input type for updating data in table "ProjectMedia" */
-export interface ProjectMedia_set_input {mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
+export interface ProjectMedia_set_input {index?: (Scalars['smallint'] | null),mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
+
+
+/** aggregate stddev on columns */
+export interface ProjectMedia_stddev_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by stddev() on columns of table "ProjectMedia" */
+export interface ProjectMedia_stddev_order_by {index?: (order_by | null)}
+
+
+/** aggregate stddev_pop on columns */
+export interface ProjectMedia_stddev_pop_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by stddev_pop() on columns of table "ProjectMedia" */
+export interface ProjectMedia_stddev_pop_order_by {index?: (order_by | null)}
+
+
+/** aggregate stddev_samp on columns */
+export interface ProjectMedia_stddev_samp_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by stddev_samp() on columns of table "ProjectMedia" */
+export interface ProjectMedia_stddev_samp_order_by {index?: (order_by | null)}
 
 
 /** Streaming cursor of the table "ProjectMedia" */
@@ -1615,13 +1795,63 @@ ordering?: (cursor_ordering | null)}
 
 
 /** Initial value of the column from where the streaming should start */
-export interface ProjectMedia_stream_cursor_value_input {mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
+export interface ProjectMedia_stream_cursor_value_input {index?: (Scalars['smallint'] | null),mediaId?: (Scalars['uuid'] | null),projectId?: (Scalars['uuid'] | null)}
+
+
+/** aggregate sum on columns */
+export interface ProjectMedia_sum_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by sum() on columns of table "ProjectMedia" */
+export interface ProjectMedia_sum_order_by {index?: (order_by | null)}
 
 export interface ProjectMedia_updates {
+/** increments the numeric columns with given value of the filtered values */
+_inc?: (ProjectMedia_inc_input | null),
 /** sets the columns of the filtered rows to the given values */
 _set?: (ProjectMedia_set_input | null),
 /** filter the rows which have to be updated */
 where: ProjectMedia_bool_exp}
+
+
+/** aggregate var_pop on columns */
+export interface ProjectMedia_var_pop_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by var_pop() on columns of table "ProjectMedia" */
+export interface ProjectMedia_var_pop_order_by {index?: (order_by | null)}
+
+
+/** aggregate var_samp on columns */
+export interface ProjectMedia_var_samp_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by var_samp() on columns of table "ProjectMedia" */
+export interface ProjectMedia_var_samp_order_by {index?: (order_by | null)}
+
+
+/** aggregate variance on columns */
+export interface ProjectMedia_variance_fieldsGenqlSelection{
+    index?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** order by variance() on columns of table "ProjectMedia" */
+export interface ProjectMedia_variance_order_by {index?: (order_by | null)}
 
 
 /** Boolean expression to compare columns of type "ProjectState". All fields are combined with logical 'AND'. */
@@ -1666,7 +1896,7 @@ on_conflict?: (Project_on_conflict | null)}
 
 
 /** Boolean expression to filter rows from the table "Project". All fields are combined with a logical 'AND'. */
-export interface Project_bool_exp {_and?: (Project_bool_exp[] | null),_not?: (Project_bool_exp | null),_or?: (Project_bool_exp[] | null),authorId?: (uuid_comparison_exp | null),blockchain?: (BlockchainNetwork_comparison_exp | null),createdAt?: (timestamp_comparison_exp | null),curatorId?: (uuid_comparison_exp | null),description?: (String_comparison_exp | null),id?: (uuid_comparison_exp | null),pricing?: (jsonb_comparison_exp | null),projectAuthor?: (Account_bool_exp | null),projectCurator?: (Account_bool_exp | null),projectCurator_aggregate?: (Account_aggregate_bool_exp | null),releaseAt?: (timestamp_comparison_exp | null),state?: (ProjectState_comparison_exp | null),storage?: (Storage_comparison_exp | null),title?: (String_comparison_exp | null),updatedAt?: (timestamp_comparison_exp | null)}
+export interface Project_bool_exp {_and?: (Project_bool_exp[] | null),_not?: (Project_bool_exp | null),_or?: (Project_bool_exp[] | null),author?: (Account_bool_exp | null),authorId?: (uuid_comparison_exp | null),blockchain?: (BlockchainNetwork_comparison_exp | null),createdAt?: (timestamp_comparison_exp | null),curator?: (Account_bool_exp | null),curatorId?: (uuid_comparison_exp | null),description?: (String_comparison_exp | null),id?: (uuid_comparison_exp | null),pricing?: (jsonb_comparison_exp | null),projectMedias?: (ProjectMedia_bool_exp | null),projectMedias_aggregate?: (ProjectMedia_aggregate_bool_exp | null),releaseAt?: (timestamp_comparison_exp | null),state?: (ProjectState_comparison_exp | null),storage?: (Storage_comparison_exp | null),title?: (String_comparison_exp | null),updatedAt?: (timestamp_comparison_exp | null)}
 
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
@@ -1682,7 +1912,7 @@ export interface Project_delete_key_input {pricing?: (Scalars['String'] | null)}
 
 
 /** input type for inserting data into table "Project" */
-export interface Project_insert_input {authorId?: (Scalars['uuid'] | null),blockchain?: (Scalars['BlockchainNetwork'] | null),createdAt?: (Scalars['timestamp'] | null),curatorId?: (Scalars['uuid'] | null),description?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),pricing?: (Scalars['jsonb'] | null),projectAuthor?: (Account_obj_rel_insert_input | null),projectCurator?: (Account_arr_rel_insert_input | null),releaseAt?: (Scalars['timestamp'] | null),state?: (Scalars['ProjectState'] | null),storage?: (Scalars['Storage'] | null),title?: (Scalars['String'] | null),updatedAt?: (Scalars['timestamp'] | null)}
+export interface Project_insert_input {author?: (Account_obj_rel_insert_input | null),authorId?: (Scalars['uuid'] | null),blockchain?: (Scalars['BlockchainNetwork'] | null),createdAt?: (Scalars['timestamp'] | null),curator?: (Account_obj_rel_insert_input | null),curatorId?: (Scalars['uuid'] | null),description?: (Scalars['String'] | null),id?: (Scalars['uuid'] | null),pricing?: (Scalars['jsonb'] | null),projectMedias?: (ProjectMedia_arr_rel_insert_input | null),releaseAt?: (Scalars['timestamp'] | null),state?: (Scalars['ProjectState'] | null),storage?: (Scalars['Storage'] | null),title?: (Scalars['String'] | null),updatedAt?: (Scalars['timestamp'] | null)}
 
 
 /** aggregate max on columns */
@@ -1751,7 +1981,7 @@ export interface Project_on_conflict {constraint: Project_constraint,update_colu
 
 
 /** Ordering options when selecting data from "Project". */
-export interface Project_order_by {authorId?: (order_by | null),blockchain?: (order_by | null),createdAt?: (order_by | null),curatorId?: (order_by | null),description?: (order_by | null),id?: (order_by | null),pricing?: (order_by | null),projectAuthor?: (Account_order_by | null),projectCurator_aggregate?: (Account_aggregate_order_by | null),releaseAt?: (order_by | null),state?: (order_by | null),storage?: (order_by | null),title?: (order_by | null),updatedAt?: (order_by | null)}
+export interface Project_order_by {author?: (Account_order_by | null),authorId?: (order_by | null),blockchain?: (order_by | null),createdAt?: (order_by | null),curator?: (Account_order_by | null),curatorId?: (order_by | null),description?: (order_by | null),id?: (order_by | null),pricing?: (order_by | null),projectMedias_aggregate?: (ProjectMedia_aggregate_order_by | null),releaseAt?: (order_by | null),state?: (order_by | null),storage?: (order_by | null),title?: (order_by | null),updatedAt?: (order_by | null)}
 
 
 /** primary key columns input for table: Project */
@@ -2347,6 +2577,8 @@ export interface mutation_rootGenqlSelection{
     where: Project_bool_exp} })
     /** update data of the table: "ProjectMedia" */
     update_ProjectMedia?: (ProjectMedia_mutation_responseGenqlSelection & { __args: {
+    /** increments the numeric columns with given value of the filtered values */
+    _inc?: (ProjectMedia_inc_input | null), 
     /** sets the columns of the filtered rows to the given values */
     _set?: (ProjectMedia_set_input | null), 
     /** filter the rows which have to be updated */
@@ -2590,9 +2822,14 @@ export interface query_rootGenqlSelection{
     where?: (_prisma_migrations_bool_exp | null)} })
     /** fetch data from the table: "_prisma_migrations" using primary key columns */
     _prisma_migrations_by_pk?: (_prisma_migrationsGenqlSelection & { __args: {id: Scalars['String']} })
+    mediaFullUrl?: { __args: {s3key: Scalars['String']} }
     __typename?: boolean | number
     __scalar?: boolean | number
 }
+
+
+/** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
+export interface smallint_comparison_exp {_eq?: (Scalars['smallint'] | null),_gt?: (Scalars['smallint'] | null),_gte?: (Scalars['smallint'] | null),_in?: (Scalars['smallint'][] | null),_is_null?: (Scalars['Boolean'] | null),_lt?: (Scalars['smallint'] | null),_lte?: (Scalars['smallint'] | null),_neq?: (Scalars['smallint'] | null),_nin?: (Scalars['smallint'][] | null)}
 
 export interface subscription_rootGenqlSelection{
     /** fetch data from the table: "Account" */
@@ -3092,6 +3329,14 @@ export type SubscriptionGenqlSelection = subscription_rootGenqlSelection
     
 
 
+    const ProjectMedia_avg_fields_possibleTypes: string[] = ['ProjectMedia_avg_fields']
+    export const isProjectMedia_avg_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_avg_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_avg_fields"')
+      return ProjectMedia_avg_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const ProjectMedia_max_fields_possibleTypes: string[] = ['ProjectMedia_max_fields']
     export const isProjectMedia_max_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_max_fields => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_max_fields"')
@@ -3112,6 +3357,62 @@ export type SubscriptionGenqlSelection = subscription_rootGenqlSelection
     export const isProjectMedia_mutation_response = (obj?: { __typename?: any } | null): obj is ProjectMedia_mutation_response => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_mutation_response"')
       return ProjectMedia_mutation_response_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_stddev_fields_possibleTypes: string[] = ['ProjectMedia_stddev_fields']
+    export const isProjectMedia_stddev_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_stddev_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_stddev_fields"')
+      return ProjectMedia_stddev_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_stddev_pop_fields_possibleTypes: string[] = ['ProjectMedia_stddev_pop_fields']
+    export const isProjectMedia_stddev_pop_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_stddev_pop_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_stddev_pop_fields"')
+      return ProjectMedia_stddev_pop_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_stddev_samp_fields_possibleTypes: string[] = ['ProjectMedia_stddev_samp_fields']
+    export const isProjectMedia_stddev_samp_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_stddev_samp_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_stddev_samp_fields"')
+      return ProjectMedia_stddev_samp_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_sum_fields_possibleTypes: string[] = ['ProjectMedia_sum_fields']
+    export const isProjectMedia_sum_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_sum_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_sum_fields"')
+      return ProjectMedia_sum_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_var_pop_fields_possibleTypes: string[] = ['ProjectMedia_var_pop_fields']
+    export const isProjectMedia_var_pop_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_var_pop_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_var_pop_fields"')
+      return ProjectMedia_var_pop_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_var_samp_fields_possibleTypes: string[] = ['ProjectMedia_var_samp_fields']
+    export const isProjectMedia_var_samp_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_var_samp_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_var_samp_fields"')
+      return ProjectMedia_var_samp_fields_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ProjectMedia_variance_fields_possibleTypes: string[] = ['ProjectMedia_variance_fields']
+    export const isProjectMedia_variance_fields = (obj?: { __typename?: any } | null): obj is ProjectMedia_variance_fields => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isProjectMedia_variance_fields"')
+      return ProjectMedia_variance_fields_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -3407,15 +3708,17 @@ export const enumProfileUpdateColumn = {
 }
 
 export const enumProjectMediaConstraint = {
-   ProjectMedia_projectId_mediaId_key: 'ProjectMedia_projectId_mediaId_key' as const
+   ProjectMedia_index_projectId_mediaId_key: 'ProjectMedia_index_projectId_mediaId_key' as const
 }
 
 export const enumProjectMediaSelectColumn = {
+   index: 'index' as const,
    mediaId: 'mediaId' as const,
    projectId: 'projectId' as const
 }
 
 export const enumProjectMediaUpdateColumn = {
+   index: 'index' as const,
    mediaId: 'mediaId' as const,
    projectId: 'projectId' as const
 }

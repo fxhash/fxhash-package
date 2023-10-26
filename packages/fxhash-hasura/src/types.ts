@@ -1,230 +1,231 @@
 export default {
     "scalars": [
         1,
-        10,
+        6,
+        15,
+        19,
         21,
+        23,
+        24,
         25,
-        27,
-        29,
-        30,
-        31,
-        38,
-        47,
-        55,
-        68,
-        78,
-        82,
-        89,
-        96,
+        32,
+        42,
+        50,
+        63,
+        73,
+        77,
+        90,
         100,
-        102,
         112,
-        127,
-        131,
-        133,
-        135,
+        120,
+        130,
         145,
-        155,
-        159,
-        166,
-        175,
-        183,
-        188,
-        189,
-        192,
+        149,
+        151,
+        153,
+        163,
+        173,
+        177,
+        184,
         193,
-        195,
-        197
+        201,
+        206,
+        207,
+        210,
+        211,
+        213,
+        215,
+        217
     ],
     "types": {
         "Account": {
-            "Account_Profiles": [
-                60,
-                {
-                    "distinct_on": [
-                        78,
-                        "[Profile_select_column!]"
-                    ],
-                    "limit": [
-                        31
-                    ],
-                    "offset": [
-                        31
-                    ],
-                    "order_by": [
-                        76,
-                        "[Profile_order_by!]"
-                    ],
-                    "where": [
-                        67
-                    ]
-                }
-            ],
-            "Account_Profiles_aggregate": [
-                61,
-                {
-                    "distinct_on": [
-                        78,
-                        "[Profile_select_column!]"
-                    ],
-                    "limit": [
-                        31
-                    ],
-                    "offset": [
-                        31
-                    ],
-                    "order_by": [
-                        76,
-                        "[Profile_order_by!]"
-                    ],
-                    "where": [
-                        67
-                    ]
-                }
-            ],
-            "Account_Wallets": [
-                137,
-                {
-                    "distinct_on": [
-                        155,
-                        "[Wallet_select_column!]"
-                    ],
-                    "limit": [
-                        31
-                    ],
-                    "offset": [
-                        31
-                    ],
-                    "order_by": [
-                        153,
-                        "[Wallet_order_by!]"
-                    ],
-                    "where": [
-                        144
-                    ]
-                }
-            ],
-            "Account_Wallets_aggregate": [
-                138,
-                {
-                    "distinct_on": [
-                        155,
-                        "[Wallet_select_column!]"
-                    ],
-                    "limit": [
-                        31
-                    ],
-                    "offset": [
-                        31
-                    ],
-                    "order_by": [
-                        153,
-                        "[Wallet_order_by!]"
-                    ],
-                    "where": [
-                        144
-                    ]
-                }
-            ],
             "authoredProjects": [
-                84,
+                79,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "authoredProjects_aggregate": [
-                104,
+                122,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "curatedProjects": [
-                84,
+                79,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "curatedProjects_aggregate": [
-                104,
+                122,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "id": [
-                197
+                217
+            ],
+            "profile": [
+                55,
+                {
+                    "distinct_on": [
+                        73,
+                        "[Profile_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        71,
+                        "[Profile_order_by!]"
+                    ],
+                    "where": [
+                        62
+                    ]
+                }
+            ],
+            "profile_aggregate": [
+                56,
+                {
+                    "distinct_on": [
+                        73,
+                        "[Profile_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        71,
+                        "[Profile_order_by!]"
+                    ],
+                    "where": [
+                        62
+                    ]
+                }
             ],
             "status": [
                 1
             ],
             "username": [
-                135
+                153
+            ],
+            "wallets": [
+                155,
+                {
+                    "distinct_on": [
+                        173,
+                        "[Wallet_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        171,
+                        "[Wallet_order_by!]"
+                    ],
+                    "where": [
+                        162
+                    ]
+                }
+            ],
+            "wallets_aggregate": [
+                156,
+                {
+                    "distinct_on": [
+                        173,
+                        "[Wallet_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        171,
+                        "[Wallet_order_by!]"
+                    ],
+                    "where": [
+                        162
+                    ]
+                }
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "AccountStatus": {},
@@ -242,7 +243,7 @@ export default {
                 1
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
                 1
@@ -257,376 +258,298 @@ export default {
                 1
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_aggregate": {
             "aggregate": [
-                6
+                4
             ],
             "nodes": [
                 0
             ],
             "__typename": [
-                135
-            ]
-        },
-        "Account_aggregate_bool_exp": {
-            "count": [
-                5
-            ],
-            "__typename": [
-                135
-            ]
-        },
-        "Account_aggregate_bool_exp_count": {
-            "arguments": [
-                21
-            ],
-            "distinct": [
-                29
-            ],
-            "filter": [
-                9
-            ],
-            "predicate": [
-                32
-            ],
-            "__typename": [
-                135
+                153
             ]
         },
         "Account_aggregate_fields": {
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        21,
+                        15,
                         "[Account_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                12
+                8
             ],
             "min": [
-                14
+                9
             ],
             "__typename": [
-                135
-            ]
-        },
-        "Account_aggregate_order_by": {
-            "count": [
-                192
-            ],
-            "max": [
-                13
-            ],
-            "min": [
-                15
-            ],
-            "__typename": [
-                135
-            ]
-        },
-        "Account_arr_rel_insert_input": {
-            "data": [
-                11
-            ],
-            "on_conflict": [
-                18
-            ],
-            "__typename": [
-                135
+                153
             ]
         },
         "Account_bool_exp": {
-            "Account_Profiles": [
-                67
-            ],
-            "Account_Profiles_aggregate": [
-                62
-            ],
-            "Account_Wallets": [
-                144
-            ],
-            "Account_Wallets_aggregate": [
-                139
-            ],
             "_and": [
-                9
+                5
             ],
             "_not": [
-                9
+                5
             ],
             "_or": [
-                9
+                5
             ],
             "authoredProjects": [
-                111
+                129
             ],
             "authoredProjects_aggregate": [
-                105
+                123
             ],
             "curatedProjects": [
-                111
+                129
             ],
             "curatedProjects_aggregate": [
-                105
+                123
             ],
             "id": [
-                198
+                218
+            ],
+            "profile": [
+                62
+            ],
+            "profile_aggregate": [
+                57
             ],
             "status": [
                 2
             ],
             "username": [
-                136
+                154
+            ],
+            "wallets": [
+                162
+            ],
+            "wallets_aggregate": [
+                157
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_constraint": {},
         "Account_insert_input": {
-            "Account_Profiles": [
-                66
-            ],
-            "Account_Wallets": [
-                143
-            ],
             "authoredProjects": [
-                110
+                128
             ],
             "curatedProjects": [
-                110
+                128
             ],
             "id": [
-                197
+                217
+            ],
+            "profile": [
+                61
             ],
             "status": [
                 1
             ],
             "username": [
-                135
+                153
+            ],
+            "wallets": [
+                161
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_max_fields": {
             "id": [
-                197
+                217
             ],
             "status": [
                 1
             ],
             "username": [
-                135
+                153
             ],
             "__typename": [
-                135
-            ]
-        },
-        "Account_max_order_by": {
-            "id": [
-                192
-            ],
-            "status": [
-                192
-            ],
-            "username": [
-                192
-            ],
-            "__typename": [
-                135
+                153
             ]
         },
         "Account_min_fields": {
             "id": [
-                197
+                217
             ],
             "status": [
                 1
             ],
             "username": [
-                135
+                153
             ],
             "__typename": [
-                135
-            ]
-        },
-        "Account_min_order_by": {
-            "id": [
-                192
-            ],
-            "status": [
-                192
-            ],
-            "username": [
-                192
-            ],
-            "__typename": [
-                135
+                153
             ]
         },
         "Account_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
                 0
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_obj_rel_insert_input": {
             "data": [
-                11
+                7
             ],
             "on_conflict": [
-                18
+                12
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_on_conflict": {
             "constraint": [
-                10
+                6
             ],
             "update_columns": [
-                25
+                19
             ],
             "where": [
-                9
+                5
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_order_by": {
-            "Account_Profiles_aggregate": [
-                65
-            ],
-            "Account_Wallets_aggregate": [
-                142
-            ],
             "authoredProjects_aggregate": [
-                108
+                126
             ],
             "curatedProjects_aggregate": [
-                108
+                126
             ],
             "id": [
-                192
+                210
+            ],
+            "profile_aggregate": [
+                60
             ],
             "status": [
-                192
+                210
             ],
             "username": [
-                192
+                210
+            ],
+            "wallets_aggregate": [
+                160
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_pk_columns_input": {
             "id": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_select_column": {},
         "Account_set_input": {
             "id": [
-                197
+                217
             ],
             "status": [
                 1
             ],
             "username": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_stream_cursor_input": {
             "initial_value": [
-                24
+                18
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_stream_cursor_value_input": {
             "id": [
-                197
+                217
             ],
             "status": [
                 1
             ],
             "username": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Account_update_column": {},
         "Account_updates": {
             "_set": [
-                22
+                16
             ],
             "where": [
-                9
+                5
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "BlockchainNetwork": {},
         "BlockchainNetwork_comparison_exp": {
             "_eq": [
-                27
+                21
             ],
             "_gt": [
-                27
+                21
             ],
             "_gte": [
-                27
+                21
             ],
             "_in": [
-                27
+                21
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                27
+                21
             ],
             "_lte": [
-                27
+                21
             ],
             "_neq": [
-                27
+                21
             ],
             "_nin": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Boolean": {},
@@ -634,2764 +557,3192 @@ export default {
         "Int": {},
         "Int_comparison_exp": {
             "_eq": [
-                31
+                25
             ],
             "_gt": [
-                31
+                25
             ],
             "_gte": [
-                31
+                25
             ],
             "_in": [
-                31
+                25
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                31
+                25
             ],
             "_lte": [
-                31
+                25
             ],
             "_neq": [
-                31
+                25
             ],
             "_nin": [
-                31
+                25
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media": {
             "bucketId": [
-                135
+                153
             ],
             "createdAt": [
-                193
+                213
             ],
             "etag": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "name": [
-                135
+                153
+            ],
+            "project": [
+                80,
+                {
+                    "distinct_on": [
+                        100,
+                        "[ProjectMedia_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        99,
+                        "[ProjectMedia_order_by!]"
+                    ],
+                    "where": [
+                        89
+                    ]
+                }
+            ],
+            "project_aggregate": [
+                81,
+                {
+                    "distinct_on": [
+                        100,
+                        "[ProjectMedia_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        99,
+                        "[ProjectMedia_order_by!]"
+                    ],
+                    "where": [
+                        89
+                    ]
+                }
             ],
             "s3key": [
-                135
+                153
             ],
             "size": [
-                31
+                25
             ],
             "updatedAt": [
-                193
+                213
+            ],
+            "uploader": [
+                0
             ],
             "uploaderId": [
-                197
+                217
+            ],
+            "url": [
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_aggregate": {
             "aggregate": [
-                35
+                29
             ],
             "nodes": [
-                33
+                27
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_aggregate_fields": {
             "avg": [
-                36
+                30
             ],
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        47,
+                        42,
                         "[Media_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                41
+                35
             ],
             "min": [
-                42
+                36
             ],
             "stddev": [
-                49
+                44
             ],
             "stddev_pop": [
-                50
+                45
             ],
             "stddev_samp": [
-                51
+                46
             ],
             "sum": [
-                54
+                49
             ],
             "var_pop": [
-                57
+                52
             ],
             "var_samp": [
-                58
+                53
             ],
             "variance": [
-                59
+                54
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_avg_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_bool_exp": {
             "_and": [
-                37
+                31
             ],
             "_not": [
-                37
+                31
             ],
             "_or": [
-                37
+                31
             ],
             "bucketId": [
-                136
+                154
             ],
             "createdAt": [
-                194
+                214
             ],
             "etag": [
-                136
+                154
             ],
             "id": [
-                198
+                218
             ],
             "name": [
-                136
+                154
+            ],
+            "project": [
+                89
+            ],
+            "project_aggregate": [
+                82
             ],
             "s3key": [
-                136
+                154
             ],
             "size": [
-                32
+                26
             ],
             "updatedAt": [
-                194
+                214
+            ],
+            "uploader": [
+                5
             ],
             "uploaderId": [
-                198
+                218
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_constraint": {},
         "Media_inc_input": {
             "size": [
-                31
+                25
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_insert_input": {
             "bucketId": [
-                135
+                153
             ],
             "createdAt": [
-                193
+                213
             ],
             "etag": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "name": [
-                135
+                153
+            ],
+            "project": [
+                86
             ],
             "s3key": [
-                135
+                153
             ],
             "size": [
-                31
+                25
             ],
             "updatedAt": [
-                193
+                213
+            ],
+            "uploader": [
+                11
             ],
             "uploaderId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_max_fields": {
             "bucketId": [
-                135
+                153
             ],
             "createdAt": [
-                193
+                213
             ],
             "etag": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "name": [
-                135
+                153
             ],
             "s3key": [
-                135
+                153
             ],
             "size": [
-                31
+                25
             ],
             "updatedAt": [
-                193
+                213
             ],
             "uploaderId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_min_fields": {
             "bucketId": [
-                135
+                153
             ],
             "createdAt": [
-                193
+                213
             ],
             "etag": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "name": [
-                135
+                153
             ],
             "s3key": [
-                135
+                153
             ],
             "size": [
-                31
+                25
             ],
             "updatedAt": [
-                193
+                213
             ],
             "uploaderId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
-                33
+                27
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "Media_obj_rel_insert_input": {
+            "data": [
+                34
+            ],
+            "on_conflict": [
+                39
+            ],
+            "__typename": [
+                153
             ]
         },
         "Media_on_conflict": {
             "constraint": [
-                38
+                32
             ],
             "update_columns": [
-                55
+                50
             ],
             "where": [
-                37
+                31
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_order_by": {
             "bucketId": [
-                192
+                210
             ],
             "createdAt": [
-                192
+                210
             ],
             "etag": [
-                192
+                210
             ],
             "id": [
-                192
+                210
             ],
             "name": [
-                192
+                210
+            ],
+            "project_aggregate": [
+                85
             ],
             "s3key": [
-                192
+                210
             ],
             "size": [
-                192
+                210
             ],
             "updatedAt": [
-                192
+                210
+            ],
+            "uploader": [
+                13
             ],
             "uploaderId": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_pk_columns_input": {
             "id": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_select_column": {},
         "Media_set_input": {
             "bucketId": [
-                135
+                153
             ],
             "createdAt": [
-                193
+                213
             ],
             "etag": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "name": [
-                135
+                153
             ],
             "s3key": [
-                135
+                153
             ],
             "size": [
-                31
+                25
             ],
             "updatedAt": [
-                193
+                213
             ],
             "uploaderId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_stddev_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_stddev_pop_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_stddev_samp_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_stream_cursor_input": {
             "initial_value": [
-                53
+                48
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_stream_cursor_value_input": {
             "bucketId": [
-                135
+                153
             ],
             "createdAt": [
-                193
+                213
             ],
             "etag": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "name": [
-                135
+                153
             ],
             "s3key": [
-                135
+                153
             ],
             "size": [
-                31
+                25
             ],
             "updatedAt": [
-                193
+                213
             ],
             "uploaderId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_sum_fields": {
             "size": [
-                31
+                25
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_update_column": {},
         "Media_updates": {
             "_inc": [
-                39
+                33
             ],
             "_set": [
-                48
+                43
             ],
             "where": [
-                37
+                31
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_var_pop_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_var_samp_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Media_variance_fields": {
             "size": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile": {
             "accountId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "instagram": [
-                135
+                153
             ],
             "picture": [
-                135
+                153
             ],
             "twitter": [
-                135
+                153
             ],
             "website": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_aggregate": {
             "aggregate": [
-                64
+                59
             ],
             "nodes": [
-                60
+                55
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_aggregate_bool_exp": {
             "count": [
-                63
+                58
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_aggregate_bool_exp_count": {
             "arguments": [
-                78
+                73
             ],
             "distinct": [
-                29
+                23
             ],
             "filter": [
-                67
+                62
             ],
             "predicate": [
-                32
+                26
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_aggregate_fields": {
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        78,
+                        73,
                         "[Profile_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                70
+                65
             ],
             "min": [
-                72
+                67
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_aggregate_order_by": {
             "count": [
-                192
+                210
             ],
             "max": [
-                71
+                66
             ],
             "min": [
-                73
+                68
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_arr_rel_insert_input": {
             "data": [
-                69
+                64
             ],
             "on_conflict": [
-                75
+                70
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_bool_exp": {
             "_and": [
-                67
+                62
             ],
             "_not": [
-                67
+                62
             ],
             "_or": [
-                67
+                62
             ],
             "accountId": [
-                198
+                218
             ],
             "description": [
-                136
+                154
             ],
             "instagram": [
-                136
+                154
             ],
             "picture": [
-                136
+                154
             ],
             "twitter": [
-                136
+                154
             ],
             "website": [
-                136
+                154
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_constraint": {},
         "Profile_insert_input": {
             "accountId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "instagram": [
-                135
+                153
             ],
             "picture": [
-                135
+                153
             ],
             "twitter": [
-                135
+                153
             ],
             "website": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_max_fields": {
             "accountId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "instagram": [
-                135
+                153
             ],
             "picture": [
-                135
+                153
             ],
             "twitter": [
-                135
+                153
             ],
             "website": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_max_order_by": {
             "accountId": [
-                192
+                210
             ],
             "description": [
-                192
+                210
             ],
             "instagram": [
-                192
+                210
             ],
             "picture": [
-                192
+                210
             ],
             "twitter": [
-                192
+                210
             ],
             "website": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_min_fields": {
             "accountId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "instagram": [
-                135
+                153
             ],
             "picture": [
-                135
+                153
             ],
             "twitter": [
-                135
+                153
             ],
             "website": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_min_order_by": {
             "accountId": [
-                192
+                210
             ],
             "description": [
-                192
+                210
             ],
             "instagram": [
-                192
+                210
             ],
             "picture": [
-                192
+                210
             ],
             "twitter": [
-                192
+                210
             ],
             "website": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
-                60
+                55
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_on_conflict": {
             "constraint": [
-                68
+                63
             ],
             "update_columns": [
-                82
+                77
             ],
             "where": [
-                67
+                62
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_order_by": {
             "accountId": [
-                192
+                210
             ],
             "description": [
-                192
+                210
             ],
             "instagram": [
-                192
+                210
             ],
             "picture": [
-                192
+                210
             ],
             "twitter": [
-                192
+                210
             ],
             "website": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_pk_columns_input": {
             "accountId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_select_column": {},
         "Profile_set_input": {
             "accountId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "instagram": [
-                135
+                153
             ],
             "picture": [
-                135
+                153
             ],
             "twitter": [
-                135
+                153
             ],
             "website": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_stream_cursor_input": {
             "initial_value": [
-                81
+                76
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_stream_cursor_value_input": {
             "accountId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "instagram": [
-                135
+                153
             ],
             "picture": [
-                135
+                153
             ],
             "twitter": [
-                135
+                153
             ],
             "website": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Profile_update_column": {},
         "Profile_updates": {
             "_set": [
-                79
+                74
             ],
             "where": [
-                67
+                62
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project": {
-            "authorId": [
-                197
-            ],
-            "blockchain": [
-                27
-            ],
-            "createdAt": [
-                193
-            ],
-            "curatorId": [
-                197
-            ],
-            "description": [
-                135
-            ],
-            "id": [
-                197
-            ],
-            "pricing": [
-                189,
-                {
-                    "path": [
-                        135
-                    ]
-                }
-            ],
-            "projectAuthor": [
+            "author": [
                 0
             ],
-            "projectCurator": [
-                0,
+            "authorId": [
+                217
+            ],
+            "blockchain": [
+                21
+            ],
+            "createdAt": [
+                213
+            ],
+            "curator": [
+                0
+            ],
+            "curatorId": [
+                217
+            ],
+            "description": [
+                153
+            ],
+            "id": [
+                217
+            ],
+            "pricing": [
+                207,
                 {
-                    "distinct_on": [
-                        21,
-                        "[Account_select_column!]"
-                    ],
-                    "limit": [
-                        31
-                    ],
-                    "offset": [
-                        31
-                    ],
-                    "order_by": [
-                        19,
-                        "[Account_order_by!]"
-                    ],
-                    "where": [
-                        9
+                    "path": [
+                        153
                     ]
                 }
             ],
-            "projectCurator_aggregate": [
-                3,
+            "projectMedias": [
+                80,
                 {
                     "distinct_on": [
-                        21,
-                        "[Account_select_column!]"
+                        100,
+                        "[ProjectMedia_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        19,
-                        "[Account_order_by!]"
+                        99,
+                        "[ProjectMedia_order_by!]"
                     ],
                     "where": [
-                        9
+                        89
+                    ]
+                }
+            ],
+            "projectMedias_aggregate": [
+                81,
+                {
+                    "distinct_on": [
+                        100,
+                        "[ProjectMedia_select_column!]"
+                    ],
+                    "limit": [
+                        25
+                    ],
+                    "offset": [
+                        25
+                    ],
+                    "order_by": [
+                        99,
+                        "[ProjectMedia_order_by!]"
+                    ],
+                    "where": [
+                        89
                     ]
                 }
             ],
             "releaseAt": [
-                193
+                213
             ],
             "state": [
-                102
+                120
             ],
             "storage": [
-                133
+                151
             ],
             "title": [
-                135
+                153
             ],
             "updatedAt": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia": {
-            "ProjectMedia_Project": [
-                84
+            "index": [
+                211
+            ],
+            "media": [
+                27
             ],
             "mediaId": [
-                197
+                217
+            ],
+            "project": [
+                79
             ],
             "projectId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia_aggregate": {
             "aggregate": [
-                87
+                84
             ],
             "nodes": [
-                85
+                80
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_aggregate_bool_exp": {
+            "count": [
+                83
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_aggregate_bool_exp_count": {
+            "arguments": [
+                100
+            ],
+            "distinct": [
+                23
+            ],
+            "filter": [
+                89
+            ],
+            "predicate": [
+                26
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_aggregate_fields": {
+            "avg": [
+                87
+            ],
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        96,
+                        100,
                         "[ProjectMedia_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                91
+                93
             ],
             "min": [
-                92
+                95
+            ],
+            "stddev": [
+                102
+            ],
+            "stddev_pop": [
+                104
+            ],
+            "stddev_samp": [
+                106
+            ],
+            "sum": [
+                110
+            ],
+            "var_pop": [
+                114
+            ],
+            "var_samp": [
+                116
+            ],
+            "variance": [
+                118
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_aggregate_order_by": {
+            "avg": [
+                88
+            ],
+            "count": [
+                210
+            ],
+            "max": [
+                94
+            ],
+            "min": [
+                96
+            ],
+            "stddev": [
+                103
+            ],
+            "stddev_pop": [
+                105
+            ],
+            "stddev_samp": [
+                107
+            ],
+            "sum": [
+                111
+            ],
+            "var_pop": [
+                115
+            ],
+            "var_samp": [
+                117
+            ],
+            "variance": [
+                119
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_arr_rel_insert_input": {
+            "data": [
+                92
+            ],
+            "on_conflict": [
+                98
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_avg_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_avg_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_bool_exp": {
-            "ProjectMedia_Project": [
-                111
-            ],
             "_and": [
-                88
+                89
             ],
             "_not": [
-                88
+                89
             ],
             "_or": [
-                88
+                89
+            ],
+            "index": [
+                212
+            ],
+            "media": [
+                31
             ],
             "mediaId": [
-                198
+                218
+            ],
+            "project": [
+                129
             ],
             "projectId": [
-                198
+                218
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia_constraint": {},
-        "ProjectMedia_insert_input": {
-            "ProjectMedia_Project": [
-                122
-            ],
-            "mediaId": [
-                197
-            ],
-            "projectId": [
-                197
+        "ProjectMedia_inc_input": {
+            "index": [
+                211
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_insert_input": {
+            "index": [
+                211
+            ],
+            "media": [
+                38
+            ],
+            "mediaId": [
+                217
+            ],
+            "project": [
+                140
+            ],
+            "projectId": [
+                217
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_max_fields": {
+            "index": [
+                211
+            ],
             "mediaId": [
-                197
+                217
             ],
             "projectId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_max_order_by": {
+            "index": [
+                210
+            ],
+            "mediaId": [
+                210
+            ],
+            "projectId": [
+                210
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_min_fields": {
+            "index": [
+                211
+            ],
             "mediaId": [
-                197
+                217
             ],
             "projectId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_min_order_by": {
+            "index": [
+                210
+            ],
+            "mediaId": [
+                210
+            ],
+            "projectId": [
+                210
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
-                85
+                80
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia_on_conflict": {
             "constraint": [
-                89
+                90
             ],
             "update_columns": [
-                100
+                112
             ],
             "where": [
-                88
+                89
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia_order_by": {
-            "ProjectMedia_Project": [
-                124
+            "index": [
+                210
+            ],
+            "media": [
+                40
             ],
             "mediaId": [
-                192
+                210
+            ],
+            "project": [
+                142
             ],
             "projectId": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia_select_column": {},
         "ProjectMedia_set_input": {
+            "index": [
+                211
+            ],
             "mediaId": [
-                197
+                217
             ],
             "projectId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_stddev_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_stddev_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_stddev_pop_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_stddev_pop_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_stddev_samp_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_stddev_samp_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_stream_cursor_input": {
             "initial_value": [
-                99
+                109
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "ProjectMedia_stream_cursor_value_input": {
+            "index": [
+                211
+            ],
             "mediaId": [
-                197
+                217
             ],
             "projectId": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_sum_fields": {
+            "index": [
+                211
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_sum_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectMedia_update_column": {},
         "ProjectMedia_updates": {
+            "_inc": [
+                91
+            ],
             "_set": [
-                97
+                101
             ],
             "where": [
-                88
+                89
             ],
             "__typename": [
-                135
+                153
+            ]
+        },
+        "ProjectMedia_var_pop_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_var_pop_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_var_samp_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_var_samp_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_variance_fields": {
+            "index": [
+                24
+            ],
+            "__typename": [
+                153
+            ]
+        },
+        "ProjectMedia_variance_order_by": {
+            "index": [
+                210
+            ],
+            "__typename": [
+                153
             ]
         },
         "ProjectState": {},
         "ProjectState_comparison_exp": {
             "_eq": [
-                102
+                120
             ],
             "_gt": [
-                102
+                120
             ],
             "_gte": [
-                102
+                120
             ],
             "_in": [
-                102
+                120
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                102
+                120
             ],
             "_lte": [
-                102
+                120
             ],
             "_neq": [
-                102
+                120
             ],
             "_nin": [
-                102
+                120
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_aggregate": {
             "aggregate": [
-                107
+                125
             ],
             "nodes": [
-                84
+                79
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_aggregate_bool_exp": {
             "count": [
-                106
+                124
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_aggregate_bool_exp_count": {
             "arguments": [
-                127
+                145
             ],
             "distinct": [
-                29
+                23
             ],
             "filter": [
-                111
+                129
             ],
             "predicate": [
-                32
+                26
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_aggregate_fields": {
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                117
+                135
             ],
             "min": [
-                119
+                137
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_aggregate_order_by": {
             "count": [
-                192
+                210
             ],
             "max": [
-                118
+                136
             ],
             "min": [
-                120
+                138
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_append_input": {
             "pricing": [
-                189
+                207
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_arr_rel_insert_input": {
             "data": [
-                116
+                134
             ],
             "on_conflict": [
-                123
+                141
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_bool_exp": {
             "_and": [
-                111
+                129
             ],
             "_not": [
-                111
+                129
             ],
             "_or": [
-                111
+                129
+            ],
+            "author": [
+                5
             ],
             "authorId": [
-                198
+                218
             ],
             "blockchain": [
-                28
+                22
             ],
             "createdAt": [
-                194
+                214
+            ],
+            "curator": [
+                5
             ],
             "curatorId": [
-                198
+                218
             ],
             "description": [
-                136
+                154
             ],
             "id": [
-                198
+                218
             ],
             "pricing": [
-                191
+                209
             ],
-            "projectAuthor": [
-                9
+            "projectMedias": [
+                89
             ],
-            "projectCurator": [
-                9
-            ],
-            "projectCurator_aggregate": [
-                4
+            "projectMedias_aggregate": [
+                82
             ],
             "releaseAt": [
-                194
+                214
             ],
             "state": [
-                103
+                121
             ],
             "storage": [
-                134
+                152
             ],
             "title": [
-                136
+                154
             ],
             "updatedAt": [
-                194
+                214
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_constraint": {},
         "Project_delete_at_path_input": {
             "pricing": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_delete_elem_input": {
             "pricing": [
-                31
+                25
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_delete_key_input": {
             "pricing": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_insert_input": {
+            "author": [
+                11
+            ],
             "authorId": [
-                197
+                217
             ],
             "blockchain": [
-                27
+                21
             ],
             "createdAt": [
-                193
+                213
+            ],
+            "curator": [
+                11
             ],
             "curatorId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "pricing": [
-                189
+                207
             ],
-            "projectAuthor": [
-                17
-            ],
-            "projectCurator": [
-                8
+            "projectMedias": [
+                86
             ],
             "releaseAt": [
-                193
+                213
             ],
             "state": [
-                102
+                120
             ],
             "storage": [
-                133
+                151
             ],
             "title": [
-                135
+                153
             ],
             "updatedAt": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_max_fields": {
             "authorId": [
-                197
+                217
             ],
             "blockchain": [
-                27
+                21
             ],
             "createdAt": [
-                193
+                213
             ],
             "curatorId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "releaseAt": [
-                193
+                213
             ],
             "state": [
-                102
+                120
             ],
             "storage": [
-                133
+                151
             ],
             "title": [
-                135
+                153
             ],
             "updatedAt": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_max_order_by": {
             "authorId": [
-                192
+                210
             ],
             "blockchain": [
-                192
+                210
             ],
             "createdAt": [
-                192
+                210
             ],
             "curatorId": [
-                192
+                210
             ],
             "description": [
-                192
+                210
             ],
             "id": [
-                192
+                210
             ],
             "releaseAt": [
-                192
+                210
             ],
             "state": [
-                192
+                210
             ],
             "storage": [
-                192
+                210
             ],
             "title": [
-                192
+                210
             ],
             "updatedAt": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_min_fields": {
             "authorId": [
-                197
+                217
             ],
             "blockchain": [
-                27
+                21
             ],
             "createdAt": [
-                193
+                213
             ],
             "curatorId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "releaseAt": [
-                193
+                213
             ],
             "state": [
-                102
+                120
             ],
             "storage": [
-                133
+                151
             ],
             "title": [
-                135
+                153
             ],
             "updatedAt": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_min_order_by": {
             "authorId": [
-                192
+                210
             ],
             "blockchain": [
-                192
+                210
             ],
             "createdAt": [
-                192
+                210
             ],
             "curatorId": [
-                192
+                210
             ],
             "description": [
-                192
+                210
             ],
             "id": [
-                192
+                210
             ],
             "releaseAt": [
-                192
+                210
             ],
             "state": [
-                192
+                210
             ],
             "storage": [
-                192
+                210
             ],
             "title": [
-                192
+                210
             ],
             "updatedAt": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
-                84
+                79
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_obj_rel_insert_input": {
             "data": [
-                116
+                134
             ],
             "on_conflict": [
-                123
+                141
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_on_conflict": {
             "constraint": [
-                112
+                130
             ],
             "update_columns": [
-                131
+                149
             ],
             "where": [
-                111
+                129
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_order_by": {
+            "author": [
+                13
+            ],
             "authorId": [
-                192
+                210
             ],
             "blockchain": [
-                192
+                210
             ],
             "createdAt": [
-                192
+                210
+            ],
+            "curator": [
+                13
             ],
             "curatorId": [
-                192
+                210
             ],
             "description": [
-                192
+                210
             ],
             "id": [
-                192
+                210
             ],
             "pricing": [
-                192
+                210
             ],
-            "projectAuthor": [
-                19
-            ],
-            "projectCurator_aggregate": [
-                7
+            "projectMedias_aggregate": [
+                85
             ],
             "releaseAt": [
-                192
+                210
             ],
             "state": [
-                192
+                210
             ],
             "storage": [
-                192
+                210
             ],
             "title": [
-                192
+                210
             ],
             "updatedAt": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_pk_columns_input": {
             "id": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_prepend_input": {
             "pricing": [
-                189
+                207
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_select_column": {},
         "Project_set_input": {
             "authorId": [
-                197
+                217
             ],
             "blockchain": [
-                27
+                21
             ],
             "createdAt": [
-                193
+                213
             ],
             "curatorId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "pricing": [
-                189
+                207
             ],
             "releaseAt": [
-                193
+                213
             ],
             "state": [
-                102
+                120
             ],
             "storage": [
-                133
+                151
             ],
             "title": [
-                135
+                153
             ],
             "updatedAt": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_stream_cursor_input": {
             "initial_value": [
-                130
+                148
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_stream_cursor_value_input": {
             "authorId": [
-                197
+                217
             ],
             "blockchain": [
-                27
+                21
             ],
             "createdAt": [
-                193
+                213
             ],
             "curatorId": [
-                197
+                217
             ],
             "description": [
-                135
+                153
             ],
             "id": [
-                197
+                217
             ],
             "pricing": [
-                189
+                207
             ],
             "releaseAt": [
-                193
+                213
             ],
             "state": [
-                102
+                120
             ],
             "storage": [
-                133
+                151
             ],
             "title": [
-                135
+                153
             ],
             "updatedAt": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Project_update_column": {},
         "Project_updates": {
             "_append": [
-                109
+                127
             ],
             "_delete_at_path": [
-                113
+                131
             ],
             "_delete_elem": [
-                114
+                132
             ],
             "_delete_key": [
-                115
+                133
             ],
             "_prepend": [
-                126
+                144
             ],
             "_set": [
-                128
+                146
             ],
             "where": [
-                111
+                129
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Storage": {},
         "Storage_comparison_exp": {
             "_eq": [
-                133
+                151
             ],
             "_gt": [
-                133
+                151
             ],
             "_gte": [
-                133
+                151
             ],
             "_in": [
-                133
+                151
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                133
+                151
             ],
             "_lte": [
-                133
+                151
             ],
             "_neq": [
-                133
+                151
             ],
             "_nin": [
-                133
+                151
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "String": {},
         "String_comparison_exp": {
             "_eq": [
-                135
+                153
             ],
             "_gt": [
-                135
+                153
             ],
             "_gte": [
-                135
+                153
             ],
             "_ilike": [
-                135
+                153
             ],
             "_in": [
-                135
+                153
             ],
             "_iregex": [
-                135
+                153
             ],
             "_is_null": [
-                29
+                23
             ],
             "_like": [
-                135
+                153
             ],
             "_lt": [
-                135
+                153
             ],
             "_lte": [
-                135
+                153
             ],
             "_neq": [
-                135
+                153
             ],
             "_nilike": [
-                135
+                153
             ],
             "_nin": [
-                135
+                153
             ],
             "_niregex": [
-                135
+                153
             ],
             "_nlike": [
-                135
+                153
             ],
             "_nregex": [
-                135
+                153
             ],
             "_nsimilar": [
-                135
+                153
             ],
             "_regex": [
-                135
+                153
             ],
             "_similar": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet": {
             "accountId": [
-                197
+                217
             ],
             "address": [
-                135
+                153
             ],
             "network": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_aggregate": {
             "aggregate": [
-                141
+                159
             ],
             "nodes": [
-                137
+                155
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_aggregate_bool_exp": {
             "count": [
-                140
+                158
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_aggregate_bool_exp_count": {
             "arguments": [
-                155
+                173
             ],
             "distinct": [
-                29
+                23
             ],
             "filter": [
-                144
+                162
             ],
             "predicate": [
-                32
+                26
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_aggregate_fields": {
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        155,
+                        173,
                         "[Wallet_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                147
+                165
             ],
             "min": [
-                149
+                167
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_aggregate_order_by": {
             "count": [
-                192
+                210
             ],
             "max": [
-                148
+                166
             ],
             "min": [
-                150
+                168
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_arr_rel_insert_input": {
             "data": [
-                146
+                164
             ],
             "on_conflict": [
-                152
+                170
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_bool_exp": {
             "_and": [
-                144
+                162
             ],
             "_not": [
-                144
+                162
             ],
             "_or": [
-                144
+                162
             ],
             "accountId": [
-                198
+                218
             ],
             "address": [
-                136
+                154
             ],
             "network": [
-                28
+                22
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_constraint": {},
         "Wallet_insert_input": {
             "accountId": [
-                197
+                217
             ],
             "address": [
-                135
+                153
             ],
             "network": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_max_fields": {
             "accountId": [
-                197
+                217
             ],
             "address": [
-                135
+                153
             ],
             "network": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_max_order_by": {
             "accountId": [
-                192
+                210
             ],
             "address": [
-                192
+                210
             ],
             "network": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_min_fields": {
             "accountId": [
-                197
+                217
             ],
             "address": [
-                135
+                153
             ],
             "network": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_min_order_by": {
             "accountId": [
-                192
+                210
             ],
             "address": [
-                192
+                210
             ],
             "network": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
-                137
+                155
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_on_conflict": {
             "constraint": [
-                145
+                163
             ],
             "update_columns": [
-                159
+                177
             ],
             "where": [
-                144
+                162
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_order_by": {
             "accountId": [
-                192
+                210
             ],
             "address": [
-                192
+                210
             ],
             "network": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_pk_columns_input": {
             "address": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_select_column": {},
         "Wallet_set_input": {
             "accountId": [
-                197
+                217
             ],
             "address": [
-                135
+                153
             ],
             "network": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_stream_cursor_input": {
             "initial_value": [
-                158
+                176
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_stream_cursor_value_input": {
             "accountId": [
-                197
+                217
             ],
             "address": [
-                135
+                153
             ],
             "network": [
-                27
+                21
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Wallet_update_column": {},
         "Wallet_updates": {
             "_set": [
-                156
+                174
             ],
             "where": [
-                144
+                162
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations": {
             "applied_steps_count": [
-                31
+                25
             ],
             "checksum": [
-                135
+                153
             ],
             "finished_at": [
-                195
+                215
             ],
             "id": [
-                135
+                153
             ],
             "logs": [
-                135
+                153
             ],
             "migration_name": [
-                135
+                153
             ],
             "rolled_back_at": [
-                195
+                215
             ],
             "started_at": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_aggregate": {
             "aggregate": [
-                163
+                181
             ],
             "nodes": [
-                161
+                179
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_aggregate_fields": {
             "avg": [
-                164
+                182
             ],
             "count": [
-                31,
+                25,
                 {
                     "columns": [
-                        175,
+                        193,
                         "[_prisma_migrations_select_column!]"
                     ],
                     "distinct": [
-                        29
+                        23
                     ]
                 }
             ],
             "max": [
-                169
-            ],
-            "min": [
-                170
-            ],
-            "stddev": [
-                177
-            ],
-            "stddev_pop": [
-                178
-            ],
-            "stddev_samp": [
-                179
-            ],
-            "sum": [
-                182
-            ],
-            "var_pop": [
-                185
-            ],
-            "var_samp": [
-                186
-            ],
-            "variance": [
                 187
             ],
+            "min": [
+                188
+            ],
+            "stddev": [
+                195
+            ],
+            "stddev_pop": [
+                196
+            ],
+            "stddev_samp": [
+                197
+            ],
+            "sum": [
+                200
+            ],
+            "var_pop": [
+                203
+            ],
+            "var_samp": [
+                204
+            ],
+            "variance": [
+                205
+            ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_avg_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_bool_exp": {
             "_and": [
-                165
+                183
             ],
             "_not": [
-                165
+                183
             ],
             "_or": [
-                165
+                183
             ],
             "applied_steps_count": [
-                32
+                26
             ],
             "checksum": [
-                136
+                154
             ],
             "finished_at": [
-                196
+                216
             ],
             "id": [
-                136
+                154
             ],
             "logs": [
-                136
+                154
             ],
             "migration_name": [
-                136
+                154
             ],
             "rolled_back_at": [
-                196
+                216
             ],
             "started_at": [
-                196
+                216
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_constraint": {},
         "_prisma_migrations_inc_input": {
             "applied_steps_count": [
-                31
+                25
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_insert_input": {
             "applied_steps_count": [
-                31
+                25
             ],
             "checksum": [
-                135
+                153
             ],
             "finished_at": [
-                195
+                215
             ],
             "id": [
-                135
+                153
             ],
             "logs": [
-                135
+                153
             ],
             "migration_name": [
-                135
+                153
             ],
             "rolled_back_at": [
-                195
+                215
             ],
             "started_at": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_max_fields": {
             "applied_steps_count": [
-                31
+                25
             ],
             "checksum": [
-                135
+                153
             ],
             "finished_at": [
-                195
+                215
             ],
             "id": [
-                135
+                153
             ],
             "logs": [
-                135
+                153
             ],
             "migration_name": [
-                135
+                153
             ],
             "rolled_back_at": [
-                195
+                215
             ],
             "started_at": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_min_fields": {
             "applied_steps_count": [
-                31
+                25
             ],
             "checksum": [
-                135
+                153
             ],
             "finished_at": [
-                195
+                215
             ],
             "id": [
-                135
+                153
             ],
             "logs": [
-                135
+                153
             ],
             "migration_name": [
-                135
+                153
             ],
             "rolled_back_at": [
-                195
+                215
             ],
             "started_at": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_mutation_response": {
             "affected_rows": [
-                31
+                25
             ],
             "returning": [
-                161
+                179
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_on_conflict": {
             "constraint": [
-                166
+                184
             ],
             "update_columns": [
-                183
+                201
             ],
             "where": [
-                165
+                183
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_order_by": {
             "applied_steps_count": [
-                192
+                210
             ],
             "checksum": [
-                192
+                210
             ],
             "finished_at": [
-                192
+                210
             ],
             "id": [
-                192
+                210
             ],
             "logs": [
-                192
+                210
             ],
             "migration_name": [
-                192
+                210
             ],
             "rolled_back_at": [
-                192
+                210
             ],
             "started_at": [
-                192
+                210
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_pk_columns_input": {
             "id": [
-                135
+                153
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_select_column": {},
         "_prisma_migrations_set_input": {
             "applied_steps_count": [
-                31
+                25
             ],
             "checksum": [
-                135
+                153
             ],
             "finished_at": [
-                195
+                215
             ],
             "id": [
-                135
+                153
             ],
             "logs": [
-                135
+                153
             ],
             "migration_name": [
-                135
+                153
             ],
             "rolled_back_at": [
-                195
+                215
             ],
             "started_at": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_stddev_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_stddev_pop_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_stddev_samp_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_stream_cursor_input": {
             "initial_value": [
-                181
+                199
             ],
             "ordering": [
-                188
+                206
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_stream_cursor_value_input": {
             "applied_steps_count": [
-                31
+                25
             ],
             "checksum": [
-                135
+                153
             ],
             "finished_at": [
-                195
+                215
             ],
             "id": [
-                135
+                153
             ],
             "logs": [
-                135
+                153
             ],
             "migration_name": [
-                135
+                153
             ],
             "rolled_back_at": [
-                195
+                215
             ],
             "started_at": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_sum_fields": {
             "applied_steps_count": [
-                31
+                25
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_update_column": {},
         "_prisma_migrations_updates": {
             "_inc": [
-                167
+                185
             ],
             "_set": [
-                176
+                194
             ],
             "where": [
-                165
+                183
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_var_pop_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_var_samp_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "_prisma_migrations_variance_fields": {
             "applied_steps_count": [
-                30
+                24
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "cursor_ordering": {},
         "jsonb": {},
         "jsonb_cast_exp": {
             "String": [
-                136
+                154
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "jsonb_comparison_exp": {
             "_cast": [
-                190
+                208
             ],
             "_contained_in": [
-                189
+                207
             ],
             "_contains": [
-                189
+                207
             ],
             "_eq": [
-                189
+                207
             ],
             "_gt": [
-                189
+                207
             ],
             "_gte": [
-                189
+                207
             ],
             "_has_key": [
-                135
+                153
             ],
             "_has_keys_all": [
-                135
+                153
             ],
             "_has_keys_any": [
-                135
+                153
             ],
             "_in": [
-                189
+                207
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                189
+                207
             ],
             "_lte": [
-                189
+                207
             ],
             "_neq": [
-                189
+                207
             ],
             "_nin": [
-                189
+                207
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "order_by": {},
+        "smallint": {},
+        "smallint_comparison_exp": {
+            "_eq": [
+                211
+            ],
+            "_gt": [
+                211
+            ],
+            "_gte": [
+                211
+            ],
+            "_in": [
+                211
+            ],
+            "_is_null": [
+                23
+            ],
+            "_lt": [
+                211
+            ],
+            "_lte": [
+                211
+            ],
+            "_neq": [
+                211
+            ],
+            "_nin": [
+                211
+            ],
+            "__typename": [
+                153
+            ]
+        },
         "timestamp": {},
         "timestamp_comparison_exp": {
             "_eq": [
-                193
+                213
             ],
             "_gt": [
-                193
+                213
             ],
             "_gte": [
-                193
+                213
             ],
             "_in": [
-                193
+                213
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                193
+                213
             ],
             "_lte": [
-                193
+                213
             ],
             "_neq": [
-                193
+                213
             ],
             "_nin": [
-                193
+                213
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "timestamptz": {},
         "timestamptz_comparison_exp": {
             "_eq": [
-                195
+                215
             ],
             "_gt": [
-                195
+                215
             ],
             "_gte": [
-                195
+                215
             ],
             "_in": [
-                195
+                215
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                195
+                215
             ],
             "_lte": [
-                195
+                215
             ],
             "_neq": [
-                195
+                215
             ],
             "_nin": [
-                195
+                215
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "uuid": {},
         "uuid_comparison_exp": {
             "_eq": [
-                197
+                217
             ],
             "_gt": [
-                197
+                217
             ],
             "_gte": [
-                197
+                217
             ],
             "_in": [
-                197
+                217
             ],
             "_is_null": [
-                29
+                23
             ],
             "_lt": [
-                197
+                217
             ],
             "_lte": [
-                197
+                217
             ],
             "_neq": [
-                197
+                217
             ],
             "_nin": [
-                197
+                217
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Query": {
@@ -3399,21 +3750,21 @@ export default {
                 0,
                 {
                     "distinct_on": [
-                        21,
+                        15,
                         "[Account_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        19,
+                        13,
                         "[Account_order_by!]"
                     ],
                     "where": [
-                        9
+                        5
                     ]
                 }
             ],
@@ -3421,21 +3772,21 @@ export default {
                 3,
                 {
                     "distinct_on": [
-                        21,
+                        15,
                         "[Account_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        19,
+                        13,
                         "[Account_order_by!]"
                     ],
                     "where": [
-                        9
+                        5
                     ]
                 }
             ],
@@ -3443,330 +3794,339 @@ export default {
                 0,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Media": [
-                33,
+                27,
                 {
                     "distinct_on": [
-                        47,
+                        42,
                         "[Media_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        45,
+                        40,
                         "[Media_order_by!]"
                     ],
                     "where": [
-                        37
+                        31
                     ]
                 }
             ],
             "Media_aggregate": [
-                34,
+                28,
                 {
                     "distinct_on": [
-                        47,
+                        42,
                         "[Media_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        45,
+                        40,
                         "[Media_order_by!]"
                     ],
                     "where": [
-                        37
+                        31
                     ]
                 }
             ],
             "Media_by_pk": [
-                33,
+                27,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Profile": [
-                60,
+                55,
                 {
                     "distinct_on": [
-                        78,
+                        73,
                         "[Profile_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        76,
+                        71,
                         "[Profile_order_by!]"
                     ],
                     "where": [
-                        67
+                        62
                     ]
                 }
             ],
             "Profile_aggregate": [
-                61,
+                56,
                 {
                     "distinct_on": [
-                        78,
+                        73,
                         "[Profile_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        76,
+                        71,
                         "[Profile_order_by!]"
                     ],
                     "where": [
-                        67
+                        62
                     ]
                 }
             ],
             "Profile_by_pk": [
-                60,
+                55,
                 {
                     "accountId": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Project": [
-                84,
+                79,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "ProjectMedia": [
-                85,
+                80,
                 {
                     "distinct_on": [
-                        96,
+                        100,
                         "[ProjectMedia_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        95,
+                        99,
                         "[ProjectMedia_order_by!]"
                     ],
                     "where": [
-                        88
+                        89
                     ]
                 }
             ],
             "ProjectMedia_aggregate": [
-                86,
+                81,
                 {
                     "distinct_on": [
-                        96,
+                        100,
                         "[ProjectMedia_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        95,
+                        99,
                         "[ProjectMedia_order_by!]"
                     ],
                     "where": [
-                        88
+                        89
                     ]
                 }
             ],
             "Project_aggregate": [
-                104,
+                122,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "Project_by_pk": [
-                84,
+                79,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Wallet": [
-                137,
+                155,
                 {
                     "distinct_on": [
-                        155,
+                        173,
                         "[Wallet_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        153,
+                        171,
                         "[Wallet_order_by!]"
                     ],
                     "where": [
-                        144
+                        162
                     ]
                 }
             ],
             "Wallet_aggregate": [
-                138,
+                156,
                 {
                     "distinct_on": [
-                        155,
+                        173,
                         "[Wallet_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        153,
+                        171,
                         "[Wallet_order_by!]"
                     ],
                     "where": [
-                        144
+                        162
                     ]
                 }
             ],
             "Wallet_by_pk": [
-                137,
+                155,
                 {
                     "address": [
-                        135,
+                        153,
                         "String!"
                     ]
                 }
             ],
             "_prisma_migrations": [
-                161,
+                179,
                 {
                     "distinct_on": [
-                        175,
+                        193,
                         "[_prisma_migrations_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        173,
+                        191,
                         "[_prisma_migrations_order_by!]"
                     ],
                     "where": [
-                        165
+                        183
                     ]
                 }
             ],
             "_prisma_migrations_aggregate": [
-                162,
+                180,
                 {
                     "distinct_on": [
-                        175,
+                        193,
                         "[_prisma_migrations_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        173,
+                        191,
                         "[_prisma_migrations_order_by!]"
                     ],
                     "where": [
-                        165
+                        183
                     ]
                 }
             ],
             "_prisma_migrations_by_pk": [
-                161,
+                179,
                 {
                     "id": [
-                        135,
+                        153,
+                        "String!"
+                    ]
+                }
+            ],
+            "mediaFullUrl": [
+                153,
+                {
+                    "s3key": [
+                        153,
                         "String!"
                     ]
                 }
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Mutation": {
             "delete_Account": [
-                16,
+                10,
                 {
                     "where": [
-                        9,
+                        5,
                         "Account_bool_exp!"
                     ]
                 }
@@ -3775,119 +4135,119 @@ export default {
                 0,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "delete_Media": [
-                43,
+                37,
                 {
                     "where": [
-                        37,
+                        31,
                         "Media_bool_exp!"
                     ]
                 }
             ],
             "delete_Media_by_pk": [
-                33,
+                27,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "delete_Profile": [
-                74,
+                69,
                 {
                     "where": [
-                        67,
+                        62,
                         "Profile_bool_exp!"
                     ]
                 }
             ],
             "delete_Profile_by_pk": [
-                60,
+                55,
                 {
                     "accountId": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "delete_Project": [
-                121,
+                139,
                 {
                     "where": [
-                        111,
+                        129,
                         "Project_bool_exp!"
                     ]
                 }
             ],
             "delete_ProjectMedia": [
-                93,
+                97,
                 {
                     "where": [
-                        88,
+                        89,
                         "ProjectMedia_bool_exp!"
                     ]
                 }
             ],
             "delete_Project_by_pk": [
-                84,
+                79,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "delete_Wallet": [
-                151,
+                169,
                 {
                     "where": [
-                        144,
+                        162,
                         "Wallet_bool_exp!"
                     ]
                 }
             ],
             "delete_Wallet_by_pk": [
-                137,
+                155,
                 {
                     "address": [
-                        135,
+                        153,
                         "String!"
                     ]
                 }
             ],
             "delete__prisma_migrations": [
-                171,
+                189,
                 {
                     "where": [
-                        165,
+                        183,
                         "_prisma_migrations_bool_exp!"
                     ]
                 }
             ],
             "delete__prisma_migrations_by_pk": [
-                161,
+                179,
                 {
                     "id": [
-                        135,
+                        153,
                         "String!"
                     ]
                 }
             ],
             "insert_Account": [
-                16,
+                10,
                 {
                     "objects": [
-                        11,
+                        7,
                         "[Account_insert_input!]!"
                     ],
                     "on_conflict": [
-                        18
+                        12
                     ]
                 }
             ],
@@ -3895,166 +4255,166 @@ export default {
                 0,
                 {
                     "object": [
-                        11,
+                        7,
                         "Account_insert_input!"
                     ],
                     "on_conflict": [
-                        18
+                        12
                     ]
                 }
             ],
             "insert_Media": [
-                43,
+                37,
                 {
                     "objects": [
-                        40,
+                        34,
                         "[Media_insert_input!]!"
                     ],
                     "on_conflict": [
-                        44
+                        39
                     ]
                 }
             ],
             "insert_Media_one": [
-                33,
+                27,
                 {
                     "object": [
-                        40,
+                        34,
                         "Media_insert_input!"
                     ],
                     "on_conflict": [
-                        44
+                        39
                     ]
                 }
             ],
             "insert_Profile": [
-                74,
+                69,
                 {
                     "objects": [
-                        69,
+                        64,
                         "[Profile_insert_input!]!"
                     ],
                     "on_conflict": [
-                        75
+                        70
                     ]
                 }
             ],
             "insert_Profile_one": [
-                60,
+                55,
                 {
                     "object": [
-                        69,
+                        64,
                         "Profile_insert_input!"
                     ],
                     "on_conflict": [
-                        75
+                        70
                     ]
                 }
             ],
             "insert_Project": [
-                121,
+                139,
                 {
                     "objects": [
-                        116,
+                        134,
                         "[Project_insert_input!]!"
                     ],
                     "on_conflict": [
-                        123
+                        141
                     ]
                 }
             ],
             "insert_ProjectMedia": [
-                93,
+                97,
                 {
                     "objects": [
-                        90,
+                        92,
                         "[ProjectMedia_insert_input!]!"
                     ],
                     "on_conflict": [
-                        94
+                        98
                     ]
                 }
             ],
             "insert_ProjectMedia_one": [
-                85,
+                80,
                 {
                     "object": [
-                        90,
+                        92,
                         "ProjectMedia_insert_input!"
                     ],
                     "on_conflict": [
-                        94
+                        98
                     ]
                 }
             ],
             "insert_Project_one": [
-                84,
+                79,
                 {
                     "object": [
-                        116,
+                        134,
                         "Project_insert_input!"
                     ],
                     "on_conflict": [
-                        123
+                        141
                     ]
                 }
             ],
             "insert_Wallet": [
-                151,
+                169,
                 {
                     "objects": [
-                        146,
+                        164,
                         "[Wallet_insert_input!]!"
                     ],
                     "on_conflict": [
-                        152
+                        170
                     ]
                 }
             ],
             "insert_Wallet_one": [
-                137,
+                155,
                 {
                     "object": [
-                        146,
+                        164,
                         "Wallet_insert_input!"
                     ],
                     "on_conflict": [
-                        152
+                        170
                     ]
                 }
             ],
             "insert__prisma_migrations": [
-                171,
+                189,
                 {
                     "objects": [
-                        168,
+                        186,
                         "[_prisma_migrations_insert_input!]!"
                     ],
                     "on_conflict": [
-                        172
+                        190
                     ]
                 }
             ],
             "insert__prisma_migrations_one": [
-                161,
+                179,
                 {
                     "object": [
-                        168,
+                        186,
                         "_prisma_migrations_insert_input!"
                     ],
                     "on_conflict": [
-                        172
+                        190
                     ]
                 }
             ],
             "update_Account": [
-                16,
+                10,
                 {
                     "_set": [
-                        22
+                        16
                     ],
                     "where": [
-                        9,
+                        5,
                         "Account_bool_exp!"
                     ]
                 }
@@ -4063,253 +4423,256 @@ export default {
                 0,
                 {
                     "_set": [
-                        22
+                        16
                     ],
                     "pk_columns": [
-                        20,
+                        14,
                         "Account_pk_columns_input!"
                     ]
                 }
             ],
             "update_Account_many": [
-                16,
+                10,
                 {
                     "updates": [
-                        26,
+                        20,
                         "[Account_updates!]!"
                     ]
                 }
             ],
             "update_Media": [
-                43,
+                37,
                 {
                     "_inc": [
-                        39
+                        33
                     ],
                     "_set": [
-                        48
+                        43
                     ],
                     "where": [
-                        37,
+                        31,
                         "Media_bool_exp!"
                     ]
                 }
             ],
             "update_Media_by_pk": [
-                33,
+                27,
                 {
                     "_inc": [
-                        39
+                        33
                     ],
                     "_set": [
-                        48
+                        43
                     ],
                     "pk_columns": [
-                        46,
+                        41,
                         "Media_pk_columns_input!"
                     ]
                 }
             ],
             "update_Media_many": [
-                43,
+                37,
                 {
                     "updates": [
-                        56,
+                        51,
                         "[Media_updates!]!"
                     ]
                 }
             ],
             "update_Profile": [
-                74,
+                69,
                 {
                     "_set": [
-                        79
+                        74
                     ],
                     "where": [
-                        67,
+                        62,
                         "Profile_bool_exp!"
                     ]
                 }
             ],
             "update_Profile_by_pk": [
-                60,
+                55,
                 {
                     "_set": [
-                        79
+                        74
                     ],
                     "pk_columns": [
-                        77,
+                        72,
                         "Profile_pk_columns_input!"
                     ]
                 }
             ],
             "update_Profile_many": [
-                74,
+                69,
                 {
                     "updates": [
-                        83,
+                        78,
                         "[Profile_updates!]!"
                     ]
                 }
             ],
             "update_Project": [
-                121,
+                139,
                 {
                     "_append": [
-                        109
+                        127
                     ],
                     "_delete_at_path": [
-                        113
+                        131
                     ],
                     "_delete_elem": [
-                        114
+                        132
                     ],
                     "_delete_key": [
-                        115
+                        133
                     ],
                     "_prepend": [
-                        126
+                        144
                     ],
                     "_set": [
-                        128
+                        146
                     ],
                     "where": [
-                        111,
+                        129,
                         "Project_bool_exp!"
                     ]
                 }
             ],
             "update_ProjectMedia": [
-                93,
+                97,
                 {
+                    "_inc": [
+                        91
+                    ],
                     "_set": [
-                        97
+                        101
                     ],
                     "where": [
-                        88,
+                        89,
                         "ProjectMedia_bool_exp!"
                     ]
                 }
             ],
             "update_ProjectMedia_many": [
-                93,
+                97,
                 {
                     "updates": [
-                        101,
+                        113,
                         "[ProjectMedia_updates!]!"
                     ]
                 }
             ],
             "update_Project_by_pk": [
-                84,
+                79,
                 {
                     "_append": [
-                        109
+                        127
                     ],
                     "_delete_at_path": [
-                        113
+                        131
                     ],
                     "_delete_elem": [
-                        114
+                        132
                     ],
                     "_delete_key": [
-                        115
+                        133
                     ],
                     "_prepend": [
-                        126
+                        144
                     ],
                     "_set": [
-                        128
+                        146
                     ],
                     "pk_columns": [
-                        125,
+                        143,
                         "Project_pk_columns_input!"
                     ]
                 }
             ],
             "update_Project_many": [
-                121,
+                139,
                 {
                     "updates": [
-                        132,
+                        150,
                         "[Project_updates!]!"
                     ]
                 }
             ],
             "update_Wallet": [
-                151,
+                169,
                 {
                     "_set": [
-                        156
+                        174
                     ],
                     "where": [
-                        144,
+                        162,
                         "Wallet_bool_exp!"
                     ]
                 }
             ],
             "update_Wallet_by_pk": [
-                137,
+                155,
                 {
                     "_set": [
-                        156
+                        174
                     ],
                     "pk_columns": [
-                        154,
+                        172,
                         "Wallet_pk_columns_input!"
                     ]
                 }
             ],
             "update_Wallet_many": [
-                151,
+                169,
                 {
                     "updates": [
-                        160,
+                        178,
                         "[Wallet_updates!]!"
                     ]
                 }
             ],
             "update__prisma_migrations": [
-                171,
+                189,
                 {
                     "_inc": [
-                        167
+                        185
                     ],
                     "_set": [
-                        176
+                        194
                     ],
                     "where": [
-                        165,
+                        183,
                         "_prisma_migrations_bool_exp!"
                     ]
                 }
             ],
             "update__prisma_migrations_by_pk": [
-                161,
+                179,
                 {
                     "_inc": [
-                        167
+                        185
                     ],
                     "_set": [
-                        176
+                        194
                     ],
                     "pk_columns": [
-                        174,
+                        192,
                         "_prisma_migrations_pk_columns_input!"
                     ]
                 }
             ],
             "update__prisma_migrations_many": [
-                171,
+                189,
                 {
                     "updates": [
-                        184,
+                        202,
                         "[_prisma_migrations_updates!]!"
                     ]
                 }
             ],
             "__typename": [
-                135
+                153
             ]
         },
         "Subscription": {
@@ -4317,21 +4680,21 @@ export default {
                 0,
                 {
                     "distinct_on": [
-                        21,
+                        15,
                         "[Account_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        19,
+                        13,
                         "[Account_order_by!]"
                     ],
                     "where": [
-                        9
+                        5
                     ]
                 }
             ],
@@ -4339,21 +4702,21 @@ export default {
                 3,
                 {
                     "distinct_on": [
-                        21,
+                        15,
                         "[Account_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        19,
+                        13,
                         "[Account_order_by!]"
                     ],
                     "where": [
-                        9
+                        5
                     ]
                 }
             ],
@@ -4361,7 +4724,7 @@ export default {
                 0,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
@@ -4370,425 +4733,425 @@ export default {
                 0,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        23,
+                        17,
                         "[Account_stream_cursor_input]!"
                     ],
                     "where": [
-                        9
+                        5
                     ]
                 }
             ],
             "Media": [
-                33,
+                27,
                 {
                     "distinct_on": [
-                        47,
+                        42,
                         "[Media_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        45,
+                        40,
                         "[Media_order_by!]"
                     ],
                     "where": [
-                        37
+                        31
                     ]
                 }
             ],
             "Media_aggregate": [
-                34,
+                28,
                 {
                     "distinct_on": [
-                        47,
+                        42,
                         "[Media_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        45,
+                        40,
                         "[Media_order_by!]"
                     ],
                     "where": [
-                        37
+                        31
                     ]
                 }
             ],
             "Media_by_pk": [
-                33,
+                27,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Media_stream": [
-                33,
+                27,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        52,
+                        47,
                         "[Media_stream_cursor_input]!"
                     ],
                     "where": [
-                        37
+                        31
                     ]
                 }
             ],
             "Profile": [
-                60,
+                55,
                 {
                     "distinct_on": [
-                        78,
+                        73,
                         "[Profile_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        76,
+                        71,
                         "[Profile_order_by!]"
                     ],
                     "where": [
-                        67
+                        62
                     ]
                 }
             ],
             "Profile_aggregate": [
-                61,
+                56,
                 {
                     "distinct_on": [
-                        78,
+                        73,
                         "[Profile_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        76,
+                        71,
                         "[Profile_order_by!]"
                     ],
                     "where": [
-                        67
+                        62
                     ]
                 }
             ],
             "Profile_by_pk": [
-                60,
+                55,
                 {
                     "accountId": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Profile_stream": [
-                60,
+                55,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        80,
+                        75,
                         "[Profile_stream_cursor_input]!"
                     ],
                     "where": [
-                        67
+                        62
                     ]
                 }
             ],
             "Project": [
-                84,
+                79,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "ProjectMedia": [
-                85,
+                80,
                 {
                     "distinct_on": [
-                        96,
+                        100,
                         "[ProjectMedia_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        95,
+                        99,
                         "[ProjectMedia_order_by!]"
                     ],
                     "where": [
-                        88
+                        89
                     ]
                 }
             ],
             "ProjectMedia_aggregate": [
-                86,
+                81,
                 {
                     "distinct_on": [
-                        96,
+                        100,
                         "[ProjectMedia_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        95,
+                        99,
                         "[ProjectMedia_order_by!]"
                     ],
                     "where": [
-                        88
+                        89
                     ]
                 }
             ],
             "ProjectMedia_stream": [
-                85,
+                80,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        98,
+                        108,
                         "[ProjectMedia_stream_cursor_input]!"
                     ],
                     "where": [
-                        88
+                        89
                     ]
                 }
             ],
             "Project_aggregate": [
-                104,
+                122,
                 {
                     "distinct_on": [
-                        127,
+                        145,
                         "[Project_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        124,
+                        142,
                         "[Project_order_by!]"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "Project_by_pk": [
-                84,
+                79,
                 {
                     "id": [
-                        197,
+                        217,
                         "uuid!"
                     ]
                 }
             ],
             "Project_stream": [
-                84,
+                79,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        129,
+                        147,
                         "[Project_stream_cursor_input]!"
                     ],
                     "where": [
-                        111
+                        129
                     ]
                 }
             ],
             "Wallet": [
-                137,
+                155,
                 {
                     "distinct_on": [
-                        155,
+                        173,
                         "[Wallet_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        153,
+                        171,
                         "[Wallet_order_by!]"
                     ],
                     "where": [
-                        144
+                        162
                     ]
                 }
             ],
             "Wallet_aggregate": [
-                138,
+                156,
                 {
                     "distinct_on": [
-                        155,
+                        173,
                         "[Wallet_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        153,
+                        171,
                         "[Wallet_order_by!]"
                     ],
                     "where": [
-                        144
+                        162
                     ]
                 }
             ],
             "Wallet_by_pk": [
-                137,
+                155,
                 {
                     "address": [
-                        135,
+                        153,
                         "String!"
                     ]
                 }
             ],
             "Wallet_stream": [
-                137,
+                155,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        157,
+                        175,
                         "[Wallet_stream_cursor_input]!"
                     ],
                     "where": [
-                        144
+                        162
                     ]
                 }
             ],
             "_prisma_migrations": [
-                161,
+                179,
                 {
                     "distinct_on": [
-                        175,
+                        193,
                         "[_prisma_migrations_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        173,
+                        191,
                         "[_prisma_migrations_order_by!]"
                     ],
                     "where": [
-                        165
+                        183
                     ]
                 }
             ],
             "_prisma_migrations_aggregate": [
-                162,
+                180,
                 {
                     "distinct_on": [
-                        175,
+                        193,
                         "[_prisma_migrations_select_column!]"
                     ],
                     "limit": [
-                        31
+                        25
                     ],
                     "offset": [
-                        31
+                        25
                     ],
                     "order_by": [
-                        173,
+                        191,
                         "[_prisma_migrations_order_by!]"
                     ],
                     "where": [
-                        165
+                        183
                     ]
                 }
             ],
             "_prisma_migrations_by_pk": [
-                161,
+                179,
                 {
                     "id": [
-                        135,
+                        153,
                         "String!"
                     ]
                 }
             ],
             "_prisma_migrations_stream": [
-                161,
+                179,
                 {
                     "batch_size": [
-                        31,
+                        25,
                         "Int!"
                     ],
                     "cursor": [
-                        180,
+                        198,
                         "[_prisma_migrations_stream_cursor_input]!"
                     ],
                     "where": [
-                        165
+                        183
                     ]
                 }
             ],
             "__typename": [
-                135
+                153
             ]
         }
     }
