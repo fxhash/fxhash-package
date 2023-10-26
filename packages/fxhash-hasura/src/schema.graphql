@@ -451,6 +451,314 @@ input Int_comparison_exp {
 }
 
 """
+columns and relationships of "Media"
+"""
+type Media {
+  bucketId: String!
+  createdAt: timestamp!
+  etag: String!
+  id: uuid!
+  name: String!
+  s3key: String!
+  size: Int!
+  updatedAt: timestamp!
+  uploaderId: uuid
+}
+
+"""
+aggregated selection of "Media"
+"""
+type Media_aggregate {
+  aggregate: Media_aggregate_fields
+  nodes: [Media!]!
+}
+
+"""
+aggregate fields of "Media"
+"""
+type Media_aggregate_fields {
+  avg: Media_avg_fields
+  count(columns: [Media_select_column!], distinct: Boolean): Int!
+  max: Media_max_fields
+  min: Media_min_fields
+  stddev: Media_stddev_fields
+  stddev_pop: Media_stddev_pop_fields
+  stddev_samp: Media_stddev_samp_fields
+  sum: Media_sum_fields
+  var_pop: Media_var_pop_fields
+  var_samp: Media_var_samp_fields
+  variance: Media_variance_fields
+}
+
+"""aggregate avg on columns"""
+type Media_avg_fields {
+  size: Float
+}
+
+"""
+Boolean expression to filter rows from the table "Media". All fields are combined with a logical 'AND'.
+"""
+input Media_bool_exp {
+  _and: [Media_bool_exp!]
+  _not: Media_bool_exp
+  _or: [Media_bool_exp!]
+  bucketId: String_comparison_exp
+  createdAt: timestamp_comparison_exp
+  etag: String_comparison_exp
+  id: uuid_comparison_exp
+  name: String_comparison_exp
+  s3key: String_comparison_exp
+  size: Int_comparison_exp
+  updatedAt: timestamp_comparison_exp
+  uploaderId: uuid_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "Media"
+"""
+enum Media_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  Media_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "Media"
+"""
+input Media_inc_input {
+  size: Int
+}
+
+"""
+input type for inserting data into table "Media"
+"""
+input Media_insert_input {
+  bucketId: String
+  createdAt: timestamp
+  etag: String
+  id: uuid
+  name: String
+  s3key: String
+  size: Int
+  updatedAt: timestamp
+  uploaderId: uuid
+}
+
+"""aggregate max on columns"""
+type Media_max_fields {
+  bucketId: String
+  createdAt: timestamp
+  etag: String
+  id: uuid
+  name: String
+  s3key: String
+  size: Int
+  updatedAt: timestamp
+  uploaderId: uuid
+}
+
+"""aggregate min on columns"""
+type Media_min_fields {
+  bucketId: String
+  createdAt: timestamp
+  etag: String
+  id: uuid
+  name: String
+  s3key: String
+  size: Int
+  updatedAt: timestamp
+  uploaderId: uuid
+}
+
+"""
+response of any mutation on the table "Media"
+"""
+type Media_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Media!]!
+}
+
+"""
+on_conflict condition type for table "Media"
+"""
+input Media_on_conflict {
+  constraint: Media_constraint!
+  update_columns: [Media_update_column!]! = []
+  where: Media_bool_exp
+}
+
+"""Ordering options when selecting data from "Media"."""
+input Media_order_by {
+  bucketId: order_by
+  createdAt: order_by
+  etag: order_by
+  id: order_by
+  name: order_by
+  s3key: order_by
+  size: order_by
+  updatedAt: order_by
+  uploaderId: order_by
+}
+
+"""primary key columns input for table: Media"""
+input Media_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "Media"
+"""
+enum Media_select_column {
+  """column name"""
+  bucketId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  etag
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  s3key
+
+  """column name"""
+  size
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  uploaderId
+}
+
+"""
+input type for updating data in table "Media"
+"""
+input Media_set_input {
+  bucketId: String
+  createdAt: timestamp
+  etag: String
+  id: uuid
+  name: String
+  s3key: String
+  size: Int
+  updatedAt: timestamp
+  uploaderId: uuid
+}
+
+"""aggregate stddev on columns"""
+type Media_stddev_fields {
+  size: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type Media_stddev_pop_fields {
+  size: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type Media_stddev_samp_fields {
+  size: Float
+}
+
+"""
+Streaming cursor of the table "Media"
+"""
+input Media_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: Media_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input Media_stream_cursor_value_input {
+  bucketId: String
+  createdAt: timestamp
+  etag: String
+  id: uuid
+  name: String
+  s3key: String
+  size: Int
+  updatedAt: timestamp
+  uploaderId: uuid
+}
+
+"""aggregate sum on columns"""
+type Media_sum_fields {
+  size: Int
+}
+
+"""
+update columns of table "Media"
+"""
+enum Media_update_column {
+  """column name"""
+  bucketId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  etag
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  s3key
+
+  """column name"""
+  size
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  uploaderId
+}
+
+input Media_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: Media_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: Media_set_input
+
+  """filter the rows which have to be updated"""
+  where: Media_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type Media_var_pop_fields {
+  size: Float
+}
+
+"""aggregate var_samp on columns"""
+type Media_var_samp_fields {
+  size: Float
+}
+
+"""aggregate variance on columns"""
+type Media_variance_fields {
+  size: Float
+}
+
+"""
 columns and relationships of "Profile"
 """
 type Profile {
@@ -778,7 +1086,7 @@ columns and relationships of "ProjectMedia"
 type ProjectMedia {
   """An object relationship"""
   ProjectMedia_Project: Project!
-  mediaId: String!
+  mediaId: uuid!
   projectId: uuid!
 }
 
@@ -807,7 +1115,7 @@ input ProjectMedia_bool_exp {
   _and: [ProjectMedia_bool_exp!]
   _not: ProjectMedia_bool_exp
   _or: [ProjectMedia_bool_exp!]
-  mediaId: String_comparison_exp
+  mediaId: uuid_comparison_exp
   projectId: uuid_comparison_exp
 }
 
@@ -826,19 +1134,19 @@ input type for inserting data into table "ProjectMedia"
 """
 input ProjectMedia_insert_input {
   ProjectMedia_Project: Project_obj_rel_insert_input
-  mediaId: String
+  mediaId: uuid
   projectId: uuid
 }
 
 """aggregate max on columns"""
 type ProjectMedia_max_fields {
-  mediaId: String
+  mediaId: uuid
   projectId: uuid
 }
 
 """aggregate min on columns"""
 type ProjectMedia_min_fields {
-  mediaId: String
+  mediaId: uuid
   projectId: uuid
 }
 
@@ -884,7 +1192,7 @@ enum ProjectMedia_select_column {
 input type for updating data in table "ProjectMedia"
 """
 input ProjectMedia_set_input {
-  mediaId: String
+  mediaId: uuid
   projectId: uuid
 }
 
@@ -901,7 +1209,7 @@ input ProjectMedia_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input ProjectMedia_stream_cursor_value_input {
-  mediaId: String
+  mediaId: uuid
   projectId: uuid
 }
 
@@ -1986,6 +2294,19 @@ type mutation_root {
   delete_Account_by_pk(id: uuid!): Account
 
   """
+  delete data from the table: "Media"
+  """
+  delete_Media(
+    """filter the rows which have to be deleted"""
+    where: Media_bool_exp!
+  ): Media_mutation_response
+
+  """
+  delete single row from the table: "Media"
+  """
+  delete_Media_by_pk(id: uuid!): Media
+
+  """
   delete data from the table: "Profile"
   """
   delete_Profile(
@@ -2066,6 +2387,28 @@ type mutation_root {
     """upsert condition"""
     on_conflict: Account_on_conflict
   ): Account
+
+  """
+  insert data into the table: "Media"
+  """
+  insert_Media(
+    """the rows to be inserted"""
+    objects: [Media_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: Media_on_conflict
+  ): Media_mutation_response
+
+  """
+  insert a single row into the table: "Media"
+  """
+  insert_Media_one(
+    """the row to be inserted"""
+    object: Media_insert_input!
+
+    """upsert condition"""
+    on_conflict: Media_on_conflict
+  ): Media
 
   """
   insert data into the table: "Profile"
@@ -2204,6 +2547,40 @@ type mutation_root {
     """updates to execute, in order"""
     updates: [Account_updates!]!
   ): [Account_mutation_response]
+
+  """
+  update data of the table: "Media"
+  """
+  update_Media(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: Media_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: Media_set_input
+
+    """filter the rows which have to be updated"""
+    where: Media_bool_exp!
+  ): Media_mutation_response
+
+  """
+  update single row of the table: "Media"
+  """
+  update_Media_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: Media_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: Media_set_input
+    pk_columns: Media_pk_columns_input!
+  ): Media
+
+  """
+  update multiples rows of table: "Media"
+  """
+  update_Media_many(
+    """updates to execute, in order"""
+    updates: [Media_updates!]!
+  ): [Media_mutation_response]
 
   """
   update data of the table: "Profile"
@@ -2449,6 +2826,49 @@ type query_root {
 
   """fetch data from the table: "Account" using primary key columns"""
   Account_by_pk(id: uuid!): Account
+
+  """
+  fetch data from the table: "Media"
+  """
+  Media(
+    """distinct select on columns"""
+    distinct_on: [Media_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Media_order_by!]
+
+    """filter the rows returned"""
+    where: Media_bool_exp
+  ): [Media!]!
+
+  """
+  fetch aggregated fields from the table: "Media"
+  """
+  Media_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Media_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Media_order_by!]
+
+    """filter the rows returned"""
+    where: Media_bool_exp
+  ): Media_aggregate!
+
+  """fetch data from the table: "Media" using primary key columns"""
+  Media_by_pk(id: uuid!): Media
 
   """
   fetch data from the table: "Profile"
@@ -2722,6 +3142,63 @@ type subscription_root {
     """filter the rows returned"""
     where: Account_bool_exp
   ): [Account!]!
+
+  """
+  fetch data from the table: "Media"
+  """
+  Media(
+    """distinct select on columns"""
+    distinct_on: [Media_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Media_order_by!]
+
+    """filter the rows returned"""
+    where: Media_bool_exp
+  ): [Media!]!
+
+  """
+  fetch aggregated fields from the table: "Media"
+  """
+  Media_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Media_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Media_order_by!]
+
+    """filter the rows returned"""
+    where: Media_bool_exp
+  ): Media_aggregate!
+
+  """fetch data from the table: "Media" using primary key columns"""
+  Media_by_pk(id: uuid!): Media
+
+  """
+  fetch data from the table in a streaming manner: "Media"
+  """
+  Media_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [Media_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: Media_bool_exp
+  ): [Media!]!
 
   """
   fetch data from the table: "Profile"
