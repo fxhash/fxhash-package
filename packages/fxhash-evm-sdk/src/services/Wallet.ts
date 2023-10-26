@@ -12,6 +12,7 @@ import { mainnet, sepolia, hardhat } from "wagmi/chains"
 import { Config } from "wagmi"
 import { getDefaultConfig } from "connectkit"
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
+import { BlockchainNetwork } from "@/types/entities/Account"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, hardhat]
@@ -39,6 +40,19 @@ export enum EWalletOperations {
   VERIFY_USER = "VERIFY_USER",
   BAN_USER = "BAN_USER",
 }
+
+const SIGN_IN_MESSAGE = "sign in to fxhash.xyz"
+const FXHASH_TERMS_OF_SERVICE =
+  "Agree to terms: https://www.fxhash.xyz/doc/legal/terms.pdf"
+
+/**
+ * Formats a sign-in payload for a given Ethereum address.
+ *
+ * @param {string} address - The Ethereum address to include in the payload.
+ * @return {string} - The formatted payload.
+ */
+const formatSignInPayload = (address: string): string =>
+  `${SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
 
 //Wrapper to get the proper provider for the chain with the corresponding configured RPC URL
 export function getProvider(rpcUrl: string): any {
@@ -80,6 +94,11 @@ export function getConfig(): Config {
  * It is responsible for handlinf interactions with the contracts as well
  */
 export class WalletManager {
+  authorization: {
+    network: BlockchainNetwork
+    payload: string
+    signature: string
+  } | null = null
   walletClient: WalletClient | undefined
   account: Address | undefined
 
@@ -89,6 +108,16 @@ export class WalletManager {
 
   async disconnect(): Promise<void> {
     this.walletClient = undefined
+    this.authorization = null
+  }
+
+  async signMessage(message: string) {
+    if (!this.walletClient) throw new Error("no wallet connected")
+    const signature = await this.walletClient.signMessage({
+      account: this.account,
+      message,
+    })
+    return signature
   }
 
   async connect(): Promise<string | false> {
@@ -102,6 +131,16 @@ export class WalletManager {
           transport: http(rpcUrls[0]),
         })
       }
+
+      const payload = formatSignInPayload(this.walletClient.account.address)
+      const signature = await this.signMessage(payload)
+
+      this.authorization = {
+        payload,
+        signature,
+        network: BlockchainNetwork.ETHEREUM,
+      }
+
       return account
     } catch (error) {
       console.log(error)
