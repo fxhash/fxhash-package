@@ -107,6 +107,7 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
       data: packReserveData(reserve),
     }))
 
+
     const params = {
       amount: distribution.editions!,
       enabled: !!distribution.enabled,
