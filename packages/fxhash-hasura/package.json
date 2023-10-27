@@ -28,7 +28,7 @@
   },
   "author": "fxhash",
   "devDependencies": {
-    "@genql/cli": "2.10.0",
+    "@genql/cli": "6.2.1",
     "@jest/globals": "29.6.4",
     "graphql-ws": "5.14.0",
     "jest": "29.7.0",
