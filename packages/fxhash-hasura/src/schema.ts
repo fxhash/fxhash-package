@@ -12,6 +12,7 @@ export type Scalars = {
     ProjectState: any,
     Storage: any,
     String: string,
+    _AccountRoles: any,
     jsonb: any,
     smallint: any,
     timestamp: any,
@@ -35,6 +36,7 @@ export interface Account {
     profile: Profile[]
     /** An aggregate relationship */
     profile_aggregate: Profile_aggregate
+    roles: (Scalars['_AccountRoles'] | null)
     status: Scalars['AccountStatus']
     username: Scalars['String']
     /** An array relationship */
@@ -95,11 +97,11 @@ export interface Account_mutation_response {
 
 
 /** select columns of table "Account" */
-export type Account_select_column = 'id' | 'status' | 'username'
+export type Account_select_column = 'id' | 'roles' | 'status' | 'username'
 
 
 /** update columns of table "Account" */
-export type Account_update_column = 'id' | 'status' | 'username'
+export type Account_update_column = 'id' | 'roles' | 'status' | 'username'
 
 
 /** columns and relationships of "Media" */
@@ -1066,6 +1068,7 @@ export interface AccountGenqlSelection{
     order_by?: (Profile_order_by[] | null), 
     /** filter the rows returned */
     where?: (Profile_bool_exp | null)} })
+    roles?: boolean | number
     status?: boolean | number
     username?: boolean | number
     /** An array relationship */
@@ -1121,11 +1124,11 @@ export interface Account_aggregate_fieldsGenqlSelection{
 
 
 /** Boolean expression to filter rows from the table "Account". All fields are combined with a logical 'AND'. */
-export interface Account_bool_exp {_and?: (Account_bool_exp[] | null),_not?: (Account_bool_exp | null),_or?: (Account_bool_exp[] | null),authoredProjects?: (Project_bool_exp | null),authoredProjects_aggregate?: (Project_aggregate_bool_exp | null),curatedProjects?: (Project_bool_exp | null),curatedProjects_aggregate?: (Project_aggregate_bool_exp | null),id?: (uuid_comparison_exp | null),profile?: (Profile_bool_exp | null),profile_aggregate?: (Profile_aggregate_bool_exp | null),status?: (AccountStatus_comparison_exp | null),username?: (String_comparison_exp | null),wallets?: (Wallet_bool_exp | null),wallets_aggregate?: (Wallet_aggregate_bool_exp | null)}
+export interface Account_bool_exp {_and?: (Account_bool_exp[] | null),_not?: (Account_bool_exp | null),_or?: (Account_bool_exp[] | null),authoredProjects?: (Project_bool_exp | null),authoredProjects_aggregate?: (Project_aggregate_bool_exp | null),curatedProjects?: (Project_bool_exp | null),curatedProjects_aggregate?: (Project_aggregate_bool_exp | null),id?: (uuid_comparison_exp | null),profile?: (Profile_bool_exp | null),profile_aggregate?: (Profile_aggregate_bool_exp | null),roles?: (_AccountRoles_comparison_exp | null),status?: (AccountStatus_comparison_exp | null),username?: (String_comparison_exp | null),wallets?: (Wallet_bool_exp | null),wallets_aggregate?: (Wallet_aggregate_bool_exp | null)}
 
 
 /** input type for inserting data into table "Account" */
-export interface Account_insert_input {authoredProjects?: (Project_arr_rel_insert_input | null),curatedProjects?: (Project_arr_rel_insert_input | null),id?: (Scalars['uuid'] | null),profile?: (Profile_arr_rel_insert_input | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null),wallets?: (Wallet_arr_rel_insert_input | null)}
+export interface Account_insert_input {authoredProjects?: (Project_arr_rel_insert_input | null),curatedProjects?: (Project_arr_rel_insert_input | null),id?: (Scalars['uuid'] | null),profile?: (Profile_arr_rel_insert_input | null),roles?: (Scalars['_AccountRoles'] | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null),wallets?: (Wallet_arr_rel_insert_input | null)}
 
 
 /** aggregate max on columns */
@@ -1170,7 +1173,7 @@ export interface Account_on_conflict {constraint: Account_constraint,update_colu
 
 
 /** Ordering options when selecting data from "Account". */
-export interface Account_order_by {authoredProjects_aggregate?: (Project_aggregate_order_by | null),curatedProjects_aggregate?: (Project_aggregate_order_by | null),id?: (order_by | null),profile_aggregate?: (Profile_aggregate_order_by | null),status?: (order_by | null),username?: (order_by | null),wallets_aggregate?: (Wallet_aggregate_order_by | null)}
+export interface Account_order_by {authoredProjects_aggregate?: (Project_aggregate_order_by | null),curatedProjects_aggregate?: (Project_aggregate_order_by | null),id?: (order_by | null),profile_aggregate?: (Profile_aggregate_order_by | null),roles?: (order_by | null),status?: (order_by | null),username?: (order_by | null),wallets_aggregate?: (Wallet_aggregate_order_by | null)}
 
 
 /** primary key columns input for table: Account */
@@ -1178,7 +1181,7 @@ export interface Account_pk_columns_input {id: Scalars['uuid']}
 
 
 /** input type for updating data in table "Account" */
-export interface Account_set_input {id?: (Scalars['uuid'] | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null)}
+export interface Account_set_input {id?: (Scalars['uuid'] | null),roles?: (Scalars['_AccountRoles'] | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null)}
 
 
 /** Streaming cursor of the table "Account" */
@@ -1190,7 +1193,7 @@ ordering?: (cursor_ordering | null)}
 
 
 /** Initial value of the column from where the streaming should start */
-export interface Account_stream_cursor_value_input {id?: (Scalars['uuid'] | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null)}
+export interface Account_stream_cursor_value_input {id?: (Scalars['uuid'] | null),roles?: (Scalars['_AccountRoles'] | null),status?: (Scalars['AccountStatus'] | null),username?: (Scalars['String'] | null)}
 
 export interface Account_updates {
 /** sets the columns of the filtered rows to the given values */
@@ -2174,6 +2177,10 @@ export interface Wallet_updates {
 _set?: (Wallet_set_input | null),
 /** filter the rows which have to be updated */
 where: Wallet_bool_exp}
+
+
+/** Boolean expression to compare columns of type "_AccountRoles". All fields are combined with logical 'AND'. */
+export interface _AccountRoles_comparison_exp {_eq?: (Scalars['_AccountRoles'] | null),_gt?: (Scalars['_AccountRoles'] | null),_gte?: (Scalars['_AccountRoles'] | null),_in?: (Scalars['_AccountRoles'][] | null),_is_null?: (Scalars['Boolean'] | null),_lt?: (Scalars['_AccountRoles'] | null),_lte?: (Scalars['_AccountRoles'] | null),_neq?: (Scalars['_AccountRoles'] | null),_nin?: (Scalars['_AccountRoles'][] | null)}
 
 
 /** columns and relationships of "_prisma_migrations" */
@@ -3647,12 +3654,14 @@ export const enumAccountConstraint = {
 
 export const enumAccountSelectColumn = {
    id: 'id' as const,
+   roles: 'roles' as const,
    status: 'status' as const,
    username: 'username' as const
 }
 
 export const enumAccountUpdateColumn = {
    id: 'id' as const,
+   roles: 'roles' as const,
    status: 'status' as const,
    username: 'username' as const
 }

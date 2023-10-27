@@ -125,6 +125,7 @@ type Account {
     """filter the rows returned"""
     where: Profile_bool_exp
   ): Profile_aggregate!
+  roles: _AccountRoles
   status: AccountStatus!
   username: String!
 
@@ -213,6 +214,7 @@ input Account_bool_exp {
   id: uuid_comparison_exp
   profile: Profile_bool_exp
   profile_aggregate: Profile_aggregate_bool_exp
+  roles: _AccountRoles_comparison_exp
   status: AccountStatus_comparison_exp
   username: String_comparison_exp
   wallets: Wallet_bool_exp
@@ -242,6 +244,7 @@ input Account_insert_input {
   curatedProjects: Project_arr_rel_insert_input
   id: uuid
   profile: Profile_arr_rel_insert_input
+  roles: _AccountRoles
   status: AccountStatus
   username: String
   wallets: Wallet_arr_rel_insert_input
@@ -297,6 +300,7 @@ input Account_order_by {
   curatedProjects_aggregate: Project_aggregate_order_by
   id: order_by
   profile_aggregate: Profile_aggregate_order_by
+  roles: order_by
   status: order_by
   username: order_by
   wallets_aggregate: Wallet_aggregate_order_by
@@ -315,6 +319,9 @@ enum Account_select_column {
   id
 
   """column name"""
+  roles
+
+  """column name"""
   status
 
   """column name"""
@@ -326,6 +333,7 @@ input type for updating data in table "Account"
 """
 input Account_set_input {
   id: uuid
+  roles: _AccountRoles
   status: AccountStatus
   username: String
 }
@@ -344,6 +352,7 @@ input Account_stream_cursor_input {
 """Initial value of the column from where the streaming should start"""
 input Account_stream_cursor_value_input {
   id: uuid
+  roles: _AccountRoles
   status: AccountStatus
   username: String
 }
@@ -354,6 +363,9 @@ update columns of table "Account"
 enum Account_update_column {
   """column name"""
   id
+
+  """column name"""
+  roles
 
   """column name"""
   status
@@ -2141,6 +2153,23 @@ input Wallet_updates {
 
   """filter the rows which have to be updated"""
   where: Wallet_bool_exp!
+}
+
+scalar _AccountRoles
+
+"""
+Boolean expression to compare columns of type "_AccountRoles". All fields are combined with logical 'AND'.
+"""
+input _AccountRoles_comparison_exp {
+  _eq: _AccountRoles
+  _gt: _AccountRoles
+  _gte: _AccountRoles
+  _in: [_AccountRoles!]
+  _is_null: Boolean
+  _lt: _AccountRoles
+  _lte: _AccountRoles
+  _neq: _AccountRoles
+  _nin: [_AccountRoles!]
 }
 
 """
