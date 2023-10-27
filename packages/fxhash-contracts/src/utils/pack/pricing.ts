@@ -32,25 +32,25 @@ export function packPricing(input: GenTokPricingForm<number>): TInputPricing {
   let details: string
   if (input.pricingMethod === GenTokPricing.FIXED) {
     // if there's a date, get the epoch
-    let opens_at = input.pricingFixed.opensAt
-      ? input.pricingFixed.opensAt.toISOString()
-      : null
+    const opens_at = typeof input.pricingFixed.opensAt === 'string' 
+      ? input.pricingFixed.opensAt 
+      : input.pricingFixed.opensAt?.toISOString() || null
+      
     // turn the string inputs into numbers
     details = packPricingFixed({
       price: input.pricingFixed.price!,
       opens_at: opens_at,
     })
   } else if (input.pricingMethod === GenTokPricing.DUTCH_AUCTION) {
-    const opens_at = input.pricingDutchAuction.opensAt
-      ? input.pricingDutchAuction.opensAt.toISOString()
-      : null
     const levels = new MichelsonMap<number, number>()
     for (let i = 0; i < input.pricingDutchAuction.levels!.length; i++) {
       levels.set(i, input.pricingDutchAuction.levels![i])
     }
     details = packPricingDutchAuction({
       levels: levels,
-      opens_at,
+      opens_at: typeof input.pricingDutchAuction.opensAt === "string"
+        ? input.pricingDutchAuction.opensAt
+        : input.pricingDutchAuction.opensAt!.toISOString(),
       decrement_duration: input.pricingDutchAuction.decrementDuration! * 60,
     })
   }
