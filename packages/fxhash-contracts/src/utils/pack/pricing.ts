@@ -41,13 +41,16 @@ export function packPricing(input: GenTokPricingForm<number>): TInputPricing {
       opens_at: opens_at,
     })
   } else if (input.pricingMethod === GenTokPricing.DUTCH_AUCTION) {
+    const opens_at = input.pricingDutchAuction.opensAt
+      ? input.pricingDutchAuction.opensAt.toISOString()
+      : null
     const levels = new MichelsonMap<number, number>()
     for (let i = 0; i < input.pricingDutchAuction.levels!.length; i++) {
       levels.set(i, input.pricingDutchAuction.levels![i])
     }
     details = packPricingDutchAuction({
       levels: levels,
-      opens_at: input.pricingDutchAuction.opensAt!.toISOString(),
+      opens_at,
       decrement_duration: input.pricingDutchAuction.decrementDuration! * 60,
     })
   }
