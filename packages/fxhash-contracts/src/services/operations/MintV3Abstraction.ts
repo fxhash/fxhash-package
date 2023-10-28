@@ -14,7 +14,10 @@ import { genTokCurrentPrice } from "@/utils/genTokCurrentPrice"
 import { isTicketOwner, isTicketUsed } from "@/services/Blockchain"
 import { prepareReserveConsumption } from "@/utils/pack/reserves"
 import { BlockchainType, TezosContractOperation } from "./ContractOperation"
-import { EBuildableParams, buildParameters } from "../parameters-builder/BuildParameters"
+import {
+  EBuildableParams,
+  buildParameters,
+} from "../parameters-builder/BuildParameters"
 
 const isValidTicket = async (
   pkh: string,
@@ -86,7 +89,7 @@ class TezosMintV3AbstractionOperation extends TezosContractOperation<TMintV3Abst
 
   async validate(): Promise<boolean> {
     if (this.useTicket) {
-      const pkh = await this.manager.getBeaconWallet().getPKH()
+      const pkh = await this.manager.beaconWallet.getPKH()
       if (this.params.ticketId instanceof Array) {
         const availableTicketId = await getFirstTicketAvailable(
           pkh,
