@@ -1,0 +1,34 @@
+{
+  "name": "@fxhash/gql",
+  "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
+  "license": "MIT",
+  "author": "fxhash",
+  "version": "0.0.8",
+  "keywords": [],
+  "main": "index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "graphql-codegen --config codegen.ts --watch \"src/gql/**/*.ts\"",
+    "build": "tsup",
+    "codegen": "graphql-codegen --config codegen.ts"
+  },
+  "dependencies": {
+    "@graphql-typed-document-node/core": "3.2.0",
+    "graphql": "16.8.1",
+    "graphql-tag": "2.12.6",
+    "tslib": "2.6.2",
+    "tsup": "7.2.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.0",
+    "@graphql-codegen/client-preset": "4.1.0",
+    "@graphql-codegen/introspection": "4.0.0",
+    "@graphql-codegen/typescript": "4.0.1",
+    "@graphql-codegen/typescript-document-nodes": "4.0.1",
+    "@graphql-codegen/typescript-resolvers": "4.0.1",
+    "@parcel/watcher": "2.3.0",
+    "typescript": "5.2.2"
+  }
+}
