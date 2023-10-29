@@ -38,7 +38,7 @@ export const FxhashContracts = {
   REGISTER: config.tez.contracts.user_register,
   MODERATION: config.tez.contracts.moderation_token,
   MODERATION_V3: config.tez.contracts.moderation_token_v3,
-  USER_MODERATION: config.tez.contracts.user_moderation,
+  USER_MODERATION: config.tez.contracts.moderation_user,
   ARTICLE_MODERATION: config.tez.contracts.moderation_articles,
   COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
   ONCHFS_FILES: config.tez.contracts.onchfs_files,
