@@ -202,7 +202,7 @@ export class WalletManager {
    * logic required for each contract call (refetch, RPC cycling, checking
    * if operation is applied... etc)
    */
-  async runContractOperation<Params>(
+  async sendTransaction<Params>(
     OperationClass: TContractOperation<Params>,
     params: Params,
     statusCallback: ContractOperationCallback
