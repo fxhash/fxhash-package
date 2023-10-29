@@ -6,7 +6,7 @@ import type {
   mutation_root,
   subscription_rootGenqlSelection,
   subscription_root,
-} from './schema'
+} from "./schema"
 import {
   linkTypeMap,
   createClient as createClientOriginal,
@@ -15,27 +15,27 @@ import {
   type GraphqlOperation,
   type ClientOptions,
   GenqlError,
-} from './runtime'
-export type { FieldsSelection } from './runtime'
+} from "./runtime"
+export type { FieldsSelection } from "./runtime"
 export { GenqlError }
 
-import types from './types'
-export * from './schema'
+import types from "./types"
+export * from "./schema"
 const typeMap = linkTypeMap(types as any)
 
 export interface Client {
   query<R extends query_rootGenqlSelection>(
-    request: R & { __name?: string },
+    request: R & { __name?: string }
   ): Promise<FieldsSelection<query_root, R>>
 
   mutation<R extends mutation_rootGenqlSelection>(
-    request: R & { __name?: string },
+    request: R & { __name?: string }
   ): Promise<FieldsSelection<mutation_root, R>>
 }
 
 export const createClient = function (options?: ClientOptions): Client {
   return createClientOriginal({
-    url: 'http://localhost:8888/v1/graphql',
+    url: "http://localhost:8888/v1/graphql",
 
     ...options,
     queryRoot: typeMap.Query!,
@@ -51,27 +51,38 @@ export const everything = {
 export type QueryResult<fields extends query_rootGenqlSelection> =
   FieldsSelection<query_root, fields>
 export const generateQueryOp: (
-  fields: query_rootGenqlSelection & { __name?: string },
+  fields: query_rootGenqlSelection & { __name?: string }
 ) => GraphqlOperation = function (fields) {
-  return generateGraphqlOperation('query', typeMap.Query!, fields as any)
+  return generateGraphqlOperation("query", typeMap.Query!, fields as any)
 }
 
 export type MutationResult<fields extends mutation_rootGenqlSelection> =
   FieldsSelection<mutation_root, fields>
 export const generateMutationOp: (
-  fields: mutation_rootGenqlSelection & { __name?: string },
+  fields: mutation_rootGenqlSelection & { __name?: string }
 ) => GraphqlOperation = function (fields) {
-  return generateGraphqlOperation('mutation', typeMap.Mutation!, fields as any)
+  return generateGraphqlOperation("mutation", typeMap.Mutation!, fields as any)
 }
 
 export type SubscriptionResult<fields extends subscription_rootGenqlSelection> =
   FieldsSelection<subscription_root, fields>
 export const generateSubscriptionOp: (
-  fields: subscription_rootGenqlSelection & { __name?: string },
+  fields: subscription_rootGenqlSelection & { __name?: string }
 ) => GraphqlOperation = function (fields) {
   return generateGraphqlOperation(
-    'subscription',
+    "subscription",
     typeMap.Subscription!,
-    fields as any,
+    fields as any
   )
 }
+
+const { query, variables } = generateQueryOp({
+  Project: {
+    __args: {
+      where: {
+        id: "uuid-here",
+      },
+    },
+    id: true,
+  },
+})
