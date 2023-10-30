@@ -7,13 +7,21 @@ const config: CodegenConfig = {
   generates: {
     "./src/generated/": {
       preset: "client",
-      config: {
-        scalars: {
-          uuid: {
-            input: "string",
-            output: "string",
-          },
-        },
+      plugins: [],
+      presetConfig: {
+        fragmentMasking: false,
+      },
+    },
+  },
+  config: {
+    scalars: {
+      uuid: {
+        input: "string",
+        output: "string",
+      },
+      ProjectState: {
+        input: "string",
+        output: "string",
       },
     },
   },

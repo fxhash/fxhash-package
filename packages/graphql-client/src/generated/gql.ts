@@ -13,8 +13,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  query GetProjects($where: Project_bool_exp = {}) {\n    Project(where: $where) {\n      id\n      pricing\n      description\n      state\n      storage\n    }\n  }\n": types.GetProjectsDocument,
-    "\n  query GetWallets($where1: Wallet_bool_exp = {}) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n": types.GetWalletsDocument,
+    "\n  fragment Project_BaseDetails on Project {\n    id\n    title\n    description\n    releaseAt\n    blockchain\n    storage\n    pricing\n    curator {\n      id\n      status\n      username\n    }\n    author {\n      id\n      status\n      username\n    }\n    projectMedias {\n      index\n      media {\n        id\n        url\n      }\n    }\n  }\n": types.Project_BaseDetailsFragmentDoc,
+    "\n  fragment Project_UserSecrets on Project {\n    state\n  }\n": types.Project_UserSecretsFragmentDoc,
+    "\n  query GetAllProjects {\n    Project {\n      ...Project_BaseDetails\n    }\n  }\n": types.GetAllProjectsDocument,
+    "\n  query GetUserSubmissions($authorId: uuid!) {\n    Project(where: { authorId: { _eq: $authorId } }) {\n      ...Project_BaseDetails\n      ...Project_UserSecrets\n    }\n  }\n": types.GetUserSubmissionsDocument,
 };
 
 /**
@@ -34,11 +36,19 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetProjects($where: Project_bool_exp = {}) {\n    Project(where: $where) {\n      id\n      pricing\n      description\n      state\n      storage\n    }\n  }\n"): (typeof documents)["\n  query GetProjects($where: Project_bool_exp = {}) {\n    Project(where: $where) {\n      id\n      pricing\n      description\n      state\n      storage\n    }\n  }\n"];
+export function graphql(source: "\n  fragment Project_BaseDetails on Project {\n    id\n    title\n    description\n    releaseAt\n    blockchain\n    storage\n    pricing\n    curator {\n      id\n      status\n      username\n    }\n    author {\n      id\n      status\n      username\n    }\n    projectMedias {\n      index\n      media {\n        id\n        url\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment Project_BaseDetails on Project {\n    id\n    title\n    description\n    releaseAt\n    blockchain\n    storage\n    pricing\n    curator {\n      id\n      status\n      username\n    }\n    author {\n      id\n      status\n      username\n    }\n    projectMedias {\n      index\n      media {\n        id\n        url\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetWallets($where1: Wallet_bool_exp = {}) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n"): (typeof documents)["\n  query GetWallets($where1: Wallet_bool_exp = {}) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n"];
+export function graphql(source: "\n  fragment Project_UserSecrets on Project {\n    state\n  }\n"): (typeof documents)["\n  fragment Project_UserSecrets on Project {\n    state\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetAllProjects {\n    Project {\n      ...Project_BaseDetails\n    }\n  }\n"): (typeof documents)["\n  query GetAllProjects {\n    Project {\n      ...Project_BaseDetails\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetUserSubmissions($authorId: uuid!) {\n    Project(where: { authorId: { _eq: $authorId } }) {\n      ...Project_BaseDetails\n      ...Project_UserSecrets\n    }\n  }\n"): (typeof documents)["\n  query GetUserSubmissions($authorId: uuid!) {\n    Project(where: { authorId: { _eq: $authorId } }) {\n      ...Project_BaseDetails\n      ...Project_UserSecrets\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
