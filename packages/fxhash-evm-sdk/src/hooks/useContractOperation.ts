@@ -118,7 +118,7 @@ export function useContractOperation<Params>(
     }
 
     // otherwise we can just trigger the operation
-    userContext.walletManager?.runContractOperation(
+    userContext.walletManager?.sendTransaction(
       OperationClass,
       params,
       statusCallback

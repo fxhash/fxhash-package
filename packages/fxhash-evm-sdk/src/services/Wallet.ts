@@ -89,6 +89,11 @@ export function getConfig(): WagmiConfig {
 /* The `WalletManager` class manages the connection to a wallet client, handles RPC node cycling, and
 provides a generic method for running contract operations with error handling and retry logic. */
 export class WalletManager {
+  authorization: {
+    network: BlockchainNetwork
+    payload: string
+    signature: string
+  } | null = null
   walletClient: WalletClient | undefined
   publicClient: PublicClient
   account: Address | undefined
@@ -100,6 +105,16 @@ export class WalletManager {
 
   async disconnect(): Promise<void> {
     this.walletClient = undefined
+    this.authorization = null
+  }
+
+  async signMessage(message: string) {
+    if (!this.walletClient) throw new Error("no wallet connected")
+    const signature = await this.walletClient.signMessage({
+      account: this.account,
+      message,
+    })
+    return signature
   }
 
   async connect(): Promise<string | false> {
@@ -113,6 +128,16 @@ export class WalletManager {
           transport: http(rpcUrls[0]),
         })
       }
+
+      const payload = formatSignInPayload(this.walletClient.account.address)
+      const signature = await this.signMessage(payload)
+
+      this.authorization = {
+        payload,
+        signature,
+        network: BlockchainNetwork.ETHEREUM,
+      }
+
       return account
     } catch (error) {
       console.log(error)
@@ -151,7 +176,7 @@ export class WalletManager {
    * logic required for each contract call (refetch, RPC cycling, checking
    * if operation is applied... etc)
    */
-  async runContractOperation<Params>(
+  async sendTransaction<Params>(
     OperationClass: TContractOperation<Params>,
     params: Params,
     statusCallback: ContractOperationCallback

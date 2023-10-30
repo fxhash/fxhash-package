@@ -1,56 +1,9 @@
 import { WalletOperation } from "@taquito/taquito"
+import { ContractOperation } from "@fxhash/contracts-shared"
 import { TezosWalletManager } from "../Wallet"
 
-// Generic Interfaces
-interface IWalletOperation {
-  // ...
-}
-
-interface IWalletManager {
-  // ...
-}
-
-/**
- * A Contract Operation defines a set of operations to run at different
- * moments of the lifecycle of an operation. When an operation needs to be sent,
- * its corresponding class is instanciated with the operation parameters and
- * the following steps are performed:
- * - prepare: preparation steps before calling a contract
- * - call: the actual contract call
- * - success: a message is emitted
- * In case of failure, the whole lifecycle restarts, if the RPC is at cause it
- * is swapped with another one. This logic is handled by an external runner.
- */
-
-interface IContractOperation<Params> {
-  manager: IWalletManager
-  params: Params
-  /**
-   * Runs the required preparations (such as fetching the contracts to get
-   * the entrypoints signature), or any other sync/async operation considered
-   * not to be a part of the actual contract call.
-   * Can store required values in the members of the instance.
-   */
-  prepare(): Promise<void>
-
-  /**
-   * The actual calls to the contracts, which results in some Transaction
-   * Wallet Operation and can be observed to track the success/failure of
-   * the transaction emitted
-   */
-  call(): Promise<IWalletOperation>
-
-  /**
-   * Each Contract Operation should implement a success message based on the
-   * operation parameters, and so to provide meaningful feedback to users on
-   * different parts of the front.
-   * todo: define appropriate type
-   */
-  success(): string
-}
-
 export abstract class TezosContractOperation<Params>
-  implements IContractOperation<Params>
+  implements ContractOperation<Params>
 {
   manager: TezosWalletManager
   params: Params
@@ -65,8 +18,14 @@ export abstract class TezosContractOperation<Params>
   abstract success(): string
 }
 
+// a generic type for ContractOperation polymorphism
+export type TTezosContractOperation<TParams> = new (
+  manager: TezosWalletManager,
+  params: TParams
+) => TezosContractOperation<TParams>
+
 export abstract class EthereumContractOperation<Params>
-  implements IContractOperation<Params>
+  implements ContractOperation<Params>
 {
   manager: any /* EthereumWalletManager */
   params: Params
@@ -80,12 +39,6 @@ export abstract class EthereumContractOperation<Params>
   abstract call(): Promise<any /* EthereumWalletOperation */>
   abstract success(): string
 }
-
-// a generic type for TezosContractOperation polymorphism
-type TTezosContractOperation<Params> = new (
-  manager: TezosWalletManager,
-  params: Params
-) => TezosContractOperation<Params>
 
 // a generic type for EthereumContractOperation polymorphism
 type TEthereumContractOperation<Params> = new (
