@@ -28,9 +28,11 @@
     "dist"
   ],
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.ts",
-    "generate": "npm run codegen && npm run build",
-    "dev": "npm run generate && chokidar \"src/gql/**/*.ts\" -c \"npm run generate\" --silent",
+    "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
+    "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
+    "codegen": "npm run codegen:schema && npm run codegen:typescript",
+    "codegen:dev": "npm run codegen:typescript && npm run build",
+    "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent",
     "build": "tsup"
   },
   "peerDependencies": {
@@ -44,6 +46,7 @@
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/client-preset": "4.1.0",
     "@graphql-codegen/introspection": "4.0.0",
+    "@graphql-codegen/schema-ast": "4.0.0",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-document-nodes": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",

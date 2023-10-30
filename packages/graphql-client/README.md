@@ -36,6 +36,14 @@ export function PresentationHeader({}: Props) {
 }
 ```
 
+When you update the graphql schema (so the Hasura API), run:
+
+```sh
+$ npm run codegen
+```
+
+It will update the `schema.graphql` and sync the typings from it.
+
 # This package explained
 
 This package uses `@graphql-codegen` for generating the GraphQL types automatically based on the schema. The package is targetting `http://localhost:8888/v1/graphql` for inspecting the schema, which is the URL under which the main hasura instance is exposed locally using the default config on the monorepo. The docgen is authenticated as a user, to ensure that no sensitive schema data leaks through the package.
@@ -43,7 +51,7 @@ This package uses `@graphql-codegen` for generating the GraphQL types automatica
 `@graphql-codegen` doesn't generate typings for making queries, instead it:
 
 - generates schema typings (models, enums, resolvers, mutations...)
-- generates typed queries from the GraphQL queries
+- generates typings for GraphQL queries written manually (and exposed by the package)
 
 As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, which are exposed for consuming.
 
@@ -58,6 +66,18 @@ As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, whi
 ├── codegen.ts             -- @graphql-codegen config
 └── graphql.schema.json    -- auto-generated
 ```
+
+## How to run generation
+
+The code generation is divided in 2 steps, designed to optimise and improve the robustness of the process:
+
+- `codegen:schema`: generates a global [`schema.graphql`](./schema.graphql) file from the hasura instance running at `http://localhost:8888`
+- `codegen:typescript`: generates the TS typings and query typings from the graphql schema & the queries in [`stc/gql`](./src/gql/)
+
+**Only tun `pnpm run codegen:schema` when you update the Hasura API.**
+
+> **Note**
+> The watch mode on dev is only running `codegen:typscript`, but it's watching for changes on both the `schema.graphql` file and the `src/gql` folder.
 
 ## How to write a new GraphQL query
 

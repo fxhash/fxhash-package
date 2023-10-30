@@ -2,7 +2,6 @@ import type { CodegenConfig } from "@graphql-codegen/cli"
 
 const config: CodegenConfig = {
   overwrite: true,
-  documents: "src/gql/**/!(*.d).{ts,tsx,graphql}",
   schema: [
     {
       "http://localhost:8888/v1/graphql": {
@@ -14,16 +13,8 @@ const config: CodegenConfig = {
     },
   ],
   generates: {
-    "./src/generated/": {
-      preset: "client",
-      config: {
-        scalars: {
-          uuid: {
-            input: "string",
-            output: "string",
-          },
-        },
-      },
+    "./schema.graphql": {
+      plugins: ["schema-ast"],
     },
   },
 }
