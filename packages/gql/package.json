@@ -1,5 +1,5 @@
 {
-  "name": "@fxhash/gql2",
+  "name": "@fxhash/gql",
   "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
   "license": "MIT",
   "author": "fxhash",

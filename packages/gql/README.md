@@ -57,6 +57,7 @@ As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, whi
 
 ```
 .
+├── _old                   -- content of previous "@fxhash/gql" package
 ├── src/
 │   ├── generated          -- auto-generated; types, utils,... etc
 │   └── gql/               -- pre-made graph ql operations
