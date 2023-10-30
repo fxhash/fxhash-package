@@ -66,3 +66,55 @@ export const Qu_getUserSubmissions = graphql(`
     }
   }
 `)
+
+/**
+ * Create a project.
+ * **Note**: User must be authenticated, and will be set as the Author.
+ */
+export const Mu_createProject = graphql(`
+  mutation CreateProject($object: Project_insert_input!) {
+    insert_Project_one(object: $object) {
+      projectMedias {
+        index
+        media {
+          id
+          name
+        }
+      }
+      id
+      description
+      author {
+        id
+      }
+      title
+      state
+      releaseAt
+    }
+  }
+`)
+
+/**
+ * Update a project, using a 3-step operation:
+ *  - delete all the medias associated with a given project
+ *  - update the project data
+ *  - add the project medias entries
+ * The user must be authenticated and the author of the project for the query to
+ * work.
+ */
+export const Mu_updateProject = graphql(`
+  mutation Update_Project(
+    $projectId: uuid!
+    $projectData: Project_set_input
+    $projectMedias: [ProjectMedia_insert_input!]!
+  ) {
+    delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {
+      affected_rows
+    }
+    update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {
+      affected_rows
+    }
+    insert_ProjectMedia(objects: $projectMedias) {
+      affected_rows
+    }
+  }
+`)

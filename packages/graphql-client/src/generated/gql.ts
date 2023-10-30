@@ -17,6 +17,8 @@ const documents = {
     "\n  fragment Project_UserSecrets on Project {\n    state\n  }\n": types.Project_UserSecretsFragmentDoc,
     "\n  query GetAllProjects {\n    Project {\n      ...Project_BaseDetails\n    }\n  }\n": types.GetAllProjectsDocument,
     "\n  query GetUserSubmissions($authorId: uuid!) {\n    Project(where: { authorId: { _eq: $authorId } }) {\n      ...Project_BaseDetails\n      ...Project_UserSecrets\n    }\n  }\n": types.GetUserSubmissionsDocument,
+    "\n  mutation CreateProject($object: Project_insert_input!) {\n    insert_Project_one(object: $object) {\n      projectMedias {\n        index\n        media {\n          id\n          name\n        }\n      }\n      id\n      description\n      author {\n        id\n      }\n      title\n      state\n      releaseAt\n    }\n  }\n": types.CreateProjectDocument,
+    "\n  mutation Update_Project(\n    $projectId: uuid!\n    $projectData: Project_set_input\n    $projectMedias: [ProjectMedia_insert_input!]!\n  ) {\n    delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {\n      affected_rows\n    }\n    update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {\n      affected_rows\n    }\n    insert_ProjectMedia(objects: $projectMedias) {\n      affected_rows\n    }\n  }\n": types.Update_ProjectDocument,
 };
 
 /**
@@ -49,6 +51,14 @@ export function graphql(source: "\n  query GetAllProjects {\n    Project {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetUserSubmissions($authorId: uuid!) {\n    Project(where: { authorId: { _eq: $authorId } }) {\n      ...Project_BaseDetails\n      ...Project_UserSecrets\n    }\n  }\n"): (typeof documents)["\n  query GetUserSubmissions($authorId: uuid!) {\n    Project(where: { authorId: { _eq: $authorId } }) {\n      ...Project_BaseDetails\n      ...Project_UserSecrets\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateProject($object: Project_insert_input!) {\n    insert_Project_one(object: $object) {\n      projectMedias {\n        index\n        media {\n          id\n          name\n        }\n      }\n      id\n      description\n      author {\n        id\n      }\n      title\n      state\n      releaseAt\n    }\n  }\n"): (typeof documents)["\n  mutation CreateProject($object: Project_insert_input!) {\n    insert_Project_one(object: $object) {\n      projectMedias {\n        index\n        media {\n          id\n          name\n        }\n      }\n      id\n      description\n      author {\n        id\n      }\n      title\n      state\n      releaseAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation Update_Project(\n    $projectId: uuid!\n    $projectData: Project_set_input\n    $projectMedias: [ProjectMedia_insert_input!]!\n  ) {\n    delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {\n      affected_rows\n    }\n    update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {\n      affected_rows\n    }\n    insert_ProjectMedia(objects: $projectMedias) {\n      affected_rows\n    }\n  }\n"): (typeof documents)["\n  mutation Update_Project(\n    $projectId: uuid!\n    $projectData: Project_set_input\n    $projectMedias: [ProjectMedia_insert_input!]!\n  ) {\n    delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {\n      affected_rows\n    }\n    update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {\n      affected_rows\n    }\n    insert_ProjectMedia(objects: $projectMedias) {\n      affected_rows\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
