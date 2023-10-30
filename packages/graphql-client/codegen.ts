@@ -16,6 +16,14 @@ const config: CodegenConfig = {
   generates: {
     "./src/generated/": {
       preset: "client",
+      config: {
+        scalars: {
+          uuid: {
+            input: "string",
+            output: "string",
+          },
+        },
+      },
     },
   },
 }

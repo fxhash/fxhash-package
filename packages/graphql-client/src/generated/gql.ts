@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query GetProjects($where: Project_bool_exp = {}) {\n    Project(where: $where) {\n      id\n      pricing\n      description\n      state\n      storage\n    }\n  }\n": types.GetProjectsDocument,
-    "\n  query GetWallets($where1: Wallet_bool_exp = { network: {} }) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n": types.GetWalletsDocument,
+    "\n  query GetWallets($where1: Wallet_bool_exp = {}) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n": types.GetWalletsDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function graphql(source: "\n  query GetProjects($where: Project_bool_exp 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetWallets($where1: Wallet_bool_exp = { network: {} }) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n"): (typeof documents)["\n  query GetWallets($where1: Wallet_bool_exp = { network: {} }) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n"];
+export function graphql(source: "\n  query GetWallets($where1: Wallet_bool_exp = {}) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n"): (typeof documents)["\n  query GetWallets($where1: Wallet_bool_exp = {}) {\n    Wallet(where: $where1) {\n      address\n      network\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

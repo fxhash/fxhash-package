@@ -141,8 +141,44 @@ export type Project = {
 
 As seen in the example, only the properties defined in the query are exposed by typescript.
 
-## TODOs
+## Custom scalars
 
-### Admin version of the package
+To define the input/output type of scalars, a setting can be defined in the [`codegen.ts`](./codegen.ts) config file.
+
+```ts
+const config: CodegenConfig = {
+  ...,
+  generates: {
+    "./src/generated/": {
+      config: {
+        scalars: {
+          // custom scalar field
+          uuid: {
+            input: "string",
+            output: "string",
+          },
+        },
+      },
+    },
+  },
+}
+```
+
+This will instruct the code generator to type the `uuid` scalar properly:
+
+```ts
+export type Scalars = {
+  ...
+  uuid: { input: string; output: string; }
+};
+```
+
+To learn more about custom GraphQL scalars: [The complete GraphQL Scalar Guide](https://the-guild.dev/blog/the-complete-graphql-scalar-guide)
+
+---
+
+# TODOs
+
+## Admin version of the package
 
 Right now, and because this package is public, its connection with the GraphQL endpoint has been user-authenticated so that it only shows the schema available to regular users. We should also have a package which handles the admin operations, however we don't want such operations to be exposed by the main GraphQL API.
