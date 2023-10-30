@@ -1,23 +1,42 @@
 {
-  "name": "@fxhash/gql",
+  "name": "@fxhash/gql2",
   "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
   "license": "MIT",
   "author": "fxhash",
   "version": "0.0.8",
   "keywords": [],
-  "main": "index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "graphql-codegen --config codegen.ts --watch \"src/gql/**/*.ts\"",
-    "build": "tsup",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "generate": "npm run codegen && npm run build",
+    "dev": "npm run generate && chokidar \"src/gql/**/*.ts\" -c \"npm run generate\" --silent",
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "dependencies": {
-    "@graphql-typed-document-node/core": "3.2.0",
-    "graphql": "16.8.1",
-    "graphql-tag": "2.12.6",
     "tslib": "2.6.2",
     "tsup": "7.2.0"
   },
@@ -28,7 +47,9 @@
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-document-nodes": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
+    "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "2.3.0",
-    "typescript": "5.2.2"
+    "chokidar-cli": "3.0.0",
+    "typescript": "5.0.4"
   }
 }

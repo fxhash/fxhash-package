@@ -1,6 +1,6 @@
-import { gql } from "graphql-tag"
+import { graphql } from "@/generated"
 
-export const Qu_getProjects = gql`
+export const Qu_getProjects = graphql(`
   query GetProjects($where: Project_bool_exp = {}) {
     Project(where: $where) {
       id
@@ -10,4 +10,13 @@ export const Qu_getProjects = gql`
       storage
     }
   }
-`
+`)
+
+export const Qu_getWallets = graphql(`
+  query GetWallets($where1: Wallet_bool_exp = {}) {
+    Wallet(where: $where1) {
+      address
+      network
+    }
+  }
+`)

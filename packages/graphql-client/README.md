@@ -1,4 +1,7 @@
-# `@fxhash/gql-client`
+# `@fxhash/gql2`
+
+> **Note**
+> This package will replace [`@fxhash/gql`](../fxhash-gql/) once it will have reached maturity. For now we keep both packages alive.
 
 > fxhash unopiniated typed GraphQL client & common queries ready for consumption.
 
@@ -7,10 +10,31 @@
 Install the package
 
 ```sh
-$ pnpm add @fxhash/gql
+$ pnpm add @fxhash/gql2
 ```
 
-TODO...
+Run a query with `@apollo/client`:
+
+```ts
+import { useQuery } from "@apollo/client"
+import { Qu_getProjects } from "@fxhash/gql2"
+
+interface Props {}
+export function PresentationHeader({}: Props) {
+  const { data } = useQuery(Qu_getProjects, {
+    variables: {
+      where: {
+        //... typed !
+      },
+    },
+  })
+
+  // typed !
+  const projects = data?.Project
+
+  return ...
+}
+```
 
 # This package explained
 
@@ -19,9 +43,9 @@ This package uses `@graphql-codegen` for generating the GraphQL types automatica
 `@graphql-codegen` doesn't generate typings for making queries, instead it:
 
 - generates schema typings (models, enums, resolvers, mutations...)
-- generates typed queries from the GraphQL code
+- generates typed queries from the GraphQL queries
 
-As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, which are exposed.
+As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, which are exposed for consuming.
 
 ```
 .
@@ -34,6 +58,32 @@ As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, whi
 ├── codegen.ts             -- @graphql-codegen config
 └── graphql.schema.json    -- auto-generated
 ```
+
+## How to write a new GraphQL query
+
+- add the query to [`./src/gql/queries`](./src/gql/queries/) (or to the `mutations` / `subscriptions`)
+- encapsulate the query with the `graphql()` function from [`./src/generated/gql.ts`](./src/generated/gql.ts)
+
+  ```ts
+  import { graphql } from "@/generated"
+
+  export const Qu_getProjects = graphql(`
+    query GetProjects($where: Project_bool_exp = {}) {
+      Project(where: $where) {
+        id
+        pricing
+        description
+        state
+        storage
+      }
+    }
+  `)
+  ```
+
+- run `$ npm run generate` (**note**: this requires the GraphQL api to be running), which will generate the types for the query.
+
+> **Note**
+> This approach has a few benefits over generating full query typings, mainly that **only** the properties specified in the query are exposed in the typings, ensuring proper type safety of queries.
 
 ## TODOs
 
