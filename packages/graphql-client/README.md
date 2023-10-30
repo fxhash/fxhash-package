@@ -82,8 +82,64 @@ As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, whi
 
 - run `$ npm run generate` (**note**: this requires the GraphQL api to be running), which will generate the types for the query.
 
-> **Note**
-> This approach has a few benefits over generating full query typings, mainly that **only** the properties specified in the query are exposed in the typings, ensuring proper type safety of queries.
+## A note on type safety
+
+`@graphql-codegen` generates query typings based on the queries, which ensures proper typing. Instead of words, example:
+
+```ts
+import { useQuery } from "@apollo/client"
+import { Qu_getProjects } from "@fxhash/gql2"
+
+// Qu_getProjects is defined as:
+export const Qu_getProjects = graphql(`
+  query GetProjects($where: Project_bool_exp = {}) {
+    Project(where: $where) {
+      id
+      pricing
+      description
+      state
+      storage
+    }
+  }
+`)
+
+// example when using useQuery
+const { data } = useQuery(Qu_getProjects)
+const projects = data?.Project
+// projects is of type:
+{
+  __typename?: "Project" | undefined;
+  id: any;
+  pricing?: any;
+  description?: string | null | undefined;
+  state: any;
+  storage?: any;
+}[] | undefined
+
+// even though the Project entity type is:
+/** columns and relationships of "Project" */
+export type Project = {
+  __typename?: 'Project';
+  /** An object relationship */
+  author: Account;
+  authorId: Scalars['uuid']['output'];
+  blockchain?: Maybe<Scalars['BlockchainNetwork']['output']>;
+  /** An object relationship */
+  curator?: Maybe<Account>;
+  curatorId?: Maybe<Scalars['uuid']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['uuid']['output'];
+  pricing?: Maybe<Scalars['jsonb']['output']>;
+  /** An array relationship */
+  projectMedias: Array<ProjectMedia>;
+  releaseAt?: Maybe<Scalars['timestamp']['output']>;
+  state: Scalars['ProjectState']['output'];
+  storage?: Maybe<Scalars['Storage']['output']>;
+  title: Scalars['String']['output'];
+};
+```
+
+As seen in the example, only the properties defined in the query are exposed by typescript.
 
 ## TODOs
 
