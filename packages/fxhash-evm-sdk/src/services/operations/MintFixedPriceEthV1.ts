@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
 import { ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
 import {
@@ -29,11 +29,10 @@ export type TMintFixedPriceEthV1OperationParams = {
  * Mint an unique iteration of a Generative Token using the Fixed Priced minter
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
-export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPriceEthV1OperationParams> {
+export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMintFixedPriceEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
       abi: FixedPriceMinterABI,
@@ -42,9 +41,9 @@ export class MintFixedPriceEthV1Operation extends ContractOperation<TMintFixedPr
         this.params.token,
         this.params.reserveId,
         this.params.amount,
-        account,
+        this.manager.address,
       ],
-      account: account,
+      account: this.manager.address,
       value: this.params.price,
     }
     return simulateAndExecuteContract(this.manager, args)

@@ -2,17 +2,22 @@
   "name": "@fxhash/hasura",
   "version": "0.0.1",
   "description": "Hasura GQL API client for FXHASH",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "exports": {
-    "./*": "./dist/*"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/*"
+        "./dist/*",
+        "./dist/index.d.ts"
       ]
     }
   },
@@ -23,7 +28,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "gen-client": "genql --endpoint http://localhost:8888/v1/graphql --output src -H 'x-hasura-admin-secret: changeme'",
+    "gen-client": "genql --sort --endpoint http://localhost:8888/v1/graphql --output src -H 'x-hasura-admin-secret: changeme'",
     "test": "jest"
   },
   "author": "fxhash",

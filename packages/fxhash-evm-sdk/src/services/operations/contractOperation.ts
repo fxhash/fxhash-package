@@ -23,3 +23,5 @@ export type TEthereumContractOperation<TParams> = new (
   manager: EthereumWalletManager,
   params: TParams
 ) => EthereumContractOperation<TParams>
+
+export { ContractOperation }

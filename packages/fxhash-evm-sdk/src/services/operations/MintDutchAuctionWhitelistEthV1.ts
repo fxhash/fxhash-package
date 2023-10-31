@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
 import { ABI as DAMinterABI } from "@/abi/DutchAuctionMinter"
 import {
@@ -8,9 +8,10 @@ import {
 } from "@/services/operations/EthCommon"
 import {
   getProof,
-  getWhitelistForToken,
+  getWhitelist,
   getUserWhitelistIndex,
   getWhitelistTree,
+  getMerkleRootForToken,
 } from "@/utils/whitelist"
 
 /**
@@ -33,30 +34,46 @@ export type TMintDutchAuctionWhitelistEthV1OperationParams = {
 
 /* The MintDutchAutionWhitelistEthV1Operation class is responsible for minting a fixed price token with
 a whitelist in a Dutch auction on the Ethereum network. */
-export class MintDutchAutionWhitelistEthV1Operation extends ContractOperation<TMintDutchAuctionWhitelistEthV1OperationParams> {
+export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOperation<TMintDutchAuctionWhitelistEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
-
-    const whitelist = getWhitelistForToken(this.params.token)
-    const index = getUserWhitelistIndex(whitelist, account)
-    const proof = getProof(getWhitelistTree(whitelist), whitelist, account)
-    const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
-      abi: DAMinterABI,
-      functionName: "buyAllowlist",
-      args: [
-        this.params.token,
-        this.params.reserveId,
-        account,
-        [index],
-        [proof],
-      ],
-      account: account,
-      value: this.params.price,
+    const merkleRoot = await getMerkleRootForToken(this.params.token)
+    if (merkleRoot === undefined) {
+      throw new Error("No merkle root found for token " + this.params.token)
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const whitelists = await getWhitelist(merkleRoot)
+    if (whitelists.length === 0) {
+      throw new Error(
+        "No active whitelists found for token " + this.params.token
+      )
+    } else {
+      const activeWhitelist = whitelists[0]
+      const index = getUserWhitelistIndex(
+        activeWhitelist.whitelist,
+        this.manager.address
+      )
+      const proof = getProof(
+        getWhitelistTree(activeWhitelist.whitelist),
+        activeWhitelist.whitelist,
+        this.manager.address
+      )
+      const args: SimulateAndExecuteContractRequest = {
+        address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
+        abi: DAMinterABI,
+        functionName: "buyAllowlist",
+        args: [
+          this.params.token,
+          this.params.reserveId,
+          this.manager.address,
+          [index],
+          [proof],
+        ],
+        account: this.manager.address,
+        value: this.params.price,
+      }
+      return simulateAndExecuteContract(this.manager, args)
+    }
   }
 
   success(): string {

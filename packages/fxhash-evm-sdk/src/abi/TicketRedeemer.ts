@@ -113,7 +113,7 @@ export const ABI = [
       },
       {
         internalType: "bytes",
-        name: "_mintData",
+        name: "_mintDetails",
         type: "bytes",
       },
     ],

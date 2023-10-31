@@ -1,4 +1,4 @@
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
 import { ABI as TicketABI } from "@/abi/FxTicket"
 import {
@@ -17,17 +17,16 @@ export type TTicketDepositEthV1OperationParams = {
  * @dev contract interface:
  * function deposit(uint256 _tokenId)
  */
-export class TicketDepositEthV1Operation extends ContractOperation<TTicketDepositEthV1OperationParams> {
+export class TicketDepositEthV1Operation extends EthereumContractOperation<TTicketDepositEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.ticket as `0x${string}`,
       abi: TicketABI,
       functionName: "deposit",
       args: [this.params.tokenId],
-      account: account,
+      account: this.manager.address,
       value: this.params.value,
     }
     return simulateAndExecuteContract(this.manager, args)

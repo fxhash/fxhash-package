@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { ABI as ScriptyStorageABI } from "@/abi/ScriptyStorage"
 import {
   BaseError,
@@ -16,13 +16,12 @@ export type TUploadOnchainCodeOperationParams = {
 /**
  * Upload code on chain using Scripty.sol
  */
-export class UploadOnchainCodeOperation extends ContractOperation<TUploadOnchainCodeOperationParams> {
+export class UploadOnchainCodeOperation extends EthereumContractOperation<TUploadOnchainCodeOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
     let lastReceipt: TransactionReceipt | undefined = undefined
-    const account = this.manager.account
-
+    const account = this.manager.address as `0x${string}`
     for (const request of this.params.uploadRequests) {
       // NOTE: Chunks are set to 10,000 because the theoretical limit of 24kb (24576) causes Hardhat to gas out
       // Breaking a big lib like ThreeJS into 14kb chunks will drastically increase gas costs IRL

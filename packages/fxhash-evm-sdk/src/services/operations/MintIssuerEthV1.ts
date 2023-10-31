@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt, getContract } from "viem"
 import { ABI as ISplitsMainABI } from "@/abi/ISplitsMain"
 import { ABI as IssuerFactoryABI } from "@/abi/FxIssuerFactory"
@@ -7,6 +7,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { Ethereumthis.manager } from "../Wallet"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -59,7 +60,7 @@ export type TMintEthIssuerV1OperationParams = {
 /**
  * Call the Issuer factory to create a new project
  */
-export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1OperationParams> {
+export class MintEthIssuerV1Operation extends EthereumContractOperation<TMintEthIssuerV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
@@ -69,9 +70,6 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       walletClient: this.manager.walletClient,
       publicClient: this.manager.publicClient,
     })
-
-    //get the address from the wallet
-    const account = this.manager.walletClient.account.address
 
     //since we are using splits, we need to create the splits first. So we get the immutable address of the splits
     const splitsAddress = await splitsFactory.read.predictImmutableSplitAddress(
@@ -90,7 +88,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       abi: IssuerFactoryABI,
       functionName: "createProject",
       args: [
-        account,
+        this.manager.address,
         this.params.initInfo,
         this.params.projectInfo,
         this.params.metadataInfo,
@@ -98,7 +96,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
         this.params.royaltiesReceivers,
         this.params.basisPoints,
       ],
-      account: account,
+      account: this.manager.address,
     }
     //simulate the transaction and execute it, will throw an error if it fails
     return simulateAndExecuteContract(this.manager, args)

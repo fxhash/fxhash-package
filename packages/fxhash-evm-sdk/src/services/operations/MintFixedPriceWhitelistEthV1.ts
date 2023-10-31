@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
 import { ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
 import {
@@ -8,9 +8,10 @@ import {
 } from "@/services/operations/EthCommon"
 import {
   getProof,
-  getWhitelistForToken,
+  getWhitelist,
   getUserWhitelistIndex,
   getWhitelistTree,
+  getMerkleRootForToken,
 } from "@/utils/whitelist"
 
 /**
@@ -40,30 +41,46 @@ export type TMintFixedPriceWhitelistEthV1OperationParams = {
 
 /* The MintFixedPriceWhitelistEthV1Operation class is responsible for minting a fixed price token for a
 specified price in ETH and using a whitelist. */
-export class MintFixedPriceWhitelistEthV1Operation extends ContractOperation<TMintFixedPriceWhitelistEthV1OperationParams> {
+export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOperation<TMintFixedPriceWhitelistEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
-
-    const whitelist = getWhitelistForToken(this.params.token)
-    const index = getUserWhitelistIndex(whitelist, account)
-    const proof = getProof(getWhitelistTree(whitelist), whitelist, account)
-    const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
-      abi: FixedPriceMinterABI,
-      functionName: "buyAllowlist",
-      args: [
-        this.params.token,
-        this.params.reserveId,
-        account,
-        [index],
-        [proof],
-      ],
-      account: account,
-      value: this.params.price,
+    const merkleRoot = await getMerkleRootForToken(this.params.token)
+    if (merkleRoot === undefined) {
+      throw new Error("No merkle root found for token " + this.params.token)
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const whitelists = await getWhitelist(merkleRoot)
+    if (whitelists.length === 0) {
+      throw new Error(
+        "No active whitelists found for token " + this.params.token
+      )
+    } else {
+      const activeWhitelist = whitelists[0]
+      const index = getUserWhitelistIndex(
+        activeWhitelist.whitelist,
+        this.manager.address
+      )
+      const proof = getProof(
+        getWhitelistTree(activeWhitelist.whitelist),
+        activeWhitelist.whitelist,
+        this.manager.address
+      )
+      const args: SimulateAndExecuteContractRequest = {
+        address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
+        abi: FixedPriceMinterABI,
+        functionName: "buyAllowlist",
+        args: [
+          this.params.token,
+          this.params.reserveId,
+          this.manager.address,
+          [index],
+          [proof],
+        ],
+        account: this.manager.address,
+        value: this.params.price,
+      }
+      return simulateAndExecuteContract(this.manager, args)
+    }
   }
 
   success(): string {

@@ -224,6 +224,37 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
+        name: "_claimer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_index",
+        type: "uint256",
+      },
+    ],
+    name: "PassClaimed",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
         name: "_buyer",
         type: "address",
       },
@@ -278,6 +309,37 @@ export const ABI = [
       },
     ],
     name: "RefundClaimed",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_claimer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_index",
+        type: "uint256",
+      },
+    ],
+    name: "SlotClaimed",
     type: "event",
   },
   {

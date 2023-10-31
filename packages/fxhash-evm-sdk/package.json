@@ -29,12 +29,11 @@
     "gen-bindings": "./scripts/gen-bindings.sh",
     "clean": "rm -rf dist",
     "build": "tsup",
-    "dev": "tsup --watch",
-    "build:rollup": "npm run clean && rollup -c --bundleConfigAsCjs",
-    "dev:rollup": "npm run clean && rollup -c -w --bundleConfigAsCjs --no-watch.clearScreen"
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@apollo/client": "3.8.1",
+    "@fxhash/hasura": "workspace:*",
     "@fxhash/contracts-shared": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@openzeppelin/merkle-tree": "1.0.5",

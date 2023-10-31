@@ -1,4 +1,4 @@
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
 import { ABI as TicketABI } from "@/abi/FxTicket"
 import {
@@ -18,17 +18,16 @@ export type TClaimTicketEthV1OperationParams = {
  * @dev contract interface:
  * function claim(uint256 _tokenId, uint80 _newPrice)
  */
-export class ClaimTicketEthV1Operation extends ContractOperation<TClaimTicketEthV1OperationParams> {
+export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimTicketEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.ticket as `0x${string}`,
       abi: TicketABI,
       functionName: "claim",
       args: [this.params.tokenId, this.params.newPrice],
-      account: account,
+      account: this.manager.address,
       value: this.params.value,
     }
     return simulateAndExecuteContract(this.manager, args)

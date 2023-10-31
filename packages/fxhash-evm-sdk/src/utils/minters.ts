@@ -4,26 +4,38 @@ import {
   encodeAbiParameters,
   getContract,
 } from "viem"
-import { getWhitelistTree } from "./whitelist"
+import { FlattenedWhitelist, getWhitelistTree } from "./whitelist"
 import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants"
 import { sign } from "viem/accounts"
 
 /**
- * The function `getFixedPriceMinterEncodedParams` returns the encoded parameters for a fixed price
- * minter, including the price, whitelist, and signer.
- * @param {bigint} price - The `price` parameter is of type `bigint` and represents the fixed price
- * value. It is the amount that needs to be paid for a specific item or service.
- * @param {`0x`[]} whitelist - The `whitelist` parameter is an array of Ethereum addresses
- * represented as strings. It is used to specify a list of addresses that are allowed to purchase a
- * fixed price item.
- * @param signer - The `signer` parameter is an Ethereum address. It is represented as a hexadecimal
- * string starting with "0x".
- * @returns The function `getFixedPriceMinterEncodedParams` returns the encoded parameters of the
- * `price`, `merkleRoot`, and `signer` values.
+ * The ReserveListEntry type represents an entry in a reserve list, with an account address and an
+ * index. It's a high level type for simpler manupulation of reserve lists.
+ * @property account - The `account` property is a string that represents an Ethereum address. It is
+ * prefixed with "0x" and followed by a series of hexadecimal characters.
+ * @property {number} index - The `index` property is a number that represents the position or order of
+ * the entry in a reserve list.
+ */
+export type ReserveListEntry = {
+  account: `0x${string}`
+  index: number
+}
+
+/**
+ * The function `getFixedPriceMinterEncodedParams` takes a price, a whitelist, and a signer address as
+ * input and returns the encoded parameters in ABI format.
+ * @param {bigint} price - The `price` parameter is a `bigint` value representing the fixed price. It
+ * is the cost or value associated with a particular item or service.
+ * @param {FlattenedWhitelist} whitelist - The `whitelist` parameter is an array of objects
+ * representing the whitelist. Each object in the array should have the following properties:
+ * @param signer - The `signer` parameter is an Ethereum address represented as a string. It is used to
+ * specify the address of the account that will sign the transaction.
+ * @returns The function `getFixedPriceMinterEncodedParams` returns the encoded ABI parameters as a
+ * result.
  */
 export function getFixedPriceMinterEncodedParams(
   price: bigint,
-  whitelist: `0x${string}`[] = [],
+  whitelist: FlattenedWhitelist = [],
   signer: `0x${string}` = ZERO_ADDRESS
 ) {
   let merkleRoot: `0x${string}` = EMPTY_BYTES_32
@@ -43,25 +55,27 @@ export function getFixedPriceMinterEncodedParams(
 
 /**
  * The function `getDutchAuctionMinterEncodedParams` takes in various parameters and returns the
- * encoded parameters for a Dutch auction minter.
- * @param {bigint[]} prices - An array of big integers representing the prices for each step in the
- * Dutch auction.
- * @param {number} stepLength - The `stepLength` parameter is a number that represents the number of
- * blocks between each price decrement in the Dutch auction.
- * @param {boolean} refundEnabled - A boolean value indicating whether refunds are enabled in the Dutch
+ * encoded ABI parameters for a Dutch auction minter.
+ * @param {bigint[]} prices - An array of bigints representing the prices for each step of the Dutch
  * auction.
- * @param {`0x${string}`[]} whitelist - The `whitelist` parameter is an array of Ethereum addresses
- * (`0x${string}`). It is used to specify a list of addresses that are allowed to participate in the
- * Dutch auction.
- * @param signer - The `signer` parameter is an Ethereum address (`0x` followed by 40 hexadecimal
- * characters) that represents the account that will sign the transaction.
- * @returns the encoded parameters of the Dutch auction minter.
+ * @param {bigint} stepLength - The `stepLength` parameter is a `bigint` value that represents the
+ * length of each step in the Dutch auction. It determines how much the price decreases at each step
+ * until the auction ends.
+ * @param {boolean} refundEnabled - A boolean value indicating whether refunds are enabled in the
+ * auction.
+ * @param {FlattenedWhitelist} whitelist - The `whitelist` parameter is an array of objects
+ * representing addresses that are allowed to participate in the Dutch auction. Each object in the
+ * array has the following structure:
+ * @param signer - The `signer` parameter is the address of the account that will sign the transaction.
+ * It is of type `address`.
+ * @returns The function `getDutchAuctionMinterEncodedParams` returns the encoded parameters of a Dutch
+ * auction minter.
  */
 export function getDutchAuctionMinterEncodedParams(
   prices: bigint[],
   stepLength: bigint,
   refundEnabled: boolean,
-  whitelist: `0x${string}`[] = [],
+  whitelist: FlattenedWhitelist = [],
   signer: `0x${string}` = ZERO_ADDRESS
 ) {
   let merkleRoot: `0x${string}` = EMPTY_BYTES_32

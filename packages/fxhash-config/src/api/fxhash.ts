@@ -25,6 +25,7 @@ export interface IFxhashApis {
   events: {
     liveBackend: string
   }
+  hasura: string
 }
 
 // list of APIs dev leverages
@@ -58,6 +59,7 @@ export const fxhashDevApis: IFxhashApis = {
   events: {
     liveBackend: "_NONE",
   },
+  hasura: "http://localhost:8888/v1/graphql",
 }
 
 // list of APIs prod leverages
@@ -91,4 +93,5 @@ export const fxhashPrdApis: IFxhashApis = {
   events: {
     liveBackend: "_NONE",
   },
+  hasura: "https://hasura.fxhash.xyz/v1/graphql",
 }

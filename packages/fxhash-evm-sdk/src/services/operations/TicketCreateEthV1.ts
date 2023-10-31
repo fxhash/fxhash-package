@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
 import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
 import {
@@ -34,24 +34,23 @@ export type TCreateTicketEthV1OperationParams = {
  *      string calldata _baseURI
  *  )
  */
-export class CreateTicketEthV1Operation extends ContractOperation<TCreateTicketEthV1OperationParams> {
+export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreateTicketEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
       abi: MintTicketFactoryABI,
       functionName: "createTicket",
       args: [
-        account,
+        this.manager.address,
         this.params.token,
         FxhashContracts.ETH_TICKET_REDEEMER_V1,
         this.params.gracePeriod,
         this.params.baseURI,
         this.params.mintInfo,
       ],
-      account: account,
+      account: this.manager.address,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

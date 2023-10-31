@@ -34,7 +34,6 @@ export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1Operatio
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    const account = this.manager.walletClient.account.address
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       abi: DAMinterABI,
@@ -43,9 +42,9 @@ export class MintDAEthV1Operation extends ContractOperation<TMintDAEthV1Operatio
         this.params.token,
         this.params.reserveId,
         this.params.amount,
-        account,
+        this.manager.address,
       ],
-      account: account,
+      account: this.manager.address,
       value: this.params.price,
     }
     return simulateAndExecuteContract(this.manager, args)
