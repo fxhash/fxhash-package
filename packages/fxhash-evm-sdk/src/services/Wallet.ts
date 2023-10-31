@@ -14,6 +14,13 @@ import {
   http,
 } from "viem"
 import { mainnet, sepolia, hardhat } from "viem/chains"
+import { createConfig, configureChains } from "wagmi"
+import { type WalletClient } from "wagmi"
+import { mainnet, sepolia, hardhat } from "wagmi/chains"
+import { Config } from "wagmi"
+import { getDefaultConfig } from "connectkit"
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
+import { BlockchainNetwork } from "@/types/entities/Account"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, hardhat]
@@ -53,11 +60,34 @@ export type WagmiConfig = {
   appIcon: string
 }
 
+const SIGN_IN_MESSAGE = "sign in to fxhash.xyz"
+const FXHASH_TERMS_OF_SERVICE =
+  "Agree to terms: https://www.fxhash.xyz/doc/legal/terms.pdf"
+
 //Returns the public client to access blockchain data
 export function getPublicClient(): PublicClient {
   return createPublicClient({
     chain: CURRENT_CHAIN,
     transport: http(config.eth.apis.rpcs[0]),
+  })
+}
+
+/**
+ * Formats a sign-in payload for a given Ethereum address.
+ *
+ * @param {string} address - The Ethereum address to include in the payload.
+ * @return {string} - The formatted payload.
+ */
+const formatSignInPayload = (address: string): string =>
+  `${SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
+
+//Wrapper to get the proper provider for the chain with the corresponding configured RPC URL
+export function getProvider(rpcUrl: string): any {
+  return jsonRpcProvider({
+    rpc: chain => {
+      // eslint-disable-next-line no-unused-labels
+      return { http: rpcUrl }
+    },
   })
 }
 
@@ -85,6 +115,11 @@ export function getConfig(): WagmiConfig {
  * It is responsible for handlinf interactions with the contracts as well
  */
 export class WalletManager {
+  authorization: {
+    network: BlockchainNetwork
+    payload: string
+    signature: string
+  } | null = null
   walletClient: WalletClient | undefined
   publicClient: PublicClient
   account: Address | undefined
@@ -96,6 +131,16 @@ export class WalletManager {
 
   async disconnect(): Promise<void> {
     this.walletClient = undefined
+    this.authorization = null
+  }
+
+  async signMessage(message: string) {
+    if (!this.walletClient) throw new Error("no wallet connected")
+    const signature = await this.walletClient.signMessage({
+      account: this.account,
+      message,
+    })
+    return signature
   }
 
   async connect(): Promise<string | false> {
@@ -109,6 +154,16 @@ export class WalletManager {
           transport: http(rpcUrls[0]),
         })
       }
+
+      const payload = formatSignInPayload(this.walletClient.account.address)
+      const signature = await this.signMessage(payload)
+
+      this.authorization = {
+        payload,
+        signature,
+        network: BlockchainNetwork.ETHEREUM,
+      }
+
       return account
     } catch (error) {
       console.log(error)
@@ -147,7 +202,7 @@ export class WalletManager {
    * logic required for each contract call (refetch, RPC cycling, checking
    * if operation is applied... etc)
    */
-  async runContractOperation<Params>(
+  async sendTransaction<Params>(
     OperationClass: TContractOperation<Params>,
     params: Params,
     statusCallback: ContractOperationCallback
