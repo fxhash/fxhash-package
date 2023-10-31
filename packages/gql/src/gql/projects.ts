@@ -47,8 +47,10 @@ export const Frag_ProjectUserSecrets = graphql(`
  */
 export const Qu_getAllProjects = graphql(`
   query GetAllProjects {
-    Project {
-      ...Project_BaseDetails
+    offchain {
+      Project {
+        ...Project_BaseDetails
+      }
     }
   }
 `)
@@ -60,9 +62,11 @@ export const Qu_getAllProjects = graphql(`
  */
 export const Qu_getUserSubmissions = graphql(`
   query GetUserSubmissions($authorId: uuid!) {
-    Project(where: { authorId: { _eq: $authorId } }) {
-      ...Project_BaseDetails
-      ...Project_UserSecrets
+    offchain {
+      Project(where: { authorId: { _eq: $authorId } }) {
+        ...Project_BaseDetails
+        ...Project_UserSecrets
+      }
     }
   }
 `)
@@ -73,22 +77,24 @@ export const Qu_getUserSubmissions = graphql(`
  */
 export const Mu_createProject = graphql(`
   mutation CreateProject($object: Project_insert_input!) {
-    insert_Project_one(object: $object) {
-      projectMedias {
-        index
-        media {
-          id
-          name
+    offchain {
+      insert_Project_one(object: $object) {
+        projectMedias {
+          index
+          media {
+            id
+            name
+          }
         }
-      }
-      id
-      description
-      author {
         id
+        description
+        author {
+          id
+        }
+        title
+        state
+        releaseAt
       }
-      title
-      state
-      releaseAt
     }
   }
 `)
@@ -107,14 +113,16 @@ export const Mu_updateProject = graphql(`
     $projectData: Project_set_input
     $projectMedias: [ProjectMedia_insert_input!]!
   ) {
-    delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {
-      affected_rows
-    }
-    update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {
-      affected_rows
-    }
-    insert_ProjectMedia(objects: $projectMedias) {
-      affected_rows
+    offchain {
+      delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {
+        affected_rows
+      }
+      update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {
+        affected_rows
+      }
+      insert_ProjectMedia(objects: $projectMedias) {
+        affected_rows
+      }
     }
   }
 `)
