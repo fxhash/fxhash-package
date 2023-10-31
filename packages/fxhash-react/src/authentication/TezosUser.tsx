@@ -1,5 +1,5 @@
-import { useState, createContext, useContext, useEffect } from "react"
-import { TezosWalletManager, encodeSignInPayload } from "@fxhash/contracts"
+import { useState, createContext, useContext, useEffect, useMemo } from "react"
+import { TezosWalletManager } from "@fxhash/contracts"
 import {
   PendingSigningRequestError,
   PromiseResult,
@@ -13,19 +13,6 @@ import { TezosToolkit, WalletProvider } from "@taquito/taquito"
 import { AbortedBeaconError } from "@airgap/beacon-sdk"
 import autonomyIRL from "autonomy-irl-js"
 
-const TEZOS_SIGN_IN_MESSAGE = "Tezos Signed Message: sign in to fxhash.xyz"
-const FXHASH_TERMS_OF_SERVICE =
-  "Agree to terms: https://www.fxhash.xyz/doc/legal/terms.pdf"
-
-/**
- * Formats a sign-in payload for a given Tezos address.
- *
- * @param {string} address - The Tezos address to include in the payload.
- * @return {string} - The formatted payload.
- */
-const formatSignInPayload = (address: string): string =>
-  `${TEZOS_SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
-
 export interface UserContextType {
   walletManager: TezosWalletManager | null
   beaconWallet: BeaconWallet | null
@@ -37,14 +24,9 @@ export interface UserContextType {
    * No Tezos function should be called before it is true. You can use useEffect to wait for it.
    */
   isReady: boolean
-  connect: (useAutonomy?: boolean) => PromiseResult<
+  connect: () => PromiseResult<
     {
       address: string
-      authorization: {
-        payload: string
-        signature: string
-        publicKey: string
-      }
     },
     UserRejectedError | PendingSigningRequestError
   >
@@ -155,6 +137,7 @@ export function TezosUserProvider({
       beaconWallet: provider as BeaconWallet,
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
+      address: pkh,
     })
 
     // https://github.com/fxhash/monorepo/issues/394
@@ -184,11 +167,6 @@ export function TezosUserProvider({
   const connect = async (): PromiseResult<
     {
       address: string
-      authorization: {
-        payload: string
-        signature: string
-        publicKey: string
-      }
     },
     UserRejectedError | PendingSigningRequestError
   > => {
@@ -217,18 +195,8 @@ export function TezosUserProvider({
       beaconWallet: context.beaconWallet,
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
+      address: userAddress,
     })
-
-    const message = formatSignInPayload(userAddress)
-    const result = await walletManager.signMessage(message)
-    if (result.isFailure()) {
-      return result
-    }
-
-    const activeAccount = await context.beaconWallet.client.getActiveAccount()
-    if (!activeAccount) {
-      return failure(new UserRejectedError())
-    }
 
     setContext({
       ...context,
@@ -238,11 +206,6 @@ export function TezosUserProvider({
 
     return success({
       address: userAddress,
-      authorization: {
-        payload: message,
-        signature: result.value,
-        publicKey: activeAccount.publicKey,
-      },
     })
   }
 
@@ -272,6 +235,7 @@ export function TezosUserProvider({
           beaconWallet: context.beaconWallet,
           tezosToolkit: context.tezosToolkit,
           rpcNodes: config.rpcNodes,
+          address: pkh,
         })
         setContext({
           ...context,
@@ -314,16 +278,19 @@ export function TezosUserProvider({
     }))
   }, [])
 
+  const contextValue = useMemo(
+    () => ({
+      ...context,
+      connect,
+      connectAutonomyWallet,
+      connectFromStorage,
+      disconnect,
+    }),
+    [context, connect, connectAutonomyWallet, connectFromStorage, disconnect]
+  )
+
   return (
-    <TezosUserContext.Provider
-      value={{
-        ...context,
-        connect,
-        connectAutonomyWallet,
-        connectFromStorage,
-        disconnect,
-      }}
-    >
+    <TezosUserContext.Provider value={contextValue}>
       {children}
     </TezosUserContext.Provider>
   )

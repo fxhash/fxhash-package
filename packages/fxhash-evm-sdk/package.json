@@ -1,17 +1,22 @@
 {
   "name": "@fxhash/evm-sdk",
   "version": "0.0.8",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "exports": {
-    "./*": "./dist/*"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/*"
+        "./dist/*",
+        "./dist/index.d.ts"
       ]
     }
   },
@@ -30,9 +35,9 @@
   },
   "dependencies": {
     "@apollo/client": "3.8.1",
+    "@fxhash/contracts-shared": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@openzeppelin/merkle-tree": "1.0.5",
-    "@web3modal/ethereum": "2.7.1",
     "date-fns": "2.30.0",
     "dotenv": "16.3.1",
     "next": "13.4.19",

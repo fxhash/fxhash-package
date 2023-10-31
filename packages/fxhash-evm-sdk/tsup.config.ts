@@ -1,7 +1,7 @@
 import { defineConfig, Options } from "tsup"
 
 export default defineConfig((options: Options) => ({
-  entry: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
+  entry: ["src/index.ts"],
   outDir: "dist",
   format: ["cjs", "esm"],
   splitting: true,

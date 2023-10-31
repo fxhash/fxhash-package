@@ -12,6 +12,12 @@ export class UserRejectedError extends Error {
 }
 
 export abstract class WalletManager {
+  public address: string
+
+  constructor(address: string) {
+    this.address = address
+  }
+
   abstract signMessage(
     message: string
   ): PromiseResult<string, PendingSigningRequestError | UserRejectedError>

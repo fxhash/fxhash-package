@@ -1,4 +1,7 @@
-export { ContractOperation } from "@fxhash/contracts-shared"
+export { ContractOperation, BlockchainType } from "@fxhash/contracts-shared"
 export { TezosContractOperation } from "@fxhash/contracts"
 export * from "./FxashProvider"
 export * from "./authentication/TezosUser"
+export * from "./authentication/EthereumUser"
+export * from "./authentication/useTezosAccount"
+export * from "./authentication/useSignMessage"

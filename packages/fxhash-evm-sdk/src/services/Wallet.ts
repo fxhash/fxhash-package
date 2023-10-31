@@ -1,19 +1,21 @@
-import {
-  ContractOperationCallback,
-  ContractOperationStatus,
-} from "../contracts/Contracts"
 import { config } from "@fxhash/config"
-import { TContractOperation } from "@/services/operations/contractOperation"
-import { isOperationApplied } from "./Blockchain"
+import {
+  PendingSigningRequestError,
+  UserRejectedError,
+  WalletManager,
+  PromiseResult,
+  failure,
+  success,
+} from "@fxhash/contracts-shared"
 import {
   Address,
   PublicClient,
+  TransactionReceipt,
+  UserRejectedRequestError,
   WalletClient,
-  createWalletClient,
-  createPublicClient,
-  http,
 } from "viem"
 import { mainnet, sepolia, hardhat } from "viem/chains"
+import { TEthereumContractOperation } from "./operations"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, hardhat]
@@ -42,127 +44,100 @@ export enum EWalletOperations {
   BAN_USER = "BAN_USER",
 }
 
-//WAGMI config type that will be used for the wallet client
-export type WagmiConfig = {
+interface EthereumWalletManagerParams {
+  address: string
+  walletClient: WalletClient
   publicClient: PublicClient
-  chains: any[]
-  walletConnectProjectId: string
-  appName: string
-  appDescription: string
-  appUrl: string
-  appIcon: string
+  rpcNodes: string[]
 }
 
-/**
- * The function `getPublicClient` returns a public client object with a specified chain and transport.
- * @returns a public client object.
- */
-export function getPublicClient(): PublicClient {
-  return createPublicClient({
-    chain: CURRENT_CHAIN,
-    transport: http(config.eth.apis.rpcs[0]),
-  })
-}
+export class EthereumWalletManager extends WalletManager {
+  private signingInProgress = false
+  public walletClient: WalletClient
+  public publicClient: PublicClient
+  private rpcNodes: string[]
 
-/**
- * The getConfig function returns a configuration object for the WAGMI, including details
- * such as the app name, description, URL, and icon.
- * @returns The function `getConfig()` is returning an object of type `WagmiConfig`.
- */
-export function getConfig(): WagmiConfig {
-  return {
-    publicClient: getPublicClient(),
-    chains: [CURRENT_CHAIN],
-    walletConnectProjectId: config.config.walletConnectId,
-    // Required
-    appName: "FXHASH",
-
-    // Optional
-    appDescription:
-      "fxhash is an open platform to mint and collect Generative Tokens.",
-    appUrl: "https://fxhash.xyz", // your app's url
-    appIcon:
-      "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG", // your app's icon, no bigger than 1024x1024px (max. 1MB)
-  }
-}
-
-/* The `WalletManager` class manages the connection to a wallet client, handles RPC node cycling, and
-provides a generic method for running contract operations with error handling and retry logic. */
-export class WalletManager {
-  authorization: {
-    network: BlockchainNetwork
-    payload: string
-    signature: string
-  } | null = null
-  walletClient: WalletClient | undefined
-  publicClient: PublicClient
-  account: Address | undefined
-
-  constructor(client) {
-    this.walletClient = client
-    this.publicClient = getPublicClient()
+  constructor(params: EthereumWalletManagerParams) {
+    super(params.address)
+    this.walletClient = params.walletClient
+    this.publicClient = params.publicClient
+    this.rpcNodes = params.rpcNodes
   }
 
-  async disconnect(): Promise<void> {
-    this.walletClient = undefined
-    this.authorization = null
-  }
+  async signMessage(
+    message: string
+  ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
+    if (this.signingInProgress) {
+      return failure(new PendingSigningRequestError())
+    }
+    this.signingInProgress = true
 
-  async signMessage(message: string) {
-    if (!this.walletClient) throw new Error("no wallet connected")
-    const signature = await this.walletClient.signMessage({
-      account: this.account,
-      message,
-    })
-    return signature
-  }
-
-  async connect(): Promise<string | false> {
     try {
-      const [account] = await this.walletClient.requestAddresses()
-      if (!this.walletClient) {
-        this.walletClient = createWalletClient({
-          account: account,
-          chain: CURRENT_CHAIN,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          transport: http(rpcUrls[0]),
-        })
-      }
-
-      const payload = formatSignInPayload(this.walletClient.account.address)
-      const signature = await this.signMessage(payload)
-
-      this.authorization = {
-        payload,
-        signature,
-        network: BlockchainNetwork.ETHEREUM,
-      }
-
-      return account
+      const signature = await this.walletClient.signMessage({
+        message,
+        account: this.address as `0x${string}`,
+      })
+      return success(signature)
     } catch (error) {
-      console.log(error)
-      return false
+      if (error instanceof UserRejectedRequestError) {
+        return failure(new UserRejectedError())
+      }
+      throw error
+    } finally {
+      this.signingInProgress = false
     }
   }
 
-  cycleRpcNode(): void {
-    // re-arrange the RPC nodes array
-    const out = rpcUrls.shift()
-    rpcUrls.push(out)
-    console.log(`update RPC provider: ${rpcUrls[0]}`)
-    const account = this.walletClient?.account
-    //TODO see how to do that
-    const client = createWalletClient({
-      account: account,
-      chain: CURRENT_CHAIN,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      transport: http(rpcUrls[0]),
-    })
-    this.walletClient = client
+  async sendTransaction<TParams>(
+    OperationClass: TEthereumContractOperation<TParams>,
+    params: TParams
+  ): PromiseResult<
+    {
+      operation: TransactionReceipt
+      message: string
+    },
+    UserRejectedError | PendingSigningRequestError
+  > {
+    if (this.signingInProgress) {
+      return failure(new PendingSigningRequestError())
+    }
+    this.signingInProgress = true
+
+    // Prepare the contract operation
+    const contractOperation = new OperationClass(this, params)
+
+    for (let i = 0; i < this.rpcNodes.length + 2; i++) {
+      try {
+        await contractOperation.prepare()
+        const operation = await contractOperation.call()
+        const message = contractOperation.success()
+
+        return success({
+          operation,
+          message,
+        })
+      } catch (error) {
+        if (error instanceof UserRejectedRequestError) {
+          return failure(new UserRejectedError())
+        }
+        // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
+        if (this.canErrorBeCycled(error) && i < this.rpcNodes.length) {
+          this.cycleRpcNode()
+          // retry after RPCs were swapped
+          continue
+        }
+        throw error
+      } finally {
+        this.signingInProgress = false
+      }
+    }
+
+    // This is not reachable, but TS doesn't know that so we need to return something here
+    return failure(new UserRejectedError("Rpc nodes exhausted"))
   }
 
   // given an error, returns true if request can be cycled to another RPC node
-  canErrorBeCycled(err: any): boolean {
+  private canErrorBeCycled(err: any): boolean {
     return (
       err &&
       (err.name === "HttpRequestFailed" ||
@@ -171,59 +146,21 @@ export class WalletManager {
     )
   }
 
-  /**
-   * Generic method to wrap Contract Interaction methods to add some general
-   * logic required for each contract call (refetch, RPC cycling, checking
-   * if operation is applied... etc)
-   */
-  async sendTransaction<Params>(
-    OperationClass: TContractOperation<Params>,
-    params: Params,
-    statusCallback: ContractOperationCallback
-  ): Promise<any> {
-    // instanciate the class
-    const contractOperation = new OperationClass(this, params)
+  private cycleRpcNode() {
+    // re-arrange the RPC nodes array
+    const out = this.rpcNodes.shift()!
+    this.rpcNodes.push(out)
+    console.log(`update RPC provider: ${this.rpcNodes[0]}`)
+    // TODO see how to do that - update the transport with the new RPC node on the fly (without recreating a new client instance)
+    // this.walletClient.transport = http(this.rpcNodes[0])
 
-    // we create a loop over the number of available nodes, representing retry
-    // operations on failure. (exits under certain criteria)
-    for (let i = 0; i < rpcUrls.length + 2; i++) {
-      try {
-        // run the preparations
-        statusCallback?.(ContractOperationStatus.CALLING)
-        await contractOperation.prepare()
-
-        // now run the contract call
-        const op = await contractOperation.call()
-
-        // wait for the confirmation of the operation
-        statusCallback?.(ContractOperationStatus.WAITING_CONFIRMATION)
-        const opData = await isOperationApplied(op.transactionHash)
-
-        // operation is injected, display a success message and exits loop
-        return statusCallback?.(ContractOperationStatus.INJECTED, {
-          hash: op.transactionHash,
-          operation: op,
-          opData: opData,
-          // todo: remove this
-          operationType: EWalletOperations.UPDATE_PROFILE,
-          message: contractOperation.success(),
-        })
-      } catch (err: any) {
-        console.log({ err })
-
-        // if network error, and the nodes have not been all tried
-        if (this.canErrorBeCycled(err) && i < rpcUrls.length) {
-          this.cycleRpcNode()
-          // retry after RPCs were swapped
-          continue
-        } else {
-          // we just fail, and exit the loop
-          return statusCallback?.(
-            ContractOperationStatus.ERROR,
-            err.description || err.message || null
-          )
-        }
-      }
-    }
+    //   const account = this.walletClient?.account
+    //   const client = createWalletClient({
+    //     account: account,
+    //     chain: CURRENT_CHAIN,
+    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //     transport: http(rpcUrls[0]),
+    //   })
+    //   this.walletClient = client
   }
 }

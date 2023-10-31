@@ -1,5 +1,5 @@
 export * from "./hooks/useClientAsyncEffect"
 export * from "./hooks/useClientEffect"
 export * from "./hooks/useIsMounted"
-export * from "./context/User"
-export * from "./utils"
+export * from "./services/operations"
+export * from "./services/Wallet"
