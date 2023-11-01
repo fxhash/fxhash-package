@@ -394,6 +394,36 @@ input BlockchainNetwork_comparison_exp {
 }
 
 """
+Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'.
+"""
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
+}
+
+"""
 Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
 """
 input Int_comparison_exp {
@@ -412,7 +442,7 @@ input Int_comparison_exp {
 columns and relationships of "Media"
 """
 type Media {
-  createdAt: timestamp!
+  createdAt: timestamptz!
   etag: String!
   id: uuid!
   name: String!
@@ -435,7 +465,7 @@ type Media {
     where: ProjectMedia_bool_exp
   ): [ProjectMedia!]!
   size: Int!
-  updatedAt: timestamp!
+  updatedAt: timestamptz!
 
   """An object relationship"""
   uploader: Account
@@ -450,13 +480,13 @@ input Media_bool_exp {
   _and: [Media_bool_exp!]
   _not: Media_bool_exp
   _or: [Media_bool_exp!]
-  createdAt: timestamp_comparison_exp
+  createdAt: timestamptz_comparison_exp
   etag: String_comparison_exp
   id: uuid_comparison_exp
   name: String_comparison_exp
   project: ProjectMedia_bool_exp
   size: Int_comparison_exp
-  updatedAt: timestamp_comparison_exp
+  updatedAt: timestamptz_comparison_exp
   uploader: Account_bool_exp
   uploaderId: uuid_comparison_exp
 }
@@ -565,12 +595,12 @@ input Media_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input Media_stream_cursor_value_input {
-  createdAt: timestamp
+  createdAt: timestamptz
   etag: String
   id: uuid
   name: String
   size: Int
-  updatedAt: timestamp
+  updatedAt: timestamptz
   uploaderId: uuid
 }
 
@@ -767,7 +797,7 @@ type Project {
     """filter the rows returned"""
     where: ProjectMedia_bool_exp
   ): [ProjectMedia!]!
-  releaseAt: timestamp
+  releaseAt: timestamptz
   state: ProjectState!
   storage: Storage
   title: String!
@@ -1073,7 +1103,7 @@ input Project_bool_exp {
   id: uuid_comparison_exp
   pricing: jsonb_comparison_exp
   projectMedias: ProjectMedia_bool_exp
-  releaseAt: timestamp_comparison_exp
+  releaseAt: timestamptz_comparison_exp
   state: ProjectState_comparison_exp
   storage: Storage_comparison_exp
   title: String_comparison_exp
@@ -1119,7 +1149,7 @@ input Project_insert_input {
   description: String
   pricing: jsonb
   projectMedias: ProjectMedia_arr_rel_insert_input
-  releaseAt: timestamp
+  releaseAt: timestamptz
   storage: Storage
   title: String
 }
@@ -1251,10 +1281,9 @@ input type for updating data in table "Project"
 """
 input Project_set_input {
   blockchain: BlockchainNetwork
-  curatorId: uuid
   description: String
   pricing: jsonb
-  releaseAt: timestamp
+  releaseAt: timestamptz
   storage: Storage
   title: String
 }
@@ -1278,7 +1307,7 @@ input Project_stream_cursor_value_input {
   description: String
   id: uuid
   pricing: jsonb
-  releaseAt: timestamp
+  releaseAt: timestamptz
   state: ProjectState
   storage: Storage
   title: String
@@ -1290,9 +1319,6 @@ update columns of table "Project"
 enum Project_update_column {
   """column name"""
   blockchain
-
-  """column name"""
-  curatorId
 
   """column name"""
   description
@@ -1496,6 +1522,1335 @@ input Wallet_stream_cursor_value_input {
   network: BlockchainNetwork
 }
 
+scalar _int2
+
+"""
+Boolean expression to compare columns of type "_int2". All fields are combined with logical 'AND'.
+"""
+input _int2_comparison_exp {
+  _eq: _int2
+  _gt: _int2
+  _gte: _int2
+  _in: [_int2!]
+  _is_null: Boolean
+  _lt: _int2
+  _lte: _int2
+  _neq: _int2
+  _nin: [_int2!]
+}
+
+scalar _int4
+
+"""
+Boolean expression to compare columns of type "_int4". All fields are combined with logical 'AND'.
+"""
+input _int4_comparison_exp {
+  _eq: _int4
+  _gt: _int4
+  _gte: _int4
+  _in: [_int4!]
+  _is_null: Boolean
+  _lt: _int4
+  _lte: _int4
+  _neq: _int4
+  _nin: [_int4!]
+}
+
+scalar _int8
+
+"""
+Boolean expression to compare columns of type "_int8". All fields are combined with logical 'AND'.
+"""
+input _int8_comparison_exp {
+  _eq: _int8
+  _gt: _int8
+  _gte: _int8
+  _in: [_int8!]
+  _is_null: Boolean
+  _lt: _int8
+  _lte: _int8
+  _neq: _int8
+  _nin: [_int8!]
+}
+
+scalar _text
+
+"""
+Boolean expression to compare columns of type "_text". All fields are combined with logical 'AND'.
+"""
+input _text_comparison_exp {
+  _eq: _text
+  _gt: _text
+  _gte: _text
+  _in: [_text!]
+  _is_null: Boolean
+  _lt: _text
+  _lte: _text
+  _neq: _text
+  _nin: [_text!]
+}
+
+"""
+columns and relationships of "action"
+"""
+type action {
+  articleId: Int
+  createdAt: timestamptz!
+  id: uuid!
+  issuerId: String
+  metadata(
+    """JSON select path"""
+    path: String
+  ): jsonb
+  numericValue: numeric
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  opHash: String!
+  redeemableAddress: String
+  targetId: String
+  ticketId: String
+  tokenId: String
+  type: action_type_enum!
+}
+
+"""
+Boolean expression to filter rows from the table "action". All fields are combined with a logical 'AND'.
+"""
+input action_bool_exp {
+  _and: [action_bool_exp!]
+  _not: action_bool_exp
+  _or: [action_bool_exp!]
+  articleId: Int_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  issuerId: String_comparison_exp
+  metadata: jsonb_comparison_exp
+  numericValue: numeric_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  opHash: String_comparison_exp
+  redeemableAddress: String_comparison_exp
+  targetId: String_comparison_exp
+  ticketId: String_comparison_exp
+  tokenId: String_comparison_exp
+  type: action_type_enum_comparison_exp
+}
+
+"""Ordering options when selecting data from "action"."""
+input action_order_by {
+  articleId: order_by
+  createdAt: order_by
+  id: order_by
+  issuerId: order_by
+  metadata: order_by
+  numericValue: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  opHash: order_by
+  redeemableAddress: order_by
+  targetId: order_by
+  ticketId: order_by
+  tokenId: order_by
+  type: order_by
+}
+
+"""
+select columns of table "action"
+"""
+enum action_select_column {
+  """column name"""
+  articleId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  issuerId
+
+  """column name"""
+  metadata
+
+  """column name"""
+  numericValue
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  opHash
+
+  """column name"""
+  redeemableAddress
+
+  """column name"""
+  targetId
+
+  """column name"""
+  ticketId
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  type
+}
+
+"""
+Streaming cursor of the table "action"
+"""
+input action_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: action_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input action_stream_cursor_value_input {
+  articleId: Int
+  createdAt: timestamptz
+  id: uuid
+  issuerId: String
+  metadata: jsonb
+  numericValue: numeric
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  opHash: String
+  redeemableAddress: String
+  targetId: String
+  ticketId: String
+  tokenId: String
+  type: action_type_enum
+}
+
+scalar action_type_enum
+
+"""
+Boolean expression to compare columns of type "action_type_enum". All fields are combined with logical 'AND'.
+"""
+input action_type_enum_comparison_exp {
+  _eq: action_type_enum
+  _gt: action_type_enum
+  _gte: action_type_enum
+  _in: [action_type_enum!]
+  _is_null: Boolean
+  _lt: action_type_enum
+  _lte: action_type_enum
+  _neq: action_type_enum
+  _nin: [action_type_enum!]
+}
+
+"""
+columns and relationships of "article"
+"""
+type article {
+  artifactUri: String!
+  authorId: String!
+  body: String!
+  createdAt: timestamptz!
+  description: String!
+  displayUri: String!
+  editions: bigint!
+  flag: article_flag_enum!
+  id: Int!
+  language: String!
+  metadata(
+    """JSON select path"""
+    path: String
+  ): json!
+  metadataLocked: Boolean!
+  metadataUri: String!
+  mintOpHash: String!
+  moderationReasonId: String
+  platforms: _text
+  royalties: Int!
+  slug: String!
+  tags: _text!
+  thumbnailCaption: String
+  thumbnailMediaId: bpchar
+  thumbnailUri: String!
+  title: String!
+}
+
+"""
+Boolean expression to filter rows from the table "article". All fields are combined with a logical 'AND'.
+"""
+input article_bool_exp {
+  _and: [article_bool_exp!]
+  _not: article_bool_exp
+  _or: [article_bool_exp!]
+  artifactUri: String_comparison_exp
+  authorId: String_comparison_exp
+  body: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  description: String_comparison_exp
+  displayUri: String_comparison_exp
+  editions: bigint_comparison_exp
+  flag: article_flag_enum_comparison_exp
+  id: Int_comparison_exp
+  language: String_comparison_exp
+  metadata: json_comparison_exp
+  metadataLocked: Boolean_comparison_exp
+  metadataUri: String_comparison_exp
+  mintOpHash: String_comparison_exp
+  moderationReasonId: String_comparison_exp
+  platforms: _text_comparison_exp
+  royalties: Int_comparison_exp
+  slug: String_comparison_exp
+  tags: _text_comparison_exp
+  thumbnailCaption: String_comparison_exp
+  thumbnailMediaId: bpchar_comparison_exp
+  thumbnailUri: String_comparison_exp
+  title: String_comparison_exp
+}
+
+scalar article_flag_enum
+
+"""
+Boolean expression to compare columns of type "article_flag_enum". All fields are combined with logical 'AND'.
+"""
+input article_flag_enum_comparison_exp {
+  _eq: article_flag_enum
+  _gt: article_flag_enum
+  _gte: article_flag_enum
+  _in: [article_flag_enum!]
+  _is_null: Boolean
+  _lt: article_flag_enum
+  _lte: article_flag_enum
+  _neq: article_flag_enum
+  _nin: [article_flag_enum!]
+}
+
+"""
+columns and relationships of "article_generative_token"
+"""
+type article_generative_token {
+  articleId: Int!
+  generativeTokenId: String!
+  line: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "article_generative_token". All fields are combined with a logical 'AND'.
+"""
+input article_generative_token_bool_exp {
+  _and: [article_generative_token_bool_exp!]
+  _not: article_generative_token_bool_exp
+  _or: [article_generative_token_bool_exp!]
+  articleId: Int_comparison_exp
+  generativeTokenId: String_comparison_exp
+  line: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "article_generative_token"."""
+input article_generative_token_order_by {
+  articleId: order_by
+  generativeTokenId: order_by
+  line: order_by
+}
+
+"""
+select columns of table "article_generative_token"
+"""
+enum article_generative_token_select_column {
+  """column name"""
+  articleId
+
+  """column name"""
+  generativeTokenId
+
+  """column name"""
+  line
+}
+
+"""
+Streaming cursor of the table "article_generative_token"
+"""
+input article_generative_token_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: article_generative_token_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input article_generative_token_stream_cursor_value_input {
+  articleId: Int
+  generativeTokenId: String
+  line: Int
+}
+
+"""
+columns and relationships of "article_ledger"
+"""
+type article_ledger {
+  amount: bigint!
+  articleId: Int!
+  ownerId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "article_ledger". All fields are combined with a logical 'AND'.
+"""
+input article_ledger_bool_exp {
+  _and: [article_ledger_bool_exp!]
+  _not: article_ledger_bool_exp
+  _or: [article_ledger_bool_exp!]
+  amount: bigint_comparison_exp
+  articleId: Int_comparison_exp
+  ownerId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "article_ledger"."""
+input article_ledger_order_by {
+  amount: order_by
+  articleId: order_by
+  ownerId: order_by
+}
+
+"""
+select columns of table "article_ledger"
+"""
+enum article_ledger_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  articleId
+
+  """column name"""
+  ownerId
+}
+
+"""
+Streaming cursor of the table "article_ledger"
+"""
+input article_ledger_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: article_ledger_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input article_ledger_stream_cursor_value_input {
+  amount: bigint
+  articleId: Int
+  ownerId: String
+}
+
+"""Ordering options when selecting data from "article"."""
+input article_order_by {
+  artifactUri: order_by
+  authorId: order_by
+  body: order_by
+  createdAt: order_by
+  description: order_by
+  displayUri: order_by
+  editions: order_by
+  flag: order_by
+  id: order_by
+  language: order_by
+  metadata: order_by
+  metadataLocked: order_by
+  metadataUri: order_by
+  mintOpHash: order_by
+  moderationReasonId: order_by
+  platforms: order_by
+  royalties: order_by
+  slug: order_by
+  tags: order_by
+  thumbnailCaption: order_by
+  thumbnailMediaId: order_by
+  thumbnailUri: order_by
+  title: order_by
+}
+
+"""
+columns and relationships of "article_revision"
+"""
+type article_revision {
+  articleId: Int!
+  createdAt: timestamptz!
+  iteration: smallint!
+  metadataUri: String!
+  opHash: String!
+}
+
+"""
+Boolean expression to filter rows from the table "article_revision". All fields are combined with a logical 'AND'.
+"""
+input article_revision_bool_exp {
+  _and: [article_revision_bool_exp!]
+  _not: article_revision_bool_exp
+  _or: [article_revision_bool_exp!]
+  articleId: Int_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  iteration: smallint_comparison_exp
+  metadataUri: String_comparison_exp
+  opHash: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "article_revision"."""
+input article_revision_order_by {
+  articleId: order_by
+  createdAt: order_by
+  iteration: order_by
+  metadataUri: order_by
+  opHash: order_by
+}
+
+"""
+select columns of table "article_revision"
+"""
+enum article_revision_select_column {
+  """column name"""
+  articleId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  iteration
+
+  """column name"""
+  metadataUri
+
+  """column name"""
+  opHash
+}
+
+"""
+Streaming cursor of the table "article_revision"
+"""
+input article_revision_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: article_revision_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input article_revision_stream_cursor_value_input {
+  articleId: Int
+  createdAt: timestamptz
+  iteration: smallint
+  metadataUri: String
+  opHash: String
+}
+
+"""
+select columns of table "article"
+"""
+enum article_select_column {
+  """column name"""
+  artifactUri
+
+  """column name"""
+  authorId
+
+  """column name"""
+  body
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  description
+
+  """column name"""
+  displayUri
+
+  """column name"""
+  editions
+
+  """column name"""
+  flag
+
+  """column name"""
+  id
+
+  """column name"""
+  language
+
+  """column name"""
+  metadata
+
+  """column name"""
+  metadataLocked
+
+  """column name"""
+  metadataUri
+
+  """column name"""
+  mintOpHash
+
+  """column name"""
+  moderationReasonId
+
+  """column name"""
+  platforms
+
+  """column name"""
+  royalties
+
+  """column name"""
+  slug
+
+  """column name"""
+  tags
+
+  """column name"""
+  thumbnailCaption
+
+  """column name"""
+  thumbnailMediaId
+
+  """column name"""
+  thumbnailUri
+
+  """column name"""
+  title
+}
+
+"""
+Streaming cursor of the table "article"
+"""
+input article_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: article_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input article_stream_cursor_value_input {
+  artifactUri: String
+  authorId: String
+  body: String
+  createdAt: timestamptz
+  description: String
+  displayUri: String
+  editions: bigint
+  flag: article_flag_enum
+  id: Int
+  language: String
+  metadata: json
+  metadataLocked: Boolean
+  metadataUri: String
+  mintOpHash: String
+  moderationReasonId: String
+  platforms: _text
+  royalties: Int
+  slug: String
+  tags: _text
+  thumbnailCaption: String
+  thumbnailMediaId: bpchar
+  thumbnailUri: String
+  title: String
+}
+
+"""
+columns and relationships of "auction"
+"""
+type auction {
+  bidTableId: Int
+  bidTimeIncrement: Int!
+  cancelledAt: timestamptz
+  createdAt: timestamptz!
+  endsAt: timestamptz
+  fulfilledAt: timestamptz
+  id: Int!
+  minDuration: Int!
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  reservePrice: bigint!
+  sellerId: String
+  version: Int!
+}
+
+"""
+columns and relationships of "auction_bid"
+"""
+type auction_bid {
+  auctionId: Int
+  auctionVersion: Int
+  bidderId: String
+  createdAt: timestamptz!
+  id: uuid!
+  price: numeric!
+}
+
+"""
+Boolean expression to filter rows from the table "auction_bid". All fields are combined with a logical 'AND'.
+"""
+input auction_bid_bool_exp {
+  _and: [auction_bid_bool_exp!]
+  _not: auction_bid_bool_exp
+  _or: [auction_bid_bool_exp!]
+  auctionId: Int_comparison_exp
+  auctionVersion: Int_comparison_exp
+  bidderId: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  price: numeric_comparison_exp
+}
+
+"""Ordering options when selecting data from "auction_bid"."""
+input auction_bid_order_by {
+  auctionId: order_by
+  auctionVersion: order_by
+  bidderId: order_by
+  createdAt: order_by
+  id: order_by
+  price: order_by
+}
+
+"""
+select columns of table "auction_bid"
+"""
+enum auction_bid_select_column {
+  """column name"""
+  auctionId
+
+  """column name"""
+  auctionVersion
+
+  """column name"""
+  bidderId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  price
+}
+
+"""
+Streaming cursor of the table "auction_bid"
+"""
+input auction_bid_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: auction_bid_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input auction_bid_stream_cursor_value_input {
+  auctionId: Int
+  auctionVersion: Int
+  bidderId: String
+  createdAt: timestamptz
+  id: uuid
+  price: numeric
+}
+
+"""
+columns and relationships of "auction_bid_table"
+"""
+type auction_bid_table {
+  id: Int!
+  table(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+}
+
+"""
+Boolean expression to filter rows from the table "auction_bid_table". All fields are combined with a logical 'AND'.
+"""
+input auction_bid_table_bool_exp {
+  _and: [auction_bid_table_bool_exp!]
+  _not: auction_bid_table_bool_exp
+  _or: [auction_bid_table_bool_exp!]
+  id: Int_comparison_exp
+  table: jsonb_comparison_exp
+}
+
+"""Ordering options when selecting data from "auction_bid_table"."""
+input auction_bid_table_order_by {
+  id: order_by
+  table: order_by
+}
+
+"""
+select columns of table "auction_bid_table"
+"""
+enum auction_bid_table_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  table
+}
+
+"""
+Streaming cursor of the table "auction_bid_table"
+"""
+input auction_bid_table_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: auction_bid_table_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input auction_bid_table_stream_cursor_value_input {
+  id: Int
+  table: jsonb
+}
+
+"""
+Boolean expression to filter rows from the table "auction". All fields are combined with a logical 'AND'.
+"""
+input auction_bool_exp {
+  _and: [auction_bool_exp!]
+  _not: auction_bool_exp
+  _or: [auction_bool_exp!]
+  bidTableId: Int_comparison_exp
+  bidTimeIncrement: Int_comparison_exp
+  cancelledAt: timestamptz_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  endsAt: timestamptz_comparison_exp
+  fulfilledAt: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  minDuration: Int_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  reservePrice: bigint_comparison_exp
+  sellerId: String_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "auction"."""
+input auction_order_by {
+  bidTableId: order_by
+  bidTimeIncrement: order_by
+  cancelledAt: order_by
+  createdAt: order_by
+  endsAt: order_by
+  fulfilledAt: order_by
+  id: order_by
+  minDuration: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  reservePrice: order_by
+  sellerId: order_by
+  version: order_by
+}
+
+"""
+select columns of table "auction"
+"""
+enum auction_select_column {
+  """column name"""
+  bidTableId
+
+  """column name"""
+  bidTimeIncrement
+
+  """column name"""
+  cancelledAt
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  endsAt
+
+  """column name"""
+  fulfilledAt
+
+  """column name"""
+  id
+
+  """column name"""
+  minDuration
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  reservePrice
+
+  """column name"""
+  sellerId
+
+  """column name"""
+  version
+}
+
+"""
+Streaming cursor of the table "auction"
+"""
+input auction_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: auction_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input auction_stream_cursor_value_input {
+  bidTableId: Int
+  bidTimeIncrement: Int
+  cancelledAt: timestamptz
+  createdAt: timestamptz
+  endsAt: timestamptz
+  fulfilledAt: timestamptz
+  id: Int
+  minDuration: Int
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  reservePrice: bigint
+  sellerId: String
+  version: Int
+}
+
+scalar bigint
+
+"""
+Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+scalar bpchar
+
+"""
+Boolean expression to compare columns of type "bpchar". All fields are combined with logical 'AND'.
+"""
+input bpchar_comparison_exp {
+  _eq: bpchar
+  _gt: bpchar
+  _gte: bpchar
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: bpchar
+  _in: [bpchar!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: bpchar
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: bpchar
+  _lt: bpchar
+  _lte: bpchar
+  _neq: bpchar
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: bpchar
+  _nin: [bpchar!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: bpchar
+
+  """does the column NOT match the given pattern"""
+  _nlike: bpchar
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: bpchar
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: bpchar
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: bpchar
+
+  """does the column match the given SQL regular expression"""
+  _similar: bpchar
+}
+
+"""
+columns and relationships of "codex"
+"""
+type codex {
+  authorId: String!
+  id: String!
+  locked: Boolean!
+  tokenVersion: generative_token_version!
+  type: codex_type_enum!
+  value: String
+}
+
+"""
+Boolean expression to filter rows from the table "codex". All fields are combined with a logical 'AND'.
+"""
+input codex_bool_exp {
+  _and: [codex_bool_exp!]
+  _not: codex_bool_exp
+  _or: [codex_bool_exp!]
+  authorId: String_comparison_exp
+  id: String_comparison_exp
+  locked: Boolean_comparison_exp
+  tokenVersion: generative_token_version_comparison_exp
+  type: codex_type_enum_comparison_exp
+  value: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "codex"."""
+input codex_order_by {
+  authorId: order_by
+  id: order_by
+  locked: order_by
+  tokenVersion: order_by
+  type: order_by
+  value: order_by
+}
+
+"""
+select columns of table "codex"
+"""
+enum codex_select_column {
+  """column name"""
+  authorId
+
+  """column name"""
+  id
+
+  """column name"""
+  locked
+
+  """column name"""
+  tokenVersion
+
+  """column name"""
+  type
+
+  """column name"""
+  value
+}
+
+"""
+Streaming cursor of the table "codex"
+"""
+input codex_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: codex_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input codex_stream_cursor_value_input {
+  authorId: String
+  id: String
+  locked: Boolean
+  tokenVersion: generative_token_version
+  type: codex_type_enum
+  value: String
+}
+
+scalar codex_type_enum
+
+"""
+Boolean expression to compare columns of type "codex_type_enum". All fields are combined with logical 'AND'.
+"""
+input codex_type_enum_comparison_exp {
+  _eq: codex_type_enum
+  _gt: codex_type_enum
+  _gte: codex_type_enum
+  _in: [codex_type_enum!]
+  _is_null: Boolean
+  _lt: codex_type_enum
+  _lte: codex_type_enum
+  _neq: codex_type_enum
+  _nin: [codex_type_enum!]
+}
+
+"""
+columns and relationships of "codex_update_request"
+"""
+type codex_update_request {
+  codexId: String!
+  createdAt: timestamptz!
+  status: codex_update_request_status_enum!
+  tokenId: String!
+  tokenVersion: generative_token_version!
+}
+
+"""
+Boolean expression to filter rows from the table "codex_update_request". All fields are combined with a logical 'AND'.
+"""
+input codex_update_request_bool_exp {
+  _and: [codex_update_request_bool_exp!]
+  _not: codex_update_request_bool_exp
+  _or: [codex_update_request_bool_exp!]
+  codexId: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  status: codex_update_request_status_enum_comparison_exp
+  tokenId: String_comparison_exp
+  tokenVersion: generative_token_version_comparison_exp
+}
+
+"""Ordering options when selecting data from "codex_update_request"."""
+input codex_update_request_order_by {
+  codexId: order_by
+  createdAt: order_by
+  status: order_by
+  tokenId: order_by
+  tokenVersion: order_by
+}
+
+"""
+select columns of table "codex_update_request"
+"""
+enum codex_update_request_select_column {
+  """column name"""
+  codexId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  status
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  tokenVersion
+}
+
+scalar codex_update_request_status_enum
+
+"""
+Boolean expression to compare columns of type "codex_update_request_status_enum". All fields are combined with logical 'AND'.
+"""
+input codex_update_request_status_enum_comparison_exp {
+  _eq: codex_update_request_status_enum
+  _gt: codex_update_request_status_enum
+  _gte: codex_update_request_status_enum
+  _in: [codex_update_request_status_enum!]
+  _is_null: Boolean
+  _lt: codex_update_request_status_enum
+  _lte: codex_update_request_status_enum
+  _neq: codex_update_request_status_enum
+  _nin: [codex_update_request_status_enum!]
+}
+
+"""
+Streaming cursor of the table "codex_update_request"
+"""
+input codex_update_request_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: codex_update_request_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input codex_update_request_stream_cursor_value_input {
+  codexId: String
+  createdAt: timestamptz
+  status: codex_update_request_status_enum
+  tokenId: String
+  tokenVersion: generative_token_version
+}
+
+"""
+columns and relationships of "collaboration"
+"""
+type collaboration {
+  collaborationContractId: String!
+  collaboratorId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "collaboration". All fields are combined with a logical 'AND'.
+"""
+input collaboration_bool_exp {
+  _and: [collaboration_bool_exp!]
+  _not: collaboration_bool_exp
+  _or: [collaboration_bool_exp!]
+  collaborationContractId: String_comparison_exp
+  collaboratorId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "collaboration"."""
+input collaboration_order_by {
+  collaborationContractId: order_by
+  collaboratorId: order_by
+}
+
+"""
+select columns of table "collaboration"
+"""
+enum collaboration_select_column {
+  """column name"""
+  collaborationContractId
+
+  """column name"""
+  collaboratorId
+}
+
+"""
+Streaming cursor of the table "collaboration"
+"""
+input collaboration_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: collaboration_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input collaboration_stream_cursor_value_input {
+  collaborationContractId: String
+  collaboratorId: String
+}
+
+"""
+columns and relationships of "collection_offer"
+"""
+type collection_offer {
+  amount: numeric!
+  buyerId: String!
+  cancelledAt: timestamptz
+  completedAt: timestamptz
+  createdAt: timestamptz!
+  id: String!
+  initialAmount: numeric!
+  price: numeric!
+  tokenId: String!
+  version: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "collection_offer". All fields are combined with a logical 'AND'.
+"""
+input collection_offer_bool_exp {
+  _and: [collection_offer_bool_exp!]
+  _not: collection_offer_bool_exp
+  _or: [collection_offer_bool_exp!]
+  amount: numeric_comparison_exp
+  buyerId: String_comparison_exp
+  cancelledAt: timestamptz_comparison_exp
+  completedAt: timestamptz_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: String_comparison_exp
+  initialAmount: numeric_comparison_exp
+  price: numeric_comparison_exp
+  tokenId: String_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "collection_offer"."""
+input collection_offer_order_by {
+  amount: order_by
+  buyerId: order_by
+  cancelledAt: order_by
+  completedAt: order_by
+  createdAt: order_by
+  id: order_by
+  initialAmount: order_by
+  price: order_by
+  tokenId: order_by
+  version: order_by
+}
+
+"""
+select columns of table "collection_offer"
+"""
+enum collection_offer_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  buyerId
+
+  """column name"""
+  cancelledAt
+
+  """column name"""
+  completedAt
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  initialAmount
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  version
+}
+
+"""
+Streaming cursor of the table "collection_offer"
+"""
+input collection_offer_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: collection_offer_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input collection_offer_stream_cursor_value_input {
+  amount: numeric
+  buyerId: String
+  cancelledAt: timestamptz
+  completedAt: timestamptz
+  createdAt: timestamptz
+  id: String
+  initialAmount: numeric
+  price: numeric
+  tokenId: String
+  version: Int
+}
+
 """ordering argument of a cursor"""
 enum cursor_ordering {
   """ascending ordering of the cursor"""
@@ -1503,6 +2858,698 @@ enum cursor_ordering {
 
   """descending ordering of the cursor"""
   DESC
+}
+
+scalar float8
+
+"""
+Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""
+columns and relationships of "generative_token"
+"""
+type generative_token {
+  authorId: String
+  balance: numeric!
+  captureMediaId: bpchar
+  codexId: String
+  createdAt: timestamptz!
+  displayUri: String
+  enabled: Boolean!
+  flag: generative_token_flag_enum!
+  generativeUri: String
+  id: String!
+  inputBytesSize: Int!
+  iterationsCount: numeric
+  labels: _int4!
+  lockEnd: timestamptz!
+  lockPriceForReserves: Boolean!
+  lockedSeconds: Int!
+  metadata(
+    """JSON select path"""
+    path: String
+  ): json
+  metadataUri: String
+  mintOpensAt: timestamptz!
+  moderationReasonId: String
+  name: String
+  openEditions: Boolean!
+  openEditionsEndsAt: timestamptz
+  originalSupply: numeric!
+  paramsDefinition(
+    """JSON select path"""
+    path: String
+  ): json
+  previewInputBytes: String
+  royalties: Int!
+  slug: String
+  supply: numeric!
+  tags: _text
+  thumbnailUri: String
+  updatedAt: timestamptz
+  version: generative_token_version!
+}
+
+"""
+Boolean expression to filter rows from the table "generative_token". All fields are combined with a logical 'AND'.
+"""
+input generative_token_bool_exp {
+  _and: [generative_token_bool_exp!]
+  _not: generative_token_bool_exp
+  _or: [generative_token_bool_exp!]
+  authorId: String_comparison_exp
+  balance: numeric_comparison_exp
+  captureMediaId: bpchar_comparison_exp
+  codexId: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  displayUri: String_comparison_exp
+  enabled: Boolean_comparison_exp
+  flag: generative_token_flag_enum_comparison_exp
+  generativeUri: String_comparison_exp
+  id: String_comparison_exp
+  inputBytesSize: Int_comparison_exp
+  iterationsCount: numeric_comparison_exp
+  labels: _int4_comparison_exp
+  lockEnd: timestamptz_comparison_exp
+  lockPriceForReserves: Boolean_comparison_exp
+  lockedSeconds: Int_comparison_exp
+  metadata: json_comparison_exp
+  metadataUri: String_comparison_exp
+  mintOpensAt: timestamptz_comparison_exp
+  moderationReasonId: String_comparison_exp
+  name: String_comparison_exp
+  openEditions: Boolean_comparison_exp
+  openEditionsEndsAt: timestamptz_comparison_exp
+  originalSupply: numeric_comparison_exp
+  paramsDefinition: json_comparison_exp
+  previewInputBytes: String_comparison_exp
+  royalties: Int_comparison_exp
+  slug: String_comparison_exp
+  supply: numeric_comparison_exp
+  tags: _text_comparison_exp
+  thumbnailUri: String_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+  version: generative_token_version_comparison_exp
+}
+
+scalar generative_token_flag_enum
+
+"""
+Boolean expression to compare columns of type "generative_token_flag_enum". All fields are combined with logical 'AND'.
+"""
+input generative_token_flag_enum_comparison_exp {
+  _eq: generative_token_flag_enum
+  _gt: generative_token_flag_enum
+  _gte: generative_token_flag_enum
+  _in: [generative_token_flag_enum!]
+  _is_null: Boolean
+  _lt: generative_token_flag_enum
+  _lte: generative_token_flag_enum
+  _neq: generative_token_flag_enum
+  _nin: [generative_token_flag_enum!]
+}
+
+"""Ordering options when selecting data from "generative_token"."""
+input generative_token_order_by {
+  authorId: order_by
+  balance: order_by
+  captureMediaId: order_by
+  codexId: order_by
+  createdAt: order_by
+  displayUri: order_by
+  enabled: order_by
+  flag: order_by
+  generativeUri: order_by
+  id: order_by
+  inputBytesSize: order_by
+  iterationsCount: order_by
+  labels: order_by
+  lockEnd: order_by
+  lockPriceForReserves: order_by
+  lockedSeconds: order_by
+  metadata: order_by
+  metadataUri: order_by
+  mintOpensAt: order_by
+  moderationReasonId: order_by
+  name: order_by
+  openEditions: order_by
+  openEditionsEndsAt: order_by
+  originalSupply: order_by
+  paramsDefinition: order_by
+  previewInputBytes: order_by
+  royalties: order_by
+  slug: order_by
+  supply: order_by
+  tags: order_by
+  thumbnailUri: order_by
+  updatedAt: order_by
+  version: order_by
+}
+
+"""
+select columns of table "generative_token"
+"""
+enum generative_token_select_column {
+  """column name"""
+  authorId
+
+  """column name"""
+  balance
+
+  """column name"""
+  captureMediaId
+
+  """column name"""
+  codexId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  displayUri
+
+  """column name"""
+  enabled
+
+  """column name"""
+  flag
+
+  """column name"""
+  generativeUri
+
+  """column name"""
+  id
+
+  """column name"""
+  inputBytesSize
+
+  """column name"""
+  iterationsCount
+
+  """column name"""
+  labels
+
+  """column name"""
+  lockEnd
+
+  """column name"""
+  lockPriceForReserves
+
+  """column name"""
+  lockedSeconds
+
+  """column name"""
+  metadata
+
+  """column name"""
+  metadataUri
+
+  """column name"""
+  mintOpensAt
+
+  """column name"""
+  moderationReasonId
+
+  """column name"""
+  name
+
+  """column name"""
+  openEditions
+
+  """column name"""
+  openEditionsEndsAt
+
+  """column name"""
+  originalSupply
+
+  """column name"""
+  paramsDefinition
+
+  """column name"""
+  previewInputBytes
+
+  """column name"""
+  royalties
+
+  """column name"""
+  slug
+
+  """column name"""
+  supply
+
+  """column name"""
+  tags
+
+  """column name"""
+  thumbnailUri
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  version
+}
+
+"""
+Streaming cursor of the table "generative_token"
+"""
+input generative_token_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: generative_token_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input generative_token_stream_cursor_value_input {
+  authorId: String
+  balance: numeric
+  captureMediaId: bpchar
+  codexId: String
+  createdAt: timestamptz
+  displayUri: String
+  enabled: Boolean
+  flag: generative_token_flag_enum
+  generativeUri: String
+  id: String
+  inputBytesSize: Int
+  iterationsCount: numeric
+  labels: _int4
+  lockEnd: timestamptz
+  lockPriceForReserves: Boolean
+  lockedSeconds: Int
+  metadata: json
+  metadataUri: String
+  mintOpensAt: timestamptz
+  moderationReasonId: String
+  name: String
+  openEditions: Boolean
+  openEditionsEndsAt: timestamptz
+  originalSupply: numeric
+  paramsDefinition: json
+  previewInputBytes: String
+  royalties: Int
+  slug: String
+  supply: numeric
+  tags: _text
+  thumbnailUri: String
+  updatedAt: timestamptz
+  version: generative_token_version
+}
+
+scalar generative_token_version
+
+"""
+Boolean expression to compare columns of type "generative_token_version". All fields are combined with logical 'AND'.
+"""
+input generative_token_version_comparison_exp {
+  _eq: generative_token_version
+  _gt: generative_token_version
+  _gte: generative_token_version
+  _in: [generative_token_version!]
+  _is_null: Boolean
+  _lt: generative_token_version
+  _lte: generative_token_version
+  _neq: generative_token_version
+  _nin: [generative_token_version!]
+}
+
+"""
+columns and relationships of "gentk_assign"
+"""
+type gentk_assign {
+  assignedAt: timestamptz
+  attempts: Int!
+  createdAt: timestamptz!
+  gentkId: String!
+  gentkIssuerVersion: generative_token_version!
+  retries: Int!
+  state: gentk_assign_state_enum!
+}
+
+"""
+Boolean expression to filter rows from the table "gentk_assign". All fields are combined with a logical 'AND'.
+"""
+input gentk_assign_bool_exp {
+  _and: [gentk_assign_bool_exp!]
+  _not: gentk_assign_bool_exp
+  _or: [gentk_assign_bool_exp!]
+  assignedAt: timestamptz_comparison_exp
+  attempts: Int_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  gentkId: String_comparison_exp
+  gentkIssuerVersion: generative_token_version_comparison_exp
+  retries: Int_comparison_exp
+  state: gentk_assign_state_enum_comparison_exp
+}
+
+"""Ordering options when selecting data from "gentk_assign"."""
+input gentk_assign_order_by {
+  assignedAt: order_by
+  attempts: order_by
+  createdAt: order_by
+  gentkId: order_by
+  gentkIssuerVersion: order_by
+  retries: order_by
+  state: order_by
+}
+
+"""
+select columns of table "gentk_assign"
+"""
+enum gentk_assign_select_column {
+  """column name"""
+  assignedAt
+
+  """column name"""
+  attempts
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  gentkId
+
+  """column name"""
+  gentkIssuerVersion
+
+  """column name"""
+  retries
+
+  """column name"""
+  state
+}
+
+scalar gentk_assign_state_enum
+
+"""
+Boolean expression to compare columns of type "gentk_assign_state_enum". All fields are combined with logical 'AND'.
+"""
+input gentk_assign_state_enum_comparison_exp {
+  _eq: gentk_assign_state_enum
+  _gt: gentk_assign_state_enum
+  _gte: gentk_assign_state_enum
+  _in: [gentk_assign_state_enum!]
+  _is_null: Boolean
+  _lt: gentk_assign_state_enum
+  _lte: gentk_assign_state_enum
+  _neq: gentk_assign_state_enum
+  _nin: [gentk_assign_state_enum!]
+}
+
+"""
+Streaming cursor of the table "gentk_assign"
+"""
+input gentk_assign_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: gentk_assign_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input gentk_assign_stream_cursor_value_input {
+  assignedAt: timestamptz
+  attempts: Int
+  createdAt: timestamptz
+  gentkId: String
+  gentkIssuerVersion: generative_token_version
+  retries: Int
+  state: gentk_assign_state_enum
+}
+
+"""
+columns and relationships of "indexed_operation"
+"""
+type indexed_operation {
+  hashed: String!
+}
+
+"""
+Boolean expression to filter rows from the table "indexed_operation". All fields are combined with a logical 'AND'.
+"""
+input indexed_operation_bool_exp {
+  _and: [indexed_operation_bool_exp!]
+  _not: indexed_operation_bool_exp
+  _or: [indexed_operation_bool_exp!]
+  hashed: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "indexed_operation"."""
+input indexed_operation_order_by {
+  hashed: order_by
+}
+
+"""
+select columns of table "indexed_operation"
+"""
+enum indexed_operation_select_column {
+  """column name"""
+  hashed
+}
+
+"""
+Streaming cursor of the table "indexed_operation"
+"""
+input indexed_operation_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: indexed_operation_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input indexed_operation_stream_cursor_value_input {
+  hashed: String
+}
+
+"""
+columns and relationships of "indexing_cursor"
+"""
+type indexing_cursor {
+  groupId: String!
+  id: bigint!
+  lastIndexedAt: timestamptz!
+  level: bigint!
+  originatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "indexing_cursor". All fields are combined with a logical 'AND'.
+"""
+input indexing_cursor_bool_exp {
+  _and: [indexing_cursor_bool_exp!]
+  _not: indexing_cursor_bool_exp
+  _or: [indexing_cursor_bool_exp!]
+  groupId: String_comparison_exp
+  id: bigint_comparison_exp
+  lastIndexedAt: timestamptz_comparison_exp
+  level: bigint_comparison_exp
+  originatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "indexing_cursor"."""
+input indexing_cursor_order_by {
+  groupId: order_by
+  id: order_by
+  lastIndexedAt: order_by
+  level: order_by
+  originatedAt: order_by
+}
+
+"""
+select columns of table "indexing_cursor"
+"""
+enum indexing_cursor_select_column {
+  """column name"""
+  groupId
+
+  """column name"""
+  id
+
+  """column name"""
+  lastIndexedAt
+
+  """column name"""
+  level
+
+  """column name"""
+  originatedAt
+}
+
+"""
+Streaming cursor of the table "indexing_cursor"
+"""
+input indexing_cursor_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: indexing_cursor_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input indexing_cursor_stream_cursor_value_input {
+  groupId: String
+  id: bigint
+  lastIndexedAt: timestamptz
+  level: bigint
+  originatedAt: timestamptz
+}
+
+"""
+columns and relationships of "indexing_target"
+"""
+type indexing_target {
+  address: String!
+  cursorGroupId: String
+  type: indexing_target_type_enum!
+}
+
+"""
+Boolean expression to filter rows from the table "indexing_target". All fields are combined with a logical 'AND'.
+"""
+input indexing_target_bool_exp {
+  _and: [indexing_target_bool_exp!]
+  _not: indexing_target_bool_exp
+  _or: [indexing_target_bool_exp!]
+  address: String_comparison_exp
+  cursorGroupId: String_comparison_exp
+  type: indexing_target_type_enum_comparison_exp
+}
+
+"""Ordering options when selecting data from "indexing_target"."""
+input indexing_target_order_by {
+  address: order_by
+  cursorGroupId: order_by
+  type: order_by
+}
+
+"""
+select columns of table "indexing_target"
+"""
+enum indexing_target_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  cursorGroupId
+
+  """column name"""
+  type
+}
+
+"""
+Streaming cursor of the table "indexing_target"
+"""
+input indexing_target_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: indexing_target_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input indexing_target_stream_cursor_value_input {
+  address: String
+  cursorGroupId: String
+  type: indexing_target_type_enum
+}
+
+scalar indexing_target_type_enum
+
+"""
+Boolean expression to compare columns of type "indexing_target_type_enum". All fields are combined with logical 'AND'.
+"""
+input indexing_target_type_enum_comparison_exp {
+  _eq: indexing_target_type_enum
+  _gt: indexing_target_type_enum
+  _gte: indexing_target_type_enum
+  _in: [indexing_target_type_enum!]
+  _is_null: Boolean
+  _lt: indexing_target_type_enum
+  _lte: indexing_target_type_enum
+  _neq: indexing_target_type_enum
+  _nin: [indexing_target_type_enum!]
+}
+
+"""
+columns and relationships of "ipfs_cid"
+"""
+type ipfs_cid {
+  cid: String!
+}
+
+"""
+Boolean expression to filter rows from the table "ipfs_cid". All fields are combined with a logical 'AND'.
+"""
+input ipfs_cid_bool_exp {
+  _and: [ipfs_cid_bool_exp!]
+  _not: ipfs_cid_bool_exp
+  _or: [ipfs_cid_bool_exp!]
+  cid: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "ipfs_cid"."""
+input ipfs_cid_order_by {
+  cid: order_by
+}
+
+"""
+select columns of table "ipfs_cid"
+"""
+enum ipfs_cid_select_column {
+  """column name"""
+  cid
+}
+
+"""
+Streaming cursor of the table "ipfs_cid"
+"""
+input ipfs_cid_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: ipfs_cid_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ipfs_cid_stream_cursor_value_input {
+  cid: String
+}
+
+scalar json
+
+"""
+Boolean expression to compare columns of type "json". All fields are combined with logical 'AND'.
+"""
+input json_comparison_exp {
+  _eq: json
+  _gt: json
+  _gte: json
+  _in: [json!]
+  _is_null: Boolean
+  _lt: json
+  _lte: json
+  _neq: json
+  _nin: [json!]
 }
 
 scalar jsonb
@@ -1542,9 +3589,1278 @@ input jsonb_comparison_exp {
   _nin: [jsonb!]
 }
 
+"""
+columns and relationships of "listing"
+"""
+type listing {
+  acceptedAt: timestamptz
+  acceptedById: String
+  amount: numeric!
+  articleId: Int
+  cancelledAt: timestamptz
+  createdAt: timestamptz!
+  id: String!
+  issuerId: String
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  price: numeric!
+  royalties: Int!
+  version: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "listing". All fields are combined with a logical 'AND'.
+"""
+input listing_bool_exp {
+  _and: [listing_bool_exp!]
+  _not: listing_bool_exp
+  _or: [listing_bool_exp!]
+  acceptedAt: timestamptz_comparison_exp
+  acceptedById: String_comparison_exp
+  amount: numeric_comparison_exp
+  articleId: Int_comparison_exp
+  cancelledAt: timestamptz_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: String_comparison_exp
+  issuerId: String_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  price: numeric_comparison_exp
+  royalties: Int_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "listing"."""
+input listing_order_by {
+  acceptedAt: order_by
+  acceptedById: order_by
+  amount: order_by
+  articleId: order_by
+  cancelledAt: order_by
+  createdAt: order_by
+  id: order_by
+  issuerId: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  price: order_by
+  royalties: order_by
+  version: order_by
+}
+
+"""
+select columns of table "listing"
+"""
+enum listing_select_column {
+  """column name"""
+  acceptedAt
+
+  """column name"""
+  acceptedById
+
+  """column name"""
+  amount
+
+  """column name"""
+  articleId
+
+  """column name"""
+  cancelledAt
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  issuerId
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  price
+
+  """column name"""
+  royalties
+
+  """column name"""
+  version
+}
+
+"""
+Streaming cursor of the table "listing"
+"""
+input listing_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: listing_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input listing_stream_cursor_value_input {
+  acceptedAt: timestamptz
+  acceptedById: String
+  amount: numeric
+  articleId: Int
+  cancelledAt: timestamptz
+  createdAt: timestamptz
+  id: String
+  issuerId: String
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  price: numeric
+  royalties: Int
+  version: Int
+}
+
+"""
+columns and relationships of "market_stats"
+"""
+type market_stats {
+  averageSalePrice: numeric
+  floor: numeric
+  floor7d: numeric
+  floor24: numeric
+  floor30d: numeric
+  floorListingId: String
+  floorListingVersion: Int
+  from: timestamptz
+  highestCollectionOffer: numeric
+  highestSold: numeric
+  highestSold7d: numeric
+  highestSold24: numeric
+  highestSold30d: numeric
+  highestSoldListingId: String
+  highestSoldListingVersion: Int
+  listed: Int
+  longestAverageHeldInSeconds: bigint
+  lowestSold: numeric
+  lowestSold7d: numeric
+  lowestSold24: numeric
+  lowestSold30d: numeric
+  lowestSoldListingId: String
+  lowestSoldListingVersion: Int
+  median: numeric
+  percentListed: Float
+  percentNeverListed: Float
+  primVolumeNb: numeric
+  primVolumeTz: numeric
+  secVolumeNb: numeric
+  secVolumeNb7d: numeric
+  secVolumeNb24: numeric
+  secVolumeNb30d: numeric
+  secVolumeTz: numeric
+  secVolumeTz7d: numeric
+  secVolumeTz24: numeric
+  secVolumeTz30d: numeric
+  to: timestamptz
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "market_stats". All fields are combined with a logical 'AND'.
+"""
+input market_stats_bool_exp {
+  _and: [market_stats_bool_exp!]
+  _not: market_stats_bool_exp
+  _or: [market_stats_bool_exp!]
+  averageSalePrice: numeric_comparison_exp
+  floor: numeric_comparison_exp
+  floor7d: numeric_comparison_exp
+  floor24: numeric_comparison_exp
+  floor30d: numeric_comparison_exp
+  floorListingId: String_comparison_exp
+  floorListingVersion: Int_comparison_exp
+  from: timestamptz_comparison_exp
+  highestCollectionOffer: numeric_comparison_exp
+  highestSold: numeric_comparison_exp
+  highestSold7d: numeric_comparison_exp
+  highestSold24: numeric_comparison_exp
+  highestSold30d: numeric_comparison_exp
+  highestSoldListingId: String_comparison_exp
+  highestSoldListingVersion: Int_comparison_exp
+  listed: Int_comparison_exp
+  longestAverageHeldInSeconds: bigint_comparison_exp
+  lowestSold: numeric_comparison_exp
+  lowestSold7d: numeric_comparison_exp
+  lowestSold24: numeric_comparison_exp
+  lowestSold30d: numeric_comparison_exp
+  lowestSoldListingId: String_comparison_exp
+  lowestSoldListingVersion: Int_comparison_exp
+  median: numeric_comparison_exp
+  percentListed: Float_comparison_exp
+  percentNeverListed: Float_comparison_exp
+  primVolumeNb: numeric_comparison_exp
+  primVolumeTz: numeric_comparison_exp
+  secVolumeNb: numeric_comparison_exp
+  secVolumeNb7d: numeric_comparison_exp
+  secVolumeNb24: numeric_comparison_exp
+  secVolumeNb30d: numeric_comparison_exp
+  secVolumeTz: numeric_comparison_exp
+  secVolumeTz7d: numeric_comparison_exp
+  secVolumeTz24: numeric_comparison_exp
+  secVolumeTz30d: numeric_comparison_exp
+  to: timestamptz_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""
+columns and relationships of "market_stats_history"
+"""
+type market_stats_history {
+  averageSalePrice: bigint
+  floor: bigint
+  floorListingId: String
+  floorListingVersion: Int
+  from: timestamptz!
+  highestCollectionOffer: bigint
+  highestSold: bigint
+  highestSoldListingId: String
+  highestSoldListingVersion: Int
+  id: Int!
+  listed: Int
+  longestAverageHeldInSeconds: bigint
+  lowestSold: bigint
+  lowestSoldListingId: String
+  lowestSoldListingVersion: Int
+  median: bigint
+  percentListed: Float
+  percentNeverListed: Float
+  primVolumeNb: bigint
+  primVolumeTz: bigint
+  secVolumeNb: bigint
+  secVolumeTz: bigint
+  to: timestamptz!
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "market_stats_history". All fields are combined with a logical 'AND'.
+"""
+input market_stats_history_bool_exp {
+  _and: [market_stats_history_bool_exp!]
+  _not: market_stats_history_bool_exp
+  _or: [market_stats_history_bool_exp!]
+  averageSalePrice: bigint_comparison_exp
+  floor: bigint_comparison_exp
+  floorListingId: String_comparison_exp
+  floorListingVersion: Int_comparison_exp
+  from: timestamptz_comparison_exp
+  highestCollectionOffer: bigint_comparison_exp
+  highestSold: bigint_comparison_exp
+  highestSoldListingId: String_comparison_exp
+  highestSoldListingVersion: Int_comparison_exp
+  id: Int_comparison_exp
+  listed: Int_comparison_exp
+  longestAverageHeldInSeconds: bigint_comparison_exp
+  lowestSold: bigint_comparison_exp
+  lowestSoldListingId: String_comparison_exp
+  lowestSoldListingVersion: Int_comparison_exp
+  median: bigint_comparison_exp
+  percentListed: Float_comparison_exp
+  percentNeverListed: Float_comparison_exp
+  primVolumeNb: bigint_comparison_exp
+  primVolumeTz: bigint_comparison_exp
+  secVolumeNb: bigint_comparison_exp
+  secVolumeTz: bigint_comparison_exp
+  to: timestamptz_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "market_stats_history"."""
+input market_stats_history_order_by {
+  averageSalePrice: order_by
+  floor: order_by
+  floorListingId: order_by
+  floorListingVersion: order_by
+  from: order_by
+  highestCollectionOffer: order_by
+  highestSold: order_by
+  highestSoldListingId: order_by
+  highestSoldListingVersion: order_by
+  id: order_by
+  listed: order_by
+  longestAverageHeldInSeconds: order_by
+  lowestSold: order_by
+  lowestSoldListingId: order_by
+  lowestSoldListingVersion: order_by
+  median: order_by
+  percentListed: order_by
+  percentNeverListed: order_by
+  primVolumeNb: order_by
+  primVolumeTz: order_by
+  secVolumeNb: order_by
+  secVolumeTz: order_by
+  to: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "market_stats_history"
+"""
+enum market_stats_history_select_column {
+  """column name"""
+  averageSalePrice
+
+  """column name"""
+  floor
+
+  """column name"""
+  floorListingId
+
+  """column name"""
+  floorListingVersion
+
+  """column name"""
+  from
+
+  """column name"""
+  highestCollectionOffer
+
+  """column name"""
+  highestSold
+
+  """column name"""
+  highestSoldListingId
+
+  """column name"""
+  highestSoldListingVersion
+
+  """column name"""
+  id
+
+  """column name"""
+  listed
+
+  """column name"""
+  longestAverageHeldInSeconds
+
+  """column name"""
+  lowestSold
+
+  """column name"""
+  lowestSoldListingId
+
+  """column name"""
+  lowestSoldListingVersion
+
+  """column name"""
+  median
+
+  """column name"""
+  percentListed
+
+  """column name"""
+  percentNeverListed
+
+  """column name"""
+  primVolumeNb
+
+  """column name"""
+  primVolumeTz
+
+  """column name"""
+  secVolumeNb
+
+  """column name"""
+  secVolumeTz
+
+  """column name"""
+  to
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "market_stats_history"
+"""
+input market_stats_history_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: market_stats_history_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input market_stats_history_stream_cursor_value_input {
+  averageSalePrice: bigint
+  floor: bigint
+  floorListingId: String
+  floorListingVersion: Int
+  from: timestamptz
+  highestCollectionOffer: bigint
+  highestSold: bigint
+  highestSoldListingId: String
+  highestSoldListingVersion: Int
+  id: Int
+  listed: Int
+  longestAverageHeldInSeconds: bigint
+  lowestSold: bigint
+  lowestSoldListingId: String
+  lowestSoldListingVersion: Int
+  median: bigint
+  percentListed: Float
+  percentNeverListed: Float
+  primVolumeNb: bigint
+  primVolumeTz: bigint
+  secVolumeNb: bigint
+  secVolumeTz: bigint
+  to: timestamptz
+  tokenId: String
+}
+
+"""Ordering options when selecting data from "market_stats"."""
+input market_stats_order_by {
+  averageSalePrice: order_by
+  floor: order_by
+  floor7d: order_by
+  floor24: order_by
+  floor30d: order_by
+  floorListingId: order_by
+  floorListingVersion: order_by
+  from: order_by
+  highestCollectionOffer: order_by
+  highestSold: order_by
+  highestSold7d: order_by
+  highestSold24: order_by
+  highestSold30d: order_by
+  highestSoldListingId: order_by
+  highestSoldListingVersion: order_by
+  listed: order_by
+  longestAverageHeldInSeconds: order_by
+  lowestSold: order_by
+  lowestSold7d: order_by
+  lowestSold24: order_by
+  lowestSold30d: order_by
+  lowestSoldListingId: order_by
+  lowestSoldListingVersion: order_by
+  median: order_by
+  percentListed: order_by
+  percentNeverListed: order_by
+  primVolumeNb: order_by
+  primVolumeTz: order_by
+  secVolumeNb: order_by
+  secVolumeNb7d: order_by
+  secVolumeNb24: order_by
+  secVolumeNb30d: order_by
+  secVolumeTz: order_by
+  secVolumeTz7d: order_by
+  secVolumeTz24: order_by
+  secVolumeTz30d: order_by
+  to: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "market_stats"
+"""
+enum market_stats_select_column {
+  """column name"""
+  averageSalePrice
+
+  """column name"""
+  floor
+
+  """column name"""
+  floor7d
+
+  """column name"""
+  floor24
+
+  """column name"""
+  floor30d
+
+  """column name"""
+  floorListingId
+
+  """column name"""
+  floorListingVersion
+
+  """column name"""
+  from
+
+  """column name"""
+  highestCollectionOffer
+
+  """column name"""
+  highestSold
+
+  """column name"""
+  highestSold7d
+
+  """column name"""
+  highestSold24
+
+  """column name"""
+  highestSold30d
+
+  """column name"""
+  highestSoldListingId
+
+  """column name"""
+  highestSoldListingVersion
+
+  """column name"""
+  listed
+
+  """column name"""
+  longestAverageHeldInSeconds
+
+  """column name"""
+  lowestSold
+
+  """column name"""
+  lowestSold7d
+
+  """column name"""
+  lowestSold24
+
+  """column name"""
+  lowestSold30d
+
+  """column name"""
+  lowestSoldListingId
+
+  """column name"""
+  lowestSoldListingVersion
+
+  """column name"""
+  median
+
+  """column name"""
+  percentListed
+
+  """column name"""
+  percentNeverListed
+
+  """column name"""
+  primVolumeNb
+
+  """column name"""
+  primVolumeTz
+
+  """column name"""
+  secVolumeNb
+
+  """column name"""
+  secVolumeNb7d
+
+  """column name"""
+  secVolumeNb24
+
+  """column name"""
+  secVolumeNb30d
+
+  """column name"""
+  secVolumeTz
+
+  """column name"""
+  secVolumeTz7d
+
+  """column name"""
+  secVolumeTz24
+
+  """column name"""
+  secVolumeTz30d
+
+  """column name"""
+  to
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "market_stats"
+"""
+input market_stats_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: market_stats_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input market_stats_stream_cursor_value_input {
+  averageSalePrice: numeric
+  floor: numeric
+  floor7d: numeric
+  floor24: numeric
+  floor30d: numeric
+  floorListingId: String
+  floorListingVersion: Int
+  from: timestamptz
+  highestCollectionOffer: numeric
+  highestSold: numeric
+  highestSold7d: numeric
+  highestSold24: numeric
+  highestSold30d: numeric
+  highestSoldListingId: String
+  highestSoldListingVersion: Int
+  listed: Int
+  longestAverageHeldInSeconds: bigint
+  lowestSold: numeric
+  lowestSold7d: numeric
+  lowestSold24: numeric
+  lowestSold30d: numeric
+  lowestSoldListingId: String
+  lowestSoldListingVersion: Int
+  median: numeric
+  percentListed: Float
+  percentNeverListed: Float
+  primVolumeNb: numeric
+  primVolumeTz: numeric
+  secVolumeNb: numeric
+  secVolumeNb7d: numeric
+  secVolumeNb24: numeric
+  secVolumeNb30d: numeric
+  secVolumeTz: numeric
+  secVolumeTz7d: numeric
+  secVolumeTz24: numeric
+  secVolumeTz30d: numeric
+  to: timestamptz
+  tokenId: String
+}
+
+"""
+columns and relationships of "media_image"
+"""
+type media_image {
+  cid: bpchar!
+  height: Int
+  metadata(
+    """JSON select path"""
+    path: String
+  ): json
+  mimeType: String
+  placeholder: String
+  processCounters: smallint!
+  processed: Boolean!
+  width: Int
+}
+
+"""
+Boolean expression to filter rows from the table "media_image". All fields are combined with a logical 'AND'.
+"""
+input media_image_bool_exp {
+  _and: [media_image_bool_exp!]
+  _not: media_image_bool_exp
+  _or: [media_image_bool_exp!]
+  cid: bpchar_comparison_exp
+  height: Int_comparison_exp
+  metadata: json_comparison_exp
+  mimeType: String_comparison_exp
+  placeholder: String_comparison_exp
+  processCounters: smallint_comparison_exp
+  processed: Boolean_comparison_exp
+  width: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "media_image"."""
+input media_image_order_by {
+  cid: order_by
+  height: order_by
+  metadata: order_by
+  mimeType: order_by
+  placeholder: order_by
+  processCounters: order_by
+  processed: order_by
+  width: order_by
+}
+
+"""
+select columns of table "media_image"
+"""
+enum media_image_select_column {
+  """column name"""
+  cid
+
+  """column name"""
+  height
+
+  """column name"""
+  metadata
+
+  """column name"""
+  mimeType
+
+  """column name"""
+  placeholder
+
+  """column name"""
+  processCounters
+
+  """column name"""
+  processed
+
+  """column name"""
+  width
+}
+
+"""
+Streaming cursor of the table "media_image"
+"""
+input media_image_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: media_image_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input media_image_stream_cursor_value_input {
+  cid: bpchar
+  height: Int
+  metadata: json
+  mimeType: String
+  placeholder: String
+  processCounters: smallint
+  processed: Boolean
+  width: Int
+}
+
+"""
+columns and relationships of "metric"
+"""
+type metric {
+  endedAt: Int!
+  id: String!
+  name: String!
+  startedAt: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "metric". All fields are combined with a logical 'AND'.
+"""
+input metric_bool_exp {
+  _and: [metric_bool_exp!]
+  _not: metric_bool_exp
+  _or: [metric_bool_exp!]
+  endedAt: Int_comparison_exp
+  id: String_comparison_exp
+  name: String_comparison_exp
+  startedAt: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "metric"."""
+input metric_order_by {
+  endedAt: order_by
+  id: order_by
+  name: order_by
+  startedAt: order_by
+}
+
+"""
+select columns of table "metric"
+"""
+enum metric_select_column {
+  """column name"""
+  endedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  startedAt
+}
+
+"""
+Streaming cursor of the table "metric"
+"""
+input metric_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: metric_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input metric_stream_cursor_value_input {
+  endedAt: Int
+  id: String
+  name: String
+  startedAt: Int
+}
+
+"""
+columns and relationships of "mint_ticket"
+"""
+type mint_ticket {
+  createdAt: timestamptz!
+  id: String!
+  ownerId: String!
+  price: numeric!
+  taxationLocked: numeric!
+  taxationPaidUntil: timestamptz!
+  taxationStart: timestamptz!
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "mint_ticket". All fields are combined with a logical 'AND'.
+"""
+input mint_ticket_bool_exp {
+  _and: [mint_ticket_bool_exp!]
+  _not: mint_ticket_bool_exp
+  _or: [mint_ticket_bool_exp!]
+  createdAt: timestamptz_comparison_exp
+  id: String_comparison_exp
+  ownerId: String_comparison_exp
+  price: numeric_comparison_exp
+  taxationLocked: numeric_comparison_exp
+  taxationPaidUntil: timestamptz_comparison_exp
+  taxationStart: timestamptz_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "mint_ticket"."""
+input mint_ticket_order_by {
+  createdAt: order_by
+  id: order_by
+  ownerId: order_by
+  price: order_by
+  taxationLocked: order_by
+  taxationPaidUntil: order_by
+  taxationStart: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "mint_ticket"
+"""
+enum mint_ticket_select_column {
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  ownerId
+
+  """column name"""
+  price
+
+  """column name"""
+  taxationLocked
+
+  """column name"""
+  taxationPaidUntil
+
+  """column name"""
+  taxationStart
+
+  """column name"""
+  tokenId
+}
+
+"""
+columns and relationships of "mint_ticket_settings"
+"""
+type mint_ticket_settings {
+  captureMediaId: bpchar
+  gracingPeriod: Int!
+  metadata(
+    """JSON select path"""
+    path: String
+  ): json!
+  metadataUri: String
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "mint_ticket_settings". All fields are combined with a logical 'AND'.
+"""
+input mint_ticket_settings_bool_exp {
+  _and: [mint_ticket_settings_bool_exp!]
+  _not: mint_ticket_settings_bool_exp
+  _or: [mint_ticket_settings_bool_exp!]
+  captureMediaId: bpchar_comparison_exp
+  gracingPeriod: Int_comparison_exp
+  metadata: json_comparison_exp
+  metadataUri: String_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "mint_ticket_settings"."""
+input mint_ticket_settings_order_by {
+  captureMediaId: order_by
+  gracingPeriod: order_by
+  metadata: order_by
+  metadataUri: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "mint_ticket_settings"
+"""
+enum mint_ticket_settings_select_column {
+  """column name"""
+  captureMediaId
+
+  """column name"""
+  gracingPeriod
+
+  """column name"""
+  metadata
+
+  """column name"""
+  metadataUri
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "mint_ticket_settings"
+"""
+input mint_ticket_settings_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: mint_ticket_settings_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input mint_ticket_settings_stream_cursor_value_input {
+  captureMediaId: bpchar
+  gracingPeriod: Int
+  metadata: json
+  metadataUri: String
+  tokenId: String
+}
+
+"""
+Streaming cursor of the table "mint_ticket"
+"""
+input mint_ticket_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: mint_ticket_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input mint_ticket_stream_cursor_value_input {
+  createdAt: timestamptz
+  id: String
+  ownerId: String
+  price: numeric
+  taxationLocked: numeric
+  taxationPaidUntil: timestamptz
+  taxationStart: timestamptz
+  tokenId: String
+}
+
+"""
+columns and relationships of "moderation_reason"
+"""
+type moderation_reason {
+  id: String!
+  reason: String!
+}
+
+"""
+Boolean expression to filter rows from the table "moderation_reason". All fields are combined with a logical 'AND'.
+"""
+input moderation_reason_bool_exp {
+  _and: [moderation_reason_bool_exp!]
+  _not: moderation_reason_bool_exp
+  _or: [moderation_reason_bool_exp!]
+  id: String_comparison_exp
+  reason: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "moderation_reason"."""
+input moderation_reason_order_by {
+  id: order_by
+  reason: order_by
+}
+
+"""
+select columns of table "moderation_reason"
+"""
+enum moderation_reason_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  reason
+}
+
+"""
+Streaming cursor of the table "moderation_reason"
+"""
+input moderation_reason_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: moderation_reason_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input moderation_reason_stream_cursor_value_input {
+  id: String
+  reason: String
+}
+
 """mutation root"""
 type mutation_root {
   offchain: offchain_mutation_frontend
+}
+
+scalar numeric
+
+"""
+Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""
+columns and relationships of "objkt"
+"""
+type objkt {
+  assigned: Boolean
+  assignedAt: timestamptz
+  captureMediaId: bpchar
+  createdAt: timestamptz!
+  displayUri: bpchar
+  duplicate: Boolean
+  features(
+    """JSON select path"""
+    path: String
+  ): json
+  generationHash: String
+  id: String!
+  inputBytes: String
+  issuerId: String!
+  issuerVersion: generative_token_version!
+  iteration: numeric
+  metadata(
+    """JSON select path"""
+    path: String
+  ): json
+  metadataUri: String
+  minterId: String
+  name: String
+  ownerId: String
+  rarity: float8
+  royalties: Int!
+  slug: String
+  tags: _text
+  thumbnailUri: bpchar
+  updatedAt: timestamptz
+  version: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "objkt". All fields are combined with a logical 'AND'.
+"""
+input objkt_bool_exp {
+  _and: [objkt_bool_exp!]
+  _not: objkt_bool_exp
+  _or: [objkt_bool_exp!]
+  assigned: Boolean_comparison_exp
+  assignedAt: timestamptz_comparison_exp
+  captureMediaId: bpchar_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  displayUri: bpchar_comparison_exp
+  duplicate: Boolean_comparison_exp
+  features: json_comparison_exp
+  generationHash: String_comparison_exp
+  id: String_comparison_exp
+  inputBytes: String_comparison_exp
+  issuerId: String_comparison_exp
+  issuerVersion: generative_token_version_comparison_exp
+  iteration: numeric_comparison_exp
+  metadata: json_comparison_exp
+  metadataUri: String_comparison_exp
+  minterId: String_comparison_exp
+  name: String_comparison_exp
+  ownerId: String_comparison_exp
+  rarity: float8_comparison_exp
+  royalties: Int_comparison_exp
+  slug: String_comparison_exp
+  tags: _text_comparison_exp
+  thumbnailUri: bpchar_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "objkt"."""
+input objkt_order_by {
+  assigned: order_by
+  assignedAt: order_by
+  captureMediaId: order_by
+  createdAt: order_by
+  displayUri: order_by
+  duplicate: order_by
+  features: order_by
+  generationHash: order_by
+  id: order_by
+  inputBytes: order_by
+  issuerId: order_by
+  issuerVersion: order_by
+  iteration: order_by
+  metadata: order_by
+  metadataUri: order_by
+  minterId: order_by
+  name: order_by
+  ownerId: order_by
+  rarity: order_by
+  royalties: order_by
+  slug: order_by
+  tags: order_by
+  thumbnailUri: order_by
+  updatedAt: order_by
+  version: order_by
+}
+
+"""
+select columns of table "objkt"
+"""
+enum objkt_select_column {
+  """column name"""
+  assigned
+
+  """column name"""
+  assignedAt
+
+  """column name"""
+  captureMediaId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  displayUri
+
+  """column name"""
+  duplicate
+
+  """column name"""
+  features
+
+  """column name"""
+  generationHash
+
+  """column name"""
+  id
+
+  """column name"""
+  inputBytes
+
+  """column name"""
+  issuerId
+
+  """column name"""
+  issuerVersion
+
+  """column name"""
+  iteration
+
+  """column name"""
+  metadata
+
+  """column name"""
+  metadataUri
+
+  """column name"""
+  minterId
+
+  """column name"""
+  name
+
+  """column name"""
+  ownerId
+
+  """column name"""
+  rarity
+
+  """column name"""
+  royalties
+
+  """column name"""
+  slug
+
+  """column name"""
+  tags
+
+  """column name"""
+  thumbnailUri
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  version
+}
+
+"""
+Streaming cursor of the table "objkt"
+"""
+input objkt_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: objkt_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input objkt_stream_cursor_value_input {
+  assigned: Boolean
+  assignedAt: timestamptz
+  captureMediaId: bpchar
+  createdAt: timestamptz
+  displayUri: bpchar
+  duplicate: Boolean
+  features: json
+  generationHash: String
+  id: String
+  inputBytes: String
+  issuerId: String
+  issuerVersion: generative_token_version
+  iteration: numeric
+  metadata: json
+  metadataUri: String
+  minterId: String
+  name: String
+  ownerId: String
+  rarity: float8
+  royalties: Int
+  slug: String
+  tags: _text
+  thumbnailUri: bpchar
+  updatedAt: timestamptz
+  version: Int
 }
 
 type offchain_mutation_frontend {
@@ -2249,6 +5565,2436 @@ type offchain_subscription {
   ): [Wallet!]!
 }
 
+"""
+columns and relationships of "offer"
+"""
+type offer {
+  acceptedAt: timestamptz
+  buyerId: String
+  cancelledAt: timestamptz
+  createdAt: timestamptz!
+  id: String!
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  price: numeric!
+  version: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "offer". All fields are combined with a logical 'AND'.
+"""
+input offer_bool_exp {
+  _and: [offer_bool_exp!]
+  _not: offer_bool_exp
+  _or: [offer_bool_exp!]
+  acceptedAt: timestamptz_comparison_exp
+  buyerId: String_comparison_exp
+  cancelledAt: timestamptz_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: String_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  price: numeric_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "offer"."""
+input offer_order_by {
+  acceptedAt: order_by
+  buyerId: order_by
+  cancelledAt: order_by
+  createdAt: order_by
+  id: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  price: order_by
+  version: order_by
+}
+
+"""
+select columns of table "offer"
+"""
+enum offer_select_column {
+  """column name"""
+  acceptedAt
+
+  """column name"""
+  buyerId
+
+  """column name"""
+  cancelledAt
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  price
+
+  """column name"""
+  version
+}
+
+"""
+Streaming cursor of the table "offer"
+"""
+input offer_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: offer_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input offer_stream_cursor_value_input {
+  acceptedAt: timestamptz
+  buyerId: String
+  cancelledAt: timestamptz
+  createdAt: timestamptz
+  id: String
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  price: numeric
+  version: Int
+}
+
+type onchain_query {
+  """
+  fetch data from the table: "action"
+  """
+  action(
+    """distinct select on columns"""
+    distinct_on: [action_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [action_order_by!]
+
+    """filter the rows returned"""
+    where: action_bool_exp
+  ): [action!]!
+
+  """fetch data from the table: "action" using primary key columns"""
+  action_by_pk(id: uuid!): action
+
+  """
+  fetch data from the table: "article"
+  """
+  article(
+    """distinct select on columns"""
+    distinct_on: [article_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_order_by!]
+
+    """filter the rows returned"""
+    where: article_bool_exp
+  ): [article!]!
+
+  """fetch data from the table: "article" using primary key columns"""
+  article_by_pk(id: Int!): article
+
+  """
+  fetch data from the table: "article_generative_token"
+  """
+  article_generative_token(
+    """distinct select on columns"""
+    distinct_on: [article_generative_token_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_generative_token_order_by!]
+
+    """filter the rows returned"""
+    where: article_generative_token_bool_exp
+  ): [article_generative_token!]!
+
+  """
+  fetch data from the table: "article_generative_token" using primary key columns
+  """
+  article_generative_token_by_pk(articleId: Int!, generativeTokenId: String!): article_generative_token
+
+  """
+  fetch data from the table: "article_ledger"
+  """
+  article_ledger(
+    """distinct select on columns"""
+    distinct_on: [article_ledger_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_ledger_order_by!]
+
+    """filter the rows returned"""
+    where: article_ledger_bool_exp
+  ): [article_ledger!]!
+
+  """fetch data from the table: "article_ledger" using primary key columns"""
+  article_ledger_by_pk(articleId: Int!, ownerId: String!): article_ledger
+
+  """
+  fetch data from the table: "article_revision"
+  """
+  article_revision(
+    """distinct select on columns"""
+    distinct_on: [article_revision_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_revision_order_by!]
+
+    """filter the rows returned"""
+    where: article_revision_bool_exp
+  ): [article_revision!]!
+
+  """
+  fetch data from the table: "article_revision" using primary key columns
+  """
+  article_revision_by_pk(articleId: Int!, iteration: smallint!): article_revision
+
+  """
+  fetch data from the table: "auction"
+  """
+  auction(
+    """distinct select on columns"""
+    distinct_on: [auction_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [auction_order_by!]
+
+    """filter the rows returned"""
+    where: auction_bool_exp
+  ): [auction!]!
+
+  """
+  fetch data from the table: "auction_bid"
+  """
+  auction_bid(
+    """distinct select on columns"""
+    distinct_on: [auction_bid_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [auction_bid_order_by!]
+
+    """filter the rows returned"""
+    where: auction_bid_bool_exp
+  ): [auction_bid!]!
+
+  """fetch data from the table: "auction_bid" using primary key columns"""
+  auction_bid_by_pk(id: uuid!): auction_bid
+
+  """
+  fetch data from the table: "auction_bid_table"
+  """
+  auction_bid_table(
+    """distinct select on columns"""
+    distinct_on: [auction_bid_table_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [auction_bid_table_order_by!]
+
+    """filter the rows returned"""
+    where: auction_bid_table_bool_exp
+  ): [auction_bid_table!]!
+
+  """
+  fetch data from the table: "auction_bid_table" using primary key columns
+  """
+  auction_bid_table_by_pk(id: Int!): auction_bid_table
+
+  """fetch data from the table: "auction" using primary key columns"""
+  auction_by_pk(id: Int!, version: Int!): auction
+
+  """
+  fetch data from the table: "codex"
+  """
+  codex(
+    """distinct select on columns"""
+    distinct_on: [codex_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [codex_order_by!]
+
+    """filter the rows returned"""
+    where: codex_bool_exp
+  ): [codex!]!
+
+  """fetch data from the table: "codex" using primary key columns"""
+  codex_by_pk(id: String!, tokenVersion: generative_token_version!): codex
+
+  """
+  fetch data from the table: "codex_update_request"
+  """
+  codex_update_request(
+    """distinct select on columns"""
+    distinct_on: [codex_update_request_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [codex_update_request_order_by!]
+
+    """filter the rows returned"""
+    where: codex_update_request_bool_exp
+  ): [codex_update_request!]!
+
+  """
+  fetch data from the table: "codex_update_request" using primary key columns
+  """
+  codex_update_request_by_pk(codexId: String!, tokenId: String!, tokenVersion: generative_token_version!): codex_update_request
+
+  """
+  fetch data from the table: "collaboration"
+  """
+  collaboration(
+    """distinct select on columns"""
+    distinct_on: [collaboration_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [collaboration_order_by!]
+
+    """filter the rows returned"""
+    where: collaboration_bool_exp
+  ): [collaboration!]!
+
+  """fetch data from the table: "collaboration" using primary key columns"""
+  collaboration_by_pk(collaborationContractId: String!, collaboratorId: String!): collaboration
+
+  """
+  fetch data from the table: "collection_offer"
+  """
+  collection_offer(
+    """distinct select on columns"""
+    distinct_on: [collection_offer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [collection_offer_order_by!]
+
+    """filter the rows returned"""
+    where: collection_offer_bool_exp
+  ): [collection_offer!]!
+
+  """
+  fetch data from the table: "collection_offer" using primary key columns
+  """
+  collection_offer_by_pk(id: String!, version: Int!): collection_offer
+
+  """
+  fetch data from the table: "generative_token"
+  """
+  generative_token(
+    """distinct select on columns"""
+    distinct_on: [generative_token_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [generative_token_order_by!]
+
+    """filter the rows returned"""
+    where: generative_token_bool_exp
+  ): [generative_token!]!
+
+  """
+  fetch data from the table: "generative_token" using primary key columns
+  """
+  generative_token_by_pk(id: String!): generative_token
+
+  """
+  fetch data from the table: "gentk_assign"
+  """
+  gentk_assign(
+    """distinct select on columns"""
+    distinct_on: [gentk_assign_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [gentk_assign_order_by!]
+
+    """filter the rows returned"""
+    where: gentk_assign_bool_exp
+  ): [gentk_assign!]!
+
+  """fetch data from the table: "gentk_assign" using primary key columns"""
+  gentk_assign_by_pk(gentkId: String!, gentkIssuerVersion: generative_token_version!): gentk_assign
+
+  """
+  fetch data from the table: "indexed_operation"
+  """
+  indexed_operation(
+    """distinct select on columns"""
+    distinct_on: [indexed_operation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [indexed_operation_order_by!]
+
+    """filter the rows returned"""
+    where: indexed_operation_bool_exp
+  ): [indexed_operation!]!
+
+  """
+  fetch data from the table: "indexed_operation" using primary key columns
+  """
+  indexed_operation_by_pk(hashed: String!): indexed_operation
+
+  """
+  fetch data from the table: "indexing_cursor"
+  """
+  indexing_cursor(
+    """distinct select on columns"""
+    distinct_on: [indexing_cursor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [indexing_cursor_order_by!]
+
+    """filter the rows returned"""
+    where: indexing_cursor_bool_exp
+  ): [indexing_cursor!]!
+
+  """fetch data from the table: "indexing_cursor" using primary key columns"""
+  indexing_cursor_by_pk(groupId: String!): indexing_cursor
+
+  """
+  fetch data from the table: "indexing_target"
+  """
+  indexing_target(
+    """distinct select on columns"""
+    distinct_on: [indexing_target_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [indexing_target_order_by!]
+
+    """filter the rows returned"""
+    where: indexing_target_bool_exp
+  ): [indexing_target!]!
+
+  """fetch data from the table: "indexing_target" using primary key columns"""
+  indexing_target_by_pk(address: String!): indexing_target
+
+  """
+  fetch data from the table: "ipfs_cid"
+  """
+  ipfs_cid(
+    """distinct select on columns"""
+    distinct_on: [ipfs_cid_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ipfs_cid_order_by!]
+
+    """filter the rows returned"""
+    where: ipfs_cid_bool_exp
+  ): [ipfs_cid!]!
+
+  """fetch data from the table: "ipfs_cid" using primary key columns"""
+  ipfs_cid_by_pk(cid: String!): ipfs_cid
+
+  """
+  fetch data from the table: "listing"
+  """
+  listing(
+    """distinct select on columns"""
+    distinct_on: [listing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [listing_order_by!]
+
+    """filter the rows returned"""
+    where: listing_bool_exp
+  ): [listing!]!
+
+  """fetch data from the table: "listing" using primary key columns"""
+  listing_by_pk(id: String!, version: Int!): listing
+
+  """
+  fetch data from the table: "market_stats"
+  """
+  market_stats(
+    """distinct select on columns"""
+    distinct_on: [market_stats_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_stats_order_by!]
+
+    """filter the rows returned"""
+    where: market_stats_bool_exp
+  ): [market_stats!]!
+
+  """fetch data from the table: "market_stats" using primary key columns"""
+  market_stats_by_pk(tokenId: String!): market_stats
+
+  """
+  fetch data from the table: "market_stats_history"
+  """
+  market_stats_history(
+    """distinct select on columns"""
+    distinct_on: [market_stats_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_stats_history_order_by!]
+
+    """filter the rows returned"""
+    where: market_stats_history_bool_exp
+  ): [market_stats_history!]!
+
+  """
+  fetch data from the table: "market_stats_history" using primary key columns
+  """
+  market_stats_history_by_pk(id: Int!): market_stats_history
+
+  """
+  fetch data from the table: "media_image"
+  """
+  media_image(
+    """distinct select on columns"""
+    distinct_on: [media_image_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [media_image_order_by!]
+
+    """filter the rows returned"""
+    where: media_image_bool_exp
+  ): [media_image!]!
+
+  """fetch data from the table: "media_image" using primary key columns"""
+  media_image_by_pk(cid: bpchar!): media_image
+
+  """
+  fetch data from the table: "metric"
+  """
+  metric(
+    """distinct select on columns"""
+    distinct_on: [metric_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [metric_order_by!]
+
+    """filter the rows returned"""
+    where: metric_bool_exp
+  ): [metric!]!
+
+  """fetch data from the table: "metric" using primary key columns"""
+  metric_by_pk(id: String!): metric
+
+  """
+  fetch data from the table: "mint_ticket"
+  """
+  mint_ticket(
+    """distinct select on columns"""
+    distinct_on: [mint_ticket_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [mint_ticket_order_by!]
+
+    """filter the rows returned"""
+    where: mint_ticket_bool_exp
+  ): [mint_ticket!]!
+
+  """fetch data from the table: "mint_ticket" using primary key columns"""
+  mint_ticket_by_pk(id: String!): mint_ticket
+
+  """
+  fetch data from the table: "mint_ticket_settings"
+  """
+  mint_ticket_settings(
+    """distinct select on columns"""
+    distinct_on: [mint_ticket_settings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [mint_ticket_settings_order_by!]
+
+    """filter the rows returned"""
+    where: mint_ticket_settings_bool_exp
+  ): [mint_ticket_settings!]!
+
+  """
+  fetch data from the table: "mint_ticket_settings" using primary key columns
+  """
+  mint_ticket_settings_by_pk(tokenId: String!): mint_ticket_settings
+
+  """
+  fetch data from the table: "moderation_reason"
+  """
+  moderation_reason(
+    """distinct select on columns"""
+    distinct_on: [moderation_reason_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [moderation_reason_order_by!]
+
+    """filter the rows returned"""
+    where: moderation_reason_bool_exp
+  ): [moderation_reason!]!
+
+  """
+  fetch data from the table: "moderation_reason" using primary key columns
+  """
+  moderation_reason_by_pk(id: String!): moderation_reason
+
+  """
+  fetch data from the table: "objkt"
+  """
+  objkt(
+    """distinct select on columns"""
+    distinct_on: [objkt_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [objkt_order_by!]
+
+    """filter the rows returned"""
+    where: objkt_bool_exp
+  ): [objkt!]!
+
+  """fetch data from the table: "objkt" using primary key columns"""
+  objkt_by_pk(id: String!, issuerVersion: generative_token_version!): objkt
+
+  """
+  fetch data from the table: "offer"
+  """
+  offer(
+    """distinct select on columns"""
+    distinct_on: [offer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [offer_order_by!]
+
+    """filter the rows returned"""
+    where: offer_bool_exp
+  ): [offer!]!
+
+  """fetch data from the table: "offer" using primary key columns"""
+  offer_by_pk(id: String!, version: Int!): offer
+
+  """
+  fetch data from the table: "pricing_dutch_auction"
+  """
+  pricing_dutch_auction(
+    """distinct select on columns"""
+    distinct_on: [pricing_dutch_auction_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pricing_dutch_auction_order_by!]
+
+    """filter the rows returned"""
+    where: pricing_dutch_auction_bool_exp
+  ): [pricing_dutch_auction!]!
+
+  """
+  fetch data from the table: "pricing_dutch_auction" using primary key columns
+  """
+  pricing_dutch_auction_by_pk(tokenId: String!): pricing_dutch_auction
+
+  """
+  fetch data from the table: "pricing_fixed"
+  """
+  pricing_fixed(
+    """distinct select on columns"""
+    distinct_on: [pricing_fixed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pricing_fixed_order_by!]
+
+    """filter the rows returned"""
+    where: pricing_fixed_bool_exp
+  ): [pricing_fixed!]!
+
+  """fetch data from the table: "pricing_fixed" using primary key columns"""
+  pricing_fixed_by_pk(tokenId: String!): pricing_fixed
+
+  """
+  fetch data from the table: "redeemable"
+  """
+  redeemable(
+    """distinct select on columns"""
+    distinct_on: [redeemable_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [redeemable_order_by!]
+
+    """filter the rows returned"""
+    where: redeemable_bool_exp
+  ): [redeemable!]!
+
+  """fetch data from the table: "redeemable" using primary key columns"""
+  redeemable_by_pk(address: String!): redeemable
+
+  """
+  fetch data from the table: "redemption"
+  """
+  redemption(
+    """distinct select on columns"""
+    distinct_on: [redemption_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [redemption_order_by!]
+
+    """filter the rows returned"""
+    where: redemption_bool_exp
+  ): [redemption!]!
+
+  """fetch data from the table: "redemption" using primary key columns"""
+  redemption_by_pk(id: Int!): redemption
+
+  """
+  fetch data from the table: "report"
+  """
+  report(
+    """distinct select on columns"""
+    distinct_on: [report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [report_order_by!]
+
+    """filter the rows returned"""
+    where: report_bool_exp
+  ): [report!]!
+
+  """fetch data from the table: "report" using primary key columns"""
+  report_by_pk(id: uuid!): report
+
+  """
+  fetch data from the table: "reserve"
+  """
+  reserve(
+    """distinct select on columns"""
+    distinct_on: [reserve_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reserve_order_by!]
+
+    """filter the rows returned"""
+    where: reserve_bool_exp
+  ): [reserve!]!
+
+  """fetch data from the table: "reserve" using primary key columns"""
+  reserve_by_pk(id: Int!): reserve
+
+  """
+  fetch data from the table: "split"
+  """
+  split(
+    """distinct select on columns"""
+    distinct_on: [split_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [split_order_by!]
+
+    """filter the rows returned"""
+    where: split_bool_exp
+  ): [split!]!
+
+  """fetch data from the table: "split" using primary key columns"""
+  split_by_pk(id: Int!): split
+
+  """
+  fetch data from the table: "transaction"
+  """
+  transaction(
+    """distinct select on columns"""
+    distinct_on: [transaction_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transaction_order_by!]
+
+    """filter the rows returned"""
+    where: transaction_bool_exp
+  ): [transaction!]!
+
+  """fetch data from the table: "transaction" using primary key columns"""
+  transaction_by_pk(id: Int!): transaction
+
+  """
+  fetch data from the table: "user"
+  """
+  user(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """fetch data from the table: "user" using primary key columns"""
+  user_by_pk(id: String!): user
+
+  """
+  fetch data from the table: "user_stats"
+  """
+  user_stats(
+    """distinct select on columns"""
+    distinct_on: [user_stats_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_stats_order_by!]
+
+    """filter the rows returned"""
+    where: user_stats_bool_exp
+  ): [user_stats!]!
+
+  """fetch data from the table: "user_stats" using primary key columns"""
+  user_stats_by_pk(userId: String!): user_stats
+}
+
+type onchain_subscription {
+  """
+  fetch data from the table: "action"
+  """
+  action(
+    """distinct select on columns"""
+    distinct_on: [action_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [action_order_by!]
+
+    """filter the rows returned"""
+    where: action_bool_exp
+  ): [action!]!
+
+  """fetch data from the table: "action" using primary key columns"""
+  action_by_pk(id: uuid!): action
+
+  """
+  fetch data from the table in a streaming manner: "action"
+  """
+  action_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [action_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: action_bool_exp
+  ): [action!]!
+
+  """
+  fetch data from the table: "article"
+  """
+  article(
+    """distinct select on columns"""
+    distinct_on: [article_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_order_by!]
+
+    """filter the rows returned"""
+    where: article_bool_exp
+  ): [article!]!
+
+  """fetch data from the table: "article" using primary key columns"""
+  article_by_pk(id: Int!): article
+
+  """
+  fetch data from the table: "article_generative_token"
+  """
+  article_generative_token(
+    """distinct select on columns"""
+    distinct_on: [article_generative_token_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_generative_token_order_by!]
+
+    """filter the rows returned"""
+    where: article_generative_token_bool_exp
+  ): [article_generative_token!]!
+
+  """
+  fetch data from the table: "article_generative_token" using primary key columns
+  """
+  article_generative_token_by_pk(articleId: Int!, generativeTokenId: String!): article_generative_token
+
+  """
+  fetch data from the table in a streaming manner: "article_generative_token"
+  """
+  article_generative_token_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [article_generative_token_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: article_generative_token_bool_exp
+  ): [article_generative_token!]!
+
+  """
+  fetch data from the table: "article_ledger"
+  """
+  article_ledger(
+    """distinct select on columns"""
+    distinct_on: [article_ledger_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_ledger_order_by!]
+
+    """filter the rows returned"""
+    where: article_ledger_bool_exp
+  ): [article_ledger!]!
+
+  """fetch data from the table: "article_ledger" using primary key columns"""
+  article_ledger_by_pk(articleId: Int!, ownerId: String!): article_ledger
+
+  """
+  fetch data from the table in a streaming manner: "article_ledger"
+  """
+  article_ledger_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [article_ledger_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: article_ledger_bool_exp
+  ): [article_ledger!]!
+
+  """
+  fetch data from the table: "article_revision"
+  """
+  article_revision(
+    """distinct select on columns"""
+    distinct_on: [article_revision_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [article_revision_order_by!]
+
+    """filter the rows returned"""
+    where: article_revision_bool_exp
+  ): [article_revision!]!
+
+  """
+  fetch data from the table: "article_revision" using primary key columns
+  """
+  article_revision_by_pk(articleId: Int!, iteration: smallint!): article_revision
+
+  """
+  fetch data from the table in a streaming manner: "article_revision"
+  """
+  article_revision_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [article_revision_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: article_revision_bool_exp
+  ): [article_revision!]!
+
+  """
+  fetch data from the table in a streaming manner: "article"
+  """
+  article_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [article_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: article_bool_exp
+  ): [article!]!
+
+  """
+  fetch data from the table: "auction"
+  """
+  auction(
+    """distinct select on columns"""
+    distinct_on: [auction_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [auction_order_by!]
+
+    """filter the rows returned"""
+    where: auction_bool_exp
+  ): [auction!]!
+
+  """
+  fetch data from the table: "auction_bid"
+  """
+  auction_bid(
+    """distinct select on columns"""
+    distinct_on: [auction_bid_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [auction_bid_order_by!]
+
+    """filter the rows returned"""
+    where: auction_bid_bool_exp
+  ): [auction_bid!]!
+
+  """fetch data from the table: "auction_bid" using primary key columns"""
+  auction_bid_by_pk(id: uuid!): auction_bid
+
+  """
+  fetch data from the table in a streaming manner: "auction_bid"
+  """
+  auction_bid_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [auction_bid_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: auction_bid_bool_exp
+  ): [auction_bid!]!
+
+  """
+  fetch data from the table: "auction_bid_table"
+  """
+  auction_bid_table(
+    """distinct select on columns"""
+    distinct_on: [auction_bid_table_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [auction_bid_table_order_by!]
+
+    """filter the rows returned"""
+    where: auction_bid_table_bool_exp
+  ): [auction_bid_table!]!
+
+  """
+  fetch data from the table: "auction_bid_table" using primary key columns
+  """
+  auction_bid_table_by_pk(id: Int!): auction_bid_table
+
+  """
+  fetch data from the table in a streaming manner: "auction_bid_table"
+  """
+  auction_bid_table_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [auction_bid_table_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: auction_bid_table_bool_exp
+  ): [auction_bid_table!]!
+
+  """fetch data from the table: "auction" using primary key columns"""
+  auction_by_pk(id: Int!, version: Int!): auction
+
+  """
+  fetch data from the table in a streaming manner: "auction"
+  """
+  auction_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [auction_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: auction_bool_exp
+  ): [auction!]!
+
+  """
+  fetch data from the table: "codex"
+  """
+  codex(
+    """distinct select on columns"""
+    distinct_on: [codex_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [codex_order_by!]
+
+    """filter the rows returned"""
+    where: codex_bool_exp
+  ): [codex!]!
+
+  """fetch data from the table: "codex" using primary key columns"""
+  codex_by_pk(id: String!, tokenVersion: generative_token_version!): codex
+
+  """
+  fetch data from the table in a streaming manner: "codex"
+  """
+  codex_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [codex_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: codex_bool_exp
+  ): [codex!]!
+
+  """
+  fetch data from the table: "codex_update_request"
+  """
+  codex_update_request(
+    """distinct select on columns"""
+    distinct_on: [codex_update_request_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [codex_update_request_order_by!]
+
+    """filter the rows returned"""
+    where: codex_update_request_bool_exp
+  ): [codex_update_request!]!
+
+  """
+  fetch data from the table: "codex_update_request" using primary key columns
+  """
+  codex_update_request_by_pk(codexId: String!, tokenId: String!, tokenVersion: generative_token_version!): codex_update_request
+
+  """
+  fetch data from the table in a streaming manner: "codex_update_request"
+  """
+  codex_update_request_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [codex_update_request_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: codex_update_request_bool_exp
+  ): [codex_update_request!]!
+
+  """
+  fetch data from the table: "collaboration"
+  """
+  collaboration(
+    """distinct select on columns"""
+    distinct_on: [collaboration_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [collaboration_order_by!]
+
+    """filter the rows returned"""
+    where: collaboration_bool_exp
+  ): [collaboration!]!
+
+  """fetch data from the table: "collaboration" using primary key columns"""
+  collaboration_by_pk(collaborationContractId: String!, collaboratorId: String!): collaboration
+
+  """
+  fetch data from the table in a streaming manner: "collaboration"
+  """
+  collaboration_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [collaboration_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: collaboration_bool_exp
+  ): [collaboration!]!
+
+  """
+  fetch data from the table: "collection_offer"
+  """
+  collection_offer(
+    """distinct select on columns"""
+    distinct_on: [collection_offer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [collection_offer_order_by!]
+
+    """filter the rows returned"""
+    where: collection_offer_bool_exp
+  ): [collection_offer!]!
+
+  """
+  fetch data from the table: "collection_offer" using primary key columns
+  """
+  collection_offer_by_pk(id: String!, version: Int!): collection_offer
+
+  """
+  fetch data from the table in a streaming manner: "collection_offer"
+  """
+  collection_offer_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [collection_offer_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: collection_offer_bool_exp
+  ): [collection_offer!]!
+
+  """
+  fetch data from the table: "generative_token"
+  """
+  generative_token(
+    """distinct select on columns"""
+    distinct_on: [generative_token_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [generative_token_order_by!]
+
+    """filter the rows returned"""
+    where: generative_token_bool_exp
+  ): [generative_token!]!
+
+  """
+  fetch data from the table: "generative_token" using primary key columns
+  """
+  generative_token_by_pk(id: String!): generative_token
+
+  """
+  fetch data from the table in a streaming manner: "generative_token"
+  """
+  generative_token_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [generative_token_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: generative_token_bool_exp
+  ): [generative_token!]!
+
+  """
+  fetch data from the table: "gentk_assign"
+  """
+  gentk_assign(
+    """distinct select on columns"""
+    distinct_on: [gentk_assign_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [gentk_assign_order_by!]
+
+    """filter the rows returned"""
+    where: gentk_assign_bool_exp
+  ): [gentk_assign!]!
+
+  """fetch data from the table: "gentk_assign" using primary key columns"""
+  gentk_assign_by_pk(gentkId: String!, gentkIssuerVersion: generative_token_version!): gentk_assign
+
+  """
+  fetch data from the table in a streaming manner: "gentk_assign"
+  """
+  gentk_assign_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [gentk_assign_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: gentk_assign_bool_exp
+  ): [gentk_assign!]!
+
+  """
+  fetch data from the table: "indexed_operation"
+  """
+  indexed_operation(
+    """distinct select on columns"""
+    distinct_on: [indexed_operation_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [indexed_operation_order_by!]
+
+    """filter the rows returned"""
+    where: indexed_operation_bool_exp
+  ): [indexed_operation!]!
+
+  """
+  fetch data from the table: "indexed_operation" using primary key columns
+  """
+  indexed_operation_by_pk(hashed: String!): indexed_operation
+
+  """
+  fetch data from the table in a streaming manner: "indexed_operation"
+  """
+  indexed_operation_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [indexed_operation_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: indexed_operation_bool_exp
+  ): [indexed_operation!]!
+
+  """
+  fetch data from the table: "indexing_cursor"
+  """
+  indexing_cursor(
+    """distinct select on columns"""
+    distinct_on: [indexing_cursor_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [indexing_cursor_order_by!]
+
+    """filter the rows returned"""
+    where: indexing_cursor_bool_exp
+  ): [indexing_cursor!]!
+
+  """fetch data from the table: "indexing_cursor" using primary key columns"""
+  indexing_cursor_by_pk(groupId: String!): indexing_cursor
+
+  """
+  fetch data from the table in a streaming manner: "indexing_cursor"
+  """
+  indexing_cursor_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [indexing_cursor_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: indexing_cursor_bool_exp
+  ): [indexing_cursor!]!
+
+  """
+  fetch data from the table: "indexing_target"
+  """
+  indexing_target(
+    """distinct select on columns"""
+    distinct_on: [indexing_target_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [indexing_target_order_by!]
+
+    """filter the rows returned"""
+    where: indexing_target_bool_exp
+  ): [indexing_target!]!
+
+  """fetch data from the table: "indexing_target" using primary key columns"""
+  indexing_target_by_pk(address: String!): indexing_target
+
+  """
+  fetch data from the table in a streaming manner: "indexing_target"
+  """
+  indexing_target_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [indexing_target_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: indexing_target_bool_exp
+  ): [indexing_target!]!
+
+  """
+  fetch data from the table: "ipfs_cid"
+  """
+  ipfs_cid(
+    """distinct select on columns"""
+    distinct_on: [ipfs_cid_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ipfs_cid_order_by!]
+
+    """filter the rows returned"""
+    where: ipfs_cid_bool_exp
+  ): [ipfs_cid!]!
+
+  """fetch data from the table: "ipfs_cid" using primary key columns"""
+  ipfs_cid_by_pk(cid: String!): ipfs_cid
+
+  """
+  fetch data from the table in a streaming manner: "ipfs_cid"
+  """
+  ipfs_cid_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ipfs_cid_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: ipfs_cid_bool_exp
+  ): [ipfs_cid!]!
+
+  """
+  fetch data from the table: "listing"
+  """
+  listing(
+    """distinct select on columns"""
+    distinct_on: [listing_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [listing_order_by!]
+
+    """filter the rows returned"""
+    where: listing_bool_exp
+  ): [listing!]!
+
+  """fetch data from the table: "listing" using primary key columns"""
+  listing_by_pk(id: String!, version: Int!): listing
+
+  """
+  fetch data from the table in a streaming manner: "listing"
+  """
+  listing_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [listing_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: listing_bool_exp
+  ): [listing!]!
+
+  """
+  fetch data from the table: "market_stats"
+  """
+  market_stats(
+    """distinct select on columns"""
+    distinct_on: [market_stats_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_stats_order_by!]
+
+    """filter the rows returned"""
+    where: market_stats_bool_exp
+  ): [market_stats!]!
+
+  """fetch data from the table: "market_stats" using primary key columns"""
+  market_stats_by_pk(tokenId: String!): market_stats
+
+  """
+  fetch data from the table: "market_stats_history"
+  """
+  market_stats_history(
+    """distinct select on columns"""
+    distinct_on: [market_stats_history_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [market_stats_history_order_by!]
+
+    """filter the rows returned"""
+    where: market_stats_history_bool_exp
+  ): [market_stats_history!]!
+
+  """
+  fetch data from the table: "market_stats_history" using primary key columns
+  """
+  market_stats_history_by_pk(id: Int!): market_stats_history
+
+  """
+  fetch data from the table in a streaming manner: "market_stats_history"
+  """
+  market_stats_history_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [market_stats_history_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: market_stats_history_bool_exp
+  ): [market_stats_history!]!
+
+  """
+  fetch data from the table in a streaming manner: "market_stats"
+  """
+  market_stats_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [market_stats_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: market_stats_bool_exp
+  ): [market_stats!]!
+
+  """
+  fetch data from the table: "media_image"
+  """
+  media_image(
+    """distinct select on columns"""
+    distinct_on: [media_image_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [media_image_order_by!]
+
+    """filter the rows returned"""
+    where: media_image_bool_exp
+  ): [media_image!]!
+
+  """fetch data from the table: "media_image" using primary key columns"""
+  media_image_by_pk(cid: bpchar!): media_image
+
+  """
+  fetch data from the table in a streaming manner: "media_image"
+  """
+  media_image_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [media_image_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: media_image_bool_exp
+  ): [media_image!]!
+
+  """
+  fetch data from the table: "metric"
+  """
+  metric(
+    """distinct select on columns"""
+    distinct_on: [metric_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [metric_order_by!]
+
+    """filter the rows returned"""
+    where: metric_bool_exp
+  ): [metric!]!
+
+  """fetch data from the table: "metric" using primary key columns"""
+  metric_by_pk(id: String!): metric
+
+  """
+  fetch data from the table in a streaming manner: "metric"
+  """
+  metric_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [metric_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: metric_bool_exp
+  ): [metric!]!
+
+  """
+  fetch data from the table: "mint_ticket"
+  """
+  mint_ticket(
+    """distinct select on columns"""
+    distinct_on: [mint_ticket_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [mint_ticket_order_by!]
+
+    """filter the rows returned"""
+    where: mint_ticket_bool_exp
+  ): [mint_ticket!]!
+
+  """fetch data from the table: "mint_ticket" using primary key columns"""
+  mint_ticket_by_pk(id: String!): mint_ticket
+
+  """
+  fetch data from the table: "mint_ticket_settings"
+  """
+  mint_ticket_settings(
+    """distinct select on columns"""
+    distinct_on: [mint_ticket_settings_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [mint_ticket_settings_order_by!]
+
+    """filter the rows returned"""
+    where: mint_ticket_settings_bool_exp
+  ): [mint_ticket_settings!]!
+
+  """
+  fetch data from the table: "mint_ticket_settings" using primary key columns
+  """
+  mint_ticket_settings_by_pk(tokenId: String!): mint_ticket_settings
+
+  """
+  fetch data from the table in a streaming manner: "mint_ticket_settings"
+  """
+  mint_ticket_settings_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [mint_ticket_settings_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: mint_ticket_settings_bool_exp
+  ): [mint_ticket_settings!]!
+
+  """
+  fetch data from the table in a streaming manner: "mint_ticket"
+  """
+  mint_ticket_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [mint_ticket_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: mint_ticket_bool_exp
+  ): [mint_ticket!]!
+
+  """
+  fetch data from the table: "moderation_reason"
+  """
+  moderation_reason(
+    """distinct select on columns"""
+    distinct_on: [moderation_reason_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [moderation_reason_order_by!]
+
+    """filter the rows returned"""
+    where: moderation_reason_bool_exp
+  ): [moderation_reason!]!
+
+  """
+  fetch data from the table: "moderation_reason" using primary key columns
+  """
+  moderation_reason_by_pk(id: String!): moderation_reason
+
+  """
+  fetch data from the table in a streaming manner: "moderation_reason"
+  """
+  moderation_reason_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [moderation_reason_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: moderation_reason_bool_exp
+  ): [moderation_reason!]!
+
+  """
+  fetch data from the table: "objkt"
+  """
+  objkt(
+    """distinct select on columns"""
+    distinct_on: [objkt_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [objkt_order_by!]
+
+    """filter the rows returned"""
+    where: objkt_bool_exp
+  ): [objkt!]!
+
+  """fetch data from the table: "objkt" using primary key columns"""
+  objkt_by_pk(id: String!, issuerVersion: generative_token_version!): objkt
+
+  """
+  fetch data from the table in a streaming manner: "objkt"
+  """
+  objkt_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [objkt_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: objkt_bool_exp
+  ): [objkt!]!
+
+  """
+  fetch data from the table: "offer"
+  """
+  offer(
+    """distinct select on columns"""
+    distinct_on: [offer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [offer_order_by!]
+
+    """filter the rows returned"""
+    where: offer_bool_exp
+  ): [offer!]!
+
+  """fetch data from the table: "offer" using primary key columns"""
+  offer_by_pk(id: String!, version: Int!): offer
+
+  """
+  fetch data from the table in a streaming manner: "offer"
+  """
+  offer_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [offer_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: offer_bool_exp
+  ): [offer!]!
+
+  """
+  fetch data from the table: "pricing_dutch_auction"
+  """
+  pricing_dutch_auction(
+    """distinct select on columns"""
+    distinct_on: [pricing_dutch_auction_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pricing_dutch_auction_order_by!]
+
+    """filter the rows returned"""
+    where: pricing_dutch_auction_bool_exp
+  ): [pricing_dutch_auction!]!
+
+  """
+  fetch data from the table: "pricing_dutch_auction" using primary key columns
+  """
+  pricing_dutch_auction_by_pk(tokenId: String!): pricing_dutch_auction
+
+  """
+  fetch data from the table in a streaming manner: "pricing_dutch_auction"
+  """
+  pricing_dutch_auction_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pricing_dutch_auction_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pricing_dutch_auction_bool_exp
+  ): [pricing_dutch_auction!]!
+
+  """
+  fetch data from the table: "pricing_fixed"
+  """
+  pricing_fixed(
+    """distinct select on columns"""
+    distinct_on: [pricing_fixed_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pricing_fixed_order_by!]
+
+    """filter the rows returned"""
+    where: pricing_fixed_bool_exp
+  ): [pricing_fixed!]!
+
+  """fetch data from the table: "pricing_fixed" using primary key columns"""
+  pricing_fixed_by_pk(tokenId: String!): pricing_fixed
+
+  """
+  fetch data from the table in a streaming manner: "pricing_fixed"
+  """
+  pricing_fixed_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pricing_fixed_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pricing_fixed_bool_exp
+  ): [pricing_fixed!]!
+
+  """
+  fetch data from the table: "redeemable"
+  """
+  redeemable(
+    """distinct select on columns"""
+    distinct_on: [redeemable_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [redeemable_order_by!]
+
+    """filter the rows returned"""
+    where: redeemable_bool_exp
+  ): [redeemable!]!
+
+  """fetch data from the table: "redeemable" using primary key columns"""
+  redeemable_by_pk(address: String!): redeemable
+
+  """
+  fetch data from the table in a streaming manner: "redeemable"
+  """
+  redeemable_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [redeemable_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: redeemable_bool_exp
+  ): [redeemable!]!
+
+  """
+  fetch data from the table: "redemption"
+  """
+  redemption(
+    """distinct select on columns"""
+    distinct_on: [redemption_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [redemption_order_by!]
+
+    """filter the rows returned"""
+    where: redemption_bool_exp
+  ): [redemption!]!
+
+  """fetch data from the table: "redemption" using primary key columns"""
+  redemption_by_pk(id: Int!): redemption
+
+  """
+  fetch data from the table in a streaming manner: "redemption"
+  """
+  redemption_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [redemption_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: redemption_bool_exp
+  ): [redemption!]!
+
+  """
+  fetch data from the table: "report"
+  """
+  report(
+    """distinct select on columns"""
+    distinct_on: [report_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [report_order_by!]
+
+    """filter the rows returned"""
+    where: report_bool_exp
+  ): [report!]!
+
+  """fetch data from the table: "report" using primary key columns"""
+  report_by_pk(id: uuid!): report
+
+  """
+  fetch data from the table in a streaming manner: "report"
+  """
+  report_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [report_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: report_bool_exp
+  ): [report!]!
+
+  """
+  fetch data from the table: "reserve"
+  """
+  reserve(
+    """distinct select on columns"""
+    distinct_on: [reserve_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [reserve_order_by!]
+
+    """filter the rows returned"""
+    where: reserve_bool_exp
+  ): [reserve!]!
+
+  """fetch data from the table: "reserve" using primary key columns"""
+  reserve_by_pk(id: Int!): reserve
+
+  """
+  fetch data from the table in a streaming manner: "reserve"
+  """
+  reserve_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [reserve_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: reserve_bool_exp
+  ): [reserve!]!
+
+  """
+  fetch data from the table: "split"
+  """
+  split(
+    """distinct select on columns"""
+    distinct_on: [split_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [split_order_by!]
+
+    """filter the rows returned"""
+    where: split_bool_exp
+  ): [split!]!
+
+  """fetch data from the table: "split" using primary key columns"""
+  split_by_pk(id: Int!): split
+
+  """
+  fetch data from the table in a streaming manner: "split"
+  """
+  split_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [split_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: split_bool_exp
+  ): [split!]!
+
+  """
+  fetch data from the table: "transaction"
+  """
+  transaction(
+    """distinct select on columns"""
+    distinct_on: [transaction_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [transaction_order_by!]
+
+    """filter the rows returned"""
+    where: transaction_bool_exp
+  ): [transaction!]!
+
+  """fetch data from the table: "transaction" using primary key columns"""
+  transaction_by_pk(id: Int!): transaction
+
+  """
+  fetch data from the table in a streaming manner: "transaction"
+  """
+  transaction_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [transaction_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: transaction_bool_exp
+  ): [transaction!]!
+
+  """
+  fetch data from the table: "user"
+  """
+  user(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """fetch data from the table: "user" using primary key columns"""
+  user_by_pk(id: String!): user
+
+  """
+  fetch data from the table: "user_stats"
+  """
+  user_stats(
+    """distinct select on columns"""
+    distinct_on: [user_stats_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_stats_order_by!]
+
+    """filter the rows returned"""
+    where: user_stats_bool_exp
+  ): [user_stats!]!
+
+  """fetch data from the table: "user_stats" using primary key columns"""
+  user_stats_by_pk(userId: String!): user_stats
+
+  """
+  fetch data from the table in a streaming manner: "user_stats"
+  """
+  user_stats_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [user_stats_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: user_stats_bool_exp
+  ): [user_stats!]!
+
+  """
+  fetch data from the table in a streaming manner: "user"
+  """
+  user_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [user_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+}
+
 """column ordering options"""
 enum order_by {
   """in ascending order, nulls last"""
@@ -2270,9 +8016,471 @@ enum order_by {
   desc_nulls_last
 }
 
+"""
+columns and relationships of "pricing_dutch_auction"
+"""
+type pricing_dutch_auction {
+  decrementDuration: bigint!
+  finalPrice: bigint
+  levels: _int8!
+  opensAt: timestamptz
+  restingPrice: String!
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "pricing_dutch_auction". All fields are combined with a logical 'AND'.
+"""
+input pricing_dutch_auction_bool_exp {
+  _and: [pricing_dutch_auction_bool_exp!]
+  _not: pricing_dutch_auction_bool_exp
+  _or: [pricing_dutch_auction_bool_exp!]
+  decrementDuration: bigint_comparison_exp
+  finalPrice: bigint_comparison_exp
+  levels: _int8_comparison_exp
+  opensAt: timestamptz_comparison_exp
+  restingPrice: String_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "pricing_dutch_auction"."""
+input pricing_dutch_auction_order_by {
+  decrementDuration: order_by
+  finalPrice: order_by
+  levels: order_by
+  opensAt: order_by
+  restingPrice: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "pricing_dutch_auction"
+"""
+enum pricing_dutch_auction_select_column {
+  """column name"""
+  decrementDuration
+
+  """column name"""
+  finalPrice
+
+  """column name"""
+  levels
+
+  """column name"""
+  opensAt
+
+  """column name"""
+  restingPrice
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "pricing_dutch_auction"
+"""
+input pricing_dutch_auction_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pricing_dutch_auction_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pricing_dutch_auction_stream_cursor_value_input {
+  decrementDuration: bigint
+  finalPrice: bigint
+  levels: _int8
+  opensAt: timestamptz
+  restingPrice: String
+  tokenId: String
+}
+
+"""
+columns and relationships of "pricing_fixed"
+"""
+type pricing_fixed {
+  opensAt: timestamptz
+  price: numeric!
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "pricing_fixed". All fields are combined with a logical 'AND'.
+"""
+input pricing_fixed_bool_exp {
+  _and: [pricing_fixed_bool_exp!]
+  _not: pricing_fixed_bool_exp
+  _or: [pricing_fixed_bool_exp!]
+  opensAt: timestamptz_comparison_exp
+  price: numeric_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "pricing_fixed"."""
+input pricing_fixed_order_by {
+  opensAt: order_by
+  price: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "pricing_fixed"
+"""
+enum pricing_fixed_select_column {
+  """column name"""
+  opensAt
+
+  """column name"""
+  price
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "pricing_fixed"
+"""
+input pricing_fixed_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pricing_fixed_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pricing_fixed_stream_cursor_value_input {
+  opensAt: timestamptz
+  price: numeric
+  tokenId: String
+}
+
 type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
+  onchain: onchain_query
+}
+
+"""
+columns and relationships of "redeemable"
+"""
+type redeemable {
+  address: String!
+  baseAmount: numeric!
+  createdAt: timestamptz!
+  fa2: String!
+  maxConsumptionsPerToken: Int!
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "redeemable". All fields are combined with a logical 'AND'.
+"""
+input redeemable_bool_exp {
+  _and: [redeemable_bool_exp!]
+  _not: redeemable_bool_exp
+  _or: [redeemable_bool_exp!]
+  address: String_comparison_exp
+  baseAmount: numeric_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  fa2: String_comparison_exp
+  maxConsumptionsPerToken: Int_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "redeemable"."""
+input redeemable_order_by {
+  address: order_by
+  baseAmount: order_by
+  createdAt: order_by
+  fa2: order_by
+  maxConsumptionsPerToken: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "redeemable"
+"""
+enum redeemable_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  baseAmount
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  fa2
+
+  """column name"""
+  maxConsumptionsPerToken
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "redeemable"
+"""
+input redeemable_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: redeemable_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input redeemable_stream_cursor_value_input {
+  address: String
+  baseAmount: numeric
+  createdAt: timestamptz
+  fa2: String
+  maxConsumptionsPerToken: Int
+  tokenId: String
+}
+
+"""
+columns and relationships of "redemption"
+"""
+type redemption {
+  amount: numeric!
+  createdAt: timestamptz!
+  id: Int!
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  redeemableAddress: String
+  redeemerId: String
+}
+
+"""
+Boolean expression to filter rows from the table "redemption". All fields are combined with a logical 'AND'.
+"""
+input redemption_bool_exp {
+  _and: [redemption_bool_exp!]
+  _not: redemption_bool_exp
+  _or: [redemption_bool_exp!]
+  amount: numeric_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  redeemableAddress: String_comparison_exp
+  redeemerId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "redemption"."""
+input redemption_order_by {
+  amount: order_by
+  createdAt: order_by
+  id: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  redeemableAddress: order_by
+  redeemerId: order_by
+}
+
+"""
+select columns of table "redemption"
+"""
+enum redemption_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  redeemableAddress
+
+  """column name"""
+  redeemerId
+}
+
+"""
+Streaming cursor of the table "redemption"
+"""
+input redemption_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: redemption_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input redemption_stream_cursor_value_input {
+  amount: numeric
+  createdAt: timestamptz
+  id: Int
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  redeemableAddress: String
+  redeemerId: String
+}
+
+"""
+columns and relationships of "report"
+"""
+type report {
+  createdAt: timestamptz!
+  id: uuid!
+  reasonId: String
+  tokenId: String
+  userId: String
+}
+
+"""
+Boolean expression to filter rows from the table "report". All fields are combined with a logical 'AND'.
+"""
+input report_bool_exp {
+  _and: [report_bool_exp!]
+  _not: report_bool_exp
+  _or: [report_bool_exp!]
+  createdAt: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  reasonId: String_comparison_exp
+  tokenId: String_comparison_exp
+  userId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "report"."""
+input report_order_by {
+  createdAt: order_by
+  id: order_by
+  reasonId: order_by
+  tokenId: order_by
+  userId: order_by
+}
+
+"""
+select columns of table "report"
+"""
+enum report_select_column {
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  reasonId
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  userId
+}
+
+"""
+Streaming cursor of the table "report"
+"""
+input report_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: report_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input report_stream_cursor_value_input {
+  createdAt: timestamptz
+  id: uuid
+  reasonId: String
+  tokenId: String
+  userId: String
+}
+
+"""
+columns and relationships of "reserve"
+"""
+type reserve {
+  amount: numeric!
+  data(
+    """JSON select path"""
+    path: String
+  ): jsonb
+  id: Int!
+  method: Int!
+  tokenId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "reserve". All fields are combined with a logical 'AND'.
+"""
+input reserve_bool_exp {
+  _and: [reserve_bool_exp!]
+  _not: reserve_bool_exp
+  _or: [reserve_bool_exp!]
+  amount: numeric_comparison_exp
+  data: jsonb_comparison_exp
+  id: Int_comparison_exp
+  method: Int_comparison_exp
+  tokenId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "reserve"."""
+input reserve_order_by {
+  amount: order_by
+  data: order_by
+  id: order_by
+  method: order_by
+  tokenId: order_by
+}
+
+"""
+select columns of table "reserve"
+"""
+enum reserve_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  data
+
+  """column name"""
+  id
+
+  """column name"""
+  method
+
+  """column name"""
+  tokenId
+}
+
+"""
+Streaming cursor of the table "reserve"
+"""
+input reserve_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: reserve_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input reserve_stream_cursor_value_input {
+  amount: numeric
+  data: jsonb
+  id: Int
+  method: Int
+  tokenId: String
 }
 
 scalar smallint
@@ -2292,25 +8500,593 @@ input smallint_comparison_exp {
   _nin: [smallint!]
 }
 
-type subscription_root {
-  offchain: offchain_subscription
+"""
+columns and relationships of "split"
+"""
+type split {
+  articleId: Int
+  generativeTokenPrimaryId: String
+  generativeTokenSecondaryId: String
+  id: Int!
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  pct: Int!
+  redeemableAddress: String
+  userId: String
 }
 
-scalar timestamp
+"""
+Boolean expression to filter rows from the table "split". All fields are combined with a logical 'AND'.
+"""
+input split_bool_exp {
+  _and: [split_bool_exp!]
+  _not: split_bool_exp
+  _or: [split_bool_exp!]
+  articleId: Int_comparison_exp
+  generativeTokenPrimaryId: String_comparison_exp
+  generativeTokenSecondaryId: String_comparison_exp
+  id: Int_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  pct: Int_comparison_exp
+  redeemableAddress: String_comparison_exp
+  userId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "split"."""
+input split_order_by {
+  articleId: order_by
+  generativeTokenPrimaryId: order_by
+  generativeTokenSecondaryId: order_by
+  id: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  pct: order_by
+  redeemableAddress: order_by
+  userId: order_by
+}
 
 """
-Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'.
+select columns of table "split"
 """
-input timestamp_comparison_exp {
-  _eq: timestamp
-  _gt: timestamp
-  _gte: timestamp
-  _in: [timestamp!]
+enum split_select_column {
+  """column name"""
+  articleId
+
+  """column name"""
+  generativeTokenPrimaryId
+
+  """column name"""
+  generativeTokenSecondaryId
+
+  """column name"""
+  id
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  pct
+
+  """column name"""
+  redeemableAddress
+
+  """column name"""
+  userId
+}
+
+"""
+Streaming cursor of the table "split"
+"""
+input split_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: split_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input split_stream_cursor_value_input {
+  articleId: Int
+  generativeTokenPrimaryId: String
+  generativeTokenSecondaryId: String
+  id: Int
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  pct: Int
+  redeemableAddress: String
+  userId: String
+}
+
+type subscription_root {
+  offchain: offchain_subscription
+  onchain: onchain_subscription
+}
+
+scalar timestamptz
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
   _is_null: Boolean
-  _lt: timestamp
-  _lte: timestamp
-  _neq: timestamp
-  _nin: [timestamp!]
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "transaction"
+"""
+type transaction {
+  articleId: Int
+  createdAt: timestamptz!
+  id: Int!
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  opHash: String!
+  price: numeric!
+  ticketId: String
+  tokenId: String
+  type: transaction_type_enum!
+}
+
+"""
+Boolean expression to filter rows from the table "transaction". All fields are combined with a logical 'AND'.
+"""
+input transaction_bool_exp {
+  _and: [transaction_bool_exp!]
+  _not: transaction_bool_exp
+  _or: [transaction_bool_exp!]
+  articleId: Int_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  objktId: String_comparison_exp
+  objktIssuerVersion: generative_token_version_comparison_exp
+  opHash: String_comparison_exp
+  price: numeric_comparison_exp
+  ticketId: String_comparison_exp
+  tokenId: String_comparison_exp
+  type: transaction_type_enum_comparison_exp
+}
+
+"""Ordering options when selecting data from "transaction"."""
+input transaction_order_by {
+  articleId: order_by
+  createdAt: order_by
+  id: order_by
+  objktId: order_by
+  objktIssuerVersion: order_by
+  opHash: order_by
+  price: order_by
+  ticketId: order_by
+  tokenId: order_by
+  type: order_by
+}
+
+"""
+select columns of table "transaction"
+"""
+enum transaction_select_column {
+  """column name"""
+  articleId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  objktId
+
+  """column name"""
+  objktIssuerVersion
+
+  """column name"""
+  opHash
+
+  """column name"""
+  price
+
+  """column name"""
+  ticketId
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  type
+}
+
+"""
+Streaming cursor of the table "transaction"
+"""
+input transaction_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: transaction_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input transaction_stream_cursor_value_input {
+  articleId: Int
+  createdAt: timestamptz
+  id: Int
+  objktId: String
+  objktIssuerVersion: generative_token_version
+  opHash: String
+  price: numeric
+  ticketId: String
+  tokenId: String
+  type: transaction_type_enum
+}
+
+scalar transaction_type_enum
+
+"""
+Boolean expression to compare columns of type "transaction_type_enum". All fields are combined with logical 'AND'.
+"""
+input transaction_type_enum_comparison_exp {
+  _eq: transaction_type_enum
+  _gt: transaction_type_enum
+  _gte: transaction_type_enum
+  _in: [transaction_type_enum!]
+  _is_null: Boolean
+  _lt: transaction_type_enum
+  _lte: transaction_type_enum
+  _neq: transaction_type_enum
+  _nin: [transaction_type_enum!]
+}
+
+"""
+columns and relationships of "user"
+"""
+type user {
+  authorizations: _int2!
+  avatarMediaId: bpchar
+  avatarUri: String
+  createdAt: timestamptz!
+  description: String
+  flag: user_flag_enum!
+  id: String!
+  metadata(
+    """JSON select path"""
+    path: String
+  ): jsonb
+  metadataUri: String
+  moderationReasonId: String
+  name: String
+  type: user_type_enum!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "user". All fields are combined with a logical 'AND'.
+"""
+input user_bool_exp {
+  _and: [user_bool_exp!]
+  _not: user_bool_exp
+  _or: [user_bool_exp!]
+  authorizations: _int2_comparison_exp
+  avatarMediaId: bpchar_comparison_exp
+  avatarUri: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  description: String_comparison_exp
+  flag: user_flag_enum_comparison_exp
+  id: String_comparison_exp
+  metadata: jsonb_comparison_exp
+  metadataUri: String_comparison_exp
+  moderationReasonId: String_comparison_exp
+  name: String_comparison_exp
+  type: user_type_enum_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+scalar user_flag_enum
+
+"""
+Boolean expression to compare columns of type "user_flag_enum". All fields are combined with logical 'AND'.
+"""
+input user_flag_enum_comparison_exp {
+  _eq: user_flag_enum
+  _gt: user_flag_enum
+  _gte: user_flag_enum
+  _in: [user_flag_enum!]
+  _is_null: Boolean
+  _lt: user_flag_enum
+  _lte: user_flag_enum
+  _neq: user_flag_enum
+  _nin: [user_flag_enum!]
+}
+
+"""Ordering options when selecting data from "user"."""
+input user_order_by {
+  authorizations: order_by
+  avatarMediaId: order_by
+  avatarUri: order_by
+  createdAt: order_by
+  description: order_by
+  flag: order_by
+  id: order_by
+  metadata: order_by
+  metadataUri: order_by
+  moderationReasonId: order_by
+  name: order_by
+  type: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "user"
+"""
+enum user_select_column {
+  """column name"""
+  authorizations
+
+  """column name"""
+  avatarMediaId
+
+  """column name"""
+  avatarUri
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  description
+
+  """column name"""
+  flag
+
+  """column name"""
+  id
+
+  """column name"""
+  metadata
+
+  """column name"""
+  metadataUri
+
+  """column name"""
+  moderationReasonId
+
+  """column name"""
+  name
+
+  """column name"""
+  type
+
+  """column name"""
+  updatedAt
+}
+
+"""
+columns and relationships of "user_stats"
+"""
+type user_stats {
+  from: timestamptz
+  primVolumeNb: bigint
+  primVolumeNb7d: bigint
+  primVolumeNb24: bigint
+  primVolumeNb30d: bigint
+  primVolumeTz: bigint
+  primVolumeTz7d: bigint
+  primVolumeTz24: bigint
+  primVolumeTz30d: bigint
+  secVolumeNb: bigint
+  secVolumeNb7d: bigint
+  secVolumeNb24: bigint
+  secVolumeNb30d: bigint
+  secVolumeTz: bigint
+  secVolumeTz7d: bigint
+  secVolumeTz24: bigint
+  secVolumeTz30d: bigint
+  to: timestamptz
+  userId: String!
+}
+
+"""
+Boolean expression to filter rows from the table "user_stats". All fields are combined with a logical 'AND'.
+"""
+input user_stats_bool_exp {
+  _and: [user_stats_bool_exp!]
+  _not: user_stats_bool_exp
+  _or: [user_stats_bool_exp!]
+  from: timestamptz_comparison_exp
+  primVolumeNb: bigint_comparison_exp
+  primVolumeNb7d: bigint_comparison_exp
+  primVolumeNb24: bigint_comparison_exp
+  primVolumeNb30d: bigint_comparison_exp
+  primVolumeTz: bigint_comparison_exp
+  primVolumeTz7d: bigint_comparison_exp
+  primVolumeTz24: bigint_comparison_exp
+  primVolumeTz30d: bigint_comparison_exp
+  secVolumeNb: bigint_comparison_exp
+  secVolumeNb7d: bigint_comparison_exp
+  secVolumeNb24: bigint_comparison_exp
+  secVolumeNb30d: bigint_comparison_exp
+  secVolumeTz: bigint_comparison_exp
+  secVolumeTz7d: bigint_comparison_exp
+  secVolumeTz24: bigint_comparison_exp
+  secVolumeTz30d: bigint_comparison_exp
+  to: timestamptz_comparison_exp
+  userId: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "user_stats"."""
+input user_stats_order_by {
+  from: order_by
+  primVolumeNb: order_by
+  primVolumeNb7d: order_by
+  primVolumeNb24: order_by
+  primVolumeNb30d: order_by
+  primVolumeTz: order_by
+  primVolumeTz7d: order_by
+  primVolumeTz24: order_by
+  primVolumeTz30d: order_by
+  secVolumeNb: order_by
+  secVolumeNb7d: order_by
+  secVolumeNb24: order_by
+  secVolumeNb30d: order_by
+  secVolumeTz: order_by
+  secVolumeTz7d: order_by
+  secVolumeTz24: order_by
+  secVolumeTz30d: order_by
+  to: order_by
+  userId: order_by
+}
+
+"""
+select columns of table "user_stats"
+"""
+enum user_stats_select_column {
+  """column name"""
+  from
+
+  """column name"""
+  primVolumeNb
+
+  """column name"""
+  primVolumeNb7d
+
+  """column name"""
+  primVolumeNb24
+
+  """column name"""
+  primVolumeNb30d
+
+  """column name"""
+  primVolumeTz
+
+  """column name"""
+  primVolumeTz7d
+
+  """column name"""
+  primVolumeTz24
+
+  """column name"""
+  primVolumeTz30d
+
+  """column name"""
+  secVolumeNb
+
+  """column name"""
+  secVolumeNb7d
+
+  """column name"""
+  secVolumeNb24
+
+  """column name"""
+  secVolumeNb30d
+
+  """column name"""
+  secVolumeTz
+
+  """column name"""
+  secVolumeTz7d
+
+  """column name"""
+  secVolumeTz24
+
+  """column name"""
+  secVolumeTz30d
+
+  """column name"""
+  to
+
+  """column name"""
+  userId
+}
+
+"""
+Streaming cursor of the table "user_stats"
+"""
+input user_stats_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: user_stats_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input user_stats_stream_cursor_value_input {
+  from: timestamptz
+  primVolumeNb: bigint
+  primVolumeNb7d: bigint
+  primVolumeNb24: bigint
+  primVolumeNb30d: bigint
+  primVolumeTz: bigint
+  primVolumeTz7d: bigint
+  primVolumeTz24: bigint
+  primVolumeTz30d: bigint
+  secVolumeNb: bigint
+  secVolumeNb7d: bigint
+  secVolumeNb24: bigint
+  secVolumeNb30d: bigint
+  secVolumeTz: bigint
+  secVolumeTz7d: bigint
+  secVolumeTz24: bigint
+  secVolumeTz30d: bigint
+  to: timestamptz
+  userId: String
+}
+
+"""
+Streaming cursor of the table "user"
+"""
+input user_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: user_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input user_stream_cursor_value_input {
+  authorizations: _int2
+  avatarMediaId: bpchar
+  avatarUri: String
+  createdAt: timestamptz
+  description: String
+  flag: user_flag_enum
+  id: String
+  metadata: jsonb
+  metadataUri: String
+  moderationReasonId: String
+  name: String
+  type: user_type_enum
+  updatedAt: timestamptz
+}
+
+scalar user_type_enum
+
+"""
+Boolean expression to compare columns of type "user_type_enum". All fields are combined with logical 'AND'.
+"""
+input user_type_enum_comparison_exp {
+  _eq: user_type_enum
+  _gt: user_type_enum
+  _gte: user_type_enum
+  _in: [user_type_enum!]
+  _is_null: Boolean
+  _lt: user_type_enum
+  _lte: user_type_enum
+  _neq: user_type_enum
+  _nin: [user_type_enum!]
 }
 
 scalar uuid
