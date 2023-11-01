@@ -1,4 +1,4 @@
-import { graphql } from ".."
+import { graphql } from "@/generated"
 
 /**
  * Exposes the most basic details for general purposes.
@@ -25,8 +25,4 @@ export const Qu_GetAccounts = graphql(`
       }
     }
   }
-`)
-
-export const Qu_GetCurators = graphql(`
-  query GetCurators($where: )
 `)
