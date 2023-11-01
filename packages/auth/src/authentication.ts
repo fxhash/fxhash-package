@@ -1,6 +1,6 @@
 import { AuthToken } from "@/types/auth-token"
 import { AuthRole } from "@/types/roles"
-import { verify } from "jsonwebtoken"
+import { SignOptions, sign, verify } from "jsonwebtoken"
 
 // local auth public, used to keep in-memory pointer of the key to be f4st
 let authPublic: string | null = null
@@ -43,7 +43,7 @@ export function verifyAuthToken(
  * @param role The role to test
  * @returns Whether the auth token contains the given role
  */
-export function hasRole(authToken: AuthToken, role: AuthRole) {
+export function hasRole(authToken: AuthToken, role: AuthRole): boolean {
   return (
     authToken["https://hasura.io/jwt/claims"]["x-hasura-role"] === role ||
     authToken["https://hasura.io/jwt/claims"][
@@ -62,4 +62,20 @@ export function hasRole(authToken: AuthToken, role: AuthRole) {
 export function verifyAuthRole(token: string, role: AuthRole) {
   const decoded = verifyAuthToken(token)
   return hasRole(decoded, role)
+}
+
+export function signAuthToken(
+  payload: string | Buffer | Object,
+  options?: SignOptions,
+  jwtPrivateKey?: string
+): string {
+  const authPrivate =
+    jwtPrivateKey || process.env.AUTH_JWT_PRIVATE_KEY.replace(/\\n/g, "\n")
+
+  if (!authPrivate) {
+    throw new Error(
+      "Cannot find private key: the fxhash auth jwt private key (AUTH_JWT_PRIVATE_KEY) is missing from the environment variables."
+    )
+  }
+  return sign(payload, authPrivate, { expiresIn: "1d", algorithm: "RS256", ...options})
 }

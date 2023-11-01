@@ -71,6 +71,24 @@ type Account {
     """filter the rows returned"""
     where: Profile_bool_exp
   ): [Profile!]!
+
+  """An array relationship"""
+  roles(
+    """distinct select on columns"""
+    distinct_on: [AccountsRoles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [AccountsRoles_order_by!]
+
+    """filter the rows returned"""
+    where: AccountsRoles_bool_exp
+  ): [AccountsRoles!]!
   status: AccountStatus!
   username: String!
 
@@ -91,6 +109,77 @@ type Account {
     """filter the rows returned"""
     where: Wallet_bool_exp
   ): [Wallet!]!
+}
+
+"""
+columns and relationships of "AccountRole"
+"""
+type AccountRole {
+  comment: String
+  value: String!
+}
+
+"""
+Boolean expression to filter rows from the table "AccountRole". All fields are combined with a logical 'AND'.
+"""
+input AccountRole_bool_exp {
+  _and: [AccountRole_bool_exp!]
+  _not: AccountRole_bool_exp
+  _or: [AccountRole_bool_exp!]
+  comment: String_comparison_exp
+  value: String_comparison_exp
+}
+
+enum AccountRole_enum {
+  """
+  curator vested by the fxhash team, with access to special curator-dedicated features.
+  """
+  VERIFIED_CURATOR
+}
+
+"""
+Boolean expression to compare columns of type "AccountRole_enum". All fields are combined with logical 'AND'.
+"""
+input AccountRole_enum_comparison_exp {
+  _eq: AccountRole_enum
+  _in: [AccountRole_enum!]
+  _is_null: Boolean
+  _neq: AccountRole_enum
+  _nin: [AccountRole_enum!]
+}
+
+"""Ordering options when selecting data from "AccountRole"."""
+input AccountRole_order_by {
+  comment: order_by
+  value: order_by
+}
+
+"""
+select columns of table "AccountRole"
+"""
+enum AccountRole_select_column {
+  """column name"""
+  comment
+
+  """column name"""
+  value
+}
+
+"""
+Streaming cursor of the table "AccountRole"
+"""
+input AccountRole_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: AccountRole_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input AccountRole_stream_cursor_value_input {
+  comment: String
+  value: String
 }
 
 scalar AccountStatus
@@ -121,6 +210,7 @@ input Account_bool_exp {
   curatedProjects: Project_bool_exp
   id: uuid_comparison_exp
   profile: Profile_bool_exp
+  roles: AccountsRoles_bool_exp
   status: AccountStatus_comparison_exp
   username: String_comparison_exp
   wallets: Wallet_bool_exp
@@ -143,6 +233,7 @@ input Account_order_by {
   curatedProjects_aggregate: Project_aggregate_order_by
   id: order_by
   profile_aggregate: Profile_aggregate_order_by
+  roles_aggregate: AccountsRoles_aggregate_order_by
   status: order_by
   username: order_by
   wallets_aggregate: Wallet_aggregate_order_by
@@ -198,6 +289,91 @@ input Account_updates {
 
   """filter the rows which have to be updated"""
   where: Account_bool_exp!
+}
+
+"""
+columns and relationships of "AccountsRoles"
+"""
+type AccountsRoles {
+  """An object relationship"""
+  account: Account!
+  accountId: uuid!
+
+  """An object relationship"""
+  role: AccountRole!
+  roleValue: AccountRole_enum!
+}
+
+"""
+order by aggregate values of table "AccountsRoles"
+"""
+input AccountsRoles_aggregate_order_by {
+  count: order_by
+  max: AccountsRoles_max_order_by
+  min: AccountsRoles_min_order_by
+}
+
+"""
+Boolean expression to filter rows from the table "AccountsRoles". All fields are combined with a logical 'AND'.
+"""
+input AccountsRoles_bool_exp {
+  _and: [AccountsRoles_bool_exp!]
+  _not: AccountsRoles_bool_exp
+  _or: [AccountsRoles_bool_exp!]
+  account: Account_bool_exp
+  accountId: uuid_comparison_exp
+  role: AccountRole_bool_exp
+  roleValue: AccountRole_enum_comparison_exp
+}
+
+"""
+order by max() on columns of table "AccountsRoles"
+"""
+input AccountsRoles_max_order_by {
+  accountId: order_by
+}
+
+"""
+order by min() on columns of table "AccountsRoles"
+"""
+input AccountsRoles_min_order_by {
+  accountId: order_by
+}
+
+"""Ordering options when selecting data from "AccountsRoles"."""
+input AccountsRoles_order_by {
+  account: Account_order_by
+  accountId: order_by
+  role: AccountRole_order_by
+  roleValue: order_by
+}
+
+"""
+select columns of table "AccountsRoles"
+"""
+enum AccountsRoles_select_column {
+  """column name"""
+  accountId
+
+  """column name"""
+  roleValue
+}
+
+"""
+Streaming cursor of the table "AccountsRoles"
+"""
+input AccountsRoles_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: AccountsRoles_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input AccountsRoles_stream_cursor_value_input {
+  accountId: uuid
+  roleValue: AccountRole_enum
 }
 
 scalar BlockchainNetwork
@@ -1616,8 +1792,54 @@ type offchain_query {
     where: Account_bool_exp
   ): [Account!]!
 
+  """
+  fetch data from the table: "AccountRole"
+  """
+  AccountRole(
+    """distinct select on columns"""
+    distinct_on: [AccountRole_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [AccountRole_order_by!]
+
+    """filter the rows returned"""
+    where: AccountRole_bool_exp
+  ): [AccountRole!]!
+
+  """fetch data from the table: "AccountRole" using primary key columns"""
+  AccountRole_by_pk(value: String!): AccountRole
+
   """fetch data from the table: "Account" using primary key columns"""
   Account_by_pk(id: uuid!): Account
+
+  """
+  fetch data from the table: "AccountsRoles"
+  """
+  AccountsRoles(
+    """distinct select on columns"""
+    distinct_on: [AccountsRoles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [AccountsRoles_order_by!]
+
+    """filter the rows returned"""
+    where: AccountsRoles_bool_exp
+  ): [AccountsRoles!]!
+
+  """fetch data from the table: "AccountsRoles" using primary key columns"""
+  AccountsRoles_by_pk(accountId: uuid!, roleValue: AccountRole_enum!): AccountsRoles
 
   """
   fetch data from the table: "Media"
@@ -1753,6 +1975,43 @@ type offchain_subscription {
     where: Account_bool_exp
   ): [Account!]!
 
+  """
+  fetch data from the table: "AccountRole"
+  """
+  AccountRole(
+    """distinct select on columns"""
+    distinct_on: [AccountRole_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [AccountRole_order_by!]
+
+    """filter the rows returned"""
+    where: AccountRole_bool_exp
+  ): [AccountRole!]!
+
+  """fetch data from the table: "AccountRole" using primary key columns"""
+  AccountRole_by_pk(value: String!): AccountRole
+
+  """
+  fetch data from the table in a streaming manner: "AccountRole"
+  """
+  AccountRole_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [AccountRole_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: AccountRole_bool_exp
+  ): [AccountRole!]!
+
   """fetch data from the table: "Account" using primary key columns"""
   Account_by_pk(id: uuid!): Account
 
@@ -1769,6 +2028,43 @@ type offchain_subscription {
     """filter the rows returned"""
     where: Account_bool_exp
   ): [Account!]!
+
+  """
+  fetch data from the table: "AccountsRoles"
+  """
+  AccountsRoles(
+    """distinct select on columns"""
+    distinct_on: [AccountsRoles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [AccountsRoles_order_by!]
+
+    """filter the rows returned"""
+    where: AccountsRoles_bool_exp
+  ): [AccountsRoles!]!
+
+  """fetch data from the table: "AccountsRoles" using primary key columns"""
+  AccountsRoles_by_pk(accountId: uuid!, roleValue: AccountRole_enum!): AccountsRoles
+
+  """
+  fetch data from the table in a streaming manner: "AccountsRoles"
+  """
+  AccountsRoles_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [AccountsRoles_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: AccountsRoles_bool_exp
+  ): [AccountsRoles!]!
 
   """
   fetch data from the table: "Media"

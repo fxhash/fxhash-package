@@ -34,6 +34,8 @@ export type Account = {
   id: Scalars['uuid']['output'];
   /** An array relationship */
   profile: Array<Profile>;
+  /** An array relationship */
+  roles: Array<AccountsRoles>;
   status: Scalars['AccountStatus']['output'];
   username: Scalars['String']['output'];
   /** An array relationship */
@@ -72,12 +74,80 @@ export type AccountProfileArgs = {
 
 
 /** columns and relationships of "Account" */
+export type AccountRolesArgs = {
+  distinct_on?: InputMaybe<Array<AccountsRoles_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountsRoles_Order_By>>;
+  where?: InputMaybe<AccountsRoles_Bool_Exp>;
+};
+
+
+/** columns and relationships of "Account" */
 export type AccountWalletsArgs = {
   distinct_on?: InputMaybe<Array<Wallet_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Wallet_Order_By>>;
   where?: InputMaybe<Wallet_Bool_Exp>;
+};
+
+/** columns and relationships of "AccountRole" */
+export type AccountRole = {
+  __typename?: 'AccountRole';
+  comment?: Maybe<Scalars['String']['output']>;
+  value: Scalars['String']['output'];
+};
+
+/** Boolean expression to filter rows from the table "AccountRole". All fields are combined with a logical 'AND'. */
+export type AccountRole_Bool_Exp = {
+  _and?: InputMaybe<Array<AccountRole_Bool_Exp>>;
+  _not?: InputMaybe<AccountRole_Bool_Exp>;
+  _or?: InputMaybe<Array<AccountRole_Bool_Exp>>;
+  comment?: InputMaybe<String_Comparison_Exp>;
+  value?: InputMaybe<String_Comparison_Exp>;
+};
+
+export enum AccountRole_Enum {
+  /** curator vested by the fxhash team, with access to special curator-dedicated features. */
+  VerifiedCurator = 'VERIFIED_CURATOR'
+}
+
+/** Boolean expression to compare columns of type "AccountRole_enum". All fields are combined with logical 'AND'. */
+export type AccountRole_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<AccountRole_Enum>;
+  _in?: InputMaybe<Array<AccountRole_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _neq?: InputMaybe<AccountRole_Enum>;
+  _nin?: InputMaybe<Array<AccountRole_Enum>>;
+};
+
+/** Ordering options when selecting data from "AccountRole". */
+export type AccountRole_Order_By = {
+  comment?: InputMaybe<Order_By>;
+  value?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "AccountRole" */
+export enum AccountRole_Select_Column {
+  /** column name */
+  Comment = 'comment',
+  /** column name */
+  Value = 'value'
+}
+
+/** Streaming cursor of the table "AccountRole" */
+export type AccountRole_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AccountRole_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AccountRole_Stream_Cursor_Value_Input = {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Boolean expression to compare columns of type "AccountStatus". All fields are combined with logical 'AND'. */
@@ -102,6 +172,7 @@ export type Account_Bool_Exp = {
   curatedProjects?: InputMaybe<Project_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
+  roles?: InputMaybe<AccountsRoles_Bool_Exp>;
   status?: InputMaybe<AccountStatus_Comparison_Exp>;
   username?: InputMaybe<String_Comparison_Exp>;
   wallets?: InputMaybe<Wallet_Bool_Exp>;
@@ -122,6 +193,7 @@ export type Account_Order_By = {
   curatedProjects_aggregate?: InputMaybe<Project_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
   profile_aggregate?: InputMaybe<Profile_Aggregate_Order_By>;
+  roles_aggregate?: InputMaybe<AccountsRoles_Aggregate_Order_By>;
   status?: InputMaybe<Order_By>;
   username?: InputMaybe<Order_By>;
   wallets_aggregate?: InputMaybe<Wallet_Aggregate_Order_By>;
@@ -167,6 +239,75 @@ export type Account_Updates = {
   _set?: InputMaybe<Account_Set_Input>;
   /** filter the rows which have to be updated */
   where: Account_Bool_Exp;
+};
+
+/** columns and relationships of "AccountsRoles" */
+export type AccountsRoles = {
+  __typename?: 'AccountsRoles';
+  /** An object relationship */
+  account: Account;
+  accountId: Scalars['uuid']['output'];
+  /** An object relationship */
+  role: AccountRole;
+  roleValue: AccountRole_Enum;
+};
+
+/** order by aggregate values of table "AccountsRoles" */
+export type AccountsRoles_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<AccountsRoles_Max_Order_By>;
+  min?: InputMaybe<AccountsRoles_Min_Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "AccountsRoles". All fields are combined with a logical 'AND'. */
+export type AccountsRoles_Bool_Exp = {
+  _and?: InputMaybe<Array<AccountsRoles_Bool_Exp>>;
+  _not?: InputMaybe<AccountsRoles_Bool_Exp>;
+  _or?: InputMaybe<Array<AccountsRoles_Bool_Exp>>;
+  account?: InputMaybe<Account_Bool_Exp>;
+  accountId?: InputMaybe<Uuid_Comparison_Exp>;
+  role?: InputMaybe<AccountRole_Bool_Exp>;
+  roleValue?: InputMaybe<AccountRole_Enum_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "AccountsRoles" */
+export type AccountsRoles_Max_Order_By = {
+  accountId?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "AccountsRoles" */
+export type AccountsRoles_Min_Order_By = {
+  accountId?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "AccountsRoles". */
+export type AccountsRoles_Order_By = {
+  account?: InputMaybe<Account_Order_By>;
+  accountId?: InputMaybe<Order_By>;
+  role?: InputMaybe<AccountRole_Order_By>;
+  roleValue?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "AccountsRoles" */
+export enum AccountsRoles_Select_Column {
+  /** column name */
+  AccountId = 'accountId',
+  /** column name */
+  RoleValue = 'roleValue'
+}
+
+/** Streaming cursor of the table "AccountsRoles" */
+export type AccountsRoles_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AccountsRoles_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AccountsRoles_Stream_Cursor_Value_Input = {
+  accountId?: InputMaybe<Scalars['uuid']['input']>;
+  roleValue?: InputMaybe<AccountRole_Enum>;
 };
 
 /** Boolean expression to compare columns of type "BlockchainNetwork". All fields are combined with logical 'AND'. */
@@ -1254,8 +1395,16 @@ export type Offchain_Query = {
   __typename?: 'offchain_query';
   /** fetch data from the table: "Account" */
   Account: Array<Account>;
+  /** fetch data from the table: "AccountRole" */
+  AccountRole: Array<AccountRole>;
+  /** fetch data from the table: "AccountRole" using primary key columns */
+  AccountRole_by_pk?: Maybe<AccountRole>;
   /** fetch data from the table: "Account" using primary key columns */
   Account_by_pk?: Maybe<Account>;
+  /** fetch data from the table: "AccountsRoles" */
+  AccountsRoles: Array<AccountsRoles>;
+  /** fetch data from the table: "AccountsRoles" using primary key columns */
+  AccountsRoles_by_pk?: Maybe<AccountsRoles>;
   /** fetch data from the table: "Media" */
   Media: Array<Media>;
   /** fetch data from the table: "Media" using primary key columns */
@@ -1286,8 +1435,37 @@ export type Offchain_QueryAccountArgs = {
 };
 
 
+export type Offchain_QueryAccountRoleArgs = {
+  distinct_on?: InputMaybe<Array<AccountRole_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountRole_Order_By>>;
+  where?: InputMaybe<AccountRole_Bool_Exp>;
+};
+
+
+export type Offchain_QueryAccountRole_By_PkArgs = {
+  value: Scalars['String']['input'];
+};
+
+
 export type Offchain_QueryAccount_By_PkArgs = {
   id: Scalars['uuid']['input'];
+};
+
+
+export type Offchain_QueryAccountsRolesArgs = {
+  distinct_on?: InputMaybe<Array<AccountsRoles_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountsRoles_Order_By>>;
+  where?: InputMaybe<AccountsRoles_Bool_Exp>;
+};
+
+
+export type Offchain_QueryAccountsRoles_By_PkArgs = {
+  accountId: Scalars['uuid']['input'];
+  roleValue: AccountRole_Enum;
 };
 
 
@@ -1359,10 +1537,22 @@ export type Offchain_Subscription = {
   __typename?: 'offchain_subscription';
   /** fetch data from the table: "Account" */
   Account: Array<Account>;
+  /** fetch data from the table: "AccountRole" */
+  AccountRole: Array<AccountRole>;
+  /** fetch data from the table: "AccountRole" using primary key columns */
+  AccountRole_by_pk?: Maybe<AccountRole>;
+  /** fetch data from the table in a streaming manner: "AccountRole" */
+  AccountRole_stream: Array<AccountRole>;
   /** fetch data from the table: "Account" using primary key columns */
   Account_by_pk?: Maybe<Account>;
   /** fetch data from the table in a streaming manner: "Account" */
   Account_stream: Array<Account>;
+  /** fetch data from the table: "AccountsRoles" */
+  AccountsRoles: Array<AccountsRoles>;
+  /** fetch data from the table: "AccountsRoles" using primary key columns */
+  AccountsRoles_by_pk?: Maybe<AccountsRoles>;
+  /** fetch data from the table in a streaming manner: "AccountsRoles" */
+  AccountsRoles_stream: Array<AccountsRoles>;
   /** fetch data from the table: "Media" */
   Media: Array<Media>;
   /** fetch data from the table: "Media" using primary key columns */
@@ -1403,6 +1593,27 @@ export type Offchain_SubscriptionAccountArgs = {
 };
 
 
+export type Offchain_SubscriptionAccountRoleArgs = {
+  distinct_on?: InputMaybe<Array<AccountRole_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountRole_Order_By>>;
+  where?: InputMaybe<AccountRole_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountRole_By_PkArgs = {
+  value: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionAccountRole_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<AccountRole_Stream_Cursor_Input>>;
+  where?: InputMaybe<AccountRole_Bool_Exp>;
+};
+
+
 export type Offchain_SubscriptionAccount_By_PkArgs = {
   id: Scalars['uuid']['input'];
 };
@@ -1412,6 +1623,28 @@ export type Offchain_SubscriptionAccount_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Account_Stream_Cursor_Input>>;
   where?: InputMaybe<Account_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountsRolesArgs = {
+  distinct_on?: InputMaybe<Array<AccountsRoles_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountsRoles_Order_By>>;
+  where?: InputMaybe<AccountsRoles_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountsRoles_By_PkArgs = {
+  accountId: Scalars['uuid']['input'];
+  roleValue: AccountRole_Enum;
+};
+
+
+export type Offchain_SubscriptionAccountsRoles_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<AccountsRoles_Stream_Cursor_Input>>;
+  where?: InputMaybe<AccountsRoles_Bool_Exp>;
 };
 
 
@@ -1585,6 +1818,15 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']['input']>>;
 };
 
+export type Account_BaseDetailsFragment = { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null }> };
+
+export type GetAccountsQueryVariables = Exact<{
+  where?: InputMaybe<Account_Bool_Exp>;
+}>;
+
+
+export type GetAccountsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null }> }> } | null };
+
 export type Project_BaseDetailsFragment = { __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string } | null, author: { __typename?: 'Account', id: string, status: any, username: string }, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> };
 
 export type Project_UserSecretsFragment = { __typename?: 'Project', state: string };
@@ -1617,8 +1859,10 @@ export type Update_ProjectMutationVariables = Exact<{
 
 export type Update_ProjectMutation = { __typename?: 'mutation_root', offchain?: { __typename?: 'offchain_mutation_frontend', delete_ProjectMedia?: { __typename?: 'ProjectMedia_mutation_response', affected_rows: number } | null, update_Project?: { __typename?: 'Project_mutation_response', affected_rows: number } | null, insert_ProjectMedia?: { __typename?: 'ProjectMedia_mutation_response', affected_rows: number } | null } | null };
 
+export const Account_BaseDetailsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}}]}}]}}]} as unknown as DocumentNode<Account_BaseDetailsFragment, unknown>;
 export const Project_BaseDetailsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<Project_BaseDetailsFragment, unknown>;
 export const Project_UserSecretsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_UserSecrets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]} as unknown as DocumentNode<Project_UserSecretsFragment, unknown>;
+export const GetAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}}]}}]}}]} as unknown as DocumentNode<GetAccountsQuery, GetAccountsQueryVariables>;
 export const GetAllProjectsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllProjects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllProjectsQuery, GetAllProjectsQueryVariables>;
 export const GetUserSubmissionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserSubmissions"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_UserSecrets"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_UserSecrets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]} as unknown as DocumentNode<GetUserSubmissionsQuery, GetUserSubmissionsQueryVariables>;
 export const CreateProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateProject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"object"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Project_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_Project_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"object"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}}]}}]}}]}}]} as unknown as DocumentNode<CreateProjectMutation, CreateProjectMutationVariables>;
