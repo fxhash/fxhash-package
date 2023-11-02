@@ -5,7 +5,15 @@ import {
 import { config } from "@fxhash/config"
 import { TContractOperation } from "@/services/operations/contractOperation"
 import { isOperationApplied } from "./Blockchain"
-import { Address, createWalletClient, http } from "viem"
+import {
+  Address,
+  PublicClient,
+  WalletClient,
+  createWalletClient,
+  createPublicClient,
+  http,
+} from "viem"
+import { mainnet, sepolia, hardhat } from "viem/chains"
 import { createConfig, configureChains } from "wagmi"
 import { type WalletClient } from "wagmi"
 import { mainnet, sepolia, hardhat } from "wagmi/chains"
@@ -18,7 +26,7 @@ import { BlockchainNetwork } from "@/types/entities/Account"
 export const chains = [mainnet, sepolia, hardhat]
 //Since the configuration of SDK is only for one chain at a time, we select the one configured
 export const CURRENT_CHAIN = chains.find(
-  chain => chain.id === parseInt(config.config.ETH_CHAIN_ID)
+  chain => chain.name === config.eth.config.network
 )
 
 const rpcUrls = config.eth.apis.rpcs
@@ -41,9 +49,28 @@ export enum EWalletOperations {
   BAN_USER = "BAN_USER",
 }
 
+//WAGMI config type that will be used for the wallet client
+export type WagmiConfig = {
+  publicClient: PublicClient
+  chains: any[]
+  walletConnectProjectId: string
+  appName: string
+  appDescription: string
+  appUrl: string
+  appIcon: string
+}
+
 const SIGN_IN_MESSAGE = "sign in to fxhash.xyz"
 const FXHASH_TERMS_OF_SERVICE =
   "Agree to terms: https://www.fxhash.xyz/doc/legal/terms.pdf"
+
+//Returns the public client to access blockchain data
+export function getPublicClient(): PublicClient {
+  return createPublicClient({
+    chain: CURRENT_CHAIN,
+    transport: http(config.eth.apis.rpcs[0]),
+  })
+}
 
 /**
  * Formats a sign-in payload for a given Ethereum address.
@@ -64,28 +91,22 @@ export function getProvider(rpcUrl: string): any {
   })
 }
 
-//WAGMI config that will be used for the wallet client
-export function getConfig(): Config {
-  const { publicClient } = configureChains(
-    chains,
-    rpcUrls.map(rpcUrl => getProvider(rpcUrl))
-  )
-  return createConfig(
-    getDefaultConfig({
-      publicClient: publicClient,
-      chains: [CURRENT_CHAIN],
-      walletConnectProjectId: config.config.ETH_WALLET_CONNECT_ID,
-      // Required
-      appName: "FXHASH",
+//Wrapper to provider the WAGMI config for the wallet
+export function getConfig(): WagmiConfig {
+  return {
+    publicClient: getPublicClient(),
+    chains: [CURRENT_CHAIN],
+    walletConnectProjectId: config.config.walletConnectId,
+    // Required
+    appName: "FXHASH",
 
-      // Optional
-      appDescription:
-        "fxhash is an open platform to mint and collect Generative Tokens.",
-      appUrl: "https://fxhash.xyz", // your app's url
-      appIcon:
-        "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG", // your app's icon, no bigger than 1024x1024px (max. 1MB)
-    })
-  )
+    // Optional
+    appDescription:
+      "fxhash is an open platform to mint and collect Generative Tokens.",
+    appUrl: "https://fxhash.xyz", // your app's url
+    appIcon:
+      "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG", // your app's icon, no bigger than 1024x1024px (max. 1MB)
+  }
 }
 
 /**
@@ -100,10 +121,12 @@ export class WalletManager {
     signature: string
   } | null = null
   walletClient: WalletClient | undefined
+  publicClient: PublicClient
   account: Address | undefined
 
   constructor(client) {
     this.walletClient = client
+    this.publicClient = getPublicClient()
   }
 
   async disconnect(): Promise<void> {

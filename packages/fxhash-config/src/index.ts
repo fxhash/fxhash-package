@@ -18,22 +18,33 @@ import {
   prdConfig,
   devConfig,
   IFxhashConfigSingleEnv,
+  localConfig,
 } from "config"
 
 const isProd = (() => {
   // We can't destructure process.envs
   // https://nextjs.org/docs/pages/api-reference/next-config-js/env
   return (
-    process.env.FXHASH_ENV === 'prd' ||
-    process.env.FXHASH_ENV === 'production' ||
-    process.env.NEXT_PUBLIC_FXHASH_ENV === 'prd' ||
-    process.env.NEXT_PUBLIC_FXHASH_ENV === 'production' ||
-    process.env.REACT_APP_FXHASH_ENV === 'prd' ||
-    process.env.REACT_APP_FXHASH_ENV === 'production'
-  );
+    process.env.FXHASH_ENV === "prd" ||
+    process.env.FXHASH_ENV === "production" ||
+    process.env.NEXT_PUBLIC_FXHASH_ENV === "prd" ||
+    process.env.NEXT_PUBLIC_FXHASH_ENV === "production" ||
+    process.env.REACT_APP_FXHASH_ENV === "prd" ||
+    process.env.REACT_APP_FXHASH_ENV === "production"
+  )
 })()
 
-let config = isProd ? prdConfig : devConfig
+const isLocal = (() => {
+  // We can't destructure process.envs
+  // https://nextjs.org/docs/pages/api-reference/next-config-js/env
+  return (
+    process.env.FXHASH_ENV === "local" ||
+    process.env.NEXT_PUBLIC_FXHASH_ENV === "local" ||
+    process.env.REACT_APP_FXHASH_ENV === "local"
+  )
+})()
+
+let config = isProd ? prdConfig : isLocal ? localConfig : devConfig
 
 function setConfig(
   userConfig: Partial<IFxhashConfigSingleEnv>
