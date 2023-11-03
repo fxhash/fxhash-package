@@ -1245,6 +1245,181 @@ export type Wallet_Stream_Cursor_Value_Input = {
   network?: InputMaybe<Scalars['BlockchainNetwork']['input']>;
 };
 
+/** columns and relationships of "Whitelist" */
+export type Whitelist = {
+  __typename?: 'Whitelist';
+  /** An array relationship */
+  entries: Array<WhitelistEntries>;
+  merkleRoot: Scalars['String']['output'];
+};
+
+
+/** columns and relationships of "Whitelist" */
+export type WhitelistEntriesArgs = {
+  distinct_on?: InputMaybe<Array<WhitelistEntries_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<WhitelistEntries_Order_By>>;
+  where?: InputMaybe<WhitelistEntries_Bool_Exp>;
+};
+
+/** columns and relationships of "WhitelistEntries" */
+export type WhitelistEntries = {
+  __typename?: 'WhitelistEntries';
+  merkleRoot: Scalars['String']['output'];
+  walletAddress: Scalars['String']['output'];
+  /** An object relationship */
+  whitelist: Whitelist;
+  whitelistIndex: Scalars['Int']['output'];
+};
+
+/** order by aggregate values of table "WhitelistEntries" */
+export type WhitelistEntries_Aggregate_Order_By = {
+  avg?: InputMaybe<WhitelistEntries_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<WhitelistEntries_Max_Order_By>;
+  min?: InputMaybe<WhitelistEntries_Min_Order_By>;
+  stddev?: InputMaybe<WhitelistEntries_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<WhitelistEntries_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<WhitelistEntries_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<WhitelistEntries_Sum_Order_By>;
+  var_pop?: InputMaybe<WhitelistEntries_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<WhitelistEntries_Var_Samp_Order_By>;
+  variance?: InputMaybe<WhitelistEntries_Variance_Order_By>;
+};
+
+/** order by avg() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Avg_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "WhitelistEntries". All fields are combined with a logical 'AND'. */
+export type WhitelistEntries_Bool_Exp = {
+  _and?: InputMaybe<Array<WhitelistEntries_Bool_Exp>>;
+  _not?: InputMaybe<WhitelistEntries_Bool_Exp>;
+  _or?: InputMaybe<Array<WhitelistEntries_Bool_Exp>>;
+  merkleRoot?: InputMaybe<String_Comparison_Exp>;
+  walletAddress?: InputMaybe<String_Comparison_Exp>;
+  whitelist?: InputMaybe<Whitelist_Bool_Exp>;
+  whitelistIndex?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Max_Order_By = {
+  merkleRoot?: InputMaybe<Order_By>;
+  walletAddress?: InputMaybe<Order_By>;
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Min_Order_By = {
+  merkleRoot?: InputMaybe<Order_By>;
+  walletAddress?: InputMaybe<Order_By>;
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "WhitelistEntries". */
+export type WhitelistEntries_Order_By = {
+  merkleRoot?: InputMaybe<Order_By>;
+  walletAddress?: InputMaybe<Order_By>;
+  whitelist?: InputMaybe<Whitelist_Order_By>;
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "WhitelistEntries" */
+export enum WhitelistEntries_Select_Column {
+  /** column name */
+  MerkleRoot = 'merkleRoot',
+  /** column name */
+  WalletAddress = 'walletAddress',
+  /** column name */
+  WhitelistIndex = 'whitelistIndex'
+}
+
+/** order by stddev() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Stddev_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Stddev_Pop_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Stddev_Samp_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "WhitelistEntries" */
+export type WhitelistEntries_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: WhitelistEntries_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type WhitelistEntries_Stream_Cursor_Value_Input = {
+  merkleRoot?: InputMaybe<Scalars['String']['input']>;
+  walletAddress?: InputMaybe<Scalars['String']['input']>;
+  whitelistIndex?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** order by sum() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Sum_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Var_Pop_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Var_Samp_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** order by variance() on columns of table "WhitelistEntries" */
+export type WhitelistEntries_Variance_Order_By = {
+  whitelistIndex?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "Whitelist". All fields are combined with a logical 'AND'. */
+export type Whitelist_Bool_Exp = {
+  _and?: InputMaybe<Array<Whitelist_Bool_Exp>>;
+  _not?: InputMaybe<Whitelist_Bool_Exp>;
+  _or?: InputMaybe<Array<Whitelist_Bool_Exp>>;
+  entries?: InputMaybe<WhitelistEntries_Bool_Exp>;
+  merkleRoot?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "Whitelist". */
+export type Whitelist_Order_By = {
+  entries_aggregate?: InputMaybe<WhitelistEntries_Aggregate_Order_By>;
+  merkleRoot?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "Whitelist" */
+export enum Whitelist_Select_Column {
+  /** column name */
+  MerkleRoot = 'merkleRoot'
+}
+
+/** Streaming cursor of the table "Whitelist" */
+export type Whitelist_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Whitelist_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Whitelist_Stream_Cursor_Value_Input = {
+  merkleRoot?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Boolean expression to compare columns of type "_int2". All fields are combined with logical 'AND'. */
 export type _Int2_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['_int2']['input']>;
@@ -6565,6 +6740,14 @@ export type Offchain_Query = {
   Wallet: Array<Wallet>;
   /** fetch data from the table: "Wallet" using primary key columns */
   Wallet_by_pk?: Maybe<Wallet>;
+  /** fetch data from the table: "Whitelist" */
+  Whitelist: Array<Whitelist>;
+  /** fetch data from the table: "WhitelistEntries" */
+  WhitelistEntries: Array<WhitelistEntries>;
+  /** fetch data from the table: "WhitelistEntries" using primary key columns */
+  WhitelistEntries_by_pk?: Maybe<WhitelistEntries>;
+  /** fetch data from the table: "Whitelist" using primary key columns */
+  Whitelist_by_pk?: Maybe<Whitelist>;
 };
 
 
@@ -6675,6 +6858,35 @@ export type Offchain_QueryWallet_By_PkArgs = {
   address: Scalars['String']['input'];
 };
 
+
+export type Offchain_QueryWhitelistArgs = {
+  distinct_on?: InputMaybe<Array<Whitelist_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Whitelist_Order_By>>;
+  where?: InputMaybe<Whitelist_Bool_Exp>;
+};
+
+
+export type Offchain_QueryWhitelistEntriesArgs = {
+  distinct_on?: InputMaybe<Array<WhitelistEntries_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<WhitelistEntries_Order_By>>;
+  where?: InputMaybe<WhitelistEntries_Bool_Exp>;
+};
+
+
+export type Offchain_QueryWhitelistEntries_By_PkArgs = {
+  merkleRoot: Scalars['String']['input'];
+  whitelistIndex: Scalars['Int']['input'];
+};
+
+
+export type Offchain_QueryWhitelist_By_PkArgs = {
+  merkleRoot: Scalars['String']['input'];
+};
+
 export type Offchain_Subscription = {
   __typename?: 'offchain_subscription';
   /** fetch data from the table: "Account" */
@@ -6723,6 +6935,18 @@ export type Offchain_Subscription = {
   Wallet_by_pk?: Maybe<Wallet>;
   /** fetch data from the table in a streaming manner: "Wallet" */
   Wallet_stream: Array<Wallet>;
+  /** fetch data from the table: "Whitelist" */
+  Whitelist: Array<Whitelist>;
+  /** fetch data from the table: "WhitelistEntries" */
+  WhitelistEntries: Array<WhitelistEntries>;
+  /** fetch data from the table: "WhitelistEntries" using primary key columns */
+  WhitelistEntries_by_pk?: Maybe<WhitelistEntries>;
+  /** fetch data from the table in a streaming manner: "WhitelistEntries" */
+  WhitelistEntries_stream: Array<WhitelistEntries>;
+  /** fetch data from the table: "Whitelist" using primary key columns */
+  Whitelist_by_pk?: Maybe<Whitelist>;
+  /** fetch data from the table in a streaming manner: "Whitelist" */
+  Whitelist_stream: Array<Whitelist>;
 };
 
 
@@ -6887,6 +7111,49 @@ export type Offchain_SubscriptionWallet_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Wallet_Stream_Cursor_Input>>;
   where?: InputMaybe<Wallet_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionWhitelistArgs = {
+  distinct_on?: InputMaybe<Array<Whitelist_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Whitelist_Order_By>>;
+  where?: InputMaybe<Whitelist_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionWhitelistEntriesArgs = {
+  distinct_on?: InputMaybe<Array<WhitelistEntries_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<WhitelistEntries_Order_By>>;
+  where?: InputMaybe<WhitelistEntries_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionWhitelistEntries_By_PkArgs = {
+  merkleRoot: Scalars['String']['input'];
+  whitelistIndex: Scalars['Int']['input'];
+};
+
+
+export type Offchain_SubscriptionWhitelistEntries_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<WhitelistEntries_Stream_Cursor_Input>>;
+  where?: InputMaybe<WhitelistEntries_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionWhitelist_By_PkArgs = {
+  merkleRoot: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionWhitelist_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Whitelist_Stream_Cursor_Input>>;
+  where?: InputMaybe<Whitelist_Bool_Exp>;
 };
 
 /** columns and relationships of "offer" */

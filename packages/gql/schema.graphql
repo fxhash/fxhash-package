@@ -1528,6 +1528,227 @@ input Wallet_stream_cursor_value_input {
   network: BlockchainNetwork
 }
 
+"""
+columns and relationships of "Whitelist"
+"""
+type Whitelist {
+  """An array relationship"""
+  entries(
+    """distinct select on columns"""
+    distinct_on: [WhitelistEntries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [WhitelistEntries_order_by!]
+
+    """filter the rows returned"""
+    where: WhitelistEntries_bool_exp
+  ): [WhitelistEntries!]!
+  merkleRoot: String!
+}
+
+"""
+columns and relationships of "WhitelistEntries"
+"""
+type WhitelistEntries {
+  merkleRoot: String!
+  walletAddress: String!
+
+  """An object relationship"""
+  whitelist: Whitelist!
+  whitelistIndex: Int!
+}
+
+"""
+order by aggregate values of table "WhitelistEntries"
+"""
+input WhitelistEntries_aggregate_order_by {
+  avg: WhitelistEntries_avg_order_by
+  count: order_by
+  max: WhitelistEntries_max_order_by
+  min: WhitelistEntries_min_order_by
+  stddev: WhitelistEntries_stddev_order_by
+  stddev_pop: WhitelistEntries_stddev_pop_order_by
+  stddev_samp: WhitelistEntries_stddev_samp_order_by
+  sum: WhitelistEntries_sum_order_by
+  var_pop: WhitelistEntries_var_pop_order_by
+  var_samp: WhitelistEntries_var_samp_order_by
+  variance: WhitelistEntries_variance_order_by
+}
+
+"""
+order by avg() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_avg_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "WhitelistEntries". All fields are combined with a logical 'AND'.
+"""
+input WhitelistEntries_bool_exp {
+  _and: [WhitelistEntries_bool_exp!]
+  _not: WhitelistEntries_bool_exp
+  _or: [WhitelistEntries_bool_exp!]
+  merkleRoot: String_comparison_exp
+  walletAddress: String_comparison_exp
+  whitelist: Whitelist_bool_exp
+  whitelistIndex: Int_comparison_exp
+}
+
+"""
+order by max() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_max_order_by {
+  merkleRoot: order_by
+  walletAddress: order_by
+  whitelistIndex: order_by
+}
+
+"""
+order by min() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_min_order_by {
+  merkleRoot: order_by
+  walletAddress: order_by
+  whitelistIndex: order_by
+}
+
+"""Ordering options when selecting data from "WhitelistEntries"."""
+input WhitelistEntries_order_by {
+  merkleRoot: order_by
+  walletAddress: order_by
+  whitelist: Whitelist_order_by
+  whitelistIndex: order_by
+}
+
+"""
+select columns of table "WhitelistEntries"
+"""
+enum WhitelistEntries_select_column {
+  """column name"""
+  merkleRoot
+
+  """column name"""
+  walletAddress
+
+  """column name"""
+  whitelistIndex
+}
+
+"""
+order by stddev() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_stddev_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_stddev_pop_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_stddev_samp_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+Streaming cursor of the table "WhitelistEntries"
+"""
+input WhitelistEntries_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: WhitelistEntries_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input WhitelistEntries_stream_cursor_value_input {
+  merkleRoot: String
+  walletAddress: String
+  whitelistIndex: Int
+}
+
+"""
+order by sum() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_sum_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+order by var_pop() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_var_pop_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+order by var_samp() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_var_samp_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+order by variance() on columns of table "WhitelistEntries"
+"""
+input WhitelistEntries_variance_order_by {
+  whitelistIndex: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "Whitelist". All fields are combined with a logical 'AND'.
+"""
+input Whitelist_bool_exp {
+  _and: [Whitelist_bool_exp!]
+  _not: Whitelist_bool_exp
+  _or: [Whitelist_bool_exp!]
+  entries: WhitelistEntries_bool_exp
+  merkleRoot: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "Whitelist"."""
+input Whitelist_order_by {
+  entries_aggregate: WhitelistEntries_aggregate_order_by
+  merkleRoot: order_by
+}
+
+"""
+select columns of table "Whitelist"
+"""
+enum Whitelist_select_column {
+  """column name"""
+  merkleRoot
+}
+
+"""
+Streaming cursor of the table "Whitelist"
+"""
+input Whitelist_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: Whitelist_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input Whitelist_stream_cursor_value_input {
+  merkleRoot: String
+}
+
 scalar _int2
 
 """
@@ -8161,6 +8382,54 @@ type offchain_query {
 
   """fetch data from the table: "Wallet" using primary key columns"""
   Wallet_by_pk(address: String!): Wallet
+
+  """
+  fetch data from the table: "Whitelist"
+  """
+  Whitelist(
+    """distinct select on columns"""
+    distinct_on: [Whitelist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Whitelist_order_by!]
+
+    """filter the rows returned"""
+    where: Whitelist_bool_exp
+  ): [Whitelist!]!
+
+  """
+  fetch data from the table: "WhitelistEntries"
+  """
+  WhitelistEntries(
+    """distinct select on columns"""
+    distinct_on: [WhitelistEntries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [WhitelistEntries_order_by!]
+
+    """filter the rows returned"""
+    where: WhitelistEntries_bool_exp
+  ): [WhitelistEntries!]!
+
+  """
+  fetch data from the table: "WhitelistEntries" using primary key columns
+  """
+  WhitelistEntries_by_pk(merkleRoot: String!, whitelistIndex: Int!): WhitelistEntries
+
+  """fetch data from the table: "Whitelist" using primary key columns"""
+  Whitelist_by_pk(merkleRoot: String!): Whitelist
 }
 
 type offchain_subscription {
@@ -8456,6 +8725,82 @@ type offchain_subscription {
     """filter the rows returned"""
     where: Wallet_bool_exp
   ): [Wallet!]!
+
+  """
+  fetch data from the table: "Whitelist"
+  """
+  Whitelist(
+    """distinct select on columns"""
+    distinct_on: [Whitelist_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Whitelist_order_by!]
+
+    """filter the rows returned"""
+    where: Whitelist_bool_exp
+  ): [Whitelist!]!
+
+  """
+  fetch data from the table: "WhitelistEntries"
+  """
+  WhitelistEntries(
+    """distinct select on columns"""
+    distinct_on: [WhitelistEntries_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [WhitelistEntries_order_by!]
+
+    """filter the rows returned"""
+    where: WhitelistEntries_bool_exp
+  ): [WhitelistEntries!]!
+
+  """
+  fetch data from the table: "WhitelistEntries" using primary key columns
+  """
+  WhitelistEntries_by_pk(merkleRoot: String!, whitelistIndex: Int!): WhitelistEntries
+
+  """
+  fetch data from the table in a streaming manner: "WhitelistEntries"
+  """
+  WhitelistEntries_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [WhitelistEntries_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: WhitelistEntries_bool_exp
+  ): [WhitelistEntries!]!
+
+  """fetch data from the table: "Whitelist" using primary key columns"""
+  Whitelist_by_pk(merkleRoot: String!): Whitelist
+
+  """
+  fetch data from the table in a streaming manner: "Whitelist"
+  """
+  Whitelist_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [Whitelist_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: Whitelist_bool_exp
+  ): [Whitelist!]!
 }
 
 """
