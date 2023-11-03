@@ -425,45 +425,6 @@ export type Media_Bool_Exp = {
   uploaderId?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "Media" */
-export enum Media_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  MediaPkey = 'Media_pkey'
-}
-
-/** input type for inserting data into table "Media" */
-export type Media_Insert_Input = {
-  bucketId?: InputMaybe<Scalars['String']['input']>;
-  etag?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  project?: InputMaybe<ProjectMedia_Arr_Rel_Insert_Input>;
-  s3key?: InputMaybe<Scalars['String']['input']>;
-  size?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** response of any mutation on the table "Media" */
-export type Media_Mutation_Response = {
-  __typename?: 'Media_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int']['output'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Media>;
-};
-
-/** input type for inserting object relation for remote table "Media" */
-export type Media_Obj_Rel_Insert_Input = {
-  data: Media_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Media_On_Conflict>;
-};
-
-/** on_conflict condition type for table "Media" */
-export type Media_On_Conflict = {
-  constraint: Media_Constraint;
-  update_columns?: Array<Media_Update_Column>;
-  where?: InputMaybe<Media_Bool_Exp>;
-};
-
 /** Ordering options when selecting data from "Media". */
 export type Media_Order_By = {
   createdAt?: InputMaybe<Order_By>;
@@ -513,12 +474,6 @@ export type Media_Stream_Cursor_Value_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
   uploaderId?: InputMaybe<Scalars['uuid']['input']>;
 };
-
-/** placeholder for update columns of table "Media" (current role has no relevant permissions) */
-export enum Media_Update_Column {
-  /** placeholder (do not use) */
-  Placeholder = '_PLACEHOLDER'
-}
 
 /** columns and relationships of "Profile" */
 export type Profile = {
@@ -747,7 +702,6 @@ export type ProjectMedia_Inc_Input = {
 /** input type for inserting data into table "ProjectMedia" */
 export type ProjectMedia_Insert_Input = {
   index?: InputMaybe<Scalars['smallint']['input']>;
-  media?: InputMaybe<Media_Obj_Rel_Insert_Input>;
   mediaId?: InputMaybe<Scalars['uuid']['input']>;
   project?: InputMaybe<Project_Obj_Rel_Insert_Input>;
   projectId?: InputMaybe<Scalars['uuid']['input']>;
@@ -6558,10 +6512,6 @@ export type Offchain_Mutation_Frontend = {
   __typename?: 'offchain_mutation_frontend';
   /** delete data from the table: "ProjectMedia" */
   delete_ProjectMedia?: Maybe<ProjectMedia_Mutation_Response>;
-  /** insert data into the table: "Media" */
-  insert_Media?: Maybe<Media_Mutation_Response>;
-  /** insert a single row into the table: "Media" */
-  insert_Media_one?: Maybe<Media>;
   /** insert data into the table: "Project" */
   insert_Project?: Maybe<Project_Mutation_Response>;
   /** insert data into the table: "ProjectMedia" */
@@ -6597,18 +6547,6 @@ export type Offchain_Mutation_Frontend = {
 
 export type Offchain_Mutation_FrontendDelete_ProjectMediaArgs = {
   where: ProjectMedia_Bool_Exp;
-};
-
-
-export type Offchain_Mutation_FrontendInsert_MediaArgs = {
-  objects: Array<Media_Insert_Input>;
-  on_conflict?: InputMaybe<Media_On_Conflict>;
-};
-
-
-export type Offchain_Mutation_FrontendInsert_Media_OneArgs = {
-  object: Media_Insert_Input;
-  on_conflict?: InputMaybe<Media_On_Conflict>;
 };
 
 

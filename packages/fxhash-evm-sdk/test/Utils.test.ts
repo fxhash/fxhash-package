@@ -19,7 +19,7 @@ import {
 dotenvConfig()
 
 const hasuraClient = createClient({
-  url: config.apis.hasura,
+  url: config.apis.hasuraGql,
   headers: () => ({
     "x-hasura-admin-secret": "changeme",
   }),

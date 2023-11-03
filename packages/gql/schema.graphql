@@ -491,58 +491,6 @@ input Media_bool_exp {
   uploaderId: uuid_comparison_exp
 }
 
-"""
-unique or primary key constraints on table "Media"
-"""
-enum Media_constraint {
-  """
-  unique or primary key constraint on columns "id"
-  """
-  Media_pkey
-}
-
-"""
-input type for inserting data into table "Media"
-"""
-input Media_insert_input {
-  bucketId: String
-  etag: String
-  name: String
-  project: ProjectMedia_arr_rel_insert_input
-  s3key: String
-  size: Int
-}
-
-"""
-response of any mutation on the table "Media"
-"""
-type Media_mutation_response {
-  """number of rows affected by the mutation"""
-  affected_rows: Int!
-
-  """data from the rows affected by the mutation"""
-  returning: [Media!]!
-}
-
-"""
-input type for inserting object relation for remote table "Media"
-"""
-input Media_obj_rel_insert_input {
-  data: Media_insert_input!
-
-  """upsert condition"""
-  on_conflict: Media_on_conflict
-}
-
-"""
-on_conflict condition type for table "Media"
-"""
-input Media_on_conflict {
-  constraint: Media_constraint!
-  update_columns: [Media_update_column!]! = []
-  where: Media_bool_exp
-}
-
 """Ordering options when selecting data from "Media"."""
 input Media_order_by {
   createdAt: order_by
@@ -602,14 +550,6 @@ input Media_stream_cursor_value_input {
   size: Int
   updatedAt: timestamptz
   uploaderId: uuid
-}
-
-"""
-placeholder for update columns of table "Media" (current role has no relevant permissions)
-"""
-enum Media_update_column {
-  """placeholder (do not use)"""
-  _PLACEHOLDER
 }
 
 """
@@ -888,7 +828,6 @@ input type for inserting data into table "ProjectMedia"
 """
 input ProjectMedia_insert_input {
   index: smallint
-  media: Media_obj_rel_insert_input
   mediaId: uuid
   project: Project_obj_rel_insert_input
   projectId: uuid
@@ -7985,28 +7924,6 @@ type offchain_mutation_frontend {
     """filter the rows which have to be deleted"""
     where: ProjectMedia_bool_exp!
   ): ProjectMedia_mutation_response
-
-  """
-  insert data into the table: "Media"
-  """
-  insert_Media(
-    """the rows to be inserted"""
-    objects: [Media_insert_input!]!
-
-    """upsert condition"""
-    on_conflict: Media_on_conflict
-  ): Media_mutation_response
-
-  """
-  insert a single row into the table: "Media"
-  """
-  insert_Media_one(
-    """the row to be inserted"""
-    object: Media_insert_input!
-
-    """upsert condition"""
-    on_conflict: Media_on_conflict
-  ): Media
 
   """
   insert data into the table: "Project"
