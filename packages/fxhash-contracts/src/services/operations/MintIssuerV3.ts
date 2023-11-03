@@ -81,7 +81,10 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
         })
       case "directory": {
         const formatted = Object.fromEntries(
-          Object.entries(ins.files).map(([_, buf]) => [_, uint8hex(buf)])
+          Object.entries(ins.files).map(([_, buf]) => [
+            _,
+            uint8hex(buf as Uint8Array),
+          ])
         )
         return this.onchfsKt.methodsObject.create_directory(formatted)
       }
@@ -106,7 +109,6 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
       method_id: mapReserveDefinition[reserve.method].id,
       data: packReserveData(reserve),
     }))
-
 
     const params = {
       amount: distribution.editions!,
@@ -134,9 +136,7 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
             }
           : {
               type: 0, // IPFS
-              value: stringToByteString(
-                this.params.metadata.generativeUri
-              ),
+              value: stringToByteString(this.params.metadata.generativeUri),
             },
       },
       input_bytes_size: this.params.data.params!.inputBytesSize,
