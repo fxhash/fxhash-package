@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2022",
+    "module": "Node16",
+    "lib": ["ES2022"],
     "moduleResolution": "node",
-    "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": "./",
-    "jsx": "react-jsx",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "alwaysStrict": true,
@@ -17,17 +18,11 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "strictNullChecks": false,
-    "isolatedModules": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "strictNullChecks": false
   },
-  "include": ["src/**/*"],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*", "__tests__/**/*"],
+  "exclude": ["src/static/**"]
 }

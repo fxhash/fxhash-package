@@ -1,6 +1,7 @@
 export interface IFxhashApis {
   website: string
   main: string
+  hasura: string
   file: string
   fsEmulator: string
   extract: string
@@ -32,10 +33,11 @@ export interface IFxhashApis {
 export const fxhashDevApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
+  hasura: "https://api.v2.dev.fxhash-dev.xyz",
   file: "https://file-api.fxhash-dev.xyz",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
-  media: "https://media.fxhash-dev.xyz",
+  media: "https://media.dev.fxhash-dev.xyz",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
@@ -62,10 +64,19 @@ export const fxhashDevApis: IFxhashApis = {
   hasura: "http://localhost:8888/v1/graphql",
 }
 
+// list of APIs for when fxhash is ran locally
+export const fxhashLocalApis: IFxhashApis = {
+  // todo: eventually, find a better way to inject the values from the
+  //       docker-compose, maybe outside of this package idk
+  ...fxhashDevApis,
+  hasura: "http://host.docker.internal:8888",
+}
+
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
+  hasura: "https://api.v2.fxhash.xyz",
   file: "https://file-api.fxhash.xyz",
   fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
