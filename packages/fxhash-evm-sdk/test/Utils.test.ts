@@ -4,9 +4,7 @@ import {
   getWhitelistTree,
   uploadWhitelist,
 } from "@/utils/whitelist"
-import { createClient } from "@fxhash/hasura"
 import { config as dotenvConfig } from "dotenv"
-import { config } from "@fxhash/config"
 import {
   concat,
   fromHex,
@@ -17,13 +15,6 @@ import {
 } from "viem"
 
 dotenvConfig()
-
-const hasuraClient = createClient({
-  url: config.apis.hasuraGql,
-  headers: () => ({
-    "x-hasura-admin-secret": "changeme",
-  }),
-})
 
 describe("createProject", () => {
   it("should correctly predict ticket address", async () => {
@@ -57,41 +48,23 @@ describe("createProject", () => {
   it("should correctly set a whitelist with api", async () => {
     const address0 = "0xBF0BbF31149e8FA7183Cb6eD96a1D2Ab947B8368"
     const address1 = "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42"
-    await hasuraClient.mutation({
-      insert_Account: {
-        __args: {
-          objects: [
-            {
-              id: "0",
-              username: "test1",
-              status: "ACTIVE",
-              Wallets: {
-                data: [
-                  {
-                    address: address0,
-                    network: "ETHEREUM",
-                  },
-                ],
-              },
-            },
-            {
-              id: "1",
-              username: "test2",
-              status: "ACTIVE",
-              Wallets: {
-                data: [
-                  {
-                    address: address1,
-                    network: "ETHEREUM",
-                  },
-                ],
-              },
-            },
-          ],
-        },
-        affected_rows: true,
-      },
-    })
+
+    //! Note:
+    // This test suite used to write accounts directly to the database, which
+    // creates a few issues:
+    // - we cannot expose the admin schema to a public-facing package
+    // - ideally a test suite can run in isolation, in this case we need the
+    //   hasura instance to run locally, and it will interfere with the data
+    //   without providing an isolated environment
+    //   best practice would suggest to run these test in an integration suite
+    //   where we initialize a self-container environment
+    //   ideally we'll want this to fully run inside docker down the line,
+    //   alongside all the integration tests
+
+    // await hasuraClient.mutation({
+    //   // ... hidding
+    // })
+
     const amount = 1
     const whitelist: Whitelist = new Map()
     whitelist.set(address0, amount)
