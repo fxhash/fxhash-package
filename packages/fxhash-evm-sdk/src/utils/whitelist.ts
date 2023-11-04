@@ -1,6 +1,11 @@
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree"
-import { hasuraClient } from "@/services/Hasura"
 import { ReserveListEntry } from "./minters"
+import { gqlClient } from "@fxhash/gql-client"
+import {
+  Mu_CreateWhitelist,
+  Qu_GetReserves,
+  Qu_GetWhitelists,
+} from "@fxhash/gql"
 
 /**
  * High level wrapper time for the whitelist for easier use in the UI
@@ -117,22 +122,15 @@ export function inflateWhitelist(
 export async function uploadWhitelist(
   whitelist: Whitelist
 ): Promise<`0x${string}`> {
-  const uploadWhitelist = await hasuraClient.mutation({
-    set_whitelist: {
-      __args: {
-        whitelist: flattenWhitelist(whitelist),
-      },
-      __scalar: true,
-    },
+  const { data } = await gqlClient.mutation(Mu_CreateWhitelist, {
+    whitelist: flattenWhitelist(whitelist),
   })
-  if (uploadWhitelist.set_whitelist.success) {
+  if (data.set_whitelist.success) {
     console.log("Whitelist uploaded successfully")
   } else {
-    throw new Error(
-      "Failed to upload whitelist: " + uploadWhitelist.set_whitelist.message
-    )
+    throw new Error("Failed to upload whitelist: " + data.set_whitelist.message)
   }
-  return uploadWhitelist.set_whitelist.merkleRoot as `0x${string}`
+  return data.set_whitelist.merkleRoot as `0x${string}`
 }
 
 /**
@@ -181,29 +179,21 @@ export function getUserWhitelistIndex(
 export async function getWhitelist(
   merkleRoot: string
 ): Promise<MerkleTreeWhitelist[]> {
-  const whitelistsResults = await hasuraClient.query({
-    Whitelist: {
-      __args: {
-        where: {
-          merkleRoot: {
-            _eq: merkleRoot,
-          },
-        },
-      },
-      merkleRoot: true,
-      Whitelist_WhitelistEntries: {
-        walletAddress: true,
+  const { data } = await gqlClient.query(Qu_GetWhitelists, {
+    where: {
+      merkleRoot: {
+        _eq: merkleRoot,
       },
     },
   })
-  if (whitelistsResults.Whitelist.length === 0) {
+  if (data.offchain.Whitelist.length === 0) {
     return undefined
   } else {
-    const whitelists = whitelistsResults.Whitelist.map(whitelist => {
+    const whitelists = data.offchain.Whitelist.map(whitelist => {
       let whitelistIndex = 0
       return {
         merkleRoot: whitelist.merkleRoot as `0x${string}`,
-        whitelist: whitelist.Whitelist_WhitelistEntries.map(entry => {
+        whitelist: whitelist.entries.map(entry => {
           const flattenedEntry = [
             whitelistIndex.toString(),
             entry.walletAddress,
@@ -227,22 +217,17 @@ export async function getWhitelist(
 export async function getMerkleRootForToken(
   token: string
 ): Promise<string | undefined> {
-  const merkleRoot = await hasuraClient.query({
-    reserve: {
-      data: true,
-      __args: {
-        where: {
-          token_id: {
-            _eq: token,
-          },
-        },
+  const { data: results } = await gqlClient.query(Qu_GetReserves, {
+    where: {
+      token_id: {
+        _eq: token,
       },
     },
   })
-  if (merkleRoot.reserve.length === 0) {
+  if (results?.onchain?.reserve.length === 0) {
     return undefined
   } else {
-    const data = merkleRoot.reserve[0].data as WhitelistReserveData
+    const data = results?.onchain.reserve[0].data as WhitelistReserveData
     return data.merkleRoot
   }
 }

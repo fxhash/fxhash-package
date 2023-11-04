@@ -1,6 +1,11 @@
 import { ethTestnetApis, IEthApis } from "api/eth"
 import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
-import { IFxhashApis, fxhashDevApis, fxhashPrdApis } from "api/fxhash"
+import {
+  IFxhashApis,
+  fxhashDevApis,
+  fxhashLocalApis,
+  fxhashPrdApis,
+} from "api/fxhash"
 import {
   ITezosContracts,
   tezosMainnetContracts,
@@ -22,7 +27,7 @@ export interface IFxhashEnvConfig {
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth"
 export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd"
+export type TEnv = "dev" | "prd" | "local"
 
 type TBlockchainContacts = {
   [B in TBlockchain]: {
@@ -110,6 +115,14 @@ export const fxhashConfig: IFxhashConfig = {
     },
   },
   envs: {
+    local: {
+      apis: fxhashLocalApis,
+      config: {
+        envName: "local",
+        gtMinPrice: "0",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+      },
+    },
     dev: {
       apis: fxhashDevApis,
       config: {
@@ -129,5 +142,6 @@ export const fxhashConfig: IFxhashConfig = {
   },
 }
 
+export const localConfig = getConfigForEnv("local")
 export const devConfig = getConfigForEnv("dev")
 export const prdConfig = getConfigForEnv("prd")
