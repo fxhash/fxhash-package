@@ -2,7 +2,7 @@ import "viem/window"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useWalletClient } from "wagmi"
 import { PublicClient } from "viem"
-import { EthereumWalletManager } from "@fxhash/evm-sdk"
+import { EthereumWalletManager } from "@fxhash/eth-sdk"
 import { invariant } from "@fxhash/contracts-shared"
 
 interface UserContextType {
