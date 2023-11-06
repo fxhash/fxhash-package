@@ -8,23 +8,24 @@ import {
   success,
 } from "@fxhash/contracts-shared"
 import {
-  Address,
   PublicClient,
   TransactionReceipt,
   UserRejectedRequestError,
   WalletClient,
 } from "viem"
-import { mainnet, sepolia, hardhat } from "viem/chains"
+import { mainnet, sepolia, hardhat, goerli } from "viem/chains"
+import { isTransactionReceipt } from "./operations/EthCommon"
+import Safe from "@safe-global/protocol-kit"
+import { getSafeSDK } from "@/services/Safe"
 import { TEthereumContractOperation } from "./operations"
+import { ethers } from "ethers"
 
 //list of supported chains by the SDK
-export const chains = [mainnet, sepolia, hardhat]
+export const chains = [mainnet, sepolia, goerli, hardhat]
 //Since the configuration of SDK is only for one chain at a time, we select the one configured
 export const CURRENT_CHAIN = chains.find(
   chain => chain.name === config.eth.config.network
 )
-
-const rpcUrls = config.eth.apis.rpcs
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -55,6 +56,8 @@ export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
   public walletClient: WalletClient
   public publicClient: PublicClient
+  public signer: ethers.providers.JsonRpcSigner | undefined
+  public safe: Safe | undefined
   private rpcNodes: string[]
 
   constructor(params: EthereumWalletManagerParams) {
@@ -88,12 +91,35 @@ export class EthereumWalletManager extends WalletManager {
     }
   }
 
+  /**
+   * The `connectSafe` function connects to a Safe contract using a given address and signer, and returns
+   * the address of the connected Safe.
+   * @param {string} safeAddress - A string representing the address of the safe. This is the address of
+   * the smart contract that manages the safe and holds the funds.
+   * @param signer - The `signer` parameter is of type `ethers.providers.JsonRpcSigner`. It represents a
+   * signer object that can be used to sign transactions and messages using a private key.
+   * @returns a `PromiseResult<string, Error>`.
+   */
+  async connectSafe(
+    safeAddress: string,
+    signer: ethers.providers.JsonRpcSigner
+  ): PromiseResult<string, Error> {
+    try {
+      const safeSdk = await getSafeSDK(safeAddress, signer)
+      this.safe = safeSdk
+      this.signer = signer
+      return success(await safeSdk.getAddress())
+    } catch (error) {
+      return failure(new Error())
+    }
+  }
+
   async sendTransaction<TParams>(
     OperationClass: TEthereumContractOperation<TParams>,
     params: TParams
   ): PromiseResult<
     {
-      operation: TransactionReceipt
+      operation: string | TransactionReceipt
       message: string
     },
     UserRejectedError | PendingSigningRequestError

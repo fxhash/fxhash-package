@@ -184,7 +184,7 @@ export async function predictTicketContractAddress(
       concat([
         fromHex("0x3d602d80600a3d3981f3363d3d373d3d3d363d73", "bytes"),
         fromHex(
-          config.eth.contracts.mint_ticket_impl_V1 as `0x${string}`,
+          config.eth.contracts.mint_ticket_impl_v1 as `0x${string}`,
           "bytes"
         ),
         fromHex("0x5af43d82803e903d91602b57fd5bf3", "bytes"),
@@ -224,6 +224,12 @@ export async function getTicketFactoryUserNonce(
   return nonce
 }
 
+/**
+ * The function checks if an object is a valid transaction receipt by verifying the presence and types
+ * of the transactionHash and blockHash properties.
+ * @param {any} obj - The parameter `obj` is of type `any`, which means it can be any type of object.
+ * @returns a boolean value.
+ */
 export function isTransactionReceipt(obj: any): obj is TransactionReceipt {
   return (
     obj &&

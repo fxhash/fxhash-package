@@ -94,7 +94,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethTestnetContracts,
         config: {
-          network: "Sepolia",
+          network: "Goerli",
         },
         apis: ethTestnetApis,
       },

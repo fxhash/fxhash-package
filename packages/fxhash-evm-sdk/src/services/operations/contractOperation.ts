@@ -14,7 +14,20 @@ export abstract class EthereumContractOperation<Params>
   }
 
   abstract prepare(): Promise<void>
-  abstract call(): Promise<TransactionReceipt>
+
+  /**
+   * The actual calls to the contracts, which results in some Transaction
+   * Wallet Operation and can be observed to track the success/failure of
+   * the transaction emitted
+   */
+  abstract call(): Promise<TransactionReceipt | string>
+
+  /**
+   * Each Contract Operation should implement a success message based on the
+   * operation parameters, and so to provide meaningful feedback to users on
+   * different parts of the front.
+   * todo: define appropriate type
+   */
   abstract success(): string
 }
 

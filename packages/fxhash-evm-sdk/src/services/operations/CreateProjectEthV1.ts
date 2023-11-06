@@ -81,7 +81,7 @@ export type ScriptyHTMLTag = {
  * @dev {ReceiverEntry[]} royaltiesReceivers should use a base of 10000 for 100%, and the total of all
  * the entries SHOULD BE LOWER than 10000
  */
-export type TMintEthIssuerV1OperationParams = {
+export type TCreateProjectEthV1OperationParams = {
   initInfo: {
     name: string
     symbol: string
@@ -112,7 +112,7 @@ export type TMintEthIssuerV1OperationParams = {
 /**
  * Call the Issuer factory to create a new project
  */
-export class MintEthIssuerV1Operation extends EthereumContractOperation<TMintEthIssuerV1OperationParams> {
+export class CreateProjectEthV1Operation extends EthereumContractOperation<TCreateProjectEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
