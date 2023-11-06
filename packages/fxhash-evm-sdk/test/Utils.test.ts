@@ -13,6 +13,10 @@ import {
   toBytes,
   toHex,
 } from "viem"
+import {
+  ReceiverEntry,
+  preparePrimaryReceivers,
+} from "@/services/operations/EthCommon"
 
 dotenvConfig()
 
@@ -72,5 +76,34 @@ describe("createProject", () => {
     const tree = getWhitelistTree(flattenWhitelist(whitelist))
     const uploadRoot = await uploadWhitelist(whitelist, "0x123")
     expect(uploadRoot).toEqual(tree.root)
+  })
+
+  it("should correctly add fee  and rebalance receivers", async () => {
+    const receivers: ReceiverEntry[] = [
+      {
+        account: "0x1",
+        value: 3000,
+      },
+      {
+        account: "0x2",
+        value: 3000,
+      },
+      {
+        account: "0x3",
+        value: 4000,
+      },
+    ]
+
+    const feeReceiver: ReceiverEntry = {
+      account: "0x4",
+      value: 500,
+    }
+    const receiversWithFee = preparePrimaryReceivers(receivers, feeReceiver)
+    const total = receiversWithFee.reduce((acc, entry) => acc + entry.value, 0)
+    expect(total).toEqual(1_000_000)
+    expect(receiversWithFee[0].value).toEqual(285_000)
+    expect(receiversWithFee[1].value).toEqual(285_000)
+    expect(receiversWithFee[2].value).toEqual(380_000)
+    expect(receiversWithFee[3].value).toEqual(50_000)
   })
 })

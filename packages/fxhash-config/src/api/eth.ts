@@ -5,7 +5,7 @@ export interface IEthApis {
 }
 
 export const ethTestnetApis: IEthApis = {
-  rpcs: ["https://rpc-sepolia.fxhash-dev.xyz"],
+  rpcs: ["https://ethereum-sepolia-rpc.allthatnode.com"],
   reservoir: "https://api-sepolia.reservoir.tools",
   whitelist: "http://localhost:9999/whitelist/new",
 }

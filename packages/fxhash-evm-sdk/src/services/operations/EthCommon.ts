@@ -14,7 +14,14 @@ import {
 } from "viem"
 
 import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
-import { WalletManager } from "../Wallet"
+import { Whitelist } from "@/utils"
+import { EthereumWalletManager } from "@/services/Wallet"
+
+//Type definition for the primary and royalties receivers
+export interface ReceiverEntry {
+  account: string
+  value: number
+}
 
 //Type definition of the parameters for the simulateContract function
 export interface SimulateAndExecuteContractRequest {
@@ -24,6 +31,60 @@ export interface SimulateAndExecuteContractRequest {
   args: any[]
   account: string
   value?: bigint
+}
+
+export interface MintInfo {
+  minter: string
+  reserveInfo: {
+    startTime: number
+    endTime: number
+    allocation: bigint
+  }
+  params: string
+}
+
+export interface InitInfo {
+  name: string
+  symbol: string
+  primaryReceiver?: string
+  randomizer: string
+  renderer: string
+  tagIds: number[]
+}
+
+export interface ProjectInfo {
+  onchain: boolean
+  mintEnabled: boolean
+  burnEnabled: boolean
+  maxSupply: bigint
+  inputSize: number
+  contractURI: string
+}
+
+export interface MetadataInfo {
+  baseURI: string
+  imageURI: string
+  onchainData: string
+}
+
+export interface ReserveInfo {
+  startTime: number
+  endTime: number
+  allocation: bigint
+}
+
+export interface FixedPriceParams {
+  price: bigint
+  whitelist?: Whitelist
+  mintPassSigner?: string
+}
+
+export interface DutchAuctionParams {
+  prices: bigint[]
+  stepLength: bigint
+  refunded: boolean
+  whitelist?: Whitelist
+  mintPassSigner?: string
 }
 
 /**
@@ -65,7 +126,7 @@ export function handleContractError(error: any): never {
  * @returns a Promise that resolves to a TransactionReceipt object.
  */
 export async function simulateAndExecuteContract(
-  walletManager: WalletManager,
+  walletManager: EthereumWalletManager,
   args: SimulateAndExecuteContractRequest
 ): Promise<TransactionReceipt> {
   //fetch the account from the wallet
@@ -94,9 +155,19 @@ export async function simulateAndExecuteContract(
   }
 }
 
+/**
+ * The function `predictTicketContractAddress` predicts the contract address for a ticket contract
+ * based on a given nonce address and wallet manager.
+ * @param {string} nonceAddress - The `nonceAddress` parameter is a string representing the address
+ * used to generate a unique nonce for the contract address.
+ * @param {WalletManager} walletManager - The `walletManager` parameter is an instance of the
+ * `WalletManager` class. It is used to interact with the Ethereum network and perform wallet-related
+ * operations such as signing transactions and retrieving account information.
+ * @returns a Promise that resolves to the perdicted contract address
+ */
 export async function predictTicketContractAddress(
   nonceAddress: string,
-  walletManager: WalletManager
+  walletManager: EthereumWalletManager
 ): Promise<string> {
   const salt = encodeAbiParameters(
     [
@@ -125,9 +196,20 @@ export async function predictTicketContractAddress(
   })
 }
 
+/**
+ * The function `getTicketFactoryUserNonce` retrieves the nonce for a given address from a ticket
+ * factory contract.
+ * @param {string} nonceAddress - The `nonceAddress` parameter is a string representing the address for
+ * which you want to retrieve the nonce. This address is used as an input to the `nonces` function of
+ * the `ticketFactory` contract.
+ * @param {WalletManager} walletManager - The `walletManager` parameter is an object that contains the
+ * wallet client and public client. It is used to interact with the blockchain and perform operations
+ * such as reading contract data and sending transactions.
+ * @returns a Promise that resolves to the nonce as bigint
+ */
 export async function getTicketFactoryUserNonce(
   nonceAddress: string,
-  walletManager: WalletManager
+  walletManager: EthereumWalletManager
 ): Promise<bigint> {
   const ticketFactory = getContract({
     address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
@@ -140,4 +222,69 @@ export async function getTicketFactoryUserNonce(
     throw Error("Could not get nonce")
   }
   return nonce
+}
+
+export function isTransactionReceipt(obj: any): obj is TransactionReceipt {
+  return (
+    obj &&
+    typeof obj.transactionHash === "string" &&
+    typeof obj.blockHash === "string"
+  )
+}
+
+export function sortReceiversAlphabetically(
+  accounts: ReceiverEntry[]
+): ReceiverEntry[] {
+  return accounts.sort((a, b) => a.account.localeCompare(b.account))
+}
+
+/**
+ * The `preparePrimaryReceivers` function prepares a list of primary receivers by sorting them alphabetically,
+ * distributing a fee proportionally among them and adjusting the values to ensure the total is 10,000.
+ * It also transforms the values to base 1_000_000.
+ * @param {ReceiverEntry[]} receivers - An array of objects representing the primary receivers. Each
+ * object has a "value" property indicating the amount to be received by that receiver.
+ * @param {ReceiverEntry} feeReceiver - The `feeReceiver` parameter is an object that represents the
+ * receiver who will receive the fee. It has the following properties:
+ * @returns an array of ReceiverEntry objects.
+ */
+export function preparePrimaryReceivers(
+  receivers: ReceiverEntry[],
+  feeReceiver: ReceiverEntry
+): ReceiverEntry[] {
+  // Calculate the original total value before fee distribution
+  const originalTotal = receivers.reduce(
+    (sum, account) => sum + account.value,
+    0
+  )
+  receivers = sortReceiversAlphabetically(receivers)
+  /**
+   * Check that the total is 10_000
+   * This is a sanity check to make sure that the total is 100%
+   */
+  if (originalTotal !== 10_000) {
+    throw Error("Primary receivers total must be 10000")
+  }
+
+  // Calculate the fee ratio for each account
+  const feeRatio = feeReceiver.value / originalTotal
+
+  // Subtract the fee from each account proportionally and transform it to base 1_000_000
+  receivers = receivers.map(account => ({
+    ...account,
+    value: (account.value - account.value * feeRatio) * 100,
+  }))
+
+  // Add the fee account with its full value
+  receivers.push(feeReceiver)
+
+  // Due to floating point precision, there might be a small discrepancy
+  // from the intended total, so we can adjust the last account slightly
+  const finalTotal = receivers.reduce((sum, account) => sum + account.value, 0)
+  const discrepancy = 1_000_000 - finalTotal
+  if (discrepancy !== 0) {
+    receivers[receivers.length - 1].value += discrepancy
+  }
+
+  return receivers
 }
