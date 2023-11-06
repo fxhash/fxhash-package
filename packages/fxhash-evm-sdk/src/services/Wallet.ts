@@ -14,12 +14,6 @@ import {
   http,
 } from "viem"
 import { mainnet, sepolia, hardhat } from "viem/chains"
-import { createConfig, configureChains } from "wagmi"
-import { type WalletClient } from "wagmi"
-import { mainnet, sepolia, hardhat } from "wagmi/chains"
-import { Config } from "wagmi"
-import { getDefaultConfig } from "connectkit"
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 import { BlockchainNetwork } from "@/types/entities/Account"
 
 //list of supported chains by the SDK
@@ -80,16 +74,6 @@ export function getPublicClient(): PublicClient {
  */
 const formatSignInPayload = (address: string): string =>
   `${SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
-
-//Wrapper to get the proper provider for the chain with the corresponding configured RPC URL
-export function getProvider(rpcUrl: string): any {
-  return jsonRpcProvider({
-    rpc: chain => {
-      // eslint-disable-next-line no-unused-labels
-      return { http: rpcUrl }
-    },
-  })
-}
 
 //Wrapper to provider the WAGMI config for the wallet
 export function getConfig(): WagmiConfig {
