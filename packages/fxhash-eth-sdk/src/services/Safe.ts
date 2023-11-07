@@ -1,6 +1,6 @@
 import SafeApiKit from "@safe-global/api-kit"
 import Safe, { EthersAdapter, SafeFactory } from "@safe-global/protocol-kit"
-import { ethers } from "ethers"
+import { ethers } from "ethers-v5"
 import { config } from "@fxhash/config"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { EthereumWalletManager } from "./Wallet"

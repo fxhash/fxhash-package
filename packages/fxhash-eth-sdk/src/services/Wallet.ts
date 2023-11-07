@@ -14,11 +14,10 @@ import {
   WalletClient,
 } from "viem"
 import { mainnet, sepolia, hardhat, goerli } from "viem/chains"
-import { isTransactionReceipt } from "./operations/EthCommon"
 import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "@/services/Safe"
 import { TEthereumContractOperation } from "./operations"
-import { ethers } from "ethers"
+import { ethers } from "ethers-v5"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, goerli, hardhat]
