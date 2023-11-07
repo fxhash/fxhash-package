@@ -1,5 +1,6 @@
 import { config } from "@fxhash/config"
 import { createClient } from "@reservoir0x/reservoir-sdk"
+import { CURRENT_CHAIN } from "./Wallet"
 
 //API key used for interacting with Reservoir API
 export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
@@ -23,7 +24,7 @@ export enum API_METHODS {
 createClient({
   chains: [
     {
-      id: parseInt(config.config.ETH_CHAIN_ID),
+      id: CURRENT_CHAIN.id,
       baseApiUrl: config.eth.apis.reservoir,
       active: true,
       apiKey: RESERVOIR_API_KEY,
