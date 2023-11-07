@@ -1,4 +1,4 @@
-export const ABI = [
+export const FX_TICKETS_ABI = [
   {
     inputs: [
       {
@@ -62,7 +62,22 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "NewOwnerIsZeroAddress",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NoHandoverRequest",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "NotAuthorized",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "Unauthorized",
     type: "error",
   },
   {
@@ -139,6 +154,25 @@ export const ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "_fromTokenId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_toTokenId",
+        type: "uint256",
+      },
+    ],
+    name: "BatchMetadataUpdate",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "uint256",
         name: "_tokenId",
@@ -151,10 +185,22 @@ export const ABI = [
         type: "address",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint128",
         name: "_newPrice",
         type: "uint128",
+      },
+      {
+        indexed: false,
+        internalType: "uint48",
+        name: "_newForeclosureTime",
+        type: "uint48",
+      },
+      {
+        indexed: false,
+        internalType: "uint80",
+        name: "_newDepositAmount",
+        type: "uint80",
       },
       {
         indexed: false,
@@ -182,16 +228,16 @@ export const ABI = [
         type: "address",
       },
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
+        indexed: false,
+        internalType: "uint48",
+        name: "_newForeclosure",
+        type: "uint48",
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "_newForeclosure",
-        type: "uint256",
+        internalType: "uint80",
+        name: "_newTotalDeposit",
+        type: "uint80",
       },
     ],
     name: "Deposited",
@@ -214,9 +260,48 @@ export const ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "MetadataUpdate",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
-        name: "previousOwner",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverCanceled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldOwner",
         type: "address",
       },
       {
@@ -252,13 +337,13 @@ export const ABI = [
         type: "uint256",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint128",
         name: "_newPrice",
         type: "uint128",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint128",
         name: "_newForeclosure",
         type: "uint128",
@@ -464,25 +549,6 @@ export const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "balances",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "baseURI",
     outputs: [
@@ -509,6 +575,13 @@ export const ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "cancelOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -522,6 +595,19 @@ export const ABI = [
       },
     ],
     name: "claim",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "completeOwnershipHandover",
     outputs: [],
     stateMutability: "payable",
     type: "function",
@@ -603,6 +689,25 @@ export const ABI = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_account",
+        type: "address",
+      },
+    ],
+    name: "getBalance",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -895,9 +1000,9 @@ export const ABI = [
     name: "minters",
     outputs: [
       {
-        internalType: "bool",
+        internalType: "uint8",
         name: "",
-        type: "bool",
+        type: "uint8",
       },
     ],
     stateMutability: "view",
@@ -922,7 +1027,7 @@ export const ABI = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "result",
         type: "address",
       },
     ],
@@ -943,6 +1048,25 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "ownershipHandoverExpiresAt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "result",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1032,7 +1156,14 @@ export const ABI = [
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "requestOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -1279,7 +1410,7 @@ export const ABI = [
     ],
     name: "transferOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {

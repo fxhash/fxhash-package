@@ -1,8 +1,7 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
-import { ABI as FxGenArt721ABI } from "@/abi/FxGenArt721"
-import { ABI as FxTicketABI } from "@/abi/FxTicket"
+import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
+import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 
 import {
   MintInfo,
@@ -31,7 +30,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
-          abi: this.params.isTicket ? FxTicketABI : FxGenArt721ABI,
+          abi: this.params.isTicket ? FX_TICKETS_ABI : FX_GEN_ART_721_ABI,
           functionName: "registerMinters",
           args: [this.params.mintInfo],
         }),
@@ -41,7 +40,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
-        abi: this.params.isTicket ? FxTicketABI : FxGenArt721ABI,
+        abi: this.params.isTicket ? FX_TICKETS_ABI : FX_GEN_ART_721_ABI,
         functionName: "registerMinters",
         args: [this.params.mintInfo],
         account: this.manager.address,

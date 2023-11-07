@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as TicketRedeemerABI } from "@/abi/TicketRedeemer"
+import { TICKET_REDEEMER_ABI } from "@/abi/TicketRedeemer"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -25,7 +25,7 @@ export class RedeemTicketEthV1Operation extends EthereumContractOperation<TRedee
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: config.eth.contracts.ticket_redeemer_v1 as `0x${string}`,
-      abi: TicketRedeemerABI,
+      abi: TICKET_REDEEMER_ABI,
       functionName: "redeem",
       args: [this.params.ticket, this.params.tokenId, this.params.params],
       account: this.manager.address,

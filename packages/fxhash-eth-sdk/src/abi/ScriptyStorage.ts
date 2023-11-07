@@ -1,4 +1,4 @@
-export const ABI = [
+export const SCRIPTY_STORAGE_ABI = [
   {
     inputs: [
       {

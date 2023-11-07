@@ -1,7 +1,7 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
+import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -40,7 +40,7 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
-      abi: MintTicketFactoryABI,
+      abi: FX_TICKETS_FACTORY_ABI,
       functionName: "createTicket",
       args: [
         this.manager.address,

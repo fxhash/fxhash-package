@@ -1,10 +1,10 @@
 export interface IEthContracts {
   seaport_zone: string
-  project_factory_v1: string
-  splits_factory_v1: string
   splits_main: string
   scripty_storage: string
   scripty_builder: string
+  project_factory_v1: string
+  splits_factory_v1: string
   fixed_price_minter_v1: string
   dutch_auction_minter_v1: string
   mint_ticket_factory_v1: string
@@ -15,23 +15,25 @@ export interface IEthContracts {
   gen_art_token_impl_v1: string
   role_registry_v1: string
   contract_registry_v1: string
+  splits_controller_v1: string
 }
 
 export const ethTestnetContracts: IEthContracts = {
   seaport_zone: "0xaee17a0e6e98e832112fd0a26da22c4e812aa7f5",
-  project_factory_v1: "0xd91b2de608ec91d69479385315fd8e34ef9d0077",
-  mint_ticket_factory_v1: "0x10162bf9748e25c8bbe78b878001e687be53ebd6",
-  splits_factory_v1: "0x6d09df011283221a11c718509fee07695c4b899f",
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
-  dutch_auction_minter_v1: "0xf14fe711cc83d7481d30a82c9131a23b75c73fe9",
-  fixed_price_minter_v1: "0x45ca73c7b3c7e95ac4e40610d1ce809a2b399d8a",
-  ticket_redeemer_v1: "0x674cb3c1395f629a932f247a362b52f5a67ae920",
-  renderer_v1: "0x4d375ea45694a87474ba17e5e12990d7ecc6870c",
-  randomizer_v1: "0x89ac2744e0c5ce4a9ab30dc8ace1b471df53d32f",
-  mint_ticket_impl_v1: "0xc06612cdaacf5de7edbf4054f1e80a4997ae9ca6",
-  role_registry_v1: "0xe695c8ec76a8ab66c68fb161dca186d4a8dea4f9",
-  contract_registry_v1: "0x240c0c6fd4d75638acb98f25d90f9b90a13eaed0",
-  gen_art_token_impl_v1: "0xaf4f60ee6692043598678f2f3b0cc3fadbdc43a6",
+  project_factory_v1: "0x3e7cf2fcf73bf51c48accfed536910466524ef98",
+  mint_ticket_factory_v1: "0x20a87415d09823315dc6accb078b2492ffe9426d",
+  splits_factory_v1: "0x771e409b32dd47e50b3d1010a1a314a3aaab5029",
+  splits_controller_v1: "0x43f9a4235f5647459d26693ac4562dc5de5c1cf8",
+  dutch_auction_minter_v1: "0x0bfe80dcf64b0a2b4e69bf1ad9370596e6fc86fb",
+  fixed_price_minter_v1: "0x2cdaa5f62cdbf0d9be671e00ec5610c82df48231",
+  ticket_redeemer_v1: "0x1d8f2a9fb696dc8d60b0dc087ec837c36076e1f8",
+  renderer_v1: "0xc7554860bd2dcc42d84205e661eb23699a4c695e",
+  randomizer_v1: "0x2aaf91e225ec21c8c1f2e4238b67d919b63b51fd",
+  role_registry_v1: "0x11e1ed2f4750c90dbb8d6669b4647a5b6ccef7ee",
+  contract_registry_v1: "0xb25b547491b1c89a2b896c7fee475466efab9edc",
+  gen_art_token_impl_v1: "0x4a1a9fc599f373328ca60b437713380b6caa1a81",
+  mint_ticket_impl_v1: "0x2a4dfd69d9915dfe223ad14b919eebe3fa2b542f",
 }

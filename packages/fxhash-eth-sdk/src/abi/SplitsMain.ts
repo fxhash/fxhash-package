@@ -1,4 +1,4 @@
-export const ABI = [
+export const SPLITS_MAIN_ABI = [
   {
     anonymous: false,
     inputs: [

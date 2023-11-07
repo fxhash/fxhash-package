@@ -1,6 +1,6 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "./contractOperation"
-import { ABI as ScriptyStorageABI } from "@/abi/ScriptyStorage"
+import { SCRIPTY_STORAGE_ABI } from "@/abi/ScriptyStorage"
 import {
   BaseError,
   ContractFunctionRevertedError,
@@ -32,7 +32,7 @@ export class UploadOnchainCodeOperation extends EthereumContractOperation<TUploa
         const { request: createScriptRequest } =
           await this.manager.publicClient.simulateContract({
             address: FxhashContracts.ETH_SCRIPTY_STORAGE as `0x${string}`,
-            abi: ScriptyStorageABI,
+            abi: SCRIPTY_STORAGE_ABI,
             functionName: "createScript",
             args: [request.scriptName, stringToBytes(request.scriptName)],
             account: account,
@@ -64,7 +64,7 @@ export class UploadOnchainCodeOperation extends EthereumContractOperation<TUploa
             const { request: createChunkRequest } =
               await this.manager.publicClient.simulateContract({
                 address: FxhashContracts.ETH_SCRIPTY_STORAGE as `0x${string}`,
-                abi: ScriptyStorageABI,
+                abi: SCRIPTY_STORAGE_ABI,
                 functionName: "addChunkToScript",
                 args: [request.scriptName, stringToBytes(chunk)],
                 account: account,

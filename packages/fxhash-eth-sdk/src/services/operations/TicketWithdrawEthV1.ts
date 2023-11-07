@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as TicketABI } from "@/abi/FxTicket"
+import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -22,7 +22,7 @@ export class WithdrawTicketEthV1Operation extends EthereumContractOperation<TWit
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.ticket as `0x${string}`,
-      abi: TicketABI,
+      abi: FX_TICKETS_ABI,
       functionName: "withdraw",
       args: [this.params.address],
       account: this.manager.address,

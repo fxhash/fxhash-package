@@ -1,7 +1,6 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
-import { ABI as FxGenArt721ABI } from "@/abi/FxGenArt721"
+import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 
 import {
   simulateAndExecuteContract,
@@ -24,7 +23,7 @@ export class BurnSupplyEthV1Operation extends EthereumContractOperation<TBurnSup
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
-          abi: FxGenArt721ABI,
+          abi: FX_GEN_ART_721_ABI,
           functionName: "reduceSupply",
           args: [this.params.supply],
         }),
@@ -34,7 +33,7 @@ export class BurnSupplyEthV1Operation extends EthereumContractOperation<TBurnSup
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
-        abi: FxGenArt721ABI,
+        abi: FX_GEN_ART_721_ABI,
         functionName: "reduceSupply",
         args: [this.params.supply],
         account: this.manager.address,

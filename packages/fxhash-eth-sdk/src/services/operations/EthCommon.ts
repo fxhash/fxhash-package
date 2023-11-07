@@ -13,7 +13,7 @@ import {
   toHex,
 } from "viem"
 
-import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
+import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { Whitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 
@@ -213,7 +213,7 @@ export async function getTicketFactoryUserNonce(
 ): Promise<bigint> {
   const ticketFactory = getContract({
     address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
-    abi: MintTicketFactoryABI,
+    abi: FX_TICKETS_FACTORY_ABI,
     walletClient: walletManager.walletClient,
     publicClient: walletManager.publicClient,
   })

@@ -1,4 +1,4 @@
-export const ABI = [
+export const FX_ISSUER_FACTORY_ABI = [
   {
     inputs: [
       {
@@ -37,7 +37,22 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "NewOwnerIsZeroAddress",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NoHandoverRequest",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "NotAuthorized",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "Unauthorized",
     type: "error",
   },
   {
@@ -65,7 +80,33 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "previousOwner",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverCanceled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldOwner",
         type: "address",
       },
       {
@@ -102,6 +143,26 @@ export const ABI = [
     ],
     name: "ProjectCreated",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "cancelOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "completeOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
   },
   {
     inputs: [
@@ -286,8 +347,27 @@ export const ABI = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "result",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "ownershipHandoverExpiresAt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "result",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -329,7 +409,14 @@ export const ABI = [
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "requestOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -368,7 +455,7 @@ export const ABI = [
     ],
     name: "transferOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
 ]

@@ -1,4 +1,4 @@
-export const ABI = [
+export const FX_SPLITS_FACTORY_ABI = [
   {
     inputs: [
       {

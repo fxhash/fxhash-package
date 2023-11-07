@@ -11,8 +11,8 @@ import {
 } from "@/services/reservoir/types"
 import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api"
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ABI as RESERVOIR_ABI } from "@/abi/Reservoir"
-import { ABI as RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
+import { RESERVOIR_ABI } from "@/abi/Reservoir"
+import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
 import { config } from "@fxhash/config"
 
 const stepHandler = (steps, path) => {}

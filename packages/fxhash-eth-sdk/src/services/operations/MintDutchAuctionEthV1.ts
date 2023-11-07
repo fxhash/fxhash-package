@@ -1,7 +1,7 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as DAMinterABI } from "@/abi/DutchAuctionMinter"
+import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -36,7 +36,7 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
-      abi: DAMinterABI,
+      abi: DUTCH_AUCTION_MINTER_ABI,
       functionName: "buy",
       args: [
         this.params.token,

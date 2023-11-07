@@ -13,10 +13,10 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { FxhashContracts } from "@/contracts/Contracts"
-import { ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
-import { ABI as IssuerFactoryABI } from "@/abi/FxIssuerFactory"
+import { FIXED_PRICE_MINTER_ABI as FixedPriceMinterABI } from "@/abi/FixedPriceMinter"
+import { FX_ISSUER_FACTORY_ABI as IssuerFactoryABI } from "@/abi/FxIssuerFactory"
 import { privateKeyToAccount } from "viem/accounts"
-import { ABI as ISplitsMainABI } from "@/abi/ISplitsMain"
+import { SPLITS_MAIN_ABI as ISplitsMainABI } from "@/abi/SplitsMain"
 
 dotenvConfig()
 

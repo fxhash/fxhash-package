@@ -1,7 +1,6 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
-import { ABI as FxGenArt721ABI } from "@/abi/FxGenArt721"
+import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 
 import {
   simulateAndExecuteContract,
@@ -26,7 +25,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
-          abi: FxGenArt721ABI,
+          abi: FX_GEN_ART_721_ABI,
           functionName: "unpause",
           args: [],
         }),
@@ -36,7 +35,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
-        abi: FxGenArt721ABI,
+        abi: FX_GEN_ART_721_ABI,
         functionName: "unpause",
         args: [],
         account: this.manager.address,

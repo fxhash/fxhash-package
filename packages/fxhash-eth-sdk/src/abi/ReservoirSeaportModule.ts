@@ -1,4 +1,4 @@
-export const ABI = [
+export const RESERVOIR_SEAPORT_MODULE_ABI = [
   {
     inputs: [
       { internalType: "address", name: "owner", type: "address" },

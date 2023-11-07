@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt } from "viem"
-import { ABI as TicketABI } from "@/abi/FxTicket"
+import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -23,7 +23,7 @@ export class TicketDepositEthV1Operation extends EthereumContractOperation<TTick
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.ticket as `0x${string}`,
-      abi: TicketABI,
+      abi: FX_TICKETS_ABI,
       functionName: "deposit",
       args: [this.params.tokenId],
       account: this.manager.address,

@@ -1,4 +1,4 @@
-export const ABI = [
+export const DUTCH_AUCTION_MINTER_ABI = [
   {
     inputs: [],
     name: "AddressZero",
@@ -547,6 +547,21 @@ export const ABI = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveNonce",
+        type: "uint256",
+      },
+      {
         internalType: "uint256",
         name: "_index",
         type: "uint256",
@@ -563,6 +578,25 @@ export const ABI = [
         internalType: "bytes32",
         name: "",
         type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+    ],
+    name: "getLatestUpdate",
+    outputs: [
+      {
+        internalType: "uint40",
+        name: "",
+        type: "uint40",
       },
     ],
     stateMutability: "view",
@@ -599,13 +633,18 @@ export const ABI = [
         name: "",
         type: "address",
       },
-    ],
-    name: "latestUpdates",
-    outputs: [
       {
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    name: "merkleRoots",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
       },
     ],
     stateMutability: "view",
@@ -624,12 +663,12 @@ export const ABI = [
         type: "uint256",
       },
     ],
-    name: "merkleRoots",
+    name: "numberMinted",
     outputs: [
       {
-        internalType: "bytes32",
+        internalType: "uint256",
         name: "",
-        type: "bytes32",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -676,6 +715,30 @@ export const ABI = [
       {
         internalType: "uint256",
         name: "lastPrice",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "reserveNonce",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
         type: "uint256",
       },
     ],

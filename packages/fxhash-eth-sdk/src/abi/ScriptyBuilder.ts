@@ -1,4 +1,4 @@
-export const ABI = [
+export const SCRIPTY_BUILDER_ABI = [
   {
     inputs: [],
     name: "BODY_OPEN_RAW",

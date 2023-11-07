@@ -1,8 +1,8 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "./contractOperation"
 import { TransactionReceipt, encodeAbiParameters, getContract } from "viem"
-import { ABI as ISplitsMainABI } from "@/abi/ISplitsMain"
-import { ABI as IssuerFactoryABI } from "@/abi/FxIssuerFactory"
+import { SPLITS_MAIN_ABI } from "@/abi/SplitsMain"
+import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
   DutchAuctionParams,
   FixedPriceParams,
@@ -118,18 +118,10 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   async call(): Promise<TransactionReceipt> {
     const splitsFactory = getContract({
       address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
-      abi: ISplitsMainABI,
+      abi: SPLITS_MAIN_ABI,
       walletClient: this.manager.walletClient,
       publicClient: this.manager.publicClient,
     })
-
-    this.params.primaryReceivers = preparePrimaryReceivers(
-      this.params.primaryReceivers,
-      {
-        account: config.config.ethFeeReceiver,
-        value: config.config.fxhashPrimaryFee,
-      }
-    )
 
     const secondaryTotal = this.params.royaltiesReceivers.reduce(
       (acc, entry) => acc + entry.value,
@@ -140,14 +132,6 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     if (secondaryTotal > 50000) {
       throw Error("Royalties should be less than 50%")
     }
-    //since we are using splits, we need to create the splits first. So we get the immutable address of the splits
-    const splitsAddress = await splitsFactory.read.predictImmutableSplitAddress(
-      [
-        this.params.primaryReceivers.map(entry => entry.account),
-        this.params.primaryReceivers.map(entry => entry.value * 100),
-        0,
-      ]
-    )
 
     const initInfo: InitInfo = {
       name: this.params.initInfo.name,
@@ -237,16 +221,12 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       })
     )
 
-    if (typeof splitsAddress === "string") {
-      initInfo.primaryReceiver = splitsAddress
-    } else {
-      throw Error("Could not get split address")
-    }
+    initInfo.primaryReceiver = this.manager.address
 
     //prepare the actual request to be able to simulate the transaction outcome
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
-      abi: IssuerFactoryABI,
+      abi: FX_ISSUER_FACTORY_ABI,
       functionName: "createProject",
       args: [
         this.manager.address,
