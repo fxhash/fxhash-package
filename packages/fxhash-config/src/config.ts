@@ -1,9 +1,18 @@
 import { ethTestnetApis, IEthApis } from "api/eth"
 import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
-import { IFxhashApis, fxhashDevApis, fxhashPrdApis  } from "api/fxhash"
-import { ITezosContracts, tezosMainnetContracts, tezosTestnetContracts } from "contracts/tezos"
+import {
+  IFxhashApis,
+  fxhashDevApis,
+  fxhashLocalApis,
+  fxhashPrdApis,
+} from "api/fxhash"
+import {
+  ITezosContracts,
+  tezosMainnetContracts,
+  tezosTestnetContracts,
+} from "contracts/tezos"
 import { ethTestnetContracts, IEthContracts } from "contracts/eth"
-import {getConfigForEnv} from "utils"
+import { getConfigForEnv } from "utils"
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -12,15 +21,13 @@ export interface IFxhashNetworkConfig {
 export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
-  // TODO: Refactor
-  ETH_WALLET_CONNECT_ID: string
-  ETH_CHAIN_ID: string
+  walletConnectId: string
 }
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth"
 export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd"
+export type TEnv = "dev" | "prd" | "local"
 
 type TBlockchainContacts = {
   [B in TBlockchain]: {
@@ -63,13 +70,13 @@ export type IFxhashConfig = {
 
 export type IFxhashConfigSingleEnv = {
   [B in TBlockchain]: {
-    contracts: TBlockchainContacts[B];
-    config: TNetworkBlockchainConfig[B];
-    apis: TBlockchainApis[B];
-  };
+    contracts: TBlockchainContacts[B]
+    config: TNetworkBlockchainConfig[B]
+    apis: TBlockchainApis[B]
+  }
 } & {
-  apis: IFxhashApis;
-  config: IFxhashEnvConfig;
+  apis: IFxhashApis
+  config: IFxhashEnvConfig
 }
 
 export const fxhashConfig: IFxhashConfig = {
@@ -85,7 +92,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethTestnetContracts,
         config: {
-          network: "goerli",
+          network: "Sepolia",
         },
         apis: ethTestnetApis,
       },
@@ -101,21 +108,27 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: null,
         config: {
-          network: "mainnet",
+          network: "Mainnet",
         },
         apis: null,
       },
     },
   },
   envs: {
+    local: {
+      apis: fxhashLocalApis,
+      config: {
+        envName: "local",
+        gtMinPrice: "0",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+      },
+    },
     dev: {
       apis: fxhashDevApis,
       config: {
         envName: "development",
         gtMinPrice: "0",
-        // TODO Refactor
-        ETH_WALLET_CONNECT_ID: "",
-        ETH_CHAIN_ID: "11155111",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
       },
     },
     prd: {
@@ -123,13 +136,12 @@ export const fxhashConfig: IFxhashConfig = {
       config: {
         envName: "production",
         gtMinPrice: "0",
-        // TODO Refactor
-        ETH_WALLET_CONNECT_ID: "",
-        ETH_CHAIN_ID: "11155111",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
       },
     },
   },
 }
 
+export const localConfig = getConfigForEnv("local")
 export const devConfig = getConfigForEnv("dev")
 export const prdConfig = getConfigForEnv("prd")
