@@ -1,4 +1,4 @@
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { getSafeService } from "@/services/Safe"
 

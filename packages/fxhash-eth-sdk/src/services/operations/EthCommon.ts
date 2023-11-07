@@ -17,6 +17,12 @@ import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { Whitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 
+export enum MintTypes {
+  FIXED_PRICE,
+  DUTCH_AUCTION,
+  TICKET,
+}
+
 //Type definition for the primary and royalties receivers
 export interface ReceiverEntry {
   account: string
@@ -71,6 +77,23 @@ export interface ReserveInfo {
   startTime: number
   endTime: number
   allocation: bigint
+}
+
+export interface FixedPriceMintInfoArgs {
+  type: MintTypes.FIXED_PRICE
+  reserveInfo: ReserveInfo
+  params: FixedPriceParams
+}
+
+export interface DutchAuctionMintInfoArgs {
+  type: MintTypes.DUTCH_AUCTION
+  reserveInfo: ReserveInfo
+  params: DutchAuctionParams
+}
+
+export interface TicketMintInfoArgs {
+  type: MintTypes.TICKET
+  reserveInfo: ReserveInfo
 }
 
 export interface FixedPriceParams {

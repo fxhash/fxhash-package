@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
 import { SPLITS_CONTROLLER_ABI } from "@/abi/FxSplitsController"
 import {

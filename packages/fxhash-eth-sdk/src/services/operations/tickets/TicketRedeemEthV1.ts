@@ -1,4 +1,4 @@
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { TICKET_REDEEMER_ABI } from "@/abi/TicketRedeemer"
 import {

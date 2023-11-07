@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import {

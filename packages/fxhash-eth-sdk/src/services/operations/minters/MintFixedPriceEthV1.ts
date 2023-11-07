@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
 import {

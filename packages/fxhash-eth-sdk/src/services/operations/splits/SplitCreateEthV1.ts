@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
 import { FX_SPLITS_FACTORY_ABI } from "@/abi/FxSplitsFactory"
 import {

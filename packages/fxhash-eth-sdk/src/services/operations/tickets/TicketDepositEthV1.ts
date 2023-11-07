@@ -1,4 +1,4 @@
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 import {
@@ -6,27 +6,26 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 
-export type TClaimTicketEthV1OperationParams = {
+export type TTicketDepositEthV1OperationParams = {
   ticket: string
   tokenId: number
-  newPrice: bigint
   value: bigint
 }
 
 /**
- * Claim a mint ticket and sets a new price
+ * Make a deposit for paying tax for mint ticket
  * @dev contract interface:
- * function claim(uint256 _tokenId, uint80 _newPrice)
+ * function deposit(uint256 _tokenId)
  */
-export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimTicketEthV1OperationParams> {
+export class TicketDepositEthV1Operation extends EthereumContractOperation<TTicketDepositEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.ticket as `0x${string}`,
       abi: FX_TICKETS_ABI,
-      functionName: "claim",
-      args: [this.params.tokenId, this.params.newPrice],
+      functionName: "deposit",
+      args: [this.params.tokenId],
       account: this.manager.address,
       value: this.params.value,
     }
@@ -34,6 +33,6 @@ export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimT
   }
 
   success(): string {
-    return `Successfully claimed mint ticket ${this.params.ticket} - ${this.params.tokenId} with new price ${this.params.newPrice}`
+    return `Successfully made deposit for mint ticket ${this.params.ticket} - ${this.params.tokenId}`
   }
 }

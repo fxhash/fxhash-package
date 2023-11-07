@@ -1,6 +1,6 @@
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
-import { getSplitsClient } from "../Splits"
+import { getSplitsClient } from "../../Splits"
 
 export type TWithdrawFromSplitsEthV1OperationParams = {
   split: string

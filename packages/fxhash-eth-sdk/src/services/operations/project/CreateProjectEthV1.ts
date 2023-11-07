@@ -1,5 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import {
   TransactionReceipt,
   encodeAbiParameters,
@@ -8,17 +8,18 @@ import {
 } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
-  DutchAuctionParams,
-  FixedPriceParams,
+  DutchAuctionMintInfoArgs,
+  FixedPriceMintInfoArgs,
   InitInfo,
   MetadataInfo,
   MintInfo,
+  MintTypes,
   predictTicketContractAddress,
   ProjectInfo,
   ReceiverEntry,
-  ReserveInfo,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
+  TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
 import {
   flattenWhitelist,
@@ -27,29 +28,6 @@ import {
 } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
-
-export enum MintTypes {
-  FIXED_PRICE,
-  DUTCH_AUCTION,
-  TICKET,
-}
-
-export interface FixedPriceMintInfoArgs {
-  type: MintTypes.FIXED_PRICE
-  reserveInfo: ReserveInfo
-  params: FixedPriceParams
-}
-
-export interface DutchAuctionMintInfoArgs {
-  type: MintTypes.DUTCH_AUCTION
-  reserveInfo: ReserveInfo
-  params: DutchAuctionParams
-}
-
-export interface TicketMintInfoArgs {
-  type: MintTypes.TICKET
-  reserveInfo: ReserveInfo
-}
 
 export type ScriptyHTMLTag = {
   name: string
@@ -85,7 +63,7 @@ export type ScriptyHTMLTag = {
  * @dev {ReceiverEntry[]} royaltiesReceivers should use a base of 10000 for 100%, and the total of all
  * the entries SHOULD BE LOWER than 10000
  */
-export type TCreateProjectEthV1OperationParams = {
+export type TCreateProjectV1OperationParams = {
   initInfo: {
     name: string
     symbol: string
@@ -117,7 +95,7 @@ export type TCreateProjectEthV1OperationParams = {
 /**
  * Call the Issuer factory to create a new project
  */
-export class CreateProjectEthV1Operation extends EthereumContractOperation<TCreateProjectEthV1OperationParams> {
+export class CreateProjectV1Operation extends EthereumContractOperation<TCreateProjectV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {

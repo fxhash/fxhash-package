@@ -1,5 +1,5 @@
 import Safe, { SafeAccountConfig } from "@safe-global/protocol-kit"
-import { EthereumContractOperation } from "./contractOperation"
+import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { getEthersAdapterForSafe, getSafeFactory } from "@/services/Safe"
 
