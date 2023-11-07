@@ -22,6 +22,8 @@ export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
   walletConnectId: string
+  ethFeeReceiver: string
+  fxhashPrimaryFee: number
 }
 
 // the variations supported by the config
@@ -92,7 +94,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethTestnetContracts,
         config: {
-          network: "Sepolia",
+          network: "Goerli",
         },
         apis: ethTestnetApis,
       },
@@ -121,6 +123,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "local",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        ethFeeReceiver: "0x53bc1c48cac9aeca57cf36f169d3345c6fb59b42",
+        fxhashPrimaryFee: 500,
       },
     },
     dev: {
@@ -129,6 +133,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "development",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        ethFeeReceiver: "0x53bc1c48cac9aeca57cf36f169d3345c6fb59b42",
+        fxhashPrimaryFee: 500,
       },
     },
     prd: {
@@ -137,6 +143,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "production",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        ethFeeReceiver: "",
+        fxhashPrimaryFee: 500,
       },
     },
   },

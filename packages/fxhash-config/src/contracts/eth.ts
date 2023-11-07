@@ -11,7 +11,7 @@ export interface IEthContracts {
   ticket_redeemer_v1: string
   renderer_v1: string
   randomizer_v1: string
-  mint_ticket_impl_V1: string
+  mint_ticket_impl_v1: string
   gen_art_token_impl_v1: string
   role_registry_v1: string
   contract_registry_v1: string
@@ -19,19 +19,19 @@ export interface IEthContracts {
 
 export const ethTestnetContracts: IEthContracts = {
   seaport_zone: "0xaee17a0e6e98e832112fd0a26da22c4e812aa7f5",
-  project_factory_v1: "0x4d3e755960758d521a879d4aecaabd41b38ad3f3",
-  mint_ticket_factory_v1: "0x034902bda5b2683e0bc769123477b5135b324033",
-  splits_factory_v1: "0x13a09244a0b1e4ddf07c79d09bf235a53f4e76ea",
-  splits_main: "0x3e03b08df74146ca4dc1f5f5e884228811b5dd6b",
+  project_factory_v1: "0xd91b2de608ec91d69479385315fd8e34ef9d0077",
+  mint_ticket_factory_v1: "0x10162bf9748e25c8bbe78b878001e687be53ebd6",
+  splits_factory_v1: "0x6d09df011283221a11c718509fee07695c4b899f",
+  splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
-  dutch_auction_minter_v1: "0x268b33440bacbda504d6878875126bb75842e97e",
-  fixed_price_minter_v1: "0xb9e1fef6fc704cce6c9595af8e570ddaad5ddbb2",
-  ticket_redeemer_v1: "0xdaba915fb482c8ed9aeab10dddcdc934988f4738",
-  renderer_v1: "0xaecca2cca794faedc6bdd58aa1129a80a9aa8640",
-  randomizer_v1: "0x01b144554d8082ca826a7c2639b90b9ca3319928",
-  mint_ticket_impl_V1: "0x0a5fecd9f1f5506d9b7fe456b610444b4dc0c128",
-  gen_art_token_impl_v1: "0xb029e4af984e31058a9bfec08bf82e92f11fcfd1",
-  role_registry_v1: "0x74a631fb1af9592bd5acebf28c9738d5f4c71b84",
-  contract_registry_v1: "0xbe8110a0ac21ef28679af2319580dd30e13fd2b5",
+  dutch_auction_minter_v1: "0xf14fe711cc83d7481d30a82c9131a23b75c73fe9",
+  fixed_price_minter_v1: "0x45ca73c7b3c7e95ac4e40610d1ce809a2b399d8a",
+  ticket_redeemer_v1: "0x674cb3c1395f629a932f247a362b52f5a67ae920",
+  renderer_v1: "0x4d375ea45694a87474ba17e5e12990d7ecc6870c",
+  randomizer_v1: "0x89ac2744e0c5ce4a9ab30dc8ace1b471df53d32f",
+  mint_ticket_impl_v1: "0xc06612cdaacf5de7edbf4054f1e80a4997ae9ca6",
+  role_registry_v1: "0xe695c8ec76a8ab66c68fb161dca186d4a8dea4f9",
+  contract_registry_v1: "0x240c0c6fd4d75638acb98f25d90f9b90a13eaed0",
+  gen_art_token_impl_v1: "0xaf4f60ee6692043598678f2f3b0cc3fadbdc43a6",
 }

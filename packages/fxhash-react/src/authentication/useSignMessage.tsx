@@ -3,7 +3,7 @@ import { useDeferredTask } from "../utils/useDeferredTask"
 import { useEthereumUserContext } from "./EthereumUser"
 import { useTezosUserContext } from "./TezosUser"
 import { TezosWalletManager } from "@fxhash/contracts"
-import { EthereumWalletManager } from "@fxhash/evm-sdk"
+import { EthereumWalletManager } from "@fxhash/eth-sdk"
 
 const SIGN_IN_MESSAGE = "Signed Message: sign in to fxhash.xyz"
 const FXHASH_TERMS_OF_SERVICE =
