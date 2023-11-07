@@ -26,6 +26,7 @@ export type TMintDAMintPassEthV1OperationParams = {
   reserveId: number
   index: number
   signature: string
+  to: string
 }
 
 /**
@@ -44,7 +45,7 @@ export class MintDAMintPassEthV1Operation extends EthereumContractOperation<TMin
         this.params.token,
         this.params.reserveId,
         this.params.amount,
-        this.manager.address,
+        this.params.to,
         this.params.index,
         this.params.signature,
       ],

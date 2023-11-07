@@ -32,6 +32,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
+    "@0xsplits/splits-sdk": "3.0.2",
     "@apollo/client": "3.8.1",
     "@fxhash/contracts-shared": "workspace:*",
     "@fxhash/gql": "workspace:*",

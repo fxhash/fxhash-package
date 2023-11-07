@@ -1,5 +1,6 @@
 export interface IEthContracts {
   seaport_zone: string
+  splits_controller_v1: string
   splits_main: string
   scripty_storage: string
   scripty_builder: string
@@ -11,18 +12,17 @@ export interface IEthContracts {
   ticket_redeemer_v1: string
   renderer_v1: string
   randomizer_v1: string
-  mint_ticket_impl_v1: string
-  gen_art_token_impl_v1: string
   role_registry_v1: string
   contract_registry_v1: string
-  splits_controller_v1: string
+  gen_art_token_impl_v1: string
+  mint_ticket_impl_v1: string
 }
 
 export const ethTestnetContracts: IEthContracts = {
   seaport_zone: "0xaee17a0e6e98e832112fd0a26da22c4e812aa7f5",
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
-  scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
+  scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
   project_factory_v1: "0x3e7cf2fcf73bf51c48accfed536910466524ef98",
   mint_ticket_factory_v1: "0x20a87415d09823315dc6accb078b2492ffe9426d",
   splits_factory_v1: "0x771e409b32dd47e50b3d1010a1a314a3aaab5029",

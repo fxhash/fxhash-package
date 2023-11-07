@@ -46,7 +46,7 @@ export interface MintInfo {
 export interface InitInfo {
   name: string
   symbol: string
-  primaryReceiver?: string
+  primaryReceiver: string
   randomizer: string
   renderer: string
   tagIds: number[]
@@ -255,15 +255,13 @@ export function sortReceiversAlphabetically(
  * @returns an array of ReceiverEntry objects.
  */
 export function preparePrimaryReceivers(
-  receivers: ReceiverEntry[],
-  feeReceiver: ReceiverEntry
+  receivers: ReceiverEntry[]
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
   const originalTotal = receivers.reduce(
     (sum, account) => sum + account.value,
     0
   )
-  receivers = sortReceiversAlphabetically(receivers)
   /**
    * Check that the total is 10_000
    * This is a sanity check to make sure that the total is 100%
@@ -272,6 +270,10 @@ export function preparePrimaryReceivers(
     throw Error("Primary receivers total must be 10000")
   }
 
+  const feeReceiver: ReceiverEntry = {
+    account: config.config.ethFeeReceiver,
+    value: config.config.fxhashPrimaryFee,
+  }
   // Calculate the fee ratio for each account
   const feeRatio = feeReceiver.value / originalTotal
 
@@ -282,7 +284,12 @@ export function preparePrimaryReceivers(
   }))
 
   // Add the fee account with its full value
-  receivers.push(feeReceiver)
+  receivers.push({
+    account: feeReceiver.account,
+    value: feeReceiver.value * 100,
+  })
+
+  receivers = sortReceiversAlphabetically(receivers)
 
   // Due to floating point precision, there might be a small discrepancy
   // from the intended total, so we can adjust the last account slightly

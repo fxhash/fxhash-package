@@ -30,6 +30,7 @@ export type TMintDutchAuctionWhitelistEthV1OperationParams = {
   price: bigint
   amount: bigint
   reserveId: number
+  to: string
 }
 
 /* The MintDutchAutionWhitelistEthV1Operation class is responsible for minting a fixed price token with
@@ -65,7 +66,7 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
         args: [
           this.params.token,
           this.params.reserveId,
-          this.manager.address,
+          this.params.to,
           [index],
           [proof],
         ],

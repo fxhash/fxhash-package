@@ -1,7 +1,11 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "./contractOperation"
-import { TransactionReceipt, encodeAbiParameters, getContract } from "viem"
-import { SPLITS_MAIN_ABI } from "@/abi/SplitsMain"
+import {
+  TransactionReceipt,
+  encodeAbiParameters,
+  encodeFunctionData,
+  getAddress,
+} from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
   DutchAuctionParams,
@@ -10,7 +14,6 @@ import {
   MetadataInfo,
   MintInfo,
   predictTicketContractAddress,
-  preparePrimaryReceivers,
   ProjectInfo,
   ReceiverEntry,
   ReserveInfo,
@@ -22,7 +25,8 @@ import {
   getDutchAuctionMinterEncodedParams,
   getFixedPriceMinterEncodedParams,
 } from "@/utils"
-import { config } from "@fxhash/config"
+import { proposeSafeTransaction } from "@/services/Safe"
+import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -105,8 +109,9 @@ export type TCreateProjectEthV1OperationParams = {
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
   )[]
-  primaryReceivers: ReceiverEntry[]
+  primaryReceiver: string
   royaltiesReceivers: ReceiverEntry[]
+  isCollab: boolean
 }
 
 /**
@@ -115,14 +120,7 @@ export type TCreateProjectEthV1OperationParams = {
 export class CreateProjectEthV1Operation extends EthereumContractOperation<TCreateProjectEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt> {
-    const splitsFactory = getContract({
-      address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
-      abi: SPLITS_MAIN_ABI,
-      walletClient: this.manager.walletClient,
-      publicClient: this.manager.publicClient,
-    })
-
+  async call(): Promise<TransactionReceipt | string> {
     const secondaryTotal = this.params.royaltiesReceivers.reduce(
       (acc, entry) => acc + entry.value,
       0
@@ -139,6 +137,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1,
       renderer: FxhashContracts.ETH_RENDERER_V1,
       tagIds: this.params.initInfo.tagIds,
+      primaryReceiver: this.params.primaryReceiver,
     }
 
     const projectInfo: ProjectInfo = {
@@ -191,8 +190,12 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
               argsMintInfo.params.prices,
               argsMintInfo.params.stepLength,
               argsMintInfo.params.refunded,
-              flattenWhitelist(argsMintInfo.params.whitelist),
-              argsMintInfo.params.mintPassSigner as `0x${string}`
+              argsMintInfo.params.whitelist
+                ? flattenWhitelist(argsMintInfo.params.whitelist)
+                : undefined,
+              argsMintInfo.params.mintPassSigner
+                ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
+                : undefined
             ),
           }
           return mintInfo
@@ -221,26 +224,46 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       })
     )
 
-    initInfo.primaryReceiver = this.manager.address
+    if (this.params.isCollab) {
+      const safeTransactionData: SafeTransactionDataPartial = {
+        to: getAddress(FxhashContracts.ETH_PROJECT_FACTORY),
+        data: encodeFunctionData({
+          abi: FX_ISSUER_FACTORY_ABI,
+          functionName: "createProject",
+          args: [
+            this.manager.address,
+            initInfo,
+            projectInfo,
+            metadataInfo,
+            mintInfos,
+            this.params.royaltiesReceivers.map(entry => entry.account),
+            this.params.royaltiesReceivers.map(entry => entry.value),
+          ],
+        }),
+        value: "0",
+      }
 
-    //prepare the actual request to be able to simulate the transaction outcome
-    const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
-      abi: FX_ISSUER_FACTORY_ABI,
-      functionName: "createProject",
-      args: [
-        this.manager.address,
-        initInfo,
-        projectInfo,
-        metadataInfo,
-        mintInfos,
-        this.params.royaltiesReceivers.map(entry => entry.account),
-        this.params.royaltiesReceivers.map(entry => entry.value),
-      ],
-      account: this.manager.address,
+      return await proposeSafeTransaction(safeTransactionData, this.manager)
+    } else {
+      //prepare the actual request to be able to simulate the transaction outcome
+      const args: SimulateAndExecuteContractRequest = {
+        address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
+        abi: FX_ISSUER_FACTORY_ABI,
+        functionName: "createProject",
+        args: [
+          this.manager.address,
+          initInfo,
+          projectInfo,
+          metadataInfo,
+          mintInfos,
+          this.params.royaltiesReceivers.map(entry => entry.account),
+          this.params.royaltiesReceivers.map(entry => entry.value),
+        ],
+        account: this.manager.address,
+      }
+      //simulate the transaction and execute it, will throw an error if it fails
+      return simulateAndExecuteContract(this.manager, args)
     }
-    //simulate the transaction and execute it, will throw an error if it fails
-    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

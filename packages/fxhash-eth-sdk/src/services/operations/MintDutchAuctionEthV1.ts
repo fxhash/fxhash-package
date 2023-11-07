@@ -24,6 +24,7 @@ export type TMintDAEthV1OperationParams = {
   price: bigint
   amount: bigint
   reserveId: number
+  to: string
 }
 
 /**
@@ -42,7 +43,7 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
         this.params.token,
         this.params.reserveId,
         this.params.amount,
-        this.manager.address,
+        this.params.to,
       ],
       account: this.manager.address,
       value: this.params.price,

@@ -27,6 +27,7 @@ export type TMintFixedPriceMintPassEthV1OperationParams = {
   amount: bigint
   index: number
   signature: string
+  to: string
 }
 
 /* The MintFixedPriceMintPassEthV1Operation class is responsible for minting a fixed price token using
@@ -43,7 +44,7 @@ export class MintFixedPriceMintPassEthV1Operation extends EthereumContractOperat
         this.params.token,
         this.params.reserveId,
         this.params.amount,
-        this.manager.address,
+        this.params.to,
         this.params.index,
         this.params.signature,
       ],

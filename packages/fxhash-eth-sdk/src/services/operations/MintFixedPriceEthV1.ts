@@ -23,6 +23,7 @@ export type TMintFixedPriceEthV1OperationParams = {
   price: bigint
   reserveId: number
   amount: bigint
+  to: string
 }
 
 /**
@@ -41,7 +42,7 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
         this.params.token,
         this.params.reserveId,
         this.params.amount,
-        this.manager.address,
+        this.params.to,
       ],
       account: this.manager.address,
       value: this.params.price,

@@ -37,6 +37,7 @@ export type TMintFixedPriceWhitelistEthV1OperationParams = {
   reserveId: number
   price: bigint
   amount: bigint
+  to: string
 }
 
 /* The MintFixedPriceWhitelistEthV1Operation class is responsible for minting a fixed price token for a
@@ -72,7 +73,7 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
         args: [
           this.params.token,
           this.params.reserveId,
-          this.manager.address,
+          this.params.to,
           [index],
           [proof],
         ],

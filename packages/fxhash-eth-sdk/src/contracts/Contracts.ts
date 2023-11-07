@@ -41,6 +41,7 @@ export const FxhashContracts = {
   COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
   ETH_PROJECT_FACTORY: config.eth.contracts.project_factory_v1,
   ETH_SPLITS_FACTORY: config.eth.contracts.splits_factory_v1,
+  ETH_SPLITS_CONTROLLER: config.eth.contracts.splits_controller_v1,
   ETH_SPLITS_MAIN: config.eth.contracts.splits_main,
   ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
   ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
