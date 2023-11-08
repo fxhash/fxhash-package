@@ -118,8 +118,9 @@ export class EthereumWalletManager extends WalletManager {
     params: TParams
   ): PromiseResult<
     {
-      operation: string | TransactionReceipt
+      operation?: TransactionReceipt
       message: string
+      hash: string
     },
     UserRejectedError | PendingSigningRequestError
   > {
@@ -138,8 +139,12 @@ export class EthereumWalletManager extends WalletManager {
         const message = contractOperation.success()
 
         return success({
-          operation,
+          operation: typeof operation === "string" ? undefined : operation,
           message,
+          hash:
+            typeof operation === "string"
+              ? operation
+              : operation.transactionHash,
         })
       } catch (error) {
         if (error instanceof UserRejectedRequestError) {
@@ -159,6 +164,18 @@ export class EthereumWalletManager extends WalletManager {
 
     // This is not reachable, but TS doesn't know that so we need to return something here
     return failure(new UserRejectedError("Rpc nodes exhausted"))
+  }
+
+  async waitForTransaction({
+    hash,
+  }: {
+    hash: string
+  }): PromiseResult<TransactionReceipt, UserRejectedError> {
+    return success(
+      await this.publicClient.waitForTransactionReceipt({
+        hash: hash as `0x${string}`,
+      })
+    )
   }
 
   // given an error, returns true if request can be cycled to another RPC node

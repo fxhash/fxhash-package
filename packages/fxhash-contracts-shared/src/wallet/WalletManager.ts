@@ -23,9 +23,12 @@ export abstract class WalletManager {
   ): PromiseResult<string, PendingSigningRequestError | UserRejectedError>
 
   abstract sendTransaction<TParams>(
-    operation: TContractOperation<TParams>,
+    operation: TContractOperation<this, TParams, any>,
     params: TParams
   ): PromiseResult<unknown, PendingSigningRequestError | UserRejectedError>
 
-  // todo: add waitForTransaction abstract method
+  abstract waitForTransaction(params: {
+    hash: string
+    // TODO proper error type
+  }): PromiseResult<unknown, UserRejectedError>
 }

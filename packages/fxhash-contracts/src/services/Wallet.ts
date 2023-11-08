@@ -75,6 +75,7 @@ export class TezosWalletManager extends WalletManager {
     {
       operation: WalletOperation
       message: string
+      hash: string
     },
     UserRejectedError | PendingSigningRequestError
   > {
@@ -95,6 +96,7 @@ export class TezosWalletManager extends WalletManager {
         return success({
           operation,
           message,
+          hash: operation.opHash,
         })
       } catch (error) {
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()

@@ -15,7 +15,7 @@ import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 import Onchfs, { Inscription } from "onchfs"
 
 export type TMintIssuerV3OperationParams = {
@@ -25,23 +25,10 @@ export type TMintIssuerV3OperationParams = {
   ticketMetadataBytes?: string
 }
 
-export class MintIssuerV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintIssuerV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
-class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3OperationParams> {
+export class MintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   onchfsKt: ContractAbstraction<Wallet> | null = null
 
