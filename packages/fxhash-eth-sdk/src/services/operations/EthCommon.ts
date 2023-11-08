@@ -16,6 +16,7 @@ import {
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { Whitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
+import { getOpenChainError } from "@/services/Openchain"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -118,16 +119,19 @@ export interface DutchAuctionParams {
  * @param {any} error - The `error` parameter from the simulation of the contract function call.
  * object.
  */
-export function handleContractError(error: any): never {
+export async function handleContractError(error: any): Promise<string> {
   //if it's an error sent by the contract, we want to throw a more meaningful error
   if (error instanceof BaseError) {
     const revertError = error.walk(
       err => err instanceof ContractFunctionRevertedError
     )
     if (revertError instanceof ContractFunctionRevertedError) {
-      const errorName = revertError.data?.errorName ?? ""
+      let errorName = revertError.data?.errorName ?? ""
+      if (!errorName) {
+        errorName = await getOpenChainError(revertError.signature)
+      }
       console.log("error: ", error)
-      throw Error("Failed: " + errorName)
+      return "Failed: " + errorName
     }
   }
   throw error // Re-throwing error if it's not an instance of BaseError.
@@ -174,7 +178,8 @@ export async function simulateAndExecuteContract(
     return receipt
   } catch (error) {
     //handle any error from the execution
-    handleContractError(error)
+    const errorMessage = await handleContractError(error)
+    throw Error(errorMessage)
   }
 }
 
