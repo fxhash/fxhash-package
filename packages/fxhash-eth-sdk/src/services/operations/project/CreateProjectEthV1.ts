@@ -88,6 +88,7 @@ export type TCreateProjectV1OperationParams = {
     | TicketMintInfoArgs
   )[]
   primaryReceiver: string
+  royalties: number
   royaltiesReceivers: ReceiverEntry[]
   isCollab: boolean
 }
@@ -99,15 +100,24 @@ export class CreateProjectV1Operation extends EthereumContractOperation<TCreateP
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    if (this.params.royalties > 2500) {
+      throw Error("Royalties should be lower or equal to 25%")
+    }
     const secondaryTotal = this.params.royaltiesReceivers.reduce(
       (acc, entry) => acc + entry.value,
       0
     )
 
-    //TODO: do we want to enforce an upper limit for royalties?
-    if (secondaryTotal > 50000) {
-      throw Error("Royalties should be less than 50%")
+    if (secondaryTotal != 10000) {
+      throw Error("Royalties total should be 100%")
     }
+
+    const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
+      return {
+        account: entry.account,
+        value: (entry.value * this.params.royalties) / 10000,
+      }
+    })
 
     const initInfo: InitInfo = {
       name: this.params.initInfo.name,
@@ -214,8 +224,8 @@ export class CreateProjectV1Operation extends EthereumContractOperation<TCreateP
             projectInfo,
             metadataInfo,
             mintInfos,
-            this.params.royaltiesReceivers.map(entry => entry.account),
-            this.params.royaltiesReceivers.map(entry => entry.value),
+            parsedRoyalties.map(entry => entry.account),
+            parsedRoyalties.map(entry => entry.value),
           ],
         }),
         value: "0",
@@ -234,8 +244,8 @@ export class CreateProjectV1Operation extends EthereumContractOperation<TCreateP
           projectInfo,
           metadataInfo,
           mintInfos,
-          this.params.royaltiesReceivers.map(entry => entry.account),
-          this.params.royaltiesReceivers.map(entry => entry.value),
+          parsedRoyalties.map(entry => entry.account),
+          parsedRoyalties.map(entry => entry.value),
         ],
         account: this.manager.address,
       }
