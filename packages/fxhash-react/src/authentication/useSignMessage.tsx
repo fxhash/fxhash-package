@@ -15,7 +15,7 @@ const FXHASH_TERMS_OF_SERVICE =
  * @param {string} address - The Tezos address to include in the payload.
  * @return {string} - The formatted payload.
  */
-const formatSignInPayload = (address: string): string =>
+export const formatSignInPayload = (address: string): string =>
   `${SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
 
 /**
@@ -49,7 +49,8 @@ export const useSignMessage = () => {
     )
 
     let message = formatSignInPayload(walletManager.address)
-    // Some wallets in Tezos show a warning message if not prefixed by "Tezos Signed Message"
+    // Some wallets in Tezos show a warning message if not prefixed by
+    // "Tezos Signed Message"
     if (network === BlockchainType.TEZOS) {
       message = `Tezos ${message}`
     }
