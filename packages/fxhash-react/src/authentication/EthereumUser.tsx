@@ -47,6 +47,11 @@ interface EthereumUserProviderProps {
   config: EthereumUserProviderConfig
 }
 
+interface SyncEvent {
+  address: string
+  walletManager: EthereumWalletManager
+}
+
 /**
  * Responsible for handling the Ethereum connection and initializing the wallet
  * manager
@@ -61,9 +66,7 @@ export function EthereumUserProvider({
   const { setOpen: setConnectkitOpen } = useModal()
   const { disconnectAsync } = useDisconnect()
 
-  const [syncObservable] = useState(
-    new Subject<{ address: string; walletManager: EthereumWalletManager }>()
-  )
+  const [syncObservable] = useState(new Subject<SyncEvent>())
 
   // whenever a local sync event occurs, event is pushed to the observable so
   // that other parts of the app can react to it in a synchronous-like manner
