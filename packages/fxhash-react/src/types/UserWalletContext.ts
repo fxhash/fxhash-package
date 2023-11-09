@@ -6,6 +6,11 @@ import {
 } from "@fxhash/contracts-shared"
 import { TezosWalletManager } from "@fxhash/contracts/index"
 import { EthereumWalletManager } from "@fxhash/eth-sdk/index"
+// to avoid having to include there utilities
+export {
+  UserRejectedError,
+  PendingSigningRequestError,
+} from "@fxhash/contracts-shared"
 
 interface BaseWalletAuthorization {
   network: BlockchainType
