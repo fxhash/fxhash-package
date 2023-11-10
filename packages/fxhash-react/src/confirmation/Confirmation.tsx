@@ -16,6 +16,24 @@ class RequestReplacedError extends Error {
   name = "RequestReplacedError"
 }
 
+export type TConfirmationRequestOption = {
+  /**
+   * When the user chooses the given action, the confirmation will resolve
+   * either in a success or failure.
+   */
+  result: "success" | "failure"
+  /**
+   * The message is used to display information about the action.
+   * Conventionnaly, this is used within a button.
+   */
+  message: string
+  /**
+   * Arbitrary payload to attach to the action. It can be used by the front-end
+   * for refining the UI.
+   */
+  payload?: any
+}
+
 export type TConfirmationRequestDetails = {
   /**
    * Request title, can be used for the title of the request modal.
@@ -28,13 +46,34 @@ export type TConfirmationRequestDetails = {
   /**
    * The "importance" of the confirmation request. Can be used by UIs to show
    * different interfaces.
+   * @default normal
    */
   level?: "normal" | "warning" | "error"
   /**
+   * Whether the interface should force the user to respond to the confirmation.
+   * This requires the appropriate front-end implementation, and can be ignored
+   * if not desired for the UX.
+   * @default false
+   */
+  blocking?: boolean
+  /**
+   * An array of options which can be used for proposing various actions to the
+   * user. The UI is responsible for processing the display of the options
+   * properly. If no option is passed, the default behaviour should apply (and
+   * should be implemented in any fashion by the front-end).
+   */
+  options?: TConfirmationRequestOption[]
+  /**
+   * @todo Probably remove, there hasn't be any use-case for it so far
    * Arbitrary payload, can be used for custom operations on the front-end,
    * when some particular UI might be required.
    */
   payload?: any
+}
+
+const defaultConfirmationDetails: Partial<TConfirmationRequestDetails> = {
+  level: "normal",
+  blocking: false,
 }
 
 type TResponse = Result<any, any>
@@ -127,7 +166,7 @@ export function ConfirmationProvider({ children }: PropsWithChildren) {
     setActiveRequest({
       id,
       details: {
-        level: "normal",
+        ...defaultConfirmationDetails,
         ...details,
       },
       resolve,
