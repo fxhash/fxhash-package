@@ -64,6 +64,14 @@ export function verifyAuthRole(token: string, role: AuthRole) {
   return hasRole(decoded, role)
 }
 
+/**
+ * Signs a new cookie with the given payload
+ * @param payload to be signed
+ * @param options Optional parameters for the signing process
+ * @param jwtPrivateKey Optional JWT private key to use for encryption. If
+ * cannot be found, the JWT in the env variables will be used instead.
+ * @returns string
+ */
 export function signAuthToken(
   payload: string | Buffer | Object,
   options?: SignOptions,
