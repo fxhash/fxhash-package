@@ -10,6 +10,7 @@ import {
   PendingSigningRequestError,
   UserRejectedError,
 } from "@fxhash/contracts-shared"
+import { ConfirmationProvider } from "./confirmation/Confirmation"
 
 interface FxhashProviderProps {
   config: {
@@ -25,10 +26,12 @@ export type FxhashContext = {
 
 export const FxhashProvider = ({ config, children }: FxhashProviderProps) => {
   return (
-    <TezosUserProvider config={config.tezos}>
-      <EthereumUserProvider config={config.ethereum}>
-        {children}
-      </EthereumUserProvider>
-    </TezosUserProvider>
+    <ConfirmationProvider>
+      <TezosUserProvider config={config.tezos}>
+        <EthereumUserProvider config={config.ethereum}>
+          {children}
+        </EthereumUserProvider>
+      </TezosUserProvider>
+    </ConfirmationProvider>
   )
 }
