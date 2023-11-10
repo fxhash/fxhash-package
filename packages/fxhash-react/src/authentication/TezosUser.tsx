@@ -44,8 +44,8 @@ export const TezosUserContext =
 export interface TezosUserProviderConfig {
   /**
    * A function that returns a beacon wallet. Called when the Provider
-   * is mounted client side.
-   * The beacon wallet can't be initialized server side as it requires access to the local storage.
+   * is mounted client side. The beacon wallet can't be initialized server side
+   * as it requires access to the local storage.
    */
   createBeaconWallet: () => BeaconWallet
   tezosToolkit: TezosToolkit
@@ -58,8 +58,9 @@ interface TezosUserProviderProps {
 }
 
 /**
- * Responsible for handling the Tezos connection and initializing the wallet manager.
- * As there is no React integration for Taquito, we handle the logic on behalf of the user.
+ * Responsible for handling the Tezos connection and initializing the wallet
+ * manager. As there is no React integration for Taquito, we handle the logic on
+ * behalf of the user.
  *
  * TODO
  * @dev long term we would want to move the logic for everything non-react
@@ -253,7 +254,7 @@ export function TezosUserProvider({
   }
 
   const disconnect = async () => {
-    await context.beaconWallet?.disconnect()
+    await context.beaconWallet?.clearActiveAccount()
     context.tezosToolkit?.setWalletProvider(undefined)
     setContext(context => ({
       ...context,
