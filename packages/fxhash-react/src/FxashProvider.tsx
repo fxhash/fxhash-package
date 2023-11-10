@@ -6,6 +6,10 @@ import {
   EthereumUserProvider,
   EthereumUserProviderConfig,
 } from "./authentication/EthereumUser"
+import {
+  PendingSigningRequestError,
+  UserRejectedError,
+} from "@fxhash/contracts-shared"
 
 interface FxhashProviderProps {
   config: {
@@ -13,6 +17,10 @@ interface FxhashProviderProps {
     ethereum: EthereumUserProviderConfig
   }
   children: React.ReactNode
+}
+
+export type FxhashContext = {
+  connectionError?: UserRejectedError | PendingSigningRequestError
 }
 
 export const FxhashProvider = ({ config, children }: FxhashProviderProps) => {

@@ -139,8 +139,8 @@ export function EthereumUserProvider({
               })
             )
           })
+        setConnectkitOpen(true)
       }
-      setConnectkitOpen(true)
     })
   }
 
@@ -158,6 +158,8 @@ export function EthereumUserProvider({
     }),
     [context, accountState]
   )
+
+  // todo: expose errors & UI interactions here
 
   return (
     <EthereumUserContext.Provider value={contextValue}>
