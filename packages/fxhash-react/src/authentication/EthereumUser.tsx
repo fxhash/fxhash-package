@@ -23,6 +23,7 @@ import {
 interface TUserEthereumWalletContext extends TUserWalletContext {
   walletManager: EthereumWalletManager | null
   address: `0x${string}` | null
+  signConnectionMessage: () => ReturnType<TUserWalletContext["connect"]>
 }
 
 const defaultCtx: TUserEthereumWalletContext = {
@@ -30,6 +31,7 @@ const defaultCtx: TUserEthereumWalletContext = {
   initialized: false,
   connected: false,
   address: null,
+  signConnectionMessage: () => new Promise(r => r(success({} as any))),
   connect: () => new Promise(r => r(success({} as any))),
   disconnect: () => new Promise(r => {}),
 }
@@ -108,6 +110,27 @@ export function EthereumUserProvider({
     }
   }, [walletClient, isIdle])
 
+  const signConnectionMessage = async (): PromiseResult<
+    IConnexionPayload,
+    UserRejectedError | PendingSigningRequestError
+  > => {
+    invariant(context.walletManager, "ETH wallet manager not available")
+    let message = formatSignInPayload(accountState.address!)
+    const result = await context.walletManager.signMessage(message)
+    if (result.isFailure()) {
+      await disconnectAsync()
+      return result
+    }
+    return success({
+      address: accountState.address!,
+      authorization: {
+        network: BlockchainType.ETHEREUM,
+        payload: message,
+        signature: result.value,
+      },
+    })
+  }
+
   const connect = (): PromiseResult<
     IConnexionPayload,
     UserRejectedError | PendingSigningRequestError
@@ -144,6 +167,7 @@ export function EthereumUserProvider({
     () => ({
       ...context,
       connect,
+      signConnectionMessage,
       disconnect: disconnectAsync,
       get address() {
         return accountState.address || null

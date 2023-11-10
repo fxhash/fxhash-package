@@ -34,7 +34,7 @@ export type TConfirmationRequestDetails = {
    * Arbitrary payload, can be used for custom operations on the front-end,
    * when some particular UI might be required.
    */
-  payload: any
+  payload?: any
 }
 
 type TResponse = Result<any, any>
