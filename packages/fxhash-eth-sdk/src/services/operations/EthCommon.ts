@@ -42,11 +42,7 @@ export interface SimulateAndExecuteContractRequest {
 
 export interface MintInfo {
   minter: string
-  reserveInfo: {
-    startTime: number
-    endTime: number
-    allocation: bigint
-  }
+  reserveInfo: ReserveInfo
   params: string
 }
 
@@ -75,8 +71,8 @@ export interface MetadataInfo {
 }
 
 export interface ReserveInfo {
-  startTime: number
-  endTime: number
+  startTime?: bigint
+  endTime?: bigint
   allocation: bigint
 }
 

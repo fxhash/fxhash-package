@@ -17,11 +17,13 @@ import {
   predictTicketContractAddress,
   ProjectInfo,
   ReceiverEntry,
+  ReserveInfo,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
 import {
+  MAX_UINT_64,
   flattenWhitelist,
   getDutchAuctionMinterEncodedParams,
   getFixedPriceMinterEncodedParams,
@@ -148,13 +150,18 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const mintInfos: MintInfo[] = await Promise.all(
       this.params.mintInfo.map(async argsMintInfo => {
         if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
+          const reserveInfo: ReserveInfo = {
+            allocation: argsMintInfo.reserveInfo.allocation,
+            endTime: argsMintInfo.reserveInfo.endTime
+              ? argsMintInfo.reserveInfo.endTime
+              : MAX_UINT_64,
+            startTime: argsMintInfo.reserveInfo.startTime
+              ? argsMintInfo.reserveInfo.startTime
+              : BigInt(0),
+          }
           const mintInfo: MintInfo = {
             minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
+            reserveInfo: reserveInfo,
             params: getFixedPriceMinterEncodedParams(
               argsMintInfo.params.price,
               argsMintInfo.params.whitelist

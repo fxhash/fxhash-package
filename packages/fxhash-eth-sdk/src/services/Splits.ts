@@ -5,7 +5,7 @@ import { PublicClient, WalletClient } from "viem"
 export function getSplitsClient(
   publicClient: PublicClient,
   walletClient: WalletClient
-) {
+): SplitsClient {
   return new SplitsClient({
     chainId: CURRENT_CHAIN.id,
     // TODO: for some reason the splits sdk is not happy with the client types but it seems to work fine
