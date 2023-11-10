@@ -66,7 +66,7 @@ export class EthereumWalletManager extends WalletManager {
     this.rpcNodes = params.rpcNodes
   }
 
-  async signMessage(
+  async signMessageWithWallet(
     message: string
   ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
     if (this.signingInProgress) {

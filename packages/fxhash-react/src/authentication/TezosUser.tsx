@@ -190,7 +190,10 @@ export function TezosUserProvider({
     })
 
     let message = "Tezos" + formatSignInPayload(walletManager.address)
-    const result = await walletManager.signMessage(message)
+    const result = await walletManager.signMessage(message, {
+      type: "authentication-payload",
+      policy: "cache-first",
+    })
     if (result.isFailure()) {
       return result
     }
@@ -207,8 +210,8 @@ export function TezosUserProvider({
       address,
       authorization: {
         network: BlockchainType.TEZOS,
-        payload: message,
-        signature: result.value,
+        payload: result.value.message,
+        signature: result.value.signature,
         publicKey:
           (await walletManager.beaconWallet.client.getActiveAccount())
             ?.publicKey || "",

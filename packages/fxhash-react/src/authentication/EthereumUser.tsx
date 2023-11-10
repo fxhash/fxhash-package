@@ -116,7 +116,10 @@ export function EthereumUserProvider({
   > => {
     invariant(context.walletManager, "ETH wallet manager not available")
     let message = formatSignInPayload(accountState.address!)
-    const result = await context.walletManager.signMessage(message)
+    const result = await context.walletManager.signMessage(message, {
+      type: "authentication-payload",
+      policy: "cache-first",
+    })
     if (result.isFailure()) {
       await disconnectAsync()
       return result
@@ -125,8 +128,8 @@ export function EthereumUserProvider({
       address: accountState.address!,
       authorization: {
         network: BlockchainType.ETHEREUM,
-        payload: message,
-        signature: result.value,
+        payload: result.value.message,
+        signature: result.value.signature,
       },
     })
   }
@@ -142,7 +145,10 @@ export function EthereumUserProvider({
           .subscribe(async ({ address, walletManager }) => {
             invariant(walletManager, "ETH wallet manager not available")
             let message = formatSignInPayload(address)
-            const result = await walletManager.signMessage(message)
+            const result = await walletManager.signMessage(message, {
+              type: "authentication-payload",
+              policy: "cache-first",
+            })
             if (result.isFailure()) {
               await disconnectAsync()
               return resolve(result)
@@ -152,8 +158,8 @@ export function EthereumUserProvider({
                 address: address,
                 authorization: {
                   network: BlockchainType.ETHEREUM,
-                  payload: message,
-                  signature: result.value,
+                  payload: result.value.message,
+                  signature: result.value.signature,
                 },
               })
             )
