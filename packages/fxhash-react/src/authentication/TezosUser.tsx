@@ -35,7 +35,7 @@ const defaultCtx: TUserTezosWalletContext = {
   connected: false,
   connect: () => new Promise(r => r(success({} as any))),
   connectAutonomyWallet: () => new Promise(r => r(success(""))),
-  disconnect: () => {},
+  disconnect: () => new Promise(r => {}),
 }
 
 export const TezosUserContext =
@@ -255,11 +255,11 @@ export function TezosUserProvider({
   const disconnect = async () => {
     await context.beaconWallet?.disconnect()
     context.tezosToolkit?.setWalletProvider(undefined)
-    setContext({
+    setContext(context => ({
       ...context,
       address: null,
       walletManager: null,
-    })
+    }))
   }
 
   /**

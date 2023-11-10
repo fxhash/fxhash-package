@@ -71,5 +71,5 @@ export interface TUserWalletContext {
    * Disconnect the wallet from the application, eventually releasing the
    * appropriate resources from memory, and updating the state accordingly.
    */
-  disconnect: () => void
+  disconnect: () => Promise<void>
 }

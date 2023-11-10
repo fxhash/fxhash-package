@@ -31,7 +31,7 @@ const defaultCtx: TUserEthereumWalletContext = {
   connected: false,
   address: null,
   connect: () => new Promise(r => r(success({} as any))),
-  disconnect: () => {},
+  disconnect: () => new Promise(r => {}),
 }
 
 const EthereumUserContext =
@@ -108,10 +108,6 @@ export function EthereumUserProvider({
     }
   }, [walletClient, isIdle])
 
-  const disconnect = () => {
-    disconnectAsync()
-  }
-
   const connect = (): PromiseResult<
     IConnexionPayload,
     UserRejectedError | PendingSigningRequestError
@@ -125,7 +121,7 @@ export function EthereumUserProvider({
             let message = formatSignInPayload(address)
             const result = await walletManager.signMessage(message)
             if (result.isFailure()) {
-              disconnect()
+              await disconnectAsync()
               return resolve(result)
             }
             resolve(
@@ -148,7 +144,7 @@ export function EthereumUserProvider({
     () => ({
       ...context,
       connect,
-      disconnect,
+      disconnect: disconnectAsync,
       get address() {
         return accountState.address || null
       },
