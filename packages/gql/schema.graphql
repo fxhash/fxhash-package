@@ -412,7 +412,7 @@ input Int_comparison_exp {
 columns and relationships of "Media"
 """
 type Media {
-  createdAt: timestamp!
+  createdAt: timestamptz!
   etag: String!
   id: uuid!
   name: String!
@@ -435,7 +435,7 @@ type Media {
     where: ProjectMedia_bool_exp
   ): [ProjectMedia!]!
   size: Int!
-  updatedAt: timestamp!
+  updatedAt: timestamptz!
 
   """An object relationship"""
   uploader: Account
@@ -450,13 +450,13 @@ input Media_bool_exp {
   _and: [Media_bool_exp!]
   _not: Media_bool_exp
   _or: [Media_bool_exp!]
-  createdAt: timestamp_comparison_exp
+  createdAt: timestamptz_comparison_exp
   etag: String_comparison_exp
   id: uuid_comparison_exp
   name: String_comparison_exp
   project: ProjectMedia_bool_exp
   size: Int_comparison_exp
-  updatedAt: timestamp_comparison_exp
+  updatedAt: timestamptz_comparison_exp
   uploader: Account_bool_exp
   uploaderId: uuid_comparison_exp
 }
@@ -565,12 +565,12 @@ input Media_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input Media_stream_cursor_value_input {
-  createdAt: timestamp
+  createdAt: timestamptz
   etag: String
   id: uuid
   name: String
   size: Int
-  updatedAt: timestamp
+  updatedAt: timestamptz
   uploaderId: uuid
 }
 
@@ -767,7 +767,7 @@ type Project {
     """filter the rows returned"""
     where: ProjectMedia_bool_exp
   ): [ProjectMedia!]!
-  releaseAt: timestamp
+  releaseAt: timestamptz
   state: ProjectState!
   storage: Storage
   title: String!
@@ -1073,7 +1073,7 @@ input Project_bool_exp {
   id: uuid_comparison_exp
   pricing: jsonb_comparison_exp
   projectMedias: ProjectMedia_bool_exp
-  releaseAt: timestamp_comparison_exp
+  releaseAt: timestamptz_comparison_exp
   state: ProjectState_comparison_exp
   storage: Storage_comparison_exp
   title: String_comparison_exp
@@ -1119,7 +1119,7 @@ input Project_insert_input {
   description: String
   pricing: jsonb
   projectMedias: ProjectMedia_arr_rel_insert_input
-  releaseAt: timestamp
+  releaseAt: timestamptz
   storage: Storage
   title: String
 }
@@ -1251,10 +1251,9 @@ input type for updating data in table "Project"
 """
 input Project_set_input {
   blockchain: BlockchainNetwork
-  curatorId: uuid
   description: String
   pricing: jsonb
-  releaseAt: timestamp
+  releaseAt: timestamptz
   storage: Storage
   title: String
 }
@@ -1278,7 +1277,7 @@ input Project_stream_cursor_value_input {
   description: String
   id: uuid
   pricing: jsonb
-  releaseAt: timestamp
+  releaseAt: timestamptz
   state: ProjectState
   storage: Storage
   title: String
@@ -1290,9 +1289,6 @@ update columns of table "Project"
 enum Project_update_column {
   """column name"""
   blockchain
-
-  """column name"""
-  curatorId
 
   """column name"""
   description
@@ -1416,6 +1412,22 @@ type Wallet {
   accountId: uuid!
   address: String!
   network: BlockchainNetwork!
+  walletUser(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
 }
 
 """
@@ -2273,6 +2285,29 @@ enum order_by {
 type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
+
+  """
+  fetch data from the table: "user"
+  """
+  user(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """fetch data from the table: "user" using primary key columns"""
+  user_by_pk(id: String!): user
 }
 
 scalar smallint
@@ -2294,23 +2329,130 @@ input smallint_comparison_exp {
 
 type subscription_root {
   offchain: offchain_subscription
+
+  """
+  fetch data from the table: "user"
+  """
+  user(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """fetch data from the table: "user" using primary key columns"""
+  user_by_pk(id: String!): user
+
+  """
+  fetch data from the table in a streaming manner: "user"
+  """
+  user_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [user_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
 }
 
-scalar timestamp
+scalar timestamptz
 
 """
-Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'.
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
 """
-input timestamp_comparison_exp {
-  _eq: timestamp
-  _gt: timestamp
-  _gte: timestamp
-  _in: [timestamp!]
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
   _is_null: Boolean
-  _lt: timestamp
-  _lte: timestamp
-  _neq: timestamp
-  _nin: [timestamp!]
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "user"
+"""
+type user {
+  flag: user_flag_enum!
+  id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "user". All fields are combined with a logical 'AND'.
+"""
+input user_bool_exp {
+  _and: [user_bool_exp!]
+  _not: user_bool_exp
+  _or: [user_bool_exp!]
+  flag: user_flag_enum_comparison_exp
+  id: String_comparison_exp
+}
+
+scalar user_flag_enum
+
+"""
+Boolean expression to compare columns of type "user_flag_enum". All fields are combined with logical 'AND'.
+"""
+input user_flag_enum_comparison_exp {
+  _eq: user_flag_enum
+  _gt: user_flag_enum
+  _gte: user_flag_enum
+  _in: [user_flag_enum!]
+  _is_null: Boolean
+  _lt: user_flag_enum
+  _lte: user_flag_enum
+  _neq: user_flag_enum
+  _nin: [user_flag_enum!]
+}
+
+"""Ordering options when selecting data from "user"."""
+input user_order_by {
+  flag: order_by
+  id: order_by
+}
+
+"""
+select columns of table "user"
+"""
+enum user_select_column {
+  """column name"""
+  flag
+
+  """column name"""
+  id
+}
+
+"""
+Streaming cursor of the table "user"
+"""
+input user_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: user_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input user_stream_cursor_value_input {
+  flag: user_flag_enum
+  id: String
 }
 
 scalar uuid
