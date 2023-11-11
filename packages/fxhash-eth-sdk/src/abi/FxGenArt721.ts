@@ -1,4 +1,4 @@
-export const ABI = [
+export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
@@ -28,6 +28,11 @@ export const ABI = [
   {
     inputs: [],
     name: "BurnInactive",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InsufficientSupply",
     type: "error",
   },
   {
@@ -82,6 +87,16 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "NewOwnerIsZeroAddress",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NoHandoverRequest",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "NoRoyaltyReceiver",
     type: "error",
   },
@@ -118,17 +133,22 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "SupplyRemaining",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "TokenRoyaltiesNotSet",
     type: "error",
   },
   {
     inputs: [],
-    name: "UnauthorizedAccount",
+    name: "Unauthorized",
     type: "error",
   },
   {
     inputs: [],
-    name: "UnauthorizedContract",
+    name: "UnauthorizedAccount",
     type: "error",
   },
   {
@@ -212,6 +232,19 @@ export const ABI = [
   },
   {
     anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bool",
+        name: "_enabled",
+        type: "bool",
+      },
+    ],
+    name: "BurnEnabled",
+    type: "event",
+  },
+  {
+    anonymous: false,
     inputs: [],
     name: "EIP712DomainChanged",
     type: "event",
@@ -247,8 +280,47 @@ export const ABI = [
     inputs: [
       {
         indexed: true,
+        internalType: "bool",
+        name: "_enabled",
+        type: "bool",
+      },
+    ],
+    name: "MintEnabled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
-        name: "previousOwner",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverCanceled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldOwner",
         type: "address",
       },
       {
@@ -416,6 +488,32 @@ export const ABI = [
         name: "_randomizer",
         type: "address",
       },
+    ],
+    name: "RandomizerUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_renderer",
+        type: "address",
+      },
+    ],
+    name: "RendererUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_randomizer",
+        type: "address",
+      },
       {
         indexed: true,
         internalType: "uint256",
@@ -430,6 +528,25 @@ export const ABI = [
       },
     ],
     name: "SeedFulfilled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint120",
+        name: "_prevSupply",
+        type: "uint120",
+      },
+      {
+        indexed: true,
+        internalType: "uint120",
+        name: "_newSupply",
+        type: "uint120",
+      },
+    ],
+    name: "SupplyReduced",
     type: "event",
   },
   {
@@ -586,6 +703,26 @@ export const ABI = [
     name: "burn",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "cancelOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "completeOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -959,9 +1096,9 @@ export const ABI = [
     name: "isMinter",
     outputs: [
       {
-        internalType: "bool",
+        internalType: "uint8",
         name: "",
-        type: "bool",
+        type: "uint8",
       },
     ],
     stateMutability: "view",
@@ -1100,7 +1237,7 @@ export const ABI = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "result",
         type: "address",
       },
     ],
@@ -1152,6 +1289,25 @@ export const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "ownershipHandoverExpiresAt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "result",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1280,7 +1436,14 @@ export const ABI = [
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "requestOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -1668,7 +1831,7 @@ export const ABI = [
     ],
     name: "transferOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {

@@ -89,6 +89,7 @@ export function getEthersAdapterForSafe(
   signer: ethers.providers.JsonRpcSigner
 ): EthersAdapter {
   const ethAdapter = new EthersAdapter({
+    // @ts-ignore
     ethers,
     signerOrProvider: signer,
   })

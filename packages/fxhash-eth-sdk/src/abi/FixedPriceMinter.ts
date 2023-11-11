@@ -1,4 +1,4 @@
-export const ABI = [
+export const FIXED_PRICE_MINTER_ABI = [
   {
     inputs: [],
     name: "AddressZero",
@@ -451,6 +451,21 @@ export const ABI = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveNonce",
+        type: "uint256",
+      },
+      {
         internalType: "uint256",
         name: "_index",
         type: "uint256",
@@ -476,16 +491,35 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "_token",
         type: "address",
       },
     ],
-    name: "latestUpdates",
+    name: "getLatestUpdate",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint40",
         name: "",
-        type: "uint256",
+        type: "uint40",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+    ],
+    name: "getSaleProceed",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "",
+        type: "uint128",
       },
     ],
     stateMutability: "view",
@@ -552,6 +586,30 @@ export const ABI = [
         type: "uint256",
       },
     ],
+    name: "reserveNonce",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     name: "reserves",
     outputs: [
       {
@@ -568,25 +626,6 @@ export const ABI = [
         internalType: "uint128",
         name: "allocation",
         type: "uint128",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "saleProceeds",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",

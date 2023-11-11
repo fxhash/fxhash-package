@@ -6,7 +6,6 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "baseUrl": ".",
-    "jsx": "react-jsx",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -22,6 +21,7 @@
     "noImplicitThis": false,
     "strictNullChecks": false,
     "isolatedModules": true,
+    "types": ["vitest/globals"],
     "paths": {
       "@/*": ["./src/*"]
     }

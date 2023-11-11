@@ -1,4 +1,4 @@
-export const ABI = [
+export const TICKET_REDEEMER_ABI = [
   {
     inputs: [],
     name: "AlreadySet",
@@ -68,12 +68,12 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "_ticket",
+        name: "_token",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "_tokenId",
+        name: "_ticketId",
         type: "uint256",
       },
       {
@@ -130,7 +130,7 @@ export const ABI = [
         type: "address",
       },
     ],
-    name: "tokens",
+    name: "tickets",
     outputs: [
       {
         internalType: "address",

@@ -1,9 +1,14 @@
-export const ABI = [
+export const FX_SPLITS_FACTORY_ABI = [
   {
     inputs: [
       {
         internalType: "address",
         name: "_admin",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_splits",
         type: "address",
       },
     ],
@@ -19,6 +24,25 @@ export const ABI = [
     inputs: [],
     name: "SplitsExists",
     type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_oldController",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_newController",
+        type: "address",
+      },
+    ],
+    name: "ControllerUpdated",
+    type: "event",
   },
   {
     anonymous: false,
@@ -77,25 +101,6 @@ export const ABI = [
     type: "event",
   },
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_oldController",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_newController",
-        type: "address",
-      },
-    ],
-    name: "UpdateController",
-    type: "event",
-  },
-  {
     inputs: [],
     name: "controller",
     outputs: [
@@ -122,6 +127,35 @@ export const ABI = [
       },
     ],
     name: "createImmutableSplit",
+    outputs: [
+      {
+        internalType: "address",
+        name: "split",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_creator",
+        type: "address",
+      },
+      {
+        internalType: "address[]",
+        name: "_accounts",
+        type: "address[]",
+      },
+      {
+        internalType: "uint32[]",
+        name: "_allocations",
+        type: "uint32[]",
+      },
+    ],
+    name: "createMutableSplit",
     outputs: [
       {
         internalType: "address",
@@ -204,24 +238,37 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "newOwner",
+        name: "_controller",
         type: "address",
       },
     ],
-    name: "transferOwnership",
+    name: "setController",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "splits",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
       {
         internalType: "address",
-        name: "_newController",
+        name: "newOwner",
         type: "address",
       },
     ],
-    name: "updateController",
+    name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

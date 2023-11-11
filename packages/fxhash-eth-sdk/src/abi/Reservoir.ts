@@ -1,4 +1,4 @@
-export const ABI = [
+export const RESERVOIR_ABI = [
   { inputs: [], name: "UnsuccessfulExecution", type: "error" },
   { inputs: [], name: "UnsuccessfulPayment", type: "error" },
   {

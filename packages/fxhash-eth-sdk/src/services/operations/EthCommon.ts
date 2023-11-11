@@ -13,9 +13,16 @@ import {
   toHex,
 } from "viem"
 
-import { ABI as MintTicketFactoryABI } from "@/abi/FxTicketFactory"
+import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { Whitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
+import { getOpenChainError } from "@/services/Openchain"
+
+export enum MintTypes {
+  FIXED_PRICE,
+  DUTCH_AUCTION,
+  TICKET,
+}
 
 //Type definition for the primary and royalties receivers
 export interface ReceiverEntry {
@@ -35,18 +42,14 @@ export interface SimulateAndExecuteContractRequest {
 
 export interface MintInfo {
   minter: string
-  reserveInfo: {
-    startTime: number
-    endTime: number
-    allocation: bigint
-  }
+  reserveInfo: ReserveInfo
   params: string
 }
 
 export interface InitInfo {
   name: string
   symbol: string
-  primaryReceiver?: string
+  primaryReceiver: string
   randomizer: string
   renderer: string
   tagIds: number[]
@@ -68,9 +71,26 @@ export interface MetadataInfo {
 }
 
 export interface ReserveInfo {
-  startTime: number
-  endTime: number
+  startTime?: bigint
+  endTime?: bigint
   allocation: bigint
+}
+
+export interface FixedPriceMintInfoArgs {
+  type: MintTypes.FIXED_PRICE
+  reserveInfo: ReserveInfo
+  params: FixedPriceParams
+}
+
+export interface DutchAuctionMintInfoArgs {
+  type: MintTypes.DUTCH_AUCTION
+  reserveInfo: ReserveInfo
+  params: DutchAuctionParams
+}
+
+export interface TicketMintInfoArgs {
+  type: MintTypes.TICKET
+  reserveInfo: ReserveInfo
 }
 
 export interface FixedPriceParams {
@@ -95,16 +115,19 @@ export interface DutchAuctionParams {
  * @param {any} error - The `error` parameter from the simulation of the contract function call.
  * object.
  */
-export function handleContractError(error: any): never {
+export async function handleContractError(error: any): Promise<string> {
   //if it's an error sent by the contract, we want to throw a more meaningful error
   if (error instanceof BaseError) {
     const revertError = error.walk(
       err => err instanceof ContractFunctionRevertedError
     )
     if (revertError instanceof ContractFunctionRevertedError) {
-      const errorName = revertError.data?.errorName ?? ""
+      let errorName = revertError.data?.errorName ?? ""
+      if (!errorName) {
+        errorName = await getOpenChainError(revertError.signature)
+      }
       console.log("error: ", error)
-      throw Error("Failed: " + errorName)
+      return "Failed: " + errorName
     }
   }
   throw error // Re-throwing error if it's not an instance of BaseError.
@@ -151,7 +174,8 @@ export async function simulateAndExecuteContract(
     return receipt
   } catch (error) {
     //handle any error from the execution
-    handleContractError(error)
+    const errorMessage = await handleContractError(error)
+    throw Error(errorMessage)
   }
 }
 
@@ -213,7 +237,7 @@ export async function getTicketFactoryUserNonce(
 ): Promise<bigint> {
   const ticketFactory = getContract({
     address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
-    abi: MintTicketFactoryABI,
+    abi: FX_TICKETS_FACTORY_ABI,
     walletClient: walletManager.walletClient,
     publicClient: walletManager.publicClient,
   })
@@ -255,15 +279,13 @@ export function sortReceiversAlphabetically(
  * @returns an array of ReceiverEntry objects.
  */
 export function preparePrimaryReceivers(
-  receivers: ReceiverEntry[],
-  feeReceiver: ReceiverEntry
+  receivers: ReceiverEntry[]
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
   const originalTotal = receivers.reduce(
     (sum, account) => sum + account.value,
     0
   )
-  receivers = sortReceiversAlphabetically(receivers)
   /**
    * Check that the total is 10_000
    * This is a sanity check to make sure that the total is 100%
@@ -272,6 +294,10 @@ export function preparePrimaryReceivers(
     throw Error("Primary receivers total must be 10000")
   }
 
+  const feeReceiver: ReceiverEntry = {
+    account: config.config.ethFeeReceiver,
+    value: config.config.fxhashPrimaryFee,
+  }
   // Calculate the fee ratio for each account
   const feeRatio = feeReceiver.value / originalTotal
 
@@ -282,7 +308,12 @@ export function preparePrimaryReceivers(
   }))
 
   // Add the fee account with its full value
-  receivers.push(feeReceiver)
+  receivers.push({
+    account: feeReceiver.account,
+    value: feeReceiver.value * 100,
+  })
+
+  receivers = sortReceiversAlphabetically(receivers)
 
   // Due to floating point precision, there might be a small discrepancy
   // from the intended total, so we can adjust the last account slightly

@@ -2,6 +2,7 @@ import {
   PublicClient,
   WalletClient,
   encodeAbiParameters,
+  encodePacked,
   getContract,
 } from "viem"
 import { FlattenedWhitelist, getWhitelistTree } from "./whitelist"
@@ -110,32 +111,33 @@ export function getDutchAuctionMinterEncodedParams(
 }
 
 /**
- * The function `signMintPass` signs a mint pass using a private key and returns the encoded signature.
+ * The function `signMintPass` signs a mint pass using the provided parameters and returns the encoded
+ * signature.
+ * @param token - The `token` parameter is a string representing the token address. It should be in the
+ * format `0x` followed by a hexadecimal string.
+ * @param {number} reserveId - The `reserveId` parameter is a number that represents the ID of the
+ * reserve. It is used to identify a specific reserve in the contract.
  * @param {number} index - The `index` parameter is a number that represents the index of the mint
- * pass. It is used to identify a specific mint pass within the contract.
- * @param address - The `address` parameter is the Ethereum address of the user who wants to mint a
- * pass. It should be a string starting with "0x".
+ * pass. It is used to uniquely identify a specific mint pass within a reserve.
+ * @param claimer - The `claimer` parameter is the Ethereum address of the account that will claim the
+ * mint pass.
  * @param {WalletClient} walletClient - The `walletClient` parameter is an instance of a wallet client
- * that is used to interact with the user's wallet. It is typically used for signing transactions or
- * messages with the user's private key.
+ * that will be used to sign the mint pass.
  * @param {PublicClient} publicClient - The `publicClient` parameter is an instance of a client that
- * interacts with the public blockchain network. It is used to read data from the blockchain and does
- * not require any private keys or signing capabilities.
+ * interacts with the public blockchain network. It is used to read data from the blockchain, such as
+ * contract state or transaction information.
  * @param privateKey - The `privateKey` parameter is a hexadecimal string representing the private key
- * used for signing the typed data hash. It should be in the format `0x` followed by a series of
- * hexadecimal characters.
- * @param minter - The `minter` parameter is the address of the contract or account that will be
- * responsible for minting the pass.
- * @param {any} abi - The `abi` parameter is the ABI (Application Binary Interface) of the smart
- * contract that you are interacting with. It is a JSON array that describes the functions and events
- * of the contract, including their names, inputs, and outputs. The ABI is used to encode and decode
- * function calls and event data
- * @returns the encoded ABI parameters of the signature, which includes the "v" (uint8), "r" (bytes32),
- * and "s" (bytes32) values.
+ * of the signer. It is used to sign the `typedDataHash` and generate a signature for the mint pass.
+ * @param minter - The `minter` parameter is the address of the minter contract used for the mint pass
+ * @param {any} abi - The `abi` parameter is the ABI (Application Binary Interface) of minter contract used
+ * @returns the encoded packed values of the signature components (`signature.r`, `signature.s`, and
+ * `signature.v`) as a `bytes32` array and a `uint8` value.
  */
 export async function signMintPass(
+  token: `0x${string}`,
+  reserveId: number,
   index: number,
-  address: `0x${string}`,
+  claimer: `0x${string}`,
   walletClient: WalletClient,
   publicClient: PublicClient,
   privateKey: `0x${string}`,
@@ -148,9 +150,13 @@ export async function signMintPass(
     walletClient: walletClient,
     publicClient: publicClient,
   })
+  const nonce = await contract.read.reserveNonce([token, reserveId])
   const typedDataHash = await contract.read.generateTypedDataHash([
+    token,
+    reserveId,
+    nonce,
     index,
-    address,
+    claimer,
   ])
   if (typeof typedDataHash !== "string") {
     throw Error("Could not get typed hash for mint pass")
@@ -159,12 +165,8 @@ export async function signMintPass(
     hash: typedDataHash,
     privateKey: privateKey,
   })
-  return encodeAbiParameters(
-    [
-      { type: "uint8", name: "v" },
-      { type: "bytes32", name: "r" },
-      { type: "bytes32", name: "s" },
-    ],
-    [Number(signature.v), signature.r, signature.s]
+  return encodePacked(
+    ["bytes32", "bytes32", "uint8"],
+    [signature.r, signature.s, Number(signature.v)]
   )
 }
