@@ -20,7 +20,7 @@ import {
   TUserWalletContext,
 } from "../types/UserWalletContext"
 
-interface TUserEthereumWalletContext extends TUserWalletContext {
+export interface TUserEthereumWalletContext extends TUserWalletContext {
   walletManager: EthereumWalletManager | null
   address: `0x${string}` | null
   signConnectionMessage: () => ReturnType<TUserWalletContext["connect"]>
