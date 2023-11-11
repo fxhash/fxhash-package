@@ -1,4 +1,9 @@
-import { BlockchainType, invariant, success } from "@fxhash/contracts-shared"
+import {
+  BlockchainType,
+  SignMessageOptions,
+  invariant,
+  success,
+} from "@fxhash/contracts-shared"
 import { useDeferredTask } from "../utils/useDeferredTask"
 import { useEthereumUserContext } from "./EthereumUser"
 import { useTezosUserContext } from "./TezosUser"
@@ -15,7 +20,7 @@ const FXHASH_TERMS_OF_SERVICE =
  * @param {string} address - The Tezos address to include in the payload.
  * @return {string} - The formatted payload.
  */
-const formatSignInPayload = (address: string): string =>
+export const formatSignInPayload = (address: string): string =>
   `${SIGN_IN_MESSAGE} (${address}). ${FXHASH_TERMS_OF_SERVICE}. Issued At: ${new Date().toISOString()} - valid for 5 mins.`
 
 /**
@@ -32,35 +37,44 @@ export const useSignMessage = () => {
   const { walletManager: tezosWalletManager } = useTezosUserContext()
   const { walletManager: ethereumWalletManager } = useEthereumUserContext()
 
-  return useDeferredTask(async ({ network }: { network: BlockchainType }) => {
-    let walletManager: TezosWalletManager | EthereumWalletManager | null
+  return useDeferredTask(
+    async ({
+      network,
+      options,
+    }: {
+      network: BlockchainType
+      options?: SignMessageOptions
+    }) => {
+      let walletManager: TezosWalletManager | EthereumWalletManager | null
 
-    if (network === BlockchainType.ETHEREUM) {
-      walletManager = ethereumWalletManager
-    } else if (network === BlockchainType.TEZOS) {
-      walletManager = tezosWalletManager
-    } else {
-      throw new Error(`useSignMessage: ${network} is not supported`)
+      if (network === BlockchainType.ETHEREUM) {
+        walletManager = ethereumWalletManager
+      } else if (network === BlockchainType.TEZOS) {
+        walletManager = tezosWalletManager
+      } else {
+        throw new Error(`useSignMessage: ${network} is not supported`)
+      }
+
+      invariant(
+        walletManager,
+        `useSignMessage: ${network} wallet manager is not defined`
+      )
+
+      let message = formatSignInPayload(walletManager.address)
+      // Some wallets in Tezos show a warning message if not prefixed by
+      // "Tezos Signed Message"
+      if (network === BlockchainType.TEZOS) {
+        message = `Tezos ${message}`
+      }
+      const result = await walletManager.signMessage(message, options)
+      if (result.isFailure()) {
+        return result
+      }
+
+      return success({
+        message,
+        signature: result.value,
+      })
     }
-
-    invariant(
-      walletManager,
-      `useSignMessage: ${network} wallet manager is not defined`
-    )
-
-    let message = formatSignInPayload(walletManager.address)
-    // Some wallets in Tezos show a warning message if not prefixed by "Tezos Signed Message"
-    if (network === BlockchainType.TEZOS) {
-      message = `Tezos ${message}`
-    }
-    const result = await walletManager.signMessage(message)
-    if (result.isFailure()) {
-      return result
-    }
-
-    return success({
-      message,
-      signature: result.value,
-    })
-  })
+  )
 }

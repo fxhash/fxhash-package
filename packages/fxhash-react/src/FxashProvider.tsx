@@ -6,6 +6,11 @@ import {
   EthereumUserProvider,
   EthereumUserProviderConfig,
 } from "./authentication/EthereumUser"
+import {
+  PendingSigningRequestError,
+  UserRejectedError,
+} from "@fxhash/contracts-shared"
+import { ConfirmationProvider } from "./confirmation/Confirmation"
 
 interface FxhashProviderProps {
   config: {
@@ -15,12 +20,18 @@ interface FxhashProviderProps {
   children: React.ReactNode
 }
 
+export type FxhashContext = {
+  connectionError?: UserRejectedError | PendingSigningRequestError
+}
+
 export const FxhashProvider = ({ config, children }: FxhashProviderProps) => {
   return (
-    <TezosUserProvider config={config.tezos}>
-      <EthereumUserProvider config={config.ethereum}>
-        {children}
-      </EthereumUserProvider>
-    </TezosUserProvider>
+    <ConfirmationProvider>
+      <TezosUserProvider config={config.tezos}>
+        <EthereumUserProvider config={config.ethereum}>
+          {children}
+        </EthereumUserProvider>
+      </TezosUserProvider>
+    </ConfirmationProvider>
   )
 }
