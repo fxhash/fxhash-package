@@ -54,6 +54,9 @@ type Account {
   ): [Project!]!
   id: uuid!
 
+  """An object relationship"""
+  mainWallet: Wallet!
+
   """An array relationship"""
   profile(
     """distinct select on columns"""
@@ -209,6 +212,7 @@ input Account_bool_exp {
   authoredProjects: Project_bool_exp
   curatedProjects: Project_bool_exp
   id: uuid_comparison_exp
+  mainWallet: Wallet_bool_exp
   profile: Profile_bool_exp
   roles: AccountsRoles_bool_exp
   status: AccountStatus_comparison_exp
@@ -232,6 +236,7 @@ input Account_order_by {
   authoredProjects_aggregate: Project_aggregate_order_by
   curatedProjects_aggregate: Project_aggregate_order_by
   id: order_by
+  mainWallet: Wallet_order_by
   profile_aggregate: Profile_aggregate_order_by
   roles_aggregate: AccountsRoles_aggregate_order_by
   status: order_by
@@ -2146,9 +2151,6 @@ type article {
     """filter the rows returned"""
     where: listing_bool_exp
   ): [listing!]!
-
-  """An object relationship"""
-  media_image: media_image
   metadata(
     """JSON select path"""
     path: String
@@ -2256,7 +2258,6 @@ input article_bool_exp {
   id: Int_comparison_exp
   language: String_comparison_exp
   listings: listing_bool_exp
-  media_image: media_image_bool_exp
   metadata: json_comparison_exp
   metadata_locked: Boolean_comparison_exp
   metadata_uri: String_comparison_exp
@@ -2588,7 +2589,6 @@ input article_order_by {
   id: order_by
   language: order_by
   listings_aggregate: listing_aggregate_order_by
-  media_image: media_image_order_by
   metadata: order_by
   metadata_locked: order_by
   metadata_uri: order_by
@@ -4369,9 +4369,6 @@ type generative_token {
     """filter the rows returned"""
     where: market_stats_history_bool_exp
   ): [market_stats_history!]!
-
-  """An object relationship"""
-  media_image: media_image
   metadata(
     """JSON select path"""
     path: String
@@ -4660,7 +4657,6 @@ input generative_token_bool_exp {
   locked_seconds: Int_comparison_exp
   market_stat: market_stats_bool_exp
   market_stats_histories: market_stats_history_bool_exp
-  media_image: media_image_bool_exp
   metadata: json_comparison_exp
   metadata_uri: String_comparison_exp
   mint_opens_at: timestamptz_comparison_exp
@@ -4798,7 +4794,6 @@ input generative_token_order_by {
   locked_seconds: order_by
   market_stat: market_stats_order_by
   market_stats_histories_aggregate: market_stats_history_aggregate_order_by
-  media_image: media_image_order_by
   metadata: order_by
   metadata_uri: order_by
   mint_opens_at: order_by
@@ -6670,104 +6665,6 @@ input market_stats_stream_cursor_value_input {
 }
 
 """
-columns and relationships of "media_image"
-"""
-type media_image {
-  cid: bpchar!
-  height: Int
-  metadata(
-    """JSON select path"""
-    path: String
-  ): json
-  mime_type: String
-  placeholder: String
-  process_counters: smallint!
-  processed: Boolean!
-  width: Int
-}
-
-"""
-Boolean expression to filter rows from the table "media_image". All fields are combined with a logical 'AND'.
-"""
-input media_image_bool_exp {
-  _and: [media_image_bool_exp!]
-  _not: media_image_bool_exp
-  _or: [media_image_bool_exp!]
-  cid: bpchar_comparison_exp
-  height: Int_comparison_exp
-  metadata: json_comparison_exp
-  mime_type: String_comparison_exp
-  placeholder: String_comparison_exp
-  process_counters: smallint_comparison_exp
-  processed: Boolean_comparison_exp
-  width: Int_comparison_exp
-}
-
-"""Ordering options when selecting data from "media_image"."""
-input media_image_order_by {
-  cid: order_by
-  height: order_by
-  metadata: order_by
-  mime_type: order_by
-  placeholder: order_by
-  process_counters: order_by
-  processed: order_by
-  width: order_by
-}
-
-"""
-select columns of table "media_image"
-"""
-enum media_image_select_column {
-  """column name"""
-  cid
-
-  """column name"""
-  height
-
-  """column name"""
-  metadata
-
-  """column name"""
-  mime_type
-
-  """column name"""
-  placeholder
-
-  """column name"""
-  process_counters
-
-  """column name"""
-  processed
-
-  """column name"""
-  width
-}
-
-"""
-Streaming cursor of the table "media_image"
-"""
-input media_image_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: media_image_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input media_image_stream_cursor_value_input {
-  cid: bpchar
-  height: Int
-  metadata: json
-  mime_type: String
-  placeholder: String
-  process_counters: smallint
-  processed: Boolean
-  width: Int
-}
-
-"""
 columns and relationships of "metric"
 """
 type metric {
@@ -6979,9 +6876,6 @@ type mint_ticket_settings {
   generative_token: generative_token!
   gracing_period: Int!
   id: String!
-
-  """An object relationship"""
-  media_image: media_image
   metadata(
     """JSON select path"""
     path: String
@@ -7024,7 +6918,6 @@ input mint_ticket_settings_bool_exp {
   generative_token: generative_token_bool_exp
   gracing_period: Int_comparison_exp
   id: String_comparison_exp
-  media_image: media_image_bool_exp
   metadata: json_comparison_exp
   metadata_uri: String_comparison_exp
 }
@@ -7055,7 +6948,6 @@ input mint_ticket_settings_order_by {
   generative_token: generative_token_order_by
   gracing_period: order_by
   id: order_by
-  media_image: media_image_order_by
   metadata: order_by
   metadata_uri: order_by
 }
@@ -7462,9 +7354,6 @@ type objkt {
     """filter the rows returned"""
     where: listing_bool_exp
   ): [listing!]!
-
-  """An object relationship"""
-  media_image: media_image
   metadata(
     """JSON select path"""
     path: String
@@ -7612,7 +7501,6 @@ input objkt_bool_exp {
   issuer_version: generative_token_version_comparison_exp
   iteration: numeric_comparison_exp
   listings: listing_bool_exp
-  media_image: media_image_bool_exp
   metadata: json_comparison_exp
   metadata_uri: String_comparison_exp
   minter_id: String_comparison_exp
@@ -7705,7 +7593,6 @@ input objkt_order_by {
   issuer_version: order_by
   iteration: order_by
   listings_aggregate: listing_aggregate_order_by
-  media_image: media_image_order_by
   metadata: order_by
   metadata_uri: order_by
   minter_id: order_by
@@ -9444,29 +9331,6 @@ type onchain_query {
   market_stats_history_by_pk(id: Int!): market_stats_history
 
   """
-  fetch data from the table: "media_image"
-  """
-  media_image(
-    """distinct select on columns"""
-    distinct_on: [media_image_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [media_image_order_by!]
-
-    """filter the rows returned"""
-    where: media_image_bool_exp
-  ): [media_image!]!
-
-  """fetch data from the table: "media_image" using primary key columns"""
-  media_image_by_pk(cid: bpchar!): media_image
-
-  """
   fetch data from the table: "metric"
   """
   metric(
@@ -10632,43 +10496,6 @@ type onchain_subscription {
     """filter the rows returned"""
     where: market_stats_bool_exp
   ): [market_stats!]!
-
-  """
-  fetch data from the table: "media_image"
-  """
-  media_image(
-    """distinct select on columns"""
-    distinct_on: [media_image_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [media_image_order_by!]
-
-    """filter the rows returned"""
-    where: media_image_bool_exp
-  ): [media_image!]!
-
-  """fetch data from the table: "media_image" using primary key columns"""
-  media_image_by_pk(cid: bpchar!): media_image
-
-  """
-  fetch data from the table in a streaming manner: "media_image"
-  """
-  media_image_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [media_image_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: media_image_bool_exp
-  ): [media_image!]!
 
   """
   fetch data from the table: "metric"
@@ -13221,9 +13048,6 @@ type user {
     """filter the rows returned"""
     where: listing_bool_exp
   ): [listing!]!
-
-  """An object relationship"""
-  media_image: media_image
   metadata(
     """JSON select path"""
     path: String
@@ -13403,7 +13227,6 @@ input user_bool_exp {
   id: String_comparison_exp
   listings: listing_bool_exp
   listingsByAcceptedById: listing_bool_exp
-  media_image: media_image_bool_exp
   metadata: jsonb_comparison_exp
   metadata_uri: String_comparison_exp
   mint_tickets: mint_ticket_bool_exp
@@ -13494,7 +13317,6 @@ input user_order_by {
   id: order_by
   listingsByAcceptedById_aggregate: listing_aggregate_order_by
   listings_aggregate: listing_aggregate_order_by
-  media_image: media_image_order_by
   metadata: order_by
   metadata_uri: order_by
   mint_tickets_aggregate: mint_ticket_aggregate_order_by
