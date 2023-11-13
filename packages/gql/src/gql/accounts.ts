@@ -7,8 +7,13 @@ export const Frag_AccountBaseDetails = graphql(`
   fragment Account_BaseDetails on Account {
     id
     username
+    status
     profile {
       picture
+      description
+    }
+    wallets {
+      ...Wallet_BaseDetails
     }
   }
 `)
