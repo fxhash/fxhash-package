@@ -1,11 +1,13 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { TransactionReceipt } from "viem"
+import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import { proposeSafeTransaction } from "@/services/Safe"
 
 /**
  * The above type represents the parameters for setting the base URI for an Ethereum V1 operation.
@@ -14,10 +16,25 @@ import {
  * @property {string} baseURI - The `baseURI` property is a string that represents the base URI for a
  * token. It is used to construct the URI for each individual token by appending the token's unique
  * identifier to the base URI.
+ * @property {boolean} isCollab - A boolean value that indicates whether the operation is being
+ * performed by a multisig.
  */
 export type TSetBaseURIEthV1OperationParams = {
   token: `0x${string}`
   baseURI: string
+  isCollab: boolean
+}
+
+export function getSafeTxData(): SafeTransactionDataPartial {
+  return {
+    to: getAddress(this.params.token),
+    data: encodeFunctionData({
+      abi: FX_GEN_ART_721_ABI,
+      functionName: "setBaseURI",
+      args: [this.params.baseURI],
+    }),
+    value: "0",
+  }
 }
 
 /* The SetBaseURIEthV1Operation class is used to set the base URI for a specific token on the Ethereum
@@ -26,14 +43,18 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    const args: SimulateAndExecuteContractRequest = {
-      address: this.params.token,
-      abi: FX_GEN_ART_721_ABI,
-      functionName: "setBaseURI",
-      args: [this.params.baseURI],
-      account: this.manager.address,
+    if (this.params.isCollab) {
+      return await proposeSafeTransaction(getSafeTxData(), this.manager)
+    } else {
+      const args: SimulateAndExecuteContractRequest = {
+        address: this.params.token,
+        abi: FX_GEN_ART_721_ABI,
+        functionName: "setBaseURI",
+        args: [this.params.baseURI],
+        account: this.manager.address,
+      }
+      return simulateAndExecuteContract(this.manager, args)
     }
-    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

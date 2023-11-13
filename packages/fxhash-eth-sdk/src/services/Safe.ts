@@ -18,7 +18,7 @@ import { getAddress } from "viem"
  */
 export async function getSafeSDK(
   safeAddress: string,
-  signer: ethers.providers.JsonRpcSigner
+  signer: ethers.Signer | ethers.providers.Provider
 ): Promise<Safe> {
   // @ts-ignore
   return await Safe.default.create({
@@ -33,7 +33,9 @@ export async function getSafeSDK(
  * represents an Ethereum account that can sign transactions and interact with the Ethereum network.
  * @returns a Promise that resolves to a SafeFactory instance.
  */
-export async function getSafeFactory(signer: ethers.providers.JsonRpcSigner) {
+export async function getSafeFactory(
+  signer: ethers.Signer | ethers.providers.Provider
+) {
   return await SafeFactory.create({
     ethAdapter: getEthersAdapterForSafe(signer),
   })
@@ -48,7 +50,7 @@ export async function getSafeFactory(signer: ethers.providers.JsonRpcSigner) {
  * @returns an instance of the `SafeApiKit` class.
  */
 export function getSafeService(
-  signer: ethers.providers.JsonRpcSigner
+  signer: ethers.Signer | ethers.providers.Provider
 ): SafeApiKit {
   // @ts-ignore
   return new SafeApiKit.default({
