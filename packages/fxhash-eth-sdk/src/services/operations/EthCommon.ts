@@ -61,7 +61,6 @@ export interface ProjectInfo {
   burnEnabled: boolean
   maxSupply: bigint
   inputSize: number
-  contractURI: string
 }
 
 export interface MetadataInfo {

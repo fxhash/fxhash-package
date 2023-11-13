@@ -77,7 +77,6 @@ export type TCreateProjectEthV1OperationParams = {
     burnEnabled: boolean
     maxSupply: bigint
     inputSize: number
-    contractURI: string
   }
   metadataInfo: {
     baseURI: string
@@ -132,7 +131,6 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
 
     const projectInfo: ProjectInfo = {
       burnEnabled: this.params.projectInfo.burnEnabled,
-      contractURI: this.params.projectInfo.contractURI,
       inputSize: this.params.projectInfo.inputSize,
       maxSupply: this.params.projectInfo.maxSupply,
       mintEnabled: this.params.projectInfo.mintEnabled,
