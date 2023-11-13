@@ -235,11 +235,6 @@ export const FX_ISSUER_FACTORY_ABI = [
             name: "inputSize",
             type: "uint120",
           },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
-          },
         ],
         internalType: "struct ProjectInfo",
         name: "_projectInfo",

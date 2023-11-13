@@ -193,13 +193,13 @@ export const FX_TICKETS_ABI = [
       {
         indexed: false,
         internalType: "uint48",
-        name: "_newForeclosureTime",
+        name: "_foreclosureTime",
         type: "uint48",
       },
       {
         indexed: false,
         internalType: "uint80",
-        name: "_newDepositAmount",
+        name: "_depositAmount",
         type: "uint80",
       },
       {
@@ -230,13 +230,13 @@ export const FX_TICKETS_ABI = [
       {
         indexed: false,
         internalType: "uint48",
-        name: "_newForeclosure",
+        name: "_foreclosureTime",
         type: "uint48",
       },
       {
         indexed: false,
         internalType: "uint80",
-        name: "_newTotalDeposit",
+        name: "_depositAmount",
         type: "uint80",
       },
     ],
@@ -345,7 +345,7 @@ export const FX_TICKETS_ABI = [
       {
         indexed: false,
         internalType: "uint128",
-        name: "_newForeclosure",
+        name: "_foreclosureTime",
         type: "uint128",
       },
       {

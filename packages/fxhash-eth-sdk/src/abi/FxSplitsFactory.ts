@@ -22,7 +22,22 @@ export const FX_SPLITS_FACTORY_ABI = [
   },
   {
     inputs: [],
+    name: "NewOwnerIsZeroAddress",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NoHandoverRequest",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "SplitsExists",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "Unauthorized",
     type: "error",
   },
   {
@@ -50,7 +65,33 @@ export const FX_SPLITS_FACTORY_ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "previousOwner",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverCanceled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipHandoverRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldOwner",
         type: "address",
       },
       {
@@ -102,6 +143,26 @@ export const FX_SPLITS_FACTORY_ABI = [
   },
   {
     inputs: [],
+    name: "cancelOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "completeOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "controller",
     outputs: [
       {
@@ -140,11 +201,6 @@ export const FX_SPLITS_FACTORY_ABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_creator",
-        type: "address",
-      },
-      {
         internalType: "address[]",
         name: "_accounts",
         type: "address[]",
@@ -169,6 +225,11 @@ export const FX_SPLITS_FACTORY_ABI = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_creator",
+        type: "address",
+      },
+      {
         internalType: "address[]",
         name: "_accounts",
         type: "address[]",
@@ -179,7 +240,7 @@ export const FX_SPLITS_FACTORY_ABI = [
         type: "uint32[]",
       },
     ],
-    name: "createMutableSplit",
+    name: "createMutableSplitFor",
     outputs: [
       {
         internalType: "address",
@@ -220,8 +281,27 @@ export const FX_SPLITS_FACTORY_ABI = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "result",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pendingOwner",
+        type: "address",
+      },
+    ],
+    name: "ownershipHandoverExpiresAt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "result",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -231,7 +311,14 @@ export const FX_SPLITS_FACTORY_ABI = [
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "requestOwnershipHandover",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -270,7 +357,7 @@ export const FX_SPLITS_FACTORY_ABI = [
     ],
     name: "transferOwnership",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
 ]

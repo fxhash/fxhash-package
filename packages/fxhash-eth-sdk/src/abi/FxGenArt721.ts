@@ -216,6 +216,19 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "string",
+        name: "_uri",
+        type: "string",
+      },
+    ],
+    name: "BaseURIUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint256",
         name: "_fromTokenId",
         type: "uint256",
@@ -247,6 +260,19 @@ export const FX_GEN_ART_721_ABI = [
     anonymous: false,
     inputs: [],
     name: "EIP712DomainChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "_uri",
+        type: "string",
+      },
+    ],
+    name: "ImageURIUpdated",
     type: "event",
   },
   {
@@ -387,11 +413,6 @@ export const FX_GEN_ART_721_ABI = [
             internalType: "uint120",
             name: "inputSize",
             type: "uint120",
-          },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
           },
         ],
         indexed: false,
@@ -880,6 +901,32 @@ export const FX_GEN_ART_721_ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getBaseURI",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getImageURI",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -973,11 +1020,6 @@ export const FX_GEN_ART_721_ABI = [
             internalType: "uint120",
             name: "inputSize",
             type: "uint120",
-          },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
           },
         ],
         internalType: "struct ProjectInfo",
@@ -1140,11 +1182,6 @@ export const FX_GEN_ART_721_ABI = [
             name: "inputSize",
             type: "uint120",
           },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
-          },
         ],
         internalType: "struct ProjectInfo",
         name: "projectInfo",
@@ -1224,7 +1261,7 @@ export const FX_GEN_ART_721_ABI = [
     outputs: [
       {
         internalType: "string",
-        name: "",
+        name: "_name",
         type: "string",
       },
     ],
@@ -1560,24 +1597,6 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "address payable[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        internalType: "uint96[]",
-        name: "_basisPoints",
-        type: "uint96[]",
-      },
-    ],
-    name: "setBaseRoyalties",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "string",
         name: "_uri",
         type: "string",
@@ -1589,24 +1608,6 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "setBaseURI",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
-      },
-    ],
-    name: "setContractURI",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1671,29 +1672,6 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "address payable[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        internalType: "uint96[]",
-        name: "_basisPoints",
-        type: "uint96[]",
-      },
-    ],
-    name: "setTokenRoyalties",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "bytes4",
         name: "interfaceId",
         type: "bytes4",
@@ -1716,7 +1694,7 @@ export const FX_GEN_ART_721_ABI = [
     outputs: [
       {
         internalType: "string",
-        name: "",
+        name: "_symbol",
         type: "string",
       },
     ],
