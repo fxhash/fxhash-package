@@ -65,7 +65,6 @@ export interface ProjectInfo {
 
 export interface MetadataInfo {
   baseURI: string
-  imageURI: string
   onchainData: string
 }
 
