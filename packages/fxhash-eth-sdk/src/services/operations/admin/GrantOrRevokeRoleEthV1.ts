@@ -6,7 +6,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { ETH_ROLES } from "./EthRoles"
+import { ETH_ROLES } from "@/utils/roles"
 import { FxhashContracts } from "@/contracts/Contracts"
 
 export type TGrantOrRevokeRoleEthV1OperationParams = {
