@@ -9,6 +9,10 @@ export const Frag_AccountBaseDetails = graphql(`
     username
     profile {
       picture
+      description
+    }
+    wallets {
+      ...Wallet_BaseDetails
     }
   }
 `)
