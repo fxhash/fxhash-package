@@ -17,11 +17,17 @@ export const Frag_ProjectBaseDetails = graphql(`
       id
       status
       username
+      wallets {
+        ...Wallet_BaseDetails
+      }
     }
     author {
       id
       status
       username
+      wallets {
+        ...Wallet_BaseDetails
+      }
     }
     projectMedias {
       index
