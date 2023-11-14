@@ -381,9 +381,9 @@ export const FX_TICKETS_ABI = [
       },
       {
         indexed: false,
-        internalType: "string",
+        internalType: "bytes",
         name: "_baseURI",
-        type: "string",
+        type: "bytes",
       },
       {
         components: [
@@ -553,9 +553,9 @@ export const FX_TICKETS_ABI = [
     name: "baseURI",
     outputs: [
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "",
-        type: "string",
+        type: "bytes",
       },
     ],
     stateMutability: "view",
@@ -874,9 +874,9 @@ export const FX_TICKETS_ABI = [
         type: "uint48",
       },
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "_baseURI",
-        type: "string",
+        type: "bytes",
       },
       {
         components: [
@@ -1251,9 +1251,9 @@ export const FX_TICKETS_ABI = [
   {
     inputs: [
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "_uri",
-        type: "string",
+        type: "bytes",
       },
     ],
     name: "setBaseURI",

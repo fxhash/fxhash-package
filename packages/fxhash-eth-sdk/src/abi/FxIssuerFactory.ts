@@ -212,11 +212,6 @@ export const FX_ISSUER_FACTORY_ABI = [
         components: [
           {
             internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
           },
@@ -243,14 +238,9 @@ export const FX_ISSUER_FACTORY_ABI = [
       {
         components: [
           {
-            internalType: "string",
+            internalType: "bytes",
             name: "baseURI",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "imageURI",
-            type: "string",
+            type: "bytes",
           },
           {
             internalType: "bytes",

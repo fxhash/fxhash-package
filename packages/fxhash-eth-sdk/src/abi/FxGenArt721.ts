@@ -216,9 +216,9 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "string",
+        internalType: "bytes",
         name: "_uri",
-        type: "string",
+        type: "bytes",
       },
     ],
     name: "BaseURIUpdated",
@@ -391,11 +391,6 @@ export const FX_GEN_ART_721_ABI = [
         components: [
           {
             internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
           },
@@ -423,14 +418,9 @@ export const FX_GEN_ART_721_ABI = [
       {
         components: [
           {
-            internalType: "string",
+            internalType: "bytes",
             name: "baseURI",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "imageURI",
-            type: "string",
+            type: "bytes",
           },
           {
             internalType: "bytes",
@@ -860,30 +850,6 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "bytes32",
-        name: "_typeHash",
-        type: "bytes32",
-      },
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-    ],
-    name: "generateTypedDataHash",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "uint256",
         name: "tokenId",
         type: "uint256",
@@ -895,32 +861,6 @@ export const FX_GEN_ART_721_ABI = [
         internalType: "address",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getBaseURI",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getImageURI",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
       },
     ],
     stateMutability: "view",
@@ -998,11 +938,6 @@ export const FX_GEN_ART_721_ABI = [
         components: [
           {
             internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
           },
@@ -1029,14 +964,9 @@ export const FX_GEN_ART_721_ABI = [
       {
         components: [
           {
-            internalType: "string",
+            internalType: "bytes",
             name: "baseURI",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "imageURI",
-            type: "string",
+            type: "bytes",
           },
           {
             internalType: "bytes",
@@ -1159,11 +1089,6 @@ export const FX_GEN_ART_721_ABI = [
         components: [
           {
             internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
           },
@@ -1196,14 +1121,9 @@ export const FX_GEN_ART_721_ABI = [
     name: "metadataInfo",
     outputs: [
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "baseURI",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "imageURI",
-        type: "string",
+        type: "bytes",
       },
       {
         internalType: "bytes",
@@ -1261,7 +1181,7 @@ export const FX_GEN_ART_721_ABI = [
     outputs: [
       {
         internalType: "string",
-        name: "_name",
+        name: "",
         type: "string",
       },
     ],
@@ -1597,35 +1517,12 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
         internalType: "bytes",
-        name: "_signature",
+        name: "_uri",
         type: "bytes",
       },
     ],
     name: "setBaseURI",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
-      },
-    ],
-    name: "setImageURI",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1694,7 +1591,7 @@ export const FX_GEN_ART_721_ABI = [
     outputs: [
       {
         internalType: "string",
-        name: "_symbol",
+        name: "",
         type: "string",
       },
     ],
