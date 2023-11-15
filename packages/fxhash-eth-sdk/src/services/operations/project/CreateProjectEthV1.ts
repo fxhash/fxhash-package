@@ -192,7 +192,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
             [predictedAddress as `0x${string}`]
           )
           const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
+            minter: FxhashContracts.ETH_TICKET_REDEEMER_V1,
             reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
             params: encodedPredictedAddress,
           }
