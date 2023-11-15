@@ -6,19 +6,17 @@ import {
   ReservoirListingParams,
 } from "@/services/reservoir/types"
 import { getListingSteps } from "@/services/reservoir/api"
-import {
-  handleAction,
-  overrideSellStepsParameters,
-  stepHandler,
-} from "../Marketplace"
+import { handleAction, overrideSellStepsParameters } from "../Marketplace"
 
 /**
  * Call the Issuer factory to create a new project
  */
-export class ListTokenOperation extends EthereumContractOperation<ReservoirListingParams> {
+export class ListTokenEthOperation extends EthereumContractOperation<ReservoirListingParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<string> {
+    const hash: string = "TODO"
+
     // Prepare listing parameters
     const listingParams: ReservoirExecuteListParams = {
       maker: this.manager.walletClient.account.address,
@@ -37,16 +35,20 @@ export class ListTokenOperation extends EthereumContractOperation<ReservoirListi
           baseURL: config.eth.apis.reservoir,
         },
         adaptViemWallet(this.manager.walletClient),
-        stepHandler,
+        (steps, path) => {
+          console.log("steps", steps)
+          console.log("path", path)
+        },
         fetchedSteps,
         undefined,
         this.manager.walletClient.chain.id
       )
     )
-    return
+
+    return hash
   }
 
   success(): string {
-    return `Your project is successfully published`
+    return `You listed successfully`
   }
 }
