@@ -149,16 +149,16 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
 
     const mintInfos: MintInfo[] = await Promise.all(
       this.params.mintInfo.map(async argsMintInfo => {
+        const reserveInfo: ReserveInfo = {
+          allocation: argsMintInfo.reserveInfo.allocation,
+          endTime: argsMintInfo.reserveInfo.endTime
+            ? argsMintInfo.reserveInfo.endTime
+            : MAX_UINT_64,
+          startTime: argsMintInfo.reserveInfo.startTime
+            ? argsMintInfo.reserveInfo.startTime
+            : BigInt(0),
+        }
         if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-          const reserveInfo: ReserveInfo = {
-            allocation: argsMintInfo.reserveInfo.allocation,
-            endTime: argsMintInfo.reserveInfo.endTime
-              ? argsMintInfo.reserveInfo.endTime
-              : MAX_UINT_64,
-            startTime: argsMintInfo.reserveInfo.startTime
-              ? argsMintInfo.reserveInfo.startTime
-              : BigInt(0),
-          }
           const mintInfo: MintInfo = {
             minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
             reserveInfo: reserveInfo,
@@ -176,11 +176,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
           const mintInfo: MintInfo = {
             minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
+            reserveInfo: reserveInfo,
             params: getDutchAuctionMinterEncodedParams(
               argsMintInfo.params.prices,
               argsMintInfo.params.stepLength,
@@ -205,11 +201,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
           )
           const mintInfo: MintInfo = {
             minter: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
+            reserveInfo: reserveInfo,
             params: encodedPredictedAddress,
           }
           return mintInfo
