@@ -5,7 +5,12 @@ import {
   encodePacked,
   getContract,
 } from "viem"
-import { FlattenedWhitelist, getWhitelistTree } from "./whitelist"
+import {
+  FlattenedWhitelist,
+  MerkleTreeWhitelist,
+  Whitelist,
+  getWhitelistTree,
+} from "./whitelist"
 import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants"
 import { sign } from "viem/accounts"
 
@@ -23,27 +28,38 @@ export type ReserveListEntry = {
 }
 
 /**
- * The function `getFixedPriceMinterEncodedParams` takes a price, a whitelist, and a signer address as
- * input and returns the encoded parameters in ABI format.
- * @param {bigint} price - The `price` parameter is a `bigint` value representing the fixed price. It
- * is the cost or value associated with a particular item or service.
- * @param {FlattenedWhitelist} whitelist - The `whitelist` parameter is an array of objects
- * representing the whitelist. Each object in the array should have the following properties:
- * @param signer - The `signer` parameter is an Ethereum address represented as a string. It is used to
+ * The function `getFixedPriceMinterEncodedParams` takes a price, a whitelist
+ * merkle root, and a signer address as input and returns the encoded parameters
+ * in ABI format.
+ * @param price `bigint` value representing the fixed price. It is the cost or
+ * value associated with a particular item or service.
+ * @param whitelist A merkle tree with the elements in the list and the merkle
+ * root, which represent the whitelist.
+ * @param signer Ethereum address represented as a string. It is used to
  * specify the address of the account that will sign the transaction.
- * @returns The function `getFixedPriceMinterEncodedParams` returns the encoded ABI parameters as a
- * result.
+ * @returns the encoded ABI parameters, as expected by the smart contract.
+ * @throws if the provided merkle tree's list doesn't match with its merkle
+ * root.
  */
 export function getFixedPriceMinterEncodedParams(
   price: bigint,
-  whitelist: FlattenedWhitelist = [],
+  whitelist?: MerkleTreeWhitelist | null,
   signer: `0x${string}` = ZERO_ADDRESS
 ) {
   let merkleRoot: `0x${string}` = EMPTY_BYTES_32
-  if (whitelist.length > 0) {
-    const tree = getWhitelistTree(whitelist)
-    merkleRoot = tree.root as `0x${string}`
+
+  if (whitelist) {
+    if (whitelist.whitelist.length > 0) {
+      const tree = getWhitelistTree(whitelist.whitelist)
+      merkleRoot = tree.root as `0x${string}`
+      if (merkleRoot !== whitelist.merkleRoot) {
+        throw new Error(
+          `The merkle root associated given whitelist (${whitelist.whitelist}) doesn't match with the merkle root which was computed as a check step (${merkleRoot}).`
+        )
+      }
+    }
   }
+
   return encodeAbiParameters(
     [
       { name: "price", type: "uint256" },
@@ -55,35 +71,47 @@ export function getFixedPriceMinterEncodedParams(
 }
 
 /**
- * The function `getDutchAuctionMinterEncodedParams` takes in various parameters and returns the
- * encoded ABI parameters for a Dutch auction minter.
- * @param {bigint[]} prices - An array of bigints representing the prices for each step of the Dutch
- * auction.
- * @param {bigint} stepLength - The `stepLength` parameter is a `bigint` value that represents the
- * length of each step in the Dutch auction. It determines how much the price decreases at each step
+ * Given a set of tiered dutch auction parameters, returns hex string
+ * reprensentation of the ABI encoded parameters as the Smart Contract expects.
+ * @param prices Array of bigints representing the prices for each tier of the
+ * Dutch Auction.
+ * @param stepLength bigint` value that represents the time-duration of each
+ * step in the Dutch auction. It determines how long each price stays active
  * until the auction ends.
- * @param {boolean} refundEnabled - A boolean value indicating whether refunds are enabled in the
- * auction.
- * @param {FlattenedWhitelist} whitelist - The `whitelist` parameter is an array of objects
- * representing addresses that are allowed to participate in the Dutch auction. Each object in the
- * array has the following structure:
- * @param signer - The `signer` parameter is the address of the account that will sign the transaction.
- * It is of type `address`.
- * @returns The function `getDutchAuctionMinterEncodedParams` returns the encoded parameters of a Dutch
- * auction minter.
+ * @param refundEnabled A boolean value indicating whether refunds are enabled
+ * in the auction. Refunds happen when the project has reached a final price
+ * (all of its iterations have been minted) or when it has reached its resting
+ * price. Collectors can then get a refund of the difference between what they
+ * spent and this final price.
+ * @param whitelist A merkle tree with the elements in the list and the merkle
+ * root, which represent the whitelist.
+ * @param signer Ethereum address represented as a string. It is used to
+ * specify the address of the account that will sign the transaction.
+ * @returns the encoded parameters of a Dutch auction minter.
+ * @throws if the provided merkle tree's list doesn't match with its merkle
+ * root.
  */
 export function getDutchAuctionMinterEncodedParams(
   prices: bigint[],
   stepLength: bigint,
   refundEnabled: boolean,
-  whitelist: FlattenedWhitelist = [],
+  whitelist?: MerkleTreeWhitelist | null,
   signer: `0x${string}` = ZERO_ADDRESS
 ) {
   let merkleRoot: `0x${string}` = EMPTY_BYTES_32
-  if (whitelist.length > 0) {
-    const tree = getWhitelistTree(whitelist)
-    merkleRoot = tree.root as `0x${string}`
+
+  if (whitelist) {
+    if (whitelist.whitelist.length > 0) {
+      const tree = getWhitelistTree(whitelist.whitelist)
+      merkleRoot = tree.root as `0x${string}`
+      if (merkleRoot !== whitelist.merkleRoot) {
+        throw new Error(
+          `The merkle root associated given whitelist (${whitelist.whitelist}) doesn't match with the merkle root which was computed as a check step (${merkleRoot}).`
+        )
+      }
+    }
   }
+
   return encodeAbiParameters(
     [
       {
