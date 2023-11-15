@@ -6,6 +6,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { MAX_UINT_64 } from "@/utils"
 
 export type TCreateTicketEthV1OperationParams = {
   token: string
@@ -15,8 +16,8 @@ export type TCreateTicketEthV1OperationParams = {
     {
       minter: string
       reserveInfo: {
-        startTime: number
-        endTime: number
+        startTime?: bigint
+        endTime?: bigint
         allocation: bigint
       }
       params: string
@@ -38,6 +39,14 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
+    this.params.mintInfo.forEach(mintInfo => {
+      if (!mintInfo.reserveInfo.startTime) {
+        mintInfo.reserveInfo.startTime = BigInt(0)
+      }
+      if (!mintInfo.reserveInfo.endTime) {
+        mintInfo.reserveInfo.endTime = MAX_UINT_64
+      }
+    })
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
       abi: FX_TICKETS_FACTORY_ABI,
