@@ -15,7 +15,7 @@ import { RESERVOIR_ABI } from "@/abi/Reservoir"
 import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
 import { config } from "@fxhash/config"
 
-const stepHandler = (steps, path) => {}
+export const stepHandler = (steps, path) => {}
 /**
  * Wrapper function to handle API actions.
  * @template T - The type of the expected return value.
@@ -23,7 +23,7 @@ const stepHandler = (steps, path) => {}
  * @returns {Promise<T>} - The result of the API action.
  * @throws Will throw an error if the API action fails.
  */
-async function handleAction<T>(action: Promise<T>): Promise<T> {
+export async function handleAction<T>(action: Promise<T>): Promise<T> {
   try {
     return await action
   } catch (error) {
@@ -42,7 +42,7 @@ async function handleAction<T>(action: Promise<T>): Promise<T> {
  * @param {Execute} steps - The execution steps that may contain the "order-signature" step.
  * @dev: As we want to use our own Seaport zone, and it is not currently supported by Reservoir, we need to intercept and override the parameters
  */
-function overrideSellStepsParameters(steps: Execute): void {
+export function overrideSellStepsParameters(steps: Execute): void {
   steps.steps
     .filter(step => step.id === "order-signature")
     .forEach(step => {
