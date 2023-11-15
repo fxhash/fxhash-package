@@ -206,9 +206,9 @@ export const FX_TICKETS_FACTORY_ABI = [
         type: "uint48",
       },
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "_baseURI",
-        type: "string",
+        type: "bytes",
       },
       {
         components: [

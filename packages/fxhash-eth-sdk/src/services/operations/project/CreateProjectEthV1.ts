@@ -30,6 +30,7 @@ import {
 } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import { getHashFromIPFSCID } from "@/utils/ipfs"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -77,11 +78,9 @@ export type TCreateProjectEthV1OperationParams = {
     burnEnabled: boolean
     maxSupply: bigint
     inputSize: number
-    contractURI: string
   }
   metadataInfo: {
     baseURI: string
-    imageURI: string
     onchainData?: string
   }
   mintInfo: (
@@ -102,6 +101,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    const onchain = this.params.projectInfo.onchain ? true : false
     if (this.params.royalties > 2500) {
       throw Error("Royalties should be lower or equal to 25%")
     }
@@ -125,23 +125,33 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1,
-      renderer: FxhashContracts.ETH_RENDERER_V1,
+      renderer: onchain
+        ? FxhashContracts.ETH_SCRIPTY_RENDERER_V1
+        : FxhashContracts.ETH_IPFS_RENDERER_V1,
       tagIds: this.params.initInfo.tagIds,
       primaryReceiver: this.params.primaryReceiver,
     }
 
     const projectInfo: ProjectInfo = {
       burnEnabled: this.params.projectInfo.burnEnabled,
-      contractURI: this.params.projectInfo.contractURI,
       inputSize: this.params.projectInfo.inputSize,
       maxSupply: this.params.projectInfo.maxSupply,
       mintEnabled: this.params.projectInfo.mintEnabled,
       onchain: this.params.projectInfo.onchain,
     }
 
+    let baseURI = this.params.metadataInfo.baseURI
+    if (onchain) {
+      //TODO: TBD: need to be worked out
+    } else {
+      if (!this.params.metadataInfo.baseURI.startsWith("ipfs://"))
+        throw Error("Invalid baseURI")
+      baseURI = getHashFromIPFSCID(
+        this.params.metadataInfo.baseURI.split("ipfs://")[1]
+      )
+    }
     const metadataInfo: MetadataInfo = {
-      baseURI: this.params.metadataInfo.baseURI,
-      imageURI: this.params.metadataInfo.imageURI,
+      baseURI: baseURI,
       onchainData: this.params.metadataInfo.onchainData
         ? this.params.metadataInfo.onchainData
         : "",
