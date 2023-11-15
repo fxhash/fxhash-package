@@ -98,6 +98,9 @@ export type TCreateProjectEthV1OperationParams = {
  * Call the Issuer factory to create a new project
  */
 export class CreateProjectEthV1Operation extends EthereumContractOperation<TCreateProjectEthV1OperationParams> {
+  static getDeployedTokenFromReceipt(receipt: TransactionReceipt) {
+    return receipt.logs[1].address
+  }
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
