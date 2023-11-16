@@ -1,9 +1,10 @@
-import { Blockchain, TEZOS_CHARSET } from "./address"
+import { BASE58_CHARSET } from "./base58"
+import { Blockchain } from "./types/blockchain"
 
 export function mockTezosTransactionHash(): string {
   const randomSequence = Array.from(
     { length: 33 },
-    () => TEZOS_CHARSET[(Math.random() * TEZOS_CHARSET.length) | 0]
+    () => BASE58_CHARSET[(Math.random() * BASE58_CHARSET.length) | 0]
   ).join("")
   return `oo${randomSequence}`
 }

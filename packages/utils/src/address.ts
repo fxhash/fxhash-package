@@ -1,5 +1,5 @@
-export const TEZOS_CHARSET =
-  "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+import { BASE58_CHARSET } from "./base58"
+import { Blockchain } from "./types/blockchain"
 
 export function mockEthereumAddress(): string {
   const randomBytes = Array.from({ length: 20 }, () =>
@@ -11,12 +11,10 @@ export function mockEthereumAddress(): string {
 export function mockTezosAddress() {
   const randomSequence = Array.from(
     { length: 33 },
-    () => TEZOS_CHARSET[(Math.random() * TEZOS_CHARSET.length) | 0]
+    () => BASE58_CHARSET[(Math.random() * BASE58_CHARSET.length) | 0]
   ).join("")
   return `tz1${randomSequence}`
 }
-
-export type Blockchain = "ETHEREUM" | "TEZOS"
 
 export function mockBlockchainAddress(chain: Blockchain) {
   if (chain === "ETHEREUM") return mockEthereumAddress()
@@ -28,7 +26,7 @@ export function isTezosAddressValid(address: string): boolean {
     return false
   }
   for (let i = 0; i < address.length; i++) {
-    if (!TEZOS_CHARSET.includes(address[i])) return false
+    if (!BASE58_CHARSET.includes(address[i])) return false
   }
   return true
 }
