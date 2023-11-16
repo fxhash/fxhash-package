@@ -3,14 +3,10 @@ import {
   FxParamType,
   FxParamValue,
 } from "@fxhash/params/types"
-
-export type RandFunction = () => number
-
-export interface ResettableRandFunction extends RandFunction {
-  reset?: () => void
-}
+import { ResettableRandFunction } from "@fxhash/utils/types/math"
 
 export type FxHashExecutionContext = "standalone" | "capture" | "minting"
+
 export type FxHashApi = {
   hash: string
   minter: string
