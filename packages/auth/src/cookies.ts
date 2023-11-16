@@ -6,6 +6,8 @@ export const COOKIE_OPTIONS_LOCAL: CookieOptions = {
   httpOnly: true,
   maxAge: FOURTEEN_DAYS,
   sameSite: "lax",
+  domain: "localhost",
+  path: "/",
 }
 
 export const COOKIE_OPTIONS_DEV: CookieOptions = {
@@ -21,6 +23,7 @@ export const COOKIE_OPTIONS_DEV: CookieOptions = {
   sameSite: "none",
   maxAge: FOURTEEN_DAYS,
   domain: ".fxhash-dev.xyz",
+  path: "/",
 }
 
 export const COOKIE_OPTIONS_PRD: CookieOptions = {
@@ -29,6 +32,7 @@ export const COOKIE_OPTIONS_PRD: CookieOptions = {
   sameSite: "lax",
   maxAge: FOURTEEN_DAYS,
   domain: ".fxhash.xyz",
+  path: "/",
 }
 
 export const COOKIE_OPTIONS: CookieOptions =
