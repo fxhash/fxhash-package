@@ -216,6 +216,19 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "bytes",
+        name: "_uri",
+        type: "bytes",
+      },
+    ],
+    name: "BaseURIUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint256",
         name: "_fromTokenId",
         type: "uint256",
@@ -286,6 +299,19 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "MintEnabled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
+      },
+    ],
+    name: "OnchainDataUpdated",
     type: "event",
   },
   {
@@ -365,11 +391,6 @@ export const FX_GEN_ART_721_ABI = [
         components: [
           {
             internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
           },
@@ -388,11 +409,6 @@ export const FX_GEN_ART_721_ABI = [
             name: "inputSize",
             type: "uint120",
           },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
-          },
         ],
         indexed: false,
         internalType: "struct ProjectInfo",
@@ -402,14 +418,9 @@ export const FX_GEN_ART_721_ABI = [
       {
         components: [
           {
-            internalType: "string",
+            internalType: "bytes",
             name: "baseURI",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "imageURI",
-            type: "string",
+            type: "bytes",
           },
           {
             internalType: "bytes",
@@ -839,17 +850,12 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "bytes32",
-        name: "_typeHash",
-        type: "bytes32",
-      },
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
       },
     ],
-    name: "generateTypedDataHash",
+    name: "generateOnchainDataHash",
     outputs: [
       {
         internalType: "bytes32",
@@ -951,11 +957,6 @@ export const FX_GEN_ART_721_ABI = [
         components: [
           {
             internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
           },
@@ -974,11 +975,6 @@ export const FX_GEN_ART_721_ABI = [
             name: "inputSize",
             type: "uint120",
           },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
-          },
         ],
         internalType: "struct ProjectInfo",
         name: "_projectInfo",
@@ -987,14 +983,9 @@ export const FX_GEN_ART_721_ABI = [
       {
         components: [
           {
-            internalType: "string",
+            internalType: "bytes",
             name: "baseURI",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "imageURI",
-            type: "string",
+            type: "bytes",
           },
           {
             internalType: "bytes",
@@ -1096,9 +1087,9 @@ export const FX_GEN_ART_721_ABI = [
     name: "isMinter",
     outputs: [
       {
-        internalType: "uint8",
+        internalType: "bool",
         name: "",
-        type: "uint8",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -1115,11 +1106,6 @@ export const FX_GEN_ART_721_ABI = [
       },
       {
         components: [
-          {
-            internalType: "bool",
-            name: "onchain",
-            type: "bool",
-          },
           {
             internalType: "bool",
             name: "mintEnabled",
@@ -1140,11 +1126,6 @@ export const FX_GEN_ART_721_ABI = [
             name: "inputSize",
             type: "uint120",
           },
-          {
-            internalType: "string",
-            name: "contractURI",
-            type: "string",
-          },
         ],
         internalType: "struct ProjectInfo",
         name: "projectInfo",
@@ -1159,14 +1140,9 @@ export const FX_GEN_ART_721_ABI = [
     name: "metadataInfo",
     outputs: [
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "baseURI",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "imageURI",
-        type: "string",
+        type: "bytes",
       },
       {
         internalType: "bytes",
@@ -1560,31 +1536,8 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "address payable[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        internalType: "uint96[]",
-        name: "_basisPoints",
-        type: "uint96[]",
-      },
-    ],
-    name: "setBaseRoyalties",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
         internalType: "bytes",
-        name: "_signature",
+        name: "_uri",
         type: "bytes",
       },
     ],
@@ -1596,9 +1549,9 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
       },
       {
         internalType: "bytes",
@@ -1606,25 +1559,7 @@ export const FX_GEN_ART_721_ABI = [
         type: "bytes",
       },
     ],
-    name: "setContractURI",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
-      },
-    ],
-    name: "setImageURI",
+    name: "setOnchainData",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1664,29 +1599,6 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "setTags",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "address payable[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        internalType: "uint96[]",
-        name: "_basisPoints",
-        type: "uint96[]",
-      },
-    ],
-    name: "setTokenRoyalties",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
