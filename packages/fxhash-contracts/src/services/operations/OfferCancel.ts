@@ -3,30 +3,17 @@ import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { Offer } from "../../types/entities/Offer"
 import { displayMutez } from "../../utils/units"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import {  TezosContractOperation } from "./ContractOperation"
 
 export type TOfferCancelOperationParams = {
   offer: Offer
   objkt: Objkt
 }
 
-export class OfferCancelOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosOfferCancelOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * List a gentk on the Marketplace
  */
-class TezosOfferCancelOperation extends TezosContractOperation<TOfferCancelOperationParams> {
+export class OfferCancelOperation extends TezosContractOperation<TOfferCancelOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
