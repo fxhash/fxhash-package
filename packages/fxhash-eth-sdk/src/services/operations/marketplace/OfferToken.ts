@@ -28,8 +28,6 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<string> {
-    const hash: string = "TODO"
-
     const args: ReservoirPlaceBidParams = [
       {
         token: `${this.params.contract}:${this.params.tokenId}`,
@@ -39,10 +37,7 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
         orderKind: "seaport-v1.5",
       },
     ]
-    // Fetch and override steps
-    const result = await placeBid(args, this.manager.walletClient)
-
-    return hash
+    return await placeBid(args, this.manager.walletClient)
   }
 
   success(): string {

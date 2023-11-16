@@ -99,7 +99,7 @@ export function overrideSellStepsParameters(steps: Execute): void {
 export const placeBid = async (
   bids: ReservoirPlaceBidParams,
   walletClient: WalletClient
-): Promise<boolean> => {
+): Promise<string> => {
   // Prepare listing parameters
   const bidStepsParams: ReservoirExecuteBidParams = {
     maker: walletClient.account.address,
@@ -110,7 +110,15 @@ export const placeBid = async (
   // Fetch and override steps
   const fetchedSteps = await getBidSteps(bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
-
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    const step = steps.find(step => step.id === "order-signature")
+    if (step.items.length > 0) {
+      if (step.items[0].orderData && step.items[0].status === "complete") {
+        orderId = step.items[0].orderData[0].orderId
+      }
+    }
+  }
   // Execute steps and handle actions
   await handleAction(
     getClient().utils.executeSteps(
@@ -118,13 +126,13 @@ export const placeBid = async (
         baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
-      stepHandler,
+      hashCallBack,
       fetchedSteps,
       undefined,
       walletClient.chain.id
     )
   )
-  return true
+  return orderId
 }
 
 /**
