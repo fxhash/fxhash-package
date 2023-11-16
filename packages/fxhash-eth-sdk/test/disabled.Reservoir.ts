@@ -1,5 +1,4 @@
 import { config as dotenvConfig } from "dotenv"
-import { beforeAll, describe, expect, test } from "@jest/globals"
 import { createWalletClient, http, parseEther, WalletClient } from "viem"
 import { sepolia } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -14,8 +13,6 @@ import {
 import { config } from "@fxhash/config"
 
 dotenvConfig()
-
-jest.setTimeout(10000000)
 
 let sellerWalletClient: WalletClient
 let buyerWalletClient: WalletClient
