@@ -22,14 +22,7 @@
       "import": "./dist/index.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
+  "typesVersions": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -37,8 +30,7 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/prettier-config": "workspace:*",
