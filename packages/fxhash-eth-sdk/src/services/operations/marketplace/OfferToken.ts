@@ -1,17 +1,6 @@
-import { adaptViemWallet, getClient } from "@reservoir0x/reservoir-sdk"
-import { config } from "@fxhash/config"
 import { EthereumContractOperation } from "../contractOperation"
-import {
-  ReservoirExecuteBidParams,
-  ReservoirExecuteListParams,
-  ReservoirPlaceBidParams,
-} from "@/services/reservoir/types"
-import { getListingSteps } from "@/services/reservoir/api"
-import {
-  handleAction,
-  overrideSellStepsParameters,
-  placeBid,
-} from "../Marketplace"
+import { ReservoirPlaceBidParams } from "@/services/reservoir/types"
+import { placeBid } from "../Marketplace"
 
 export type TMakeOfferEthV1OperationParams = {
   contract: string

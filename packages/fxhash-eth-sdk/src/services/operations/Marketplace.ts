@@ -258,15 +258,28 @@ export const buyTokenAdvanced = async (
 export const acceptOffer = async (
   offers: ReservoirAcceptOfferParams,
   walletClient: WalletClient
-): Promise<true | Execute> => {
-  return await handleAction(
+): Promise<string> => {
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    console.log(steps)
+    const step = steps.find(step => step.id === "sale")
+    if (step.items.length > 0) {
+      if (step.items[0].orderIds && step.items[0].status === "complete") {
+        orderId = step.items[0].orderIds[0]
+      }
+    }
+  }
+  const result = await handleAction(
     getClient().actions.acceptOffer({
       items: offers,
       wallet: walletClient,
-      onProgress: (steps: Execute["steps"], path: Execute["path"]) =>
-        console.log(steps),
+      onProgress: hashCallBack,
     })
   )
+  if (!result) {
+    throw new Error("Failed to accept offer")
+  }
+  return orderId
 }
 
 /**

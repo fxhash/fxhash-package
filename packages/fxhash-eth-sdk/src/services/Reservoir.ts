@@ -5,6 +5,9 @@ import { CURRENT_CHAIN } from "./Wallet"
 //API key used for interacting with Reservoir API
 export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
 
+//source used for interacting with Reservoir API and be able to easily filter on only our orders
+export const RESERVOIR_SOURCE = "fxhash.xyz"
+
 //Defines the headers used for interacting with Reservoir API
 const headers = {
   accept: "*/*",
@@ -30,7 +33,7 @@ createClient({
       apiKey: RESERVOIR_API_KEY,
     },
   ],
-  source: "fxhash.xyz",
+  source: RESERVOIR_SOURCE,
 })
 
 //Creates a generic fetch function for interacting with Reservoir API
