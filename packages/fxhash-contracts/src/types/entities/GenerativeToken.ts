@@ -107,6 +107,7 @@ export interface GenerativeTokenMarketStatsHistory {
 export enum GenerativeTokenVersion {
   "PRE_V3" = "PRE_V3",
   V3 = "V3",
+  ETH_V1 = "ETH_V1",
 }
 export interface GenerativeToken {
   id: number
