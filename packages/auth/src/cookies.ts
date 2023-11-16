@@ -42,6 +42,10 @@ export const COOKIE_OPTIONS: CookieOptions =
     ? COOKIE_OPTIONS_DEV
     : COOKIE_OPTIONS_PRD
 
+const SPECIAL_COOKIE_KEYS = {
+  maxAge: "Max-Age",
+}
+
 /**
  * Takes CookieOptions and returns them as a string, that can be used e.g.
  * for Set-Cookie header
@@ -50,7 +54,8 @@ export const COOKIE_OPTIONS: CookieOptions =
  */
 export function parseCookieOptions(options: CookieOptions): string {
   const cookieParts = []
-  for (const [key, value] of Object.entries(options)) {
+  for (const [k, value] of Object.entries(options)) {
+    const key = SPECIAL_COOKIE_KEYS[k] || k
     if (value === true) {
       cookieParts.push(`${key}`)
     } else {
