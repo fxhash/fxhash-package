@@ -2,9 +2,8 @@ import { EthereumContractOperation } from "../contractOperation"
 import { ReservoirPlaceBidParams } from "@/services/reservoir/types"
 import { placeBid } from "../Marketplace"
 
-export type TMakeOfferEthV1OperationParams = {
+export type TMakeCollectionOfferEthV1OperationParams = {
   token: string
-  tokenId: string
   amount: number
   price: string
   expiration?: string
@@ -13,13 +12,13 @@ export type TMakeOfferEthV1OperationParams = {
 /**
  * Call the Issuer factory to create a new project
  */
-export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOfferEthV1OperationParams> {
+export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation<TMakeCollectionOfferEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<string> {
     const args: ReservoirPlaceBidParams = [
       {
-        token: `${this.params.token}:${this.params.tokenId}`,
+        collection: this.params.token,
         weiPrice: this.params.price,
         quantity: this.params.amount,
         orderbook: "reservoir",
@@ -30,6 +29,6 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   }
 
   success(): string {
-    return `You successfully placed an offer`
+    return `You successfully placed a collection offer`
   }
 }
