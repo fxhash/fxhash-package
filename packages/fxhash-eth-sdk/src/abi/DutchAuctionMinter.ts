@@ -180,6 +180,18 @@ export const DUTCH_AUCTION_MINTER_ABI = [
         type: "tuple",
       },
       {
+        indexed: false,
+        internalType: "bytes32",
+        name: "_merkleRoot",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "_mintPassSigner",
+        type: "address",
+      },
+      {
         components: [
           {
             internalType: "bool",
