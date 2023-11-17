@@ -16,7 +16,7 @@ import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 import { IReserveConsumption } from "@/types/Reserve"
 
 export type TMintOperationParams = {
@@ -25,23 +25,10 @@ export type TMintOperationParams = {
   consumeReserve: IReserveConsumption | null
 }
 
-export class MintOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
-class TezosMintOperation extends TezosContractOperation<TMintOperationParams> {
+export class MintOperation extends TezosContractOperation<TMintOperationParams> {
   issuerContract: ContractAbstraction<Wallet> | null = null
   reserveInput: string | null = null
   payloadPacked: string | null = null
