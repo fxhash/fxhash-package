@@ -10,7 +10,7 @@ import {
   FxhashContracts,
 } from "../../types/Contracts"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
-import { MintGenerativeData } from "../../types/Mint"
+import { GenTokEditions, MintGenerativeData } from "../../types/Mint"
 import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
@@ -98,7 +98,10 @@ export class MintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3O
     }))
 
     const params = {
-      amount: distribution.editions!,
+      amount:
+        distribution.editions.type === GenTokEditions.FIXED
+          ? distribution.editions.fixed.amount
+          : 0,
       enabled: !!distribution.enabled,
       metadata: this.params.ipfsMetadataBytes,
       pricing: packedPricing,
@@ -114,7 +117,15 @@ export class MintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3O
               metadata: this.params.ticketMetadataBytes,
             }
           : null,
-      open_editions: null,
+      open_editions:
+        distribution.editions.type === GenTokEditions.OPENED
+          ? {
+              closing_time: distribution.editions.opened.closesAt
+                ? new Date(distribution.editions.opened.closesAt).toISOString()
+                : null,
+              extra: "",
+            }
+          : null,
       codex: {
         codex_entry: this.params.data.onChain
           ? {
@@ -128,6 +139,8 @@ export class MintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3O
       },
       input_bytes_size: this.params.data.params!.inputBytesSize,
     }
+
+    console.log({ params })
 
     const batch = this.manager.tezosToolkit.wallet.batch()
 

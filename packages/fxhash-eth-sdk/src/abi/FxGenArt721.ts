@@ -267,19 +267,6 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "string",
-        name: "_uri",
-        type: "string",
-      },
-    ],
-    name: "ImageURIUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
         internalType: "uint8",
         name: "version",
         type: "uint8",
@@ -312,6 +299,19 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "MintEnabled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
+      },
+    ],
+    name: "OnchainDataUpdated",
     type: "event",
   },
   {
@@ -850,6 +850,25 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
+      },
+    ],
+    name: "generateOnchainDataHash",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "tokenId",
         type: "uint256",
@@ -1068,9 +1087,9 @@ export const FX_GEN_ART_721_ABI = [
     name: "isMinter",
     outputs: [
       {
-        internalType: "uint8",
+        internalType: "bool",
         name: "",
-        type: "uint8",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -1523,6 +1542,24 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "setBaseURI",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "_signature",
+        type: "bytes",
+      },
+    ],
+    name: "setOnchainData",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
