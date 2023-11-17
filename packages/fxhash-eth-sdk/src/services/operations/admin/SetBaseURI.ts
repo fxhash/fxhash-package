@@ -8,6 +8,7 @@ import {
 } from "@/services/operations/EthCommon"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe"
+import { getHashFromIPFSCID } from "@/utils"
 
 /**
  * The above type represents the parameters for setting the base URI for an Ethereum V1 operation.
@@ -43,6 +44,9 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    const parsedCID = this.params.baseURI.startsWith("ipfs://")
+      ? getHashFromIPFSCID(this.params.baseURI.split("ipfs://")[1])
+      : getHashFromIPFSCID(this.params.baseURI)
     if (this.params.isCollab) {
       return await proposeSafeTransaction(getSafeTxData(), this.manager)
     } else {
@@ -50,7 +54,7 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
         address: this.params.token,
         abi: FX_GEN_ART_721_ABI,
         functionName: "setBaseURI",
-        args: [this.params.baseURI],
+        args: [parsedCID],
         account: this.manager.address,
       }
       return simulateAndExecuteContract(this.manager, args)
