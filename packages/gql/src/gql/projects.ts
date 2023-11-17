@@ -25,6 +25,9 @@ export const Frag_ProjectBaseDetails = graphql(`
       id
       status
       username
+      profile {
+        picture
+      }
       wallets {
         ...Wallet_BaseDetails
       }
