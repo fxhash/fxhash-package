@@ -64,6 +64,14 @@ export function verifyAuthRole(token: string, role: AuthRole) {
   return hasRole(decoded, role)
 }
 
+/**
+ * Signs a new cookie with the given payload
+ * @param payload to be signed
+ * @param options Optional parameters for the signing process
+ * @param jwtPrivateKey Optional JWT private key to use for encryption. If
+ * cannot be found, the JWT in the env variables will be used instead.
+ * @returns string
+ */
 export function signAuthToken(
   payload: string | Buffer | Object,
   options?: SignOptions,
@@ -77,5 +85,9 @@ export function signAuthToken(
       "Cannot find private key: the fxhash auth jwt private key (AUTH_JWT_PRIVATE_KEY) is missing from the environment variables."
     )
   }
-  return sign(payload, authPrivate, { expiresIn: "1d", algorithm: "RS256", ...options})
+  return sign(payload, authPrivate, {
+    algorithm: "RS256",
+    expiresIn: "14d",
+    ...options,
+  })
 }

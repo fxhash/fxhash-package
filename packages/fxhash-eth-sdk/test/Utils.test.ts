@@ -24,6 +24,7 @@ import { getExistingSplits } from "@/utils"
 import { getSplitsClient } from "@/services/Splits"
 import { privateKeyToAccount } from "viem/accounts"
 import { foundry } from "viem/chains"
+import { getCIDFromV0Digest, getHashFromIPFSCID } from "@/utils/ipfs"
 
 dotenvConfig()
 
@@ -145,4 +146,13 @@ describe("utils tests", () => {
   // )
   // expect(exists2).toBe(false)
   //})
+
+  it("should correctly parse a v0 IPFS CID", async () => {
+    const cid = "QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB"
+    expect(getHashFromIPFSCID(cid)).toEqual(
+      "0x0e7071c59df3b9454d1d18a15270aa36d54f89606a576dc621757afd44ad1d2e"
+    )
+    const cidParsed = await getCIDFromV0Digest(getHashFromIPFSCID(cid))
+    expect(cid).toEqual(cidParsed)
+  })
 })

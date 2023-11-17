@@ -162,6 +162,18 @@ export const FIXED_PRICE_MINTER_ABI = [
       },
       {
         indexed: false,
+        internalType: "bytes32",
+        name: "_merkleRoot",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "_mintPassSigner",
+        type: "address",
+      },
+      {
+        indexed: false,
         internalType: "bool",
         name: "_openEdition",
         type: "bool",

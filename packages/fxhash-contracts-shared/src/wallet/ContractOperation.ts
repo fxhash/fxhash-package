@@ -1,8 +1,8 @@
 import { WalletManager } from "./WalletManager"
 
 export enum BlockchainType {
-  TEZOS = "TEZOS",
   ETHEREUM = "ETHEREUM",
+  TEZOS = "TEZOS",
 }
 
 /**
