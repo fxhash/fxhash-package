@@ -1,11 +1,13 @@
 import { CookieOptions } from "express"
 
-export const FOURTEEN_DAYS = 14 * 24 * 60 * 60 * 1000
+export const FOURTEEN_DAYS = 14 * 24 * 60 * 60
 
 export const COOKIE_OPTIONS_LOCAL: CookieOptions = {
   httpOnly: true,
   maxAge: FOURTEEN_DAYS,
   sameSite: "lax",
+  domain: "localhost",
+  path: "/",
 }
 
 export const COOKIE_OPTIONS_DEV: CookieOptions = {
@@ -21,6 +23,7 @@ export const COOKIE_OPTIONS_DEV: CookieOptions = {
   sameSite: "none",
   maxAge: FOURTEEN_DAYS,
   domain: ".fxhash-dev.xyz",
+  path: "/",
 }
 
 export const COOKIE_OPTIONS_PRD: CookieOptions = {
@@ -29,6 +32,7 @@ export const COOKIE_OPTIONS_PRD: CookieOptions = {
   sameSite: "lax",
   maxAge: FOURTEEN_DAYS,
   domain: ".fxhash.xyz",
+  path: "/",
 }
 
 export const COOKIE_OPTIONS: CookieOptions =
@@ -38,6 +42,10 @@ export const COOKIE_OPTIONS: CookieOptions =
     ? COOKIE_OPTIONS_DEV
     : COOKIE_OPTIONS_PRD
 
+const SPECIAL_COOKIE_KEYS = {
+  maxAge: "Max-Age",
+}
+
 /**
  * Takes CookieOptions and returns them as a string, that can be used e.g.
  * for Set-Cookie header
@@ -46,7 +54,8 @@ export const COOKIE_OPTIONS: CookieOptions =
  */
 export function parseCookieOptions(options: CookieOptions): string {
   const cookieParts = []
-  for (const [key, value] of Object.entries(options)) {
+  for (const [k, value] of Object.entries(options)) {
+    const key = SPECIAL_COOKIE_KEYS[k] || k
     if (value === true) {
       cookieParts.push(`${key}`)
     } else {
