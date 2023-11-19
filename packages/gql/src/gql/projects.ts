@@ -32,6 +32,16 @@ export const Frag_ProjectBaseDetails = graphql(`
         ...Wallet_BaseDetails
       }
     }
+    collaborators {
+      account {
+        id
+        status
+        username
+        profile {
+          picture
+        }
+      }
+    }
     projectMedias {
       index
       media {
