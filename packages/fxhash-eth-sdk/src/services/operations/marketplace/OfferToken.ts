@@ -11,7 +11,7 @@ export type TMakeOfferEthV1OperationParams = {
 }
 
 /**
- * Call the Issuer factory to create a new project
+ * Create a tokenId specific offer for a token through Reservoir
  */
 export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOfferEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type

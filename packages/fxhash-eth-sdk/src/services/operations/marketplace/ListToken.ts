@@ -9,7 +9,7 @@ import { getListingSteps } from "@/services/reservoir/api"
 import { handleAction, overrideSellStepsParameters } from "../Marketplace"
 
 /**
- * Call the Issuer factory to create a new project
+ * List a token using Reservoir
  */
 export class ListTokenEthOperation extends EthereumContractOperation<ReservoirListingParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type

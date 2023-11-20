@@ -9,7 +9,7 @@ export type TAcceptOfferEthV1OperationParams = {
 }
 
 /**
- * Call the Issuer factory to create a new project
+ * Accept a Reservoir offer (normal or collection)
  */
 export class AcceptOfferEthV1Operation extends EthereumContractOperation<TAcceptOfferEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
