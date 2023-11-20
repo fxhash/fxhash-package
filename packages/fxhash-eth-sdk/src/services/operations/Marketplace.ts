@@ -65,11 +65,10 @@ export function overrideSellStepsParameters(steps: Execute): void {
 ): Promise<string> => {
   let orderId: string = undefined
   const hashCallBack = (steps, path) => {
-    console.log(steps)
-    const step = steps.find(step => step.id === "sale")
-    if (step.items.length > 0) {
-      if (step.items[0].orderIds && step.items[0].status === "complete") {
-        orderId = step.items[0].orderIds[0]
+    const step = steps.find(step => step.id === "order-signature")
+    if (step && step.items.length > 0) {
+      if (step.items[0].orderData && step.items[0].status === "complete") {
+        orderId = step.items[0].orderData[0].orderId
       }
     }
   }
@@ -125,7 +124,7 @@ export const placeBid = async (
   let orderId: string = undefined
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
-    if (step.items.length > 0) {
+    if (step && step.items.length > 0) {
       if (step.items[0].orderData && step.items[0].status === "complete") {
         orderId = step.items[0].orderData[0].orderId
       }
@@ -169,7 +168,7 @@ export const buyToken = async (
   const hashCallBack = (steps, path) => {
     console.log(steps)
     const step = steps.find(step => step.id === "sale")
-    if (step.items.length > 0) {
+    if (step && step.items.length > 0) {
       if (step.items[0].orderIds && step.items[0].status === "complete") {
         orderId = step.items[0].orderIds[0]
       }
@@ -178,7 +177,7 @@ export const buyToken = async (
   // Fetch and override steps
   const fetchedSteps = await getBuySteps(buyStepsParams)
   // Execute steps and handle actions
-  const result = await handleAction(
+  await handleAction(
     getClient().utils.executeSteps(
       {
         baseURL: config.eth.apis.reservoir,

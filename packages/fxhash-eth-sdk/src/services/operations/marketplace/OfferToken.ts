@@ -1,6 +1,7 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { ReservoirPlaceBidParams } from "@/services/reservoir/types"
 import { placeBid } from "../Marketplace"
+import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
 
 export type TMakeOfferEthV1OperationParams = {
   token: string
@@ -22,8 +23,8 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
         token: `${this.params.token}:${this.params.tokenId}`,
         weiPrice: this.params.price,
         quantity: this.params.amount,
-        orderbook: "reservoir",
-        orderKind: "seaport-v1.5",
+        orderbook: RESERVOIR_ORDERBOOK,
+        orderKind: RESERVOIR_ORDER_KIND,
       },
     ]
     return await placeBid(args, this.manager.walletClient)

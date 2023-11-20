@@ -7,11 +7,20 @@ import {
 } from "@/services/reservoir/types"
 import { getListingSteps } from "@/services/reservoir/api"
 import { handleAction, overrideSellStepsParameters } from "../Marketplace"
+import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
+
+export type TListTokenEthV1OperationParams = {
+  token: string
+  tokenId: string
+  price: string
+  amount: number
+  expiration?: string
+}
 
 /**
  * List a token using Reservoir
  */
-export class ListTokenEthOperation extends EthereumContractOperation<ReservoirListingParams> {
+export class ListTokenEthV1Operation extends EthereumContractOperation<TListTokenEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<string> {
@@ -21,7 +30,15 @@ export class ListTokenEthOperation extends EthereumContractOperation<ReservoirLi
     const listingParams: ReservoirExecuteListParams = {
       maker: this.manager.walletClient.account.address,
       source: getClient().source,
-      params: this.params,
+      params: [
+        {
+          token: this.params.token,
+          weiPrice: this.params.price,
+          quantity: this.params.amount,
+          orderbook: RESERVOIR_ORDERBOOK,
+          orderKind: RESERVOIR_ORDER_KIND,
+        },
+      ],
     }
 
     // Fetch and override steps
