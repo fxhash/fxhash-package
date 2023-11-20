@@ -36,7 +36,6 @@ export const FxhashContracts = {
   ETH_MINT_TICKETS_FACTORY_V1: config.eth.contracts.mint_ticket_factory_v1,
   ETH_TICKET_REDEEMER_V1: config.eth.contracts.ticket_redeemer_v1,
   ETH_RANDOMIZER_V1: config.eth.contracts.randomizer_v1,
-  ETH_SCRIPTY_RENDERER_V1: config.eth.contracts.scripty_renderer_v1,
   ETH_IPFS_RENDERER_V1: config.eth.contracts.ipfs_renderer_v1,
 }
 
