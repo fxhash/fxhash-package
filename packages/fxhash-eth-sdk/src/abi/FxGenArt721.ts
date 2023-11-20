@@ -162,6 +162,11 @@ export const FX_GEN_ART_721_ABI = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "WriteError",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -423,9 +428,9 @@ export const FX_GEN_ART_721_ABI = [
             type: "bytes",
           },
           {
-            internalType: "bytes",
-            name: "onchainData",
-            type: "bytes",
+            internalType: "address",
+            name: "onchainDataPointer",
+            type: "address",
           },
         ],
         indexed: false,
@@ -641,6 +646,19 @@ export const FX_GEN_ART_721_ABI = [
     ],
     name: "Unpaused",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "activeMinters",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
@@ -988,9 +1006,9 @@ export const FX_GEN_ART_721_ABI = [
             type: "bytes",
           },
           {
-            internalType: "bytes",
-            name: "onchainData",
-            type: "bytes",
+            internalType: "address",
+            name: "onchainDataPointer",
+            type: "address",
           },
         ],
         internalType: "struct MetadataInfo",
@@ -1145,9 +1163,9 @@ export const FX_GEN_ART_721_ABI = [
         type: "bytes",
       },
       {
-        internalType: "bytes",
-        name: "onchainData",
-        type: "bytes",
+        internalType: "address",
+        name: "onchainDataPointer",
+        type: "address",
       },
     ],
     stateMutability: "view",
