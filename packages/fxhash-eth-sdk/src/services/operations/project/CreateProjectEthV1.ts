@@ -1,34 +1,20 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import {
-  TransactionReceipt,
-  encodeAbiParameters,
-  encodeFunctionData,
-  getAddress,
-} from "viem"
+import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
-  defineReserveInfo,
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
   InitInfo,
   MetadataInfo,
   MintInfo,
-  MintTypes,
-  predictTicketContractAddress,
   ProjectInfo,
   ReceiverEntry,
-  ReserveInfo,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
-import {
-  MAX_UINT_64,
-  flattenWhitelist,
-  getDutchAuctionMinterEncodedParams,
-  getFixedPriceMinterEncodedParams,
-} from "@/utils"
+import { processAndFormatMintInfos } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { getHashFromIPFSCID } from "@/utils/ipfs"
@@ -161,59 +147,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         : "",
     }
 
-    const mintInfos: MintInfo[] = await Promise.all(
-      this.params.mintInfo.map(async argsMintInfo => {
-        if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-          const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
-            reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
-            params: getFixedPriceMinterEncodedParams(
-              argsMintInfo.params.price,
-              argsMintInfo.params.whitelist,
-              argsMintInfo.params.mintPassSigner
-                ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
-                : undefined
-            ),
-          }
-          return mintInfo
-        } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
-          const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime || MAX_UINT_64,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
-            params: getDutchAuctionMinterEncodedParams(
-              argsMintInfo.params.prices,
-              argsMintInfo.params.stepLength,
-              argsMintInfo.params.refunded,
-              argsMintInfo.params.whitelist,
-              argsMintInfo.params.mintPassSigner
-                ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
-                : undefined
-            ),
-          }
-          return mintInfo
-        } else if (argsMintInfo.type === MintTypes.TICKET) {
-          const predictedAddress = await predictTicketContractAddress(
-            this.manager.address,
-            this.manager
-          )
-          const encodedPredictedAddress = encodeAbiParameters(
-            [{ name: "address", type: "address" }],
-            [predictedAddress as `0x${string}`]
-          )
-          const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_TICKET_REDEEMER_V1,
-            reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
-            params: encodedPredictedAddress,
-          }
-          return mintInfo
-        } else {
-          throw Error("Invalid mint type")
-        }
-      })
+    const mintInfos: MintInfo[] = await processAndFormatMintInfos(
+      this.params.mintInfo,
+      this.manager
     )
 
     if (this.params.isCollab) {

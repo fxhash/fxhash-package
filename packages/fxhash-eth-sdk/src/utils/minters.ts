@@ -5,14 +5,22 @@ import {
   encodePacked,
   getContract,
 } from "viem"
-import {
-  FlattenedWhitelist,
-  MerkleTreeWhitelist,
-  Whitelist,
-  getWhitelistTree,
-} from "./whitelist"
+import { MerkleTreeWhitelist, getWhitelistTree } from "./whitelist"
 import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants"
+
 import { sign } from "viem/accounts"
+import {
+  DutchAuctionMintInfoArgs,
+  FixedPriceMintInfoArgs,
+  MintInfo,
+  MintTypes,
+  ReserveInfo,
+  TicketMintInfoArgs,
+  defineReserveInfo,
+  predictTicketContractAddress,
+} from "@/services/operations"
+import { FxhashContracts } from "@/contracts/Contracts"
+import { EthereumWalletManager } from ".."
 
 /**
  * The ReserveListEntry type represents an entry in a reserve list, with an account address and an
@@ -196,5 +204,76 @@ export async function signMintPass(
   return encodePacked(
     ["bytes32", "bytes32", "uint8"],
     [signature.r, signature.s, Number(signature.v)]
+  )
+}
+
+export async function processAndFormatMintInfos(
+  mintInfos: (
+    | FixedPriceMintInfoArgs
+    | DutchAuctionMintInfoArgs
+    | TicketMintInfoArgs
+  )[],
+  manager: EthereumWalletManager
+): Promise<MintInfo[]> {
+  return await Promise.all(
+    mintInfos.map(async argsMintInfo => {
+      if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
+        const reserveInfo: ReserveInfo = defineReserveInfo(
+          argsMintInfo.reserveInfo
+        )
+        const mintInfo: MintInfo = {
+          minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
+          reserveInfo: reserveInfo,
+          params: getFixedPriceMinterEncodedParams(
+            argsMintInfo.params.price,
+            argsMintInfo.params.whitelist,
+            argsMintInfo.params.mintPassSigner
+              ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
+              : undefined
+          ),
+        }
+        return mintInfo
+      } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
+        const mintInfo: MintInfo = {
+          minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
+          reserveInfo: {
+            allocation: argsMintInfo.reserveInfo.allocation,
+            endTime: argsMintInfo.reserveInfo.endTime,
+            startTime: argsMintInfo.reserveInfo.startTime,
+          },
+          params: getDutchAuctionMinterEncodedParams(
+            argsMintInfo.params.prices,
+            argsMintInfo.params.stepLength,
+            argsMintInfo.params.refunded,
+            argsMintInfo.params.whitelist,
+            argsMintInfo.params.mintPassSigner
+              ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
+              : undefined
+          ),
+        }
+        return mintInfo
+      } else if (argsMintInfo.type === MintTypes.TICKET) {
+        const predictedAddress = await predictTicketContractAddress(
+          manager.address,
+          manager
+        )
+        const encodedPredictedAddress = encodeAbiParameters(
+          [{ name: "address", type: "address" }],
+          [predictedAddress as `0x${string}`]
+        )
+        const mintInfo: MintInfo = {
+          minter: FxhashContracts.ETH_TICKET_REDEEMER_V1,
+          reserveInfo: {
+            allocation: argsMintInfo.reserveInfo.allocation,
+            endTime: argsMintInfo.reserveInfo.endTime,
+            startTime: argsMintInfo.reserveInfo.startTime,
+          },
+          params: encodedPredictedAddress,
+        }
+        return mintInfo
+      } else {
+        throw Error("Invalid mint type")
+      }
+    })
   )
 }
