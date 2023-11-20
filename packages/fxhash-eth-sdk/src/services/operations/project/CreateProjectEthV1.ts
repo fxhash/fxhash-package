@@ -8,6 +8,7 @@ import {
 } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
+  defineReserveInfo,
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
   InitInfo,
@@ -98,6 +99,9 @@ export type TCreateProjectEthV1OperationParams = {
  * Call the Issuer factory to create a new project
  */
 export class CreateProjectEthV1Operation extends EthereumContractOperation<TCreateProjectEthV1OperationParams> {
+  static getDeployedTokenFromReceipt(receipt: TransactionReceipt) {
+    return receipt.logs[1].address
+  }
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
@@ -160,23 +164,12 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const mintInfos: MintInfo[] = await Promise.all(
       this.params.mintInfo.map(async argsMintInfo => {
         if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-          const reserveInfo: ReserveInfo = {
-            allocation: argsMintInfo.reserveInfo.allocation,
-            endTime: argsMintInfo.reserveInfo.endTime
-              ? argsMintInfo.reserveInfo.endTime
-              : MAX_UINT_64,
-            startTime: argsMintInfo.reserveInfo.startTime
-              ? argsMintInfo.reserveInfo.startTime
-              : BigInt(0),
-          }
           const mintInfo: MintInfo = {
             minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
-            reserveInfo: reserveInfo,
+            reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
             params: getFixedPriceMinterEncodedParams(
               argsMintInfo.params.price,
-              argsMintInfo.params.whitelist
-                ? flattenWhitelist(argsMintInfo.params.whitelist)
-                : undefined,
+              argsMintInfo.params.whitelist,
               argsMintInfo.params.mintPassSigner
                 ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
                 : undefined
@@ -188,16 +181,14 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
             minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
             reserveInfo: {
               allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
+              endTime: argsMintInfo.reserveInfo.endTime || MAX_UINT_64,
               startTime: argsMintInfo.reserveInfo.startTime,
             },
             params: getDutchAuctionMinterEncodedParams(
               argsMintInfo.params.prices,
               argsMintInfo.params.stepLength,
               argsMintInfo.params.refunded,
-              argsMintInfo.params.whitelist
-                ? flattenWhitelist(argsMintInfo.params.whitelist)
-                : undefined,
+              argsMintInfo.params.whitelist,
               argsMintInfo.params.mintPassSigner
                 ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
                 : undefined
@@ -214,12 +205,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
             [predictedAddress as `0x${string}`]
           )
           const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
+            minter: FxhashContracts.ETH_TICKET_REDEEMER_V1,
+            reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
             params: encodedPredictedAddress,
           }
           return mintInfo
@@ -266,6 +253,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         ],
         account: this.manager.address,
       }
+      console.log(args)
       //simulate the transaction and execute it, will throw an error if it fails
       return simulateAndExecuteContract(this.manager, args)
     }

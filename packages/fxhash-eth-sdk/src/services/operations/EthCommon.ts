@@ -14,7 +14,7 @@ import {
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { Whitelist } from "@/utils"
+import { MAX_UINT_64, MerkleTreeWhitelist, Whitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
 
@@ -91,18 +91,19 @@ export interface TicketMintInfoArgs {
   reserveInfo: ReserveInfo
 }
 
-export interface FixedPriceParams {
-  price: bigint
-  whitelist?: Whitelist
+export interface BaseReserves {
+  whitelist?: MerkleTreeWhitelist
   mintPassSigner?: string
 }
 
-export interface DutchAuctionParams {
+export interface FixedPriceParams extends BaseReserves {
+  price: bigint
+}
+
+export interface DutchAuctionParams extends BaseReserves {
   prices: bigint[]
   stepLength: bigint
   refunded: boolean
-  whitelist?: Whitelist
-  mintPassSigner?: string
 }
 
 /**
@@ -216,6 +217,21 @@ export async function predictTicketContractAddress(
     opcode: "CREATE2",
     salt: keccak256(salt),
   })
+}
+
+/**
+ * Given a Reserve info where the fields are allowed to be undefined, define
+ * such fields with their corresponding integer value based on the contract
+ * design.
+ * @param info Reserve info where fields are allowed to be undefined
+ * @returns Reserve info without undefined fields
+ */
+export function defineReserveInfo(info: ReserveInfo): Required<ReserveInfo> {
+  return {
+    allocation: info.allocation,
+    endTime: info.endTime ? info.endTime : MAX_UINT_64,
+    startTime: info.startTime ? info.startTime : BigInt(0),
+  }
 }
 
 /**
