@@ -17,6 +17,7 @@ import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { MAX_UINT_64, MerkleTreeWhitelist, Whitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
+import { FX_ISSUER_FACTORY_ABI } from "@/abi"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -56,7 +57,6 @@ export interface InitInfo {
 }
 
 export interface ProjectInfo {
-  onchain: boolean
   mintEnabled: boolean
   burnEnabled: boolean
   maxSupply: bigint
@@ -65,7 +65,7 @@ export interface ProjectInfo {
 
 export interface MetadataInfo {
   baseURI: string
-  onchainData: string
+  onchainPointer: string
 }
 
 export interface ReserveInfo {
@@ -179,47 +179,6 @@ export async function simulateAndExecuteContract(
 }
 
 /**
- * The function `predictTicketContractAddress` predicts the contract address for a ticket contract
- * based on a given nonce address and wallet manager.
- * @param {string} nonceAddress - The `nonceAddress` parameter is a string representing the address
- * used to generate a unique nonce for the contract address.
- * @param {WalletManager} walletManager - The `walletManager` parameter is an instance of the
- * `WalletManager` class. It is used to interact with the Ethereum network and perform wallet-related
- * operations such as signing transactions and retrieving account information.
- * @returns a Promise that resolves to the perdicted contract address
- */
-export async function predictTicketContractAddress(
-  nonceAddress: string,
-  walletManager: EthereumWalletManager
-): Promise<string> {
-  const salt = encodeAbiParameters(
-    [
-      { name: "address", type: "address" },
-      { name: "nonce", type: "uint256" },
-    ],
-    [
-      nonceAddress as `0x${string}`,
-      await getTicketFactoryUserNonce(nonceAddress, walletManager),
-    ]
-  )
-  return getContractAddress({
-    bytecode: toHex(
-      concat([
-        fromHex("0x3d602d80600a3d3981f3363d3d373d3d3d363d73", "bytes"),
-        fromHex(
-          config.eth.contracts.mint_ticket_impl_v1 as `0x${string}`,
-          "bytes"
-        ),
-        fromHex("0x5af43d82803e903d91602b57fd5bf3", "bytes"),
-      ])
-    ),
-    from: config.eth.contracts.mint_ticket_factory_v1 as `0x${string}`,
-    opcode: "CREATE2",
-    salt: keccak256(salt),
-  })
-}
-
-/**
  * Given a Reserve info where the fields are allowed to be undefined, define
  * such fields with their corresponding integer value based on the contract
  * design.
@@ -235,31 +194,36 @@ export function defineReserveInfo(info: ReserveInfo): Required<ReserveInfo> {
 }
 
 /**
- * The function `getTicketFactoryUserNonce` retrieves the nonce for a given address from a ticket
- * factory contract.
- * @param {string} nonceAddress - The `nonceAddress` parameter is a string representing the address for
- * which you want to retrieve the nonce. This address is used as an input to the `nonces` function of
- * the `ticketFactory` contract.
- * @param {WalletManager} walletManager - The `walletManager` parameter is an object that contains the
- * wallet client and public client. It is used to interact with the blockchain and perform operations
- * such as reading contract data and sending transactions.
- * @returns a Promise that resolves to the nonce as bigint
+ * The function `predictFxContractAddress` predicts the contract address for a token or ticket
+ * contract deployed from an fx factoryn based on the given parameters.
+ * @param {string} nonceAddress - The address of the creator.
+ * @param {"issuer" | "ticket"} factoryType - The `factoryType` parameter is a string that specifies
+ * the type of factory contract to use. It can have two possible values: "issuer" or "ticket".
+ * @param {EthereumWalletManager} walletManager - The `walletManager` parameter is an instance of the
+ * `EthereumWalletManager` class. It is used to interact with the Ethereum network and manage wallets.
+ * @returns the predicted address (checksummed).
  */
-export async function getTicketFactoryUserNonce(
+export async function predictFxContractAddress(
   nonceAddress: string,
+  factoryType: "issuer" | "ticket",
   walletManager: EthereumWalletManager
-): Promise<bigint> {
-  const ticketFactory = getContract({
-    address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
-    abi: FX_TICKETS_FACTORY_ABI,
+): Promise<string> {
+  const factory = getContract({
+    address:
+      factoryType === "ticket"
+        ? (FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`)
+        : (FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`),
+    abi:
+      factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
     walletClient: walletManager.walletClient,
     publicClient: walletManager.publicClient,
   })
-  const nonce = await ticketFactory.read.nonces([nonceAddress])
+  const nonce = await factory.read.nonces([nonceAddress])
   if (typeof nonce !== "bigint") {
     throw Error("Could not get nonce")
   }
-  return nonce
+  const address = await factory.read.getTokenAddress([nonceAddress, nonce])
+  return address as string
 }
 
 /**

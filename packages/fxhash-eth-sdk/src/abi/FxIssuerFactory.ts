@@ -243,9 +243,9 @@ export const FX_ISSUER_FACTORY_ABI = [
             type: "bytes",
           },
           {
-            internalType: "bytes",
-            name: "onchainData",
-            type: "bytes",
+            internalType: "address",
+            name: "onchainPointer",
+            type: "address",
           },
         ],
         internalType: "struct MetadataInfo",
@@ -314,6 +314,30 @@ export const FX_ISSUER_FACTORY_ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_sender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_nonce",
+        type: "uint256",
+      },
+    ],
+    name: "getTokenAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "implementation",
     outputs: [
@@ -321,6 +345,25 @@ export const FX_ISSUER_FACTORY_ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "nonces",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
