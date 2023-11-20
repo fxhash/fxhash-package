@@ -1,4 +1,4 @@
-;[
+export const FX_TICKETS_FACTORY_ABI = [
   {
     inputs: [
       {
