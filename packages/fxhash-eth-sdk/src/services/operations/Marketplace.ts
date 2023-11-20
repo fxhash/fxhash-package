@@ -145,7 +145,7 @@ export const placeBid = async (
 export const buyToken = async (
   items: ReservoirBuyTokenParams,
   walletClient: WalletClient
-): Promise<true> => {
+): Promise<string> => {
   // Prepare listing parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
     items: items,
@@ -153,22 +153,33 @@ export const buyToken = async (
     taker: walletClient.account.address,
   }
 
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    console.log(steps)
+    const step = steps.find(step => step.id === "sale")
+    if (step.items.length > 0) {
+      if (step.items[0].orderIds && step.items[0].status === "complete") {
+        orderId = step.items[0].orderIds[0]
+      }
+    }
+  }
   // Fetch and override steps
   const fetchedSteps = await getBuySteps(buyStepsParams)
   // Execute steps and handle actions
-  await handleAction(
+  const result = await handleAction(
     getClient().utils.executeSteps(
       {
         baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
-      stepHandler,
+      hashCallBack,
       fetchedSteps,
       undefined,
       walletClient.chain.id
     )
   )
-  return true
+
+  return orderId
 }
 
 /**
@@ -291,12 +302,27 @@ export const acceptOffer = async (
 export const cancelOrder = async (
   orders: string[],
   walletClient: WalletClient
-): Promise<boolean> => {
-  return await handleAction(
+): Promise<string> => {
+  let orderId: string = undefined
+  const hashCallBack = steps => {
+    console.log(steps)
+    const step = steps.find(step => step.id === "sale")
+    if (step.items.length > 0) {
+      if (step.items[0].orderIds && step.items[0].status === "complete") {
+        orderId = step.items[0].orderIds[0]
+      }
+    }
+  }
+  const result = await handleAction(
     getClient().actions.cancelOrder({
       ids: orders,
       wallet: walletClient,
-      onProgress: (steps: Execute["steps"]) => console.log(steps),
+      onProgress: hashCallBack,
     })
   )
+
+  if (!result) {
+    throw new Error("Failed to accept offer")
+  }
+  return orderId
 }
