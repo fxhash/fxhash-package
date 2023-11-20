@@ -2,7 +2,7 @@ import { EthereumContractOperation } from "../contractOperation"
 import { cancelOrder } from "../Marketplace"
 
 export type TCancelOrderEthV1OperationParams = {
-  orders: string[]
+  orderIds: string[]
 }
 
 /**
@@ -12,7 +12,7 @@ export class CancelOrderEthV1Operation extends EthereumContractOperation<TCancel
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<string> {
-    return await cancelOrder(this.params.orders, this.manager.walletClient)
+    return await cancelOrder(this.params.orderIds, this.manager.walletClient)
   }
 
   success(): string {

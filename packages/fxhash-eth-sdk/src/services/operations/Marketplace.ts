@@ -166,7 +166,6 @@ export const buyToken = async (
 
   let orderId: string = undefined
   const hashCallBack = (steps, path) => {
-    console.log(steps)
     const step = steps.find(step => step.id === "sale")
     if (step && step.items.length > 0) {
       if (step.items[0].orderIds && step.items[0].status === "complete") {
@@ -283,7 +282,6 @@ export const acceptOffer = async (
 ): Promise<string> => {
   let orderId: string = undefined
   const hashCallBack = (steps, path) => {
-    console.log(steps)
     const step = steps.find(step => step.id === "sale")
     if (step.items.length > 0) {
       if (step.items[0].orderIds && step.items[0].status === "complete") {
@@ -314,15 +312,7 @@ export const cancelOrder = async (
   orders: string[],
   walletClient: WalletClient
 ): Promise<string> => {
-  let orderId: string = undefined
   const hashCallBack = steps => {
-    console.log(steps)
-    const step = steps.find(step => step.id === "sale")
-    if (step.items.length > 0) {
-      if (step.items[0].orderIds && step.items[0].status === "complete") {
-        orderId = step.items[0].orderIds[0]
-      }
-    }
   }
   const result = await handleAction(
     getClient().actions.cancelOrder({
@@ -335,5 +325,5 @@ export const cancelOrder = async (
   if (!result) {
     throw new Error("Failed to accept offer")
   }
-  return orderId
+  return orders[0]
 }
