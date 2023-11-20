@@ -51,6 +51,7 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
         this.manager.address,
         this.params.token,
         FxhashContracts.ETH_TICKET_REDEEMER_V1,
+        FxhashContracts.ETH_IPFS_RENDERER_V1,
         this.params.gracePeriod,
         baseURI,
         await processAndFormatMintInfos(this.params.mintInfo, this.manager),
