@@ -37,6 +37,11 @@ export const FX_TICKETS_FACTORY_ABI = [
   },
   {
     inputs: [],
+    name: "InvalidRenderer",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidToken",
     type: "error",
   },
@@ -201,6 +206,11 @@ export const FX_TICKETS_FACTORY_ABI = [
         type: "address",
       },
       {
+        internalType: "address",
+        name: "_renderer",
+        type: "address",
+      },
+      {
         internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
@@ -259,6 +269,30 @@ export const FX_TICKETS_FACTORY_ABI = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_sender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_nonce",
+        type: "uint256",
+      },
+    ],
+    name: "getTokenAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

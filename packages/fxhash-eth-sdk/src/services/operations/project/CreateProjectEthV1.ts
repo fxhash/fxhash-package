@@ -1,11 +1,6 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import {
-  TransactionReceipt,
-  encodeAbiParameters,
-  encodeFunctionData,
-  getAddress,
-} from "viem"
+import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
   DutchAuctionMintInfoArgs,
@@ -13,21 +8,13 @@ import {
   InitInfo,
   MetadataInfo,
   MintInfo,
-  MintTypes,
-  predictTicketContractAddress,
   ProjectInfo,
   ReceiverEntry,
-  ReserveInfo,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
-import {
-  MAX_UINT_64,
-  flattenWhitelist,
-  getDutchAuctionMinterEncodedParams,
-  getFixedPriceMinterEncodedParams,
-} from "@/utils"
+import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { getHashFromIPFSCID } from "@/utils/ipfs"
@@ -73,15 +60,14 @@ export type TCreateProjectEthV1OperationParams = {
     tagIds: number[]
   }
   projectInfo: {
-    onchain: boolean
     mintEnabled: boolean
     burnEnabled: boolean
     maxSupply: bigint
     inputSize: number
   }
-  metadataInfo: {
-    baseURI: string
-    onchainData?: string
+  metadataInfo?: {
+    baseURI?: string
+    onchainPointer?: string
   }
   mintInfo: (
     | FixedPriceMintInfoArgs
@@ -98,10 +84,12 @@ export type TCreateProjectEthV1OperationParams = {
  * Call the Issuer factory to create a new project
  */
 export class CreateProjectEthV1Operation extends EthereumContractOperation<TCreateProjectEthV1OperationParams> {
+  static getDeployedTokenFromReceipt(receipt: TransactionReceipt) {
+    return receipt.logs[1].address
+  }
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    const onchain = this.params.projectInfo.onchain ? true : false
     if (this.params.royalties > 2500) {
       throw Error("Royalties should be lower or equal to 25%")
     }
@@ -125,9 +113,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1,
-      renderer: onchain
-        ? FxhashContracts.ETH_SCRIPTY_RENDERER_V1
-        : FxhashContracts.ETH_IPFS_RENDERER_V1,
+      renderer: FxhashContracts.ETH_IPFS_RENDERER_V1,
       tagIds: this.params.initInfo.tagIds,
       primaryReceiver: this.params.primaryReceiver,
     }
@@ -137,96 +123,33 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       inputSize: this.params.projectInfo.inputSize,
       maxSupply: this.params.projectInfo.maxSupply,
       mintEnabled: this.params.projectInfo.mintEnabled,
-      onchain: this.params.projectInfo.onchain,
     }
 
-    let baseURI = this.params.metadataInfo.baseURI
-    if (onchain) {
-      //TODO: TBD: need to be worked out
-    } else {
-      if (!this.params.metadataInfo.baseURI.startsWith("ipfs://"))
-        throw Error("Invalid baseURI")
-      baseURI = getHashFromIPFSCID(
-        this.params.metadataInfo.baseURI.split("ipfs://")[1]
-      )
+    let baseURI = ""
+    let onchainPointer = ZERO_ADDRESS
+    if (this.params.metadataInfo) {
+      baseURI = this.params.metadataInfo.baseURI
+      if (this.params.metadataInfo.baseURI) {
+        if (!this.params.metadataInfo.baseURI.startsWith("ipfs://"))
+          throw Error("Invalid baseURI")
+        baseURI = getHashFromIPFSCID(
+          this.params.metadataInfo.baseURI.split("ipfs://")[1]
+        )
+      } else {
+        baseURI = ""
+      }
+      onchainPointer = this.params.metadataInfo.onchainPointer
+        ? this.params.metadataInfo.onchainPointer
+        : ZERO_ADDRESS
     }
     const metadataInfo: MetadataInfo = {
       baseURI: baseURI,
-      onchainData: this.params.metadataInfo.onchainData
-        ? this.params.metadataInfo.onchainData
-        : "",
+      onchainPointer: onchainPointer,
     }
 
-    const mintInfos: MintInfo[] = await Promise.all(
-      this.params.mintInfo.map(async argsMintInfo => {
-        if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-          const reserveInfo: ReserveInfo = {
-            allocation: argsMintInfo.reserveInfo.allocation,
-            endTime: argsMintInfo.reserveInfo.endTime
-              ? argsMintInfo.reserveInfo.endTime
-              : MAX_UINT_64,
-            startTime: argsMintInfo.reserveInfo.startTime
-              ? argsMintInfo.reserveInfo.startTime
-              : BigInt(0),
-          }
-          const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
-            reserveInfo: reserveInfo,
-            params: getFixedPriceMinterEncodedParams(
-              argsMintInfo.params.price,
-              argsMintInfo.params.whitelist
-                ? flattenWhitelist(argsMintInfo.params.whitelist)
-                : undefined,
-              argsMintInfo.params.mintPassSigner
-                ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
-                : undefined
-            ),
-          }
-          return mintInfo
-        } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
-          const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
-            params: getDutchAuctionMinterEncodedParams(
-              argsMintInfo.params.prices,
-              argsMintInfo.params.stepLength,
-              argsMintInfo.params.refunded,
-              argsMintInfo.params.whitelist
-                ? flattenWhitelist(argsMintInfo.params.whitelist)
-                : undefined,
-              argsMintInfo.params.mintPassSigner
-                ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
-                : undefined
-            ),
-          }
-          return mintInfo
-        } else if (argsMintInfo.type === MintTypes.TICKET) {
-          const predictedAddress = await predictTicketContractAddress(
-            this.manager.address,
-            this.manager
-          )
-          const encodedPredictedAddress = encodeAbiParameters(
-            [{ name: "address", type: "address" }],
-            [predictedAddress as `0x${string}`]
-          )
-          const mintInfo: MintInfo = {
-            minter: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
-            reserveInfo: {
-              allocation: argsMintInfo.reserveInfo.allocation,
-              endTime: argsMintInfo.reserveInfo.endTime,
-              startTime: argsMintInfo.reserveInfo.startTime,
-            },
-            params: encodedPredictedAddress,
-          }
-          return mintInfo
-        } else {
-          throw Error("Invalid mint type")
-        }
-      })
+    const mintInfos: MintInfo[] = await processAndFormatMintInfos(
+      this.params.mintInfo,
+      this.manager
     )
 
     if (this.params.isCollab) {
@@ -266,6 +189,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         ],
         account: this.manager.address,
       }
+      console.log(args)
       //simulate the transaction and execute it, will throw an error if it fails
       return simulateAndExecuteContract(this.manager, args)
     }

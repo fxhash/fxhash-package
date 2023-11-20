@@ -62,7 +62,18 @@ function overrideSellStepsParameters(steps: Execute): void {
  */ export const listToken = async (
   reservoirListings: ReservoirListingParams,
   walletClient: WalletClient
-): Promise<boolean> => {
+): Promise<string> => {
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    console.log(steps)
+    const step = steps.find(step => step.id === "sale")
+    if (step.items.length > 0) {
+      if (step.items[0].orderIds && step.items[0].status === "complete") {
+        orderId = step.items[0].orderIds[0]
+      }
+    }
+  }
+
   // Prepare listing parameters
   const listingParams: ReservoirExecuteListParams = {
     maker: walletClient.account.address,
@@ -81,13 +92,14 @@ function overrideSellStepsParameters(steps: Execute): void {
         baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
-      stepHandler,
+      hashCallBack,
       fetchedSteps,
       undefined,
       walletClient.chain.id
     )
   )
-  return true
+
+  return orderId
 }
 
 /**
