@@ -4,6 +4,8 @@ import {
   ReservoirExecuteBidParams,
   ReservoirExecuteBuyParams,
   ReservoirExecuteListParams,
+  ReservoirGetCollectionResponse,
+  ReservoirGetTokenResponse,
 } from "./types"
 
 /**
@@ -45,5 +47,36 @@ export const getBuySteps = async (
     API_METHODS.POST,
     "/execute/buy/v7",
     JSON.stringify(params)
+  )
+}
+
+/**
+ * Fetches collection data from reservoir API.
+ * @param {string} collection - The `collection` parameter is a string that represents the token contract.
+ * @returns Return a `ReservoirGetCollectionResponse` object containing the collection data.
+ */
+export async function getCollection(
+  collection: string
+): Promise<ReservoirGetCollectionResponse> {
+  return await fetchReservoir<ReservoirGetCollectionResponse>(
+    API_METHODS.GET,
+    `/collections/v7?id=${collection}`,
+    undefined
+  )
+}
+
+/**
+ * Fetches token data from reservoir API.
+ * @param {string} token - The `token` parameter is a string that represents the token id.
+ * it must be in the form `contractAddress:tokenId`
+ * @returns Return a `ReservoirGetTokenResponse` object containing the token data.
+ */
+export async function getToken(
+  token: string
+): Promise<ReservoirGetTokenResponse> {
+  return await fetchReservoir<ReservoirGetTokenResponse>(
+    API_METHODS.GET,
+    `/tokens/v6?tokens=${token}`,
+    undefined
   )
 }
