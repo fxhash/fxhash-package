@@ -17,7 +17,7 @@ import {
   ReserveInfo,
   TicketMintInfoArgs,
   defineReserveInfo,
-  predictTicketContractAddress,
+  predictFxContractAddress,
 } from "@/services/operations"
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumWalletManager } from ".."
@@ -253,8 +253,9 @@ export async function processAndFormatMintInfos(
         }
         return mintInfo
       } else if (argsMintInfo.type === MintTypes.TICKET) {
-        const predictedAddress = await predictTicketContractAddress(
+        const predictedAddress = await predictFxContractAddress(
           manager.address,
+          "ticket",
           manager
         )
         const encodedPredictedAddress = encodeAbiParameters(
