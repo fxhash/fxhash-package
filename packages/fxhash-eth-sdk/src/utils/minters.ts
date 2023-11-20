@@ -236,11 +236,7 @@ export async function processAndFormatMintInfos(
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
         const mintInfo: MintInfo = {
           minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
-          reserveInfo: {
-            allocation: argsMintInfo.reserveInfo.allocation,
-            endTime: argsMintInfo.reserveInfo.endTime,
-            startTime: argsMintInfo.reserveInfo.startTime,
-          },
+          reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
           params: getDutchAuctionMinterEncodedParams(
             argsMintInfo.params.prices,
             argsMintInfo.params.stepLength,
@@ -264,11 +260,7 @@ export async function processAndFormatMintInfos(
         )
         const mintInfo: MintInfo = {
           minter: FxhashContracts.ETH_TICKET_REDEEMER_V1,
-          reserveInfo: {
-            allocation: argsMintInfo.reserveInfo.allocation,
-            endTime: argsMintInfo.reserveInfo.endTime,
-            startTime: argsMintInfo.reserveInfo.startTime,
-          },
+          reserveInfo: defineReserveInfo(argsMintInfo.reserveInfo),
           params: encodedPredictedAddress,
         }
         return mintInfo
