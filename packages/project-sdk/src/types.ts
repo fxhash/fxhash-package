@@ -3,7 +3,7 @@ import {
   FxParamType,
   FxParamValue,
 } from "@fxhash/params/types"
-import { ResettableRandFunction } from "@fxhash/utils/types/math"
+import { ResettableRandFunction } from "@fxhash/utils"
 
 export type FxHashExecutionContext = "standalone" | "capture" | "minting"
 
