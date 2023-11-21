@@ -4,8 +4,7 @@ import { acceptOffer } from "../Marketplace"
 
 export type TAcceptOfferEthV1OperationParams = {
   orderId: string
-  token: string
-  tokenId: string
+  tokens: { token: string; tokenId: string }[]
 }
 
 /**
@@ -15,12 +14,12 @@ export class AcceptOfferEthV1Operation extends EthereumContractOperation<TAccept
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<string> {
-    const args: ReservoirAcceptOfferParams = [
-      {
+    const args: ReservoirAcceptOfferParams = this.params.tokens.map(token => {
+      return {
         orderId: this.params.orderId,
-        token: `${this.params.token}:${this.params.tokenId}`,
-      },
-    ]
+        token: `${token.token}:${token.tokenId}`,
+      }
+    })
     return await acceptOffer(args, this.manager.walletClient)
   }
 

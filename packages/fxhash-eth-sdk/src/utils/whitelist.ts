@@ -16,23 +16,37 @@ import {
 export type Whitelist = Map<`0x${string}`, number>
 
 /**
- * Wrapper type for the whitelist type that is used in the smart contracts
+ * Wrapper type for the whitelist type that is used in the smart contracts. The
+ * format is [index, allocation][].
  * @dev this type should be used for smart contract interactions
  * @dev to transform it to the format that is used in the UI, you can use the
- *
+ *`flattenWhitelist` and `inflateWhitelist` utilities.
  */
 export type FlattenedWhitelist = string[][]
 
 /**
- * The above type represents a project whitelist with a project ID, merkle root, and a flattened
- * whitelist. It is used to represent a project whitelist stored in the db.
- * @property merkleRoot - The `merkleRoot` property is a string that represents the Merkle root hash of
- * a Merkle tree. A Merkle tree is a data structure that is used to efficiently verify the integrity of
- * large data sets. The Merkle root is a hash value that is computed by hashing together all the
- * @property {FlattenedWhitelist} whitelist - The `whitelist` property is of type `FlattenedWhitelist`.
+ * The merkle root in a hex string of a 32 bytes sequence prefixed by 0x.
+ */
+export type MerkleRoot = `0x${string}`
+
+/**
+ * The above type represents a project whitelist with a project ID, merkle root,
+ * and a flattened whitelist. It is used to represent a project whitelist stored
+ * in the db.
+ * @property merkleRoot - The `merkleRoot` property is a string that r
  */
 export type MerkleTreeWhitelist = {
-  merkleRoot: `0x${string}`
+  /**
+   * Represents the Merkle root hash of a Merkle tree. A Merkle tree is a data
+   * structure that is used to efficiently verify the integrity of large data
+   * sets. The Merkle root is a hash value that is computed by hashing together
+   * the flattened whitelist.
+   */
+  merkleRoot: MerkleRoot
+
+  /**
+   * The whitelist flattened: [address, allocation][]
+   */
   whitelist: FlattenedWhitelist
 }
 

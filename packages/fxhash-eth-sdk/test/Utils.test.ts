@@ -9,9 +9,11 @@ import {
   concat,
   createPublicClient,
   createWalletClient,
+  encodeAbiParameters,
   fromHex,
   getContractAddress,
   http,
+  keccak256,
   slice,
   toBytes,
   toHex,
@@ -41,22 +43,6 @@ const publicClient = createPublicClient({
 })
 
 describe("utils tests", () => {
-  // it("should correctly predict ticket address", async () => {
-  //   const hexByteCode = toHex(
-  //     concat([
-  //       fromHex("0x3d602d80600a3d3981f3363d3d373d3d3d363d73", "bytes"),
-  //       fromHex("0x4622376Cb7Befe201384753d8dc234Da38e1F567", "bytes"),
-  //       fromHex("0x5af43d82803e903d91602b57fd5bf3", "bytes"),
-  //     ])
-  //   )
-  //   const ticketAddress = await getContractAddress({
-  //     bytecode: hexByteCode,
-  //     from: "0x80fEE32F8BDda62bb67e883691C3c94c6ED4C525" as `0x${string}`,
-  //     opcode: "CREATE2",
-  //     salt: toBytes(0),
-  //   })
-  //   expect(ticketAddress).toEqual("0xDb807b799addfeA3c4Ba0741C9f6DDAfbFa50F3b")
-  // })
   // it("should correctly decode tax info", async () => {
   //   const hexPaylod =
   //     "0x0000000002d8e3a6e610000000038d7ea4c683e80000652fbe650000652e3600"
@@ -146,7 +132,6 @@ describe("utils tests", () => {
   // )
   // expect(exists2).toBe(false)
   //})
-
   it("should correctly parse a v0 IPFS CID", async () => {
     const cid = "QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB"
     expect(getHashFromIPFSCID(cid)).toEqual(
