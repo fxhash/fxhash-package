@@ -3,7 +3,7 @@ import { Blockchain } from "./types/blockchain"
 
 export function mockTezosTransactionHash(): string {
   const randomSequence = Array.from(
-    { length: 33 },
+    { length: 49 },
     () => BASE58_CHARSET[(Math.random() * BASE58_CHARSET.length) | 0]
   ).join("")
   return `oo${randomSequence}`
