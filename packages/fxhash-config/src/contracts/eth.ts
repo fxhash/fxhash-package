@@ -1,21 +1,21 @@
 export interface IEthContracts {
-  seaport_zone: string
-  splits_controller_v1: string
-  splits_main: string
-  scripty_storage: string
-  scripty_builder: string
-  project_factory_v1: string
-  splits_factory_v1: string
-  fixed_price_minter_v1: string
-  dutch_auction_minter_v1: string
-  mint_ticket_factory_v1: string
-  ticket_redeemer_v1: string
-  ipfs_renderer_v1: string
-  randomizer_v1: string
-  role_registry_v1: string
-  contract_registry_v1: string
-  gen_art_token_impl_v1: string
-  mint_ticket_impl_v1: string
+  seaport_zone: `0x${string}`
+  splits_controller_v1: `0x${string}`
+  splits_main: `0x${string}`
+  scripty_storage: `0x${string}`
+  scripty_builder: `0x${string}`
+  project_factory_v1: `0x${string}`
+  splits_factory_v1: `0x${string}`
+  fixed_price_minter_v1: `0x${string}`
+  dutch_auction_minter_v1: `0x${string}`
+  mint_ticket_factory_v1: `0x${string}`
+  ticket_redeemer_v1: `0x${string}`
+  ipfs_renderer_v1: `0x${string}`
+  randomizer_v1: `0x${string}`
+  role_registry_v1: `0x${string}`
+  contract_registry_v1: `0x${string}`
+  gen_art_token_impl_v1: `0x${string}`
+  mint_ticket_impl_v1: `0x${string}`
 }
 
 export const ethTestnetContracts: IEthContracts = {
