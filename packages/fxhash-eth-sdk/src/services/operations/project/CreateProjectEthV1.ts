@@ -77,7 +77,7 @@ export type TCreateProjectEthV1OperationParams = {
     inputSize: bigint
   }
   metadataInfo?: {
-    baseURI?: `0x${string}`
+    baseURI?: string
     onchainPointer?: `0x${string}`
   }
   mintInfo: (
@@ -162,7 +162,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         : ZERO_ADDRESS
     }
     const metadataInfo: MetadataInfo = {
-      baseURI: baseURI,
+      baseURI: baseURI as `0x${string}`,
       onchainPointer: onchainPointer,
     }
 
@@ -173,7 +173,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
 
     console.log(this.params.mintInfo)
     const hasTicketMintInfo = this.params.mintInfo.some(mint => {
-      mint.type === MintTypes.TICKET
+      return mint.type === MintTypes.TICKET
     })
 
     let args: unknown[]
