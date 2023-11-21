@@ -38,7 +38,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
         abi: FX_GEN_ART_721_ABI,
         functionName: "unpause",
         args: [],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

@@ -45,7 +45,7 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
         abi: FX_GEN_ART_721_ABI,
         functionName: functionName,
         args: functionArgs,
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

@@ -24,7 +24,7 @@ export class SetTagsEthV1Operation extends EthereumContractOperation<TSetTagsEth
       abi: FX_GEN_ART_721_ABI,
       functionName: "setTags",
       args: [this.params.tags],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

@@ -24,7 +24,7 @@ export class WithdrawFromFixedPriceMinterEthV1Operation extends EthereumContract
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "withdraw",
       args: [this.params.token],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

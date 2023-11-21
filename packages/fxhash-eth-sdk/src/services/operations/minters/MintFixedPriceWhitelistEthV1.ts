@@ -77,7 +77,7 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
           [index],
           [proof],
         ],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
         value: this.params.price,
       }
       return simulateAndExecuteContract(this.manager, args)

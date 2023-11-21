@@ -4,17 +4,11 @@ import {
   BaseError,
   ContractFunctionRevertedError,
   TransactionReceipt,
-  concat,
-  encodeAbiParameters,
-  fromHex,
   getContract,
-  getContractAddress,
-  keccak256,
-  toHex,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { MAX_UINT_64, MerkleTreeWhitelist, Whitelist } from "@/utils"
+import { MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi"
@@ -280,7 +274,7 @@ export function preparePrimaryReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    account: config.config.ethFeeReceiver,
+    account: config.config.ethFeeReceiver as `0x${string}`,
     value: config.config.fxhashPrimaryFee,
   }
   // Calculate the fee ratio for each account
