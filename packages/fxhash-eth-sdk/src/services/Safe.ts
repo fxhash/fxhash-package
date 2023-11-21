@@ -18,7 +18,7 @@ import { getAddress } from "viem"
  */
 export async function getSafeSDK(
   safeAddress: string,
-  signer: ethers.Signer | ethers.providers.Provider
+  signer: ethers.providers.JsonRpcSigner | ethers.providers.Provider
 ): Promise<Safe> {
   // @ts-ignore
   return await Safe.default.create({
@@ -34,7 +34,7 @@ export async function getSafeSDK(
  * @returns a Promise that resolves to a SafeFactory instance.
  */
 export async function getSafeFactory(
-  signer: ethers.Signer | ethers.providers.Provider
+  signer: ethers.providers.JsonRpcSigner | ethers.providers.Provider
 ) {
   return await SafeFactory.create({
     ethAdapter: getEthersAdapterForSafe(signer),
@@ -50,7 +50,7 @@ export async function getSafeFactory(
  * @returns an instance of the `SafeApiKit` class.
  */
 export function getSafeService(
-  signer: ethers.Signer | ethers.providers.Provider
+  signer: ethers.providers.JsonRpcSigner | ethers.providers.Provider
 ): SafeApiKit {
   // @ts-ignore
   return new SafeApiKit.default({
@@ -133,4 +133,41 @@ export async function proposeSafeTransaction(
     senderSignature: senderSignature.data,
   })
   return safeTxHash
+}
+
+/**
+ * Retrieves the safes owned by a user.
+ * @param {string} userAddress - The userAddress parameter is a string that represents the address of a
+ * user.
+ * @returns the list of safes related to the user.
+ */
+export async function getUserSafes(
+  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
+  userAddress: string
+) {
+  return await getSafeService(provider).getSafesByOwner(userAddress)
+}
+
+/**
+ * Retrieves pending transactions for a given safe adress.
+ * @param {string} safeAddress - address of a safe.
+ * @returns pending transactions for the safe with the specified address.
+ */
+export async function getPendingTransactionsForSafe(
+  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
+  safeAddress: string
+) {
+  return await getSafeService(provider).getPendingTransactions(safeAddress)
+}
+
+/**
+ * Retrieves all transactions associated with a given safe address.
+ * @param {string} safeAddress - address of a safe contract.
+ * @returns all transactions associated with the safe with the specified address.
+ */
+export async function getAllSafeTransactions(
+  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
+  safeAddress: string
+) {
+  return await getSafeService(provider).getAllTransactions(safeAddress)
 }

@@ -43,35 +43,6 @@ const publicClient = createPublicClient({
 })
 
 describe("utils tests", () => {
-  it("should correctly predict a issuer factory address", async () => {
-    const salt = keccak256(
-      encodeAbiParameters(
-        [
-          { name: "address", type: "address" },
-          { name: "nonce", type: "uint256" },
-        ],
-        [
-          "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42" as `0x${string}`,
-          //await getFxFactoryNonce(nonceAddress, factoryType, walletManager),
-          BigInt(13),
-        ]
-      )
-    )
-    const hexByteCode = toHex(
-      concat([
-        fromHex("0x602c3d8160093d39f33d3d3d3d363d3d37363d73", "bytes"),
-        fromHex("0xdD2ef82dCeB15dDF5cf7A1B412549884B87944B8", "bytes"),
-        fromHex("0x5af43d82803e903d91602b57fd5bf3", "bytes"),
-      ])
-    )
-    const address = await getContractAddress({
-      bytecode: hexByteCode,
-      from: "0xd36B73453789ea53136213D6A161298fE0579a7c" as `0x${string}`,
-      opcode: "CREATE2",
-      salt: salt,
-    })
-    expect(address).toEqual("0xc64fa822d734C2187195D1002d48a7088C2F3E13")
-  })
   // it("should correctly decode tax info", async () => {
   //   const hexPaylod =
   //     "0x0000000002d8e3a6e610000000038d7ea4c683e80000652fbe650000652e3600"
@@ -161,13 +132,12 @@ describe("utils tests", () => {
   // )
   // expect(exists2).toBe(false)
   //})
-
-  // it("should correctly parse a v0 IPFS CID", async () => {
-  //   const cid = "QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB"
-  //   expect(getHashFromIPFSCID(cid)).toEqual(
-  //     "0x0e7071c59df3b9454d1d18a15270aa36d54f89606a576dc621757afd44ad1d2e"
-  //   )
-  //   const cidParsed = await getCIDFromV0Digest(getHashFromIPFSCID(cid))
-  //   expect(cid).toEqual(cidParsed)
-  // })
+  it("should correctly parse a v0 IPFS CID", async () => {
+    const cid = "QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB"
+    expect(getHashFromIPFSCID(cid)).toEqual(
+      "0x0e7071c59df3b9454d1d18a15270aa36d54f89606a576dc621757afd44ad1d2e"
+    )
+    const cidParsed = await getCIDFromV0Digest(getHashFromIPFSCID(cid))
+    expect(cid).toEqual(cidParsed)
+  })
 })

@@ -54,3 +54,35 @@ export type ReservoirPlaceBidParams =
  */
 export type ReservoirAcceptOfferParams =
   paths["/execute/sell/v7"]["post"]["parameters"]["body"]["body"]["items"]
+
+/**
+ * @typedef {Object} ReservoirGetCollectionParams
+ * Represents the 'query' section within the body parameters for getting
+ * collection information from Reservoir
+ */
+export type ReservoirGetCollectionParams =
+  paths["/collections/v7"]["get"]["parameters"]["query"]
+
+/**
+ * @typedef {Object} ReservoirGetCollectionResponse
+ * Represents the model returned by the following endpoint:
+ * `https://docs.reservoir.tools/reference/getcollections/v7`
+ */
+export type ReservoirGetCollectionResponse =
+  paths["/collections/v7"]["get"]["responses"]["200"]["schema"]
+
+/**
+ * @typedef {Object} ReservoirGetTokenParams
+ * Represents the 'query' section within the body parameters for getting
+ * token information from Reservoir
+ */
+export type ReservoirGetTokenParams =
+  paths["/tokens/v7"]["get"]["parameters"]["query"]
+
+/**
+ * @typedef {Object} ReservoirGetTokenResponse
+ * Represents the model returned by the following endpoint:
+ * `https://docs.reservoir.tools/reference/gettokensv6`
+ */
+export type ReservoirGetTokenResponse =
+  paths["/tokens/v7"]["get"]["responses"]["200"]["schema"]
