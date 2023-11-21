@@ -27,6 +27,7 @@
     "dist"
   ],
   "scripts": {
+    "test": "vitest",
     "build": "tsup",
     "dev": "tsup --watch"
   },
@@ -35,6 +36,7 @@
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/prettier-config": "workspace:*",
     "tsup": "6.6.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "vitest": "0.34.6"
   }
 }
