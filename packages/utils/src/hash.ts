@@ -27,8 +27,16 @@ export function isEthereumTransactionHashValid(hash: string): boolean {
 }
 
 export function isTezosTransactionHashValid(hash: string): boolean {
-  const substr = hash.substring(0, 2)
-  return substr === "tz" || substr === "KT"
+  if (hash.length !== 51) {
+    return false
+  }
+  if (!hash.startsWith("oo") && !hash.startsWith("op")) {
+    return false
+  }
+  for (let i = 2; i < hash.length; i++) {
+    if (!BASE58_CHARSET.includes(hash[i])) return false
+  }
+  return true
 }
 
 export function getBlockchainFromTransactionHash(hash: string): Blockchain {
