@@ -41,23 +41,20 @@ function sfc32(seed: number[]): () => number {
   }
 }
 
-function matcher(str: string, start: number): number[] {
+function matcher(
+  str: string,
+  start: number,
+  decoder: (s: string) => number = b58dec
+): number[] {
   return str
     .slice(start)
     .match(new RegExp(".{" + ((str.length - start) >> 2) + "}", "g"))
-    .map(function (substring: string): number {
-      return b58dec(substring)
-    })
+    .map(decoder)
 }
 
 function getSeedFromHash(hash: string): number[] {
   if (isEthereumTransactionHashValid(hash) || isEthereumAddressValid(hash)) {
-    return [
-      parseInt(hash.slice(2, 10), 16),
-      parseInt(hash.slice(10, 18), 16),
-      parseInt(hash.slice(18, 26), 16),
-      parseInt(hash.slice(26, 34), 16),
-    ]
+    return matcher(hash, 2, s => parseInt(s, 16) | 0)
   } else if (isTezosAddressValid(hash)) {
     return matcher(hash, 3)
   } else {
