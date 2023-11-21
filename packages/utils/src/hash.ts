@@ -23,7 +23,7 @@ export function mockTransactionHash(chain: Blockchain): string {
 }
 
 export function isEthereumTransactionHashValid(hash: string): boolean {
-  return hash.substring(0, 2) === "0x"
+  return /^(0x)?([A-Fa-f0-9]{64})$/.test(hash)
 }
 
 export function isTezosTransactionHashValid(hash: string): boolean {
