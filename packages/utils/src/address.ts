@@ -32,10 +32,7 @@ export function isTezosAddressValid(address: string): boolean {
 }
 
 export function isEthereumAddressValid(address: string): boolean {
-  if (!/^(0x)?[0-9a-fA-F]{40}$/.test(address)) {
-    return false
-  }
-  return true
+  return /^(0x)?[0-9a-fA-F]{40}$/.test(address)
 }
 
 export function getBlockchainFromAddress(address: string): Blockchain {
