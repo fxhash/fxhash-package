@@ -68,7 +68,7 @@ export type TCreateProjectEthV1OperationParams = {
   initInfo: {
     name: string
     symbol: string
-    tagIds: number[]
+    tagIds: bigint[]
   }
   projectInfo: {
     mintEnabled: boolean
@@ -77,7 +77,7 @@ export type TCreateProjectEthV1OperationParams = {
     inputSize: bigint
   }
   metadataInfo?: {
-    baseURI?: string
+    baseURI?: `0x${string}`
     onchainPointer?: `0x${string}`
   }
   mintInfo: (
@@ -171,19 +171,23 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       this.manager
     )
 
+    console.log(this.params.mintInfo)
     const hasTicketMintInfo = this.params.mintInfo.some(mint => {
       mint.type === MintTypes.TICKET
     })
 
     let args: unknown[]
+    console.log(this.params.ticketInfo)
     if (hasTicketMintInfo && !this.params.ticketInfo) {
-      throw Error("Ticket info is required")
+      throw Error("Ticket mint info required")
     } else if (hasTicketMintInfo && this.params.ticketInfo) {
+      console.log("ticket ok")
       /**
        * this scenario requires calling a different endpoint and encoding
        * the parameters as bytes
        */
       const projectEncodedArgs = encodeProjectFactoryArgs(
+        this.manager.address as `0x${string}`,
         initInfo,
         projectInfo,
         metadataInfo,

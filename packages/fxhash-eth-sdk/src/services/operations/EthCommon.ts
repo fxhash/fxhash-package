@@ -47,7 +47,7 @@ export interface InitInfo {
   primaryReceiver: `0x${string}`
   randomizer: `0x${string}`
   renderer: `0x${string}`
-  tagIds: number[]
+  tagIds: bigint[]
 }
 
 export interface ProjectInfo {
@@ -58,7 +58,7 @@ export interface ProjectInfo {
 }
 
 export interface MetadataInfo {
-  baseURI: string
+  baseURI: `0x${string}`
   onchainPointer: `0x${string}`
 }
 
