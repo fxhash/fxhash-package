@@ -2,8 +2,9 @@ import { BASE58_CHARSET } from "./base58"
 import { Blockchain } from "./types/blockchain"
 
 export function mockEthereumAddress(): string {
-  const randomBytes = Array.from({ length: 20 }, () =>
-    Math.floor(Math.random() * 256)
+  const randomBytes = Array.from(
+    { length: 20 },
+    () => (Math.random() * 256) | 0
   )
   return `0x${Buffer.from(randomBytes).toString("hex")}`
 }

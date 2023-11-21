@@ -10,8 +10,9 @@ export function mockTezosTransactionHash(): string {
 }
 
 export function mockEthereumTransactionHash(): string {
-  const randomBytes = Array.from({ length: 32 }, () =>
-    Math.floor(Math.random() * 256)
+  const randomBytes = Array.from(
+    { length: 32 },
+    () => (Math.random() * 256) | 0
   )
   return `0x${Buffer.from(randomBytes).toString("hex")}`
 }
