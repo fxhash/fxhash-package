@@ -15,7 +15,7 @@ import { RESERVOIR_ABI } from "@/abi/Reservoir"
 import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
 import { config } from "@fxhash/config"
 
-const stepHandler = (steps, path) => {}
+export const stepHandler = (steps, path) => {}
 /**
  * Wrapper function to handle API actions.
  * @template T - The type of the expected return value.
@@ -23,7 +23,7 @@ const stepHandler = (steps, path) => {}
  * @returns {Promise<T>} - The result of the API action.
  * @throws Will throw an error if the API action fails.
  */
-async function handleAction<T>(action: Promise<T>): Promise<T> {
+export async function handleAction<T>(action: Promise<T>): Promise<T> {
   try {
     return await action
   } catch (error) {
@@ -42,7 +42,7 @@ async function handleAction<T>(action: Promise<T>): Promise<T> {
  * @param {Execute} steps - The execution steps that may contain the "order-signature" step.
  * @dev: As we want to use our own Seaport zone, and it is not currently supported by Reservoir, we need to intercept and override the parameters
  */
-function overrideSellStepsParameters(steps: Execute): void {
+export function overrideSellStepsParameters(steps: Execute): void {
   steps.steps
     .filter(step => step.id === "order-signature")
     .forEach(step => {
@@ -65,11 +65,10 @@ function overrideSellStepsParameters(steps: Execute): void {
 ): Promise<string> => {
   let orderId: string = undefined
   const hashCallBack = (steps, path) => {
-    console.log(steps)
-    const step = steps.find(step => step.id === "sale")
-    if (step.items.length > 0) {
-      if (step.items[0].orderIds && step.items[0].status === "complete") {
-        orderId = step.items[0].orderIds[0]
+    const step = steps.find(step => step.id === "order-signature")
+    if (step && step.items.length > 0) {
+      if (step.items[0].orderData && step.items[0].status === "complete") {
+        orderId = step.items[0].orderData[0].orderId
       }
     }
   }
@@ -111,7 +110,7 @@ function overrideSellStepsParameters(steps: Execute): void {
 export const placeBid = async (
   bids: ReservoirPlaceBidParams,
   walletClient: WalletClient
-): Promise<boolean> => {
+): Promise<string> => {
   // Prepare listing parameters
   const bidStepsParams: ReservoirExecuteBidParams = {
     maker: walletClient.account.address,
@@ -122,7 +121,15 @@ export const placeBid = async (
   // Fetch and override steps
   const fetchedSteps = await getBidSteps(bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
-
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    const step = steps.find(step => step.id === "order-signature")
+    if (step && step.items.length > 0) {
+      if (step.items[0].orderData && step.items[0].status === "complete") {
+        orderId = step.items[0].orderData[0].orderId
+      }
+    }
+  }
   // Execute steps and handle actions
   await handleAction(
     getClient().utils.executeSteps(
@@ -130,13 +137,13 @@ export const placeBid = async (
         baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
-      stepHandler,
+      hashCallBack,
       fetchedSteps,
       undefined,
       walletClient.chain.id
     )
   )
-  return true
+  return orderId
 }
 
 /**
@@ -149,7 +156,7 @@ export const placeBid = async (
 export const buyToken = async (
   items: ReservoirBuyTokenParams,
   walletClient: WalletClient
-): Promise<true> => {
+): Promise<string> => {
   // Prepare listing parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
     items: items,
@@ -157,6 +164,15 @@ export const buyToken = async (
     taker: walletClient.account.address,
   }
 
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    const step = steps.find(step => step.id === "sale")
+    if (step && step.items.length > 0) {
+      if (step.items[0].orderIds && step.items[0].status === "complete") {
+        orderId = step.items[0].orderIds[0]
+      }
+    }
+  }
   // Fetch and override steps
   const fetchedSteps = await getBuySteps(buyStepsParams)
   // Execute steps and handle actions
@@ -166,13 +182,14 @@ export const buyToken = async (
         baseURL: config.eth.apis.reservoir,
       },
       adaptViemWallet(walletClient),
-      stepHandler,
+      hashCallBack,
       fetchedSteps,
       undefined,
       walletClient.chain.id
     )
   )
-  return true
+
+  return orderId
 }
 
 /**
@@ -262,15 +279,27 @@ export const buyTokenAdvanced = async (
 export const acceptOffer = async (
   offers: ReservoirAcceptOfferParams,
   walletClient: WalletClient
-): Promise<true | Execute> => {
-  return await handleAction(
+): Promise<string> => {
+  let orderId: string = undefined
+  const hashCallBack = (steps, path) => {
+    const step = steps.find(step => step.id === "sale")
+    if (step.items.length > 0) {
+      if (step.items[0].orderIds && step.items[0].status === "complete") {
+        orderId = step.items[0].orderIds[0]
+      }
+    }
+  }
+  const result = await handleAction(
     getClient().actions.acceptOffer({
       items: offers,
       wallet: walletClient,
-      onProgress: (steps: Execute["steps"], path: Execute["path"]) =>
-        console.log(steps),
+      onProgress: hashCallBack,
     })
   )
+  if (!result) {
+    throw new Error("Failed to accept offer")
+  }
+  return orderId
 }
 
 /**
@@ -282,12 +311,19 @@ export const acceptOffer = async (
 export const cancelOrder = async (
   orders: string[],
   walletClient: WalletClient
-): Promise<boolean> => {
-  return await handleAction(
+): Promise<string> => {
+  const hashCallBack = steps => {
+  }
+  const result = await handleAction(
     getClient().actions.cancelOrder({
       ids: orders,
       wallet: walletClient,
-      onProgress: (steps: Execute["steps"]) => console.log(steps),
+      onProgress: hashCallBack,
     })
   )
+
+  if (!result) {
+    throw new Error("Failed to accept offer")
+  }
+  return orders[0]
 }
