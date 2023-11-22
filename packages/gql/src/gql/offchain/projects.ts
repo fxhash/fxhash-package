@@ -22,11 +22,16 @@ export const Frag_ProjectBaseDetails = graphql(`
       }
     }
     author {
-      id
-      status
-      username
-      wallets {
-        ...Wallet_BaseDetails
+      ...Account_BaseDetails
+    }
+    collaborators {
+      account {
+        ...Account_BaseDetails
+      }
+    }
+    collaborators {
+      account {
+        ...Account_BaseDetails
       }
     }
     projectMedias {
@@ -118,15 +123,22 @@ export const Mu_updateProject = graphql(`
     $projectId: uuid!
     $projectData: Project_set_input
     $projectMedias: [ProjectMedia_insert_input!]!
+    $projectCollaborators: [ProjectCollaborator_insert_input!]!
   ) {
     offchain {
       delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {
+        affected_rows
+      }
+      delete_ProjectCollaborator(where: { projectId: { _eq: $projectId } }) {
         affected_rows
       }
       update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {
         affected_rows
       }
       insert_ProjectMedia(objects: $projectMedias) {
+        affected_rows
+      }
+      insert_ProjectCollaborator(objects: $projectCollaborators) {
         affected_rows
       }
     }
