@@ -10,12 +10,12 @@ import {
   FxhashContracts,
 } from "../../types/Contracts"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
-import { MintGenerativeData } from "../../types/Mint"
+import { GenTokEditions, MintGenerativeData } from "../../types/Mint"
 import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 import Onchfs, { Inscription } from "onchfs"
 
 export type TMintIssuerV3OperationParams = {
@@ -25,23 +25,10 @@ export type TMintIssuerV3OperationParams = {
   ticketMetadataBytes?: string
 }
 
-export class MintIssuerV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintIssuerV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
-class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3OperationParams> {
+export class MintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   onchfsKt: ContractAbstraction<Wallet> | null = null
 
@@ -81,7 +68,10 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
         })
       case "directory": {
         const formatted = Object.fromEntries(
-          Object.entries(ins.files).map(([_, buf]) => [_, uint8hex(buf)])
+          Object.entries(ins.files).map(([_, buf]) => [
+            _,
+            uint8hex(buf as Uint8Array),
+          ])
         )
         return this.onchfsKt.methodsObject.create_directory(formatted)
       }
@@ -107,9 +97,11 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
       data: packReserveData(reserve),
     }))
 
-
     const params = {
-      amount: distribution.editions!,
+      amount:
+        distribution.editions.type === GenTokEditions.FIXED
+          ? distribution.editions.fixed.amount
+          : 0,
       enabled: !!distribution.enabled,
       metadata: this.params.ipfsMetadataBytes,
       pricing: packedPricing,
@@ -125,7 +117,15 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
               metadata: this.params.ticketMetadataBytes,
             }
           : null,
-      open_editions: null,
+      open_editions:
+        distribution.editions.type === GenTokEditions.OPENED
+          ? {
+              closing_time: distribution.editions.opened.closesAt
+                ? new Date(distribution.editions.opened.closesAt).toISOString()
+                : null,
+              extra: "",
+            }
+          : null,
       codex: {
         codex_entry: this.params.data.onChain
           ? {
@@ -134,13 +134,13 @@ class TezosMintIssuerV3Operation extends TezosContractOperation<TMintIssuerV3Ope
             }
           : {
               type: 0, // IPFS
-              value: stringToByteString(
-                this.params.metadata.generativeUri
-              ),
+              value: stringToByteString(this.params.metadata.generativeUri),
             },
       },
       input_bytes_size: this.params.data.params!.inputBytesSize,
     }
+
+    console.log({ params })
 
     const batch = this.manager.tezosToolkit.wallet.batch()
 

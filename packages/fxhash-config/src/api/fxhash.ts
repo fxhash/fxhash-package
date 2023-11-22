@@ -2,6 +2,7 @@ export interface IFxhashApis {
   website: string
   main: string
   hasura: string
+  hasuraGql: string
   file: string
   fsEmulator: string
   extract: string
@@ -33,6 +34,7 @@ export const fxhashDevApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
   main: "https://api.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
+  hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
@@ -68,6 +70,7 @@ export const fxhashLocalApis: IFxhashApis = {
   //       docker-compose, maybe outside of this package idk
   ...fxhashDevApis,
   hasura: "http://host.docker.internal:8888",
+  hasuraGql: "http://host.docker.internal:8888/v1/graphql",
 }
 
 // list of APIs prod leverages
@@ -75,6 +78,7 @@ export const fxhashPrdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
+  hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
   fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",

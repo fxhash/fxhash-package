@@ -1,4 +1,8 @@
-import { GenTokDistributionForm, MintGenerativeData } from "../../types/Mint"
+import {
+  GenTokDistributionForm,
+  GenTokEditionsForm,
+  MintGenerativeData,
+} from "../../types/Mint"
 import { transformPricingFormToNumbers } from "./pricing"
 
 /**
@@ -10,13 +14,27 @@ export function transformGenTokDistribFormToNumbers(
 ): GenTokDistributionForm<number> {
   return {
     ...input,
-    editions: parseInt(input.editions!),
+    editions: transformEditionsFormToNumbers(input.editions),
     royalties: Math.floor(parseFloat(input.royalties!) * 10),
     pricing: transformPricingFormToNumbers(input.pricing),
     reserves: input.reserves as any,
     gracingPeriod: input.gracingPeriod
       ? parseInt(input.gracingPeriod)
       : undefined,
+  }
+}
+
+export function transformEditionsFormToNumbers(
+  input: GenTokEditionsForm<string>
+): GenTokEditionsForm<number> {
+  return {
+    ...input,
+    fixed: {
+      amount: parseInt(input.fixed.amount),
+    },
+    opened: {
+      closesAt: input.opened.closesAt,
+    },
   }
 }
 
