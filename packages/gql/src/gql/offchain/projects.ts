@@ -23,8 +23,10 @@ export const Frag_ProjectBaseDetails = graphql(`
     }
     author {
       ...Account_BaseDetails
-      wallets {
-        ...Wallet_BaseDetails
+    }
+    collaborators {
+      account {
+        ...Account_BaseDetails
       }
     }
     collaborators {
