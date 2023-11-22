@@ -32,7 +32,7 @@ export interface IFxhashApis {
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
-  main: "https://api.fxhash-dev.xyz/graphql",
+  main: "https://api.v2-temp.dev.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
