@@ -121,6 +121,10 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       throw Error("Royalties total should be 100%")
     }
 
+    const owner = this.params.isCollab
+      ? await this.manager.safe.getAddress()
+      : this.manager.address
+
     const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
       return {
         account: entry.account,
@@ -197,11 +201,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       )
       const ticketEncodedArgs = encodeTicketFactoryArgs(
         this.manager.address as `0x${string}`,
-        await predictFxContractAddress(
-          this.manager.address,
-          "issuer",
-          this.manager
-        ),
+        await predictFxContractAddress(owner, "issuer", this.manager),
         FxhashContracts.ETH_TICKET_REDEEMER_V1,
         FxhashContracts.ETH_IPFS_RENDERER_V1,
         this.params.ticketInfo.gracePeriod,
