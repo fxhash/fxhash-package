@@ -64,6 +64,11 @@ export function overrideSellStepsParameters(steps: Execute): void {
   walletClient: WalletClient
 ): Promise<string> => {
   let orderId: string = undefined
+  reservoirListings.forEach(listing => {
+    listing.marketplaceFees = [
+      `${config.config.ethFeeReceiver}:${config.config.fxhashReservoirSecondaryFee}`,
+    ]
+  })
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
     if (step && step.items.length > 0) {
@@ -111,6 +116,12 @@ export const placeBid = async (
   bids: ReservoirPlaceBidParams,
   walletClient: WalletClient
 ): Promise<string> => {
+  let orderId: string = undefined
+  bids.forEach(bid => {
+    bid.marketplaceFees = [
+      `${config.config.ethFeeReceiver}:${config.config.fxhashReservoirSecondaryFee}`,
+    ]
+  })
   // Prepare listing parameters
   const bidStepsParams: ReservoirExecuteBidParams = {
     maker: walletClient.account.address,
@@ -121,7 +132,6 @@ export const placeBid = async (
   // Fetch and override steps
   const fetchedSteps = await getBidSteps(bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
-  let orderId: string = undefined
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
     if (step && step.items.length > 0) {
