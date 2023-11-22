@@ -1984,7 +1984,6 @@ type action {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String!
 
   """An object relationship"""
@@ -2000,7 +1999,6 @@ type action {
 
   """An object relationship"""
   userByIssuerId: user
-  userByTargetid: user
 }
 
 """
@@ -2026,8 +2024,6 @@ order by avg() on columns of table "action"
 input action_avg_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -2047,7 +2043,6 @@ input action_bool_exp {
   numeric_value: numeric_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   op_hash: String_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
@@ -2057,7 +2052,6 @@ input action_bool_exp {
   type: action_type_enum_comparison_exp
   user: user_bool_exp
   userByIssuerId: user_bool_exp
-  userByTargetid: user_bool_exp
 }
 
 """
@@ -2070,7 +2064,6 @@ input action_max_order_by {
   issuer_id: order_by
   numeric_value: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   redeemable_address: order_by
   target_id: order_by
@@ -2089,7 +2082,6 @@ input action_min_order_by {
   issuer_id: order_by
   numeric_value: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   redeemable_address: order_by
   target_id: order_by
@@ -2110,7 +2102,6 @@ input action_order_by {
   numeric_value: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
@@ -2120,7 +2111,6 @@ input action_order_by {
   type: order_by
   user: user_order_by
   userByIssuerId: user_order_by
-  userByTargetid: user_order_by
 }
 
 """
@@ -2149,9 +2139,6 @@ enum action_select_column {
   objkt_id
 
   """column name"""
-  objkt_issuer_version
-
-  """column name"""
   op_hash
 
   """column name"""
@@ -2176,8 +2163,6 @@ order by stddev() on columns of table "action"
 input action_stddev_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -2186,8 +2171,6 @@ order by stddev_pop() on columns of table "action"
 input action_stddev_pop_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -2196,8 +2179,6 @@ order by stddev_samp() on columns of table "action"
 input action_stddev_samp_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -2220,7 +2201,6 @@ input action_stream_cursor_value_input {
   metadata: jsonb
   numeric_value: numeric
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String
   redeemable_address: String
   target_id: String
@@ -2235,8 +2215,6 @@ order by sum() on columns of table "action"
 input action_sum_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 scalar action_type_enum
@@ -2262,8 +2240,6 @@ order by var_pop() on columns of table "action"
 input action_var_pop_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -2272,8 +2248,6 @@ order by var_samp() on columns of table "action"
 input action_var_samp_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -2282,8 +2256,6 @@ order by variance() on columns of table "action"
 input action_variance_order_by {
   article_id: order_by
   numeric_value: order_by
-  objkt_id: order_by
-  token_id: order_by
 }
 
 """
@@ -3225,7 +3197,6 @@ type auction {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   reserve_price: bigint!
   seller_id: String
 
@@ -3560,7 +3531,6 @@ input auction_bool_exp {
   min_duration: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   reserve_price: bigint_comparison_exp
   seller_id: String_comparison_exp
   user: user_bool_exp
@@ -3580,7 +3550,6 @@ input auction_max_order_by {
   id: order_by
   min_duration: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   reserve_price: order_by
   seller_id: order_by
   version: order_by
@@ -3599,7 +3568,6 @@ input auction_min_order_by {
   id: order_by
   min_duration: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   reserve_price: order_by
   seller_id: order_by
   version: order_by
@@ -3619,7 +3587,6 @@ input auction_order_by {
   min_duration: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   reserve_price: order_by
   seller_id: order_by
   user: user_order_by
@@ -3656,9 +3623,6 @@ enum auction_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   reserve_price
@@ -3728,7 +3692,6 @@ input auction_stream_cursor_value_input {
   id: Int
   min_duration: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   reserve_price: bigint
   seller_id: String
   version: Int
@@ -3894,24 +3857,6 @@ input codex_aggregate_order_by {
   count: order_by
   max: codex_max_order_by
   min: codex_min_order_by
-  avg: codex_avg_order_by
-  count: order_by
-  max: codex_max_order_by
-  min: codex_min_order_by
-  stddev: codex_stddev_order_by
-  stddev_pop: codex_stddev_pop_order_by
-  stddev_samp: codex_stddev_samp_order_by
-  sum: codex_sum_order_by
-  var_pop: codex_var_pop_order_by
-  var_samp: codex_var_samp_order_by
-  variance: codex_variance_order_by
-}
-
-"""
-order by avg() on columns of table "codex"
-"""
-input codex_avg_order_by {
-  id: order_by
 }
 
 """
@@ -5341,8 +5286,7 @@ type gentk_assign {
   assigned_at: timestamptz
   attempts: Int!
   created_at: timestamptz!
-  gentk_id: String!
-  gentk_issuer_version: generative_token_version!
+  id: String!
 
   """An object relationship"""
   objkt: objkt
@@ -5360,8 +5304,7 @@ input gentk_assign_bool_exp {
   assigned_at: timestamptz_comparison_exp
   attempts: Int_comparison_exp
   created_at: timestamptz_comparison_exp
-  gentk_id: String_comparison_exp
-  gentk_issuer_version: generative_token_version_comparison_exp
+  id: String_comparison_exp
   objkt: objkt_bool_exp
   retries: Int_comparison_exp
   state: gentk_assign_state_enum_comparison_exp
@@ -5372,8 +5315,7 @@ input gentk_assign_order_by {
   assigned_at: order_by
   attempts: order_by
   created_at: order_by
-  gentk_id: order_by
-  gentk_issuer_version: order_by
+  id: order_by
   objkt: objkt_order_by
   retries: order_by
   state: order_by
@@ -5393,10 +5335,7 @@ enum gentk_assign_select_column {
   created_at
 
   """column name"""
-  gentk_id
-
-  """column name"""
-  gentk_issuer_version
+  id
 
   """column name"""
   retries
@@ -5438,8 +5377,7 @@ input gentk_assign_stream_cursor_value_input {
   assigned_at: timestamptz
   attempts: Int
   created_at: timestamptz
-  gentk_id: String
-  gentk_issuer_version: generative_token_version
+  id: String
   retries: Int
   state: gentk_assign_state_enum
 }
@@ -5833,7 +5771,6 @@ type listing {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric!
   royalties: Int!
 
@@ -5897,7 +5834,6 @@ input listing_bool_exp {
   market_stats_histories: market_stats_history_bool_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   price: numeric_comparison_exp
   royalties: Int_comparison_exp
   user: user_bool_exp
@@ -5918,7 +5854,6 @@ input listing_max_order_by {
   id: order_by
   issuer_id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   royalties: order_by
   version: order_by
@@ -5937,7 +5872,6 @@ input listing_min_order_by {
   id: order_by
   issuer_id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   royalties: order_by
   version: order_by
@@ -5962,7 +5896,6 @@ input listing_order_by {
   market_stats_histories_aggregate: market_stats_history_aggregate_order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   royalties: order_by
   user: user_order_by
@@ -6000,9 +5933,6 @@ enum listing_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   price
@@ -6069,7 +5999,6 @@ input listing_stream_cursor_value_input {
   id: String
   issuer_id: String
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric
   royalties: Int
   version: Int
@@ -7685,7 +7614,6 @@ type objkt {
   id: String!
   input_bytes: String
   issuer_id: String!
-  issuer_version: generative_token_version!
   iteration: numeric
 
   """An array relationship"""
@@ -7852,7 +7780,6 @@ input objkt_bool_exp {
   id: String_comparison_exp
   input_bytes: String_comparison_exp
   issuer_id: String_comparison_exp
-  issuer_version: generative_token_version_comparison_exp
   iteration: numeric_comparison_exp
   listings: listing_bool_exp
   media_image: media_image_bool_exp
@@ -7888,7 +7815,6 @@ input objkt_max_order_by {
   id: order_by
   input_bytes: order_by
   issuer_id: order_by
-  issuer_version: order_by
   iteration: order_by
   metadata_uri: order_by
   minter_id: order_by
@@ -7914,7 +7840,6 @@ input objkt_min_order_by {
   id: order_by
   input_bytes: order_by
   issuer_id: order_by
-  issuer_version: order_by
   iteration: order_by
   metadata_uri: order_by
   minter_id: order_by
@@ -7945,7 +7870,6 @@ input objkt_order_by {
   id: order_by
   input_bytes: order_by
   issuer_id: order_by
-  issuer_version: order_by
   iteration: order_by
   listings_aggregate: listing_aggregate_order_by
   media_image: media_image_order_by
@@ -8005,9 +7929,6 @@ enum objkt_select_column {
 
   """column name"""
   issuer_id
-
-  """column name"""
-  issuer_version
 
   """column name"""
   iteration
@@ -8103,7 +8024,6 @@ input objkt_stream_cursor_value_input {
   id: String
   input_bytes: String
   issuer_id: String
-  issuer_version: generative_token_version
   iteration: numeric
   metadata: json
   metadata_uri: String
@@ -8153,555 +8073,6 @@ input objkt_var_samp_order_by {
 order by variance() on columns of table "objkt"
 """
 input objkt_variance_order_by {
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-columns and relationships of "objkt"
-"""
-type objkt {
-  """An array relationship"""
-  actions(
-    """distinct select on columns"""
-    distinct_on: [action_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [action_order_by!]
-
-    """filter the rows returned"""
-    where: action_bool_exp
-  ): [action!]!
-  assigned: Boolean
-  assignedAt: timestamptz
-
-  """An array relationship"""
-  auctions(
-    """distinct select on columns"""
-    distinct_on: [auction_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bool_exp
-  ): [auction!]!
-  captureMediaId: bpchar
-  createdAt: timestamptz!
-  displayUri: bpchar
-  duplicate: Boolean
-  features(
-    """JSON select path"""
-    path: String
-  ): json
-  generationHash: String
-
-  """An object relationship"""
-  generative_token: generative_token!
-
-  """An object relationship"""
-  gentk_assign: gentk_assign
-  id: Int!
-  inputBytes: String
-  issuerId: Int!
-  issuerVersion: generative_token_version!
-  iteration: Int
-
-  """An array relationship"""
-  listings(
-    """distinct select on columns"""
-    distinct_on: [listing_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [listing_order_by!]
-
-    """filter the rows returned"""
-    where: listing_bool_exp
-  ): [listing!]!
-
-  """An object relationship"""
-  media_image: media_image
-  metadata(
-    """JSON select path"""
-    path: String
-  ): json
-  metadataUri: String
-  minterId: String
-  name: String
-
-  """An array relationship"""
-  offers(
-    """distinct select on columns"""
-    distinct_on: [offer_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [offer_order_by!]
-
-    """filter the rows returned"""
-    where: offer_bool_exp
-  ): [offer!]!
-  ownerId: String
-  rarity: float8
-
-  """An array relationship"""
-  redemptions(
-    """distinct select on columns"""
-    distinct_on: [redemption_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [redemption_order_by!]
-
-    """filter the rows returned"""
-    where: redemption_bool_exp
-  ): [redemption!]!
-  royalties: Int!
-  slug: String
-
-  """An array relationship"""
-  splits(
-    """distinct select on columns"""
-    distinct_on: [split_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [split_order_by!]
-
-    """filter the rows returned"""
-    where: split_bool_exp
-  ): [split!]!
-  tags: _text
-  thumbnailUri: bpchar
-
-  """An array relationship"""
-  transactions(
-    """distinct select on columns"""
-    distinct_on: [transaction_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [transaction_order_by!]
-
-    """filter the rows returned"""
-    where: transaction_bool_exp
-  ): [transaction!]!
-  updatedAt: timestamptz
-
-  """An object relationship"""
-  user: user
-
-  """An object relationship"""
-  userByOwnerid: user
-  version: Int!
-}
-
-"""
-order by aggregate values of table "objkt"
-"""
-input objkt_aggregate_order_by {
-  avg: objkt_avg_order_by
-  count: order_by
-  max: objkt_max_order_by
-  min: objkt_min_order_by
-  stddev: objkt_stddev_order_by
-  stddev_pop: objkt_stddev_pop_order_by
-  stddev_samp: objkt_stddev_samp_order_by
-  sum: objkt_sum_order_by
-  var_pop: objkt_var_pop_order_by
-  var_samp: objkt_var_samp_order_by
-  variance: objkt_variance_order_by
-}
-
-"""
-order by avg() on columns of table "objkt"
-"""
-input objkt_avg_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-Boolean expression to filter rows from the table "objkt". All fields are combined with a logical 'AND'.
-"""
-input objkt_bool_exp {
-  _and: [objkt_bool_exp!]
-  _not: objkt_bool_exp
-  _or: [objkt_bool_exp!]
-  actions: action_bool_exp
-  assigned: Boolean_comparison_exp
-  assignedAt: timestamptz_comparison_exp
-  auctions: auction_bool_exp
-  captureMediaId: bpchar_comparison_exp
-  createdAt: timestamptz_comparison_exp
-  displayUri: bpchar_comparison_exp
-  duplicate: Boolean_comparison_exp
-  features: json_comparison_exp
-  generationHash: String_comparison_exp
-  generative_token: generative_token_bool_exp
-  gentk_assign: gentk_assign_bool_exp
-  id: Int_comparison_exp
-  inputBytes: String_comparison_exp
-  issuerId: Int_comparison_exp
-  issuerVersion: generative_token_version_comparison_exp
-  iteration: Int_comparison_exp
-  listings: listing_bool_exp
-  media_image: media_image_bool_exp
-  metadata: json_comparison_exp
-  metadataUri: String_comparison_exp
-  minterId: String_comparison_exp
-  name: String_comparison_exp
-  offers: offer_bool_exp
-  ownerId: String_comparison_exp
-  rarity: float8_comparison_exp
-  redemptions: redemption_bool_exp
-  royalties: Int_comparison_exp
-  slug: String_comparison_exp
-  splits: split_bool_exp
-  tags: _text_comparison_exp
-  thumbnailUri: bpchar_comparison_exp
-  transactions: transaction_bool_exp
-  updatedAt: timestamptz_comparison_exp
-  user: user_bool_exp
-  userByOwnerid: user_bool_exp
-  version: Int_comparison_exp
-}
-
-"""
-order by max() on columns of table "objkt"
-"""
-input objkt_max_order_by {
-  assignedAt: order_by
-  captureMediaId: order_by
-  createdAt: order_by
-  displayUri: order_by
-  generationHash: order_by
-  id: order_by
-  inputBytes: order_by
-  issuerId: order_by
-  issuerVersion: order_by
-  iteration: order_by
-  metadataUri: order_by
-  minterId: order_by
-  name: order_by
-  ownerId: order_by
-  rarity: order_by
-  royalties: order_by
-  slug: order_by
-  thumbnailUri: order_by
-  updatedAt: order_by
-  version: order_by
-}
-
-"""
-order by min() on columns of table "objkt"
-"""
-input objkt_min_order_by {
-  assignedAt: order_by
-  captureMediaId: order_by
-  createdAt: order_by
-  displayUri: order_by
-  generationHash: order_by
-  id: order_by
-  inputBytes: order_by
-  issuerId: order_by
-  issuerVersion: order_by
-  iteration: order_by
-  metadataUri: order_by
-  minterId: order_by
-  name: order_by
-  ownerId: order_by
-  rarity: order_by
-  royalties: order_by
-  slug: order_by
-  thumbnailUri: order_by
-  updatedAt: order_by
-  version: order_by
-}
-
-"""Ordering options when selecting data from "objkt"."""
-input objkt_order_by {
-  actions_aggregate: action_aggregate_order_by
-  assigned: order_by
-  assignedAt: order_by
-  auctions_aggregate: auction_aggregate_order_by
-  captureMediaId: order_by
-  createdAt: order_by
-  displayUri: order_by
-  duplicate: order_by
-  features: order_by
-  generationHash: order_by
-  generative_token: generative_token_order_by
-  gentk_assign: gentk_assign_order_by
-  id: order_by
-  inputBytes: order_by
-  issuerId: order_by
-  issuerVersion: order_by
-  iteration: order_by
-  listings_aggregate: listing_aggregate_order_by
-  media_image: media_image_order_by
-  metadata: order_by
-  metadataUri: order_by
-  minterId: order_by
-  name: order_by
-  offers_aggregate: offer_aggregate_order_by
-  ownerId: order_by
-  rarity: order_by
-  redemptions_aggregate: redemption_aggregate_order_by
-  royalties: order_by
-  slug: order_by
-  splits_aggregate: split_aggregate_order_by
-  tags: order_by
-  thumbnailUri: order_by
-  transactions_aggregate: transaction_aggregate_order_by
-  updatedAt: order_by
-  user: user_order_by
-  userByOwnerid: user_order_by
-  version: order_by
-}
-
-"""
-select columns of table "objkt"
-"""
-enum objkt_select_column {
-  """column name"""
-  assigned
-
-  """column name"""
-  assignedAt
-
-  """column name"""
-  captureMediaId
-
-  """column name"""
-  createdAt
-
-  """column name"""
-  displayUri
-
-  """column name"""
-  duplicate
-
-  """column name"""
-  features
-
-  """column name"""
-  generationHash
-
-  """column name"""
-  id
-
-  """column name"""
-  inputBytes
-
-  """column name"""
-  issuerId
-
-  """column name"""
-  issuerVersion
-
-  """column name"""
-  iteration
-
-  """column name"""
-  metadata
-
-  """column name"""
-  metadataUri
-
-  """column name"""
-  minterId
-
-  """column name"""
-  name
-
-  """column name"""
-  ownerId
-
-  """column name"""
-  rarity
-
-  """column name"""
-  royalties
-
-  """column name"""
-  slug
-
-  """column name"""
-  tags
-
-  """column name"""
-  thumbnailUri
-
-  """column name"""
-  updatedAt
-
-  """column name"""
-  version
-}
-
-"""
-order by stddev() on columns of table "objkt"
-"""
-input objkt_stddev_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-order by stddev_pop() on columns of table "objkt"
-"""
-input objkt_stddev_pop_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-order by stddev_samp() on columns of table "objkt"
-"""
-input objkt_stddev_samp_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-Streaming cursor of the table "objkt"
-"""
-input objkt_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: objkt_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input objkt_stream_cursor_value_input {
-  assigned: Boolean
-  assignedAt: timestamptz
-  captureMediaId: bpchar
-  createdAt: timestamptz
-  displayUri: bpchar
-  duplicate: Boolean
-  features: json
-  generationHash: String
-  id: Int
-  inputBytes: String
-  issuerId: Int
-  issuerVersion: generative_token_version
-  iteration: Int
-  metadata: json
-  metadataUri: String
-  minterId: String
-  name: String
-  ownerId: String
-  rarity: float8
-  royalties: Int
-  slug: String
-  tags: _text
-  thumbnailUri: bpchar
-  updatedAt: timestamptz
-  version: Int
-}
-
-"""
-order by sum() on columns of table "objkt"
-"""
-input objkt_sum_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-order by var_pop() on columns of table "objkt"
-"""
-input objkt_var_pop_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-order by var_samp() on columns of table "objkt"
-"""
-input objkt_var_samp_order_by {
-  id: order_by
-  issuerId: order_by
-  iteration: order_by
-  rarity: order_by
-  royalties: order_by
-  version: order_by
-}
-
-"""
-order by variance() on columns of table "objkt"
-"""
-input objkt_variance_order_by {
-  id: order_by
-  issuerId: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -9609,7 +8980,6 @@ type offer {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric!
 
   """An object relationship"""
@@ -9656,7 +9026,6 @@ input offer_bool_exp {
   id: String_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   price: numeric_comparison_exp
   user: user_bool_exp
   version: Int_comparison_exp
@@ -9672,7 +9041,6 @@ input offer_max_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   version: order_by
 }
@@ -9687,7 +9055,6 @@ input offer_min_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   version: order_by
 }
@@ -9701,7 +9068,6 @@ input offer_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   user: user_order_by
   version: order_by
@@ -9728,9 +9094,6 @@ enum offer_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   price
@@ -9782,7 +9145,6 @@ input offer_stream_cursor_value_input {
   created_at: timestamptz
   id: String
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric
   version: Int
 }
@@ -10078,9 +9440,6 @@ type onchain_query {
     where: collaboration_bool_exp
   ): [collaboration!]!
 
-  """fetch data from the table: "collaboration" using primary key columns"""
-  collaboration_by_pk(collaboration_contract_id: String!, collaborator_id: String!): collaboration
-
   """
   fetch data from the table: "collection_offer"
   """
@@ -10152,7 +9511,7 @@ type onchain_query {
   ): [gentk_assign!]!
 
   """fetch data from the table: "gentk_assign" using primary key columns"""
-  gentk_assign_by_pk(gentk_id: String!, gentk_issuer_version: generative_token_version!): gentk_assign
+  gentk_assign_by_pk(id: String!): gentk_assign
 
   """
   fetch data from the table: "indexed_operation"
@@ -10457,7 +9816,7 @@ type onchain_query {
   ): [objkt!]!
 
   """fetch data from the table: "objkt" using primary key columns"""
-  objkt_by_pk(id: String!, issuer_version: generative_token_version!): objkt
+  objkt_by_pk(id: String!): objkt
 
   """
   fetch data from the table: "offer"
@@ -11114,9 +10473,6 @@ type onchain_subscription {
     where: collaboration_bool_exp
   ): [collaboration!]!
 
-  """fetch data from the table: "collaboration" using primary key columns"""
-  collaboration_by_pk(collaboration_contract_id: String!, collaborator_id: String!): collaboration
-
   """
   fetch data from the table in a streaming manner: "collaboration"
   """
@@ -11230,7 +10586,7 @@ type onchain_subscription {
   ): [gentk_assign!]!
 
   """fetch data from the table: "gentk_assign" using primary key columns"""
-  gentk_assign_by_pk(gentk_id: String!, gentk_issuer_version: generative_token_version!): gentk_assign
+  gentk_assign_by_pk(id: String!): gentk_assign
 
   """
   fetch data from the table in a streaming manner: "gentk_assign"
@@ -11717,7 +11073,7 @@ type onchain_subscription {
   ): [objkt!]!
 
   """fetch data from the table: "objkt" using primary key columns"""
-  objkt_by_pk(id: String!, issuer_version: generative_token_version!): objkt
+  objkt_by_pk(id: String!): objkt
 
   """
   fetch data from the table in a streaming manner: "objkt"
@@ -12143,245 +11499,6 @@ type onchain_subscription {
   ): [user!]!
 }
 
-"""
-columns and relationships of "offer"
-"""
-type offer {
-  acceptedAt: timestamptz
-  buyerId: String
-  cancelledAt: timestamptz
-  createdAt: timestamptz!
-  id: Int!
-
-  """An object relationship"""
-  objkt: objkt
-  objktId: Int
-  objktIssuerVersion: generative_token_version
-  price: bigint!
-
-  """An object relationship"""
-  user: user
-  version: Int!
-}
-
-"""
-order by aggregate values of table "offer"
-"""
-input offer_aggregate_order_by {
-  avg: offer_avg_order_by
-  count: order_by
-  max: offer_max_order_by
-  min: offer_min_order_by
-  stddev: offer_stddev_order_by
-  stddev_pop: offer_stddev_pop_order_by
-  stddev_samp: offer_stddev_samp_order_by
-  sum: offer_sum_order_by
-  var_pop: offer_var_pop_order_by
-  var_samp: offer_var_samp_order_by
-  variance: offer_variance_order_by
-}
-
-"""
-order by avg() on columns of table "offer"
-"""
-input offer_avg_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-Boolean expression to filter rows from the table "offer". All fields are combined with a logical 'AND'.
-"""
-input offer_bool_exp {
-  _and: [offer_bool_exp!]
-  _not: offer_bool_exp
-  _or: [offer_bool_exp!]
-  acceptedAt: timestamptz_comparison_exp
-  buyerId: String_comparison_exp
-  cancelledAt: timestamptz_comparison_exp
-  createdAt: timestamptz_comparison_exp
-  id: Int_comparison_exp
-  objkt: objkt_bool_exp
-  objktId: Int_comparison_exp
-  objktIssuerVersion: generative_token_version_comparison_exp
-  price: bigint_comparison_exp
-  user: user_bool_exp
-  version: Int_comparison_exp
-}
-
-"""
-order by max() on columns of table "offer"
-"""
-input offer_max_order_by {
-  acceptedAt: order_by
-  buyerId: order_by
-  cancelledAt: order_by
-  createdAt: order_by
-  id: order_by
-  objktId: order_by
-  objktIssuerVersion: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-order by min() on columns of table "offer"
-"""
-input offer_min_order_by {
-  acceptedAt: order_by
-  buyerId: order_by
-  cancelledAt: order_by
-  createdAt: order_by
-  id: order_by
-  objktId: order_by
-  objktIssuerVersion: order_by
-  price: order_by
-  version: order_by
-}
-
-"""Ordering options when selecting data from "offer"."""
-input offer_order_by {
-  acceptedAt: order_by
-  buyerId: order_by
-  cancelledAt: order_by
-  createdAt: order_by
-  id: order_by
-  objkt: objkt_order_by
-  objktId: order_by
-  objktIssuerVersion: order_by
-  price: order_by
-  user: user_order_by
-  version: order_by
-}
-
-"""
-select columns of table "offer"
-"""
-enum offer_select_column {
-  """column name"""
-  acceptedAt
-
-  """column name"""
-  buyerId
-
-  """column name"""
-  cancelledAt
-
-  """column name"""
-  createdAt
-
-  """column name"""
-  id
-
-  """column name"""
-  objktId
-
-  """column name"""
-  objktIssuerVersion
-
-  """column name"""
-  price
-
-  """column name"""
-  version
-}
-
-"""
-order by stddev() on columns of table "offer"
-"""
-input offer_stddev_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-order by stddev_pop() on columns of table "offer"
-"""
-input offer_stddev_pop_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-order by stddev_samp() on columns of table "offer"
-"""
-input offer_stddev_samp_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-Streaming cursor of the table "offer"
-"""
-input offer_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: offer_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input offer_stream_cursor_value_input {
-  acceptedAt: timestamptz
-  buyerId: String
-  cancelledAt: timestamptz
-  createdAt: timestamptz
-  id: Int
-  objktId: Int
-  objktIssuerVersion: generative_token_version
-  price: bigint
-  version: Int
-}
-
-"""
-order by sum() on columns of table "offer"
-"""
-input offer_sum_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-order by var_pop() on columns of table "offer"
-"""
-input offer_var_pop_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-order by var_samp() on columns of table "offer"
-"""
-input offer_var_samp_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
-"""
-order by variance() on columns of table "offer"
-"""
-input offer_variance_order_by {
-  id: order_by
-  objktId: order_by
-  price: order_by
-  version: order_by
-}
-
 """column ordering options"""
 enum order_by {
   """in ascending order, nulls last"""
@@ -12766,574 +11883,7 @@ input pricing_fixed_variance_order_by {
 }
 
 type query_root {
-  """
-  fetch data from the table: "action"
-  """
-  action(
-    """distinct select on columns"""
-    distinct_on: [action_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [action_order_by!]
-
-    """filter the rows returned"""
-    where: action_bool_exp
-  ): [action!]!
-
-  """fetch data from the table: "action" using primary key columns"""
-  action_by_pk(id: uuid!): action
-
-  """
-  fetch data from the table: "article"
-  """
-  article(
-    """distinct select on columns"""
-    distinct_on: [article_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_order_by!]
-
-    """filter the rows returned"""
-    where: article_bool_exp
-  ): [article!]!
-
-  """fetch data from the table: "article" using primary key columns"""
-  article_by_pk(id: Int!): article
-
-  """
-  fetch data from the table: "article_generative_token"
-  """
-  article_generative_token(
-    """distinct select on columns"""
-    distinct_on: [article_generative_token_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_generative_token_order_by!]
-
-    """filter the rows returned"""
-    where: article_generative_token_bool_exp
-  ): [article_generative_token!]!
-
-  """
-  fetch data from the table: "article_generative_token" using primary key columns
-  """
-  article_generative_token_by_pk(articleId: Int!, generativeTokenId: Int!): article_generative_token
-
-  """
-  fetch data from the table: "article_ledger"
-  """
-  article_ledger(
-    """distinct select on columns"""
-    distinct_on: [article_ledger_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_ledger_order_by!]
-
-    """filter the rows returned"""
-    where: article_ledger_bool_exp
-  ): [article_ledger!]!
-
-  """fetch data from the table: "article_ledger" using primary key columns"""
-  article_ledger_by_pk(articleId: Int!, ownerId: String!): article_ledger
-
-  """
-  fetch data from the table: "article_revision"
-  """
-  article_revision(
-    """distinct select on columns"""
-    distinct_on: [article_revision_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_revision_order_by!]
-
-    """filter the rows returned"""
-    where: article_revision_bool_exp
-  ): [article_revision!]!
-
-  """
-  fetch data from the table: "article_revision" using primary key columns
-  """
-  article_revision_by_pk(articleId: Int!, iteration: smallint!): article_revision
-
-  """
-  fetch data from the table: "auction"
-  """
-  auction(
-    """distinct select on columns"""
-    distinct_on: [auction_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bool_exp
-  ): [auction!]!
-
-  """
-  fetch data from the table: "auction_bid"
-  """
-  auction_bid(
-    """distinct select on columns"""
-    distinct_on: [auction_bid_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_bid_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bid_bool_exp
-  ): [auction_bid!]!
-
-  """fetch data from the table: "auction_bid" using primary key columns"""
-  auction_bid_by_pk(id: uuid!): auction_bid
-
-  """
-  fetch data from the table: "auction_bid_table"
-  """
-  auction_bid_table(
-    """distinct select on columns"""
-    distinct_on: [auction_bid_table_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_bid_table_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bid_table_bool_exp
-  ): [auction_bid_table!]!
-
-  """
-  fetch data from the table: "auction_bid_table" using primary key columns
-  """
-  auction_bid_table_by_pk(id: Int!): auction_bid_table
-
-  """fetch data from the table: "auction" using primary key columns"""
-  auction_by_pk(id: Int!, version: Int!): auction
-
-  """
-  fetch data from the table: "codex"
-  """
-  codex(
-    """distinct select on columns"""
-    distinct_on: [codex_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [codex_order_by!]
-
-    """filter the rows returned"""
-    where: codex_bool_exp
-  ): [codex!]!
-
-  """fetch data from the table: "codex" using primary key columns"""
-  codex_by_pk(id: Int!, tokenVersion: generative_token_version!): codex
-
-  """
-  fetch data from the table: "codex_update_request"
-  """
-  codex_update_request(
-    """distinct select on columns"""
-    distinct_on: [codex_update_request_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [codex_update_request_order_by!]
-
-    """filter the rows returned"""
-    where: codex_update_request_bool_exp
-  ): [codex_update_request!]!
-
-  """
-  fetch data from the table: "codex_update_request" using primary key columns
-  """
-  codex_update_request_by_pk(codexId: Int!, tokenId: Int!, tokenVersion: generative_token_version!): codex_update_request
-
-  """
-  fetch data from the table: "collaboration"
-  """
-  collaboration(
-    """distinct select on columns"""
-    distinct_on: [collaboration_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [collaboration_order_by!]
-
-    """filter the rows returned"""
-    where: collaboration_bool_exp
-  ): [collaboration!]!
-
-  """fetch data from the table: "collaboration" using primary key columns"""
-  collaboration_by_pk(collaborationContractId: String!, collaboratorId: String!): collaboration
-
-  """
-  fetch data from the table: "collection_offer"
-  """
-  collection_offer(
-    """distinct select on columns"""
-    distinct_on: [collection_offer_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [collection_offer_order_by!]
-
-    """filter the rows returned"""
-    where: collection_offer_bool_exp
-  ): [collection_offer!]!
-
-  """
-  fetch data from the table: "collection_offer" using primary key columns
-  """
-  collection_offer_by_pk(id: Int!, version: Int!): collection_offer
-
-  """
-  fetch data from the table: "generative_token"
-  """
-  generative_token(
-    """distinct select on columns"""
-    distinct_on: [generative_token_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [generative_token_order_by!]
-
-    """filter the rows returned"""
-    where: generative_token_bool_exp
-  ): [generative_token!]!
-
-  """
-  fetch data from the table: "generative_token" using primary key columns
-  """
-  generative_token_by_pk(id: Int!): generative_token
-
-  """
-  fetch data from the table: "gentk_assign"
-  """
-  gentk_assign(
-    """distinct select on columns"""
-    distinct_on: [gentk_assign_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [gentk_assign_order_by!]
-
-    """filter the rows returned"""
-    where: gentk_assign_bool_exp
-  ): [gentk_assign!]!
-
-  """fetch data from the table: "gentk_assign" using primary key columns"""
-  gentk_assign_by_pk(gentkId: Int!, gentkIssuerVersion: generative_token_version!): gentk_assign
-
-  """
-  fetch data from the table: "ipfs_cid"
-  """
-  ipfs_cid(
-    """distinct select on columns"""
-    distinct_on: [ipfs_cid_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [ipfs_cid_order_by!]
-
-    """filter the rows returned"""
-    where: ipfs_cid_bool_exp
-  ): [ipfs_cid!]!
-
-  """fetch data from the table: "ipfs_cid" using primary key columns"""
-  ipfs_cid_by_pk(cid: String!): ipfs_cid
-
-  """
-  fetch data from the table: "listing"
-  """
-  listing(
-    """distinct select on columns"""
-    distinct_on: [listing_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [listing_order_by!]
-
-    """filter the rows returned"""
-    where: listing_bool_exp
-  ): [listing!]!
-
-  """fetch data from the table: "listing" using primary key columns"""
-  listing_by_pk(id: Int!, version: Int!): listing
-
-  """
-  fetch data from the table: "market_stats"
-  """
-  market_stats(
-    """distinct select on columns"""
-    distinct_on: [market_stats_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [market_stats_order_by!]
-
-    """filter the rows returned"""
-    where: market_stats_bool_exp
-  ): [market_stats!]!
-
-  """fetch data from the table: "market_stats" using primary key columns"""
-  market_stats_by_pk(tokenId: Int!): market_stats
-
-  """
-  fetch data from the table: "market_stats_history"
-  """
-  market_stats_history(
-    """distinct select on columns"""
-    distinct_on: [market_stats_history_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [market_stats_history_order_by!]
-
-    """filter the rows returned"""
-    where: market_stats_history_bool_exp
-  ): [market_stats_history!]!
-
-  """
-  fetch data from the table: "market_stats_history" using primary key columns
-  """
-  market_stats_history_by_pk(id: Int!): market_stats_history
   mediaFullUrl(s3key: String!): String!
-
-  """
-  fetch data from the table: "media_image"
-  """
-  media_image(
-    """distinct select on columns"""
-    distinct_on: [media_image_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [media_image_order_by!]
-
-    """filter the rows returned"""
-    where: media_image_bool_exp
-  ): [media_image!]!
-
-  """fetch data from the table: "media_image" using primary key columns"""
-  media_image_by_pk(cid: bpchar!): media_image
-
-  """
-  fetch data from the table: "metric"
-  """
-  metric(
-    """distinct select on columns"""
-    distinct_on: [metric_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [metric_order_by!]
-
-    """filter the rows returned"""
-    where: metric_bool_exp
-  ): [metric!]!
-
-  """fetch data from the table: "metric" using primary key columns"""
-  metric_by_pk(id: String!): metric
-
-  """
-  fetch data from the table: "mint_ticket"
-  """
-  mint_ticket(
-    """distinct select on columns"""
-    distinct_on: [mint_ticket_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [mint_ticket_order_by!]
-
-    """filter the rows returned"""
-    where: mint_ticket_bool_exp
-  ): [mint_ticket!]!
-
-  """fetch data from the table: "mint_ticket" using primary key columns"""
-  mint_ticket_by_pk(id: Int!): mint_ticket
-
-  """An array relationship"""
-  mint_ticket_settings(
-    """distinct select on columns"""
-    distinct_on: [mint_ticket_settings_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [mint_ticket_settings_order_by!]
-
-    """filter the rows returned"""
-    where: mint_ticket_settings_bool_exp
-  ): [mint_ticket_settings!]!
-
-  """
-  fetch data from the table: "mint_ticket_settings" using primary key columns
-  """
-  mint_ticket_settings_by_pk(tokenId: Int!): mint_ticket_settings
-
-  """
-  fetch data from the table: "moderation_reason"
-  """
-  moderation_reason(
-    """distinct select on columns"""
-    distinct_on: [moderation_reason_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [moderation_reason_order_by!]
-
-    """filter the rows returned"""
-    where: moderation_reason_bool_exp
-  ): [moderation_reason!]!
-
-  """
-  fetch data from the table: "moderation_reason" using primary key columns
-  """
-  moderation_reason_by_pk(id: String!): moderation_reason
-
-  """
-  fetch data from the table: "objkt"
-  """
-  objkt(
-    """distinct select on columns"""
-    distinct_on: [objkt_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [objkt_order_by!]
-
-    """filter the rows returned"""
-    where: objkt_bool_exp
-  ): [objkt!]!
-
-  """fetch data from the table: "objkt" using primary key columns"""
-  objkt_by_pk(id: Int!, issuerVersion: generative_token_version!): objkt
   offchain: offchain_query
   onchain: onchain_query
 }
@@ -13599,7 +12149,6 @@ type redemption {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
 
   """An object relationship"""
   redeemable: redeemable
@@ -13647,7 +12196,6 @@ input redemption_bool_exp {
   id: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
   redeemer_id: String_comparison_exp
@@ -13662,7 +12210,6 @@ input redemption_max_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   redeemable_address: order_by
   redeemer_id: order_by
 }
@@ -13675,7 +12222,6 @@ input redemption_min_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   redeemable_address: order_by
   redeemer_id: order_by
 }
@@ -13687,7 +12233,6 @@ input redemption_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
   redeemer_id: order_by
@@ -13709,9 +12254,6 @@ enum redemption_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   redeemable_address
@@ -13761,7 +12303,6 @@ input redemption_stream_cursor_value_input {
   created_at: timestamptz
   id: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   redeemable_address: String
   redeemer_id: String
 }
@@ -14146,7 +12687,6 @@ type split {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   pct: Int!
 
   """An object relationship"""
@@ -14200,7 +12740,6 @@ input split_bool_exp {
   id: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   pct: Int_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
@@ -14217,7 +12756,6 @@ input split_max_order_by {
   generative_token_secondary_id: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   pct: order_by
   redeemable_address: order_by
   user_id: order_by
@@ -14232,7 +12770,6 @@ input split_min_order_by {
   generative_token_secondary_id: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   pct: order_by
   redeemable_address: order_by
   user_id: order_by
@@ -14249,7 +12786,6 @@ input split_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   pct: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
@@ -14275,9 +12811,6 @@ enum split_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   pct
@@ -14334,7 +12867,6 @@ input split_stream_cursor_value_input {
   generative_token_secondary_id: String
   id: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   pct: Int
   redeemable_address: String
   user_id: String
@@ -14377,909 +12909,6 @@ input split_variance_order_by {
 }
 
 type subscription_root {
-  """
-  fetch data from the table: "action"
-  """
-  action(
-    """distinct select on columns"""
-    distinct_on: [action_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [action_order_by!]
-
-    """filter the rows returned"""
-    where: action_bool_exp
-  ): [action!]!
-
-  """fetch data from the table: "action" using primary key columns"""
-  action_by_pk(id: uuid!): action
-
-  """
-  fetch data from the table in a streaming manner: "action"
-  """
-  action_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [action_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: action_bool_exp
-  ): [action!]!
-
-  """
-  fetch data from the table: "article"
-  """
-  article(
-    """distinct select on columns"""
-    distinct_on: [article_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_order_by!]
-
-    """filter the rows returned"""
-    where: article_bool_exp
-  ): [article!]!
-
-  """fetch data from the table: "article" using primary key columns"""
-  article_by_pk(id: Int!): article
-
-  """
-  fetch data from the table: "article_generative_token"
-  """
-  article_generative_token(
-    """distinct select on columns"""
-    distinct_on: [article_generative_token_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_generative_token_order_by!]
-
-    """filter the rows returned"""
-    where: article_generative_token_bool_exp
-  ): [article_generative_token!]!
-
-  """
-  fetch data from the table: "article_generative_token" using primary key columns
-  """
-  article_generative_token_by_pk(articleId: Int!, generativeTokenId: Int!): article_generative_token
-
-  """
-  fetch data from the table in a streaming manner: "article_generative_token"
-  """
-  article_generative_token_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [article_generative_token_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: article_generative_token_bool_exp
-  ): [article_generative_token!]!
-
-  """
-  fetch data from the table: "article_ledger"
-  """
-  article_ledger(
-    """distinct select on columns"""
-    distinct_on: [article_ledger_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_ledger_order_by!]
-
-    """filter the rows returned"""
-    where: article_ledger_bool_exp
-  ): [article_ledger!]!
-
-  """fetch data from the table: "article_ledger" using primary key columns"""
-  article_ledger_by_pk(articleId: Int!, ownerId: String!): article_ledger
-
-  """
-  fetch data from the table in a streaming manner: "article_ledger"
-  """
-  article_ledger_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [article_ledger_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: article_ledger_bool_exp
-  ): [article_ledger!]!
-
-  """
-  fetch data from the table: "article_revision"
-  """
-  article_revision(
-    """distinct select on columns"""
-    distinct_on: [article_revision_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [article_revision_order_by!]
-
-    """filter the rows returned"""
-    where: article_revision_bool_exp
-  ): [article_revision!]!
-
-  """
-  fetch data from the table: "article_revision" using primary key columns
-  """
-  article_revision_by_pk(articleId: Int!, iteration: smallint!): article_revision
-
-  """
-  fetch data from the table in a streaming manner: "article_revision"
-  """
-  article_revision_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [article_revision_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: article_revision_bool_exp
-  ): [article_revision!]!
-
-  """
-  fetch data from the table in a streaming manner: "article"
-  """
-  article_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [article_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: article_bool_exp
-  ): [article!]!
-
-  """
-  fetch data from the table: "auction"
-  """
-  auction(
-    """distinct select on columns"""
-    distinct_on: [auction_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bool_exp
-  ): [auction!]!
-
-  """
-  fetch data from the table: "auction_bid"
-  """
-  auction_bid(
-    """distinct select on columns"""
-    distinct_on: [auction_bid_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_bid_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bid_bool_exp
-  ): [auction_bid!]!
-
-  """fetch data from the table: "auction_bid" using primary key columns"""
-  auction_bid_by_pk(id: uuid!): auction_bid
-
-  """
-  fetch data from the table in a streaming manner: "auction_bid"
-  """
-  auction_bid_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [auction_bid_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: auction_bid_bool_exp
-  ): [auction_bid!]!
-
-  """
-  fetch data from the table: "auction_bid_table"
-  """
-  auction_bid_table(
-    """distinct select on columns"""
-    distinct_on: [auction_bid_table_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [auction_bid_table_order_by!]
-
-    """filter the rows returned"""
-    where: auction_bid_table_bool_exp
-  ): [auction_bid_table!]!
-
-  """
-  fetch data from the table: "auction_bid_table" using primary key columns
-  """
-  auction_bid_table_by_pk(id: Int!): auction_bid_table
-
-  """
-  fetch data from the table in a streaming manner: "auction_bid_table"
-  """
-  auction_bid_table_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [auction_bid_table_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: auction_bid_table_bool_exp
-  ): [auction_bid_table!]!
-
-  """fetch data from the table: "auction" using primary key columns"""
-  auction_by_pk(id: Int!, version: Int!): auction
-
-  """
-  fetch data from the table in a streaming manner: "auction"
-  """
-  auction_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [auction_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: auction_bool_exp
-  ): [auction!]!
-
-  """
-  fetch data from the table: "codex"
-  """
-  codex(
-    """distinct select on columns"""
-    distinct_on: [codex_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [codex_order_by!]
-
-    """filter the rows returned"""
-    where: codex_bool_exp
-  ): [codex!]!
-
-  """fetch data from the table: "codex" using primary key columns"""
-  codex_by_pk(id: Int!, tokenVersion: generative_token_version!): codex
-
-  """
-  fetch data from the table in a streaming manner: "codex"
-  """
-  codex_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [codex_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: codex_bool_exp
-  ): [codex!]!
-
-  """
-  fetch data from the table: "codex_update_request"
-  """
-  codex_update_request(
-    """distinct select on columns"""
-    distinct_on: [codex_update_request_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [codex_update_request_order_by!]
-
-    """filter the rows returned"""
-    where: codex_update_request_bool_exp
-  ): [codex_update_request!]!
-
-  """
-  fetch data from the table: "codex_update_request" using primary key columns
-  """
-  codex_update_request_by_pk(codexId: Int!, tokenId: Int!, tokenVersion: generative_token_version!): codex_update_request
-
-  """
-  fetch data from the table in a streaming manner: "codex_update_request"
-  """
-  codex_update_request_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [codex_update_request_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: codex_update_request_bool_exp
-  ): [codex_update_request!]!
-
-  """
-  fetch data from the table: "collaboration"
-  """
-  collaboration(
-    """distinct select on columns"""
-    distinct_on: [collaboration_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [collaboration_order_by!]
-
-    """filter the rows returned"""
-    where: collaboration_bool_exp
-  ): [collaboration!]!
-
-  """fetch data from the table: "collaboration" using primary key columns"""
-  collaboration_by_pk(collaborationContractId: String!, collaboratorId: String!): collaboration
-
-  """
-  fetch data from the table in a streaming manner: "collaboration"
-  """
-  collaboration_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [collaboration_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: collaboration_bool_exp
-  ): [collaboration!]!
-
-  """
-  fetch data from the table: "collection_offer"
-  """
-  collection_offer(
-    """distinct select on columns"""
-    distinct_on: [collection_offer_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [collection_offer_order_by!]
-
-    """filter the rows returned"""
-    where: collection_offer_bool_exp
-  ): [collection_offer!]!
-
-  """
-  fetch data from the table: "collection_offer" using primary key columns
-  """
-  collection_offer_by_pk(id: Int!, version: Int!): collection_offer
-
-  """
-  fetch data from the table in a streaming manner: "collection_offer"
-  """
-  collection_offer_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [collection_offer_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: collection_offer_bool_exp
-  ): [collection_offer!]!
-
-  """
-  fetch data from the table: "generative_token"
-  """
-  generative_token(
-    """distinct select on columns"""
-    distinct_on: [generative_token_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [generative_token_order_by!]
-
-    """filter the rows returned"""
-    where: generative_token_bool_exp
-  ): [generative_token!]!
-
-  """
-  fetch data from the table: "generative_token" using primary key columns
-  """
-  generative_token_by_pk(id: Int!): generative_token
-
-  """
-  fetch data from the table in a streaming manner: "generative_token"
-  """
-  generative_token_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [generative_token_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: generative_token_bool_exp
-  ): [generative_token!]!
-
-  """
-  fetch data from the table: "gentk_assign"
-  """
-  gentk_assign(
-    """distinct select on columns"""
-    distinct_on: [gentk_assign_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [gentk_assign_order_by!]
-
-    """filter the rows returned"""
-    where: gentk_assign_bool_exp
-  ): [gentk_assign!]!
-
-  """fetch data from the table: "gentk_assign" using primary key columns"""
-  gentk_assign_by_pk(gentkId: Int!, gentkIssuerVersion: generative_token_version!): gentk_assign
-
-  """
-  fetch data from the table in a streaming manner: "gentk_assign"
-  """
-  gentk_assign_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [gentk_assign_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: gentk_assign_bool_exp
-  ): [gentk_assign!]!
-
-  """
-  fetch data from the table: "ipfs_cid"
-  """
-  ipfs_cid(
-    """distinct select on columns"""
-    distinct_on: [ipfs_cid_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [ipfs_cid_order_by!]
-
-    """filter the rows returned"""
-    where: ipfs_cid_bool_exp
-  ): [ipfs_cid!]!
-
-  """fetch data from the table: "ipfs_cid" using primary key columns"""
-  ipfs_cid_by_pk(cid: String!): ipfs_cid
-
-  """
-  fetch data from the table in a streaming manner: "ipfs_cid"
-  """
-  ipfs_cid_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [ipfs_cid_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: ipfs_cid_bool_exp
-  ): [ipfs_cid!]!
-
-  """
-  fetch data from the table: "listing"
-  """
-  listing(
-    """distinct select on columns"""
-    distinct_on: [listing_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [listing_order_by!]
-
-    """filter the rows returned"""
-    where: listing_bool_exp
-  ): [listing!]!
-
-  """fetch data from the table: "listing" using primary key columns"""
-  listing_by_pk(id: Int!, version: Int!): listing
-
-  """
-  fetch data from the table in a streaming manner: "listing"
-  """
-  listing_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [listing_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: listing_bool_exp
-  ): [listing!]!
-
-  """
-  fetch data from the table: "market_stats"
-  """
-  market_stats(
-    """distinct select on columns"""
-    distinct_on: [market_stats_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [market_stats_order_by!]
-
-    """filter the rows returned"""
-    where: market_stats_bool_exp
-  ): [market_stats!]!
-
-  """fetch data from the table: "market_stats" using primary key columns"""
-  market_stats_by_pk(tokenId: Int!): market_stats
-
-  """
-  fetch data from the table: "market_stats_history"
-  """
-  market_stats_history(
-    """distinct select on columns"""
-    distinct_on: [market_stats_history_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [market_stats_history_order_by!]
-
-    """filter the rows returned"""
-    where: market_stats_history_bool_exp
-  ): [market_stats_history!]!
-
-  """
-  fetch data from the table: "market_stats_history" using primary key columns
-  """
-  market_stats_history_by_pk(id: Int!): market_stats_history
-
-  """
-  fetch data from the table in a streaming manner: "market_stats_history"
-  """
-  market_stats_history_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [market_stats_history_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: market_stats_history_bool_exp
-  ): [market_stats_history!]!
-
-  """
-  fetch data from the table in a streaming manner: "market_stats"
-  """
-  market_stats_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [market_stats_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: market_stats_bool_exp
-  ): [market_stats!]!
-
-  """
-  fetch data from the table: "media_image"
-  """
-  media_image(
-    """distinct select on columns"""
-    distinct_on: [media_image_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [media_image_order_by!]
-
-    """filter the rows returned"""
-    where: media_image_bool_exp
-  ): [media_image!]!
-
-  """fetch data from the table: "media_image" using primary key columns"""
-  media_image_by_pk(cid: bpchar!): media_image
-
-  """
-  fetch data from the table in a streaming manner: "media_image"
-  """
-  media_image_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [media_image_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: media_image_bool_exp
-  ): [media_image!]!
-
-  """
-  fetch data from the table: "metric"
-  """
-  metric(
-    """distinct select on columns"""
-    distinct_on: [metric_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [metric_order_by!]
-
-    """filter the rows returned"""
-    where: metric_bool_exp
-  ): [metric!]!
-
-  """fetch data from the table: "metric" using primary key columns"""
-  metric_by_pk(id: String!): metric
-
-  """
-  fetch data from the table in a streaming manner: "metric"
-  """
-  metric_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [metric_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: metric_bool_exp
-  ): [metric!]!
-
-  """
-  fetch data from the table: "mint_ticket"
-  """
-  mint_ticket(
-    """distinct select on columns"""
-    distinct_on: [mint_ticket_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [mint_ticket_order_by!]
-
-    """filter the rows returned"""
-    where: mint_ticket_bool_exp
-  ): [mint_ticket!]!
-
-  """fetch data from the table: "mint_ticket" using primary key columns"""
-  mint_ticket_by_pk(id: Int!): mint_ticket
-
-  """An array relationship"""
-  mint_ticket_settings(
-    """distinct select on columns"""
-    distinct_on: [mint_ticket_settings_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [mint_ticket_settings_order_by!]
-
-    """filter the rows returned"""
-    where: mint_ticket_settings_bool_exp
-  ): [mint_ticket_settings!]!
-
-  """
-  fetch data from the table: "mint_ticket_settings" using primary key columns
-  """
-  mint_ticket_settings_by_pk(tokenId: Int!): mint_ticket_settings
-
-  """
-  fetch data from the table in a streaming manner: "mint_ticket_settings"
-  """
-  mint_ticket_settings_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [mint_ticket_settings_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: mint_ticket_settings_bool_exp
-  ): [mint_ticket_settings!]!
-
-  """
-  fetch data from the table in a streaming manner: "mint_ticket"
-  """
-  mint_ticket_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [mint_ticket_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: mint_ticket_bool_exp
-  ): [mint_ticket!]!
-
-  """
-  fetch data from the table: "moderation_reason"
-  """
-  moderation_reason(
-    """distinct select on columns"""
-    distinct_on: [moderation_reason_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [moderation_reason_order_by!]
-
-    """filter the rows returned"""
-    where: moderation_reason_bool_exp
-  ): [moderation_reason!]!
-
-  """
-  fetch data from the table: "moderation_reason" using primary key columns
-  """
-  moderation_reason_by_pk(id: String!): moderation_reason
-
-  """
-  fetch data from the table in a streaming manner: "moderation_reason"
-  """
-  moderation_reason_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [moderation_reason_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: moderation_reason_bool_exp
-  ): [moderation_reason!]!
-
-  """
-  fetch data from the table: "objkt"
-  """
-  objkt(
-    """distinct select on columns"""
-    distinct_on: [objkt_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [objkt_order_by!]
-
-    """filter the rows returned"""
-    where: objkt_bool_exp
-  ): [objkt!]!
-
-  """fetch data from the table: "objkt" using primary key columns"""
-  objkt_by_pk(id: Int!, issuerVersion: generative_token_version!): objkt
-
-  """
-  fetch data from the table in a streaming manner: "objkt"
-  """
-  objkt_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [objkt_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: objkt_bool_exp
-  ): [objkt!]!
   offchain: offchain_subscription
   onchain: onchain_subscription
 }
@@ -15317,7 +12946,6 @@ type transaction {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String!
   price: numeric!
   ticket_id: String
@@ -15365,7 +12993,6 @@ input transaction_bool_exp {
   id: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   op_hash: String_comparison_exp
   price: numeric_comparison_exp
   ticket_id: String_comparison_exp
@@ -15381,7 +13008,6 @@ input transaction_max_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   price: order_by
   ticket_id: order_by
@@ -15397,7 +13023,6 @@ input transaction_min_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   price: order_by
   ticket_id: order_by
@@ -15414,7 +13039,6 @@ input transaction_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   price: order_by
   ticket_id: order_by
@@ -15437,9 +13061,6 @@ enum transaction_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   op_hash
@@ -15501,7 +13122,6 @@ input transaction_stream_cursor_value_input {
   created_at: timestamptz
   id: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String
   price: numeric
   ticket_id: String

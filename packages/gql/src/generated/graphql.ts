@@ -1599,7 +1599,6 @@ export type Action = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   op_hash: Scalars['String']['output'];
   /** An object relationship */
   redeemable?: Maybe<Redeemable>;
@@ -1656,7 +1655,6 @@ export type Action_Bool_Exp = {
   numeric_value?: InputMaybe<Numeric_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   op_hash?: InputMaybe<String_Comparison_Exp>;
   redeemable?: InputMaybe<Redeemable_Bool_Exp>;
   redeemable_address?: InputMaybe<String_Comparison_Exp>;
@@ -1676,7 +1674,6 @@ export type Action_Max_Order_By = {
   issuer_id?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   op_hash?: InputMaybe<Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   target_id?: InputMaybe<Order_By>;
@@ -1693,7 +1690,6 @@ export type Action_Min_Order_By = {
   issuer_id?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   op_hash?: InputMaybe<Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   target_id?: InputMaybe<Order_By>;
@@ -1714,7 +1710,6 @@ export type Action_Order_By = {
   numeric_value?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   op_hash?: InputMaybe<Order_By>;
   redeemable?: InputMaybe<Redeemable_Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
@@ -1742,8 +1737,6 @@ export enum Action_Select_Column {
   NumericValue = 'numeric_value',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   OpHash = 'op_hash',
   /** column name */
@@ -1793,7 +1786,6 @@ export type Action_Stream_Cursor_Value_Input = {
   metadata?: InputMaybe<Scalars['jsonb']['input']>;
   numeric_value?: InputMaybe<Scalars['numeric']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   op_hash?: InputMaybe<Scalars['String']['input']>;
   redeemable_address?: InputMaybe<Scalars['String']['input']>;
   target_id?: InputMaybe<Scalars['String']['input']>;
@@ -2591,7 +2583,6 @@ export type Auction = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   reserve_price: Scalars['bigint']['output'];
   seller_id?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
@@ -2882,7 +2873,6 @@ export type Auction_Bool_Exp = {
   min_duration?: InputMaybe<Int_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   reserve_price?: InputMaybe<Bigint_Comparison_Exp>;
   seller_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
@@ -2900,7 +2890,6 @@ export type Auction_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   min_duration?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   reserve_price?: InputMaybe<Order_By>;
   seller_id?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -2917,7 +2906,6 @@ export type Auction_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   min_duration?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   reserve_price?: InputMaybe<Order_By>;
   seller_id?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -2937,7 +2925,6 @@ export type Auction_Order_By = {
   min_duration?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   reserve_price?: InputMaybe<Order_By>;
   seller_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
@@ -2964,8 +2951,6 @@ export enum Auction_Select_Column {
   MinDuration = 'min_duration',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   ReservePrice = 'reserve_price',
   /** column name */
@@ -3023,7 +3008,6 @@ export type Auction_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
   min_duration?: InputMaybe<Scalars['Int']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   reserve_price?: InputMaybe<Scalars['bigint']['input']>;
   seller_id?: InputMaybe<Scalars['String']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
@@ -4309,8 +4293,7 @@ export type Gentk_Assign = {
   assigned_at?: Maybe<Scalars['timestamptz']['output']>;
   attempts: Scalars['Int']['output'];
   created_at: Scalars['timestamptz']['output'];
-  gentk_id: Scalars['String']['output'];
-  gentk_issuer_version: Scalars['generative_token_version']['output'];
+  id: Scalars['String']['output'];
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   retries: Scalars['Int']['output'];
@@ -4325,8 +4308,7 @@ export type Gentk_Assign_Bool_Exp = {
   assigned_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   attempts?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  gentk_id?: InputMaybe<String_Comparison_Exp>;
-  gentk_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   retries?: InputMaybe<Int_Comparison_Exp>;
   state?: InputMaybe<Gentk_Assign_State_Enum_Comparison_Exp>;
@@ -4337,8 +4319,7 @@ export type Gentk_Assign_Order_By = {
   assigned_at?: InputMaybe<Order_By>;
   attempts?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
-  gentk_id?: InputMaybe<Order_By>;
-  gentk_issuer_version?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   retries?: InputMaybe<Order_By>;
   state?: InputMaybe<Order_By>;
@@ -4353,9 +4334,7 @@ export enum Gentk_Assign_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  GentkId = 'gentk_id',
-  /** column name */
-  GentkIssuerVersion = 'gentk_issuer_version',
+  Id = 'id',
   /** column name */
   Retries = 'retries',
   /** column name */
@@ -4388,8 +4367,7 @@ export type Gentk_Assign_Stream_Cursor_Value_Input = {
   assigned_at?: InputMaybe<Scalars['timestamptz']['input']>;
   attempts?: InputMaybe<Scalars['Int']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
-  gentk_id?: InputMaybe<Scalars['String']['input']>;
-  gentk_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   retries?: InputMaybe<Scalars['Int']['input']>;
   state?: InputMaybe<Scalars['gentk_assign_state_enum']['input']>;
 };
@@ -4672,7 +4650,6 @@ export type Listing = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   price: Scalars['numeric']['output'];
   royalties: Scalars['Int']['output'];
   /** An object relationship */
@@ -4758,7 +4735,6 @@ export type Listing_Bool_Exp = {
   market_stats_histories?: InputMaybe<Market_Stats_History_Bool_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   royalties?: InputMaybe<Int_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
@@ -4777,7 +4753,6 @@ export type Listing_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   issuer_id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -4794,7 +4769,6 @@ export type Listing_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   issuer_id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -4819,7 +4793,6 @@ export type Listing_Order_By = {
   market_stats_histories_aggregate?: InputMaybe<Market_Stats_History_Aggregate_Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
@@ -4847,8 +4820,6 @@ export enum Listing_Select_Column {
   IssuerId = 'issuer_id',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   Price = 'price',
   /** column name */
@@ -4903,7 +4874,6 @@ export type Listing_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   issuer_id?: InputMaybe<Scalars['String']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   royalties?: InputMaybe<Scalars['Int']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
@@ -6248,7 +6218,6 @@ export type Objkt = {
   id: Scalars['String']['output'];
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id: Scalars['String']['output'];
-  issuer_version: Scalars['generative_token_version']['output'];
   iteration?: Maybe<Scalars['numeric']['output']>;
   /** An array relationship */
   listings: Array<Listing>;
@@ -6405,7 +6374,6 @@ export type Objkt_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   input_bytes?: InputMaybe<String_Comparison_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
-  issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   iteration?: InputMaybe<Numeric_Comparison_Exp>;
   listings?: InputMaybe<Listing_Bool_Exp>;
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
@@ -6439,7 +6407,6 @@ export type Objkt_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   input_bytes?: InputMaybe<Order_By>;
   issuer_id?: InputMaybe<Order_By>;
-  issuer_version?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   metadata_uri?: InputMaybe<Order_By>;
   minter_id?: InputMaybe<Order_By>;
@@ -6463,7 +6430,6 @@ export type Objkt_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   input_bytes?: InputMaybe<Order_By>;
   issuer_id?: InputMaybe<Order_By>;
-  issuer_version?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   metadata_uri?: InputMaybe<Order_By>;
   minter_id?: InputMaybe<Order_By>;
@@ -6494,7 +6460,6 @@ export type Objkt_Order_By = {
   id?: InputMaybe<Order_By>;
   input_bytes?: InputMaybe<Order_By>;
   issuer_id?: InputMaybe<Order_By>;
-  issuer_version?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   listings_aggregate?: InputMaybe<Listing_Aggregate_Order_By>;
   media_image?: InputMaybe<Media_Image_Order_By>;
@@ -6542,8 +6507,6 @@ export enum Objkt_Select_Column {
   InputBytes = 'input_bytes',
   /** column name */
   IssuerId = 'issuer_id',
-  /** column name */
-  IssuerVersion = 'issuer_version',
   /** column name */
   Iteration = 'iteration',
   /** column name */
@@ -6617,7 +6580,6 @@ export type Objkt_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
   issuer_id?: InputMaybe<Scalars['String']['input']>;
-  issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   iteration?: InputMaybe<Scalars['numeric']['input']>;
   metadata?: InputMaybe<Scalars['json']['input']>;
   metadata_uri?: InputMaybe<Scalars['String']['input']>;
@@ -6659,461 +6621,6 @@ export type Objkt_Var_Samp_Order_By = {
 
 /** order by variance() on columns of table "objkt" */
 export type Objkt_Variance_Order_By = {
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** columns and relationships of "objkt" */
-export type Objkt = {
-  __typename?: 'objkt';
-  /** An array relationship */
-  actions: Array<Action>;
-  assigned?: Maybe<Scalars['Boolean']['output']>;
-  assignedAt?: Maybe<Scalars['timestamptz']['output']>;
-  /** An array relationship */
-  auctions: Array<Auction>;
-  captureMediaId?: Maybe<Scalars['bpchar']['output']>;
-  createdAt: Scalars['timestamptz']['output'];
-  displayUri?: Maybe<Scalars['bpchar']['output']>;
-  duplicate?: Maybe<Scalars['Boolean']['output']>;
-  features?: Maybe<Scalars['json']['output']>;
-  generationHash?: Maybe<Scalars['String']['output']>;
-  /** An object relationship */
-  generative_token: Generative_Token;
-  /** An object relationship */
-  gentk_assign?: Maybe<Gentk_Assign>;
-  id: Scalars['Int']['output'];
-  inputBytes?: Maybe<Scalars['String']['output']>;
-  issuerId: Scalars['Int']['output'];
-  issuerVersion: Scalars['generative_token_version']['output'];
-  iteration?: Maybe<Scalars['Int']['output']>;
-  /** An array relationship */
-  listings: Array<Listing>;
-  /** An object relationship */
-  media_image?: Maybe<Media_Image>;
-  metadata?: Maybe<Scalars['json']['output']>;
-  metadataUri?: Maybe<Scalars['String']['output']>;
-  minterId?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  /** An array relationship */
-  offers: Array<Offer>;
-  ownerId?: Maybe<Scalars['String']['output']>;
-  rarity?: Maybe<Scalars['float8']['output']>;
-  /** An array relationship */
-  redemptions: Array<Redemption>;
-  royalties: Scalars['Int']['output'];
-  slug?: Maybe<Scalars['String']['output']>;
-  /** An array relationship */
-  splits: Array<Split>;
-  tags?: Maybe<Scalars['_text']['output']>;
-  thumbnailUri?: Maybe<Scalars['bpchar']['output']>;
-  /** An array relationship */
-  transactions: Array<Transaction>;
-  updatedAt?: Maybe<Scalars['timestamptz']['output']>;
-  /** An object relationship */
-  user?: Maybe<User>;
-  /** An object relationship */
-  userByOwnerid?: Maybe<User>;
-  version: Scalars['Int']['output'];
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktActionsArgs = {
-  distinct_on?: InputMaybe<Array<Action_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Action_Order_By>>;
-  where?: InputMaybe<Action_Bool_Exp>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktAuctionsArgs = {
-  distinct_on?: InputMaybe<Array<Auction_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Auction_Order_By>>;
-  where?: InputMaybe<Auction_Bool_Exp>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktFeaturesArgs = {
-  path?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktListingsArgs = {
-  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Listing_Order_By>>;
-  where?: InputMaybe<Listing_Bool_Exp>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktMetadataArgs = {
-  path?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktOffersArgs = {
-  distinct_on?: InputMaybe<Array<Offer_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Offer_Order_By>>;
-  where?: InputMaybe<Offer_Bool_Exp>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktRedemptionsArgs = {
-  distinct_on?: InputMaybe<Array<Redemption_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Redemption_Order_By>>;
-  where?: InputMaybe<Redemption_Bool_Exp>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktSplitsArgs = {
-  distinct_on?: InputMaybe<Array<Split_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Split_Order_By>>;
-  where?: InputMaybe<Split_Bool_Exp>;
-};
-
-
-/** columns and relationships of "objkt" */
-export type ObjktTransactionsArgs = {
-  distinct_on?: InputMaybe<Array<Transaction_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Transaction_Order_By>>;
-  where?: InputMaybe<Transaction_Bool_Exp>;
-};
-
-/** order by aggregate values of table "objkt" */
-export type Objkt_Aggregate_Order_By = {
-  avg?: InputMaybe<Objkt_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Objkt_Max_Order_By>;
-  min?: InputMaybe<Objkt_Min_Order_By>;
-  stddev?: InputMaybe<Objkt_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Objkt_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Objkt_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Objkt_Sum_Order_By>;
-  var_pop?: InputMaybe<Objkt_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Objkt_Var_Samp_Order_By>;
-  variance?: InputMaybe<Objkt_Variance_Order_By>;
-};
-
-/** order by avg() on columns of table "objkt" */
-export type Objkt_Avg_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "objkt". All fields are combined with a logical 'AND'. */
-export type Objkt_Bool_Exp = {
-  _and?: InputMaybe<Array<Objkt_Bool_Exp>>;
-  _not?: InputMaybe<Objkt_Bool_Exp>;
-  _or?: InputMaybe<Array<Objkt_Bool_Exp>>;
-  actions?: InputMaybe<Action_Bool_Exp>;
-  assigned?: InputMaybe<Boolean_Comparison_Exp>;
-  assignedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  auctions?: InputMaybe<Auction_Bool_Exp>;
-  captureMediaId?: InputMaybe<Bpchar_Comparison_Exp>;
-  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  displayUri?: InputMaybe<Bpchar_Comparison_Exp>;
-  duplicate?: InputMaybe<Boolean_Comparison_Exp>;
-  features?: InputMaybe<Json_Comparison_Exp>;
-  generationHash?: InputMaybe<String_Comparison_Exp>;
-  generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
-  gentk_assign?: InputMaybe<Gentk_Assign_Bool_Exp>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  inputBytes?: InputMaybe<String_Comparison_Exp>;
-  issuerId?: InputMaybe<Int_Comparison_Exp>;
-  issuerVersion?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
-  iteration?: InputMaybe<Int_Comparison_Exp>;
-  listings?: InputMaybe<Listing_Bool_Exp>;
-  media_image?: InputMaybe<Media_Image_Bool_Exp>;
-  metadata?: InputMaybe<Json_Comparison_Exp>;
-  metadataUri?: InputMaybe<String_Comparison_Exp>;
-  minterId?: InputMaybe<String_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
-  offers?: InputMaybe<Offer_Bool_Exp>;
-  ownerId?: InputMaybe<String_Comparison_Exp>;
-  rarity?: InputMaybe<Float8_Comparison_Exp>;
-  redemptions?: InputMaybe<Redemption_Bool_Exp>;
-  royalties?: InputMaybe<Int_Comparison_Exp>;
-  slug?: InputMaybe<String_Comparison_Exp>;
-  splits?: InputMaybe<Split_Bool_Exp>;
-  tags?: InputMaybe<_Text_Comparison_Exp>;
-  thumbnailUri?: InputMaybe<Bpchar_Comparison_Exp>;
-  transactions?: InputMaybe<Transaction_Bool_Exp>;
-  updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  user?: InputMaybe<User_Bool_Exp>;
-  userByOwnerid?: InputMaybe<User_Bool_Exp>;
-  version?: InputMaybe<Int_Comparison_Exp>;
-};
-
-/** order by max() on columns of table "objkt" */
-export type Objkt_Max_Order_By = {
-  assignedAt?: InputMaybe<Order_By>;
-  captureMediaId?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  displayUri?: InputMaybe<Order_By>;
-  generationHash?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  inputBytes?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  issuerVersion?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  metadataUri?: InputMaybe<Order_By>;
-  minterId?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  ownerId?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  slug?: InputMaybe<Order_By>;
-  thumbnailUri?: InputMaybe<Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "objkt" */
-export type Objkt_Min_Order_By = {
-  assignedAt?: InputMaybe<Order_By>;
-  captureMediaId?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  displayUri?: InputMaybe<Order_By>;
-  generationHash?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  inputBytes?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  issuerVersion?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  metadataUri?: InputMaybe<Order_By>;
-  minterId?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  ownerId?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  slug?: InputMaybe<Order_By>;
-  thumbnailUri?: InputMaybe<Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "objkt". */
-export type Objkt_Order_By = {
-  actions_aggregate?: InputMaybe<Action_Aggregate_Order_By>;
-  assigned?: InputMaybe<Order_By>;
-  assignedAt?: InputMaybe<Order_By>;
-  auctions_aggregate?: InputMaybe<Auction_Aggregate_Order_By>;
-  captureMediaId?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  displayUri?: InputMaybe<Order_By>;
-  duplicate?: InputMaybe<Order_By>;
-  features?: InputMaybe<Order_By>;
-  generationHash?: InputMaybe<Order_By>;
-  generative_token?: InputMaybe<Generative_Token_Order_By>;
-  gentk_assign?: InputMaybe<Gentk_Assign_Order_By>;
-  id?: InputMaybe<Order_By>;
-  inputBytes?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  issuerVersion?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  listings_aggregate?: InputMaybe<Listing_Aggregate_Order_By>;
-  media_image?: InputMaybe<Media_Image_Order_By>;
-  metadata?: InputMaybe<Order_By>;
-  metadataUri?: InputMaybe<Order_By>;
-  minterId?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  offers_aggregate?: InputMaybe<Offer_Aggregate_Order_By>;
-  ownerId?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  redemptions_aggregate?: InputMaybe<Redemption_Aggregate_Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  slug?: InputMaybe<Order_By>;
-  splits_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
-  tags?: InputMaybe<Order_By>;
-  thumbnailUri?: InputMaybe<Order_By>;
-  transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
-  user?: InputMaybe<User_Order_By>;
-  userByOwnerid?: InputMaybe<User_Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "objkt" */
-export enum Objkt_Select_Column {
-  /** column name */
-  Assigned = 'assigned',
-  /** column name */
-  AssignedAt = 'assignedAt',
-  /** column name */
-  CaptureMediaId = 'captureMediaId',
-  /** column name */
-  CreatedAt = 'createdAt',
-  /** column name */
-  DisplayUri = 'displayUri',
-  /** column name */
-  Duplicate = 'duplicate',
-  /** column name */
-  Features = 'features',
-  /** column name */
-  GenerationHash = 'generationHash',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  InputBytes = 'inputBytes',
-  /** column name */
-  IssuerId = 'issuerId',
-  /** column name */
-  IssuerVersion = 'issuerVersion',
-  /** column name */
-  Iteration = 'iteration',
-  /** column name */
-  Metadata = 'metadata',
-  /** column name */
-  MetadataUri = 'metadataUri',
-  /** column name */
-  MinterId = 'minterId',
-  /** column name */
-  Name = 'name',
-  /** column name */
-  OwnerId = 'ownerId',
-  /** column name */
-  Rarity = 'rarity',
-  /** column name */
-  Royalties = 'royalties',
-  /** column name */
-  Slug = 'slug',
-  /** column name */
-  Tags = 'tags',
-  /** column name */
-  ThumbnailUri = 'thumbnailUri',
-  /** column name */
-  UpdatedAt = 'updatedAt',
-  /** column name */
-  Version = 'version'
-}
-
-/** order by stddev() on columns of table "objkt" */
-export type Objkt_Stddev_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_pop() on columns of table "objkt" */
-export type Objkt_Stddev_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_samp() on columns of table "objkt" */
-export type Objkt_Stddev_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "objkt" */
-export type Objkt_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Objkt_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Objkt_Stream_Cursor_Value_Input = {
-  assigned?: InputMaybe<Scalars['Boolean']['input']>;
-  assignedAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  captureMediaId?: InputMaybe<Scalars['bpchar']['input']>;
-  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  displayUri?: InputMaybe<Scalars['bpchar']['input']>;
-  duplicate?: InputMaybe<Scalars['Boolean']['input']>;
-  features?: InputMaybe<Scalars['json']['input']>;
-  generationHash?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
-  inputBytes?: InputMaybe<Scalars['String']['input']>;
-  issuerId?: InputMaybe<Scalars['Int']['input']>;
-  issuerVersion?: InputMaybe<Scalars['generative_token_version']['input']>;
-  iteration?: InputMaybe<Scalars['Int']['input']>;
-  metadata?: InputMaybe<Scalars['json']['input']>;
-  metadataUri?: InputMaybe<Scalars['String']['input']>;
-  minterId?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  ownerId?: InputMaybe<Scalars['String']['input']>;
-  rarity?: InputMaybe<Scalars['float8']['input']>;
-  royalties?: InputMaybe<Scalars['Int']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Scalars['_text']['input']>;
-  thumbnailUri?: InputMaybe<Scalars['bpchar']['input']>;
-  updatedAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  version?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** order by sum() on columns of table "objkt" */
-export type Objkt_Sum_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** order by var_pop() on columns of table "objkt" */
-export type Objkt_Var_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** order by var_samp() on columns of table "objkt" */
-export type Objkt_Var_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
-  iteration?: InputMaybe<Order_By>;
-  rarity?: InputMaybe<Order_By>;
-  royalties?: InputMaybe<Order_By>;
-  version?: InputMaybe<Order_By>;
-};
-
-/** order by variance() on columns of table "objkt" */
-export type Objkt_Variance_Order_By = {
-  id?: InputMaybe<Order_By>;
-  issuerId?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -7771,7 +7278,6 @@ export type Offer = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   price: Scalars['numeric']['output'];
   /** An object relationship */
   user?: Maybe<User>;
@@ -7811,7 +7317,6 @@ export type Offer_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Int_Comparison_Exp>;
@@ -7825,7 +7330,6 @@ export type Offer_Max_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
 };
@@ -7838,7 +7342,6 @@ export type Offer_Min_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
 };
@@ -7852,7 +7355,6 @@ export type Offer_Order_By = {
   id?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
@@ -7872,8 +7374,6 @@ export enum Offer_Select_Column {
   Id = 'id',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   Price = 'price',
   /** column name */
@@ -7914,7 +7414,6 @@ export type Offer_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -7987,8 +7486,6 @@ export type Onchain_Query = {
   codex_update_request_by_pk?: Maybe<Codex_Update_Request>;
   /** fetch data from the table: "collaboration" */
   collaboration: Array<Collaboration>;
-  /** fetch data from the table: "collaboration" using primary key columns */
-  collaboration_by_pk?: Maybe<Collaboration>;
   /** fetch data from the table: "collection_offer" */
   collection_offer: Array<Collection_Offer>;
   /** fetch data from the table: "collection_offer" using primary key columns */
@@ -8256,12 +7753,6 @@ export type Onchain_QueryCollaborationArgs = {
 };
 
 
-export type Onchain_QueryCollaboration_By_PkArgs = {
-  collaboration_contract_id: Scalars['String']['input'];
-  collaborator_id: Scalars['String']['input'];
-};
-
-
 export type Onchain_QueryCollection_OfferArgs = {
   distinct_on?: InputMaybe<Array<Collection_Offer_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -8301,8 +7792,7 @@ export type Onchain_QueryGentk_AssignArgs = {
 
 
 export type Onchain_QueryGentk_Assign_By_PkArgs = {
-  gentk_id: Scalars['String']['input'];
-  gentk_issuer_version: Scalars['generative_token_version']['input'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -8486,7 +7976,6 @@ export type Onchain_QueryObjktArgs = {
 
 export type Onchain_QueryObjkt_By_PkArgs = {
   id: Scalars['String']['input'];
-  issuer_version: Scalars['generative_token_version']['input'];
 };
 
 
@@ -8708,8 +8197,6 @@ export type Onchain_Subscription = {
   codex_update_request_stream: Array<Codex_Update_Request>;
   /** fetch data from the table: "collaboration" */
   collaboration: Array<Collaboration>;
-  /** fetch data from the table: "collaboration" using primary key columns */
-  collaboration_by_pk?: Maybe<Collaboration>;
   /** fetch data from the table in a streaming manner: "collaboration" */
   collaboration_stream: Array<Collaboration>;
   /** fetch data from the table: "collection_offer" */
@@ -9103,12 +8590,6 @@ export type Onchain_SubscriptionCollaborationArgs = {
 };
 
 
-export type Onchain_SubscriptionCollaboration_By_PkArgs = {
-  collaboration_contract_id: Scalars['String']['input'];
-  collaborator_id: Scalars['String']['input'];
-};
-
-
 export type Onchain_SubscriptionCollaboration_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Collaboration_Stream_Cursor_Input>>;
@@ -9169,8 +8650,7 @@ export type Onchain_SubscriptionGentk_AssignArgs = {
 
 
 export type Onchain_SubscriptionGentk_Assign_By_PkArgs = {
-  gentk_id: Scalars['String']['input'];
-  gentk_issuer_version: Scalars['generative_token_version']['input'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -9445,7 +8925,6 @@ export type Onchain_SubscriptionObjktArgs = {
 
 export type Onchain_SubscriptionObjkt_By_PkArgs = {
   id: Scalars['String']['input'];
-  issuer_version: Scalars['generative_token_version']['input'];
 };
 
 
@@ -9997,103 +9476,7 @@ export type Pricing_Fixed_Variance_Order_By = {
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** fetch data from the table: "action" */
-  action: Array<Action>;
-  /** fetch data from the table: "action" using primary key columns */
-  action_by_pk?: Maybe<Action>;
-  /** fetch data from the table: "article" */
-  article: Array<Article>;
-  /** fetch data from the table: "article" using primary key columns */
-  article_by_pk?: Maybe<Article>;
-  /** fetch data from the table: "article_generative_token" */
-  article_generative_token: Array<Article_Generative_Token>;
-  /** fetch data from the table: "article_generative_token" using primary key columns */
-  article_generative_token_by_pk?: Maybe<Article_Generative_Token>;
-  /** fetch data from the table: "article_ledger" */
-  article_ledger: Array<Article_Ledger>;
-  /** fetch data from the table: "article_ledger" using primary key columns */
-  article_ledger_by_pk?: Maybe<Article_Ledger>;
-  /** fetch data from the table: "article_revision" */
-  article_revision: Array<Article_Revision>;
-  /** fetch data from the table: "article_revision" using primary key columns */
-  article_revision_by_pk?: Maybe<Article_Revision>;
-  /** fetch data from the table: "auction" */
-  auction: Array<Auction>;
-  /** fetch data from the table: "auction_bid" */
-  auction_bid: Array<Auction_Bid>;
-  /** fetch data from the table: "auction_bid" using primary key columns */
-  auction_bid_by_pk?: Maybe<Auction_Bid>;
-  /** fetch data from the table: "auction_bid_table" */
-  auction_bid_table: Array<Auction_Bid_Table>;
-  /** fetch data from the table: "auction_bid_table" using primary key columns */
-  auction_bid_table_by_pk?: Maybe<Auction_Bid_Table>;
-  /** fetch data from the table: "auction" using primary key columns */
-  auction_by_pk?: Maybe<Auction>;
-  /** fetch data from the table: "codex" */
-  codex: Array<Codex>;
-  /** fetch data from the table: "codex" using primary key columns */
-  codex_by_pk?: Maybe<Codex>;
-  /** fetch data from the table: "codex_update_request" */
-  codex_update_request: Array<Codex_Update_Request>;
-  /** fetch data from the table: "codex_update_request" using primary key columns */
-  codex_update_request_by_pk?: Maybe<Codex_Update_Request>;
-  /** fetch data from the table: "collaboration" */
-  collaboration: Array<Collaboration>;
-  /** fetch data from the table: "collaboration" using primary key columns */
-  collaboration_by_pk?: Maybe<Collaboration>;
-  /** fetch data from the table: "collection_offer" */
-  collection_offer: Array<Collection_Offer>;
-  /** fetch data from the table: "collection_offer" using primary key columns */
-  collection_offer_by_pk?: Maybe<Collection_Offer>;
-  /** fetch data from the table: "generative_token" */
-  generative_token: Array<Generative_Token>;
-  /** fetch data from the table: "generative_token" using primary key columns */
-  generative_token_by_pk?: Maybe<Generative_Token>;
-  /** fetch data from the table: "gentk_assign" */
-  gentk_assign: Array<Gentk_Assign>;
-  /** fetch data from the table: "gentk_assign" using primary key columns */
-  gentk_assign_by_pk?: Maybe<Gentk_Assign>;
-  /** fetch data from the table: "ipfs_cid" */
-  ipfs_cid: Array<Ipfs_Cid>;
-  /** fetch data from the table: "ipfs_cid" using primary key columns */
-  ipfs_cid_by_pk?: Maybe<Ipfs_Cid>;
-  /** fetch data from the table: "listing" */
-  listing: Array<Listing>;
-  /** fetch data from the table: "listing" using primary key columns */
-  listing_by_pk?: Maybe<Listing>;
-  /** fetch data from the table: "market_stats" */
-  market_stats: Array<Market_Stats>;
-  /** fetch data from the table: "market_stats" using primary key columns */
-  market_stats_by_pk?: Maybe<Market_Stats>;
-  /** fetch data from the table: "market_stats_history" */
-  market_stats_history: Array<Market_Stats_History>;
-  /** fetch data from the table: "market_stats_history" using primary key columns */
-  market_stats_history_by_pk?: Maybe<Market_Stats_History>;
   mediaFullUrl: Scalars['String']['output'];
-  /** fetch data from the table: "media_image" */
-  media_image: Array<Media_Image>;
-  /** fetch data from the table: "media_image" using primary key columns */
-  media_image_by_pk?: Maybe<Media_Image>;
-  /** fetch data from the table: "metric" */
-  metric: Array<Metric>;
-  /** fetch data from the table: "metric" using primary key columns */
-  metric_by_pk?: Maybe<Metric>;
-  /** fetch data from the table: "mint_ticket" */
-  mint_ticket: Array<Mint_Ticket>;
-  /** fetch data from the table: "mint_ticket" using primary key columns */
-  mint_ticket_by_pk?: Maybe<Mint_Ticket>;
-  /** An array relationship */
-  mint_ticket_settings: Array<Mint_Ticket_Settings>;
-  /** fetch data from the table: "mint_ticket_settings" using primary key columns */
-  mint_ticket_settings_by_pk?: Maybe<Mint_Ticket_Settings>;
-  /** fetch data from the table: "moderation_reason" */
-  moderation_reason: Array<Moderation_Reason>;
-  /** fetch data from the table: "moderation_reason" using primary key columns */
-  moderation_reason_by_pk?: Maybe<Moderation_Reason>;
-  /** fetch data from the table: "objkt" */
-  objkt: Array<Objkt>;
-  /** fetch data from the table: "objkt" using primary key columns */
-  objkt_by_pk?: Maybe<Objkt>;
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
 };
@@ -10309,7 +9692,6 @@ export type Redemption = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   /** An object relationship */
   redeemable?: Maybe<Redeemable>;
   redeemable_address?: Maybe<Scalars['String']['output']>;
@@ -10349,7 +9731,6 @@ export type Redemption_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   redeemable?: InputMaybe<Redeemable_Bool_Exp>;
   redeemable_address?: InputMaybe<String_Comparison_Exp>;
   redeemer_id?: InputMaybe<String_Comparison_Exp>;
@@ -10362,7 +9743,6 @@ export type Redemption_Max_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   redeemer_id?: InputMaybe<Order_By>;
 };
@@ -10373,7 +9753,6 @@ export type Redemption_Min_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   redeemer_id?: InputMaybe<Order_By>;
 };
@@ -10385,7 +9764,6 @@ export type Redemption_Order_By = {
   id?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   redeemable?: InputMaybe<Redeemable_Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   redeemer_id?: InputMaybe<Order_By>;
@@ -10402,8 +9780,6 @@ export enum Redemption_Select_Column {
   Id = 'id',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   RedeemableAddress = 'redeemable_address',
   /** column name */
@@ -10442,7 +9818,6 @@ export type Redemption_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   redeemable_address?: InputMaybe<Scalars['String']['input']>;
   redeemer_id?: InputMaybe<Scalars['String']['input']>;
 };
@@ -10729,718 +10104,6 @@ export type Reserve_Variance_Order_By = {
   method?: InputMaybe<Order_By>;
 };
 
-
-export type Query_RootUser_StatsArgs = {
-  distinct_on?: InputMaybe<Array<User_Stats_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<User_Stats_Order_By>>;
-  where?: InputMaybe<User_Stats_Bool_Exp>;
-};
-
-
-export type Query_RootUser_Stats_By_PkArgs = {
-  userId: Scalars['String']['input'];
-};
-
-/** columns and relationships of "redeemable" */
-export type Redeemable = {
-  __typename?: 'redeemable';
-  /** An array relationship */
-  actions: Array<Action>;
-  address: Scalars['String']['output'];
-  baseAmount: Scalars['bigint']['output'];
-  createdAt: Scalars['timestamptz']['output'];
-  fa2: Scalars['String']['output'];
-  /** An object relationship */
-  generative_token: Generative_Token;
-  maxConsumptionsPerToken: Scalars['Int']['output'];
-  /** An array relationship */
-  redemptions: Array<Redemption>;
-  /** An array relationship */
-  splits: Array<Split>;
-  tokenId: Scalars['Int']['output'];
-};
-
-
-/** columns and relationships of "redeemable" */
-export type RedeemableActionsArgs = {
-  distinct_on?: InputMaybe<Array<Action_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Action_Order_By>>;
-  where?: InputMaybe<Action_Bool_Exp>;
-};
-
-
-/** columns and relationships of "redeemable" */
-export type RedeemableRedemptionsArgs = {
-  distinct_on?: InputMaybe<Array<Redemption_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Redemption_Order_By>>;
-  where?: InputMaybe<Redemption_Bool_Exp>;
-};
-
-
-/** columns and relationships of "redeemable" */
-export type RedeemableSplitsArgs = {
-  distinct_on?: InputMaybe<Array<Split_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Split_Order_By>>;
-  where?: InputMaybe<Split_Bool_Exp>;
-};
-
-/** order by aggregate values of table "redeemable" */
-export type Redeemable_Aggregate_Order_By = {
-  avg?: InputMaybe<Redeemable_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Redeemable_Max_Order_By>;
-  min?: InputMaybe<Redeemable_Min_Order_By>;
-  stddev?: InputMaybe<Redeemable_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Redeemable_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Redeemable_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Redeemable_Sum_Order_By>;
-  var_pop?: InputMaybe<Redeemable_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Redeemable_Var_Samp_Order_By>;
-  variance?: InputMaybe<Redeemable_Variance_Order_By>;
-};
-
-/** order by avg() on columns of table "redeemable" */
-export type Redeemable_Avg_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "redeemable". All fields are combined with a logical 'AND'. */
-export type Redeemable_Bool_Exp = {
-  _and?: InputMaybe<Array<Redeemable_Bool_Exp>>;
-  _not?: InputMaybe<Redeemable_Bool_Exp>;
-  _or?: InputMaybe<Array<Redeemable_Bool_Exp>>;
-  actions?: InputMaybe<Action_Bool_Exp>;
-  address?: InputMaybe<String_Comparison_Exp>;
-  baseAmount?: InputMaybe<Bigint_Comparison_Exp>;
-  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  fa2?: InputMaybe<String_Comparison_Exp>;
-  generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
-  maxConsumptionsPerToken?: InputMaybe<Int_Comparison_Exp>;
-  redemptions?: InputMaybe<Redemption_Bool_Exp>;
-  splits?: InputMaybe<Split_Bool_Exp>;
-  tokenId?: InputMaybe<Int_Comparison_Exp>;
-};
-
-/** order by max() on columns of table "redeemable" */
-export type Redeemable_Max_Order_By = {
-  address?: InputMaybe<Order_By>;
-  baseAmount?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  fa2?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "redeemable" */
-export type Redeemable_Min_Order_By = {
-  address?: InputMaybe<Order_By>;
-  baseAmount?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  fa2?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "redeemable". */
-export type Redeemable_Order_By = {
-  actions_aggregate?: InputMaybe<Action_Aggregate_Order_By>;
-  address?: InputMaybe<Order_By>;
-  baseAmount?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  fa2?: InputMaybe<Order_By>;
-  generative_token?: InputMaybe<Generative_Token_Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  redemptions_aggregate?: InputMaybe<Redemption_Aggregate_Order_By>;
-  splits_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "redeemable" */
-export enum Redeemable_Select_Column {
-  /** column name */
-  Address = 'address',
-  /** column name */
-  BaseAmount = 'baseAmount',
-  /** column name */
-  CreatedAt = 'createdAt',
-  /** column name */
-  Fa2 = 'fa2',
-  /** column name */
-  MaxConsumptionsPerToken = 'maxConsumptionsPerToken',
-  /** column name */
-  TokenId = 'tokenId'
-}
-
-/** order by stddev() on columns of table "redeemable" */
-export type Redeemable_Stddev_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_pop() on columns of table "redeemable" */
-export type Redeemable_Stddev_Pop_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_samp() on columns of table "redeemable" */
-export type Redeemable_Stddev_Samp_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "redeemable" */
-export type Redeemable_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Redeemable_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Redeemable_Stream_Cursor_Value_Input = {
-  address?: InputMaybe<Scalars['String']['input']>;
-  baseAmount?: InputMaybe<Scalars['bigint']['input']>;
-  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  fa2?: InputMaybe<Scalars['String']['input']>;
-  maxConsumptionsPerToken?: InputMaybe<Scalars['Int']['input']>;
-  tokenId?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** order by sum() on columns of table "redeemable" */
-export type Redeemable_Sum_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by var_pop() on columns of table "redeemable" */
-export type Redeemable_Var_Pop_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by var_samp() on columns of table "redeemable" */
-export type Redeemable_Var_Samp_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by variance() on columns of table "redeemable" */
-export type Redeemable_Variance_Order_By = {
-  baseAmount?: InputMaybe<Order_By>;
-  maxConsumptionsPerToken?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** columns and relationships of "redemption" */
-export type Redemption = {
-  __typename?: 'redemption';
-  amount: Scalars['bigint']['output'];
-  createdAt: Scalars['timestamptz']['output'];
-  id: Scalars['Int']['output'];
-  /** An object relationship */
-  objkt?: Maybe<Objkt>;
-  objktId?: Maybe<Scalars['Int']['output']>;
-  objktIssuerVersion?: Maybe<Scalars['generative_token_version']['output']>;
-  /** An object relationship */
-  redeemable?: Maybe<Redeemable>;
-  redeemableAddress?: Maybe<Scalars['String']['output']>;
-  redeemerId?: Maybe<Scalars['String']['output']>;
-  /** An object relationship */
-  user?: Maybe<User>;
-};
-
-/** order by aggregate values of table "redemption" */
-export type Redemption_Aggregate_Order_By = {
-  avg?: InputMaybe<Redemption_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Redemption_Max_Order_By>;
-  min?: InputMaybe<Redemption_Min_Order_By>;
-  stddev?: InputMaybe<Redemption_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Redemption_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Redemption_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Redemption_Sum_Order_By>;
-  var_pop?: InputMaybe<Redemption_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Redemption_Var_Samp_Order_By>;
-  variance?: InputMaybe<Redemption_Variance_Order_By>;
-};
-
-/** order by avg() on columns of table "redemption" */
-export type Redemption_Avg_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "redemption". All fields are combined with a logical 'AND'. */
-export type Redemption_Bool_Exp = {
-  _and?: InputMaybe<Array<Redemption_Bool_Exp>>;
-  _not?: InputMaybe<Redemption_Bool_Exp>;
-  _or?: InputMaybe<Array<Redemption_Bool_Exp>>;
-  amount?: InputMaybe<Bigint_Comparison_Exp>;
-  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  objkt?: InputMaybe<Objkt_Bool_Exp>;
-  objktId?: InputMaybe<Int_Comparison_Exp>;
-  objktIssuerVersion?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
-  redeemable?: InputMaybe<Redeemable_Bool_Exp>;
-  redeemableAddress?: InputMaybe<String_Comparison_Exp>;
-  redeemerId?: InputMaybe<String_Comparison_Exp>;
-  user?: InputMaybe<User_Bool_Exp>;
-};
-
-/** order by max() on columns of table "redemption" */
-export type Redemption_Max_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-  objktIssuerVersion?: InputMaybe<Order_By>;
-  redeemableAddress?: InputMaybe<Order_By>;
-  redeemerId?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "redemption" */
-export type Redemption_Min_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-  objktIssuerVersion?: InputMaybe<Order_By>;
-  redeemableAddress?: InputMaybe<Order_By>;
-  redeemerId?: InputMaybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "redemption". */
-export type Redemption_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objkt?: InputMaybe<Objkt_Order_By>;
-  objktId?: InputMaybe<Order_By>;
-  objktIssuerVersion?: InputMaybe<Order_By>;
-  redeemable?: InputMaybe<Redeemable_Order_By>;
-  redeemableAddress?: InputMaybe<Order_By>;
-  redeemerId?: InputMaybe<Order_By>;
-  user?: InputMaybe<User_Order_By>;
-};
-
-/** select columns of table "redemption" */
-export enum Redemption_Select_Column {
-  /** column name */
-  Amount = 'amount',
-  /** column name */
-  CreatedAt = 'createdAt',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  ObjktId = 'objktId',
-  /** column name */
-  ObjktIssuerVersion = 'objktIssuerVersion',
-  /** column name */
-  RedeemableAddress = 'redeemableAddress',
-  /** column name */
-  RedeemerId = 'redeemerId'
-}
-
-/** order by stddev() on columns of table "redemption" */
-export type Redemption_Stddev_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_pop() on columns of table "redemption" */
-export type Redemption_Stddev_Pop_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_samp() on columns of table "redemption" */
-export type Redemption_Stddev_Samp_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "redemption" */
-export type Redemption_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Redemption_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Redemption_Stream_Cursor_Value_Input = {
-  amount?: InputMaybe<Scalars['bigint']['input']>;
-  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
-  objktId?: InputMaybe<Scalars['Int']['input']>;
-  objktIssuerVersion?: InputMaybe<Scalars['generative_token_version']['input']>;
-  redeemableAddress?: InputMaybe<Scalars['String']['input']>;
-  redeemerId?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** order by sum() on columns of table "redemption" */
-export type Redemption_Sum_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** order by var_pop() on columns of table "redemption" */
-export type Redemption_Var_Pop_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** order by var_samp() on columns of table "redemption" */
-export type Redemption_Var_Samp_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** order by variance() on columns of table "redemption" */
-export type Redemption_Variance_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  objktId?: InputMaybe<Order_By>;
-};
-
-/** columns and relationships of "report" */
-export type Report = {
-  __typename?: 'report';
-  createdAt: Scalars['timestamptz']['output'];
-  /** An object relationship */
-  generative_token?: Maybe<Generative_Token>;
-  id: Scalars['uuid']['output'];
-  /** An object relationship */
-  moderation_reason?: Maybe<Moderation_Reason>;
-  reasonId?: Maybe<Scalars['String']['output']>;
-  tokenId?: Maybe<Scalars['Int']['output']>;
-  /** An object relationship */
-  user?: Maybe<User>;
-  userId?: Maybe<Scalars['String']['output']>;
-};
-
-/** order by aggregate values of table "report" */
-export type Report_Aggregate_Order_By = {
-  avg?: InputMaybe<Report_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Report_Max_Order_By>;
-  min?: InputMaybe<Report_Min_Order_By>;
-  stddev?: InputMaybe<Report_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Report_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Report_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Report_Sum_Order_By>;
-  var_pop?: InputMaybe<Report_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Report_Var_Samp_Order_By>;
-  variance?: InputMaybe<Report_Variance_Order_By>;
-};
-
-/** order by avg() on columns of table "report" */
-export type Report_Avg_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "report". All fields are combined with a logical 'AND'. */
-export type Report_Bool_Exp = {
-  _and?: InputMaybe<Array<Report_Bool_Exp>>;
-  _not?: InputMaybe<Report_Bool_Exp>;
-  _or?: InputMaybe<Array<Report_Bool_Exp>>;
-  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  moderation_reason?: InputMaybe<Moderation_Reason_Bool_Exp>;
-  reasonId?: InputMaybe<String_Comparison_Exp>;
-  tokenId?: InputMaybe<Int_Comparison_Exp>;
-  user?: InputMaybe<User_Bool_Exp>;
-  userId?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** order by max() on columns of table "report" */
-export type Report_Max_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  reasonId?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-  userId?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "report" */
-export type Report_Min_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  reasonId?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-  userId?: InputMaybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "report". */
-export type Report_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  generative_token?: InputMaybe<Generative_Token_Order_By>;
-  id?: InputMaybe<Order_By>;
-  moderation_reason?: InputMaybe<Moderation_Reason_Order_By>;
-  reasonId?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-  user?: InputMaybe<User_Order_By>;
-  userId?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "report" */
-export enum Report_Select_Column {
-  /** column name */
-  CreatedAt = 'createdAt',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  ReasonId = 'reasonId',
-  /** column name */
-  TokenId = 'tokenId',
-  /** column name */
-  UserId = 'userId'
-}
-
-/** order by stddev() on columns of table "report" */
-export type Report_Stddev_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_pop() on columns of table "report" */
-export type Report_Stddev_Pop_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_samp() on columns of table "report" */
-export type Report_Stddev_Samp_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "report" */
-export type Report_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Report_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Report_Stream_Cursor_Value_Input = {
-  createdAt?: InputMaybe<Scalars['timestamptz']['input']>;
-  id?: InputMaybe<Scalars['uuid']['input']>;
-  reasonId?: InputMaybe<Scalars['String']['input']>;
-  tokenId?: InputMaybe<Scalars['Int']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** order by sum() on columns of table "report" */
-export type Report_Sum_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by var_pop() on columns of table "report" */
-export type Report_Var_Pop_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by var_samp() on columns of table "report" */
-export type Report_Var_Samp_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by variance() on columns of table "report" */
-export type Report_Variance_Order_By = {
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** columns and relationships of "reserve" */
-export type Reserve = {
-  __typename?: 'reserve';
-  amount: Scalars['Int']['output'];
-  data?: Maybe<Scalars['jsonb']['output']>;
-  /** An object relationship */
-  generative_token: Generative_Token;
-  id: Scalars['Int']['output'];
-  method: Scalars['Int']['output'];
-  tokenId: Scalars['Int']['output'];
-};
-
-
-/** columns and relationships of "reserve" */
-export type ReserveDataArgs = {
-  path?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** order by aggregate values of table "reserve" */
-export type Reserve_Aggregate_Order_By = {
-  avg?: InputMaybe<Reserve_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Reserve_Max_Order_By>;
-  min?: InputMaybe<Reserve_Min_Order_By>;
-  stddev?: InputMaybe<Reserve_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Reserve_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Reserve_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Reserve_Sum_Order_By>;
-  var_pop?: InputMaybe<Reserve_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Reserve_Var_Samp_Order_By>;
-  variance?: InputMaybe<Reserve_Variance_Order_By>;
-};
-
-/** order by avg() on columns of table "reserve" */
-export type Reserve_Avg_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "reserve". All fields are combined with a logical 'AND'. */
-export type Reserve_Bool_Exp = {
-  _and?: InputMaybe<Array<Reserve_Bool_Exp>>;
-  _not?: InputMaybe<Reserve_Bool_Exp>;
-  _or?: InputMaybe<Array<Reserve_Bool_Exp>>;
-  amount?: InputMaybe<Int_Comparison_Exp>;
-  data?: InputMaybe<Jsonb_Comparison_Exp>;
-  generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  method?: InputMaybe<Int_Comparison_Exp>;
-  tokenId?: InputMaybe<Int_Comparison_Exp>;
-};
-
-/** order by max() on columns of table "reserve" */
-export type Reserve_Max_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "reserve" */
-export type Reserve_Min_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "reserve". */
-export type Reserve_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  data?: InputMaybe<Order_By>;
-  generative_token?: InputMaybe<Generative_Token_Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "reserve" */
-export enum Reserve_Select_Column {
-  /** column name */
-  Amount = 'amount',
-  /** column name */
-  Data = 'data',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Method = 'method',
-  /** column name */
-  TokenId = 'tokenId'
-}
-
-/** order by stddev() on columns of table "reserve" */
-export type Reserve_Stddev_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_pop() on columns of table "reserve" */
-export type Reserve_Stddev_Pop_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by stddev_samp() on columns of table "reserve" */
-export type Reserve_Stddev_Samp_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "reserve" */
-export type Reserve_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Reserve_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Reserve_Stream_Cursor_Value_Input = {
-  amount?: InputMaybe<Scalars['Int']['input']>;
-  data?: InputMaybe<Scalars['jsonb']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
-  method?: InputMaybe<Scalars['Int']['input']>;
-  tokenId?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** order by sum() on columns of table "reserve" */
-export type Reserve_Sum_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by var_pop() on columns of table "reserve" */
-export type Reserve_Var_Pop_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by var_samp() on columns of table "reserve" */
-export type Reserve_Var_Samp_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
-/** order by variance() on columns of table "reserve" */
-export type Reserve_Variance_Order_By = {
-  amount?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  method?: InputMaybe<Order_By>;
-  tokenId?: InputMaybe<Order_By>;
-};
-
 /** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
 export type Smallint_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['smallint']['input']>;
@@ -11470,7 +10133,6 @@ export type Split = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   pct: Scalars['Int']['output'];
   /** An object relationship */
   redeemable?: Maybe<Redeemable>;
@@ -11516,7 +10178,6 @@ export type Split_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   pct?: InputMaybe<Int_Comparison_Exp>;
   redeemable?: InputMaybe<Redeemable_Bool_Exp>;
   redeemable_address?: InputMaybe<String_Comparison_Exp>;
@@ -11531,7 +10192,6 @@ export type Split_Max_Order_By = {
   generative_token_secondary_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   pct?: InputMaybe<Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   user_id?: InputMaybe<Order_By>;
@@ -11544,7 +10204,6 @@ export type Split_Min_Order_By = {
   generative_token_secondary_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   pct?: InputMaybe<Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
   user_id?: InputMaybe<Order_By>;
@@ -11561,7 +10220,6 @@ export type Split_Order_By = {
   id?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   pct?: InputMaybe<Order_By>;
   redeemable?: InputMaybe<Redeemable_Order_By>;
   redeemable_address?: InputMaybe<Order_By>;
@@ -11581,8 +10239,6 @@ export enum Split_Select_Column {
   Id = 'id',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   Pct = 'pct',
   /** column name */
@@ -11627,7 +10283,6 @@ export type Split_Stream_Cursor_Value_Input = {
   generative_token_secondary_id?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   pct?: InputMaybe<Scalars['Int']['input']>;
   redeemable_address?: InputMaybe<Scalars['String']['input']>;
   user_id?: InputMaybe<Scalars['String']['input']>;
@@ -11663,150 +10318,6 @@ export type Split_Variance_Order_By = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
-  /** fetch data from the table: "action" */
-  action: Array<Action>;
-  /** fetch data from the table: "action" using primary key columns */
-  action_by_pk?: Maybe<Action>;
-  /** fetch data from the table in a streaming manner: "action" */
-  action_stream: Array<Action>;
-  /** fetch data from the table: "article" */
-  article: Array<Article>;
-  /** fetch data from the table: "article" using primary key columns */
-  article_by_pk?: Maybe<Article>;
-  /** fetch data from the table: "article_generative_token" */
-  article_generative_token: Array<Article_Generative_Token>;
-  /** fetch data from the table: "article_generative_token" using primary key columns */
-  article_generative_token_by_pk?: Maybe<Article_Generative_Token>;
-  /** fetch data from the table in a streaming manner: "article_generative_token" */
-  article_generative_token_stream: Array<Article_Generative_Token>;
-  /** fetch data from the table: "article_ledger" */
-  article_ledger: Array<Article_Ledger>;
-  /** fetch data from the table: "article_ledger" using primary key columns */
-  article_ledger_by_pk?: Maybe<Article_Ledger>;
-  /** fetch data from the table in a streaming manner: "article_ledger" */
-  article_ledger_stream: Array<Article_Ledger>;
-  /** fetch data from the table: "article_revision" */
-  article_revision: Array<Article_Revision>;
-  /** fetch data from the table: "article_revision" using primary key columns */
-  article_revision_by_pk?: Maybe<Article_Revision>;
-  /** fetch data from the table in a streaming manner: "article_revision" */
-  article_revision_stream: Array<Article_Revision>;
-  /** fetch data from the table in a streaming manner: "article" */
-  article_stream: Array<Article>;
-  /** fetch data from the table: "auction" */
-  auction: Array<Auction>;
-  /** fetch data from the table: "auction_bid" */
-  auction_bid: Array<Auction_Bid>;
-  /** fetch data from the table: "auction_bid" using primary key columns */
-  auction_bid_by_pk?: Maybe<Auction_Bid>;
-  /** fetch data from the table in a streaming manner: "auction_bid" */
-  auction_bid_stream: Array<Auction_Bid>;
-  /** fetch data from the table: "auction_bid_table" */
-  auction_bid_table: Array<Auction_Bid_Table>;
-  /** fetch data from the table: "auction_bid_table" using primary key columns */
-  auction_bid_table_by_pk?: Maybe<Auction_Bid_Table>;
-  /** fetch data from the table in a streaming manner: "auction_bid_table" */
-  auction_bid_table_stream: Array<Auction_Bid_Table>;
-  /** fetch data from the table: "auction" using primary key columns */
-  auction_by_pk?: Maybe<Auction>;
-  /** fetch data from the table in a streaming manner: "auction" */
-  auction_stream: Array<Auction>;
-  /** fetch data from the table: "codex" */
-  codex: Array<Codex>;
-  /** fetch data from the table: "codex" using primary key columns */
-  codex_by_pk?: Maybe<Codex>;
-  /** fetch data from the table in a streaming manner: "codex" */
-  codex_stream: Array<Codex>;
-  /** fetch data from the table: "codex_update_request" */
-  codex_update_request: Array<Codex_Update_Request>;
-  /** fetch data from the table: "codex_update_request" using primary key columns */
-  codex_update_request_by_pk?: Maybe<Codex_Update_Request>;
-  /** fetch data from the table in a streaming manner: "codex_update_request" */
-  codex_update_request_stream: Array<Codex_Update_Request>;
-  /** fetch data from the table: "collaboration" */
-  collaboration: Array<Collaboration>;
-  /** fetch data from the table: "collaboration" using primary key columns */
-  collaboration_by_pk?: Maybe<Collaboration>;
-  /** fetch data from the table in a streaming manner: "collaboration" */
-  collaboration_stream: Array<Collaboration>;
-  /** fetch data from the table: "collection_offer" */
-  collection_offer: Array<Collection_Offer>;
-  /** fetch data from the table: "collection_offer" using primary key columns */
-  collection_offer_by_pk?: Maybe<Collection_Offer>;
-  /** fetch data from the table in a streaming manner: "collection_offer" */
-  collection_offer_stream: Array<Collection_Offer>;
-  /** fetch data from the table: "generative_token" */
-  generative_token: Array<Generative_Token>;
-  /** fetch data from the table: "generative_token" using primary key columns */
-  generative_token_by_pk?: Maybe<Generative_Token>;
-  /** fetch data from the table in a streaming manner: "generative_token" */
-  generative_token_stream: Array<Generative_Token>;
-  /** fetch data from the table: "gentk_assign" */
-  gentk_assign: Array<Gentk_Assign>;
-  /** fetch data from the table: "gentk_assign" using primary key columns */
-  gentk_assign_by_pk?: Maybe<Gentk_Assign>;
-  /** fetch data from the table in a streaming manner: "gentk_assign" */
-  gentk_assign_stream: Array<Gentk_Assign>;
-  /** fetch data from the table: "ipfs_cid" */
-  ipfs_cid: Array<Ipfs_Cid>;
-  /** fetch data from the table: "ipfs_cid" using primary key columns */
-  ipfs_cid_by_pk?: Maybe<Ipfs_Cid>;
-  /** fetch data from the table in a streaming manner: "ipfs_cid" */
-  ipfs_cid_stream: Array<Ipfs_Cid>;
-  /** fetch data from the table: "listing" */
-  listing: Array<Listing>;
-  /** fetch data from the table: "listing" using primary key columns */
-  listing_by_pk?: Maybe<Listing>;
-  /** fetch data from the table in a streaming manner: "listing" */
-  listing_stream: Array<Listing>;
-  /** fetch data from the table: "market_stats" */
-  market_stats: Array<Market_Stats>;
-  /** fetch data from the table: "market_stats" using primary key columns */
-  market_stats_by_pk?: Maybe<Market_Stats>;
-  /** fetch data from the table: "market_stats_history" */
-  market_stats_history: Array<Market_Stats_History>;
-  /** fetch data from the table: "market_stats_history" using primary key columns */
-  market_stats_history_by_pk?: Maybe<Market_Stats_History>;
-  /** fetch data from the table in a streaming manner: "market_stats_history" */
-  market_stats_history_stream: Array<Market_Stats_History>;
-  /** fetch data from the table in a streaming manner: "market_stats" */
-  market_stats_stream: Array<Market_Stats>;
-  /** fetch data from the table: "media_image" */
-  media_image: Array<Media_Image>;
-  /** fetch data from the table: "media_image" using primary key columns */
-  media_image_by_pk?: Maybe<Media_Image>;
-  /** fetch data from the table in a streaming manner: "media_image" */
-  media_image_stream: Array<Media_Image>;
-  /** fetch data from the table: "metric" */
-  metric: Array<Metric>;
-  /** fetch data from the table: "metric" using primary key columns */
-  metric_by_pk?: Maybe<Metric>;
-  /** fetch data from the table in a streaming manner: "metric" */
-  metric_stream: Array<Metric>;
-  /** fetch data from the table: "mint_ticket" */
-  mint_ticket: Array<Mint_Ticket>;
-  /** fetch data from the table: "mint_ticket" using primary key columns */
-  mint_ticket_by_pk?: Maybe<Mint_Ticket>;
-  /** An array relationship */
-  mint_ticket_settings: Array<Mint_Ticket_Settings>;
-  /** fetch data from the table: "mint_ticket_settings" using primary key columns */
-  mint_ticket_settings_by_pk?: Maybe<Mint_Ticket_Settings>;
-  /** fetch data from the table in a streaming manner: "mint_ticket_settings" */
-  mint_ticket_settings_stream: Array<Mint_Ticket_Settings>;
-  /** fetch data from the table in a streaming manner: "mint_ticket" */
-  mint_ticket_stream: Array<Mint_Ticket>;
-  /** fetch data from the table: "moderation_reason" */
-  moderation_reason: Array<Moderation_Reason>;
-  /** fetch data from the table: "moderation_reason" using primary key columns */
-  moderation_reason_by_pk?: Maybe<Moderation_Reason>;
-  /** fetch data from the table in a streaming manner: "moderation_reason" */
-  moderation_reason_stream: Array<Moderation_Reason>;
-  /** fetch data from the table: "objkt" */
-  objkt: Array<Objkt>;
-  /** fetch data from the table: "objkt" using primary key columns */
-  objkt_by_pk?: Maybe<Objkt>;
-  /** fetch data from the table in a streaming manner: "objkt" */
-  objkt_stream: Array<Objkt>;
   offchain?: Maybe<Offchain_Subscription>;
   onchain?: Maybe<Onchain_Subscription>;
 };
@@ -11837,7 +10348,6 @@ export type Transaction = {
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
-  objkt_issuer_version?: Maybe<Scalars['generative_token_version']['output']>;
   op_hash: Scalars['String']['output'];
   price: Scalars['numeric']['output'];
   ticket_id?: Maybe<Scalars['String']['output']>;
@@ -11879,7 +10389,6 @@ export type Transaction_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
-  objkt_issuer_version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
   op_hash?: InputMaybe<String_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   ticket_id?: InputMaybe<String_Comparison_Exp>;
@@ -11893,7 +10402,6 @@ export type Transaction_Max_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   op_hash?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   ticket_id?: InputMaybe<Order_By>;
@@ -11907,7 +10415,6 @@ export type Transaction_Min_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   op_hash?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   ticket_id?: InputMaybe<Order_By>;
@@ -11924,7 +10431,6 @@ export type Transaction_Order_By = {
   id?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
-  objkt_issuer_version?: InputMaybe<Order_By>;
   op_hash?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   ticket_id?: InputMaybe<Order_By>;
@@ -11942,8 +10448,6 @@ export enum Transaction_Select_Column {
   Id = 'id',
   /** column name */
   ObjktId = 'objkt_id',
-  /** column name */
-  ObjktIssuerVersion = 'objkt_issuer_version',
   /** column name */
   OpHash = 'op_hash',
   /** column name */
@@ -11991,7 +10495,6 @@ export type Transaction_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
-  objkt_issuer_version?: InputMaybe<Scalars['generative_token_version']['input']>;
   op_hash?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   ticket_id?: InputMaybe<Scalars['String']['input']>;
@@ -12699,21 +11202,21 @@ export type GetAccountWalletsQueryVariables = Exact<{
 
 export type GetAccountWalletsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } }> } | null };
 
-export type Project_BaseDetailsFragment = { __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, status: any, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, status: any, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> };
+export type Project_BaseDetailsFragment = { __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> };
 
 export type Project_UserSecretsFragment = { __typename?: 'Project', state: string };
 
 export type GetAllProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllProjectsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, status: any, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, status: any, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
+export type GetAllProjectsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
 
 export type GetUserSubmissionsQueryVariables = Exact<{
   authorId: Scalars['uuid']['input'];
 }>;
 
 
-export type GetUserSubmissionsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, state: string, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, status: any, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, status: any, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
+export type GetUserSubmissionsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, state: string, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
 
 export type CreateProjectMutationVariables = Exact<{
   object: Project_Insert_Input;
@@ -12726,11 +11229,10 @@ export type Update_ProjectMutationVariables = Exact<{
   projectId: Scalars['uuid']['input'];
   projectData?: InputMaybe<Project_Set_Input>;
   projectMedias: Array<ProjectMedia_Insert_Input> | ProjectMedia_Insert_Input;
-  projectCollaborators: Array<ProjectCollaborator_Insert_Input> | ProjectCollaborator_Insert_Input;
 }>;
 
 
-export type Update_ProjectMutation = { __typename?: 'mutation_root', offchain?: { __typename?: 'offchain_mutation_frontend', delete_ProjectMedia?: { __typename?: 'ProjectMedia_mutation_response', affected_rows: number } | null, delete_ProjectCollaborator?: { __typename?: 'ProjectCollaborator_mutation_response', affected_rows: number } | null, update_Project?: { __typename?: 'Project_mutation_response', affected_rows: number } | null, insert_ProjectMedia?: { __typename?: 'ProjectMedia_mutation_response', affected_rows: number } | null, insert_ProjectCollaborator?: { __typename?: 'ProjectCollaborator_mutation_response', affected_rows: number } | null } | null };
+export type Update_ProjectMutation = { __typename?: 'mutation_root', offchain?: { __typename?: 'offchain_mutation_frontend', delete_ProjectMedia?: { __typename?: 'ProjectMedia_mutation_response', affected_rows: number } | null, update_Project?: { __typename?: 'Project_mutation_response', affected_rows: number } | null, insert_ProjectMedia?: { __typename?: 'ProjectMedia_mutation_response', affected_rows: number } | null } | null };
 
 export type Wallet_BaseDetailsFragment = { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> };
 
