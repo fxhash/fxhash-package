@@ -36,6 +36,24 @@ type Account {
   ): [Project!]!
 
   """An array relationship"""
+  collaboratedProjects(
+    """distinct select on columns"""
+    distinct_on: [ProjectCollaborator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ProjectCollaborator_order_by!]
+
+    """filter the rows returned"""
+    where: ProjectCollaborator_bool_exp
+  ): [ProjectCollaborator!]!
+
+  """An array relationship"""
   curatedProjects(
     """distinct select on columns"""
     distinct_on: [Project_select_column!]
@@ -210,6 +228,7 @@ input Account_bool_exp {
   _not: Account_bool_exp
   _or: [Account_bool_exp!]
   authoredProjects: Project_bool_exp
+  collaboratedProjects: ProjectCollaborator_bool_exp
   curatedProjects: Project_bool_exp
   id: uuid_comparison_exp
   mainWallet: Wallet_bool_exp
@@ -234,6 +253,7 @@ type Account_mutation_response {
 """Ordering options when selecting data from "Account"."""
 input Account_order_by {
   authoredProjects_aggregate: Project_aggregate_order_by
+  collaboratedProjects_aggregate: ProjectCollaborator_aggregate_order_by
   curatedProjects_aggregate: Project_aggregate_order_by
   id: order_by
   mainWallet: Wallet_order_by
@@ -715,6 +735,24 @@ type Project {
   authorId: uuid!
   blockchain: BlockchainNetwork
 
+  """An array relationship"""
+  collaborators(
+    """distinct select on columns"""
+    distinct_on: [ProjectCollaborator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ProjectCollaborator_order_by!]
+
+    """filter the rows returned"""
+    where: ProjectCollaborator_bool_exp
+  ): [ProjectCollaborator!]!
+
   """An object relationship"""
   curator: Account
   curatorId: uuid
@@ -746,6 +784,150 @@ type Project {
   state: ProjectState!
   storage: Storage
   title: String!
+}
+
+"""
+columns and relationships of "ProjectCollaborator"
+"""
+type ProjectCollaborator {
+  """An object relationship"""
+  account: Account!
+  collaboratorId: uuid!
+
+  """An object relationship"""
+  project: Project!
+  projectId: uuid!
+}
+
+"""
+order by aggregate values of table "ProjectCollaborator"
+"""
+input ProjectCollaborator_aggregate_order_by {
+  count: order_by
+  max: ProjectCollaborator_max_order_by
+  min: ProjectCollaborator_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "ProjectCollaborator"
+"""
+input ProjectCollaborator_arr_rel_insert_input {
+  data: [ProjectCollaborator_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: ProjectCollaborator_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "ProjectCollaborator". All fields are combined with a logical 'AND'.
+"""
+input ProjectCollaborator_bool_exp {
+  _and: [ProjectCollaborator_bool_exp!]
+  _not: ProjectCollaborator_bool_exp
+  _or: [ProjectCollaborator_bool_exp!]
+  account: Account_bool_exp
+  collaboratorId: uuid_comparison_exp
+  project: Project_bool_exp
+  projectId: uuid_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "ProjectCollaborator"
+"""
+enum ProjectCollaborator_constraint {
+  """
+  unique or primary key constraint on columns "collaboratorId", "projectId"
+  """
+  ProjectCollaborator_projectId_collaboratorId_key
+}
+
+"""
+input type for inserting data into table "ProjectCollaborator"
+"""
+input ProjectCollaborator_insert_input {
+  collaboratorId: uuid
+  project: Project_obj_rel_insert_input
+  projectId: uuid
+}
+
+"""
+order by max() on columns of table "ProjectCollaborator"
+"""
+input ProjectCollaborator_max_order_by {
+  collaboratorId: order_by
+  projectId: order_by
+}
+
+"""
+order by min() on columns of table "ProjectCollaborator"
+"""
+input ProjectCollaborator_min_order_by {
+  collaboratorId: order_by
+  projectId: order_by
+}
+
+"""
+response of any mutation on the table "ProjectCollaborator"
+"""
+type ProjectCollaborator_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [ProjectCollaborator!]!
+}
+
+"""
+on_conflict condition type for table "ProjectCollaborator"
+"""
+input ProjectCollaborator_on_conflict {
+  constraint: ProjectCollaborator_constraint!
+  update_columns: [ProjectCollaborator_update_column!]! = []
+  where: ProjectCollaborator_bool_exp
+}
+
+"""Ordering options when selecting data from "ProjectCollaborator"."""
+input ProjectCollaborator_order_by {
+  account: Account_order_by
+  collaboratorId: order_by
+  project: Project_order_by
+  projectId: order_by
+}
+
+"""
+select columns of table "ProjectCollaborator"
+"""
+enum ProjectCollaborator_select_column {
+  """column name"""
+  collaboratorId
+
+  """column name"""
+  projectId
+}
+
+"""
+Streaming cursor of the table "ProjectCollaborator"
+"""
+input ProjectCollaborator_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: ProjectCollaborator_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ProjectCollaborator_stream_cursor_value_input {
+  collaboratorId: uuid
+  projectId: uuid
+}
+
+"""
+placeholder for update columns of table "ProjectCollaborator" (current role has no relevant permissions)
+"""
+enum ProjectCollaborator_update_column {
+  """placeholder (do not use)"""
+  _PLACEHOLDER
 }
 
 """
@@ -1041,6 +1223,7 @@ input Project_bool_exp {
   author: Account_bool_exp
   authorId: uuid_comparison_exp
   blockchain: BlockchainNetwork_comparison_exp
+  collaborators: ProjectCollaborator_bool_exp
   curator: Account_bool_exp
   curatorId: uuid_comparison_exp
   description: String_comparison_exp
@@ -1089,6 +1272,7 @@ input type for inserting data into table "Project"
 """
 input Project_insert_input {
   blockchain: BlockchainNetwork
+  collaborators: ProjectCollaborator_arr_rel_insert_input
   curatorId: uuid
   description: String
   pricing: jsonb
@@ -1163,6 +1347,7 @@ input Project_order_by {
   author: Account_order_by
   authorId: order_by
   blockchain: order_by
+  collaborators_aggregate: ProjectCollaborator_aggregate_order_by
   curator: Account_order_by
   curatorId: order_by
   description: order_by
@@ -1799,7 +1984,6 @@ type action {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String!
 
   """An object relationship"""
@@ -1859,7 +2043,6 @@ input action_bool_exp {
   numeric_value: numeric_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   op_hash: String_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
@@ -1881,7 +2064,6 @@ input action_max_order_by {
   issuer_id: order_by
   numeric_value: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   redeemable_address: order_by
   target_id: order_by
@@ -1900,7 +2082,6 @@ input action_min_order_by {
   issuer_id: order_by
   numeric_value: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   redeemable_address: order_by
   target_id: order_by
@@ -1921,7 +2102,6 @@ input action_order_by {
   numeric_value: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
@@ -1957,9 +2137,6 @@ enum action_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   op_hash
@@ -2024,7 +2201,6 @@ input action_stream_cursor_value_input {
   metadata: jsonb
   numeric_value: numeric
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String
   redeemable_address: String
   target_id: String
@@ -3021,7 +3197,6 @@ type auction {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   reserve_price: bigint!
   seller_id: String
 
@@ -3356,7 +3531,6 @@ input auction_bool_exp {
   min_duration: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   reserve_price: bigint_comparison_exp
   seller_id: String_comparison_exp
   user: user_bool_exp
@@ -3376,7 +3550,6 @@ input auction_max_order_by {
   id: order_by
   min_duration: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   reserve_price: order_by
   seller_id: order_by
   version: order_by
@@ -3395,7 +3568,6 @@ input auction_min_order_by {
   id: order_by
   min_duration: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   reserve_price: order_by
   seller_id: order_by
   version: order_by
@@ -3415,7 +3587,6 @@ input auction_order_by {
   min_duration: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   reserve_price: order_by
   seller_id: order_by
   user: user_order_by
@@ -3452,9 +3623,6 @@ enum auction_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   reserve_price
@@ -3524,7 +3692,6 @@ input auction_stream_cursor_value_input {
   id: Int
   min_duration: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   reserve_price: bigint
   seller_id: String
   version: Int
@@ -5119,8 +5286,7 @@ type gentk_assign {
   assigned_at: timestamptz
   attempts: Int!
   created_at: timestamptz!
-  gentk_id: String!
-  gentk_issuer_version: generative_token_version!
+  id: String!
 
   """An object relationship"""
   objkt: objkt
@@ -5138,8 +5304,7 @@ input gentk_assign_bool_exp {
   assigned_at: timestamptz_comparison_exp
   attempts: Int_comparison_exp
   created_at: timestamptz_comparison_exp
-  gentk_id: String_comparison_exp
-  gentk_issuer_version: generative_token_version_comparison_exp
+  id: String_comparison_exp
   objkt: objkt_bool_exp
   retries: Int_comparison_exp
   state: gentk_assign_state_enum_comparison_exp
@@ -5150,8 +5315,7 @@ input gentk_assign_order_by {
   assigned_at: order_by
   attempts: order_by
   created_at: order_by
-  gentk_id: order_by
-  gentk_issuer_version: order_by
+  id: order_by
   objkt: objkt_order_by
   retries: order_by
   state: order_by
@@ -5171,10 +5335,7 @@ enum gentk_assign_select_column {
   created_at
 
   """column name"""
-  gentk_id
-
-  """column name"""
-  gentk_issuer_version
+  id
 
   """column name"""
   retries
@@ -5216,8 +5377,7 @@ input gentk_assign_stream_cursor_value_input {
   assigned_at: timestamptz
   attempts: Int
   created_at: timestamptz
-  gentk_id: String
-  gentk_issuer_version: generative_token_version
+  id: String
   retries: Int
   state: gentk_assign_state_enum
 }
@@ -5611,7 +5771,6 @@ type listing {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric!
   royalties: Int!
 
@@ -5675,7 +5834,6 @@ input listing_bool_exp {
   market_stats_histories: market_stats_history_bool_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   price: numeric_comparison_exp
   royalties: Int_comparison_exp
   user: user_bool_exp
@@ -5696,7 +5854,6 @@ input listing_max_order_by {
   id: order_by
   issuer_id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   royalties: order_by
   version: order_by
@@ -5715,7 +5872,6 @@ input listing_min_order_by {
   id: order_by
   issuer_id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   royalties: order_by
   version: order_by
@@ -5740,7 +5896,6 @@ input listing_order_by {
   market_stats_histories_aggregate: market_stats_history_aggregate_order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   royalties: order_by
   user: user_order_by
@@ -5778,9 +5933,6 @@ enum listing_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   price
@@ -5847,7 +5999,6 @@ input listing_stream_cursor_value_input {
   id: String
   issuer_id: String
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric
   royalties: Int
   version: Int
@@ -7463,7 +7614,6 @@ type objkt {
   id: String!
   input_bytes: String
   issuer_id: String!
-  issuer_version: generative_token_version!
   iteration: numeric
 
   """An array relationship"""
@@ -7630,7 +7780,6 @@ input objkt_bool_exp {
   id: String_comparison_exp
   input_bytes: String_comparison_exp
   issuer_id: String_comparison_exp
-  issuer_version: generative_token_version_comparison_exp
   iteration: numeric_comparison_exp
   listings: listing_bool_exp
   media_image: media_image_bool_exp
@@ -7666,7 +7815,6 @@ input objkt_max_order_by {
   id: order_by
   input_bytes: order_by
   issuer_id: order_by
-  issuer_version: order_by
   iteration: order_by
   metadata_uri: order_by
   minter_id: order_by
@@ -7692,7 +7840,6 @@ input objkt_min_order_by {
   id: order_by
   input_bytes: order_by
   issuer_id: order_by
-  issuer_version: order_by
   iteration: order_by
   metadata_uri: order_by
   minter_id: order_by
@@ -7723,7 +7870,6 @@ input objkt_order_by {
   id: order_by
   input_bytes: order_by
   issuer_id: order_by
-  issuer_version: order_by
   iteration: order_by
   listings_aggregate: listing_aggregate_order_by
   media_image: media_image_order_by
@@ -7783,9 +7929,6 @@ enum objkt_select_column {
 
   """column name"""
   issuer_id
-
-  """column name"""
-  issuer_version
 
   """column name"""
   iteration
@@ -7881,7 +8024,6 @@ input objkt_stream_cursor_value_input {
   id: String
   input_bytes: String
   issuer_id: String
-  issuer_version: generative_token_version
   iteration: numeric
   metadata: json
   metadata_uri: String
@@ -7939,6 +8081,14 @@ input objkt_variance_order_by {
 
 type offchain_mutation_frontend {
   """
+  delete data from the table: "ProjectCollaborator"
+  """
+  delete_ProjectCollaborator(
+    """filter the rows which have to be deleted"""
+    where: ProjectCollaborator_bool_exp!
+  ): ProjectCollaborator_mutation_response
+
+  """
   delete data from the table: "ProjectMedia"
   """
   delete_ProjectMedia(
@@ -7956,6 +8106,28 @@ type offchain_mutation_frontend {
     """upsert condition"""
     on_conflict: Project_on_conflict
   ): Project_mutation_response
+
+  """
+  insert data into the table: "ProjectCollaborator"
+  """
+  insert_ProjectCollaborator(
+    """the rows to be inserted"""
+    objects: [ProjectCollaborator_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: ProjectCollaborator_on_conflict
+  ): ProjectCollaborator_mutation_response
+
+  """
+  insert a single row into the table: "ProjectCollaborator"
+  """
+  insert_ProjectCollaborator_one(
+    """the row to be inserted"""
+    object: ProjectCollaborator_insert_input!
+
+    """upsert condition"""
+    on_conflict: ProjectCollaborator_on_conflict
+  ): ProjectCollaborator
 
   """
   insert data into the table: "ProjectMedia"
@@ -8276,6 +8448,26 @@ type offchain_query {
   ): [Project!]!
 
   """
+  fetch data from the table: "ProjectCollaborator"
+  """
+  ProjectCollaborator(
+    """distinct select on columns"""
+    distinct_on: [ProjectCollaborator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ProjectCollaborator_order_by!]
+
+    """filter the rows returned"""
+    where: ProjectCollaborator_bool_exp
+  ): [ProjectCollaborator!]!
+
+  """
   fetch data from the table: "ProjectMedia"
   """
   ProjectMedia(
@@ -8577,6 +8769,40 @@ type offchain_subscription {
   ): [Project!]!
 
   """
+  fetch data from the table: "ProjectCollaborator"
+  """
+  ProjectCollaborator(
+    """distinct select on columns"""
+    distinct_on: [ProjectCollaborator_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [ProjectCollaborator_order_by!]
+
+    """filter the rows returned"""
+    where: ProjectCollaborator_bool_exp
+  ): [ProjectCollaborator!]!
+
+  """
+  fetch data from the table in a streaming manner: "ProjectCollaborator"
+  """
+  ProjectCollaborator_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ProjectCollaborator_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: ProjectCollaborator_bool_exp
+  ): [ProjectCollaborator!]!
+
+  """
   fetch data from the table: "ProjectMedia"
   """
   ProjectMedia(
@@ -8754,7 +8980,6 @@ type offer {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric!
 
   """An object relationship"""
@@ -8801,7 +9026,6 @@ input offer_bool_exp {
   id: String_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   price: numeric_comparison_exp
   user: user_bool_exp
   version: Int_comparison_exp
@@ -8817,7 +9041,6 @@ input offer_max_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   version: order_by
 }
@@ -8832,7 +9055,6 @@ input offer_min_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   version: order_by
 }
@@ -8846,7 +9068,6 @@ input offer_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   price: order_by
   user: user_order_by
   version: order_by
@@ -8873,9 +9094,6 @@ enum offer_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   price
@@ -8927,7 +9145,6 @@ input offer_stream_cursor_value_input {
   created_at: timestamptz
   id: String
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   price: numeric
   version: Int
 }
@@ -9223,9 +9440,6 @@ type onchain_query {
     where: collaboration_bool_exp
   ): [collaboration!]!
 
-  """fetch data from the table: "collaboration" using primary key columns"""
-  collaboration_by_pk(collaboration_contract_id: String!, collaborator_id: String!): collaboration
-
   """
   fetch data from the table: "collection_offer"
   """
@@ -9297,7 +9511,7 @@ type onchain_query {
   ): [gentk_assign!]!
 
   """fetch data from the table: "gentk_assign" using primary key columns"""
-  gentk_assign_by_pk(gentk_id: String!, gentk_issuer_version: generative_token_version!): gentk_assign
+  gentk_assign_by_pk(id: String!): gentk_assign
 
   """
   fetch data from the table: "indexed_operation"
@@ -9602,7 +9816,7 @@ type onchain_query {
   ): [objkt!]!
 
   """fetch data from the table: "objkt" using primary key columns"""
-  objkt_by_pk(id: String!, issuer_version: generative_token_version!): objkt
+  objkt_by_pk(id: String!): objkt
 
   """
   fetch data from the table: "offer"
@@ -10259,9 +10473,6 @@ type onchain_subscription {
     where: collaboration_bool_exp
   ): [collaboration!]!
 
-  """fetch data from the table: "collaboration" using primary key columns"""
-  collaboration_by_pk(collaboration_contract_id: String!, collaborator_id: String!): collaboration
-
   """
   fetch data from the table in a streaming manner: "collaboration"
   """
@@ -10375,7 +10586,7 @@ type onchain_subscription {
   ): [gentk_assign!]!
 
   """fetch data from the table: "gentk_assign" using primary key columns"""
-  gentk_assign_by_pk(gentk_id: String!, gentk_issuer_version: generative_token_version!): gentk_assign
+  gentk_assign_by_pk(id: String!): gentk_assign
 
   """
   fetch data from the table in a streaming manner: "gentk_assign"
@@ -10862,7 +11073,7 @@ type onchain_subscription {
   ): [objkt!]!
 
   """fetch data from the table: "objkt" using primary key columns"""
-  objkt_by_pk(id: String!, issuer_version: generative_token_version!): objkt
+  objkt_by_pk(id: String!): objkt
 
   """
   fetch data from the table in a streaming manner: "objkt"
@@ -11938,7 +12149,6 @@ type redemption {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
 
   """An object relationship"""
   redeemable: redeemable
@@ -11986,7 +12196,6 @@ input redemption_bool_exp {
   id: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
   redeemer_id: String_comparison_exp
@@ -12001,7 +12210,6 @@ input redemption_max_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   redeemable_address: order_by
   redeemer_id: order_by
 }
@@ -12014,7 +12222,6 @@ input redemption_min_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   redeemable_address: order_by
   redeemer_id: order_by
 }
@@ -12026,7 +12233,6 @@ input redemption_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
   redeemer_id: order_by
@@ -12048,9 +12254,6 @@ enum redemption_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   redeemable_address
@@ -12100,7 +12303,6 @@ input redemption_stream_cursor_value_input {
   created_at: timestamptz
   id: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   redeemable_address: String
   redeemer_id: String
 }
@@ -12485,7 +12687,6 @@ type split {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   pct: Int!
 
   """An object relationship"""
@@ -12539,7 +12740,6 @@ input split_bool_exp {
   id: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   pct: Int_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
@@ -12556,7 +12756,6 @@ input split_max_order_by {
   generative_token_secondary_id: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   pct: order_by
   redeemable_address: order_by
   user_id: order_by
@@ -12571,7 +12770,6 @@ input split_min_order_by {
   generative_token_secondary_id: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   pct: order_by
   redeemable_address: order_by
   user_id: order_by
@@ -12588,7 +12786,6 @@ input split_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   pct: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
@@ -12614,9 +12811,6 @@ enum split_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   pct
@@ -12673,7 +12867,6 @@ input split_stream_cursor_value_input {
   generative_token_secondary_id: String
   id: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   pct: Int
   redeemable_address: String
   user_id: String
@@ -12753,7 +12946,6 @@ type transaction {
   """An object relationship"""
   objkt: objkt
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String!
   price: numeric!
   ticket_id: String
@@ -12801,7 +12993,6 @@ input transaction_bool_exp {
   id: Int_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
-  objkt_issuer_version: generative_token_version_comparison_exp
   op_hash: String_comparison_exp
   price: numeric_comparison_exp
   ticket_id: String_comparison_exp
@@ -12817,7 +13008,6 @@ input transaction_max_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   price: order_by
   ticket_id: order_by
@@ -12833,7 +13023,6 @@ input transaction_min_order_by {
   created_at: order_by
   id: order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   price: order_by
   ticket_id: order_by
@@ -12850,7 +13039,6 @@ input transaction_order_by {
   id: order_by
   objkt: objkt_order_by
   objkt_id: order_by
-  objkt_issuer_version: order_by
   op_hash: order_by
   price: order_by
   ticket_id: order_by
@@ -12873,9 +13061,6 @@ enum transaction_select_column {
 
   """column name"""
   objkt_id
-
-  """column name"""
-  objkt_issuer_version
 
   """column name"""
   op_hash
@@ -12937,7 +13122,6 @@ input transaction_stream_cursor_value_input {
   created_at: timestamptz
   id: Int
   objkt_id: String
-  objkt_issuer_version: generative_token_version
   op_hash: String
   price: numeric
   ticket_id: String
