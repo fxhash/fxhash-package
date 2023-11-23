@@ -8,7 +8,6 @@ import {
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
-import { as } from "vitest/dist/reporters-5f784f42"
 
 export type TToggleBurnEthV1OperationParams = {
   token: `0x${string}`
