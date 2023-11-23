@@ -4,8 +4,6 @@ import { buyToken } from "../Marketplace"
 
 export type TBuyTokenEthV1OperationParams = {
   orderId: string
-  token: string
-  tokenId: string
 }
 
 /**
@@ -18,7 +16,6 @@ export class BuyTokenEthV1Operation extends EthereumContractOperation<TBuyTokenE
     const args: ReservoirBuyTokenParams = [
       {
         orderId: this.params.orderId,
-        token: `${this.params.token}:${this.params.tokenId}`,
       },
     ]
     return await buyToken(args, this.manager.walletClient)
