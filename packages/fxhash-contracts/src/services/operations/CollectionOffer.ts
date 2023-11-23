@@ -2,7 +2,7 @@ import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
 import { GenerativeToken } from "@/types/entities/GenerativeToken"
 import { FxhashContracts } from "../../types/Contracts"
 import { displayMutez } from "../../utils/units"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TCollectionOfferOperationParams = {
   token: GenerativeToken
@@ -10,24 +10,10 @@ export type TCollectionOfferOperationParams = {
   price: number
 }
 
-export class CollectionOfferOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosCollectionOfferOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Create a collection offer on the Marketplace
  */
-class TezosCollectionOfferOperation extends TezosContractOperation<TCollectionOfferOperationParams> {
+export class CollectionOfferOperation extends TezosContractOperation<TCollectionOfferOperationParams> {
   marketplaceContract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
