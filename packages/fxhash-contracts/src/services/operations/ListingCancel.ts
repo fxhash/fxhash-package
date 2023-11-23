@@ -2,30 +2,17 @@ import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
 import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TListingCancelOperationParams = {
   listing: Listing
   objkt: Objkt
 }
 
-export class ListingCancelOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosListingCancelOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * List a gentk on the Marketplace
  */
-export class TezosListingCancelOperation extends TezosContractOperation<TListingCancelOperationParams> {
+export class ListingCancelOperation extends TezosContractOperation<TListingCancelOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   ep = ""
 
