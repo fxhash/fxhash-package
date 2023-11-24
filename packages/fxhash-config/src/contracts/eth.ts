@@ -4,6 +4,7 @@ export interface IEthContracts {
   splits_main: string
   scripty_storage: string
   scripty_builder: string
+  multicall3: string
   project_factory_v1: string
   splits_factory_v1: string
   fixed_price_minter_v1: string
@@ -23,6 +24,7 @@ export const ethTestnetContracts: IEthContracts = {
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
   scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
+  multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   project_factory_v1: "0x52770A0FBd7dcd6991BE4C0def8484DA5dCF71Ff",
   mint_ticket_factory_v1: "0xA07D92912870E3e8a1b95A03c034D64cf291938d",
   splits_factory_v1: "0x7645BC5094Ec0614A383c61CA70d774C9e48BB31",

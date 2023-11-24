@@ -4443,6 +4443,80 @@ enum cursor_ordering {
   DESC
 }
 
+"""
+columns and relationships of "eth_token_proceeds"
+"""
+type eth_token_proceeds {
+  dutch_auction_proceeds(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  fixed_price_proceeds(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  fk_user_proceeds: Wallet
+  id: String!
+  total_proceeds: numeric!
+}
+
+"""
+Boolean expression to filter rows from the table "eth_token_proceeds". All fields are combined with a logical 'AND'.
+"""
+input eth_token_proceeds_bool_exp {
+  _and: [eth_token_proceeds_bool_exp!]
+  _not: eth_token_proceeds_bool_exp
+  _or: [eth_token_proceeds_bool_exp!]
+  dutch_auction_proceeds: jsonb_comparison_exp
+  fixed_price_proceeds: jsonb_comparison_exp
+  id: String_comparison_exp
+  total_proceeds: numeric_comparison_exp
+}
+
+"""Ordering options when selecting data from "eth_token_proceeds"."""
+input eth_token_proceeds_order_by {
+  dutch_auction_proceeds: order_by
+  fixed_price_proceeds: order_by
+  id: order_by
+  total_proceeds: order_by
+}
+
+"""
+select columns of table "eth_token_proceeds"
+"""
+enum eth_token_proceeds_select_column {
+  """column name"""
+  dutch_auction_proceeds
+
+  """column name"""
+  fixed_price_proceeds
+
+  """column name"""
+  id
+
+  """column name"""
+  total_proceeds
+}
+
+"""
+Streaming cursor of the table "eth_token_proceeds"
+"""
+input eth_token_proceeds_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: eth_token_proceeds_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input eth_token_proceeds_stream_cursor_value_input {
+  dutch_auction_proceeds: jsonb
+  fixed_price_proceeds: jsonb
+  id: String
+  total_proceeds: numeric
+}
+
 scalar float8
 
 """
@@ -9466,6 +9540,31 @@ type onchain_query {
   collection_offer_by_pk(id: String!, version: Int!): collection_offer
 
   """
+  fetch data from the table: "eth_token_proceeds"
+  """
+  eth_token_proceeds(
+    """distinct select on columns"""
+    distinct_on: [eth_token_proceeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_token_proceeds_order_by!]
+
+    """filter the rows returned"""
+    where: eth_token_proceeds_bool_exp
+  ): [eth_token_proceeds!]!
+
+  """
+  fetch data from the table: "eth_token_proceeds" using primary key columns
+  """
+  eth_token_proceeds_by_pk(id: String!): eth_token_proceeds
+
+  """
   fetch data from the table: "generative_token"
   """
   generative_token(
@@ -10525,6 +10624,45 @@ type onchain_subscription {
     """filter the rows returned"""
     where: collection_offer_bool_exp
   ): [collection_offer!]!
+
+  """
+  fetch data from the table: "eth_token_proceeds"
+  """
+  eth_token_proceeds(
+    """distinct select on columns"""
+    distinct_on: [eth_token_proceeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_token_proceeds_order_by!]
+
+    """filter the rows returned"""
+    where: eth_token_proceeds_bool_exp
+  ): [eth_token_proceeds!]!
+
+  """
+  fetch data from the table: "eth_token_proceeds" using primary key columns
+  """
+  eth_token_proceeds_by_pk(id: String!): eth_token_proceeds
+
+  """
+  fetch data from the table in a streaming manner: "eth_token_proceeds"
+  """
+  eth_token_proceeds_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [eth_token_proceeds_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: eth_token_proceeds_bool_exp
+  ): [eth_token_proceeds!]!
 
   """
   fetch data from the table: "generative_token"
