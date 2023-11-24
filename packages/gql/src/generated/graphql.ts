@@ -3613,6 +3613,75 @@ export enum Cursor_Ordering {
   Desc = 'DESC'
 }
 
+/** columns and relationships of "eth_token_proceeds" */
+export type Eth_Token_Proceeds = {
+  __typename?: 'eth_token_proceeds';
+  dutch_auction_proceeds: Scalars['jsonb']['output'];
+  fixed_price_proceeds: Scalars['jsonb']['output'];
+  fk_user_proceeds?: Maybe<Wallet>;
+  id: Scalars['String']['output'];
+  total_proceeds: Scalars['numeric']['output'];
+};
+
+
+/** columns and relationships of "eth_token_proceeds" */
+export type Eth_Token_ProceedsDutch_Auction_ProceedsArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** columns and relationships of "eth_token_proceeds" */
+export type Eth_Token_ProceedsFixed_Price_ProceedsArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "eth_token_proceeds". All fields are combined with a logical 'AND'. */
+export type Eth_Token_Proceeds_Bool_Exp = {
+  _and?: InputMaybe<Array<Eth_Token_Proceeds_Bool_Exp>>;
+  _not?: InputMaybe<Eth_Token_Proceeds_Bool_Exp>;
+  _or?: InputMaybe<Array<Eth_Token_Proceeds_Bool_Exp>>;
+  dutch_auction_proceeds?: InputMaybe<Jsonb_Comparison_Exp>;
+  fixed_price_proceeds?: InputMaybe<Jsonb_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  total_proceeds?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "eth_token_proceeds". */
+export type Eth_Token_Proceeds_Order_By = {
+  dutch_auction_proceeds?: InputMaybe<Order_By>;
+  fixed_price_proceeds?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  total_proceeds?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "eth_token_proceeds" */
+export enum Eth_Token_Proceeds_Select_Column {
+  /** column name */
+  DutchAuctionProceeds = 'dutch_auction_proceeds',
+  /** column name */
+  FixedPriceProceeds = 'fixed_price_proceeds',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  TotalProceeds = 'total_proceeds'
+}
+
+/** Streaming cursor of the table "eth_token_proceeds" */
+export type Eth_Token_Proceeds_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Eth_Token_Proceeds_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Eth_Token_Proceeds_Stream_Cursor_Value_Input = {
+  dutch_auction_proceeds?: InputMaybe<Scalars['jsonb']['input']>;
+  fixed_price_proceeds?: InputMaybe<Scalars['jsonb']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  total_proceeds?: InputMaybe<Scalars['numeric']['input']>;
+};
+
 /** Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'. */
 export type Float8_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['float8']['input']>;
@@ -7490,6 +7559,10 @@ export type Onchain_Query = {
   collection_offer: Array<Collection_Offer>;
   /** fetch data from the table: "collection_offer" using primary key columns */
   collection_offer_by_pk?: Maybe<Collection_Offer>;
+  /** fetch data from the table: "eth_token_proceeds" */
+  eth_token_proceeds: Array<Eth_Token_Proceeds>;
+  /** fetch data from the table: "eth_token_proceeds" using primary key columns */
+  eth_token_proceeds_by_pk?: Maybe<Eth_Token_Proceeds>;
   /** fetch data from the table: "generative_token" */
   generative_token: Array<Generative_Token>;
   /** fetch data from the table: "generative_token" using primary key columns */
@@ -7765,6 +7838,20 @@ export type Onchain_QueryCollection_OfferArgs = {
 export type Onchain_QueryCollection_Offer_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
+};
+
+
+export type Onchain_QueryEth_Token_ProceedsArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Token_Proceeds_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Token_Proceeds_Order_By>>;
+  where?: InputMaybe<Eth_Token_Proceeds_Bool_Exp>;
+};
+
+
+export type Onchain_QueryEth_Token_Proceeds_By_PkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -8205,6 +8292,12 @@ export type Onchain_Subscription = {
   collection_offer_by_pk?: Maybe<Collection_Offer>;
   /** fetch data from the table in a streaming manner: "collection_offer" */
   collection_offer_stream: Array<Collection_Offer>;
+  /** fetch data from the table: "eth_token_proceeds" */
+  eth_token_proceeds: Array<Eth_Token_Proceeds>;
+  /** fetch data from the table: "eth_token_proceeds" using primary key columns */
+  eth_token_proceeds_by_pk?: Maybe<Eth_Token_Proceeds>;
+  /** fetch data from the table in a streaming manner: "eth_token_proceeds" */
+  eth_token_proceeds_stream: Array<Eth_Token_Proceeds>;
   /** fetch data from the table: "generative_token" */
   generative_token: Array<Generative_Token>;
   /** fetch data from the table: "generative_token" using primary key columns */
@@ -8616,6 +8709,27 @@ export type Onchain_SubscriptionCollection_Offer_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Collection_Offer_Stream_Cursor_Input>>;
   where?: InputMaybe<Collection_Offer_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_Token_ProceedsArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Token_Proceeds_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Token_Proceeds_Order_By>>;
+  where?: InputMaybe<Eth_Token_Proceeds_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_Token_Proceeds_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Onchain_SubscriptionEth_Token_Proceeds_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Eth_Token_Proceeds_Stream_Cursor_Input>>;
+  where?: InputMaybe<Eth_Token_Proceeds_Bool_Exp>;
 };
 
 
@@ -11255,6 +11369,13 @@ export type GetWhitelistQuery = { __typename?: 'query_root', offchain?: { __type
 
 export type GenerativeToken_PricingFragment = { __typename?: 'generative_token', pricing_fixeds: Array<{ __typename?: 'pricing_fixed', price: any, opens_at?: any | null }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', levels: any, resting_price: string, final_price?: any | null, decrement_duration: any, opens_at?: any | null }> };
 
+export type GetProceedsQueryVariables = Exact<{
+  where?: InputMaybe<Eth_Token_Proceeds_Bool_Exp>;
+}>;
+
+
+export type GetProceedsQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', eth_token_proceeds: Array<{ __typename?: 'eth_token_proceeds', dutch_auction_proceeds: any, fixed_price_proceeds: any, total_proceeds: any }> } | null };
+
 export type GetReservesQueryVariables = Exact<{
   where?: InputMaybe<Reserve_Bool_Exp>;
 }>;
@@ -11278,4 +11399,5 @@ export const CreateProjectDocument = {"kind":"Document","definitions":[{"kind":"
 export const Update_ProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Update_Project"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Project_set_input"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectMedia_insert_input"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectCollaborator_insert_input"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"update_Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}}]}}]}}]} as unknown as DocumentNode<Update_ProjectMutation, Update_ProjectMutationVariables>;
 export const GetWhitelistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWhitelists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Whitelist"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"WhitelistEntries"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WhitelistEntries"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAddress"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistIndex"}}]}}]}}]} as unknown as DocumentNode<GetWhitelistsQuery, GetWhitelistsQueryVariables>;
 export const GetWhitelistDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWhitelist"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"merkleRoot"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"defaultValue":{"kind":"StringValue","value":"","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Whitelist_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"merkleRoot"},"value":{"kind":"Variable","name":{"kind":"Name","value":"merkleRoot"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"WhitelistEntries"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WhitelistEntries"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAddress"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistIndex"}}]}}]}}]} as unknown as DocumentNode<GetWhitelistQuery, GetWhitelistQueryVariables>;
+export const GetProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_token_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_token_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dutch_auction_proceeds"}},{"kind":"Field","name":{"kind":"Name","value":"fixed_price_proceeds"}},{"kind":"Field","name":{"kind":"Name","value":"total_proceeds"}}]}}]}}]}}]} as unknown as DocumentNode<GetProceedsQuery, GetProceedsQueryVariables>;
 export const GetReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"reserve_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"token_id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]} as unknown as DocumentNode<GetReservesQuery, GetReservesQueryVariables>;
