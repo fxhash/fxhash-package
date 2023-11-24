@@ -133,6 +133,8 @@ export interface GenerativeToken {
   balance: number
   // defined for V3 only
   iterationsCount?: number
+  openEditions: boolean
+  openEditionsEndsAt?: string | null
   enabled: boolean
   royalties: number
   splitsPrimary: Split[]
