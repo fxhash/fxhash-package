@@ -10,7 +10,7 @@ import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TCollectionOfferAcceptOperationParams = {
   offer: CollectionOffer
@@ -18,23 +18,10 @@ export type TCollectionOfferAcceptOperationParams = {
   price: number
 }
 
-export class CollectionOfferAcceptOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosCollectionOfferAcceptOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Accept a collection offer on the Marketplace
  */
-class TezosCollectionOfferAcceptOperation extends TezosContractOperation<TCollectionOfferAcceptOperationParams> {
+export class CollectionOfferAcceptOperation extends TezosContractOperation<TCollectionOfferAcceptOperationParams> {
   async prepare() {}
 
   async call(): Promise<WalletOperation> {
