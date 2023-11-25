@@ -37,14 +37,8 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
-    let baseURI = this.params.baseURI
-
-    if (!this.params.baseURI.startsWith("ipfs://"))
-      throw Error("Invalid baseURI")
-    baseURI = getHashFromIPFSCID(this.params.baseURI.split("ipfs://")[1])
-
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`,
+      address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
       abi: FX_TICKETS_FACTORY_ABI,
       functionName: "createTicket",
       args: [
@@ -53,10 +47,9 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
         FxhashContracts.ETH_TICKET_REDEEMER_V1,
         FxhashContracts.ETH_IPFS_RENDERER_V1,
         this.params.gracePeriod,
-        baseURI,
         await processAndFormatMintInfos(this.params.mintInfo, this.manager),
       ],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

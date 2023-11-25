@@ -45,7 +45,7 @@ export enum EWalletOperations {
 }
 
 interface EthereumWalletManagerParams {
-  address: string
+  address: `0x${string}`
   walletClient: WalletClient
   publicClient: PublicClient
   rpcNodes: string[]

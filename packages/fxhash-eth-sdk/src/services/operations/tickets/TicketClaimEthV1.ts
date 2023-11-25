@@ -27,7 +27,7 @@ export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimT
       abi: FX_TICKETS_ABI,
       functionName: "claim",
       args: [this.params.tokenId, this.params.newPrice],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
       value: this.params.value,
     }
     return simulateAndExecuteContract(this.manager, args)

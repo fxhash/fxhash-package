@@ -191,6 +191,25 @@ export const FX_TICKETS_FACTORY_ABI = [
   {
     inputs: [
       {
+        internalType: "bytes",
+        name: "_creationInfo",
+        type: "bytes",
+      },
+    ],
+    name: "createTicket",
+    outputs: [
+      {
+        internalType: "address",
+        name: "mintTicket",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_owner",
         type: "address",
@@ -214,11 +233,6 @@ export const FX_TICKETS_FACTORY_ABI = [
         internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
-      },
-      {
-        internalType: "bytes",
-        name: "_baseURI",
-        type: "bytes",
       },
       {
         components: [
@@ -278,13 +292,8 @@ export const FX_TICKETS_FACTORY_ABI = [
         name: "_sender",
         type: "address",
       },
-      {
-        internalType: "uint256",
-        name: "_nonce",
-        type: "uint256",
-      },
     ],
-    name: "getTokenAddress",
+    name: "getTicketAddress",
     outputs: [
       {
         internalType: "address",

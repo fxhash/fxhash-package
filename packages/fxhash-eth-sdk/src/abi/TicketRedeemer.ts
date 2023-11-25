@@ -15,6 +15,11 @@ export const TICKET_REDEEMER_ABI = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "ZeroAddress",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -69,6 +74,11 @@ export const TICKET_REDEEMER_ABI = [
       {
         internalType: "address",
         name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_to",
         type: "address",
       },
       {

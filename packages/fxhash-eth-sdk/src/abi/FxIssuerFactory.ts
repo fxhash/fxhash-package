@@ -292,7 +292,7 @@ export const FX_ISSUER_FACTORY_ABI = [
         type: "tuple[]",
       },
       {
-        internalType: "address payable[]",
+        internalType: "address[]",
         name: "_royaltyReceivers",
         type: "address[]",
       },
@@ -316,14 +316,62 @@ export const FX_ISSUER_FACTORY_ABI = [
   {
     inputs: [
       {
+        internalType: "bytes",
+        name: "_projectCreationInfo",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "_ticketCreationInfo",
+        type: "bytes",
+      },
+      {
         internalType: "address",
-        name: "_sender",
+        name: "_ticketFactory",
+        type: "address",
+      },
+    ],
+    name: "createProject",
+    outputs: [
+      {
+        internalType: "address",
+        name: "genArtToken",
         type: "address",
       },
       {
-        internalType: "uint256",
-        name: "_nonce",
-        type: "uint256",
+        internalType: "address",
+        name: "mintTicket",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "_creationInfo",
+        type: "bytes",
+      },
+    ],
+    name: "createProject",
+    outputs: [
+      {
+        internalType: "address",
+        name: "genArt721",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_sender",
+        type: "address",
       },
     ],
     name: "getTokenAddress",

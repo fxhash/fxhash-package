@@ -28,7 +28,7 @@ export class RedeemTicketEthV1Operation extends EthereumContractOperation<TRedee
       abi: TICKET_REDEEMER_ABI,
       functionName: "redeem",
       args: [this.params.ticket, this.params.tokenId, this.params.params],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }
