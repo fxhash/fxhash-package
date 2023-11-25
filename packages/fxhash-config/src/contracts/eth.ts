@@ -1,4 +1,5 @@
 export interface IEthContracts {
+  multicall3: `0x${string}`
   seaport_zone: `0x${string}`
   splits_controller_v1: `0x${string}`
   splits_main: `0x${string}`
@@ -19,6 +20,7 @@ export interface IEthContracts {
 }
 
 export const ethTestnetContracts: IEthContracts = {
+  multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0xaee17a0e6e98e832112fd0a26da22c4e812aa7f5",
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
