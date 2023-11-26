@@ -5,6 +5,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "private": true,
   "exports": {
     "./*": "./dist/*"
   },
@@ -54,7 +55,8 @@
     "typescript": "5.0.4",
     "viem": "1.14.0",
     "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/prettier-config": "1.0.2"
+    "@fxhash/prettier-config": "1.0.2",
+    "@fxhash/config": "0.0.8"
   },
   "peerDependencies": {
     "@reservoir0x/reservoir-sdk": "1.4.0",

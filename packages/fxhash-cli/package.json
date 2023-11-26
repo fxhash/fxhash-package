@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.12",
+  "version": "0.0.14",
   "author": "fxhash",
   "license": "MIT",
   "engines": {
@@ -77,9 +77,9 @@
     "terser-webpack-plugin": "5.3.9",
     "yargs": "17.7.2",
     "yesno": "0.4.0",
-    "@fxhash/config": "0.0.8",
     "@fxhash/fxhash-snippet": "0.0.7",
-    "@fxhash/project-sdk": "0.0.10"
+    "@fxhash/project-sdk": "0.0.11",
+    "@fxhash/config": "0.0.8"
   },
   "devDependencies": {
     "@types/adm-zip": "0.5.0",
