@@ -146,7 +146,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         abi: MULTICALL3_ABI,
         functionName: "aggregate",
         args: [callRequests],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     } else {

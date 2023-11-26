@@ -155,6 +155,19 @@ export const FX_TICKETS_ABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "bytes",
+        name: "_uri",
+        type: "bytes",
+      },
+    ],
+    name: "BaseURIUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint256",
         name: "_fromTokenId",
         type: "uint256",
@@ -375,15 +388,15 @@ export const FX_TICKETS_ABI = [
       },
       {
         indexed: true,
-        internalType: "uint48",
-        name: "_gracePeriod",
-        type: "uint48",
+        internalType: "address",
+        name: "_renderer",
+        type: "address",
       },
       {
         indexed: false,
-        internalType: "bytes",
-        name: "_baseURI",
-        type: "bytes",
+        internalType: "uint48",
+        name: "_gracePeriod",
+        type: "uint48",
       },
       {
         components: [
@@ -620,6 +633,19 @@ export const FX_TICKETS_ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "contractURI",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -869,14 +895,14 @@ export const FX_TICKETS_ABI = [
         type: "address",
       },
       {
+        internalType: "address",
+        name: "_renderer",
+        type: "address",
+      },
+      {
         internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
-      },
-      {
-        internalType: "bytes",
-        name: "_baseURI",
-        type: "bytes",
       },
       {
         components: [
@@ -1150,6 +1176,19 @@ export const FX_TICKETS_ABI = [
     name: "registerMinters",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renderer",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

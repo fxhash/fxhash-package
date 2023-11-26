@@ -25,7 +25,7 @@ export class WithdrawFromDutchAuctionMinterEthV1Operation extends EthereumContra
       abi: DUTCH_AUCTION_MINTER_ABI,
       functionName: "withdraw",
       args: [this.params.token, this.params.reserveId],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

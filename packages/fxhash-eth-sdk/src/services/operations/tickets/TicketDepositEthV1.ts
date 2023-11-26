@@ -26,7 +26,7 @@ export class TicketDepositEthV1Operation extends EthereumContractOperation<TTick
       abi: FX_TICKETS_ABI,
       functionName: "deposit",
       args: [this.params.tokenId],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
       value: this.params.value,
     }
     return simulateAndExecuteContract(this.manager, args)

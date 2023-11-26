@@ -36,7 +36,7 @@ export class BurnSupplyEthV1Operation extends EthereumContractOperation<TBurnSup
         abi: FX_GEN_ART_721_ABI,
         functionName: "reduceSupply",
         args: [this.params.supply],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

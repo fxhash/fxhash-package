@@ -49,7 +49,7 @@ export class MintDAMintPassEthV1Operation extends EthereumContractOperation<TMin
         this.params.index,
         this.params.signature,
       ],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
       value: this.params.price,
     }
     return simulateAndExecuteContract(this.manager, args)
