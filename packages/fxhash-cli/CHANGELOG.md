@@ -1,5 +1,13 @@
 # @fxhash/cli
 
+## 0.0.15
+
+### Patch Changes
+
+- 70a8250: Ethereum compatibility; project-sdk v4
+- Updated dependencies [70a8250]
+  - @fxhash/project-sdk@0.0.12
+
 ## 0.0.14
 
 ### Patch Changes
