@@ -16,7 +16,7 @@ export default defineConfig([
     minify: true,
     dts: true,
     splitting: true,
-    sourcemap: true,
+    sourcemap: false,
     clean: true,
     bundle: true,
   },
