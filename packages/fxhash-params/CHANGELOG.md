@@ -1,5 +1,11 @@
 # @fxhash/params
 
+## 0.0.9
+
+### Patch Changes
+
+- 70a8250: Ethereum compatibility; project-sdk v4
+
 ## 0.0.8
 
 ### Patch Changes

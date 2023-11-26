@@ -70,7 +70,7 @@ importers:
   packages/fxhash:
     dependencies:
       '@fxhash/cli':
-        specifier: 0.0.14
+        specifier: 0.0.15
         version: link:../fxhash-cli
 
   packages/fxhash-cli:
@@ -85,7 +85,7 @@ importers:
         specifier: 0.0.7
         version: link:../fxhash-snippet
       '@fxhash/project-sdk':
-        specifier: 0.0.11
+        specifier: 0.0.12
         version: link:../project-sdk
       '@octokit/rest':
         specifier: 20.0.1
@@ -457,34 +457,6 @@ importers:
         specifier: 1.14.0
         version: 1.14.0(typescript@5.0.4)
 
-  packages/fxhash-gql:
-    dependencies:
-      '@apollo/client':
-        specifier: 3.8.1
-        version: 3.8.1(graphql@16.7.1)(react-dom@18.2.0)(react@18.2.0)
-      graphql:
-        specifier: 16.7.1
-        version: 16.7.1
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-    devDependencies:
-      '@fxhash/config':
-        specifier: 0.0.8
-        version: link:../fxhash-config
-      tslib:
-        specifier: 2.6.0
-        version: 2.6.0
-      tsup:
-        specifier: 6.6.0
-        version: 6.6.0(typescript@5.0.4)
-      typescript:
-        specifier: 5.0.4
-        version: 5.0.4
-
   packages/fxhash-hasura:
     devDependencies:
       '@genql/cli':
@@ -717,10 +689,10 @@ importers:
   packages/project-sdk:
     dependencies:
       '@fxhash/params':
-        specifier: 0.0.8
+        specifier: 0.0.9
         version: link:../fxhash-params
       '@fxhash/utils':
-        specifier: 0.0.1
+        specifier: 0.0.2
         version: link:../utils
       node-html-parser:
         specifier: 6.1.5
@@ -7995,7 +7967,6 @@ packages:
       function-bind: 1.1.2
       get-intrinsic: 1.2.1
       set-function-length: 1.1.1
-    dev: true
 
   /callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -8727,7 +8698,6 @@ packages:
       get-intrinsic: 1.2.1
       gopd: 1.0.1
       has-property-descriptors: 1.0.0
-    dev: true
 
   /define-lazy-prop@2.0.0:
     resolution: {integrity: sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==}
@@ -10026,7 +9996,6 @@ packages:
 
   /function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
-    dev: true
 
   /function.prototype.name@1.1.6:
     resolution: {integrity: sha512-Z5kx79swU5P27WEayXM1tBi5Ze/lbIyiNgU3qyXUOf9b2rgXYyF9Dy9Cx+IQv/Lc8WCG6L82zwUPpSS9hGehIg==}
@@ -10374,7 +10343,6 @@ packages:
     resolution: {integrity: sha512-62DVLZGoiEBDHQyqG4w9xCuZ7eJEwNmJRWw2VY84Oedb7WFcA27fiEVe8oUQx9hAUJ4ekurquucTGwsyO1XGdQ==}
     dependencies:
       get-intrinsic: 1.2.1
-    dev: true
 
   /has-proto@1.0.1:
     resolution: {integrity: sha512-7qE+iP+O+bgF9clE5+UoBFzE65mlBiVj3tKCrlNQ0Ogwm0BjpT/gK4SlLYDMybDh5I3TCTKnPPa0oMG7JDYrhg==}
@@ -10753,7 +10721,7 @@ packages:
     resolution: {integrity: sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA==}
     engines: {node: '>= 0.4'}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-tostringtag: 1.0.0
     dev: false
 
@@ -14389,7 +14357,6 @@ packages:
       get-intrinsic: 1.2.1
       gopd: 1.0.1
       has-property-descriptors: 1.0.0
-    dev: true
 
   /set-function-name@2.0.1:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
