@@ -127,7 +127,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const splitsAddress = await splitsFactory.read.predictImmutableSplitAddress(
       [
         primaryReceivers.map(entry => entry.account),
-        primaryReceivers.map(entry => entry.value * 100),
+        primaryReceivers.map(entry => entry.value),
         0,
       ]
     )
