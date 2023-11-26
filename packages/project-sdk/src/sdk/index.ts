@@ -1,5 +1,9 @@
 import { FxHashApi, FxHashExecutionContext } from "../types"
-import { createFxRandom, getRandomHash } from "./math"
+import {
+  createFxRandom,
+  mockTezosAddress,
+  mockTezosTransactionHash,
+} from "@fxhash/utils"
 import {
   serializeParams,
   processParams,
@@ -13,11 +17,11 @@ export function createFxhashSdk(window, options): FxHashApi {
 
   const search = new URLSearchParams(window.location.search)
   // make fxrandstring from hash
-  const fxhash = search.get("fxhash") || "oo" + getRandomHash(49)
-  let fxrand = createFxRandom(fxhash, 2)
+  const fxhash = search.get("fxhash") || mockTezosTransactionHash()
+  let fxrand = createFxRandom(fxhash)
   // make fxrandminter from minter address
-  const fxminter = search.get("fxminter") || "tz1" + getRandomHash(33)
-  let fxrandminter = createFxRandom(fxminter, 3)
+  const fxminter = search.get("fxminter") || mockTezosAddress()
+  let fxrandminter = createFxRandom(fxminter)
   // true if preview mode active, false otherwise
   // you can append preview=1 to the URL to simulate preview active
   const isFxpreview = search.get("preview") === "1"
@@ -31,7 +35,7 @@ export function createFxhashSdk(window, options): FxHashApi {
   const initialInputBytes = searchParams?.replace("#0x", "")
 
   const $fx = {
-    _version: "3.3.0",
+    _version: "4.0.0",
     _processors: ParameterProcessors,
     // where params def & features will be stored
     _params: undefined,
@@ -196,13 +200,13 @@ export function createFxhashSdk(window, options): FxHashApi {
     },
   }
   const resetFxRand: () => void = () => {
-    fxrand = createFxRandom(fxhash, 2)
+    fxrand = createFxRandom(fxhash)
     $fx.rand = fxrand
     fxrand.reset = resetFxRand
   }
   fxrand.reset = resetFxRand
   const resetFxRandMinter: () => void = () => {
-    fxrandminter = createFxRandom(fxminter, 3)
+    fxrandminter = createFxRandom(fxminter)
     $fx.randminter = fxrandminter
     fxrandminter.reset = resetFxRandMinter
   }
