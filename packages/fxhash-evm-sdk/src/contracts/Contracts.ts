@@ -39,15 +39,16 @@ export const FxhashContracts = {
   USER_MODERATION: config.tez.contracts.user_moderation,
   ARTICLE_MODERATION: config.tez.contracts.moderation_articles,
   COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
-  ETH_PROJECT_FACTORY: config.eth.contracts.project_factory,
-  ETH_SPLITS_FACTORY: config.eth.contracts.splits_factory,
+  ETH_PROJECT_FACTORY: config.eth.contracts.project_factory_v1,
+  ETH_SPLITS_FACTORY: config.eth.contracts.splits_factory_v1,
   ETH_SPLITS_MAIN: config.eth.contracts.splits_main,
   ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
   ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
   ETH_SEAPORT_ZONE: config.eth.contracts.seaport_zone,
   ETH_FIXED_PRICE_MINTER_V1: config.eth.contracts.fixed_price_minter_v1,
-  ETH_DUTCH_AUCTION_V1: config.eth.contracts.dutch_auction_v1,
+  ETH_DUTCH_AUCTION_V1: config.eth.contracts.dutch_auction_minter_v1,
   ETH_MINT_TICKETS_FACTORY_V1: config.eth.contracts.mint_ticket_factory_v1,
+  ETH_TICKET_REDEEMER_V1: config.eth.contracts.ticket_redeemer_v1,
 }
 
 export const FxhashCollabFactoryCalls = {

@@ -46,7 +46,22 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "InvalidProof",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidReserve",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidShortString",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidSig",
     type: "error",
   },
   {
@@ -56,17 +71,27 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: "InvalidTimes",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "InvalidToken",
     type: "error",
   },
   {
     inputs: [],
+    name: "NoAllowlist",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NoPublicMint",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "NoRefund",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NoSigningAuthority",
     type: "error",
   },
   {
@@ -81,13 +106,40 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: "OnlyAuthorityOrAllowlist",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "PassAlreadyClaimed",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "PricesOutOfOrder",
     type: "error",
   },
   {
     inputs: [],
-    name: "TooMany",
+    name: "SlotAlreadyClaimed",
     type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "str",
+        type: "string",
+      },
+    ],
+    name: "StringTooLong",
+    type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: "EIP712DomainChanged",
+    type: "event",
   },
   {
     anonymous: false,
@@ -95,13 +147,13 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
@@ -124,16 +176,11 @@ export const ABI = [
         ],
         indexed: false,
         internalType: "struct ReserveInfo",
-        name: "reserve",
+        name: "_reserve",
         type: "tuple",
       },
       {
         components: [
-          {
-            internalType: "uint256[]",
-            name: "prices",
-            type: "uint256[]",
-          },
           {
             internalType: "uint248",
             name: "stepLength",
@@ -144,10 +191,15 @@ export const ABI = [
             name: "refunded",
             type: "bool",
           },
+          {
+            internalType: "uint256[]",
+            name: "prices",
+            type: "uint256[]",
+          },
         ],
         indexed: false,
         internalType: "struct AuctionInfo",
-        name: "daInfo",
+        name: "_daInfo",
         type: "tuple",
       },
     ],
@@ -160,37 +212,37 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "buyer",
+        name: "_buyer",
         type: "address",
       },
       {
         indexed: false,
         internalType: "address",
-        name: "to",
+        name: "_to",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "_amount",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "price",
+        name: "_price",
         type: "uint256",
       },
     ],
@@ -203,25 +255,25 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "buyer",
+        name: "_buyer",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "refundAmount",
+        name: "_refundAmount",
         type: "uint256",
       },
     ],
@@ -234,25 +286,25 @@ export const ABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "token",
+        name: "_token",
         type: "address",
       },
       {
         indexed: true,
         internalType: "uint256",
-        name: "reserveId",
+        name: "_reserveId",
         type: "uint256",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "creator",
+        name: "_creator",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "proceeds",
+        name: "_proceeds",
         type: "uint256",
       },
     ],
@@ -320,26 +372,111 @@ export const ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "_token",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_indexes",
+        type: "uint256[]",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "bytes32[][]",
+        name: "_proofs",
+        type: "bytes32[][]",
+      },
+    ],
+    name: "buyAllowlist",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_reserveId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
         type: "uint256",
       },
       {
         internalType: "address",
-        name: "",
+        name: "_to",
         type: "address",
       },
-    ],
-    name: "cumulativeMintCost",
-    outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "_index",
         type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "_signature",
+        type: "bytes",
+      },
+    ],
+    name: "buyMintPass",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "eip712Domain",
+    outputs: [
+      {
+        internalType: "bytes1",
+        name: "fields",
+        type: "bytes1",
+      },
+      {
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "version",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "chainId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "verifyingContract",
+        type: "address",
+      },
+      {
+        internalType: "bytes32",
+        name: "salt",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256[]",
+        name: "extensions",
+        type: "uint256[]",
       },
     ],
     stateMutability: "view",
@@ -348,27 +485,22 @@ export const ABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
         internalType: "uint256",
-        name: "",
+        name: "_index",
         type: "uint256",
       },
       {
         internalType: "address",
-        name: "",
+        name: "_user",
         type: "address",
       },
     ],
-    name: "cumulativeMints",
+    name: "generateTypedDataHash",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bytes32",
         name: "",
-        type: "uint256",
+        type: "bytes32",
       },
     ],
     stateMutability: "view",
@@ -405,18 +537,37 @@ export const ABI = [
         name: "",
         type: "address",
       },
+    ],
+    name: "lastUpdated",
+    outputs: [
       {
         internalType: "uint256",
         name: "",
         type: "uint256",
       },
     ],
-    name: "lastPrice",
-    outputs: [
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
       {
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    name: "merkleRoots",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
       },
     ],
     stateMutability: "view",
@@ -443,6 +594,30 @@ export const ABI = [
     name: "refund",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "refundInfo",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "lastPrice",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -536,6 +711,30 @@ export const ABI = [
     name: "setMintDetails",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "signingAuthorities",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

@@ -8,6 +8,11 @@ import {
 import { getProjectPaths } from "../templates/paths"
 import { logger } from "../utils/logger"
 
+export type ValidProjectSdkFiles = {
+  packageJson: string
+  files: string[]
+}
+
 export function isEjectedProject(srcPath: string): boolean {
   const projectPath = path.resolve(CWD_PATH, srcPath)
   return (

@@ -1,0 +1,42 @@
+{
+  "name": "@fxhash/utils",
+  "description": "A general-purpose nodejs/browser compatible utility package related to fxhash applications.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "typesVersions": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "6.6.0",
+    "typescript": "5.0.4",
+    "vitest": "0.34.6",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/prettier-config": "1.0.2"
+  },
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup",
+    "dev": "tsup --watch"
+  }
+}

@@ -32,9 +32,10 @@ export function packPricing(input: GenTokPricingForm<number>): TInputPricing {
   let details: string
   if (input.pricingMethod === GenTokPricing.FIXED) {
     // if there's a date, get the epoch
-    let opens_at = input.pricingFixed.opensAt
-      ? input.pricingFixed.opensAt.getTime()
-      : null
+    const opens_at = typeof input.pricingFixed.opensAt === 'string' 
+      ? input.pricingFixed.opensAt 
+      : input.pricingFixed.opensAt?.toISOString() || null
+      
     // turn the string inputs into numbers
     details = packPricingFixed({
       price: input.pricingFixed.price!,
@@ -47,7 +48,9 @@ export function packPricing(input: GenTokPricingForm<number>): TInputPricing {
     }
     details = packPricingDutchAuction({
       levels: levels,
-      opens_at: input.pricingDutchAuction.opensAt!.getTime(),
+      opens_at: typeof input.pricingDutchAuction.opensAt === "string"
+        ? input.pricingDutchAuction.opensAt
+        : input.pricingDutchAuction.opensAt!.toISOString(),
       decrement_duration: input.pricingDutchAuction.decrementDuration! * 60,
     })
   }

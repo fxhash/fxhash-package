@@ -7,7 +7,6 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { getConfig } from "../Wallet"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -19,23 +18,26 @@ export type ScriptyHTMLTag = {
   tagContent: string
 }
 export type TMintEthIssuerV1OperationParams = {
+  initInfo: {
+    name: string
+    symbol: string
+    primaryReceiver?: string
+    randomizer: string
+    renderer: string
+    tagIds: number[]
+  }
   projectInfo: {
-    enabled: boolean
     onchain: boolean
-    supply: bigint
+    mintEnabled: boolean
+    burnEnabled: boolean
+    maxSupply: bigint
+    inputSize: number
     contractURI: string
   }
   metadataInfo: {
     baseURI: string
     imageURI: string
-    animation: {
-      bodyTags: ScriptyHTMLTag[]
-      headTags: ScriptyHTMLTag[]
-    }
-    attributes: {
-      bodyTags: ScriptyHTMLTag[]
-      headTags: ScriptyHTMLTag[]
-    }
+    onchainData: string
   }
   mintInfo: [
     {
@@ -49,9 +51,9 @@ export type TMintEthIssuerV1OperationParams = {
     }
   ]
   primaryReceivers: string[]
-  primaryBasisPoints: bigint[]
+  primaryBasisPoints: number[]
   royaltiesReceivers: string[]
-  basisPoints: bigint[]
+  basisPoints: number[]
 }
 
 /**
@@ -65,7 +67,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
       abi: ISplitsMainABI,
       walletClient: this.manager.walletClient,
-      publicClient: getConfig().publicClient,
+      publicClient: this.manager.publicClient,
     })
 
     //get the address from the wallet
@@ -76,6 +78,12 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       [this.params.primaryReceivers, this.params.primaryBasisPoints, 0]
     )
 
+    if (typeof splitsAddress === "string") {
+      this.params.initInfo.primaryReceiver = splitsAddress
+    } else {
+      throw Error("Could not get split address")
+    }
+
     //prepare the actual request to be able to simulate the transaction outcome
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
@@ -83,7 +91,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       functionName: "createProject",
       args: [
         account,
-        splitsAddress,
+        this.params.initInfo,
         this.params.projectInfo,
         this.params.metadataInfo,
         this.params.mintInfo,
@@ -93,11 +101,7 @@ export class MintEthIssuerV1Operation extends ContractOperation<TMintEthIssuerV1
       account: account,
     }
     //simulate the transaction and execute it, will throw an error if it fails
-    return simulateAndExecuteContract(
-      getConfig().publicClient,
-      this.manager.walletClient,
-      args
-    )
+    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {

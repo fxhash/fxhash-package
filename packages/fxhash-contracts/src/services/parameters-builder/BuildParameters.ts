@@ -26,7 +26,7 @@ import reserveMintInputType from "./reserve-mint-input/type.json"
 import reserveMintPassInputType from "./reserve-mint-pass-input/type.json"
 import mintPassConsumeType from "./mint-pass-consume/type.json"
 import { Schema } from "@taquito/michelson-encoder"
-import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
+import { packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
 /**
  * An Enumeration of the different parameter builders available
