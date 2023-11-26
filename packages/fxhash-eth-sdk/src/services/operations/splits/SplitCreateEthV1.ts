@@ -58,7 +58,7 @@ export class CreateSplitEthV1Operation extends EthereumContractOperation<TCreate
         abi: FX_SPLITS_FACTORY_ABI,
         functionName: functionName,
         args: argsPayload,
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

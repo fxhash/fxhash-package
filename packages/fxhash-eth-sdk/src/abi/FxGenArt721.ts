@@ -429,7 +429,7 @@ export const FX_GEN_ART_721_ABI = [
           },
           {
             internalType: "address",
-            name: "onchainDataPointer",
+            name: "onchainPointer",
             type: "address",
           },
         ],
@@ -571,19 +571,19 @@ export const FX_GEN_ART_721_ABI = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "tokenId",
+        name: "_tokenId",
         type: "uint256",
       },
       {
         indexed: false,
-        internalType: "address payable[]",
-        name: "receivers",
+        internalType: "address[]",
+        name: "_receivers",
         type: "address[]",
       },
       {
         indexed: false,
         internalType: "uint96[]",
-        name: "basisPoint",
+        name: "_basisPoints",
         type: "uint96[]",
       },
     ],
@@ -595,14 +595,14 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "address payable[]",
-        name: "receivers",
+        internalType: "address[]",
+        name: "_receivers",
         type: "address[]",
       },
       {
         indexed: false,
         internalType: "uint96[]",
-        name: "basisPoints",
+        name: "_basisPoints",
         type: "uint96[]",
       },
     ],
@@ -708,7 +708,7 @@ export const FX_GEN_ART_721_ABI = [
     name: "baseRoyalties",
     outputs: [
       {
-        internalType: "address payable",
+        internalType: "address",
         name: "receiver",
         type: "address",
       },
@@ -914,7 +914,7 @@ export const FX_GEN_ART_721_ABI = [
     name: "getRoyalties",
     outputs: [
       {
-        internalType: "address payable[]",
+        internalType: "address[]",
         name: "receivers",
         type: "address[]",
       },
@@ -1007,7 +1007,7 @@ export const FX_GEN_ART_721_ABI = [
           },
           {
             internalType: "address",
-            name: "onchainDataPointer",
+            name: "onchainPointer",
             type: "address",
           },
         ],
@@ -1055,7 +1055,7 @@ export const FX_GEN_ART_721_ABI = [
         type: "tuple[]",
       },
       {
-        internalType: "address payable[]",
+        internalType: "address[]",
         name: "_royaltyReceivers",
         type: "address[]",
       },
@@ -1164,7 +1164,7 @@ export const FX_GEN_ART_721_ABI = [
       },
       {
         internalType: "address",
-        name: "onchainDataPointer",
+        name: "onchainPointer",
         type: "address",
       },
     ],
@@ -1683,7 +1683,7 @@ export const FX_GEN_ART_721_ABI = [
     name: "tokenRoyalties",
     outputs: [
       {
-        internalType: "address payable",
+        internalType: "address",
         name: "receiver",
         type: "address",
       },

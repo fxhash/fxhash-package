@@ -26,7 +26,7 @@ export class TransferTokenEthV1Operation extends EthereumContractOperation<TTran
       abi: FX_GEN_ART_721_ABI,
       functionName: "safeTransferFrom",
       args: [this.params.from, this.params.to, this.params.tokenId],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

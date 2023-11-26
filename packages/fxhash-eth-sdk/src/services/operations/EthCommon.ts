@@ -4,17 +4,11 @@ import {
   BaseError,
   ContractFunctionRevertedError,
   TransactionReceipt,
-  concat,
-  encodeAbiParameters,
-  fromHex,
   getContract,
-  getContractAddress,
-  keccak256,
-  toHex,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { MAX_UINT_64, MerkleTreeWhitelist, Whitelist } from "@/utils"
+import { MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi"
@@ -27,7 +21,7 @@ export enum MintTypes {
 
 //Type definition for the primary and royalties receivers
 export interface ReceiverEntry {
-  account: string
+  account: `0x${string}`
   value: number
 }
 
@@ -37,38 +31,44 @@ export interface SimulateAndExecuteContractRequest {
   abi: any[]
   functionName: string
   args: any[]
-  account: string
+  account: `0x${string}`
   value?: bigint
 }
 
 export interface MintInfo {
-  minter: string
+  minter: `0x${string}`
   reserveInfo: ReserveInfo
-  params: string
+  params: `0x${string}`
 }
 
 export interface InitInfo {
   name: string
   symbol: string
-  primaryReceiver: string
-  randomizer: string
-  renderer: string
-  tagIds: number[]
+  primaryReceiver: `0x${string}`
+  randomizer: `0x${string}`
+  renderer: `0x${string}`
+  tagIds: bigint[]
 }
 
 export interface ProjectInfo {
   mintEnabled: boolean
   burnEnabled: boolean
   maxSupply: bigint
-  inputSize: number
+  inputSize: bigint
 }
 
 export interface MetadataInfo {
-  baseURI: string
-  onchainPointer: string
+  baseURI: `0x${string}`
+  onchainPointer: `0x${string}`
 }
 
 export interface ReserveInfo {
+  startTime: bigint
+  endTime: bigint
+  allocation: bigint
+}
+
+export interface ReserveInfoArgs {
   startTime?: bigint
   endTime?: bigint
   allocation: bigint
@@ -76,19 +76,19 @@ export interface ReserveInfo {
 
 export interface FixedPriceMintInfoArgs {
   type: MintTypes.FIXED_PRICE
-  reserveInfo: ReserveInfo
+  reserveInfo: ReserveInfoArgs
   params: FixedPriceParams
 }
 
 export interface DutchAuctionMintInfoArgs {
   type: MintTypes.DUTCH_AUCTION
-  reserveInfo: ReserveInfo
+  reserveInfo: ReserveInfoArgs
   params: DutchAuctionParams
 }
 
 export interface TicketMintInfoArgs {
   type: MintTypes.TICKET
-  reserveInfo: ReserveInfo
+  reserveInfo: ReserveInfoArgs
 }
 
 export interface BaseReserves {
@@ -185,7 +185,9 @@ export async function simulateAndExecuteContract(
  * @param info Reserve info where fields are allowed to be undefined
  * @returns Reserve info without undefined fields
  */
-export function defineReserveInfo(info: ReserveInfo): Required<ReserveInfo> {
+export function defineReserveInfo(
+  info: ReserveInfoArgs
+): Required<ReserveInfo> {
   return {
     allocation: info.allocation,
     endTime: info.endTime ? info.endTime : MAX_UINT_64,
@@ -207,7 +209,7 @@ export async function predictFxContractAddress(
   nonceAddress: string,
   factoryType: "issuer" | "ticket",
   walletManager: EthereumWalletManager
-): Promise<string> {
+): Promise<`0x${string}`> {
   const factory = getContract({
     address:
       factoryType === "ticket"
@@ -218,12 +220,11 @@ export async function predictFxContractAddress(
     walletClient: walletManager.walletClient,
     publicClient: walletManager.publicClient,
   })
-  const nonce = await factory.read.nonces([nonceAddress])
-  if (typeof nonce !== "bigint") {
-    throw Error("Could not get nonce")
-  }
-  const address = await factory.read.getTokenAddress([nonceAddress, nonce])
-  return address as string
+  const address =
+    factoryType === "ticket"
+      ? await factory.read.getTicketAddress([nonceAddress])
+      : await factory.read.getTokenAddress([nonceAddress])
+  return address as `0x${string}`
 }
 
 /**
@@ -273,7 +274,7 @@ export function preparePrimaryReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    account: config.config.ethFeeReceiver,
+    account: config.config.ethFeeReceiver as `0x${string}`,
     value: config.config.fxhashPrimaryFee,
   }
   // Calculate the fee ratio for each account

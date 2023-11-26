@@ -70,7 +70,7 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
           [index],
           [proof],
         ],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
         value: this.params.price,
       }
       return simulateAndExecuteContract(this.manager, args)
