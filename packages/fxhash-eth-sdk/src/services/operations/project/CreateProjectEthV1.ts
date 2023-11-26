@@ -2,11 +2,13 @@ import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
 import {
   TransactionReceipt,
-  encodeAbiParameters,
   encodeFunctionData,
   getAddress,
+  getContract,
 } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
+import { SPLITS_MAIN_ABI } from "@/abi/SplitsMain"
+
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
@@ -15,6 +17,7 @@ import {
   MintInfo,
   MintTypes,
   predictFxContractAddress,
+  preparePrimaryReceivers,
   ProjectInfo,
   ReceiverEntry,
   simulateAndExecuteContract,
@@ -85,7 +88,7 @@ export type TCreateProjectEthV1OperationParams = {
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
   )[]
-  primaryReceiver: string
+  primaryReceivers: ReceiverEntry[]
   royalties: number
   royaltiesReceivers: ReceiverEntry[]
   ticketInfo?: {
@@ -109,6 +112,30 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    const splitsFactory = getContract({
+      address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
+      abi: SPLITS_MAIN_ABI,
+      walletClient: this.manager.walletClient,
+      publicClient: this.manager.publicClient,
+    })
+
+    const primaryReceivers = preparePrimaryReceivers(
+      this.params.primaryReceivers
+    )
+
+    //since we are using splits, we need to create the splits first. So we get the immutable address of the splits
+    const splitsAddress = await splitsFactory.read.predictImmutableSplitAddress(
+      [
+        primaryReceivers.map(entry => entry.account),
+        primaryReceivers.map(entry => entry.value * 100),
+        0,
+      ]
+    )
+
+    if (typeof splitsAddress != "string") {
+      throw Error("Could not get split address")
+    }
+
     if (this.params.royalties > 2500) {
       throw Error("Royalties should be lower or equal to 25%")
     }
@@ -138,7 +165,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1 as `0x${string}`,
       renderer: FxhashContracts.ETH_IPFS_RENDERER_V1 as `0x${string}`,
       tagIds: this.params.initInfo.tagIds,
-      primaryReceiver: this.params.primaryReceiver as `0x${string}`,
+      primaryReceiver: splitsAddress as `0x${string}`,
     }
 
     const projectInfo: ProjectInfo = {

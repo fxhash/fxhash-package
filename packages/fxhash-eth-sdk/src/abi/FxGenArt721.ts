@@ -379,6 +379,19 @@ export const FX_GEN_ART_721_ABI = [
   },
   {
     anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_receiver",
+        type: "address",
+      },
+    ],
+    name: "PrimaryReceiverUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
     inputs: [],
     name: "ProjectDeleted",
     type: "event",
@@ -874,6 +887,25 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "generateOnchainDataHash",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_receiver",
+        type: "address",
+      },
+    ],
+    name: "generatePrimaryReceiverHash",
     outputs: [
       {
         internalType: "bytes32",
@@ -1554,6 +1586,24 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
+        internalType: "address[]",
+        name: "_receivers",
+        type: "address[]",
+      },
+      {
+        internalType: "uint96[]",
+        name: "_basisPoints",
+        type: "uint96[]",
+      },
+    ],
+    name: "setBaseRoyalties",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes",
         name: "_uri",
         type: "bytes",
@@ -1578,6 +1628,24 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     name: "setOnchainData",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_receiver",
+        type: "address",
+      },
+      {
+        internalType: "bytes",
+        name: "_signature",
+        type: "bytes",
+      },
+    ],
+    name: "setPrimaryReceiver",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
