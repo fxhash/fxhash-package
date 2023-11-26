@@ -7,7 +7,7 @@
 - 70a8250: Ethereum compatibility; project-sdk v4
 - Updated dependencies [70a8250]
   - @fxhash/params@0.0.9
-  - @fxhash/utils@0.0.2
+  - @fxhash/utils@0.0.1
 
 ## 0.0.11
 

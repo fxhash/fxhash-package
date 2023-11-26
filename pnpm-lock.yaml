@@ -692,7 +692,7 @@ importers:
         specifier: 0.0.9
         version: link:../fxhash-params
       '@fxhash/utils':
-        specifier: 0.0.2
+        specifier: 0.0.1
         version: link:../utils
       node-html-parser:
         specifier: 6.1.5

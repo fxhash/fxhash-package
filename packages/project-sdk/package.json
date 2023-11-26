@@ -34,7 +34,7 @@
   "dependencies": {
     "node-html-parser": "6.1.5",
     "@fxhash/params": "0.0.9",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/utils": "0.0.1"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
