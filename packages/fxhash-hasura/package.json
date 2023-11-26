@@ -34,8 +34,6 @@
     "ws": "8.14.2"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
     "gen-client": "genql --endpoint http://localhost:8888/v1/graphql --output src -H 'x-hasura-admin-secret: changeme'",
     "test": "jest"
   }
