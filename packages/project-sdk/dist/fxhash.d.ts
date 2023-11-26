@@ -1,9 +1,6 @@
 import { FxParamDefinition, FxParamType, FxParamValue } from '@fxhash/params/types';
+import { ResettableRandFunction } from '@fxhash/utils';
 
-type RandFunction = () => number;
-interface ResettableRandFunction extends RandFunction {
-    reset?: () => void;
-}
 type FxHashExecutionContext = "standalone" | "capture" | "minting";
 type FxHashApi = {
     hash: string;
@@ -46,4 +43,4 @@ declare global {
     }
 }
 
-export { FxEmitData, FxEmitFunction, FxEventId, FxFeatureValue, FxFeatures, FxHashApi, FxHashExecutionContext, FxInitOptions, RandFunction, ResettableRandFunction, SetFeaturesOptions, SetParamsOptions };
+export { FxEmitData, FxEmitFunction, FxEventId, FxFeatureValue, FxFeatures, FxHashApi, FxHashExecutionContext, FxInitOptions, SetFeaturesOptions, SetParamsOptions };

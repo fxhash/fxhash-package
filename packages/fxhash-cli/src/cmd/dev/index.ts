@@ -41,6 +41,11 @@ export function devCommandBuilder(yargs) {
       describe:
         "The path to the src of the project. This setting is only relevant when your project is ejected.",
     })
+    .option("noLens", {
+      type: "boolean",
+      default: env.NO_LENS,
+      describe: "Only serve the project. Don't start fxlens.",
+    })
 }
 
 export const commandDev: CommandModule = {
@@ -51,6 +56,7 @@ export const commandDev: CommandModule = {
     const portProject = yargs.portProject as number
     const portStudio = yargs.portStudio as number
     const srcPathArg = yargs.srcPath as string
+    const noLensArg = yargs.noLens as boolean
 
     const isEjected = isEjectedProject(srcPathArg)
 
@@ -130,34 +136,37 @@ export const commandDev: CommandModule = {
       }
     })
 
-    // start fxlens
-    const app = express()
-    app.use(express.static(FXSTUDIO_PATH))
-    app.listen(portStudio, () => {
-      console.log(
-        `${logger.successC("[fxlens] fx(lens) is running on")} ${logger.url(
-          URL_FXLENS
-        )}`
-      )
-    })
+    if (!noLensArg) {
+      // start fxlens
+      const app = express()
+      app.use(express.static(FXSTUDIO_PATH))
+      app.listen(portStudio, () => {
+        console.log(
+          `${logger.successC("[fxlens] fx(lens) is running on")} ${logger.url(
+            URL_FXLENS
+          )}`
+        )
+      })
+    }
 
     server.startCallback(() => {
-      const target = `${URL_FXLENS}/?target=${URL_PROJECT}`
-      const l =
-        env.RUN_PROJECT === true
-          ? `${logger.successC(
-              "[project] your project is running on"
-            )} ${logger.url(URL_PROJECT)}`
-          : `${logger.successC(
-              "[project] your project might be running on, "
-            )} ${logger.url(URL_PROJECT)} ${logger.successC(
-              "but this is user specified so we don't really know"
-            )}`
-      console.log(l)
+      let target = `${URL_FXLENS}/?target=${URL_PROJECT}`
       console.log()
       console.log(
-        `opening fxlens with project as target: ${logger.url(target)}`
+        `${logger.successC(
+          "[project] your project is running on"
+        )} ${logger.url(URL_PROJECT)}`
       )
+      console.log()
+      if (noLensArg) {
+        target = URL_PROJECT
+        console.log(`noLens argument found; starting project only`)
+        console.log(`opening project: ${logger.url(target)}`)
+      } else {
+        console.log(
+          `opening fxlens with project as target: ${logger.url(target)}`
+        )
+      }
       console.log()
       open(target)
     })
