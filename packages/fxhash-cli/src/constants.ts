@@ -1,11 +1,13 @@
 import dotenv from "dotenv"
 import path from "path"
+import os from "os"
+import fs from "fs"
 
 dotenv.config()
 const env = {
   PORT_FXSTUDIO: 3300,
   PORT_FXPROJECT: 3301,
-  RUN_PROJECT: true,
+  NO_LENS: false,
   SRC_PATH: "src",
   NO_ZIP: false,
   ...process.env,
@@ -27,5 +29,12 @@ export const CWD_PATH = path.resolve(process.cwd())
 export const ROOT_PATH = path.resolve(__dirname)
 export const STATIC_PATH = path.resolve(ROOT_PATH, "..", "static")
 export const FXSTUDIO_PATH = path.resolve(STATIC_PATH, "fxlens")
-export const TMP_PATH = path.resolve(STATIC_PATH, "tmp")
+
+const TMP_PATH = path.join(os.tmpdir(), "fxhash-cli")
+export function getTmpPath(): string {
+  if (!fs.existsSync(TMP_PATH)) {
+    fs.mkdirSync(TMP_PATH, { recursive: true })
+  }
+  return TMP_PATH
+}
 export const SNIPPET_PATH = path.resolve(STATIC_PATH, "snippet.js")
