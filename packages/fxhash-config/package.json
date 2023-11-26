@@ -32,14 +32,14 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "18.7.13",
     "typescript": "5.0.4",
     "tsup": "6.6.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }

@@ -26,17 +26,17 @@
   "files": [
     "dist"
   ],
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "6.6.0",
+    "typescript": "5.0.4",
+    "vitest": "0.34.6",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/prettier-config": "1.0.2"
+  },
   "scripts": {
     "test": "vitest",
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/prettier-config": "workspace:*",
-    "tsup": "6.6.0",
-    "typescript": "5.0.4",
-    "vitest": "0.34.6"
   }
 }

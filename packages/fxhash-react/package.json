@@ -30,16 +30,12 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@airgap/beacon-sdk": "4.0.10",
     "@taquito/utils": "17.3.1",
-    "@fxhash/contracts": "workspace:*",
-    "@fxhash/contracts-shared": "workspace:*",
-    "autonomy-irl-js": "1.0.0"
+    "autonomy-irl-js": "1.0.0",
+    "@fxhash/contracts": "0.0.8",
+    "@fxhash/contracts-shared": "0.0.0"
   },
   "peerDependencies": {
     "@taquito/beacon-wallet": "^17.3.1",
@@ -52,5 +48,9 @@
     "@types/react": "18.2.15",
     "typescript": "5.0.4",
     "tsup": "6.6.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }
