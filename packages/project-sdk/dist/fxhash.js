@@ -1,10 +1,49 @@
 "use strict";
 (() => {
-  // src/sdk/math.ts
-  var alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+  // ../utils/dist/chunk-IMPGERQH.js
+  var BASE58_CHARSET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+  // ../utils/dist/chunk-26CM6NPL.js
+  function mockTezosAddress() {
+    const randomSequence = Array.from(
+      { length: 33 },
+      () => BASE58_CHARSET[Math.random() * BASE58_CHARSET.length | 0]
+    ).join("");
+    return `tz1${randomSequence}`;
+  }
+  function isTezosAddressValid(address) {
+    if (address.length !== 36) {
+      return false;
+    }
+    for (let i = 0; i < address.length; i++) {
+      if (!BASE58_CHARSET.includes(address[i]))
+        return false;
+    }
+    return true;
+  }
+  function isEthereumAddressValid(address) {
+    if (!/^(0x)?[0-9a-fA-F]{40}$/.test(address)) {
+      return false;
+    }
+    return true;
+  }
+
+  // ../utils/dist/chunk-FISFLHKP.js
+  function mockTezosTransactionHash() {
+    const randomSequence = Array.from(
+      { length: 33 },
+      () => BASE58_CHARSET[Math.random() * BASE58_CHARSET.length | 0]
+    ).join("");
+    return `oo${randomSequence}`;
+  }
+  function isEthereumTransactionHashValid(hash) {
+    return hash.substring(0, 2) === "0x";
+  }
+
+  // ../utils/dist/chunk-7UVKKGRT.js
   function b58dec(str) {
     return [...str].reduce(function(p, c) {
-      return p * alphabet.length + alphabet.indexOf(c) | 0;
+      return p * BASE58_CHARSET.length + BASE58_CHARSET.indexOf(c) | 0;
     }, 0);
   }
   function sfc32(seed) {
@@ -31,13 +70,23 @@
       return b58dec(substring);
     });
   }
-  function getRandomHash(n) {
-    return Array(n).fill(0).map(function(_) {
-      return alphabet[Math.random() * alphabet.length | 0];
-    }).join("");
+  function getSeedFromHash(hash) {
+    if (isEthereumTransactionHashValid(hash) || isEthereumAddressValid(hash)) {
+      return [
+        parseInt(hash.slice(2, 10), 16),
+        parseInt(hash.slice(10, 18), 16),
+        parseInt(hash.slice(18, 26), 16),
+        parseInt(hash.slice(26, 34), 16)
+      ];
+    } else if (isTezosAddressValid(hash)) {
+      return matcher(hash, 3);
+    } else {
+      return matcher(hash, 2);
+    }
   }
-  function createFxRandom(fxhash, start) {
-    return sfc32(matcher(fxhash, start));
+  function createFxRandom(hash) {
+    const seed = getSeedFromHash(hash);
+    return sfc32(seed);
   }
 
   // ../fxhash-params/dist/chunk-FZWZHHQ2.js
@@ -352,10 +401,10 @@
   function createFxhashSdk(window2, options) {
     const { parent } = window2;
     const search = new URLSearchParams(window2.location.search);
-    const fxhash = search.get("fxhash") || "oo" + getRandomHash(49);
-    let fxrand = createFxRandom(fxhash, 2);
-    const fxminter = search.get("fxminter") || "tz1" + getRandomHash(33);
-    let fxrandminter = createFxRandom(fxminter, 3);
+    const fxhash = search.get("fxhash") || mockTezosTransactionHash();
+    let fxrand = createFxRandom(fxhash);
+    const fxminter = search.get("fxminter") || mockTezosAddress();
+    let fxrandminter = createFxRandom(fxminter);
     const isFxpreview = search.get("preview") === "1";
     function fxpreview() {
       window2.dispatchEvent(new Event("fxhash-preview"));
@@ -529,13 +578,13 @@
       }
     };
     const resetFxRand = () => {
-      fxrand = createFxRandom(fxhash, 2);
+      fxrand = createFxRandom(fxhash);
       $fx.rand = fxrand;
       fxrand.reset = resetFxRand;
     };
     fxrand.reset = resetFxRand;
     const resetFxRandMinter = () => {
-      fxrandminter = createFxRandom(fxminter, 3);
+      fxrandminter = createFxRandom(fxminter);
       $fx.randminter = fxrandminter;
       fxrandminter.reset = resetFxRandMinter;
     };
