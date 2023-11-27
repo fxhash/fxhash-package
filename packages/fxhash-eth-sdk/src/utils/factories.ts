@@ -1,6 +1,23 @@
 import { encodeAbiParameters } from "viem"
 import { InitInfo, MetadataInfo, MintInfo, ProjectInfo } from ".."
 
+export function encodeCreateImmutableSplitsParametersArgs(
+  accounts: `0x${string}`[],
+  percentAllocations: number[],
+  distributorFee: number,
+  controller: `0x${string}`
+) {
+  return encodeAbiParameters(
+    [
+      { name: "accounts", type: "address[]" },
+      { name: "percentAllocations", type: "uint32[]" },
+      { name: "distributorFee", type: "uint32" },
+      { name: "controller", type: "address" },
+    ],
+    [accounts, percentAllocations, distributorFee, controller]
+  )
+}
+
 export function encodeProjectFactoryArgs(
   owner: `0x${string}`,
   initInfo: InitInfo,

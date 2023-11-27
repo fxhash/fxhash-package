@@ -42,8 +42,9 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         },
       },
     })
-    const multicallArgs: CallData[] = []
 
+    const multicallArgs: CallData[] = []
+    const tokenSplits: string[] = []
     //we loop on the all the minters, to prepare the withdraw operations
     for (const minterProceeds of proceeds.data.onchain.eth_token_proceeds) {
       //first we process dutch auction earnings
@@ -57,6 +58,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [dutchAuctionProceeds.token, dutchAuctionProceeds.reserveId],
           }),
         })
+        tokenSplits.push(dutchAuctionProceeds.token)
       }
 
       //then fixed price minter earnings
@@ -69,6 +71,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [fixedPriceProceeds.token],
           }),
         })
+        tokenSplits.push(fixedPriceProceeds.token)
       }
     }
 
@@ -82,22 +85,19 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     )
 
     //we fetch all the splits related to the user
-    const userSplits = await splitsClient.getRelatedSplits({
-      address: this.params.address,
+    //we get the current user splits having money
+    const userSplits = await splitsClient.getUserEarningsByContract({
+      userAddress: this.params.address,
     })
 
-    const filteredUserSplits = userSplits.controlling.filter(split => true)
+    //we transform the list of splits into a list of split addresses
+    const filteredUserSplits = Object.keys(userSplits.activeBalances)
 
-    //TODO: once the split update will be done, we'll need to filter out the splits that won't receive funds
-    //TODO: we'll also add splits that would not be part of the minter proceeds but would have funds
-
-    //format the list so it is easily usable
-    const flattenedUserSplits = userSplits.controlling
-      .map(split => split.address)
-      .concat(userSplits.receivingFrom.map(split => split.address))
+    //we add the splits related to the minter earnings
+    const flattenedUserSplits = filteredUserSplits.concat(tokenSplits)
 
     //before distributing, we first need to withdraw the funds
-    for (const split of flattenedUserSplits) {
+    for (const split of tokenSplits) {
       //we fetch the splits recipient
       const { recipients } = await splitsClient.getSplitMetadata({
         splitAddress: split,
