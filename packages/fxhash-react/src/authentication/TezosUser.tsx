@@ -189,7 +189,7 @@ export function TezosUserProvider({
       address,
     })
 
-    let message = "Tezos" + formatSignInPayload(walletManager.address)
+    let message = "Tezos " + formatSignInPayload(walletManager.address)
     const result = await walletManager.signMessage(message, {
       type: "authentication-payload",
       policy: "cache-first",
