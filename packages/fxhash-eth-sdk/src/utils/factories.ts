@@ -8,7 +8,8 @@ export function encodeProjectFactoryArgs(
   metadataInfo: MetadataInfo,
   mintInfos: MintInfo[],
   royaltyReceivers: `0x${string}`[],
-  basisPoints: bigint[]
+  allocations: number[],
+  basisPoints: bigint
 ) {
   return encodeAbiParameters(
     [
@@ -81,8 +82,12 @@ export function encodeProjectFactoryArgs(
         type: "address[]",
       },
       {
+        name: "allocations",
+        type: "uint32[]",
+      },
+      {
         name: "basisPoints",
-        type: "uint96[]",
+        type: "uint96",
       },
     ],
     [
@@ -92,6 +97,7 @@ export function encodeProjectFactoryArgs(
       metadataInfo,
       mintInfos,
       royaltyReceivers,
+      allocations,
       basisPoints,
     ]
   )

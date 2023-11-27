@@ -89,7 +89,7 @@ export type TCreateProjectEthV1OperationParams = {
     | TicketMintInfoArgs
   )[]
   primaryReceivers: ReceiverEntry[]
-  royalties: number
+  royalties: bigint
   royaltiesReceivers: ReceiverEntry[]
   ticketInfo?: {
     gracePeriod: number
@@ -155,7 +155,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
       return {
         account: entry.account,
-        value: (entry.value * this.params.royalties) / 10000,
+        value: (BigInt(entry.value) * this.params.royalties) / BigInt(10000),
       }
     })
 
@@ -221,7 +221,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         metadataInfo,
         mintInfos,
         parsedRoyalties.map(entry => entry.account),
-        parsedRoyalties.map(entry => BigInt(entry.value))
+        parsedRoyalties.map(entry => Number(entry.value)),
+        this.params.royalties
       )
       const ticketEncodedArgs = encodeTicketFactoryArgs(
         this.manager.address as `0x${string}`,

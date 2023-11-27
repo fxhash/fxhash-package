@@ -32,6 +32,11 @@ export const FX_GEN_ART_721_ABI = [
   },
   {
     inputs: [],
+    name: "FxHashReceiverMissing",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InsufficientSupply",
     type: "error",
   },
@@ -589,15 +594,15 @@ export const FX_GEN_ART_721_ABI = [
       },
       {
         indexed: false,
-        internalType: "address[]",
-        name: "_receivers",
-        type: "address[]",
+        internalType: "address",
+        name: "_receiver",
+        type: "address",
       },
       {
         indexed: false,
-        internalType: "uint96[]",
+        internalType: "uint96",
         name: "_basisPoints",
-        type: "uint96[]",
+        type: "uint96",
       },
     ],
     name: "TokenIdRoyaltiesUpdated",
@@ -614,9 +619,15 @@ export const FX_GEN_ART_721_ABI = [
       },
       {
         indexed: false,
-        internalType: "uint96[]",
+        internalType: "uint32[]",
+        name: "_allocations",
+        type: "uint32[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint96",
         name: "_basisPoints",
-        type: "uint96[]",
+        type: "uint96",
       },
     ],
     name: "TokenRoyaltiesUpdated",
@@ -711,13 +722,7 @@ export const FX_GEN_ART_721_ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    inputs: [],
     name: "baseRoyalties",
     outputs: [
       {
@@ -1092,9 +1097,14 @@ export const FX_GEN_ART_721_ABI = [
         type: "address[]",
       },
       {
-        internalType: "uint96[]",
+        internalType: "uint32[]",
+        name: "_allocations",
+        type: "uint32[]",
+      },
+      {
+        internalType: "uint96",
         name: "_basisPoints",
-        type: "uint96[]",
+        type: "uint96",
       },
     ],
     name: "initialize",
@@ -1591,9 +1601,14 @@ export const FX_GEN_ART_721_ABI = [
         type: "address[]",
       },
       {
-        internalType: "uint96[]",
+        internalType: "uint32[]",
+        name: "_allocations",
+        type: "uint32[]",
+      },
+      {
+        internalType: "uint96",
         name: "_basisPoints",
-        type: "uint96[]",
+        type: "uint96",
       },
     ],
     name: "setBaseRoyalties",
@@ -1737,11 +1752,6 @@ export const FX_GEN_ART_721_ABI = [
   },
   {
     inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
       {
         internalType: "uint256",
         name: "",
