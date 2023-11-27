@@ -12,7 +12,7 @@ import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TListingV3OperationParams = {
   article: NFTArticle
@@ -20,25 +20,11 @@ export type TListingV3OperationParams = {
   price: string
   owner: User
 }
-
-export class ListingV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosListingV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * List an asset on the marketplace V3
  * todo: add support for other asset types
  */
-export class TezosListingV3Operation extends TezosContractOperation<TListingV3OperationParams> {
+export class ListingV3Operation extends TezosContractOperation<TListingV3OperationParams> {
   articleContract: ContractAbstraction<Wallet> | null = null
   marketplaceContract: ContractAbstraction<Wallet> | null = null
 
