@@ -20,7 +20,7 @@ export function getSeedsFromMintTransaction(
       data: log.data,
     })
     if (desc?.name === "SeedFulfilled") {
-      seeds.push(desc.topic as Hash)
+      seeds.push(desc.args.getValue("_seed") as Hash)
     }
   }
   return seeds
