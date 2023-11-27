@@ -126,6 +126,7 @@ export function EthereumUserProvider({
     }
     return success({
       address: accountState.address!,
+      walletManager: context.walletManager,
       authorization: {
         network: BlockchainType.ETHEREUM,
         payload: result.value.message,
@@ -156,6 +157,7 @@ export function EthereumUserProvider({
             resolve(
               success({
                 address: address,
+                walletManager: walletManager,
                 authorization: {
                   network: BlockchainType.ETHEREUM,
                   payload: result.value.message,

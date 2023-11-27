@@ -30,14 +30,17 @@ export type TMintDutchAuctionWhitelistEthV1OperationParams = {
   price: bigint
   amount: bigint
   reserveId: number
-  to: string
+  to: string | null
 }
 
 /* The MintDutchAutionWhitelistEthV1Operation class is responsible for minting a fixed price token with
 a whitelist in a Dutch auction on the Ethereum network. */
 export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOperation<TMintDutchAuctionWhitelistEthV1OperationParams> {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
-  async prepare() {}
+  async prepare() {
+    if (!this.params.to) {
+      this.params.to = this.manager.address
+    }
+  }
   async call(): Promise<TransactionReceipt> {
     const merkleRoot = await getMerkleRootForToken(this.params.token)
     if (merkleRoot === undefined) {
