@@ -1,7 +1,6 @@
 export interface IEthContracts {
   multicall3: `0x${string}`
   seaport_zone: `0x${string}`
-  splits_controller_v1: `0x${string}`
   splits_main: `0x${string}`
   scripty_storage: `0x${string}`
   scripty_builder: `0x${string}`
@@ -25,17 +24,16 @@ export const ethTestnetContracts: IEthContracts = {
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
   scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
-  project_factory_v1: "0xaAac8b3C065824871c65d5F40C2efE95bFa8D1af",
-  mint_ticket_factory_v1: "0x0414421AC7aFB9B1b9ec5232Bb9FEEE0072Ae21A",
-  splits_factory_v1: "0x09bb4FF8e3309A11e20b354e1Eeeb02170C6bb64",
-  splits_controller_v1: "0x447851a0033f4669E01dF608424c24C34128B040",
-  dutch_auction_minter_v1: "0x8FD24a7002Eb40d60Ee403518c9F80EED0424cbF",
-  fixed_price_minter_v1: "0x00b6BB7C1A08bF0278Ec462E05218109eeC87274",
-  ticket_redeemer_v1: "0xA88773F85c6Fd31FDd0F283eD851E9C966B7D569",
-  ipfs_renderer_v1: "0x74Fed617fD8a59CBf4e3386B0192c02E377Bc535",
-  randomizer_v1: "0x4cbe2BF84874bC626a373A1C57C6641191e57383",
-  role_registry_v1: "0x7287BEABe00A4AaE2d93907D5f24046D98e164d2",
-  contract_registry_v1: "0x91E96491f1638b100280F651Ce7D07f805D2A841",
-  gen_art_token_impl_v1: "0xdA2C0B9EC1CfC2e82dB8DeA56215a318837CD22a",
-  mint_ticket_impl_v1: "0xB290A25113414576776C15f52901c2b068389d20",
+  project_factory_v1: "0x17Dc532646DC56c7e8fE10d464F314EeE852B054",
+  mint_ticket_factory_v1: "0x0A0817fC59a194fa54C84EFbfDa5d445c27ba0f5",
+  splits_factory_v1: "0xfdED3152A2eD1A307C63A02c40C6Dc59f8f7c6A4",
+  dutch_auction_minter_v1: "0xCE2580FBcc529e7c46BE92D37f94ff0cD10cC219",
+  fixed_price_minter_v1: "0x6368b18C6a9CCA24Ca93c6e189F53061fA058DB4",
+  ticket_redeemer_v1: "0xF18510B54E7F08B0F1B0538D46d4Ca1C62ff2374",
+  ipfs_renderer_v1: "0xe384589079e1061b72B8B0385a876A42aC68f018",
+  randomizer_v1: "0x94a3cC3dd2da9dc2C877Dd95154c3f4f25Bf753D",
+  role_registry_v1: "0x6007402a64BE3b40101254F492C110d354E276A1",
+  contract_registry_v1: "0x098F32260eB2Ba2ca5d611aEac35B746589622c9",
+  gen_art_token_impl_v1: "0x968F38612D315562dCA582c01c83B1Ca8b55cb13",
+  mint_ticket_impl_v1: "0xcFFb01732603F89cbc34a53B98daE8F8Cd3CBfcF",
 }
