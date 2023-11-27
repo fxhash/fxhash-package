@@ -3,7 +3,9 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
+  PublicClient,
   TransactionReceipt,
+  WalletClient,
   getContract,
 } from "viem"
 
@@ -11,7 +13,11 @@ import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
-import { FX_ISSUER_FACTORY_ABI } from "@/abi"
+import {
+  FX_GEN_ART_721_ABI,
+  FX_ISSUER_FACTORY_ABI,
+  SPLITS_MAIN_ABI,
+} from "@/abi"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -248,9 +254,27 @@ export function sortReceiversAlphabetically(
 }
 
 /**
+ * Given a list of receivers, if the same receiver is set twice in the list,
+ * merge those entry and add up their values.
+ */
+export function mergeSameReceivers(
+  receivers: ReceiverEntry[]
+): ReceiverEntry[] {
+  const out: ReceiverEntry[] = []
+  for (const receiver of receivers) {
+    const f = out.find(r => r.account === receiver.account)
+    if (f) f.value += receiver.value
+    else out.push({ ...receiver })
+  }
+  return out
+}
+
+/**
  * The `preparePrimaryReceivers` function prepares a list of primary receivers by sorting them alphabetically,
  * distributing a fee proportionally among them and adjusting the values to ensure the total is 10,000.
  * It also transforms the values to base 1_000_000.
+ * In the end, if an address is defined multiple times, the entries are merged
+ * into one.
  * @param {ReceiverEntry[]} receivers - An array of objects representing the primary receivers. Each
  * object has a "value" property indicating the amount to be received by that receiver.
  * @param {ReceiverEntry} feeReceiver - The `feeReceiver` parameter is an object that represents the
@@ -302,5 +326,39 @@ export function preparePrimaryReceivers(
     receivers[receivers.length - 1].value += discrepancy
   }
 
-  return receivers
+  return mergeSameReceivers(receivers)
+}
+
+/**
+ * Uses the Main Split contract to predict the split address given the
+ * receivers.
+ * @param receivers list of receivers
+ * @returns the address of the immutable split
+ */
+export function predictImmutableSplitAddress(
+  receivers: ReceiverEntry[],
+  publicClient: PublicClient
+): Promise<`0x${string}`> {
+  const mainSplit = getContract({
+    abi: SPLITS_MAIN_ABI,
+    address: config.eth.contracts.splits_main,
+    publicClient,
+  })
+  return mainSplit.read.predictImmutableSplitAddress([
+    receivers.map(r => r.account),
+    receivers.map(r => r.value),
+    0,
+  ]) as any as Promise<`0x${string}`>
+}
+
+export function generateOnchainDataHash(
+  bytes: `0x${string}`,
+  publicClient: PublicClient
+) {
+  const genArt = getContract({
+    abi: FX_GEN_ART_721_ABI,
+    address: config.eth.contracts.gen_art_token_impl_v1,
+    publicClient,
+  })
+  return genArt.read.generateOnchainDataHash([bytes])
 }
