@@ -18,12 +18,6 @@ export type TWithdrawAllEthV1OperationParams = {
   address: string
 }
 
-import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev"
-
-loadDevMessages()
-
-loadErrorMessages()
-
 /**
  * Complex batched operation to withdraw all earning for a user
  * The process is the following:
@@ -92,7 +86,10 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       address: this.params.address,
     })
 
+    const filteredUserSplits = userSplits.controlling.filter(split => true)
+
     //TODO: once the split update will be done, we'll need to filter out the splits that won't receive funds
+    //TODO: we'll also add splits that would not be part of the minter proceeds but would have funds
 
     //format the list so it is easily usable
     const flattenedUserSplits = userSplits.controlling
