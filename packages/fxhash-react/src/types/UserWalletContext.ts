@@ -27,6 +27,7 @@ export type BlockchainAuthorization =
 
 export interface IConnexionPayload {
   address: string
+  walletManager: TezosWalletManager | EthereumWalletManager
   authorization: BlockchainAuthorization
 }
 

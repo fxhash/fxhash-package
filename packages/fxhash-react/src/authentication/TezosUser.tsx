@@ -208,6 +208,7 @@ export function TezosUserProvider({
     // success payload for the connection
     return success({
       address,
+      walletManager,
       authorization: {
         network: BlockchainType.TEZOS,
         payload: result.value.message,
