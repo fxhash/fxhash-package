@@ -248,7 +248,7 @@ export function sortReceiversAlphabetically(
 }
 
 /**
- * The `preparePrimaryReceivers` function prepares a list of primary receivers by sorting them alphabetically,
+ * The `prepareReceivers` function prepares a list of primary receivers by sorting them alphabetically,
  * distributing a fee proportionally among them and adjusting the values to ensure the total is 10,000.
  * It also transforms the values to base 1_000_000.
  * @param {ReceiverEntry[]} receivers - An array of objects representing the primary receivers. Each
@@ -257,8 +257,9 @@ export function sortReceiversAlphabetically(
  * receiver who will receive the fee. It has the following properties:
  * @returns an array of ReceiverEntry objects.
  */
-export function preparePrimaryReceivers(
-  receivers: ReceiverEntry[]
+export function prepareReceivers(
+  receivers: ReceiverEntry[],
+  type: "primary" | "secondary"
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
   const originalTotal = receivers.reduce(
@@ -270,12 +271,15 @@ export function preparePrimaryReceivers(
    * This is a sanity check to make sure that the total is 100%
    */
   if (originalTotal !== 10_000) {
-    throw Error("Primary receivers total must be 10000")
+    throw Error("Primary receivers total must be 10_000")
   }
 
   const feeReceiver: ReceiverEntry = {
     account: config.config.ethFeeReceiver as `0x${string}`,
-    value: config.config.fxhashPrimaryFee,
+    value:
+      type === "primary"
+        ? config.config.fxhashPrimaryFee
+        : config.config.fxhashSecondaryFee,
   }
   // Calculate the fee ratio for each account
   const feeRatio = feeReceiver.value / originalTotal

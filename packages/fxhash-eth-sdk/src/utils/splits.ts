@@ -1,8 +1,11 @@
-import { ReceiverEntry, preparePrimaryReceivers } from "@/services/operations"
+import { ReceiverEntry, prepareReceivers } from "@/services/operations"
 import { Split, SplitsClient } from "@0xsplits/splits-sdk"
 
-function sortAndNormalizeReceivers(receivers: ReceiverEntry[]) {
-  return preparePrimaryReceivers(receivers)
+function sortAndNormalizeReceivers(
+  receivers: ReceiverEntry[],
+  type: "primary" | "secondary"
+) {
+  return prepareReceivers(receivers, type)
     .map(r => ({
       account: r.account.toLowerCase(),
       value: r.value / 10000,
@@ -38,7 +41,7 @@ export async function getExistingSplits(
   user: string,
   receivers: ReceiverEntry[]
 ) {
-  const preparedReceivers = sortAndNormalizeReceivers(receivers)
+  const preparedReceivers = sortAndNormalizeReceivers(receivers, "primary")
 
   const userSplits = await splitsClient.getRelatedSplits({
     address: user,

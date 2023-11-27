@@ -17,7 +17,7 @@ import {
   MintInfo,
   MintTypes,
   predictFxContractAddress,
-  preparePrimaryReceivers,
+  prepareReceivers,
   ProjectInfo,
   ReceiverEntry,
   simulateAndExecuteContract,
@@ -119,8 +119,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       publicClient: this.manager.publicClient,
     })
 
-    const primaryReceivers = preparePrimaryReceivers(
-      this.params.primaryReceivers
+    const primaryReceivers = prepareReceivers(
+      this.params.primaryReceivers,
+      "primary"
     )
 
     //since we are using splits, we need to create the splits first. So we get the immutable address of the splits
@@ -139,25 +140,15 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     if (this.params.royalties > 2500) {
       throw Error("Royalties should be lower or equal to 25%")
     }
-    const secondaryTotal = this.params.royaltiesReceivers.reduce(
-      (acc, entry) => acc + entry.value,
-      0
-    )
 
-    if (secondaryTotal != 10000) {
-      throw Error("Royalties total should be 100%")
-    }
+    const secondaryReceivers = prepareReceivers(
+      this.params.royaltiesReceivers,
+      "secondary"
+    )
 
     const owner = this.params.isCollab
       ? await this.manager.safe.getAddress()
       : this.manager.address
-
-    const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
-      return {
-        account: entry.account,
-        value: (BigInt(entry.value) * this.params.royalties) / BigInt(10000),
-      }
-    })
 
     const initInfo: InitInfo = {
       name: this.params.initInfo.name,
@@ -220,8 +211,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         projectInfo,
         metadataInfo,
         mintInfos,
-        parsedRoyalties.map(entry => entry.account),
-        parsedRoyalties.map(entry => Number(entry.value)),
+        secondaryReceivers.map(entry => entry.account),
+        secondaryReceivers.map(entry => Number(entry.value)),
         this.params.royalties
       )
       const ticketEncodedArgs = encodeTicketFactoryArgs(
@@ -247,8 +238,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         projectInfo,
         metadataInfo,
         mintInfos,
-        parsedRoyalties.map(entry => entry.account),
-        parsedRoyalties.map(entry => entry.value),
+        secondaryReceivers.map(entry => entry.account),
+        secondaryReceivers.map(entry => entry.value),
+        this.params.royalties,
       ]
     }
     if (this.params.isCollab) {
