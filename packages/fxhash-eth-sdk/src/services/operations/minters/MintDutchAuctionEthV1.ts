@@ -55,6 +55,6 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
   }
 
   success(): string {
-    return `Successfully minted dutch auction token ${this.params.token} for ${this.params.price} ETH`
+    return `Successfully minted dutch auction token ${this.params.token}`
   }
 }
