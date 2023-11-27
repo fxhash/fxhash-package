@@ -186,3 +186,15 @@ export async function getSafeData(
 ): Promise<SafeInfoResponse> {
   return await getSafeService(provider).getSafeInfo(safeAdress)
 }
+
+/**
+ * Retrieves the provided safe creation information
+ * @param {string} safeAddress - address of a safe contract.
+ * @returns {SafeCreationInfoResponse} safe creation information
+ */
+export async function getSafeCreationInfo(
+  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
+  safeAddress: string
+) {
+  return await getSafeService(provider).getSafeCreationInfo(safeAddress)
+}

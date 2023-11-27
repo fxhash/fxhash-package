@@ -27,14 +27,17 @@ export type TMintFixedPriceMintPassEthV1OperationParams = {
   amount: bigint
   index: number
   signature: string
-  to: string
+  to: string | null
 }
 
 /* The MintFixedPriceMintPassEthV1Operation class is responsible for minting a fixed price token using
 a mint pass in Ethereum. */
 export class MintFixedPriceMintPassEthV1Operation extends EthereumContractOperation<TMintFixedPriceMintPassEthV1OperationParams> {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
-  async prepare() {}
+  async prepare() {
+    if (!this.params.to) {
+      this.params.to = this.manager.address
+    }
+  }
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
