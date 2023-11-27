@@ -202,17 +202,14 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       this.manager
     )
 
-    console.log(this.params.mintInfo)
     const hasTicketMintInfo = this.params.mintInfo.some(mint => {
       return mint.type === MintTypes.TICKET
     })
 
     let args: unknown[]
-    console.log(this.params.ticketInfo)
     if (hasTicketMintInfo && !this.params.ticketInfo) {
       throw Error("Ticket mint info required")
     } else if (hasTicketMintInfo && this.params.ticketInfo) {
-      console.log("ticket ok")
       /**
        * this scenario requires calling a different endpoint and encoding
        * the parameters as bytes
