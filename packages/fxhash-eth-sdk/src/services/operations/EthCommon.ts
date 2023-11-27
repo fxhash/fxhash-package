@@ -304,7 +304,7 @@ export function preparePrimaryReceivers(
   // Subtract the fee from each account proportionally and transform it to base 1_000_000
   receivers = receivers.map(account => ({
     ...account,
-    value: (account.pct - account.pct * feeRatio) * 100,
+    pct: (account.pct - account.pct * feeRatio) * 100,
   }))
 
   // Add the fee account with its full value
