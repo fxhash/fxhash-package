@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { encodeFunctionData, TransactionReceipt } from "viem"
+import { encodeFunctionData, getContract, TransactionReceipt } from "viem"
 
 import {
   simulateAndExecuteContract,
@@ -10,9 +10,10 @@ import { apolloClient } from "../Hasura"
 import { Qu_GetEthProceeds } from "@fxhash/gql"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { FIXED_PRICE_MINTER_ABI } from "@/abi"
+import { FIXED_PRICE_MINTER_ABI, SPLITS_MAIN_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
 import { CallData } from "@0xsplits/splits-sdk"
+import { FxhashContracts } from "@/contracts/Contracts"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -98,6 +99,23 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
 
     //before distributing, we first need to withdraw the funds
     for (const split of tokenSplits) {
+      //we fetch the bytecode to check if the split is deployed or if we need to deploy it
+      const splitBytecode = await this.manager.publicClient.getBytecode({
+        address: split as `0x${string}`,
+      })
+      if (splitBytecode === undefined) {
+        //it's not we need to deploy it
+        //first we need to fetch the recipients and allocations
+        //then we provide it to the createSplit function
+        multicallArgs.push({
+          address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
+          data: encodeFunctionData({
+            abi: SPLITS_MAIN_ABI,
+            functionName: "createSplit",
+            args: [],
+          }),
+        })
+      }
       //we fetch the splits recipient
       const { recipients } = await splitsClient.getSplitMetadata({
         splitAddress: split,
