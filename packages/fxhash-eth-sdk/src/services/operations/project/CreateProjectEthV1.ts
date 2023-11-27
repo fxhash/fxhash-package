@@ -113,7 +113,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       throw Error("Royalties should be lower or equal to 25%")
     }
     const secondaryTotal = this.params.royaltiesReceivers.reduce(
-      (acc, entry) => acc + entry.value,
+      (acc, entry) => acc + entry.pct,
       0
     )
 
@@ -127,8 +127,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
 
     const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
       return {
-        account: entry.account,
-        value: (entry.value * this.params.royalties) / 10000,
+        account: entry.address,
+        value: (entry.pct * this.params.royalties) / 10000,
       }
     })
 

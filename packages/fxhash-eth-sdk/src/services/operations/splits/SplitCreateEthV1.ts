@@ -33,12 +33,12 @@ export class CreateSplitEthV1Operation extends EthereumContractOperation<TCreate
       this.params.mutable && this.params.creator
         ? [
             getAddress(this.params.creator),
-            this.params.receivers.map(receiver => getAddress(receiver.account)),
-            this.params.receivers.map(receiver => receiver.value),
+            this.params.receivers.map(receiver => getAddress(receiver.address)),
+            this.params.receivers.map(receiver => receiver.pct),
           ]
         : [
-            this.params.receivers.map(receiver => getAddress(receiver.account)),
-            this.params.receivers.map(receiver => receiver.value),
+            this.params.receivers.map(receiver => getAddress(receiver.address)),
+            this.params.receivers.map(receiver => receiver.pct),
           ]
     console.log(argsPayload)
     if (this.params.isCollab) {

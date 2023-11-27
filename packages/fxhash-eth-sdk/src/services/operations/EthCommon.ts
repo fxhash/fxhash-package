@@ -27,8 +27,8 @@ export enum MintTypes {
 
 //Type definition for the primary and royalties receivers
 export interface ReceiverEntry {
-  account: `0x${string}`
-  value: number
+  address: `0x${string}`
+  pct: number
 }
 
 //Type definition of the parameters for the simulateContract function
@@ -250,7 +250,7 @@ export function isTransactionReceipt(obj: any): obj is TransactionReceipt {
 export function sortReceiversAlphabetically(
   accounts: ReceiverEntry[]
 ): ReceiverEntry[] {
-  return accounts.sort((a, b) => a.account.localeCompare(b.account))
+  return accounts.sort((a, b) => a.address.localeCompare(b.address))
 }
 
 /**
@@ -262,8 +262,8 @@ export function mergeSameReceivers(
 ): ReceiverEntry[] {
   const out: ReceiverEntry[] = []
   for (const receiver of receivers) {
-    const f = out.find(r => r.account === receiver.account)
-    if (f) f.value += receiver.value
+    const f = out.find(r => r.address === receiver.address)
+    if (f) f.pct += receiver.pct
     else out.push({ ...receiver })
   }
   return out
@@ -285,10 +285,7 @@ export function preparePrimaryReceivers(
   receivers: ReceiverEntry[]
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
-  const originalTotal = receivers.reduce(
-    (sum, account) => sum + account.value,
-    0
-  )
+  const originalTotal = receivers.reduce((sum, account) => sum + account.pct, 0)
   /**
    * Check that the total is 10_000
    * This is a sanity check to make sure that the total is 100%
@@ -298,32 +295,32 @@ export function preparePrimaryReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    account: config.config.ethFeeReceiver as `0x${string}`,
-    value: config.config.fxhashPrimaryFee,
+    address: config.config.ethFeeReceiver as `0x${string}`,
+    pct: config.config.fxhashPrimaryFee,
   }
   // Calculate the fee ratio for each account
-  const feeRatio = feeReceiver.value / originalTotal
+  const feeRatio = feeReceiver.pct / originalTotal
 
   // Subtract the fee from each account proportionally and transform it to base 1_000_000
   receivers = receivers.map(account => ({
     ...account,
-    value: (account.value - account.value * feeRatio) * 100,
+    value: (account.pct - account.pct * feeRatio) * 100,
   }))
 
   // Add the fee account with its full value
   receivers.push({
-    account: feeReceiver.account,
-    value: feeReceiver.value * 100,
+    address: feeReceiver.address,
+    pct: feeReceiver.pct * 100,
   })
 
   receivers = sortReceiversAlphabetically(receivers)
 
   // Due to floating point precision, there might be a small discrepancy
   // from the intended total, so we can adjust the last account slightly
-  const finalTotal = receivers.reduce((sum, account) => sum + account.value, 0)
+  const finalTotal = receivers.reduce((sum, account) => sum + account.pct, 0)
   const discrepancy = 1_000_000 - finalTotal
   if (discrepancy !== 0) {
-    receivers[receivers.length - 1].value += discrepancy
+    receivers[receivers.length - 1].pct += discrepancy
   }
 
   return mergeSameReceivers(receivers)
@@ -345,8 +342,8 @@ export function predictImmutableSplitAddress(
     publicClient,
   })
   return mainSplit.read.predictImmutableSplitAddress([
-    receivers.map(r => r.account),
-    receivers.map(r => r.value),
+    receivers.map(r => r.address),
+    receivers.map(r => r.pct),
     0,
   ]) as any as Promise<`0x${string}`>
 }

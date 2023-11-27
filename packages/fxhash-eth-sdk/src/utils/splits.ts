@@ -4,8 +4,8 @@ import { Split, SplitsClient } from "@0xsplits/splits-sdk"
 function sortAndNormalizeReceivers(receivers: ReceiverEntry[]) {
   return preparePrimaryReceivers(receivers)
     .map(r => ({
-      account: r.account.toLowerCase(),
-      value: r.value / 10000,
+      account: r.address.toLowerCase(),
+      value: r.pct / 10000,
     }))
     .sort((a, b) => a.account.localeCompare(b.account) || a.value - b.value)
 }
