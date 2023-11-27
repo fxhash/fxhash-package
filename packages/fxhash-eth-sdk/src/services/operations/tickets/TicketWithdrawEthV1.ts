@@ -25,7 +25,7 @@ export class WithdrawTicketEthV1Operation extends EthereumContractOperation<TWit
       abi: FX_TICKETS_ABI,
       functionName: "withdraw",
       args: [this.params.address],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

@@ -38,7 +38,7 @@ export class PauseEthV1Operation extends EthereumContractOperation<TPauseEthV1Op
         abi: FX_GEN_ART_721_ABI,
         functionName: "pause",
         args: [],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

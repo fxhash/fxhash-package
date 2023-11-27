@@ -54,7 +54,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         abi: this.params.isTicket ? FX_TICKETS_ABI : FX_GEN_ART_721_ABI,
         functionName: "registerMinters",
         args: [payloadArgs],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

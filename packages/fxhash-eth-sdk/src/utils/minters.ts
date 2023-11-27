@@ -15,6 +15,7 @@ import {
   MintInfo,
   MintTypes,
   ReserveInfo,
+  ReserveInfoArgs,
   TicketMintInfoArgs,
   defineReserveInfo,
   predictFxContractAddress,
@@ -222,7 +223,7 @@ export async function processAndFormatMintInfos(
       )
       if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
         const mintInfo: MintInfo = {
-          minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1,
+          minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
           reserveInfo: reserveInfo,
           params: getFixedPriceMinterEncodedParams(
             argsMintInfo.params.price,
@@ -235,7 +236,7 @@ export async function processAndFormatMintInfos(
         return mintInfo
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
         const mintInfo: MintInfo = {
-          minter: FxhashContracts.ETH_DUTCH_AUCTION_V1,
+          minter: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
           reserveInfo: reserveInfo,
           params: getDutchAuctionMinterEncodedParams(
             argsMintInfo.params.prices,
@@ -259,7 +260,7 @@ export async function processAndFormatMintInfos(
           [predictedAddress as `0x${string}`]
         )
         const mintInfo: MintInfo = {
-          minter: FxhashContracts.ETH_TICKET_REDEEMER_V1,
+          minter: FxhashContracts.ETH_TICKET_REDEEMER_V1 as `0x${string}`,
           reserveInfo: reserveInfo,
           params: encodedPredictedAddress,
         }

@@ -1,6 +1,11 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
+import {
+  TransactionReceipt,
+  encodeAbiParameters,
+  encodeFunctionData,
+  getAddress,
+} from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
   DutchAuctionMintInfoArgs,
@@ -8,6 +13,8 @@ import {
   InitInfo,
   MetadataInfo,
   MintInfo,
+  MintTypes,
+  predictFxContractAddress,
   ProjectInfo,
   ReceiverEntry,
   simulateAndExecuteContract,
@@ -18,6 +25,10 @@ import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { getHashFromIPFSCID } from "@/utils/ipfs"
+import {
+  encodeProjectFactoryArgs,
+  encodeTicketFactoryArgs,
+} from "@/utils/factories"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -57,17 +68,17 @@ export type TCreateProjectEthV1OperationParams = {
   initInfo: {
     name: string
     symbol: string
-    tagIds: number[]
+    tagIds: bigint[]
   }
   projectInfo: {
     mintEnabled: boolean
     burnEnabled: boolean
     maxSupply: bigint
-    inputSize: number
+    inputSize: bigint
   }
   metadataInfo?: {
     baseURI?: string
-    onchainPointer?: string
+    onchainPointer?: `0x${string}`
   }
   mintInfo: (
     | FixedPriceMintInfoArgs
@@ -77,6 +88,14 @@ export type TCreateProjectEthV1OperationParams = {
   primaryReceiver: string
   royalties: number
   royaltiesReceivers: ReceiverEntry[]
+  ticketInfo?: {
+    gracePeriod: number
+    mintInfo: (
+      | FixedPriceMintInfoArgs
+      | DutchAuctionMintInfoArgs
+      | TicketMintInfoArgs
+    )[]
+  }
   isCollab: boolean
 }
 
@@ -102,6 +121,10 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       throw Error("Royalties total should be 100%")
     }
 
+    const owner = this.params.isCollab
+      ? await this.manager.safe.getAddress()
+      : this.manager.address
+
     const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
       return {
         account: entry.account,
@@ -112,10 +135,10 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const initInfo: InitInfo = {
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
-      randomizer: FxhashContracts.ETH_RANDOMIZER_V1,
-      renderer: FxhashContracts.ETH_IPFS_RENDERER_V1,
+      randomizer: FxhashContracts.ETH_RANDOMIZER_V1 as `0x${string}`,
+      renderer: FxhashContracts.ETH_IPFS_RENDERER_V1 as `0x${string}`,
       tagIds: this.params.initInfo.tagIds,
-      primaryReceiver: this.params.primaryReceiver,
+      primaryReceiver: this.params.primaryReceiver as `0x${string}`,
     }
 
     const projectInfo: ProjectInfo = {
@@ -143,7 +166,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         : ZERO_ADDRESS
     }
     const metadataInfo: MetadataInfo = {
-      baseURI: baseURI,
+      baseURI: baseURI as `0x${string}`,
       onchainPointer: onchainPointer,
     }
 
@@ -152,21 +175,61 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       this.manager
     )
 
+    const hasTicketMintInfo = this.params.mintInfo.some(mint => {
+      return mint.type === MintTypes.TICKET
+    })
+
+    let args: unknown[]
+    if (hasTicketMintInfo && !this.params.ticketInfo) {
+      throw Error("Ticket mint info required")
+    } else if (hasTicketMintInfo && this.params.ticketInfo) {
+      /**
+       * this scenario requires calling a different endpoint and encoding
+       * the parameters as bytes
+       */
+      const projectEncodedArgs = encodeProjectFactoryArgs(
+        this.manager.address as `0x${string}`,
+        initInfo,
+        projectInfo,
+        metadataInfo,
+        mintInfos,
+        parsedRoyalties.map(entry => entry.account),
+        parsedRoyalties.map(entry => BigInt(entry.value))
+      )
+      const ticketEncodedArgs = encodeTicketFactoryArgs(
+        this.manager.address as `0x${string}`,
+        await predictFxContractAddress(owner, "issuer", this.manager),
+        FxhashContracts.ETH_TICKET_REDEEMER_V1,
+        FxhashContracts.ETH_IPFS_RENDERER_V1,
+        this.params.ticketInfo.gracePeriod,
+        await processAndFormatMintInfos(
+          this.params.ticketInfo.mintInfo,
+          this.manager
+        )
+      )
+      args = [
+        projectEncodedArgs,
+        ticketEncodedArgs,
+        FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
+      ]
+    } else {
+      args = [
+        this.manager.address,
+        initInfo,
+        projectInfo,
+        metadataInfo,
+        mintInfos,
+        parsedRoyalties.map(entry => entry.account),
+        parsedRoyalties.map(entry => entry.value),
+      ]
+    }
     if (this.params.isCollab) {
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(FxhashContracts.ETH_PROJECT_FACTORY),
         data: encodeFunctionData({
           abi: FX_ISSUER_FACTORY_ABI,
           functionName: "createProject",
-          args: [
-            this.manager.address,
-            initInfo,
-            projectInfo,
-            metadataInfo,
-            mintInfos,
-            parsedRoyalties.map(entry => entry.account),
-            parsedRoyalties.map(entry => entry.value),
-          ],
+          args: args,
         }),
         value: "0",
       }
@@ -174,24 +237,15 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       return await proposeSafeTransaction(safeTransactionData, this.manager)
     } else {
       //prepare the actual request to be able to simulate the transaction outcome
-      const args: SimulateAndExecuteContractRequest = {
+      const contractArgs: SimulateAndExecuteContractRequest = {
         address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
         abi: FX_ISSUER_FACTORY_ABI,
         functionName: "createProject",
-        args: [
-          this.manager.address,
-          initInfo,
-          projectInfo,
-          metadataInfo,
-          mintInfos,
-          parsedRoyalties.map(entry => entry.account),
-          parsedRoyalties.map(entry => entry.value),
-        ],
-        account: this.manager.address,
+        args: args,
+        account: this.manager.address as `0x${string}`,
       }
-      console.log(args)
       //simulate the transaction and execute it, will throw an error if it fails
-      return simulateAndExecuteContract(this.manager, args)
+      return simulateAndExecuteContract(this.manager, contractArgs)
     }
   }
 

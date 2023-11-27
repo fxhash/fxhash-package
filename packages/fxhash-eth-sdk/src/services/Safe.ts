@@ -1,4 +1,4 @@
-import SafeApiKit from "@safe-global/api-kit"
+import SafeApiKit, { SafeInfoResponse } from "@safe-global/api-kit"
 import Safe, { EthersAdapter, SafeFactory } from "@safe-global/protocol-kit"
 import { ethers } from "ethers-v5"
 import { config } from "@fxhash/config"
@@ -170,4 +170,19 @@ export async function getAllSafeTransactions(
   safeAddress: string
 ) {
   return await getSafeService(provider).getAllTransactions(safeAddress)
+}
+
+/**
+ * Retrieves information about a safe
+ * @param {ethers.providers.JsonRpcSigner | ethers.providers.Provider} provider - The `provider`
+ * parameter is an instance of `ethers.providers.JsonRpcSigner` or `ethers.providers.Provider`.
+ * @param {string} safeAdress - The `safeAddress` parameter is a string that represents the address of
+ * a safe.
+ * @returns {SafeInfoResponse} safe data
+ */
+export async function getSafeData(
+  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
+  safeAdress: string
+): Promise<SafeInfoResponse> {
+  return await getSafeService(provider).getSafeInfo(safeAdress)
 }

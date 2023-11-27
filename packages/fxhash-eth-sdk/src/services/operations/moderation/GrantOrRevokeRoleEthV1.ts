@@ -32,7 +32,7 @@ export class GrantOrRevokeRoleEthV1Operation extends EthereumContractOperation<T
       abi: FX_ROLE_REGISTRY_ABI,
       functionName: functionName,
       args: [this.params.role, this.params.user],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

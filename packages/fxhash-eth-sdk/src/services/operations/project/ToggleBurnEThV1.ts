@@ -38,7 +38,7 @@ export class ToggleBurnEthV1Operation extends EthereumContractOperation<TToggleB
         abi: FX_GEN_ART_721_ABI,
         functionName: "toggleBurn",
         args: [],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

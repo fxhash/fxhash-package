@@ -26,7 +26,7 @@ export class SetPriceTicketEthV1Operation extends EthereumContractOperation<TSet
       abi: FX_TICKETS_ABI,
       functionName: "setPrice",
       args: [this.params.tokenId, this.params.newPrice],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }

@@ -3,30 +3,17 @@ import { GenerativeToken } from "@/types/entities/GenerativeToken"
 import { FxhashContracts } from "../../types/Contracts"
 import { CollectionOffer } from "../../types/entities/Offer"
 import { displayMutez } from "../../utils/units"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TCollectionOfferCancelOperationParams = {
   offer: CollectionOffer
   token: GenerativeToken
 }
 
-export class CollectionOfferCancelOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosCollectionOfferCancelOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Withdraw a collection offer from the Marketplace
  */
-class TezosCollectionOfferCancelOperation extends TezosContractOperation<TCollectionOfferCancelOperationParams> {
+export class CollectionOfferCancelOperation extends TezosContractOperation<TCollectionOfferCancelOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

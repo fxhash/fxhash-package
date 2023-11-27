@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@fxhash/params": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "node-html-parser": "6.1.5"
   },
   "devDependencies": {
