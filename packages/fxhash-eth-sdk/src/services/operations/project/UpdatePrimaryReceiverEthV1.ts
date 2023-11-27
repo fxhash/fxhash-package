@@ -10,6 +10,7 @@ import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 export type TUpdatePrimaryReceiverEthV1OperationParams = {
   token: string
+  signature: `0x${string}`
   primaryReceiver: string
   isCollab: boolean
 }
@@ -27,7 +28,7 @@ export class UpdatePrimaryReceiverEthV1Operation extends EthereumContractOperati
         data: encodeFunctionData({
           abi: FX_GEN_ART_721_ABI,
           functionName: "setPrimaryReceiver",
-          args: [this.params.primaryReceiver],
+          args: [this.params.primaryReceiver, this.params.signature],
         }),
         value: "0",
       }
@@ -37,7 +38,7 @@ export class UpdatePrimaryReceiverEthV1Operation extends EthereumContractOperati
         address: getAddress(this.params.token) as `0x${string}`,
         abi: FX_GEN_ART_721_ABI,
         functionName: "setPrimaryReceiver",
-        args: [this.params.primaryReceiver],
+        args: [this.params.primaryReceiver, this.params.signature],
         account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
