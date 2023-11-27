@@ -86,3 +86,11 @@ export type ReservoirGetTokenParams =
  */
 export type ReservoirGetTokenResponse =
   paths["/tokens/v7"]["get"]["responses"]["200"]["schema"]
+
+/**
+ * @typedef {Object} ReservoirGetOfferResponse
+ * Represents the model returned by the following endpoint:
+ * `https://docs.reservoir.tools/reference/getordersbidsv6`
+ */
+export type ReservoirGetOfferResponse =
+  paths["/orders/bids/v6"]["get"]["responses"]["200"]["schema"]

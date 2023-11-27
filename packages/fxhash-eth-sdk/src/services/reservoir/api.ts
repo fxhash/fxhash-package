@@ -5,6 +5,7 @@ import {
   ReservoirExecuteBuyParams,
   ReservoirExecuteListParams,
   ReservoirGetCollectionResponse,
+  ReservoirGetOfferResponse,
   ReservoirGetTokenResponse,
 } from "./types"
 
@@ -77,6 +78,21 @@ export async function getToken(
   return await fetchReservoir<ReservoirGetTokenResponse>(
     API_METHODS.GET,
     `/tokens/v6?tokens=${token}`,
+    undefined
+  )
+}
+
+/**
+ * Fetches offer data from reservoir API.
+ * @param {string} offerId - the id of the offer.
+ * @returns the bid data.
+ */
+export async function getOffer(
+  offerId: string
+): Promise<ReservoirGetOfferResponse> {
+  return await fetchReservoir<ReservoirGetOfferResponse>(
+    API_METHODS.GET,
+    `/orders/bids/v6?id=${offerId}`,
     undefined
   )
 }

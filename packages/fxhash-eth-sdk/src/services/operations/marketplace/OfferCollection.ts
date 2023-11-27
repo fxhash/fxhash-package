@@ -6,7 +6,7 @@ import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
 export type TMakeCollectionOfferEthV1OperationParams = {
   token: string
   amount: number
-  price: string
+  pricePerItem: string
   expiration?: string
 }
 
@@ -20,7 +20,9 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
     const args: ReservoirPlaceBidParams = [
       {
         collection: this.params.token,
-        weiPrice: this.params.price,
+        weiPrice: (
+          Number(this.params.pricePerItem) * Number(this.params.amount)
+        ).toString(),
         quantity: this.params.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
