@@ -21,7 +21,7 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
       {
         collection: this.params.token,
         weiPrice: (
-          Number(this.params.pricePerItem) * Number(this.params.amount)
+          BigInt(this.params.pricePerItem) * BigInt(this.params.amount)
         ).toString(),
         quantity: this.params.amount,
         orderbook: RESERVOIR_ORDERBOOK,
