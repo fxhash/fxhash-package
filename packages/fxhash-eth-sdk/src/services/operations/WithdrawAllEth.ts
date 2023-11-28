@@ -12,7 +12,7 @@ import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
 import { CallData } from "@0xsplits/splits-sdk"
-import { Qu_GetEthProjectData } from "@fxhash/gql/index"
+import { Qu_GetEthProjectData } from "@fxhash/gql"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string

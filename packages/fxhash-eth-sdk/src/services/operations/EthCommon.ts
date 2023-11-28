@@ -5,12 +5,11 @@ import {
   ContractFunctionRevertedError,
   PublicClient,
   TransactionReceipt,
-  WalletClient,
   getContract,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
+import { ALLOCATION_BASE, MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
 import {
@@ -18,6 +17,7 @@ import {
   FX_ISSUER_FACTORY_ABI,
   SPLITS_MAIN_ABI,
 } from "@/abi"
+import { CONTRACT_REGISTRY_ABI } from "@/abi/ContractRegistry"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -50,7 +50,8 @@ export interface MintInfo {
 export interface InitInfo {
   name: string
   symbol: string
-  primaryReceiver: `0x${string}`
+  primaryReceivers: `0x${string}`[]
+  allocations: number[]
   randomizer: `0x${string}`
   renderer: `0x${string}`
   tagIds: bigint[]
@@ -110,6 +111,34 @@ export interface DutchAuctionParams extends BaseReserves {
   prices: bigint[]
   stepLength: bigint
   refunded: boolean
+}
+
+export interface ConfigInfo {
+  feeReceiver: `0x${string}`
+  secondaryFeeAllocation: number
+  primaryFeeAllocation: number
+  lockTime: number
+  referrerShare: bigint
+  defaultMetadataURI: string
+}
+
+export async function getOnChainConfig(
+  publicClient: PublicClient
+): Promise<ConfigInfo> {
+  const contractRegistry = getContract({
+    abi: CONTRACT_REGISTRY_ABI,
+    address: config.eth.contracts.contract_registry_v1,
+    publicClient,
+  })
+  const configInfo = await contractRegistry.read.configInfo()
+  return {
+    feeReceiver: configInfo[0],
+    secondaryFeeAllocation: configInfo[1],
+    primaryFeeAllocation: configInfo[2],
+    lockTime: configInfo[3],
+    referrerShare: configInfo[4],
+    defaultMetadataURI: configInfo[5],
+  }
 }
 
 /**
@@ -279,11 +308,13 @@ export function mergeSameReceivers(
  * object has a "value" property indicating the amount to be received by that receiver.
  * @param {ReceiverEntry} feeReceiver - The `feeReceiver` parameter is an object that represents the
  * receiver who will receive the fee. It has the following properties:
+ * @param {ConfigInfo} config - The `config` parameter is onchain configuration of the contracts
  * @returns an array of ReceiverEntry objects.
  */
 export function prepareReceivers(
   receivers: ReceiverEntry[],
-  type: "primary" | "secondary"
+  type: "primary" | "secondary",
+  config: ConfigInfo
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
   const originalTotal = receivers.reduce((sum, account) => sum + account.pct, 0)
@@ -296,14 +327,14 @@ export function prepareReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    address: config.config.ethFeeReceiver as `0x${string}`,
+    address: config.feeReceiver as `0x${string}`,
     pct:
       type === "primary"
-        ? config.config.fxhashPrimaryFee
-        : config.config.fxhashSecondaryFee,
+        ? config.primaryFeeAllocation
+        : config.secondaryFeeAllocation,
   }
   // Calculate the fee ratio for each account
-  const feeRatio = feeReceiver.pct / originalTotal
+  const feeRatio = feeReceiver.pct / ALLOCATION_BASE
 
   // Subtract the fee from each account proportionally and transform it to base 1_000_000
   receivers = receivers.map(account => ({
@@ -314,7 +345,7 @@ export function prepareReceivers(
   // Add the fee account with its full value
   receivers.push({
     address: feeReceiver.address,
-    pct: feeReceiver.pct * 100,
+    pct: feeReceiver.pct,
   })
 
   receivers = sortReceiversAlphabetically(receivers)

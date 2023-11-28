@@ -3,6 +3,7 @@ import { EthereumContractOperation } from "../contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
 import { FX_SPLITS_FACTORY_ABI } from "@/abi/FxSplitsFactory"
 import {
+  getOnChainConfig,
   prepareReceivers,
   ReceiverEntry,
   simulateAndExecuteContract,
@@ -25,10 +26,15 @@ export class CreateSplitEthV1Operation extends EthereumContractOperation<TCreate
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    const onchainConfig = await getOnChainConfig(this.manager.publicClient)
     const functionName = this.params.mutable
       ? "createMutableSplit"
       : "createImmutableSplit"
-    this.params.receivers = prepareReceivers(this.params.receivers, "primary")
+    this.params.receivers = prepareReceivers(
+      this.params.receivers,
+      "primary",
+      onchainConfig
+    )
     const argsPayload =
       this.params.mutable && this.params.creator
         ? [

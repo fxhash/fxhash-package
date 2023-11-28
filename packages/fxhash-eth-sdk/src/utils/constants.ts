@@ -7,3 +7,5 @@ export const ZERO_ADDRESS: `0x${string}` =
 export const MAX_UINT_64 = BigInt("18446744073709551615")
 
 export const MAX_UINT_120 = BigInt("1329227995784915872903807060280344575")
+
+export const ALLOCATION_BASE = 1_000_000

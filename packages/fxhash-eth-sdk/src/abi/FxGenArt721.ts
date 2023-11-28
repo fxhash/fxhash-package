@@ -126,6 +126,11 @@ export const FX_GEN_ART_721_ABI = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "PrimaryFeeReceiverIncorrect",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "string",
@@ -1022,9 +1027,14 @@ export const FX_GEN_ART_721_ABI = [
             type: "string",
           },
           {
-            internalType: "address",
-            name: "primaryReceiver",
-            type: "address",
+            internalType: "address[]",
+            name: "primaryReceivers",
+            type: "address[]",
+          },
+          {
+            internalType: "uint32[]",
+            name: "allocations",
+            type: "uint32[]",
           },
           {
             internalType: "address",
@@ -1706,17 +1716,17 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_receiver",
-        type: "address",
+        internalType: "address[]",
+        name: "_receivers",
+        type: "address[]",
       },
       {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
+        internalType: "uint32[]",
+        name: "_allocations",
+        type: "uint32[]",
       },
     ],
-    name: "setPrimaryReceiver",
+    name: "setPrimaryReceivers",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -184,9 +184,14 @@ export const FX_ISSUER_FACTORY_ABI = [
             type: "string",
           },
           {
-            internalType: "address",
-            name: "primaryReceiver",
-            type: "address",
+            internalType: "address[]",
+            name: "primaryReceivers",
+            type: "address[]",
+          },
+          {
+            internalType: "uint32[]",
+            name: "allocations",
+            type: "uint32[]",
           },
           {
             internalType: "address",

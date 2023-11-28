@@ -37,7 +37,8 @@ export function encodeProjectFactoryArgs(
         components: [
           { name: "name", type: "string" },
           { name: "symbol", type: "string" },
-          { name: "primaryReceiver", type: "address" },
+          { name: "primaryReceivers", type: "address[]" },
+          { name: "allocations", type: "uint32[]" },
           { name: "randomizer", type: "address" },
           { name: "renderer", type: "address" },
           { name: "tagIds", type: "uint256[]" },
