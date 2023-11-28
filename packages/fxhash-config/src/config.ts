@@ -24,6 +24,7 @@ export interface IFxhashEnvConfig {
   walletConnectId: string
   ethFeeReceiver: string
   fxhashPrimaryFee: number
+  fxhashTeamSafeAddress: string
 }
 
 // the variations supported by the config
@@ -125,6 +126,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         ethFeeReceiver: "0x3F09caa38354E17F589d92eD8b9340218dB66Fe6",
         fxhashPrimaryFee: 500,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6"
       },
     },
     dev: {
@@ -135,6 +137,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         ethFeeReceiver: "0x3F09caa38354E17F589d92eD8b9340218dB66Fe6",
         fxhashPrimaryFee: 500,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6"
       },
     },
     prd: {
@@ -145,6 +148,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         ethFeeReceiver: "",
         fxhashPrimaryFee: 500,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6"
       },
     },
   },
