@@ -1,19 +1,18 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { encodeFunctionData, getContract, TransactionReceipt } from "viem"
+import { encodeFunctionData, TransactionReceipt } from "viem"
 
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import { apolloClient } from "../Hasura"
 import { Qu_GetEthProceeds } from "@fxhash/gql"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { FIXED_PRICE_MINTER_ABI, SPLITS_MAIN_ABI } from "@/abi"
+import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
 import { CallData } from "@0xsplits/splits-sdk"
-import { FxhashContracts } from "@/contracts/Contracts"
+import { Qu_GetEthProjectData } from "@fxhash/gql/index"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -45,7 +44,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     })
 
     const multicallArgs: CallData[] = []
-    const tokenSplits: string[] = []
+    const tokensWithEarnings: string[] = []
     //we loop on the all the minters, to prepare the withdraw operations
     for (const minterProceeds of proceeds.data.onchain.eth_token_proceeds) {
       //first we process dutch auction earnings
@@ -59,7 +58,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [dutchAuctionProceeds.token, dutchAuctionProceeds.reserveId],
           }),
         })
-        tokenSplits.push(dutchAuctionProceeds.token)
+        tokensWithEarnings.push(dutchAuctionProceeds.token)
       }
 
       //then fixed price minter earnings
@@ -72,7 +71,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [fixedPriceProceeds.token],
           }),
         })
-        tokenSplits.push(fixedPriceProceeds.token)
+        tokensWithEarnings.push(fixedPriceProceeds.token)
       }
     }
 
@@ -94,28 +93,24 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //we transform the list of splits into a list of split addresses
     const filteredUserSplits = Object.keys(userSplits.activeBalances)
 
-    //we add the splits related to the minter earnings
-    const flattenedUserSplits = filteredUserSplits.concat(tokenSplits)
+    //we fetch the primary receiver for each split that will receive money
+    const tokens = await apolloClient.query({
+      query: Qu_GetEthProjectData,
+      variables: {
+        where: {
+          id: {
+            _in: tokensWithEarnings,
+          },
+        },
+      },
+    })
+
+    for (const projectData of tokens.data.onchain.eth_project_data) {
+      filteredUserSplits.push(projectData.primary_receiver)
+    }
 
     //before distributing, we first need to withdraw the funds
-    for (const split of tokenSplits) {
-      //we fetch the bytecode to check if the split is deployed or if we need to deploy it
-      const splitBytecode = await this.manager.publicClient.getBytecode({
-        address: split as `0x${string}`,
-      })
-      if (splitBytecode === undefined) {
-        //it's not we need to deploy it
-        //first we need to fetch the recipients and allocations
-        //then we provide it to the createSplit function
-        multicallArgs.push({
-          address: FxhashContracts.ETH_SPLITS_MAIN as `0x${string}`,
-          data: encodeFunctionData({
-            abi: SPLITS_MAIN_ABI,
-            functionName: "createSplit",
-            args: [],
-          }),
-        })
-      }
+    for (const split of tokensWithEarnings) {
       //we fetch the splits recipient
       const { recipients } = await splitsClient.getSplitMetadata({
         splitAddress: split,
@@ -137,7 +132,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     }
     //now that this is done we can finally distribute them
     const distributeCalls = await Promise.all(
-      flattenedUserSplits.map(async split => {
+      filteredUserSplits.map(async split => {
         return await splitsClient.callData.distributeToken({
           splitAddress: split,
           token: SPLITS_ETHER_TOKEN,
