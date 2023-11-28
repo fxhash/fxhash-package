@@ -1,6 +1,7 @@
 import {
   PublicClient,
   WalletClient,
+  decodeAbiParameters,
   encodeAbiParameters,
   encodePacked,
   getContract,
@@ -15,13 +16,51 @@ import {
   MintInfo,
   MintTypes,
   ReserveInfo,
-  ReserveInfoArgs,
   TicketMintInfoArgs,
   defineReserveInfo,
   predictFxContractAddress,
 } from "@/services/operations"
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumWalletManager } from ".."
+
+/**
+ * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
+ * @property {bigint} price - The `price` property is of type `bigint`, which represents an arbitrary
+ * precision integer. It is used to specify the fixed price for minting an item.
+ * @property merkleRoot - The `merkleRoot` property is a string representing a hexadecimal value. It is
+ * prefixed with `0x` to indicate that it is a hexadecimal value.
+ * @property signer - The `signer` property is a string representing the Ethereum address of the
+ * account that will be used to sign transactions related to the fixed price mint.
+ */
+export type FixedPriceMintParams = {
+  price: bigint
+  merkleRoot: `0x${string}`
+  signer: `0x${string}`
+}
+
+/**
+ * The below type represents the parameters required for minting in a Dutch auction.
+ * @property {boolean} refunded - A boolean value indicating whether the auction will refund any excess
+ * funds to the participants.
+ * @property {bigint} stepLength - The `stepLength` property in the `DutchAuctionMintParams` type
+ * represents the duration of each step in the Dutch auction. It is of type `bigint`, which is a
+ * built-in JavaScript type for arbitrary precision integers.
+ * @property prices - The `prices` property is an array of `bigint` values. It represents the
+ * decreasing prices in the Dutch auction. Each element in the array corresponds to a specific step in
+ * the auction, with the first element being the initial price and each subsequent element being a
+ * lower price.
+ * @property merkleRoot - The `merkleRoot` property is a string representing the Merkle root of a
+ * Merkle tree. It is prefixed with `0x` to indicate that it is a hexadecimal value.
+ * @property signer - The `signer` property is a string representing the Ethereum address of the
+ * account that will sign the transaction.
+ */
+export type DutchAuctionMintParams = {
+  refunded: boolean
+  stepLength: bigint
+  prices: readonly bigint[]
+  merkleRoot: `0x${string}`
+  signer: `0x${string}`
+}
 
 /**
  * The ReserveListEntry type represents an entry in a reserve list, with an account address and an
@@ -270,4 +309,83 @@ export async function processAndFormatMintInfos(
       }
     })
   )
+}
+
+/**
+ * The function `decodeDutchAuctionMinterParams` decodes a given byte string into a
+ * DutchAuctionMintParams object.
+ * @param bytes - The `bytes` parameter is a hexadecimal string that represents the encoded data of the
+ * DutchAuctionMintParams.
+ * @returns The function `decodeDutchAuctionMinterParams` returns an object of type
+ * `DutchAuctionMintParams` or `undefined`.
+ */
+export function decodeDutchAuctionMinterParams(
+  bytes: `0x${string}`
+): DutchAuctionMintParams | undefined {
+  try {
+    const dutchAuctionDecoded = decodeAbiParameters(
+      [
+        {
+          name: "auctionInfo",
+          type: "tuple",
+          components: [
+            { name: "refunded", type: "bool" },
+            { name: "stepLength", type: "uint248" },
+            { name: "prices", type: "uint256[]" },
+          ],
+        },
+        { name: "merkleRoot", type: "bytes32" },
+        { name: "signer", type: "address" },
+      ],
+      bytes
+    )
+    return {
+      refunded: dutchAuctionDecoded[0].refunded,
+      stepLength: dutchAuctionDecoded[0].stepLength,
+      prices: dutchAuctionDecoded[0].prices,
+      merkleRoot: dutchAuctionDecoded[1],
+      signer: dutchAuctionDecoded[2],
+    }
+  } catch (error) {
+    return undefined
+  }
+}
+
+/**
+ * The function `decodeFixedPriceMinterParams` decodes a given byte string into a
+ * `FixedPriceMintParams` object, or returns `undefined` if decoding fails.
+ * @param bytes - The `bytes` parameter is a hexadecimal string that represents encoded data.
+ * @returns The function `decodeFixedPriceMinterParams` returns an object of type
+ * `FixedPriceMintParams` if the decoding is successful. If there is an error during decoding, it
+ * returns `undefined`.
+ */
+export function decodeFixedPriceMinterParams(
+  bytes: `0x${string}`
+): FixedPriceMintParams | undefined {
+  try {
+    const fixedPriceDecoded = decodeAbiParameters(
+      [
+        {
+          name: "price",
+          type: "uint256",
+        },
+        {
+          name: "merkleRoot",
+          type: "bytes32",
+        },
+        {
+          name: "signer",
+          type: "address",
+        },
+      ],
+      bytes
+    )
+    return {
+      price: fixedPriceDecoded[0],
+      merkleRoot: fixedPriceDecoded[1],
+      signer: fixedPriceDecoded[2],
+    }
+  } catch (error) {
+    return undefined
+  }
 }

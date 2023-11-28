@@ -6,6 +6,7 @@ import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
+  getOnChainConfig,
   InitInfo,
   MetadataInfo,
   MintInfo,

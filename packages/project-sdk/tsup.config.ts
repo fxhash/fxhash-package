@@ -5,7 +5,7 @@ export default defineConfig([
     entry: {
       fxhash: "src/index.ts",
     },
-    outExtension({ format }) {
+    outExtension() {
       return {
         js: `.js`,
       }
@@ -13,9 +13,10 @@ export default defineConfig([
     outDir: "dist",
     format: ["iife"],
     platform: "browser",
+    minify: true,
     dts: true,
     splitting: true,
-    sourcemap: true,
+    sourcemap: false,
     clean: true,
     bundle: true,
   },

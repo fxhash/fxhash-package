@@ -301,6 +301,7 @@ export function mergeSameReceivers(
  * object has a "value" property indicating the amount to be received by that receiver.
  * @param {ReceiverEntry} feeReceiver - The `feeReceiver` parameter is an object that represents the
  * receiver who will receive the fee. It has the following properties:
+ * @param {ConfigInfo} config - The `config` parameter is onchain configuration of the contracts
  * @returns an array of ReceiverEntry objects.
  */
 export function prepareReceivers(

@@ -27,6 +27,7 @@ export interface IFxhashEnvConfig {
   fxhashSecondaryFee: number
   projectLockTime: number
   referrerShare: number
+  fxhashTeamSafeAddress: string
 }
 
 // the variations supported by the config
@@ -126,11 +127,12 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "local",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
-        ethFeeReceiver: "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42",
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 3330,
         projectLockTime: 3600,
         referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
       },
     },
     dev: {
@@ -139,11 +141,12 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "development",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
-        ethFeeReceiver: "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42",
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 3330,
         projectLockTime: 3600,
         referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
       },
     },
     prd: {
@@ -152,11 +155,12 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "production",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
-        ethFeeReceiver: "0xTODO",
-        fxhashPrimaryFee: 5000,
-        fxhashSecondaryFee: 2500,
         projectLockTime: 3600,
         referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
       },
     },
   },

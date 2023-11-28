@@ -14,7 +14,10 @@ export function mockEthereumTransactionHash(): string {
     { length: 32 },
     () => (Math.random() * 256) | 0
   )
-  return `0x${Buffer.from(randomBytes).toString("hex")}`
+  const hexString = Array.from(randomBytes)
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("")
+  return `0x${hexString}`
 }
 
 export function mockTransactionHash(chain: Blockchain): string {

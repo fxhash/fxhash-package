@@ -396,6 +396,18 @@ export const FX_GEN_ART_721_ABI = [
         name: "_receiver",
         type: "address",
       },
+      {
+        indexed: false,
+        internalType: "address[]",
+        name: "_receivers",
+        type: "address[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint32[]",
+        name: "_allocations",
+        type: "uint32[]",
+      },
     ],
     name: "PrimaryReceiverUpdated",
     type: "event",
@@ -616,6 +628,12 @@ export const FX_GEN_ART_721_ABI = [
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "_receiver",
+        type: "address",
+      },
       {
         indexed: false,
         internalType: "address[]",
