@@ -17,7 +17,6 @@ import {
   FX_ISSUER_FACTORY_ABI,
   SPLITS_MAIN_ABI,
 } from "@/abi"
-import { CONTRACT_REGISTRY_ABI } from "@/abi/ContractRegistry"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -122,23 +121,17 @@ export interface ConfigInfo {
   defaultMetadataURI: string
 }
 
-export async function getOnChainConfig(
-  publicClient: PublicClient
-): Promise<ConfigInfo> {
-  const contractRegistry = getContract({
-    abi: CONTRACT_REGISTRY_ABI,
-    address: config.eth.contracts.contract_registry_v1,
-    publicClient,
-  })
-  const configInfo = await contractRegistry.read.configInfo()
-  return {
-    feeReceiver: configInfo[0],
-    secondaryFeeAllocation: configInfo[1],
-    primaryFeeAllocation: configInfo[2],
-    lockTime: configInfo[3],
-    referrerShare: configInfo[4],
-    defaultMetadataURI: configInfo[5],
-  }
+/**
+ * Defines a set of constant variables used by the Ethereum stack. There are
+ * static and instanciated at runtime from the config.
+ */
+export const onchainConfig: ConfigInfo = {
+  feeReceiver: config.config.ethFeeReceiver,
+  secondaryFeeAllocation: config.config.fxhashSecondaryFee,
+  primaryFeeAllocation: config.config.fxhashPrimaryFee,
+  lockTime: config.config.projectLockTime,
+  referrerShare: BigInt(config.config.referrerShare),
+  defaultMetadataURI: config.apis.ethMetadata,
 }
 
 /**
@@ -313,8 +306,7 @@ export function mergeSameReceivers(
  */
 export function prepareReceivers(
   receivers: ReceiverEntry[],
-  type: "primary" | "secondary",
-  config: ConfigInfo
+  type: "primary" | "secondary"
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
   const originalTotal = receivers.reduce((sum, account) => sum + account.pct, 0)
@@ -327,11 +319,11 @@ export function prepareReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    address: config.feeReceiver as `0x${string}`,
+    address: onchainConfig.feeReceiver as `0x${string}`,
     pct:
       type === "primary"
-        ? config.primaryFeeAllocation
-        : config.secondaryFeeAllocation,
+        ? onchainConfig.primaryFeeAllocation
+        : onchainConfig.secondaryFeeAllocation,
   }
   // Calculate the fee ratio for each account
   const feeRatio = feeReceiver.pct / ALLOCATION_BASE

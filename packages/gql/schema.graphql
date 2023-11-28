@@ -495,7 +495,7 @@ type Media {
   """An object relationship"""
   uploader: Account
   uploaderId: uuid
-  url: String!
+url: String!
 }
 
 """
@@ -12021,7 +12021,7 @@ input pricing_fixed_variance_order_by {
 }
 
 type query_root {
-  mediaFullUrl(s3key: String!): String!
+mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
 }

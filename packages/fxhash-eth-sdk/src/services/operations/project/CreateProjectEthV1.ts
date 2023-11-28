@@ -107,11 +107,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    const onchainConfig = await getOnChainConfig(this.manager.publicClient)
     const primaryReceivers = prepareReceivers(
       this.params.primaryReceivers,
-      "primary",
-      onchainConfig
+      "primary"
     )
 
     if (this.params.royalties > 2500) {
@@ -120,8 +118,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
 
     const secondaryReceivers = prepareReceivers(
       this.params.royaltiesReceivers,
-      "secondary",
-      onchainConfig
+      "secondary"
     )
 
     const owner = (

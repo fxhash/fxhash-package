@@ -1,9 +1,4 @@
-import {
-  ConfigInfo,
-  ReceiverEntry,
-  getOnChainConfig,
-  prepareReceivers,
-} from "@/services/operations"
+import { ReceiverEntry, prepareReceivers } from "@/services/operations"
 import { Split, SplitsClient } from "@0xsplits/splits-sdk"
 import { PublicClient, WalletClient, encodePacked, getContract } from "viem"
 import { sign } from "viem/accounts"
@@ -12,10 +7,9 @@ import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 
 function sortAndNormalizeReceivers(
   receivers: ReceiverEntry[],
-  type: "primary" | "secondary",
-  config: ConfigInfo
+  type: "primary" | "secondary"
 ) {
-  return prepareReceivers(receivers, type, config)
+  return prepareReceivers(receivers, type)
     .map(r => ({
       account: r.address.toLowerCase(),
       value: r.pct / 10000,
@@ -51,13 +45,7 @@ export async function getExistingSplits(
   user: string,
   receivers: ReceiverEntry[]
 ) {
-  const onchainConfig = await getOnChainConfig(this.manager.publicClient)
-
-  const preparedReceivers = sortAndNormalizeReceivers(
-    receivers,
-    "primary",
-    onchainConfig
-  )
+  const preparedReceivers = sortAndNormalizeReceivers(receivers, "primary")
 
   const userSplits = await splitsClient.getRelatedSplits({
     address: user,

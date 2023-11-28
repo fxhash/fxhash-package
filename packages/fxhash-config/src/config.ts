@@ -22,9 +22,11 @@ export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
   walletConnectId: string
-  ethFeeReceiver: string
+  ethFeeReceiver: `0x${string}`
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
+  projectLockTime: number
+  referrerShare: number
   fxhashTeamSafeAddress: string
 }
 
@@ -125,6 +127,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "local",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
@@ -137,6 +141,8 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "development",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
@@ -149,10 +155,12 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "production",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
-        ethFeeReceiver: "",
+        projectLockTime: 3600,
+        referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
-        fxhashTeamSafeAddress: "",
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
       },
     },
   },
