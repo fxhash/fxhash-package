@@ -24,6 +24,7 @@ export interface IFxhashEnvConfig {
   walletConnectId: string
   ethFeeReceiver: string
   fxhashPrimaryFee: number
+  fxhashSecondaryFee: number
 }
 
 // the variations supported by the config
@@ -123,8 +124,9 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "local",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
-        ethFeeReceiver: "0x3F09caa38354E17F589d92eD8b9340218dB66Fe6",
-        fxhashPrimaryFee: 500,
+        ethFeeReceiver: "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
       },
     },
     dev: {
@@ -133,8 +135,9 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "development",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
-        ethFeeReceiver: "0x3F09caa38354E17F589d92eD8b9340218dB66Fe6",
-        fxhashPrimaryFee: 500,
+        ethFeeReceiver: "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
       },
     },
     prd: {
@@ -144,7 +147,8 @@ export const fxhashConfig: IFxhashConfig = {
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         ethFeeReceiver: "",
-        fxhashPrimaryFee: 500,
+        fxhashPrimaryFee: 5000,
+        fxhashSecondaryFee: 2500,
       },
     },
   },

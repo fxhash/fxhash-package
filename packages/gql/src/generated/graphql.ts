@@ -3613,6 +3613,98 @@ export enum Cursor_Ordering {
   Desc = 'DESC'
 }
 
+/** columns and relationships of "eth_project_data" */
+export type Eth_Project_Data = {
+  __typename?: 'eth_project_data';
+  accounts: Scalars['_text']['output'];
+  allocations: Scalars['_int4']['output'];
+  id: Scalars['String']['output'];
+  mint_info: Scalars['jsonb']['output'];
+  primary_receiver: Scalars['String']['output'];
+  project_info: Scalars['jsonb']['output'];
+  secondary_receiver?: Maybe<Scalars['String']['output']>;
+  tags: Scalars['_int4']['output'];
+};
+
+
+/** columns and relationships of "eth_project_data" */
+export type Eth_Project_DataMint_InfoArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** columns and relationships of "eth_project_data" */
+export type Eth_Project_DataProject_InfoArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "eth_project_data". All fields are combined with a logical 'AND'. */
+export type Eth_Project_Data_Bool_Exp = {
+  _and?: InputMaybe<Array<Eth_Project_Data_Bool_Exp>>;
+  _not?: InputMaybe<Eth_Project_Data_Bool_Exp>;
+  _or?: InputMaybe<Array<Eth_Project_Data_Bool_Exp>>;
+  accounts?: InputMaybe<_Text_Comparison_Exp>;
+  allocations?: InputMaybe<_Int4_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  mint_info?: InputMaybe<Jsonb_Comparison_Exp>;
+  primary_receiver?: InputMaybe<String_Comparison_Exp>;
+  project_info?: InputMaybe<Jsonb_Comparison_Exp>;
+  secondary_receiver?: InputMaybe<String_Comparison_Exp>;
+  tags?: InputMaybe<_Int4_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "eth_project_data". */
+export type Eth_Project_Data_Order_By = {
+  accounts?: InputMaybe<Order_By>;
+  allocations?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  mint_info?: InputMaybe<Order_By>;
+  primary_receiver?: InputMaybe<Order_By>;
+  project_info?: InputMaybe<Order_By>;
+  secondary_receiver?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "eth_project_data" */
+export enum Eth_Project_Data_Select_Column {
+  /** column name */
+  Accounts = 'accounts',
+  /** column name */
+  Allocations = 'allocations',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  MintInfo = 'mint_info',
+  /** column name */
+  PrimaryReceiver = 'primary_receiver',
+  /** column name */
+  ProjectInfo = 'project_info',
+  /** column name */
+  SecondaryReceiver = 'secondary_receiver',
+  /** column name */
+  Tags = 'tags'
+}
+
+/** Streaming cursor of the table "eth_project_data" */
+export type Eth_Project_Data_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Eth_Project_Data_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Eth_Project_Data_Stream_Cursor_Value_Input = {
+  accounts?: InputMaybe<Scalars['_text']['input']>;
+  allocations?: InputMaybe<Scalars['_int4']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  mint_info?: InputMaybe<Scalars['jsonb']['input']>;
+  primary_receiver?: InputMaybe<Scalars['String']['input']>;
+  project_info?: InputMaybe<Scalars['jsonb']['input']>;
+  secondary_receiver?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Scalars['_int4']['input']>;
+};
+
 /** columns and relationships of "eth_token_proceeds" */
 export type Eth_Token_Proceeds = {
   __typename?: 'eth_token_proceeds';
@@ -7559,6 +7651,10 @@ export type Onchain_Query = {
   collection_offer: Array<Collection_Offer>;
   /** fetch data from the table: "collection_offer" using primary key columns */
   collection_offer_by_pk?: Maybe<Collection_Offer>;
+  /** fetch data from the table: "eth_project_data" */
+  eth_project_data: Array<Eth_Project_Data>;
+  /** fetch data from the table: "eth_project_data" using primary key columns */
+  eth_project_data_by_pk?: Maybe<Eth_Project_Data>;
   /** fetch data from the table: "eth_token_proceeds" */
   eth_token_proceeds: Array<Eth_Token_Proceeds>;
   /** fetch data from the table: "eth_token_proceeds" using primary key columns */
@@ -7838,6 +7934,20 @@ export type Onchain_QueryCollection_OfferArgs = {
 export type Onchain_QueryCollection_Offer_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
+};
+
+
+export type Onchain_QueryEth_Project_DataArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Project_Data_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Project_Data_Order_By>>;
+  where?: InputMaybe<Eth_Project_Data_Bool_Exp>;
+};
+
+
+export type Onchain_QueryEth_Project_Data_By_PkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -8292,6 +8402,12 @@ export type Onchain_Subscription = {
   collection_offer_by_pk?: Maybe<Collection_Offer>;
   /** fetch data from the table in a streaming manner: "collection_offer" */
   collection_offer_stream: Array<Collection_Offer>;
+  /** fetch data from the table: "eth_project_data" */
+  eth_project_data: Array<Eth_Project_Data>;
+  /** fetch data from the table: "eth_project_data" using primary key columns */
+  eth_project_data_by_pk?: Maybe<Eth_Project_Data>;
+  /** fetch data from the table in a streaming manner: "eth_project_data" */
+  eth_project_data_stream: Array<Eth_Project_Data>;
   /** fetch data from the table: "eth_token_proceeds" */
   eth_token_proceeds: Array<Eth_Token_Proceeds>;
   /** fetch data from the table: "eth_token_proceeds" using primary key columns */
@@ -8709,6 +8825,27 @@ export type Onchain_SubscriptionCollection_Offer_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Collection_Offer_Stream_Cursor_Input>>;
   where?: InputMaybe<Collection_Offer_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_Project_DataArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Project_Data_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Project_Data_Order_By>>;
+  where?: InputMaybe<Eth_Project_Data_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_Project_Data_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Onchain_SubscriptionEth_Project_Data_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Eth_Project_Data_Stream_Cursor_Input>>;
+  where?: InputMaybe<Eth_Project_Data_Bool_Exp>;
 };
 
 
@@ -11367,6 +11504,13 @@ export type GetWhitelistQueryVariables = Exact<{
 
 export type GetWhitelistQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Whitelist_by_pk?: { __typename?: 'Whitelist', merkleRoot: string, entries: Array<{ __typename?: 'WhitelistEntries', walletAddress: string, whitelistIndex: number }> } | null } | null };
 
+export type GetEthProjectDataQueryVariables = Exact<{
+  where?: InputMaybe<Eth_Project_Data_Bool_Exp>;
+}>;
+
+
+export type GetEthProjectDataQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', eth_project_data: Array<{ __typename?: 'eth_project_data', id: string, primary_receiver: string, secondary_receiver?: string | null }> } | null };
+
 export type GenerativeToken_PricingFragment = { __typename?: 'generative_token', pricing_fixeds: Array<{ __typename?: 'pricing_fixed', price: any, opens_at?: any | null }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', levels: any, resting_price: string, final_price?: any | null, decrement_duration: any, opens_at?: any | null }> };
 
 export type GetProceedsQueryVariables = Exact<{
@@ -11399,5 +11543,6 @@ export const CreateProjectDocument = {"kind":"Document","definitions":[{"kind":"
 export const Update_ProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Update_Project"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Project_set_input"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectMedia_insert_input"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectCollaborator_insert_input"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"update_Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}}]}}]}}]} as unknown as DocumentNode<Update_ProjectMutation, Update_ProjectMutationVariables>;
 export const GetWhitelistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWhitelists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Whitelist"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"WhitelistEntries"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WhitelistEntries"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAddress"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistIndex"}}]}}]}}]} as unknown as DocumentNode<GetWhitelistsQuery, GetWhitelistsQueryVariables>;
 export const GetWhitelistDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWhitelist"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"merkleRoot"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"defaultValue":{"kind":"StringValue","value":"","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Whitelist_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"merkleRoot"},"value":{"kind":"Variable","name":{"kind":"Name","value":"merkleRoot"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"WhitelistEntries"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WhitelistEntries"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAddress"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistIndex"}}]}}]}}]} as unknown as DocumentNode<GetWhitelistQuery, GetWhitelistQueryVariables>;
+export const GetEthProjectDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthProjectData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_project_data_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_project_data"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"primary_receiver"}},{"kind":"Field","name":{"kind":"Name","value":"secondary_receiver"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthProjectDataQuery, GetEthProjectDataQueryVariables>;
 export const GetProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_token_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_token_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dutch_auction_proceeds"}},{"kind":"Field","name":{"kind":"Name","value":"fixed_price_proceeds"}},{"kind":"Field","name":{"kind":"Name","value":"total_proceeds"}}]}}]}}]}}]} as unknown as DocumentNode<GetProceedsQuery, GetProceedsQueryVariables>;
 export const GetReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"reserve_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"token_id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]} as unknown as DocumentNode<GetReservesQuery, GetReservesQueryVariables>;

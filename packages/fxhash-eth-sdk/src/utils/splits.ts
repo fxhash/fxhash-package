@@ -1,11 +1,24 @@
-import { ReceiverEntry, preparePrimaryReceivers } from "@/services/operations"
+import {
+  ConfigInfo,
+  ReceiverEntry,
+  getOnChainConfig,
+  prepareReceivers,
+} from "@/services/operations"
 import { Split, SplitsClient } from "@0xsplits/splits-sdk"
+import { PublicClient, WalletClient, encodePacked, getContract } from "viem"
+import { sign } from "viem/accounts"
+import { EthereumWalletManager, FX_GEN_ART_721_ABI } from ".."
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 
-function sortAndNormalizeReceivers(receivers: ReceiverEntry[]) {
-  return preparePrimaryReceivers(receivers)
+function sortAndNormalizeReceivers(
+  receivers: ReceiverEntry[],
+  type: "primary" | "secondary",
+  config: ConfigInfo
+) {
+  return prepareReceivers(receivers, type, config)
     .map(r => ({
-      account: r.account.toLowerCase(),
-      value: r.value / 10000,
+      account: r.address.toLowerCase(),
+      value: r.pct / 10000,
     }))
     .sort((a, b) => a.account.localeCompare(b.account) || a.value - b.value)
 }
@@ -38,7 +51,13 @@ export async function getExistingSplits(
   user: string,
   receivers: ReceiverEntry[]
 ) {
-  const preparedReceivers = sortAndNormalizeReceivers(receivers)
+  const onchainConfig = await getOnChainConfig(this.manager.publicClient)
+
+  const preparedReceivers = sortAndNormalizeReceivers(
+    receivers,
+    "primary",
+    onchainConfig
+  )
 
   const userSplits = await splitsClient.getRelatedSplits({
     address: user,

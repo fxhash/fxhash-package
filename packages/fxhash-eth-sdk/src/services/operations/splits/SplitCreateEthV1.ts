@@ -3,7 +3,8 @@ import { EthereumContractOperation } from "../contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
 import { FX_SPLITS_FACTORY_ABI } from "@/abi/FxSplitsFactory"
 import {
-  preparePrimaryReceivers,
+  getOnChainConfig,
+  prepareReceivers,
   ReceiverEntry,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -25,20 +26,25 @@ export class CreateSplitEthV1Operation extends EthereumContractOperation<TCreate
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    const onchainConfig = await getOnChainConfig(this.manager.publicClient)
     const functionName = this.params.mutable
       ? "createMutableSplit"
       : "createImmutableSplit"
-    this.params.receivers = preparePrimaryReceivers(this.params.receivers)
+    this.params.receivers = prepareReceivers(
+      this.params.receivers,
+      "primary",
+      onchainConfig
+    )
     const argsPayload =
       this.params.mutable && this.params.creator
         ? [
             getAddress(this.params.creator),
-            this.params.receivers.map(receiver => getAddress(receiver.account)),
-            this.params.receivers.map(receiver => receiver.value),
+            this.params.receivers.map(receiver => getAddress(receiver.address)),
+            this.params.receivers.map(receiver => receiver.pct),
           ]
         : [
-            this.params.receivers.map(receiver => getAddress(receiver.account)),
-            this.params.receivers.map(receiver => receiver.value),
+            this.params.receivers.map(receiver => getAddress(receiver.address)),
+            this.params.receivers.map(receiver => receiver.pct),
           ]
     console.log(argsPayload)
     if (this.params.isCollab) {

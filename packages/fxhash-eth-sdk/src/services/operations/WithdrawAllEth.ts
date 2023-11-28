@@ -5,24 +5,18 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import { apolloClient } from "../Hasura"
 import { Qu_GetEthProceeds } from "@fxhash/gql"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { FIXED_PRICE_MINTER_ABI } from "@/abi"
+import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
 import { CallData } from "@0xsplits/splits-sdk"
+import { Qu_GetEthProjectData } from "@fxhash/gql"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
 }
-
-import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev"
-
-loadDevMessages()
-
-loadErrorMessages()
 
 /**
  * Complex batched operation to withdraw all earning for a user
@@ -48,8 +42,9 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         },
       },
     })
-    const multicallArgs: CallData[] = []
 
+    const multicallArgs: CallData[] = []
+    const tokensWithEarnings: string[] = []
     //we loop on the all the minters, to prepare the withdraw operations
     for (const minterProceeds of proceeds.data.onchain.eth_token_proceeds) {
       //first we process dutch auction earnings
@@ -63,6 +58,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [dutchAuctionProceeds.token, dutchAuctionProceeds.reserveId],
           }),
         })
+        tokensWithEarnings.push(dutchAuctionProceeds.token)
       }
 
       //then fixed price minter earnings
@@ -75,6 +71,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [fixedPriceProceeds.token],
           }),
         })
+        tokensWithEarnings.push(fixedPriceProceeds.token)
       }
     }
 
@@ -88,19 +85,32 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     )
 
     //we fetch all the splits related to the user
-    const userSplits = await splitsClient.getRelatedSplits({
-      address: this.params.address,
+    //we get the current user splits having money
+    const userSplits = await splitsClient.getUserEarningsByContract({
+      userAddress: this.params.address,
     })
 
-    //TODO: once the split update will be done, we'll need to filter out the splits that won't receive funds
+    //we transform the list of splits into a list of split addresses
+    const filteredUserSplits = Object.keys(userSplits.activeBalances)
 
-    //format the list so it is easily usable
-    const flattenedUserSplits = userSplits.controlling
-      .map(split => split.address)
-      .concat(userSplits.receivingFrom.map(split => split.address))
+    //we fetch the primary receiver for each split that will receive money
+    const tokens = await apolloClient.query({
+      query: Qu_GetEthProjectData,
+      variables: {
+        where: {
+          id: {
+            _in: tokensWithEarnings,
+          },
+        },
+      },
+    })
+
+    for (const projectData of tokens.data.onchain.eth_project_data) {
+      filteredUserSplits.push(projectData.primary_receiver)
+    }
 
     //before distributing, we first need to withdraw the funds
-    for (const split of flattenedUserSplits) {
+    for (const split of tokensWithEarnings) {
       //we fetch the splits recipient
       const { recipients } = await splitsClient.getSplitMetadata({
         splitAddress: split,
@@ -122,7 +132,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     }
     //now that this is done we can finally distribute them
     const distributeCalls = await Promise.all(
-      flattenedUserSplits.map(async split => {
+      filteredUserSplits.map(async split => {
         return await splitsClient.callData.distributeToken({
           splitAddress: split,
           token: SPLITS_ETHER_TOKEN,
