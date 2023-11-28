@@ -1,6 +1,23 @@
 import { encodeAbiParameters } from "viem"
 import { InitInfo, MetadataInfo, MintInfo, ProjectInfo } from ".."
 
+export function encodeCreateImmutableSplitsParametersArgs(
+  accounts: `0x${string}`[],
+  percentAllocations: number[],
+  distributorFee: number,
+  controller: `0x${string}`
+) {
+  return encodeAbiParameters(
+    [
+      { name: "accounts", type: "address[]" },
+      { name: "percentAllocations", type: "uint32[]" },
+      { name: "distributorFee", type: "uint32" },
+      { name: "controller", type: "address" },
+    ],
+    [accounts, percentAllocations, distributorFee, controller]
+  )
+}
+
 export function encodeProjectFactoryArgs(
   owner: `0x${string}`,
   initInfo: InitInfo,
@@ -8,7 +25,8 @@ export function encodeProjectFactoryArgs(
   metadataInfo: MetadataInfo,
   mintInfos: MintInfo[],
   royaltyReceivers: `0x${string}`[],
-  basisPoints: bigint[]
+  allocations: number[],
+  basisPoints: bigint
 ) {
   return encodeAbiParameters(
     [
@@ -19,7 +37,8 @@ export function encodeProjectFactoryArgs(
         components: [
           { name: "name", type: "string" },
           { name: "symbol", type: "string" },
-          { name: "primaryReceiver", type: "address" },
+          { name: "primaryReceivers", type: "address[]" },
+          { name: "allocations", type: "uint32[]" },
           { name: "randomizer", type: "address" },
           { name: "renderer", type: "address" },
           { name: "tagIds", type: "uint256[]" },
@@ -81,8 +100,12 @@ export function encodeProjectFactoryArgs(
         type: "address[]",
       },
       {
+        name: "allocations",
+        type: "uint32[]",
+      },
+      {
         name: "basisPoints",
-        type: "uint96[]",
+        type: "uint96",
       },
     ],
     [
@@ -92,6 +115,7 @@ export function encodeProjectFactoryArgs(
       metadataInfo,
       mintInfos,
       royaltyReceivers,
+      allocations,
       basisPoints,
     ]
   )

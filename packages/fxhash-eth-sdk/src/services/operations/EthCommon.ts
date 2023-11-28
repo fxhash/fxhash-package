@@ -3,15 +3,21 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
+  PublicClient,
   TransactionReceipt,
   getContract,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
+import { ALLOCATION_BASE, MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
 import { EthereumWalletManager } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
-import { FX_ISSUER_FACTORY_ABI } from "@/abi"
+import {
+  FX_GEN_ART_721_ABI,
+  FX_ISSUER_FACTORY_ABI,
+  SPLITS_MAIN_ABI,
+} from "@/abi"
+import { CONTRACT_REGISTRY_ABI } from "@/abi/ContractRegistry"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -21,8 +27,8 @@ export enum MintTypes {
 
 //Type definition for the primary and royalties receivers
 export interface ReceiverEntry {
-  account: `0x${string}`
-  value: number
+  address: `0x${string}`
+  pct: number
 }
 
 //Type definition of the parameters for the simulateContract function
@@ -44,7 +50,8 @@ export interface MintInfo {
 export interface InitInfo {
   name: string
   symbol: string
-  primaryReceiver: `0x${string}`
+  primaryReceivers: `0x${string}`[]
+  allocations: number[]
   randomizer: `0x${string}`
   renderer: `0x${string}`
   tagIds: bigint[]
@@ -104,6 +111,34 @@ export interface DutchAuctionParams extends BaseReserves {
   prices: bigint[]
   stepLength: bigint
   refunded: boolean
+}
+
+export interface ConfigInfo {
+  feeReceiver: `0x${string}`
+  secondaryFeeAllocation: number
+  primaryFeeAllocation: number
+  lockTime: number
+  referrerShare: bigint
+  defaultMetadataURI: string
+}
+
+export async function getOnChainConfig(
+  publicClient: PublicClient
+): Promise<ConfigInfo> {
+  const contractRegistry = getContract({
+    abi: CONTRACT_REGISTRY_ABI,
+    address: config.eth.contracts.contract_registry_v1,
+    publicClient,
+  })
+  const configInfo = await contractRegistry.read.configInfo()
+  return {
+    feeReceiver: configInfo[0],
+    secondaryFeeAllocation: configInfo[1],
+    primaryFeeAllocation: configInfo[2],
+    lockTime: configInfo[3],
+    referrerShare: configInfo[4],
+    defaultMetadataURI: configInfo[5],
+  }
 }
 
 /**
@@ -244,63 +279,118 @@ export function isTransactionReceipt(obj: any): obj is TransactionReceipt {
 export function sortReceiversAlphabetically(
   accounts: ReceiverEntry[]
 ): ReceiverEntry[] {
-  return accounts.sort((a, b) => a.account.localeCompare(b.account))
+  return accounts.sort((a, b) => a.address.localeCompare(b.address))
 }
 
 /**
- * The `preparePrimaryReceivers` function prepares a list of primary receivers by sorting them alphabetically,
+ * Given a list of receivers, if the same receiver is set twice in the list,
+ * merge those entry and add up their values.
+ */
+export function mergeSameReceivers(
+  receivers: ReceiverEntry[]
+): ReceiverEntry[] {
+  const out: ReceiverEntry[] = []
+  for (const receiver of receivers) {
+    const f = out.find(r => r.address === receiver.address)
+    if (f) f.pct += receiver.pct
+    else out.push({ ...receiver })
+  }
+  return out
+}
+
+/**
+ * The `prepareReceivers` function prepares a list of primary receivers by sorting them alphabetically,
  * distributing a fee proportionally among them and adjusting the values to ensure the total is 10,000.
  * It also transforms the values to base 1_000_000.
+ * In the end, if an address is defined multiple times, the entries are merged
+ * into one.
  * @param {ReceiverEntry[]} receivers - An array of objects representing the primary receivers. Each
  * object has a "value" property indicating the amount to be received by that receiver.
  * @param {ReceiverEntry} feeReceiver - The `feeReceiver` parameter is an object that represents the
  * receiver who will receive the fee. It has the following properties:
+ * @param {ConfigInfo} config - The `config` parameter is onchain configuration of the contracts
  * @returns an array of ReceiverEntry objects.
  */
-export function preparePrimaryReceivers(
-  receivers: ReceiverEntry[]
+export function prepareReceivers(
+  receivers: ReceiverEntry[],
+  type: "primary" | "secondary",
+  config: ConfigInfo
 ): ReceiverEntry[] {
   // Calculate the original total value before fee distribution
-  const originalTotal = receivers.reduce(
-    (sum, account) => sum + account.value,
-    0
-  )
+  const originalTotal = receivers.reduce((sum, account) => sum + account.pct, 0)
   /**
    * Check that the total is 10_000
    * This is a sanity check to make sure that the total is 100%
    */
   if (originalTotal !== 10_000) {
-    throw Error("Primary receivers total must be 10000")
+    throw Error("Primary receivers total must be 10_000")
   }
 
   const feeReceiver: ReceiverEntry = {
-    account: config.config.ethFeeReceiver as `0x${string}`,
-    value: config.config.fxhashPrimaryFee,
+    address: config.feeReceiver as `0x${string}`,
+    pct:
+      type === "primary"
+        ? config.primaryFeeAllocation
+        : config.secondaryFeeAllocation,
   }
   // Calculate the fee ratio for each account
-  const feeRatio = feeReceiver.value / originalTotal
+  const feeRatio = feeReceiver.pct / ALLOCATION_BASE
 
   // Subtract the fee from each account proportionally and transform it to base 1_000_000
   receivers = receivers.map(account => ({
     ...account,
-    value: (account.value - account.value * feeRatio) * 100,
+    pct: (account.pct - account.pct * feeRatio) * 100,
   }))
 
   // Add the fee account with its full value
   receivers.push({
-    account: feeReceiver.account,
-    value: feeReceiver.value * 100,
+    address: feeReceiver.address,
+    pct: feeReceiver.pct,
   })
 
   receivers = sortReceiversAlphabetically(receivers)
 
   // Due to floating point precision, there might be a small discrepancy
   // from the intended total, so we can adjust the last account slightly
-  const finalTotal = receivers.reduce((sum, account) => sum + account.value, 0)
+  const finalTotal = receivers.reduce((sum, account) => sum + account.pct, 0)
   const discrepancy = 1_000_000 - finalTotal
   if (discrepancy !== 0) {
-    receivers[receivers.length - 1].value += discrepancy
+    receivers[receivers.length - 1].pct += discrepancy
   }
 
-  return receivers
+  return mergeSameReceivers(receivers)
+}
+
+/**
+ * Uses the Main Split contract to predict the split address given the
+ * receivers.
+ * @param receivers list of receivers
+ * @returns the address of the immutable split
+ */
+export function predictImmutableSplitAddress(
+  receivers: ReceiverEntry[],
+  publicClient: PublicClient
+): Promise<`0x${string}`> {
+  const mainSplit = getContract({
+    abi: SPLITS_MAIN_ABI,
+    address: config.eth.contracts.splits_main,
+    publicClient,
+  })
+  return mainSplit.read.predictImmutableSplitAddress([
+    receivers.map(r => r.address),
+    receivers.map(r => r.pct),
+    0,
+  ]) as any as Promise<`0x${string}`>
+}
+
+export function generateOnchainDataHash(
+  bytes: `0x${string}`,
+  publicClient: PublicClient
+) {
+  const genArt = getContract({
+    abi: FX_GEN_ART_721_ABI,
+    address: config.eth.contracts.gen_art_token_impl_v1,
+    publicClient,
+  })
+  return genArt.read.generateOnchainDataHash([bytes])
 }

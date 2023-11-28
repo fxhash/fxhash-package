@@ -1,20 +1,18 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import {
-  TransactionReceipt,
-  encodeAbiParameters,
-  encodeFunctionData,
-  getAddress,
-} from "viem"
+import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
+
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
+  getOnChainConfig,
   InitInfo,
   MetadataInfo,
   MintInfo,
   MintTypes,
   predictFxContractAddress,
+  prepareReceivers,
   ProjectInfo,
   ReceiverEntry,
   simulateAndExecuteContract,
@@ -85,8 +83,8 @@ export type TCreateProjectEthV1OperationParams = {
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
   )[]
-  primaryReceiver: string
-  royalties: number
+  primaryReceivers: ReceiverEntry[]
+  royalties: bigint
   royaltiesReceivers: ReceiverEntry[]
   ticketInfo?: {
     gracePeriod: number
@@ -109,17 +107,22 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    const onchainConfig = await getOnChainConfig(this.manager.publicClient)
+    const primaryReceivers = prepareReceivers(
+      this.params.primaryReceivers,
+      "primary",
+      onchainConfig
+    )
+
     if (this.params.royalties > 2500) {
       throw Error("Royalties should be lower or equal to 25%")
     }
-    const secondaryTotal = this.params.royaltiesReceivers.reduce(
-      (acc, entry) => acc + entry.value,
-      0
-    )
 
-    if (secondaryTotal != 10000) {
-      throw Error("Royalties total should be 100%")
-    }
+    const secondaryReceivers = prepareReceivers(
+      this.params.royaltiesReceivers,
+      "secondary",
+      onchainConfig
+    )
 
     const owner = (
       this.params.isCollab
@@ -127,20 +130,14 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         : this.manager.address
     ) as `0x${string}`
 
-    const parsedRoyalties = this.params.royaltiesReceivers.map(entry => {
-      return {
-        account: entry.account,
-        value: (entry.value * this.params.royalties) / 10000,
-      }
-    })
-
     const initInfo: InitInfo = {
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1 as `0x${string}`,
       renderer: FxhashContracts.ETH_IPFS_RENDERER_V1 as `0x${string}`,
       tagIds: this.params.initInfo.tagIds,
-      primaryReceiver: this.params.primaryReceiver as `0x${string}`,
+      primaryReceivers: primaryReceivers.map(entry => entry.address),
+      allocations: primaryReceivers.map(entry => entry.pct),
     }
 
     const projectInfo: ProjectInfo = {
@@ -195,8 +192,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         projectInfo,
         metadataInfo,
         mintInfos,
-        parsedRoyalties.map(entry => entry.account),
-        parsedRoyalties.map(entry => BigInt(entry.value))
+        secondaryReceivers.map(entry => entry.address),
+        secondaryReceivers.map(entry => Number(entry.pct)),
+        this.params.royalties
       )
       const ticketEncodedArgs = encodeTicketFactoryArgs(
         owner,
@@ -221,8 +219,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         projectInfo,
         metadataInfo,
         mintInfos,
-        parsedRoyalties.map(entry => entry.account),
-        parsedRoyalties.map(entry => entry.value),
+        secondaryReceivers.map(entry => entry.address),
+        secondaryReceivers.map(entry => entry.pct),
+        this.params.royalties,
       ]
     }
     if (this.params.isCollab) {
