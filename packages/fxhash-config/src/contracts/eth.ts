@@ -1,12 +1,10 @@
 export interface IEthContracts {
   multicall3: `0x${string}`
   seaport_zone: `0x${string}`
-  splits_controller_v1: `0x${string}`
   splits_main: `0x${string}`
   scripty_storage: `0x${string}`
   scripty_builder: `0x${string}`
   project_factory_v1: `0x${string}`
-  splits_factory_v1: `0x${string}`
   fixed_price_minter_v1: `0x${string}`
   dutch_auction_minter_v1: `0x${string}`
   mint_ticket_factory_v1: `0x${string}`
@@ -25,17 +23,15 @@ export const ethTestnetContracts: IEthContracts = {
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
   scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
-  project_factory_v1: "0xaAac8b3C065824871c65d5F40C2efE95bFa8D1af",
-  mint_ticket_factory_v1: "0x0414421AC7aFB9B1b9ec5232Bb9FEEE0072Ae21A",
-  splits_factory_v1: "0x09bb4FF8e3309A11e20b354e1Eeeb02170C6bb64",
-  splits_controller_v1: "0x447851a0033f4669E01dF608424c24C34128B040",
-  dutch_auction_minter_v1: "0x8FD24a7002Eb40d60Ee403518c9F80EED0424cbF",
-  fixed_price_minter_v1: "0x00b6BB7C1A08bF0278Ec462E05218109eeC87274",
-  ticket_redeemer_v1: "0xA88773F85c6Fd31FDd0F283eD851E9C966B7D569",
-  ipfs_renderer_v1: "0x74Fed617fD8a59CBf4e3386B0192c02E377Bc535",
-  randomizer_v1: "0x4cbe2BF84874bC626a373A1C57C6641191e57383",
-  role_registry_v1: "0x7287BEABe00A4AaE2d93907D5f24046D98e164d2",
-  contract_registry_v1: "0x91E96491f1638b100280F651Ce7D07f805D2A841",
-  gen_art_token_impl_v1: "0xdA2C0B9EC1CfC2e82dB8DeA56215a318837CD22a",
-  mint_ticket_impl_v1: "0xB290A25113414576776C15f52901c2b068389d20",
+  project_factory_v1: "0xee005c99566a3AcC6D8FDEd22EbC73D39aa07606",
+  mint_ticket_factory_v1: "0xe986d9a6E1A5AcBc673D899DD3d0e4020975F2dc",
+  dutch_auction_minter_v1: "0x8b3aCfD7E068D22E8020A9c90970C9a3Ca1367ab",
+  fixed_price_minter_v1: "0x2278Ae9Ae2d21e1f081F35aB065faaEf9baE07a4",
+  ticket_redeemer_v1: "0x5E3ff4182A75e91B60232033Bfbe73C4DE3Fc1dc",
+  ipfs_renderer_v1: "0x1c9c4E5B607AaAbc4eC8aeA8737E6918a863b843",
+  randomizer_v1: "0xb95183c79beb01b6cb992fC32a11596e2838198E",
+  role_registry_v1: "0x3f859cfF0e7f56583A0Dcd318646410B302e294B",
+  contract_registry_v1: "0x1880c6CEED031d901c1da85eB8c051AD76642359",
+  gen_art_token_impl_v1: "0x6c562D9ebfaA863074968D049782eeD79aC429D4",
+  mint_ticket_impl_v1: "0xEE48764cf857Bc71375adb4ADAdF789d9F684912",
 }
