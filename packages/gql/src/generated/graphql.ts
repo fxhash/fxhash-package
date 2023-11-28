@@ -3616,6 +3616,8 @@ export enum Cursor_Ordering {
 /** columns and relationships of "eth_project_data" */
 export type Eth_Project_Data = {
   __typename?: 'eth_project_data';
+  accounts: Scalars['_text']['output'];
+  allocations: Scalars['_int4']['output'];
   id: Scalars['String']['output'];
   mint_info: Scalars['jsonb']['output'];
   primary_receiver: Scalars['String']['output'];
@@ -3640,6 +3642,8 @@ export type Eth_Project_Data_Bool_Exp = {
   _and?: InputMaybe<Array<Eth_Project_Data_Bool_Exp>>;
   _not?: InputMaybe<Eth_Project_Data_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Project_Data_Bool_Exp>>;
+  accounts?: InputMaybe<_Text_Comparison_Exp>;
+  allocations?: InputMaybe<_Int4_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   mint_info?: InputMaybe<Jsonb_Comparison_Exp>;
   primary_receiver?: InputMaybe<String_Comparison_Exp>;
@@ -3649,6 +3653,8 @@ export type Eth_Project_Data_Bool_Exp = {
 
 /** Ordering options when selecting data from "eth_project_data". */
 export type Eth_Project_Data_Order_By = {
+  accounts?: InputMaybe<Order_By>;
+  allocations?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   mint_info?: InputMaybe<Order_By>;
   primary_receiver?: InputMaybe<Order_By>;
@@ -3658,6 +3664,10 @@ export type Eth_Project_Data_Order_By = {
 
 /** select columns of table "eth_project_data" */
 export enum Eth_Project_Data_Select_Column {
+  /** column name */
+  Accounts = 'accounts',
+  /** column name */
+  Allocations = 'allocations',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3680,6 +3690,8 @@ export type Eth_Project_Data_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Eth_Project_Data_Stream_Cursor_Value_Input = {
+  accounts?: InputMaybe<Scalars['_text']['input']>;
+  allocations?: InputMaybe<Scalars['_int4']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   mint_info?: InputMaybe<Scalars['jsonb']['input']>;
   primary_receiver?: InputMaybe<Scalars['String']['input']>;
