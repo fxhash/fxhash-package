@@ -495,7 +495,7 @@ type Media {
   """An object relationship"""
   uploader: Account
   uploaderId: uuid
-  url: String!
+url: String!
 }
 
 """
@@ -4459,6 +4459,7 @@ type eth_project_data {
     """JSON select path"""
     path: String
   ): jsonb!
+  secondary_receiver: String
   tags: _int4!
 }
 
@@ -4475,6 +4476,7 @@ input eth_project_data_bool_exp {
   mint_info: jsonb_comparison_exp
   primary_receiver: String_comparison_exp
   project_info: jsonb_comparison_exp
+  secondary_receiver: String_comparison_exp
   tags: _int4_comparison_exp
 }
 
@@ -4486,6 +4488,7 @@ input eth_project_data_order_by {
   mint_info: order_by
   primary_receiver: order_by
   project_info: order_by
+  secondary_receiver: order_by
   tags: order_by
 }
 
@@ -4512,6 +4515,9 @@ enum eth_project_data_select_column {
   project_info
 
   """column name"""
+  secondary_receiver
+
+  """column name"""
   tags
 }
 
@@ -4534,6 +4540,7 @@ input eth_project_data_stream_cursor_value_input {
   mint_info: jsonb
   primary_receiver: String
   project_info: jsonb
+  secondary_receiver: String
   tags: _int4
 }
 
@@ -12179,7 +12186,7 @@ input pricing_fixed_variance_order_by {
 }
 
 type query_root {
-  mediaFullUrl(s3key: String!): String!
+mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
 }

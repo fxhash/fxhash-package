@@ -3622,6 +3622,7 @@ export type Eth_Project_Data = {
   mint_info: Scalars['jsonb']['output'];
   primary_receiver: Scalars['String']['output'];
   project_info: Scalars['jsonb']['output'];
+  secondary_receiver?: Maybe<Scalars['String']['output']>;
   tags: Scalars['_int4']['output'];
 };
 
@@ -3648,6 +3649,7 @@ export type Eth_Project_Data_Bool_Exp = {
   mint_info?: InputMaybe<Jsonb_Comparison_Exp>;
   primary_receiver?: InputMaybe<String_Comparison_Exp>;
   project_info?: InputMaybe<Jsonb_Comparison_Exp>;
+  secondary_receiver?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<_Int4_Comparison_Exp>;
 };
 
@@ -3659,6 +3661,7 @@ export type Eth_Project_Data_Order_By = {
   mint_info?: InputMaybe<Order_By>;
   primary_receiver?: InputMaybe<Order_By>;
   project_info?: InputMaybe<Order_By>;
+  secondary_receiver?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
 };
 
@@ -3676,6 +3679,8 @@ export enum Eth_Project_Data_Select_Column {
   PrimaryReceiver = 'primary_receiver',
   /** column name */
   ProjectInfo = 'project_info',
+  /** column name */
+  SecondaryReceiver = 'secondary_receiver',
   /** column name */
   Tags = 'tags'
 }
@@ -3696,6 +3701,7 @@ export type Eth_Project_Data_Stream_Cursor_Value_Input = {
   mint_info?: InputMaybe<Scalars['jsonb']['input']>;
   primary_receiver?: InputMaybe<Scalars['String']['input']>;
   project_info?: InputMaybe<Scalars['jsonb']['input']>;
+  secondary_receiver?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Scalars['_int4']['input']>;
 };
 
