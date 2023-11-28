@@ -7,6 +7,7 @@ export interface IFxhashApis {
   fsEmulator: string
   extract: string
   media: string
+  ethMetadata: string
   ipfsGateway: string
   ipfsGatewaySafe: string
   onchfsProxy: string
@@ -39,6 +40,7 @@ export const fxhashDevApis: IFxhashApis = {
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.dev.fxhash-dev.xyz",
+  ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
@@ -83,6 +85,7 @@ export const fxhashPrdApis: IFxhashApis = {
   fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
+  ethMetadata: "https://media.fxhash.xyz/metadata/ethereum/",
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
