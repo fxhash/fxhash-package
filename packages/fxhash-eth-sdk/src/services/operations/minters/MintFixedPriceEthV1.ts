@@ -54,6 +54,6 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
   }
 
   success(): string {
-    return `Successfully minted fixed price token ${this.params.token} for ${this.params.price} ETH`
+    return `Successfully minted fixed price token ${this.params.token}`
   }
 }

@@ -108,3 +108,6 @@ export abstract class WalletManager {
     // TODO proper error type
   }): PromiseResult<unknown, UserRejectedError>
 }
+
+// a generic type for ContractOperation polymorphism
+export type TWalletManager = new (address: string) => WalletManager

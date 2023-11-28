@@ -92,7 +92,7 @@ export async function getOffer(
 ): Promise<ReservoirGetOfferResponse> {
   return await fetchReservoir<ReservoirGetOfferResponse>(
     API_METHODS.GET,
-    `/orders/bids/v6?id=${offerId}`,
+    `/orders/bids/v6?ids=${offerId}`,
     undefined
   )
 }

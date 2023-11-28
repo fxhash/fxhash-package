@@ -5,7 +5,7 @@ import {
 } from "@taquito/taquito"
 import { Collaboration } from "../../types/entities/User"
 import { CollaborationProposal } from "../indexing/contract-handlers/CollaborationHandler"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TCollabVoteProposalParams = {
   collaboration: Collaboration
@@ -13,23 +13,10 @@ export type TCollabVoteProposalParams = {
   approval: boolean
 }
 
-export class CollabVoteProposalOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosCollabVoteProposalOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Vote for a proposal
  */
-class TezosCollabVoteProposalOperation extends TezosContractOperation<TCollabVoteProposalParams> {
+export class CollabVoteProposalOperation extends TezosContractOperation<TCollabVoteProposalParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

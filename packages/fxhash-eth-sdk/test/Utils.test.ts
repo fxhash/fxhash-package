@@ -20,7 +20,7 @@ import {
 } from "viem"
 import {
   ReceiverEntry,
-  preparePrimaryReceivers,
+  prepareReceivers,
 } from "@/services/operations/EthCommon"
 import { getExistingSplits } from "@/utils"
 import { getSplitsClient } from "@/services/Splits"

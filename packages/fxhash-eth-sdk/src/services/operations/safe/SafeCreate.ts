@@ -2,6 +2,7 @@ import Safe, { SafeAccountConfig } from "@safe-global/protocol-kit"
 import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
 import { getEthersAdapterForSafe, getSafeFactory } from "@/services/Safe"
+import { ethers } from "ethers-v5"
 
 /**
  * The above type represents the parameters required to create a safe multisig Ethereum V1 operation.
@@ -13,6 +14,7 @@ import { getEthersAdapterForSafe, getSafeFactory } from "@/services/Safe"
 export type TCreateSafeMultisigEthV1OperationParams = {
   owners: string[]
   threshold: number
+  signer: ethers.providers.Provider
 }
 
 /**
@@ -22,7 +24,8 @@ export class CreateSafeMultisigEthV1Operation extends EthereumContractOperation<
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    const safeFactory = await getSafeFactory(this.manager.signer)
+    // We use params as the user is not yet connected to a Safe
+    const safeFactory = await getSafeFactory(this.params.signer)
 
     const safeAccountConfig: SafeAccountConfig = {
       owners: this.params.owners,

@@ -3,7 +3,7 @@
   // ../utils/dist/chunk-IMPGERQH.js
   var BASE58_CHARSET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
-  // ../utils/dist/chunk-26CM6NPL.js
+  // ../utils/dist/chunk-NX3IL6GN.js
   function mockTezosAddress() {
     const randomSequence = Array.from(
       { length: 33 },
@@ -22,25 +22,22 @@
     return true;
   }
   function isEthereumAddressValid(address) {
-    if (!/^(0x)?[0-9a-fA-F]{40}$/.test(address)) {
-      return false;
-    }
-    return true;
+    return /^(0x)?[0-9a-fA-F]{40}$/.test(address);
   }
 
-  // ../utils/dist/chunk-FISFLHKP.js
+  // ../utils/dist/chunk-JWHCNSS7.js
   function mockTezosTransactionHash() {
     const randomSequence = Array.from(
-      { length: 33 },
+      { length: 49 },
       () => BASE58_CHARSET[Math.random() * BASE58_CHARSET.length | 0]
     ).join("");
     return `oo${randomSequence}`;
   }
   function isEthereumTransactionHashValid(hash) {
-    return hash.substring(0, 2) === "0x";
+    return /^(0x)?([A-Fa-f0-9]{64})$/.test(hash);
   }
 
-  // ../utils/dist/chunk-7UVKKGRT.js
+  // ../utils/dist/chunk-LQMLDE4N.js
   function b58dec(str) {
     return [...str].reduce(function(p, c) {
       return p * BASE58_CHARSET.length + BASE58_CHARSET.indexOf(c) | 0;
@@ -65,19 +62,12 @@
       return (t >>> 0) / 4294967296;
     };
   }
-  function matcher(str, start) {
-    return str.slice(start).match(new RegExp(".{" + (str.length - start >> 2) + "}", "g")).map(function(substring) {
-      return b58dec(substring);
-    });
+  function matcher(str, start, decoder = b58dec) {
+    return str.slice(start).match(new RegExp(".{" + (str.length - start >> 2) + "}", "g")).map(decoder);
   }
   function getSeedFromHash(hash) {
     if (isEthereumTransactionHashValid(hash) || isEthereumAddressValid(hash)) {
-      return [
-        parseInt(hash.slice(2, 10), 16),
-        parseInt(hash.slice(10, 18), 16),
-        parseInt(hash.slice(18, 26), 16),
-        parseInt(hash.slice(26, 34), 16)
-      ];
+      return matcher(hash, 2, (s) => parseInt(s, 16) | 0);
     } else if (isTezosAddressValid(hash)) {
       return matcher(hash, 3);
     } else {
@@ -413,7 +403,7 @@
     const searchParams = window2.location.hash;
     const initialInputBytes = searchParams?.replace("#0x", "");
     const $fx = {
-      _version: "3.3.0",
+      _version: "4.0.0",
       _processors: ParameterProcessors,
       // where params def & features will be stored
       _params: void 0,

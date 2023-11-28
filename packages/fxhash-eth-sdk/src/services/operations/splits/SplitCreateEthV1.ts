@@ -3,7 +3,7 @@ import { EthereumContractOperation } from "../contractOperation"
 import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
 import { FX_SPLITS_FACTORY_ABI } from "@/abi/FxSplitsFactory"
 import {
-  preparePrimaryReceivers,
+  prepareReceivers,
   ReceiverEntry,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -28,17 +28,17 @@ export class CreateSplitEthV1Operation extends EthereumContractOperation<TCreate
     const functionName = this.params.mutable
       ? "createMutableSplit"
       : "createImmutableSplit"
-    this.params.receivers = preparePrimaryReceivers(this.params.receivers)
+    this.params.receivers = prepareReceivers(this.params.receivers, "primary")
     const argsPayload =
       this.params.mutable && this.params.creator
         ? [
             getAddress(this.params.creator),
-            this.params.receivers.map(receiver => getAddress(receiver.account)),
-            this.params.receivers.map(receiver => receiver.value),
+            this.params.receivers.map(receiver => getAddress(receiver.address)),
+            this.params.receivers.map(receiver => receiver.pct),
           ]
         : [
-            this.params.receivers.map(receiver => getAddress(receiver.account)),
-            this.params.receivers.map(receiver => receiver.value),
+            this.params.receivers.map(receiver => getAddress(receiver.address)),
+            this.params.receivers.map(receiver => receiver.pct),
           ]
     console.log(argsPayload)
     if (this.params.isCollab) {
