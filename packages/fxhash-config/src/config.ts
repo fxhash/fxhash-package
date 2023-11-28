@@ -23,9 +23,8 @@ export interface IFxhashEnvConfig {
   gtMinPrice: string
   walletConnectId: string
   ethFeeReceiver: `0x${string}`
-  fxhashPrimaryFee: number
-  fxhashReservoirSecondaryFee: number
   wertRelayer: string
+  fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   projectLockTime: number
   referrerShare: number

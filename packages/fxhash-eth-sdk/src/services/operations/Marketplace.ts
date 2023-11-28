@@ -66,7 +66,7 @@ export function overrideSellStepsParameters(steps: Execute): void {
   let orderId: string = undefined
   reservoirListings.forEach(listing => {
     listing.marketplaceFees = [
-      `${config.config.ethFeeReceiver}:${config.config.fxhashReservoirSecondaryFee}`,
+      `${config.config.ethFeeReceiver}:${config.config.fxhashSecondaryFee}`,
     ]
   })
   const hashCallBack = (steps, path) => {
@@ -119,7 +119,7 @@ export const placeBid = async (
   let orderId: string = undefined
   bids.forEach(bid => {
     bid.marketplaceFees = [
-      `${config.config.ethFeeReceiver}:${config.config.fxhashReservoirSecondaryFee}`,
+      `${config.config.ethFeeReceiver}:${config.config.fxhashSecondaryFee}`,
     ]
   })
   // Prepare listing parameters
