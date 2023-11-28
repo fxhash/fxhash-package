@@ -149,7 +149,7 @@ export async function getUserSafes(
 }
 
 /**
- * Retrieves pending transactions for a given safe adress.
+ * Retrieves pending transactions for a given safe address.
  * @param {string} safeAddress - address of a safe.
  * @returns pending transactions for the safe with the specified address.
  */
