@@ -76,7 +76,6 @@ export interface GenerativeTokenMetadata {
   authenticityHash: string
   capture: CaptureSettings
   settings?: GenTokenSettings | null
-  decimals: number
   symbol: string
   // ADDED STARTING FROM v0.2
   // a fake transaction hash used for the preview
