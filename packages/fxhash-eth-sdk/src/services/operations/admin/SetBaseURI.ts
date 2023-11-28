@@ -55,7 +55,7 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
         abi: FX_GEN_ART_721_ABI,
         functionName: "setBaseURI",
         args: [parsedCID],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

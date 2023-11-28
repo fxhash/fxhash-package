@@ -37,14 +37,17 @@ export type TMintFixedPriceWhitelistEthV1OperationParams = {
   reserveId: number
   price: bigint
   amount: bigint
-  to: string
+  to: string | null
 }
 
 /* The MintFixedPriceWhitelistEthV1Operation class is responsible for minting a fixed price token for a
 specified price in ETH and using a whitelist. */
 export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOperation<TMintFixedPriceWhitelistEthV1OperationParams> {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
-  async prepare() {}
+  async prepare() {
+    if (!this.params.to) {
+      this.params.to = this.manager.address
+    }
+  }
   async call(): Promise<TransactionReceipt> {
     const merkleRoot = await getMerkleRootForToken(this.params.token)
     if (merkleRoot === undefined) {
@@ -77,7 +80,7 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
           [index],
           [proof],
         ],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
         value: this.params.price,
       }
       return simulateAndExecuteContract(this.manager, args)
@@ -85,6 +88,6 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
   }
 
   success(): string {
-    return `Successfully minted fixed price token ${this.params.token} for ${this.params.price} ETH with whitelist`
+    return `Successfully minted fixed price token ${this.params.token}`
   }
 }

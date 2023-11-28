@@ -54,7 +54,7 @@ export class UpdateSplitEthV1Operation extends EthereumContractOperation<TUpdate
           this.params.accounts,
           this.params.allocations,
         ],
-        account: this.manager.address,
+        account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
     }

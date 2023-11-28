@@ -13,30 +13,16 @@ import { GenTokPricingForm } from "../../types/Mint"
 import { packPricing } from "../../utils/pack/pricing"
 import { transformPricingFormToNumbers } from "../../utils/transformers/pricing"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TUpdatePricingV3OperationParams = {
   data: GenTokPricingForm<string>
   token: GenerativeToken
 }
-
-export class UpdatePricingV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosUpdatePricingV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Updates the pricing of a Generative Token
  */
-export class TezosUpdatePricingV3Operation extends TezosContractOperation<TUpdatePricingV3OperationParams> {
+export class UpdatePricingV3Operation extends TezosContractOperation<TUpdatePricingV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

@@ -23,7 +23,7 @@ export type TMintFixedPriceEthV1OperationParams = {
   price: bigint
   reserveId: number
   amount: bigint
-  to: string
+  to: string | null
 }
 
 /**
@@ -31,8 +31,11 @@ export type TMintFixedPriceEthV1OperationParams = {
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
 export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMintFixedPriceEthV1OperationParams> {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
-  async prepare() {}
+  async prepare() {
+    if (!this.params.to) {
+      this.params.to = this.manager.address
+    }
+  }
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
@@ -44,13 +47,13 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
         this.params.amount,
         this.params.to,
       ],
-      account: this.manager.address,
+      account: this.manager.address as `0x${string}`,
       value: this.params.price,
     }
     return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {
-    return `Successfully minted fixed price token ${this.params.token} for ${this.params.price} ETH`
+    return `Successfully minted fixed price token ${this.params.token}`
   }
 }

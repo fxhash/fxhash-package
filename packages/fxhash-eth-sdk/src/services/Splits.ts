@@ -2,6 +2,8 @@ import { SplitsClient } from "@0xsplits/splits-sdk"
 import { CURRENT_CHAIN } from "./Wallet"
 import { PublicClient, WalletClient } from "viem"
 
+export const SPLITS_ETHER_TOKEN = "0x0000000000000000000000000000000000000000"
+
 export function getSplitsClient(
   publicClient: PublicClient,
   walletClient: WalletClient
