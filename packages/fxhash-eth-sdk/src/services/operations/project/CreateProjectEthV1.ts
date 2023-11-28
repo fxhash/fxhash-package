@@ -127,8 +127,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     //since we are using splits, we need to create the splits first. So we get the immutable address of the splits
     const splitsAddress = await splitsFactory.read.predictImmutableSplitAddress(
       [
-        primaryReceivers.map(entry => entry.account),
-        primaryReceivers.map(entry => entry.value),
+        primaryReceivers.map(entry => entry.address),
+        primaryReceivers.map(entry => entry.pct),
         0,
       ]
     )
@@ -211,8 +211,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         projectInfo,
         metadataInfo,
         mintInfos,
-        secondaryReceivers.map(entry => entry.account),
-        secondaryReceivers.map(entry => Number(entry.value)),
+        secondaryReceivers.map(entry => entry.address),
+        secondaryReceivers.map(entry => Number(entry.pct)),
         this.params.royalties
       )
       const ticketEncodedArgs = encodeTicketFactoryArgs(
@@ -238,8 +238,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         projectInfo,
         metadataInfo,
         mintInfos,
-        secondaryReceivers.map(entry => entry.account),
-        secondaryReceivers.map(entry => entry.value),
+        secondaryReceivers.map(entry => entry.address),
+        secondaryReceivers.map(entry => entry.pct),
         this.params.royalties,
       ]
     }

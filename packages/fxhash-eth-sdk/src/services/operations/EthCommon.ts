@@ -296,8 +296,8 @@ export function prepareReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    account: config.config.ethFeeReceiver as `0x${string}`,
-    value:
+    address: config.config.ethFeeReceiver as `0x${string}`,
+    pct:
       type === "primary"
         ? config.config.fxhashPrimaryFee
         : config.config.fxhashSecondaryFee,
