@@ -4444,107 +4444,6 @@ enum cursor_ordering {
 }
 
 """
-columns and relationships of "eth_project_data"
-"""
-type eth_project_data {
-  accounts: _text!
-  allocations: _int4!
-  id: String!
-  mint_info(
-    """JSON select path"""
-    path: String
-  ): jsonb!
-  primary_receiver: String!
-  project_info(
-    """JSON select path"""
-    path: String
-  ): jsonb!
-  secondary_receiver: String
-  tags: _int4!
-}
-
-"""
-Boolean expression to filter rows from the table "eth_project_data". All fields are combined with a logical 'AND'.
-"""
-input eth_project_data_bool_exp {
-  _and: [eth_project_data_bool_exp!]
-  _not: eth_project_data_bool_exp
-  _or: [eth_project_data_bool_exp!]
-  accounts: _text_comparison_exp
-  allocations: _int4_comparison_exp
-  id: String_comparison_exp
-  mint_info: jsonb_comparison_exp
-  primary_receiver: String_comparison_exp
-  project_info: jsonb_comparison_exp
-  secondary_receiver: String_comparison_exp
-  tags: _int4_comparison_exp
-}
-
-"""Ordering options when selecting data from "eth_project_data"."""
-input eth_project_data_order_by {
-  accounts: order_by
-  allocations: order_by
-  id: order_by
-  mint_info: order_by
-  primary_receiver: order_by
-  project_info: order_by
-  secondary_receiver: order_by
-  tags: order_by
-}
-
-"""
-select columns of table "eth_project_data"
-"""
-enum eth_project_data_select_column {
-  """column name"""
-  accounts
-
-  """column name"""
-  allocations
-
-  """column name"""
-  id
-
-  """column name"""
-  mint_info
-
-  """column name"""
-  primary_receiver
-
-  """column name"""
-  project_info
-
-  """column name"""
-  secondary_receiver
-
-  """column name"""
-  tags
-}
-
-"""
-Streaming cursor of the table "eth_project_data"
-"""
-input eth_project_data_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: eth_project_data_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input eth_project_data_stream_cursor_value_input {
-  accounts: _text
-  allocations: _int4
-  id: String
-  mint_info: jsonb
-  primary_receiver: String
-  project_info: jsonb
-  secondary_receiver: String
-  tags: _int4
-}
-
-"""
 columns and relationships of "eth_token_proceeds"
 """
 type eth_token_proceeds {
@@ -9641,31 +9540,6 @@ type onchain_query {
   collection_offer_by_pk(id: String!, version: Int!): collection_offer
 
   """
-  fetch data from the table: "eth_project_data"
-  """
-  eth_project_data(
-    """distinct select on columns"""
-    distinct_on: [eth_project_data_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [eth_project_data_order_by!]
-
-    """filter the rows returned"""
-    where: eth_project_data_bool_exp
-  ): [eth_project_data!]!
-
-  """
-  fetch data from the table: "eth_project_data" using primary key columns
-  """
-  eth_project_data_by_pk(id: String!): eth_project_data
-
-  """
   fetch data from the table: "eth_token_proceeds"
   """
   eth_token_proceeds(
@@ -10750,45 +10624,6 @@ type onchain_subscription {
     """filter the rows returned"""
     where: collection_offer_bool_exp
   ): [collection_offer!]!
-
-  """
-  fetch data from the table: "eth_project_data"
-  """
-  eth_project_data(
-    """distinct select on columns"""
-    distinct_on: [eth_project_data_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [eth_project_data_order_by!]
-
-    """filter the rows returned"""
-    where: eth_project_data_bool_exp
-  ): [eth_project_data!]!
-
-  """
-  fetch data from the table: "eth_project_data" using primary key columns
-  """
-  eth_project_data_by_pk(id: String!): eth_project_data
-
-  """
-  fetch data from the table in a streaming manner: "eth_project_data"
-  """
-  eth_project_data_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [eth_project_data_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: eth_project_data_bool_exp
-  ): [eth_project_data!]!
 
   """
   fetch data from the table: "eth_token_proceeds"

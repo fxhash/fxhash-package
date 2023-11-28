@@ -28,7 +28,6 @@ const documents = {
     "\n  fragment WhitelistEntries on Whitelist {\n    entries {\n      walletAddress\n      whitelistIndex\n    }\n  }\n": types.WhitelistEntriesFragmentDoc,
     "\n  query GetWhitelists($where: Whitelist_bool_exp = {}) {\n    offchain {\n      Whitelist(where: $where) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistsDocument,
     "\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistDocument,
-    "\n  query GetEthProjectData($where: eth_project_data_bool_exp = {}) {\n    onchain {\n      eth_project_data(where: $where) {\n        id\n        primary_receiver\n        secondary_receiver\n      }\n    }\n  }\n": types.GetEthProjectDataDocument,
     "\n  fragment GenerativeToken_Pricing on generative_token {\n    pricing_fixeds {\n      price\n      opens_at\n    }\n    pricing_dutch_auctions {\n      levels\n      resting_price\n      final_price\n      decrement_duration\n      opens_at\n    }\n  }\n": types.GenerativeToken_PricingFragmentDoc,
     "\n  query GetProceeds($where: eth_token_proceeds_bool_exp = {}) {\n    onchain {\n      eth_token_proceeds(where: $where) {\n        dutch_auction_proceeds\n        fixed_price_proceeds\n        total_proceeds\n      }\n    }\n  }\n": types.GetProceedsDocument,
     "\n  query GetReserves($where: reserve_bool_exp = {}) {\n    onchain {\n      reserve(where: $where) {\n        data\n        id\n        method\n        token_id\n        amount\n      }\n    }\n  }\n": types.GetReservesDocument,
@@ -108,10 +107,6 @@ export function graphql(source: "\n  query GetWhitelists($where: Whitelist_bool_
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query GetEthProjectData($where: eth_project_data_bool_exp = {}) {\n    onchain {\n      eth_project_data(where: $where) {\n        id\n        primary_receiver\n        secondary_receiver\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetEthProjectData($where: eth_project_data_bool_exp = {}) {\n    onchain {\n      eth_project_data(where: $where) {\n        id\n        primary_receiver\n        secondary_receiver\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
