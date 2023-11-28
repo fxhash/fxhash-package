@@ -7841,11 +7841,6 @@ export type Onchain_QueryCollection_Offer_By_PkArgs = {
 };
 
 
-export type Onchain_QueryEth_Project_Data_By_PkArgs = {
-  id: Scalars['String']['input'];
-};
-
-
 export type Onchain_QueryEth_Token_ProceedsArgs = {
   distinct_on?: InputMaybe<Array<Eth_Token_Proceeds_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -8714,18 +8709,6 @@ export type Onchain_SubscriptionCollection_Offer_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Collection_Offer_Stream_Cursor_Input>>;
   where?: InputMaybe<Collection_Offer_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionEth_Project_Data_By_PkArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type Onchain_SubscriptionEth_Project_Data_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Eth_Project_Data_Stream_Cursor_Input>>;
-  where?: InputMaybe<Eth_Project_Data_Bool_Exp>;
 };
 
 
@@ -11383,8 +11366,6 @@ export type GetWhitelistQueryVariables = Exact<{
 
 
 export type GetWhitelistQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Whitelist_by_pk?: { __typename?: 'Whitelist', merkleRoot: string, entries: Array<{ __typename?: 'WhitelistEntries', walletAddress: string, whitelistIndex: number }> } | null } | null };
-
-export type GetEthProjectDataQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', eth_project_data: Array<{ __typename?: 'eth_project_data', id: string, primary_receiver: string, secondary_receiver?: string | null }> } | null };
 
 export type GenerativeToken_PricingFragment = { __typename?: 'generative_token', pricing_fixeds: Array<{ __typename?: 'pricing_fixed', price: any, opens_at?: any | null }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', levels: any, resting_price: string, final_price?: any | null, decrement_duration: any, opens_at?: any | null }> };
 
