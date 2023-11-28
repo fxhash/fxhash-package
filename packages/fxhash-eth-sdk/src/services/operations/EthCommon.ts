@@ -337,7 +337,7 @@ export function prepareReceivers(
   // Add the fee account with its full value
   receivers.push({
     address: feeReceiver.address,
-    pct: feeReceiver.pct,
+    pct: feeReceiver.pct * 100,
   })
 
   receivers = sortReceiversAlphabetically(receivers)
