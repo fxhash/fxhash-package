@@ -6,7 +6,10 @@ export function mockEthereumAddress(): string {
     { length: 20 },
     () => (Math.random() * 256) | 0
   )
-  return `0x${Buffer.from(randomBytes).toString("hex")}`
+  const hexString = Array.from(randomBytes)
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("")
+  return `0x${hexString}`
 }
 
 export function mockTezosAddress() {

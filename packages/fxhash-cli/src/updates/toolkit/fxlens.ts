@@ -1,7 +1,7 @@
 import axios from "axios"
 import path from "path"
 import fs from "fs"
-import { FXSTUDIO_PATH, TMP_PATH } from "../../constants"
+import { FXSTUDIO_PATH, getTmpPath } from "../../constants"
 import { readLockFile } from "../lockfile"
 import { ModuleUpdater } from "./toolkit"
 import { GHDownloader } from "../ghDownloader"
@@ -28,8 +28,9 @@ export const fxlensUpdateConfig: ModuleUpdater = {
     }
   },
   update: async latestVersion => {
+    const tmpPath = getTmpPath()
     await ghDownloader.download("fxhash", "fxlens", "build", {
-      output: TMP_PATH,
+      output: tmpPath,
     })
     // if the folder fxlens already exists, clear it
     fs.rmSync(FXSTUDIO_PATH, {
@@ -37,7 +38,7 @@ export const fxlensUpdateConfig: ModuleUpdater = {
       force: true,
     })
     // move download to ./lib/fxlens
-    fs.renameSync(path.join(TMP_PATH, "build"), path.join(FXSTUDIO_PATH))
+    fs.renameSync(path.join(tmpPath, "build"), path.join(FXSTUDIO_PATH))
     return latestVersion
   },
 }

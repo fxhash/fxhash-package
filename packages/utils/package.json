@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/utils",
   "description": "A general-purpose nodejs/browser compatible utility package related to fxhash applications.",
-  "version": "0.0.8",
+  "version": "0.0.1",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
