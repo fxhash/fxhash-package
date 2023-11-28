@@ -24,6 +24,8 @@ export interface IFxhashEnvConfig {
   walletConnectId: string
   ethFeeReceiver: `0x${string}`
   fxhashPrimaryFee: number
+  fxhashReservoirSecondaryFee: number
+  wertRelayer: string
   fxhashSecondaryFee: number
   projectLockTime: number
   referrerShare: number
@@ -133,6 +135,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
     dev: {
@@ -147,6 +150,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
     prd: {
@@ -161,6 +165,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
     },
   },

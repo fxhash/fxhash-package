@@ -64,6 +64,11 @@ export function overrideSellStepsParameters(steps: Execute): void {
   walletClient: WalletClient
 ): Promise<string> => {
   let orderId: string = undefined
+  reservoirListings.forEach(listing => {
+    listing.marketplaceFees = [
+      `${config.config.ethFeeReceiver}:${config.config.fxhashReservoirSecondaryFee}`,
+    ]
+  })
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
     if (step && step.items.length > 0) {
@@ -111,6 +116,12 @@ export const placeBid = async (
   bids: ReservoirPlaceBidParams,
   walletClient: WalletClient
 ): Promise<string> => {
+  let orderId: string = undefined
+  bids.forEach(bid => {
+    bid.marketplaceFees = [
+      `${config.config.ethFeeReceiver}:${config.config.fxhashReservoirSecondaryFee}`,
+    ]
+  })
   // Prepare listing parameters
   const bidStepsParams: ReservoirExecuteBidParams = {
     maker: walletClient.account.address,
@@ -121,7 +132,6 @@ export const placeBid = async (
   // Fetch and override steps
   const fetchedSteps = await getBidSteps(bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
-  let orderId: string = undefined
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
     if (step && step.items.length > 0) {
@@ -149,7 +159,6 @@ export const placeBid = async (
 /**
  * Buys a token.
  * @param {ReservoirBuyTokenParams} items - The buy parameters.
- * @param {string[]} feesOnTop - the additional fees to set for the order
  * @param {WalletClient} walletClient - The wallet client to use.
  * @returns {Promise<true | Execute>} - Returns true or the Execute steps if the buying is successful.
  */
@@ -190,6 +199,34 @@ export const buyToken = async (
   )
 
   return orderId
+}
+
+/**
+ * Get the payload to buy a token with Wert and Reservoir.
+ * @param {ReservoirBuyTokenParams} items - The buy parameters.
+ * @param {WalletClient} walletClient - The wallet client to use.
+ * @returns {Promise<true | Execute>} - Returns true or the Execute steps if the buying is successful.
+ */
+export const getBuyPayloadForWert = async (
+  items: ReservoirBuyTokenParams,
+  walletClient: WalletClient
+): Promise<{
+  from: `0x${string}`
+  to: `0x${string}`
+  data: `0x${string}`
+  value: `0x${string}`
+}> => {
+  // Prepare listing parameters
+  const buyStepsParams: ReservoirExecuteBuyParams = {
+    items: items,
+    source: getClient().source,
+    taker: walletClient.account.address,
+    relayer: config.config.wertRelayer,
+  }
+
+  const fetchedSteps = await getBuySteps(buyStepsParams)
+
+  return fetchedSteps.steps.find(step => step.id === "sale").items[0].data
 }
 
 /**
@@ -312,8 +349,7 @@ export const cancelOrder = async (
   orders: string[],
   walletClient: WalletClient
 ): Promise<string> => {
-  const hashCallBack = steps => {
-  }
+  const hashCallBack = steps => {}
   const result = await handleAction(
     getClient().actions.cancelOrder({
       ids: orders,
