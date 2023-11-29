@@ -495,7 +495,7 @@ type Media {
   """An object relationship"""
   uploader: Account
   uploaderId: uuid
-url: String!
+  url: String!
 }
 
 """
@@ -4441,6 +4441,147 @@ enum cursor_ordering {
 
   """descending ordering of the cursor"""
   DESC
+}
+
+"""
+columns and relationships of "eth_primary_splits"
+"""
+type eth_primary_splits {
+  allocations: _int4!
+  id: String!
+  receiver: String!
+  receivers: _text!
+}
+
+"""
+Boolean expression to filter rows from the table "eth_primary_splits". All fields are combined with a logical 'AND'.
+"""
+input eth_primary_splits_bool_exp {
+  _and: [eth_primary_splits_bool_exp!]
+  _not: eth_primary_splits_bool_exp
+  _or: [eth_primary_splits_bool_exp!]
+  allocations: _int4_comparison_exp
+  id: String_comparison_exp
+  receiver: String_comparison_exp
+  receivers: _text_comparison_exp
+}
+
+"""Ordering options when selecting data from "eth_primary_splits"."""
+input eth_primary_splits_order_by {
+  allocations: order_by
+  id: order_by
+  receiver: order_by
+  receivers: order_by
+}
+
+"""
+select columns of table "eth_primary_splits"
+"""
+enum eth_primary_splits_select_column {
+  """column name"""
+  allocations
+
+  """column name"""
+  id
+
+  """column name"""
+  receiver
+
+  """column name"""
+  receivers
+}
+
+"""
+Streaming cursor of the table "eth_primary_splits"
+"""
+input eth_primary_splits_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: eth_primary_splits_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input eth_primary_splits_stream_cursor_value_input {
+  allocations: _int4
+  id: String
+  receiver: String
+  receivers: _text
+}
+
+"""
+columns and relationships of "eth_secondary_splits"
+"""
+type eth_secondary_splits {
+  allocations: _int4!
+  basis_points: Int!
+  id: String!
+  receiver: String!
+  receivers: _text!
+}
+
+"""
+Boolean expression to filter rows from the table "eth_secondary_splits". All fields are combined with a logical 'AND'.
+"""
+input eth_secondary_splits_bool_exp {
+  _and: [eth_secondary_splits_bool_exp!]
+  _not: eth_secondary_splits_bool_exp
+  _or: [eth_secondary_splits_bool_exp!]
+  allocations: _int4_comparison_exp
+  basis_points: Int_comparison_exp
+  id: String_comparison_exp
+  receiver: String_comparison_exp
+  receivers: _text_comparison_exp
+}
+
+"""Ordering options when selecting data from "eth_secondary_splits"."""
+input eth_secondary_splits_order_by {
+  allocations: order_by
+  basis_points: order_by
+  id: order_by
+  receiver: order_by
+  receivers: order_by
+}
+
+"""
+select columns of table "eth_secondary_splits"
+"""
+enum eth_secondary_splits_select_column {
+  """column name"""
+  allocations
+
+  """column name"""
+  basis_points
+
+  """column name"""
+  id
+
+  """column name"""
+  receiver
+
+  """column name"""
+  receivers
+}
+
+"""
+Streaming cursor of the table "eth_secondary_splits"
+"""
+input eth_secondary_splits_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: eth_secondary_splits_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input eth_secondary_splits_stream_cursor_value_input {
+  allocations: _int4
+  basis_points: Int
+  id: String
+  receiver: String
+  receivers: _text
 }
 
 """
@@ -9540,6 +9681,56 @@ type onchain_query {
   collection_offer_by_pk(id: String!, version: Int!): collection_offer
 
   """
+  fetch data from the table: "eth_primary_splits"
+  """
+  eth_primary_splits(
+    """distinct select on columns"""
+    distinct_on: [eth_primary_splits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_primary_splits_order_by!]
+
+    """filter the rows returned"""
+    where: eth_primary_splits_bool_exp
+  ): [eth_primary_splits!]!
+
+  """
+  fetch data from the table: "eth_primary_splits" using primary key columns
+  """
+  eth_primary_splits_by_pk(id: String!): eth_primary_splits
+
+  """
+  fetch data from the table: "eth_secondary_splits"
+  """
+  eth_secondary_splits(
+    """distinct select on columns"""
+    distinct_on: [eth_secondary_splits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_secondary_splits_order_by!]
+
+    """filter the rows returned"""
+    where: eth_secondary_splits_bool_exp
+  ): [eth_secondary_splits!]!
+
+  """
+  fetch data from the table: "eth_secondary_splits" using primary key columns
+  """
+  eth_secondary_splits_by_pk(id: String!): eth_secondary_splits
+
+  """
   fetch data from the table: "eth_token_proceeds"
   """
   eth_token_proceeds(
@@ -10624,6 +10815,84 @@ type onchain_subscription {
     """filter the rows returned"""
     where: collection_offer_bool_exp
   ): [collection_offer!]!
+
+  """
+  fetch data from the table: "eth_primary_splits"
+  """
+  eth_primary_splits(
+    """distinct select on columns"""
+    distinct_on: [eth_primary_splits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_primary_splits_order_by!]
+
+    """filter the rows returned"""
+    where: eth_primary_splits_bool_exp
+  ): [eth_primary_splits!]!
+
+  """
+  fetch data from the table: "eth_primary_splits" using primary key columns
+  """
+  eth_primary_splits_by_pk(id: String!): eth_primary_splits
+
+  """
+  fetch data from the table in a streaming manner: "eth_primary_splits"
+  """
+  eth_primary_splits_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [eth_primary_splits_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: eth_primary_splits_bool_exp
+  ): [eth_primary_splits!]!
+
+  """
+  fetch data from the table: "eth_secondary_splits"
+  """
+  eth_secondary_splits(
+    """distinct select on columns"""
+    distinct_on: [eth_secondary_splits_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_secondary_splits_order_by!]
+
+    """filter the rows returned"""
+    where: eth_secondary_splits_bool_exp
+  ): [eth_secondary_splits!]!
+
+  """
+  fetch data from the table: "eth_secondary_splits" using primary key columns
+  """
+  eth_secondary_splits_by_pk(id: String!): eth_secondary_splits
+
+  """
+  fetch data from the table in a streaming manner: "eth_secondary_splits"
+  """
+  eth_secondary_splits_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [eth_secondary_splits_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: eth_secondary_splits_bool_exp
+  ): [eth_secondary_splits!]!
 
   """
   fetch data from the table: "eth_token_proceeds"
@@ -12021,7 +12290,7 @@ input pricing_fixed_variance_order_by {
 }
 
 type query_root {
-mediaFullUrl(s3key: String!): String!
+  mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
 }
