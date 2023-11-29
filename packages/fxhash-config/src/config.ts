@@ -26,7 +26,6 @@ export interface IFxhashEnvConfig {
   wertRelayer: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
-  basisPoint: number
   projectLockTime: number
   referrerShare: number
   fxhashTeamSafeAddress: string
@@ -134,7 +133,6 @@ export const fxhashConfig: IFxhashConfig = {
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
-        basisPoint: 10000,
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
         wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
@@ -150,7 +148,6 @@ export const fxhashConfig: IFxhashConfig = {
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
-        basisPoint: 10000,
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
         wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
@@ -166,7 +163,6 @@ export const fxhashConfig: IFxhashConfig = {
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 3330,
-        basisPoint: 10000,
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
         wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
