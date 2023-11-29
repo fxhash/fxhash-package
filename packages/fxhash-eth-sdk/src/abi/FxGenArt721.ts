@@ -52,6 +52,11 @@ export const FX_GEN_ART_721_ABI = [
   },
   {
     inputs: [],
+    name: "InvalidFeeReceiver",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "InvalidInputSize",
     type: "error",
   },
@@ -123,11 +128,6 @@ export const FX_GEN_ART_721_ABI = [
   {
     inputs: [],
     name: "OverMaxBasisPointsAllowed",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "PrimaryFeeReceiverIncorrect",
     type: "error",
   },
   {
@@ -445,9 +445,14 @@ export const FX_GEN_ART_721_ABI = [
             type: "uint120",
           },
           {
-            internalType: "uint120",
+            internalType: "uint88",
             name: "inputSize",
-            type: "uint120",
+            type: "uint88",
+          },
+          {
+            internalType: "uint32",
+            name: "earliestStartTime",
+            type: "uint32",
           },
         ],
         indexed: false,
@@ -948,25 +953,6 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "_receiver",
-        type: "address",
-      },
-    ],
-    name: "generatePrimaryReceiverHash",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "_renderer",
         type: "address",
       },
@@ -1092,9 +1078,14 @@ export const FX_GEN_ART_721_ABI = [
             type: "uint120",
           },
           {
-            internalType: "uint120",
+            internalType: "uint88",
             name: "inputSize",
-            type: "uint120",
+            type: "uint88",
+          },
+          {
+            internalType: "uint32",
+            name: "earliestStartTime",
+            type: "uint32",
           },
         ],
         internalType: "struct ProjectInfo",
@@ -1248,9 +1239,14 @@ export const FX_GEN_ART_721_ABI = [
             type: "uint120",
           },
           {
-            internalType: "uint120",
+            internalType: "uint88",
             name: "inputSize",
-            type: "uint120",
+            type: "uint88",
+          },
+          {
+            internalType: "uint32",
+            name: "earliestStartTime",
+            type: "uint32",
           },
         ],
         internalType: "struct ProjectInfo",
@@ -1443,6 +1439,19 @@ export const FX_GEN_ART_721_ABI = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "primaryReceiver",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
     stateMutability: "view",

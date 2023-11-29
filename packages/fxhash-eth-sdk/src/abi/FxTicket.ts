@@ -77,6 +77,11 @@ export const FX_TICKETS_ABI = [
   },
   {
     inputs: [],
+    name: "PriceExceeded",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "Unauthorized",
     type: "error",
   },
@@ -267,6 +272,19 @@ export const FX_TICKETS_ABI = [
       },
     ],
     name: "Initialized",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "Locked",
     type: "event",
   },
   {
@@ -472,6 +490,19 @@ export const FX_TICKETS_ABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "Unlocked",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "address",
         name: "account",
         type: "address",
@@ -599,6 +630,11 @@ export const FX_TICKETS_ABI = [
       {
         internalType: "uint256",
         name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_maxPrice",
         type: "uint256",
       },
       {
@@ -995,6 +1031,25 @@ export const FX_TICKETS_ABI = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "locked",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_to",
         type: "address",
@@ -1113,6 +1168,19 @@ export const FX_TICKETS_ABI = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "primaryReceiver",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
     stateMutability: "view",

@@ -61,6 +61,7 @@ export interface ProjectInfo {
   burnEnabled: boolean
   maxSupply: bigint
   inputSize: bigint
+  earliestStartTime: number
 }
 
 export interface MetadataInfo {

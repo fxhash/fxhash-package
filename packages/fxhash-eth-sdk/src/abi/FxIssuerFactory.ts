@@ -231,9 +231,14 @@ export const FX_ISSUER_FACTORY_ABI = [
             type: "uint120",
           },
           {
-            internalType: "uint120",
+            internalType: "uint88",
             name: "inputSize",
-            type: "uint120",
+            type: "uint88",
+          },
+          {
+            internalType: "uint32",
+            name: "earliestStartTime",
+            type: "uint32",
           },
         ],
         internalType: "struct ProjectInfo",

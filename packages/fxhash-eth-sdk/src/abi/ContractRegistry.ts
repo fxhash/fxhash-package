@@ -15,12 +15,12 @@ export const CONTRACT_REGISTRY_ABI = [
           },
           {
             internalType: "uint32",
-            name: "secondaryFeeAllocation",
+            name: "primaryFeeAllocation",
             type: "uint32",
           },
           {
             internalType: "uint32",
-            name: "primaryFeeAllocation",
+            name: "secondaryFeeAllocation",
             type: "uint32",
           },
           {
@@ -90,12 +90,12 @@ export const CONTRACT_REGISTRY_ABI = [
           },
           {
             internalType: "uint32",
-            name: "secondaryFeeAllocation",
+            name: "primaryFeeAllocation",
             type: "uint32",
           },
           {
             internalType: "uint32",
-            name: "primaryFeeAllocation",
+            name: "secondaryFeeAllocation",
             type: "uint32",
           },
           {
@@ -224,12 +224,12 @@ export const CONTRACT_REGISTRY_ABI = [
       },
       {
         internalType: "uint32",
-        name: "secondaryFeeAllocation",
+        name: "primaryFeeAllocation",
         type: "uint32",
       },
       {
         internalType: "uint32",
-        name: "primaryFeeAllocation",
+        name: "secondaryFeeAllocation",
         type: "uint32",
       },
       {
@@ -345,12 +345,12 @@ export const CONTRACT_REGISTRY_ABI = [
           },
           {
             internalType: "uint32",
-            name: "secondaryFeeAllocation",
+            name: "primaryFeeAllocation",
             type: "uint32",
           },
           {
             internalType: "uint32",
-            name: "primaryFeeAllocation",
+            name: "secondaryFeeAllocation",
             type: "uint32",
           },
           {

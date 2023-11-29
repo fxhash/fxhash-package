@@ -10,6 +10,7 @@ export interface IEthContracts {
   mint_ticket_factory_v1: `0x${string}`
   ticket_redeemer_v1: `0x${string}`
   ipfs_renderer_v1: `0x${string}`
+  onchfs_renderer_v1: `0x${string}`
   randomizer_v1: `0x${string}`
   role_registry_v1: `0x${string}`
   contract_registry_v1: `0x${string}`
@@ -23,15 +24,16 @@ export const ethTestnetContracts: IEthContracts = {
   splits_main: "0x2ed6c4b5da6378c7897ac67ba9e43102feb694ee",
   scripty_builder: "0x18eef3cc32083396853eb46a89123b7a5da71d16",
   scripty_storage: "0x13153f99bdc7b87531e52d8f310aea5e9468ceb5",
-  project_factory_v1: "0xBd823e08A8bE3e1F705B96ad362d5563bc944266",
-  mint_ticket_factory_v1: "0x4f76C619ce80E2bE860B420AF1cC05CA11A8C597",
-  dutch_auction_minter_v1: "0x33c1C1ca0A0BC279B5d60E72B566d69430c261ea",
-  fixed_price_minter_v1: "0x270351dC73dC2bb1EFA40cCFb4B0ca30dCcB8e2C",
-  ticket_redeemer_v1: "0x157E32374C3AF4F7335281b4177404849cEd72cA",
-  ipfs_renderer_v1: "0x0261e62B5e5Fc25595C8E03808143E78f0954144",
-  randomizer_v1: "0xd90D0D7dBCA06418ee90A9634259130626B259c6",
-  role_registry_v1: "0x26C853772509B3006fa0139BAdC274677C458A3C",
-  contract_registry_v1: "0x05245FF8D03E88B2354dCEb6158b2EE965753e47",
-  gen_art_token_impl_v1: "0xa965Bb875DA39ed97576B1B1aCf50B274E028619",
-  mint_ticket_impl_v1: "0x08Ae49fcd3abc85E60cf6C846328678E7C9e8F65",
+  project_factory_v1: "0x13BE4bEd3B0f7C18D60019030efB8E5E955D0398",
+  mint_ticket_factory_v1: "0xFDE1840166e395D584AA4a068Ca7f023B2BDA0Cb",
+  dutch_auction_minter_v1: "0xec8585c28c8A88FFB54667110E4B6886c63a6f48",
+  fixed_price_minter_v1: "0xdD97b013146B185EbE5F6D199e253A76d8E54cBD",
+  ticket_redeemer_v1: "0x38ab9c6728e9703c74820990028Bd740AcBeCC0E",
+  ipfs_renderer_v1: "0x02d435D0efF1C2aA5c064bA1D203825e6da52F42",
+  onchfs_renderer_v1: "0x0B7cd8d8952B2F1c1E9e096FC37a2E5B25C573D8",
+  randomizer_v1: "0xC360fa9723842135DFC6e33FEA9225ae893B6B4d",
+  role_registry_v1: "0xA6B59786F0640903e3C9d473B7e59DA55f0c964E",
+  contract_registry_v1: "0xe1EA7023dC625D02f3c28e0bb58ba8A024896dC6",
+  gen_art_token_impl_v1: "0x379F32b5A694422eDf6286CcC2A5c9410B1C59eD",
+  mint_ticket_impl_v1: "0x99b95Af45244669D643d8DeDBD28Dbf3ff23f396",
 }

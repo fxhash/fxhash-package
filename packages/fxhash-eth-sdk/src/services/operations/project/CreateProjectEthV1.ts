@@ -72,6 +72,7 @@ export type TCreateProjectEthV1OperationParams = {
     burnEnabled: boolean
     maxSupply: bigint
     inputSize: bigint
+    earliestStartTime?: number
   }
   metadataInfo?: {
     baseURI?: string
@@ -141,6 +142,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       inputSize: this.params.projectInfo.inputSize,
       maxSupply: this.params.projectInfo.maxSupply,
       mintEnabled: this.params.projectInfo.mintEnabled,
+      earliestStartTime: this.params.projectInfo.earliestStartTime
+        ? this.params.projectInfo.earliestStartTime
+        : 0,
     }
 
     let baseURI = ""

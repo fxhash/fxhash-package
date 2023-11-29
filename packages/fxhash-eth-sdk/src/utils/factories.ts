@@ -51,7 +51,8 @@ export function encodeProjectFactoryArgs(
           { name: "mintEnabled", type: "bool" },
           { name: "burnEnabled", type: "bool" },
           { name: "maxSupply", type: "uint120" },
-          { name: "inputSize", type: "uint120" },
+          { name: "inputSize", type: "uint88" },
+          { name: "earliestStartTime", type: "uint32" },
         ],
       },
       {

@@ -96,6 +96,11 @@ export const DUTCH_AUCTION_MINTER_ABI = [
   },
   {
     inputs: [],
+    name: "NonRefundableDA",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "NotEnded",
     type: "error",
   },

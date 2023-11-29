@@ -9,6 +9,7 @@ import {
 export type TClaimTicketEthV1OperationParams = {
   ticket: string
   tokenId: number
+  maxPrice: bigint
   newPrice: bigint
   value: bigint
 }
@@ -26,7 +27,7 @@ export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimT
       address: this.params.ticket as `0x${string}`,
       abi: FX_TICKETS_ABI,
       functionName: "claim",
-      args: [this.params.tokenId, this.params.newPrice],
+      args: [this.params.tokenId, this.params.maxPrice, this.params.newPrice],
       account: this.manager.address as `0x${string}`,
       value: this.params.value,
     }

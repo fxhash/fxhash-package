@@ -26,11 +26,6 @@ export const FIXED_PRICE_MINTER_ABI = [
   },
   {
     inputs: [],
-    name: "InvalidPrice",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "InvalidProof",
     type: "error",
   },
