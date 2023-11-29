@@ -3,13 +3,17 @@ import { graphql } from "@/generated"
 /**
  * ETH Minter proceeds
  */
-export const Qu_GetEthProceeds = graphql(`
-  query GetProceeds($where: eth_token_proceeds_bool_exp = {}) {
+export const Qu_GetEthMinterProceeds = graphql(`
+  query GetEthMinterProceeds($where: eth_minter_proceeds_bool_exp = {}) {
     onchain {
-      eth_token_proceeds(where: $where) {
-        dutch_auction_proceeds
-        fixed_price_proceeds
-        total_proceeds
+      eth_minter_proceeds(where: $where) {
+        id
+        minter_address
+        primary_receiver
+        reserve_id
+        token_address
+        user_address
+        amount
       }
     }
   }

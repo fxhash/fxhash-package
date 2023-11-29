@@ -4444,6 +4444,94 @@ enum cursor_ordering {
 }
 
 """
+columns and relationships of "eth_minter_proceeds"
+"""
+type eth_minter_proceeds {
+  amount: numeric!
+  id: String!
+  minter_address: String!
+  primary_receiver: String!
+  reserve_id: numeric
+  token_address: String!
+  user_address: String!
+}
+
+"""
+Boolean expression to filter rows from the table "eth_minter_proceeds". All fields are combined with a logical 'AND'.
+"""
+input eth_minter_proceeds_bool_exp {
+  _and: [eth_minter_proceeds_bool_exp!]
+  _not: eth_minter_proceeds_bool_exp
+  _or: [eth_minter_proceeds_bool_exp!]
+  amount: numeric_comparison_exp
+  id: String_comparison_exp
+  minter_address: String_comparison_exp
+  primary_receiver: String_comparison_exp
+  reserve_id: numeric_comparison_exp
+  token_address: String_comparison_exp
+  user_address: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "eth_minter_proceeds"."""
+input eth_minter_proceeds_order_by {
+  amount: order_by
+  id: order_by
+  minter_address: order_by
+  primary_receiver: order_by
+  reserve_id: order_by
+  token_address: order_by
+  user_address: order_by
+}
+
+"""
+select columns of table "eth_minter_proceeds"
+"""
+enum eth_minter_proceeds_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  id
+
+  """column name"""
+  minter_address
+
+  """column name"""
+  primary_receiver
+
+  """column name"""
+  reserve_id
+
+  """column name"""
+  token_address
+
+  """column name"""
+  user_address
+}
+
+"""
+Streaming cursor of the table "eth_minter_proceeds"
+"""
+input eth_minter_proceeds_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: eth_minter_proceeds_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input eth_minter_proceeds_stream_cursor_value_input {
+  amount: numeric
+  id: String
+  minter_address: String
+  primary_receiver: String
+  reserve_id: numeric
+  token_address: String
+  user_address: String
+}
+
+"""
 columns and relationships of "eth_primary_splits"
 """
 type eth_primary_splits {
@@ -4585,53 +4673,34 @@ input eth_secondary_splits_stream_cursor_value_input {
 }
 
 """
-columns and relationships of "eth_token_proceeds"
+columns and relationships of "eth_user_proceeds"
 """
-type eth_token_proceeds {
-  dutch_auction_proceeds(
-    """JSON select path"""
-    path: String
-  ): jsonb!
-  fixed_price_proceeds(
-    """JSON select path"""
-    path: String
-  ): jsonb!
-  fk_user_proceeds: Wallet
+type eth_user_proceeds {
   id: String!
   total_proceeds: numeric!
 }
 
 """
-Boolean expression to filter rows from the table "eth_token_proceeds". All fields are combined with a logical 'AND'.
+Boolean expression to filter rows from the table "eth_user_proceeds". All fields are combined with a logical 'AND'.
 """
-input eth_token_proceeds_bool_exp {
-  _and: [eth_token_proceeds_bool_exp!]
-  _not: eth_token_proceeds_bool_exp
-  _or: [eth_token_proceeds_bool_exp!]
-  dutch_auction_proceeds: jsonb_comparison_exp
-  fixed_price_proceeds: jsonb_comparison_exp
+input eth_user_proceeds_bool_exp {
+  _and: [eth_user_proceeds_bool_exp!]
+  _not: eth_user_proceeds_bool_exp
+  _or: [eth_user_proceeds_bool_exp!]
   id: String_comparison_exp
   total_proceeds: numeric_comparison_exp
 }
 
-"""Ordering options when selecting data from "eth_token_proceeds"."""
-input eth_token_proceeds_order_by {
-  dutch_auction_proceeds: order_by
-  fixed_price_proceeds: order_by
+"""Ordering options when selecting data from "eth_user_proceeds"."""
+input eth_user_proceeds_order_by {
   id: order_by
   total_proceeds: order_by
 }
 
 """
-select columns of table "eth_token_proceeds"
+select columns of table "eth_user_proceeds"
 """
-enum eth_token_proceeds_select_column {
-  """column name"""
-  dutch_auction_proceeds
-
-  """column name"""
-  fixed_price_proceeds
-
+enum eth_user_proceeds_select_column {
   """column name"""
   id
 
@@ -4640,20 +4709,18 @@ enum eth_token_proceeds_select_column {
 }
 
 """
-Streaming cursor of the table "eth_token_proceeds"
+Streaming cursor of the table "eth_user_proceeds"
 """
-input eth_token_proceeds_stream_cursor_input {
+input eth_user_proceeds_stream_cursor_input {
   """Stream column input with initial value"""
-  initial_value: eth_token_proceeds_stream_cursor_value_input!
+  initial_value: eth_user_proceeds_stream_cursor_value_input!
 
   """cursor ordering"""
   ordering: cursor_ordering
 }
 
 """Initial value of the column from where the streaming should start"""
-input eth_token_proceeds_stream_cursor_value_input {
-  dutch_auction_proceeds: jsonb
-  fixed_price_proceeds: jsonb
+input eth_user_proceeds_stream_cursor_value_input {
   id: String
   total_proceeds: numeric
 }
@@ -9681,6 +9748,31 @@ type onchain_query {
   collection_offer_by_pk(id: String!, version: Int!): collection_offer
 
   """
+  fetch data from the table: "eth_minter_proceeds"
+  """
+  eth_minter_proceeds(
+    """distinct select on columns"""
+    distinct_on: [eth_minter_proceeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_minter_proceeds_order_by!]
+
+    """filter the rows returned"""
+    where: eth_minter_proceeds_bool_exp
+  ): [eth_minter_proceeds!]!
+
+  """
+  fetch data from the table: "eth_minter_proceeds" using primary key columns
+  """
+  eth_minter_proceeds_by_pk(id: String!): eth_minter_proceeds
+
+  """
   fetch data from the table: "eth_primary_splits"
   """
   eth_primary_splits(
@@ -9731,11 +9823,11 @@ type onchain_query {
   eth_secondary_splits_by_pk(id: String!): eth_secondary_splits
 
   """
-  fetch data from the table: "eth_token_proceeds"
+  fetch data from the table: "eth_user_proceeds"
   """
-  eth_token_proceeds(
+  eth_user_proceeds(
     """distinct select on columns"""
-    distinct_on: [eth_token_proceeds_select_column!]
+    distinct_on: [eth_user_proceeds_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -9744,16 +9836,16 @@ type onchain_query {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [eth_token_proceeds_order_by!]
+    order_by: [eth_user_proceeds_order_by!]
 
     """filter the rows returned"""
-    where: eth_token_proceeds_bool_exp
-  ): [eth_token_proceeds!]!
+    where: eth_user_proceeds_bool_exp
+  ): [eth_user_proceeds!]!
 
   """
-  fetch data from the table: "eth_token_proceeds" using primary key columns
+  fetch data from the table: "eth_user_proceeds" using primary key columns
   """
-  eth_token_proceeds_by_pk(id: String!): eth_token_proceeds
+  eth_user_proceeds_by_pk(id: String!): eth_user_proceeds
 
   """
   fetch data from the table: "generative_token"
@@ -10817,6 +10909,45 @@ type onchain_subscription {
   ): [collection_offer!]!
 
   """
+  fetch data from the table: "eth_minter_proceeds"
+  """
+  eth_minter_proceeds(
+    """distinct select on columns"""
+    distinct_on: [eth_minter_proceeds_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_minter_proceeds_order_by!]
+
+    """filter the rows returned"""
+    where: eth_minter_proceeds_bool_exp
+  ): [eth_minter_proceeds!]!
+
+  """
+  fetch data from the table: "eth_minter_proceeds" using primary key columns
+  """
+  eth_minter_proceeds_by_pk(id: String!): eth_minter_proceeds
+
+  """
+  fetch data from the table in a streaming manner: "eth_minter_proceeds"
+  """
+  eth_minter_proceeds_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [eth_minter_proceeds_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: eth_minter_proceeds_bool_exp
+  ): [eth_minter_proceeds!]!
+
+  """
   fetch data from the table: "eth_primary_splits"
   """
   eth_primary_splits(
@@ -10895,11 +11026,11 @@ type onchain_subscription {
   ): [eth_secondary_splits!]!
 
   """
-  fetch data from the table: "eth_token_proceeds"
+  fetch data from the table: "eth_user_proceeds"
   """
-  eth_token_proceeds(
+  eth_user_proceeds(
     """distinct select on columns"""
-    distinct_on: [eth_token_proceeds_select_column!]
+    distinct_on: [eth_user_proceeds_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -10908,30 +11039,30 @@ type onchain_subscription {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [eth_token_proceeds_order_by!]
+    order_by: [eth_user_proceeds_order_by!]
 
     """filter the rows returned"""
-    where: eth_token_proceeds_bool_exp
-  ): [eth_token_proceeds!]!
+    where: eth_user_proceeds_bool_exp
+  ): [eth_user_proceeds!]!
 
   """
-  fetch data from the table: "eth_token_proceeds" using primary key columns
+  fetch data from the table: "eth_user_proceeds" using primary key columns
   """
-  eth_token_proceeds_by_pk(id: String!): eth_token_proceeds
+  eth_user_proceeds_by_pk(id: String!): eth_user_proceeds
 
   """
-  fetch data from the table in a streaming manner: "eth_token_proceeds"
+  fetch data from the table in a streaming manner: "eth_user_proceeds"
   """
-  eth_token_proceeds_stream(
+  eth_user_proceeds_stream(
     """maximum number of rows returned in a single batch"""
     batch_size: Int!
 
     """cursor to stream the results returned by the query"""
-    cursor: [eth_token_proceeds_stream_cursor_input]!
+    cursor: [eth_user_proceeds_stream_cursor_input]!
 
     """filter the rows returned"""
-    where: eth_token_proceeds_bool_exp
-  ): [eth_token_proceeds!]!
+    where: eth_user_proceeds_bool_exp
+  ): [eth_user_proceeds!]!
 
   """
   fetch data from the table: "generative_token"
