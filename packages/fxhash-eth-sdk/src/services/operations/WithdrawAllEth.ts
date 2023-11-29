@@ -54,10 +54,13 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
           data: encodeFunctionData({
             abi: DUTCH_AUCTION_MINTER_ABI,
             functionName: "withdraw",
-            args: [dutchAuctionProceeds.token, dutchAuctionProceeds.reserveId],
+            args: [
+              dutchAuctionProceeds.tokenAddress,
+              dutchAuctionProceeds.reserveId,
+            ],
           }),
         })
-        tokensWithEarnings.push(dutchAuctionProceeds.token)
+        tokensWithEarnings.push(dutchAuctionProceeds.primaryReceiver)
       }
 
       //then fixed price minter earnings
@@ -67,10 +70,10 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
           data: encodeFunctionData({
             abi: FIXED_PRICE_MINTER_ABI,
             functionName: "withdraw",
-            args: [fixedPriceProceeds.token],
+            args: [fixedPriceProceeds.tokenAddress],
           }),
         })
-        tokensWithEarnings.push(fixedPriceProceeds.token)
+        tokensWithEarnings.push(fixedPriceProceeds.primaryReceiver)
       }
     }
 
@@ -99,6 +102,9 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         where: {
           id: {
             _in: tokensWithEarnings,
+          },
+          receiver: {
+            _eq: this.params.address,
           },
         },
       },
