@@ -16,6 +16,8 @@ export interface IEthContracts {
   contract_registry_v1: `0x${string}`
   gen_art_token_impl_v1: `0x${string}`
   mint_ticket_impl_v1: `0x${string}`
+  onchfs_file_system: `0x${string}`
+  onchfs_content_store: `0x${string}`
 }
 
 export const ethTestnetContracts: IEthContracts = {
@@ -36,4 +38,6 @@ export const ethTestnetContracts: IEthContracts = {
   contract_registry_v1: "0xe1EA7023dC625D02f3c28e0bb58ba8A024896dC6",
   gen_art_token_impl_v1: "0x379F32b5A694422eDf6286CcC2A5c9410B1C59eD",
   mint_ticket_impl_v1: "0x99b95Af45244669D643d8DeDBD28Dbf3ff23f396",
+  onchfs_file_system: "0xc01B8F6Dd2cfBFf28C11Fbca9F1FEd71097dDdf0",
+  onchfs_content_store: "0x7c1730B7bE9424D0b983B84aEb254e3a2a105d91",
 }
