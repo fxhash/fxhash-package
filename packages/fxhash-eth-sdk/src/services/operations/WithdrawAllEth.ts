@@ -43,7 +43,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     })
 
     const multicallArgs: CallData[] = []
-    const tokensWithEarnings: string[] = []
+    const splitsWithEarnings: string[] = []
     //we loop on the all the minters, to prepare the withdraw operations
     for (const minterProceeds of proceeds.data.onchain.eth_token_proceeds) {
       //first we process dutch auction earnings
@@ -60,7 +60,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             ],
           }),
         })
-        tokensWithEarnings.push(dutchAuctionProceeds.primaryReceiver)
+        splitsWithEarnings.push(dutchAuctionProceeds.primaryReceiver)
       }
 
       //then fixed price minter earnings
@@ -73,7 +73,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             args: [fixedPriceProceeds.tokenAddress],
           }),
         })
-        tokensWithEarnings.push(fixedPriceProceeds.primaryReceiver)
+        splitsWithEarnings.push(fixedPriceProceeds.primaryReceiver)
       }
     }
 
@@ -93,30 +93,26 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     })
 
     //we transform the list of splits into a list of split addresses
-    const filteredUserSplits = Object.keys(userSplits.activeBalances)
+    const filteredUserSplits = splitsWithEarnings.concat(
+      Object.keys(userSplits.activeBalances)
+    )
 
-    //we fetch the primary receiver for each split that will receive money
-    const primarySplitsWithProceeds = await apolloClient.query({
-      query: Qu_GetEthPrimarySplits,
-      variables: {
-        where: {
-          id: {
-            _in: tokensWithEarnings,
-          },
-          receiver: {
-            _eq: this.params.address,
-          },
-        },
-      },
-    })
+    //we remove duplicates
+    const splitSet = new Set(filteredUserSplits)
 
-    for (const split of primarySplitsWithProceeds.data.onchain
-      .eth_primary_splits) {
-      filteredUserSplits.push(split.receiver)
-    }
+    //before withdrawing, we first need to distribute the funds
+    const distributeCalls = await Promise.all(
+      [...splitSet].map(async split => {
+        return await splitsClient.callData.distributeToken({
+          splitAddress: split,
+          token: SPLITS_ETHER_TOKEN,
+        })
+      })
+    )
+    multicallArgs.push(...distributeCalls)
 
-    //before distributing, we first need to withdraw the funds
-    for (const split of tokensWithEarnings) {
+    //now that this is done we can finally withdraw them
+    for (const split of splitsWithEarnings) {
       //we fetch the splits recipient
       const { recipients } = await splitsClient.getSplitMetadata({
         splitAddress: split,
@@ -136,20 +132,6 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       )
       multicallArgs.push(...withdrawCalls)
     }
-
-    //we remove duplicates
-    const splitSet = new Set(filteredUserSplits)
-
-    //now that this is done we can finally distribute them
-    const distributeCalls = await Promise.all(
-      [...splitSet].map(async split => {
-        return await splitsClient.callData.distributeToken({
-          splitAddress: split,
-          token: SPLITS_ETHER_TOKEN,
-        })
-      })
-    )
-    multicallArgs.push(...distributeCalls)
 
     //we properly format the payload for multicall
     const callRequests = multicallArgs.map(call => {
@@ -174,6 +156,6 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     }
   }
   success(): string {
-    return `Successfully withdfrew all eth from minters and splits`
+    return `Successfully withdrew all eth from minters and splits`
   }
 }
