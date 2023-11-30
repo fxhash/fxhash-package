@@ -1,14 +1,13 @@
 import { EthereumContractOperation } from "../contractOperation"
-import { bytesToHex, encodeFunctionData, TransactionReceipt } from "viem"
+import { TransactionReceipt } from "viem"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { type Inscription } from "onchfs"
-import { CallData } from "@0xsplits/splits-sdk"
 import { config } from "@fxhash/config"
-import { ONCHFS_CONTENT_STORE, ONCHFS_FILE_SYSTEM_ABI } from "@/abi"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
+import { ethOnchfsInscriptionCallData } from "@/utils"
 
 export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]
@@ -20,63 +19,9 @@ export type TOnchfsWriteOperationParams = {
 export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWriteOperationParams> {
   async prepare() {}
 
-  private inscriptionCallData(ins: Inscription): CallData {
-    switch (ins.type) {
-      case "chunk":
-        return {
-          address: config.eth.contracts.onchfs_content_store,
-          data: encodeFunctionData({
-            abi: ONCHFS_CONTENT_STORE,
-            functionName: "addContent",
-            args: [bytesToHex(ins.content)],
-          }),
-        }
-      case "file":
-        return {
-          address: config.eth.contracts.onchfs_file_system,
-          data: encodeFunctionData({
-            abi: ONCHFS_FILE_SYSTEM_ABI,
-            functionName: "createFile",
-            args: [
-              bytesToHex(ins.metadata),
-              ins.chunks.map(chunk => bytesToHex(chunk)),
-            ],
-          }),
-        }
-      case "directory":
-        console.log(Object.keys(ins.files)
-        .sort()
-        .map(key => [key, ins.files[key]])
-        .reduce(
-          (acc, [name, content]) => [
-            [...acc[0], name],
-            [...acc[1], bytesToHex(content as any)],
-          ],
-          [[], []]
-        ))
-        return {
-          address: config.eth.contracts.onchfs_file_system,
-          data: encodeFunctionData({
-            abi: ONCHFS_FILE_SYSTEM_ABI,
-            functionName: "createDirectory",
-            args: Object.keys(ins.files)
-              .sort()
-              .map(key => [key, ins.files[key]])
-              .reduce(
-                (acc, [name, content]) => [
-                  [...acc[0], name],
-                  [...acc[1], bytesToHex(content as any)],
-                ],
-                [[], []]
-              ),
-          }),
-        }
-    }
-  }
-
   async call(): Promise<TransactionReceipt> {
     const callRequests = this.params.inscriptions
-      .map(ins => this.inscriptionCallData(ins))
+      .map(ins => ethOnchfsInscriptionCallData(ins))
       .map(call => {
         return {
           target: call.address,
