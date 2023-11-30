@@ -6,6 +6,9 @@ import {
   PublicClient,
   TransactionReceipt,
   getContract,
+  ContractFunctionExecutionError,
+  InsufficientFundsError as InsufficientFundsErrorViem,
+  TransactionExecutionError,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
@@ -17,6 +20,11 @@ import {
   FX_ISSUER_FACTORY_ABI,
   SPLITS_MAIN_ABI,
 } from "@/abi"
+import {
+  InsufficientFundsError,
+  TransactionRevertedError,
+  UserRejectedError,
+} from "@fxhash/contracts-shared"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -144,6 +152,24 @@ export const onchainConfig: ConfigInfo = {
  * object.
  */
 export async function handleContractError(error: any): Promise<string> {
+  // This can be thrown by the simulateContract function
+  if (error instanceof ContractFunctionExecutionError) {
+    const isInsufficientFundsError = error.walk(
+      e => e instanceof InsufficientFundsErrorViem
+    )
+    if (isInsufficientFundsError) {
+      throw new InsufficientFundsError()
+    }
+  }
+
+  // This can be thrown by the writeContract function
+  if (
+    error instanceof TransactionExecutionError &&
+    error.cause.name === "UserRejectedRequestError"
+  ) {
+    throw new UserRejectedError()
+  }
+
   //if it's an error sent by the contract, we want to throw a more meaningful error
   if (error instanceof BaseError) {
     const revertError = error.walk(
@@ -153,6 +179,9 @@ export async function handleContractError(error: any): Promise<string> {
       let errorName = revertError.data?.errorName ?? ""
       if (!errorName) {
         errorName = await getOpenChainError(revertError.signature)
+      }
+      if (errorName) {
+        throw new TransactionRevertedError(errorName)
       }
       console.log("error: ", error)
       return "Failed: " + errorName

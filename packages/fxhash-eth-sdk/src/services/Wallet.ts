@@ -6,6 +6,8 @@ import {
   PromiseResult,
   failure,
   success,
+  InsufficientFundsError,
+  TransactionRevertedError,
 } from "@fxhash/contracts-shared"
 import {
   PublicClient,
@@ -123,7 +125,10 @@ export class EthereumWalletManager extends WalletManager {
       message: string
       hash: string
     },
-    UserRejectedError | PendingSigningRequestError
+    | UserRejectedError
+    | PendingSigningRequestError
+    | InsufficientFundsError
+    | TransactionRevertedError
   > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
@@ -148,8 +153,16 @@ export class EthereumWalletManager extends WalletManager {
               : operation.transactionHash,
         })
       } catch (error) {
-        if (error instanceof UserRejectedRequestError) {
+        if (
+          error instanceof UserRejectedRequestError ||
+          // This can happen for Safe transactions
+          error instanceof UserRejectedError
+        ) {
           return failure(new UserRejectedError())
+        } else if (error instanceof InsufficientFundsError) {
+          return failure(error)
+        } else if (error instanceof TransactionRevertedError) {
+          return failure(error)
         }
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
         if (this.canErrorBeCycled(error) && i < this.rpcNodes.length) {
