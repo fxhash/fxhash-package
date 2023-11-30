@@ -355,6 +355,48 @@ export function prepareReceivers(
 }
 
 /**
+ * Reverses the fee deduction from each receiver in an array and
+ * ensures that the total percentage is back to 10,000.
+ * @param {ReceiverEntry[]} receivers - An array of objects representing the receivers. Each object
+ * should have the following properties:
+ * @param {"primary" | "secondary"} type - The `type` parameter is a string that can have two possible
+ * values: "primary" or "secondary". It determines which fee allocation ratio to use for reversing the
+ * fee deduction from each receiver.
+ * @returns the properly processed `ReceiverEntry` array.
+ */
+export function revertReceiversFee(
+  receivers: ReceiverEntry[],
+  type: "primary" | "secondary"
+): ReceiverEntry[] {
+  // Define the fee ratio
+  const feeRatio =
+    type === "primary"
+      ? onchainConfig.primaryFeeAllocation / ALLOCATION_BASE
+      : onchainConfig.secondaryFeeAllocation / ALLOCATION_BASE
+
+  // Reverse the fee deduction from each receiver
+  const originalReceivers = receivers
+    .map(account => {
+      // Skip the fee receiver
+      if (account.address === onchainConfig.feeReceiver) return null
+      return {
+        ...account,
+        // Reverse the fee deduction
+        pct: Math.round(account.pct / (100 * (1 - feeRatio))),
+      }
+    })
+    .filter(account => account !== null) // Remove null (fee receiver)
+
+  // Ensure the total is back to 10,000
+  const total = originalReceivers.reduce((sum, account) => sum + account.pct, 0)
+  if (total !== ALLOCATION_BASE) {
+    throw Error("The reverted receivers' total must be 10_000")
+  }
+
+  return originalReceivers
+}
+
+/**
  * Uses the Main Split contract to predict the split address given the
  * receivers.
  * @param receivers list of receivers

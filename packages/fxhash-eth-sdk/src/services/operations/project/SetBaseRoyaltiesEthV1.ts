@@ -13,7 +13,7 @@ import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 export type TSetBaseRoyaltiesEthV1OperationParams = {
   token: string
   receivers: ReceiverEntry[]
-  basisPoints: number
+  basisPoints: bigint
   collabAddress?: string
 }
 
@@ -24,6 +24,10 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    if (this.params.basisPoints > 2500) {
+      throw Error("Royalties should be lower or equal to 25%")
+    }
+
     const preparedPrimaryReceivers = prepareReceivers(
       this.params.receivers,
       "secondary"
