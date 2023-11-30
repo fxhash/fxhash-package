@@ -38,6 +38,6 @@ export const ethTestnetContracts: IEthContracts = {
   contract_registry_v1: "0x99e116ee5C601ABEa1f78361F9b971D55A98854a",
   gen_art_token_impl_v1: "0x44D3f20026E2788e6C4196e7295Dfe45BE486a44",
   mint_ticket_impl_v1: "0x035003FCD3FA20346e024474DDD5D635D7b2Eb2b",
-  onchfs_file_system: "0xc3f5ef1a0256b9ceb1452650db72344809bb3a85",
+  onchfs_file_system: "0x9e0f2864c6f125bbf599df6ca6e6c3774c5b2e04",
   onchfs_content_store: "0x7c1730B7bE9424D0b983B84aEb254e3a2a105d91",
 }
