@@ -824,6 +824,40 @@ export const FX_TICKETS_ABI = [
         name: "_depositAmount",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "_foreclosureTime",
+        type: "uint256",
+      },
+    ],
+    name: "getDepositAmounts",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "depositOwed",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "depositRemaining",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_dailyTax",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_depositAmount",
+        type: "uint256",
+      },
     ],
     name: "getExcessTax",
     outputs: [
@@ -863,35 +897,6 @@ export const FX_TICKETS_ABI = [
       },
     ],
     stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_dailyTax",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_depositAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_foreclosureTime",
-        type: "uint256",
-      },
-    ],
-    name: "getRemainingDeposit",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -1448,7 +1453,7 @@ export const FX_TICKETS_ABI = [
     outputs: [
       {
         internalType: "uint48",
-        name: "gracePeriod",
+        name: "startTime",
         type: "uint48",
       },
       {

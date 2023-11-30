@@ -22,11 +22,6 @@ export const FX_ISSUER_FACTORY_ABI = [
   },
   {
     inputs: [],
-    name: "InvalidInputSize",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "InvalidOwner",
     type: "error",
   },

@@ -1,5 +1,5 @@
-import { PublicClient, WalletClient, getContract } from "viem"
-import { EthereumWalletManager, FX_TICKETS_ABI } from ".."
+import { PublicClient, getContract } from "viem"
+import { FX_TICKETS_ABI } from ".."
 
 export async function getBalance(
   publicClient: PublicClient,
@@ -73,7 +73,7 @@ export async function getTaxInfo(
   })
   const taxInfo = await contract.read.taxes([tokenId])
   return {
-    gracePeriod: taxInfo[0],
+    startTime: taxInfo[0],
     foreclosureTime: taxInfo[1],
     currentPrice: taxInfo[2],
     depositAmount: taxInfo[3],
