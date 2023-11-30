@@ -9608,6 +9608,7 @@ export type Pricing_Dutch_Auction = {
   id: Scalars['String']['output'];
   levels: Scalars['_int8']['output'];
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
+  refundable?: Maybe<Scalars['Boolean']['output']>;
   resting_price: Scalars['String']['output'];
   token_id?: Maybe<Scalars['String']['output']>;
 };
@@ -9644,6 +9645,7 @@ export type Pricing_Dutch_Auction_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   levels?: InputMaybe<_Int8_Comparison_Exp>;
   opens_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  refundable?: InputMaybe<Boolean_Comparison_Exp>;
   resting_price?: InputMaybe<String_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
 };
@@ -9676,6 +9678,7 @@ export type Pricing_Dutch_Auction_Order_By = {
   id?: InputMaybe<Order_By>;
   levels?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
+  refundable?: InputMaybe<Order_By>;
   resting_price?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -9692,6 +9695,8 @@ export enum Pricing_Dutch_Auction_Select_Column {
   Levels = 'levels',
   /** column name */
   OpensAt = 'opens_at',
+  /** column name */
+  Refundable = 'refundable',
   /** column name */
   RestingPrice = 'resting_price',
   /** column name */
@@ -9731,6 +9736,7 @@ export type Pricing_Dutch_Auction_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   levels?: InputMaybe<Scalars['_int8']['input']>;
   opens_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  refundable?: InputMaybe<Scalars['Boolean']['input']>;
   resting_price?: InputMaybe<Scalars['String']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
 };

@@ -12070,6 +12070,7 @@ type pricing_dutch_auction {
   id: String!
   levels: _int8!
   opens_at: timestamptz
+  refundable: Boolean
   resting_price: String!
   token_id: String
 }
@@ -12112,6 +12113,7 @@ input pricing_dutch_auction_bool_exp {
   id: String_comparison_exp
   levels: _int8_comparison_exp
   opens_at: timestamptz_comparison_exp
+  refundable: Boolean_comparison_exp
   resting_price: String_comparison_exp
   token_id: String_comparison_exp
 }
@@ -12148,6 +12150,7 @@ input pricing_dutch_auction_order_by {
   id: order_by
   levels: order_by
   opens_at: order_by
+  refundable: order_by
   resting_price: order_by
   token_id: order_by
 }
@@ -12170,6 +12173,9 @@ enum pricing_dutch_auction_select_column {
 
   """column name"""
   opens_at
+
+  """column name"""
+  refundable
 
   """column name"""
   resting_price
@@ -12220,6 +12226,7 @@ input pricing_dutch_auction_stream_cursor_value_input {
   id: String
   levels: _int8
   opens_at: timestamptz
+  refundable: Boolean
   resting_price: String
   token_id: String
 }
