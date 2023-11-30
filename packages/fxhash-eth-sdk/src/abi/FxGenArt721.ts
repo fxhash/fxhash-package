@@ -264,7 +264,7 @@ export const FX_GEN_ART_721_ABI = [
       {
         indexed: true,
         internalType: "bool",
-        name: "_enabled",
+        name: "_flag",
         type: "bool",
       },
     ],
@@ -309,7 +309,7 @@ export const FX_GEN_ART_721_ABI = [
       {
         indexed: true,
         internalType: "bool",
-        name: "_enabled",
+        name: "_flag",
         type: "bool",
       },
     ],
@@ -906,25 +906,6 @@ export const FX_GEN_ART_721_ABI = [
         internalType: "bytes",
         name: "fxParams",
         type: "bytes",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "_uri",
-        type: "bytes",
-      },
-    ],
-    name: "generateBaseURIHash",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
       },
     ],
     stateMutability: "view",
@@ -1711,13 +1692,34 @@ export const FX_GEN_ART_721_ABI = [
         name: "_uri",
         type: "bytes",
       },
-      {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
-      },
     ],
     name: "setBaseURI",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "_flag",
+        type: "bool",
+      },
+    ],
+    name: "setBurnEnabled",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "_flag",
+        type: "bool",
+      },
+    ],
+    name: "setMintEnabled",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1832,20 +1834,6 @@ export const FX_GEN_ART_721_ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "toggleBurn",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "toggleMint",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {

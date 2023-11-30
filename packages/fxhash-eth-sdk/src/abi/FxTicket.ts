@@ -593,6 +593,25 @@ export const FX_TICKETS_ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "balances",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "baseURI",
     outputs: [
@@ -701,6 +720,24 @@ export const FX_TICKETS_ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint80",
+        name: "_newPrice",
+        type: "uint80",
+      },
+    ],
+    name: "depositAndSetPrice",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "genArt721",
     outputs: [
@@ -759,25 +796,6 @@ export const FX_TICKETS_ABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_account",
-        type: "address",
-      },
-    ],
-    name: "getBalance",
-    outputs: [
-      {
-        internalType: "uint128",
-        name: "",
-        type: "uint128",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "uint256",
         name: "_currentPrice",
         type: "uint256",
@@ -798,12 +816,12 @@ export const FX_TICKETS_ABI = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_totalDeposit",
+        name: "_dailyTax",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_dailyTax",
+        name: "_depositAmount",
         type: "uint256",
       },
     ],
@@ -827,16 +845,16 @@ export const FX_TICKETS_ABI = [
       },
       {
         internalType: "uint256",
-        name: "_foreclosureTime",
+        name: "_depositAmount",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_taxPayment",
+        name: "_currentForeclosure",
         type: "uint256",
       },
     ],
-    name: "getForeclosureTime",
+    name: "getNewForeclosure",
     outputs: [
       {
         internalType: "uint48",
@@ -856,12 +874,12 @@ export const FX_TICKETS_ABI = [
       },
       {
         internalType: "uint256",
-        name: "_foreclosureTime",
+        name: "_depositAmount",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_depositAmount",
+        name: "_foreclosureTime",
         type: "uint256",
       },
     ],
@@ -880,12 +898,12 @@ export const FX_TICKETS_ABI = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_taxPayment",
+        name: "_dailyTax",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_dailyTax",
+        name: "_depositAmount",
         type: "uint256",
       },
     ],

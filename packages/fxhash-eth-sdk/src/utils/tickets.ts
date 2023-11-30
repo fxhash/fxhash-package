@@ -1,8 +1,21 @@
 import { PublicClient, WalletClient, getContract } from "viem"
 import { EthereumWalletManager, FX_TICKETS_ABI } from ".."
 
+export async function getBalance(
+  publicClient: PublicClient,
+  ticket: `0x${string}`,
+  user: `0x${string}`
+) {
+  const contract = getContract({
+    address: ticket,
+    abi: FX_TICKETS_ABI,
+    publicClient: publicClient,
+  })
+  const dailyTax = await contract.read.balances([user])
+  return dailyTax as bigint
+}
+
 export async function getDailyTax(
-  walletClient: WalletClient,
   publicClient: PublicClient,
   ticket: `0x${string}`,
   price: bigint
@@ -10,7 +23,6 @@ export async function getDailyTax(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    walletClient: walletClient,
     publicClient: publicClient,
   })
   const dailyTax = await contract.read.getDailyTax([price])
@@ -18,7 +30,6 @@ export async function getDailyTax(
 }
 
 export async function isForeclosed(
-  walletClient: WalletClient,
   publicClient: PublicClient,
   ticket: `0x${string}`,
   tokenId: bigint
@@ -26,7 +37,6 @@ export async function isForeclosed(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    walletClient: walletClient,
     publicClient: publicClient,
   })
   const isForeclosed = await contract.read.isForeclosed([tokenId])
@@ -34,7 +44,6 @@ export async function isForeclosed(
 }
 
 export async function getAuctionPrice(
-  walletClient: WalletClient,
   publicClient: PublicClient,
   ticket: `0x${string}`,
   price: bigint,
@@ -43,7 +52,6 @@ export async function getAuctionPrice(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    walletClient: walletClient,
     publicClient: publicClient,
   })
   const auctionPrice = await contract.read.getAuctionPrice([
@@ -54,7 +62,6 @@ export async function getAuctionPrice(
 }
 
 export async function getTaxInfo(
-  walletClient: WalletClient,
   publicClient: PublicClient,
   ticket: `0x${string}`,
   tokenId: bigint
@@ -62,7 +69,6 @@ export async function getTaxInfo(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    walletClient: walletClient,
     publicClient: publicClient,
   })
   const taxInfo = await contract.read.taxes([tokenId])
@@ -75,28 +81,16 @@ export async function getTaxInfo(
 }
 
 export async function getMinimumClaimValueForNewPrice(
-  walletClient: WalletClient,
   publicClient: PublicClient,
   ticket: `0x${string}`,
   tokenId: bigint,
   newPrice: bigint
 ) {
-  const taxInfo = await getTaxInfo(walletClient, publicClient, ticket, tokenId)
-  const isTicketForeclosed = await isForeclosed(
-    walletClient,
-    publicClient,
-    ticket,
-    tokenId
-  )
-  const newDailyTax = await getDailyTax(
-    walletClient,
-    publicClient,
-    ticket,
-    newPrice
-  )
+  const taxInfo = await getTaxInfo(publicClient, ticket, tokenId)
+  const isTicketForeclosed = await isForeclosed(publicClient, ticket, tokenId)
+  const newDailyTax = await getDailyTax(publicClient, ticket, newPrice)
   if (isTicketForeclosed) {
     const auctionPrice = await getAuctionPrice(
-      walletClient,
       publicClient,
       ticket,
       newPrice,

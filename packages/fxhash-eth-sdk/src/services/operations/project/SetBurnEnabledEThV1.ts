@@ -9,15 +9,16 @@ import {
 import { proposeSafeTransaction } from "@/services/Safe"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 
-export type TToggleMintEthV1OperationParams = {
+export type TSetBurnEnabledEthV1OperationParams = {
   token: `0x${string}`
+  enabled: boolean
   collabAddress?: string
 }
 
 /**
- * Enable/Disable mint for a project
+ * Enable/Disable burn for a project
  */
-export class ToggleMintEthV1Operation extends EthereumContractOperation<TToggleMintEthV1OperationParams> {
+export class SetBurnEnabledEthV1Operation extends EthereumContractOperation<TSetBurnEnabledEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
@@ -27,8 +28,8 @@ export class ToggleMintEthV1Operation extends EthereumContractOperation<TToggleM
         to: getAddress(this.params.token),
         data: encodeFunctionData({
           abi: FX_GEN_ART_721_ABI,
-          functionName: "toggleMint",
-          args: [],
+          functionName: "setBurnEnabled",
+          args: [this.params.enabled],
         }),
         value: "0",
       }
@@ -37,8 +38,8 @@ export class ToggleMintEthV1Operation extends EthereumContractOperation<TToggleM
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
         abi: FX_GEN_ART_721_ABI,
-        functionName: "toggleMint",
-        args: [],
+        functionName: "setBurnEnabled",
+        args: [this.params.enabled],
         account: this.manager.address as `0x${string}`,
       }
       return simulateAndExecuteContract(this.manager, args)
@@ -46,6 +47,6 @@ export class ToggleMintEthV1Operation extends EthereumContractOperation<TToggleM
   }
 
   success(): string {
-    return `Successfully toggled mint token ${this.params.token}`
+    return `Successfully toggled burn for token ${this.params.token}`
   }
 }
