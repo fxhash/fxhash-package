@@ -11,7 +11,7 @@ import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 
 export type TToggleBurnEthV1OperationParams = {
   token: `0x${string}`
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -21,7 +21,8 @@ export class ToggleBurnEthV1Operation extends EthereumContractOperation<TToggleB
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({

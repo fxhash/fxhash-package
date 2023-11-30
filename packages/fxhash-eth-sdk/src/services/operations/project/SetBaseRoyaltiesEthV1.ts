@@ -14,7 +14,7 @@ export type TSetBaseRoyaltiesEthV1OperationParams = {
   token: string
   receivers: ReceiverEntry[]
   basisPoints: number
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -28,7 +28,8 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
       this.params.receivers,
       "secondary"
     )
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({

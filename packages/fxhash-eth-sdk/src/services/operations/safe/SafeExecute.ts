@@ -8,6 +8,7 @@ import { getSafeService } from "@/services/Safe"
  * @property {string} safeTxHash - A string representing the hash of a safe transaction.
  */
 export type TExecuteSafeMultisigTxEthV1OperationParams = {
+  collabAddress: string
   safeTxHash: string
 }
 
@@ -18,6 +19,8 @@ export class ExecuteSafeMultisigTxEthV1Operation extends EthereumContractOperati
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    await this.manager.connectSafe(this.params.collabAddress)
+
     const safeService = getSafeService(this.manager.signer)
     const tx = await safeService.getTransaction(this.params.safeTxHash)
     const executeTxResponse = await this.manager.safe.executeTransaction(tx)

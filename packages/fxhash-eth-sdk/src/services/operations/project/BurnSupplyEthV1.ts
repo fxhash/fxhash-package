@@ -12,14 +12,16 @@ import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 export type TBurnSupplyEthV1OperationParams = {
   token: `0x${string}`
   supply: number
-  isCollab: boolean
+  collabAddress?: string
 }
 
 export class BurnSupplyEthV1Operation extends EthereumContractOperation<TBurnSupplyEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
+
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({

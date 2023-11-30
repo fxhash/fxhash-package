@@ -49,13 +49,14 @@ interface EthereumWalletManagerParams {
   walletClient: WalletClient
   publicClient: PublicClient
   rpcNodes: string[]
+  signer: ethers.providers.JsonRpcSigner
 }
 
 export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
   public walletClient: WalletClient
   public publicClient: PublicClient
-  public signer: ethers.providers.JsonRpcSigner | undefined
+  public signer: ethers.providers.JsonRpcSigner
   public safe: Safe | undefined
   private rpcNodes: string[]
 
@@ -64,6 +65,7 @@ export class EthereumWalletManager extends WalletManager {
     this.walletClient = params.walletClient
     this.publicClient = params.publicClient
     this.rpcNodes = params.rpcNodes
+    this.signer = params.signer
   }
 
   async signMessageWithWallet(
@@ -91,7 +93,7 @@ export class EthereumWalletManager extends WalletManager {
   }
 
   /**
-   * The `connectSafe` function connects to a Safe contract using a given address and signer, and returns
+   * The `connectSafe` function connects to a Safe contract using a given address, and returns
    * the address of the connected Safe.
    * @param {string} safeAddress - A string representing the address of the safe. This is the address of
    * the smart contract that manages the safe and holds the funds.
@@ -99,17 +101,16 @@ export class EthereumWalletManager extends WalletManager {
    * signer object that can be used to sign transactions and messages using a private key.
    * @returns a `PromiseResult<string, Error>`.
    */
-  async connectSafe(
-    safeAddress: string,
-    signer: ethers.providers.JsonRpcSigner
-  ): PromiseResult<string, Error> {
+  async connectSafe(safeAddress: string): PromiseResult<string, Error> {
+    if ((await this.safe?.getAddress()) === safeAddress) {
+      return success(safeAddress)
+    }
     try {
-      const safeSdk = await getSafeSDK(safeAddress, signer)
+      const safeSdk = await getSafeSDK(safeAddress, this.signer)
       this.safe = safeSdk
-      this.signer = signer
-      return success(await safeSdk.getAddress())
+      return success(safeAddress)
     } catch (error) {
-      return failure(new Error())
+      return failure(new Error(error))
     }
   }
 

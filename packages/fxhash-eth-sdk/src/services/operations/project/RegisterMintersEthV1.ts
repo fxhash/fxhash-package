@@ -22,7 +22,7 @@ export type TRegisterMintersEthV1OperationParams = {
     | TicketMintInfoArgs
   )[]
   isTicket: boolean
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -37,7 +37,8 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
       this.params.mintInfo,
       this.manager
     )
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({

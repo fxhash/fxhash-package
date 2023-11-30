@@ -17,13 +17,12 @@ import { getHashFromIPFSCID } from "@/utils"
  * @property {string} baseURI - The `baseURI` property is a string that represents the base URI for a
  * token. It is used to construct the URI for each individual token by appending the token's unique
  * identifier to the base URI.
- * @property {boolean} isCollab - A boolean value that indicates whether the operation is being
- * performed by a multisig.
+ * @property {string} collabAddress - A string representing the address of a collaboration.
  */
 export type TSetBaseURIEthV1OperationParams = {
   token: `0x${string}`
   baseURI: string
-  isCollab: boolean
+  collabAddress?: string
 }
 
 export function getSafeTxData(): SafeTransactionDataPartial {
@@ -47,7 +46,8 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
     const parsedCID = this.params.baseURI.startsWith("ipfs://")
       ? getHashFromIPFSCID(this.params.baseURI.split("ipfs://")[1])
       : getHashFromIPFSCID(this.params.baseURI)
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       return await proposeSafeTransaction(getSafeTxData(), this.manager)
     } else {
       const args: SimulateAndExecuteContractRequest = {

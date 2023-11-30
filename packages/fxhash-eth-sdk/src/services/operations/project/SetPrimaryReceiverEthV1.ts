@@ -14,7 +14,7 @@ import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 export type TSetPrimaryReceiversEthV1OperationParams = {
   token: string
   receivers: ReceiverEntry[]
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -28,7 +28,8 @@ export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation
       this.params.receivers,
       "primary"
     )
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({

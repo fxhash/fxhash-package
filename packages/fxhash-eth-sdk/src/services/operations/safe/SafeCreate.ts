@@ -14,7 +14,6 @@ import { ethers } from "ethers-v5"
 export type TCreateSafeMultisigEthV1OperationParams = {
   owners: string[]
   threshold: number
-  signer: ethers.providers.Provider
 }
 
 /**
@@ -25,7 +24,7 @@ export class CreateSafeMultisigEthV1Operation extends EthereumContractOperation<
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
     // We use params as the user is not yet connected to a Safe
-    const safeFactory = await getSafeFactory(this.params.signer)
+    const safeFactory = await getSafeFactory(this.manager.signer)
 
     const safeAccountConfig: SafeAccountConfig = {
       owners: this.params.owners,
