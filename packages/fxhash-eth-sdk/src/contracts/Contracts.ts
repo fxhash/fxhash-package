@@ -35,6 +35,7 @@ export const FxhashContracts = {
   ETH_TICKET_REDEEMER_V1: config.eth.contracts.ticket_redeemer_v1,
   ETH_RANDOMIZER_V1: config.eth.contracts.randomizer_v1,
   ETH_IPFS_RENDERER_V1: config.eth.contracts.ipfs_renderer_v1,
+  ETH_ONCHFS_RENDERER_V1: config.eth.contracts.onchfs_renderer_v1,
 }
 
 export type ContractCallHookReturn<T> = {

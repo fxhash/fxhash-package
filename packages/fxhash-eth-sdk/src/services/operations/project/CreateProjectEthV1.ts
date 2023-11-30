@@ -66,6 +66,7 @@ export type TCreateProjectEthV1OperationParams = {
     name: string
     symbol: string
     tagIds: bigint[]
+    renderer: "ipfs" | "onchfs"
   }
   projectInfo: {
     mintEnabled: boolean
@@ -131,7 +132,10 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1 as `0x${string}`,
-      renderer: FxhashContracts.ETH_IPFS_RENDERER_V1 as `0x${string}`,
+      renderer:
+        this.params.initInfo.renderer === "ipfs"
+          ? (FxhashContracts.ETH_IPFS_RENDERER_V1 as any)
+          : FxhashContracts.ETH_ONCHFS_RENDERER_V1,
       tagIds: this.params.initInfo.tagIds,
       primaryReceivers: primaryReceivers.map(entry => entry.address),
       allocations: primaryReceivers.map(entry => entry.pct),
@@ -152,11 +156,15 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     if (this.params.metadataInfo) {
       baseURI = this.params.metadataInfo.baseURI
       if (this.params.metadataInfo.baseURI) {
-        if (!this.params.metadataInfo.baseURI.startsWith("ipfs://"))
-          throw Error("Invalid baseURI")
-        baseURI = getHashFromIPFSCID(
-          this.params.metadataInfo.baseURI.split("ipfs://")[1]
-        )
+        if (this.params.metadataInfo.baseURI.startsWith("ipfs://")) {
+          baseURI = getHashFromIPFSCID(
+            this.params.metadataInfo.baseURI.split("ipfs://")[1]
+          )
+        } else if (this.params.metadataInfo.baseURI.startsWith("onchfs://")) {
+          baseURI = this.params.metadataInfo.baseURI.replace("onchfs://", "")
+        } else {
+          throw new Error("base URI format is not supported")
+        }
       } else {
         baseURI = ""
       }
