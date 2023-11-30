@@ -7,29 +7,30 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 
-export type TWithdrawFromDutchAuctionMinterEthV1OperationParams = {
+export type TRefundDutchAuctionMinterEthV1OperationParams = {
   token: string
   minter: string
   reserveId: number
 }
+
 /**
- * Withdraw ETH earnings from the dutch auction minter contract for a specific token and reserve
+ * Refund ETH from the dutch auction minter contract for a specific token and reserve
  */
-export class WithdrawFromDutchAuctionMinterEthV1Operation extends EthereumContractOperation<TWithdrawFromDutchAuctionMinterEthV1OperationParams> {
+export class RefundDutchAuctionMinterEthV1Operation extends EthereumContractOperation<TRefundDutchAuctionMinterEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       abi: DUTCH_AUCTION_MINTER_ABI,
-      functionName: "withdraw",
-      args: [this.params.token, this.params.reserveId],
+      functionName: "refund",
+      args: [this.params.token, this.params.reserveId, this.params.minter],
       account: this.manager.address as `0x${string}`,
     }
     return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {
-    return `Successfully minted withdrew earnings for ${this.params.token} from Fixed price minter`
+    return `Successfully refunded ${this.params.token} from Dutch Auction price minter`
   }
 }
