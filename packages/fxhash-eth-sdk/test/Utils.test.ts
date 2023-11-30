@@ -21,6 +21,7 @@ import {
 import {
   ReceiverEntry,
   prepareReceivers,
+  revertReceiversFee,
 } from "@/services/operations/EthCommon"
 import { getExistingSplits } from "@/utils"
 import { getSplitsClient } from "@/services/Splits"
@@ -139,5 +140,13 @@ describe("utils tests", () => {
     )
     const cidParsed = await getCIDFromV0Digest(getHashFromIPFSCID(cid))
     expect(cid).toEqual(cidParsed)
+  })
+  it("should correctly revert receiver fees", async () => {
+    const receivers: ReceiverEntry[] = [
+      { address: "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b41", pct: 5000 },
+      { address: "0x53Bc1c48CAc9aEca57Cf36f169d3345c6fb59b42", pct: 5000 },
+    ]
+    const preparedReceivers = prepareReceivers(receivers, "primary")
+    expect(revertReceiversFee(preparedReceivers, "primary")).toEqual(receivers)
   })
 })
