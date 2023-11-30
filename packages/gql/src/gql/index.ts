@@ -1,2 +1,3 @@
-export * from "./projects"
-export * from "./accounts"
+export * from "./offchain"
+export * from "./onchain"
+export * from "./actions"

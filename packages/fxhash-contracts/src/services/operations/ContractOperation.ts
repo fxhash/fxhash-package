@@ -2,21 +2,11 @@ import { WalletOperation } from "@taquito/taquito"
 import { ContractOperation } from "@fxhash/contracts-shared"
 import { TezosWalletManager } from "../Wallet"
 
-export abstract class TezosContractOperation<Params>
-  implements ContractOperation<Params>
-{
-  manager: TezosWalletManager
-  params: Params
-
-  constructor(manager: TezosWalletManager, params: Params) {
-    this.manager = manager
-    this.params = params
-  }
-
-  abstract prepare(): Promise<void>
-  abstract call(): Promise<WalletOperation>
-  abstract success(): string
-}
+export abstract class TezosContractOperation<Params> extends ContractOperation<
+  TezosWalletManager,
+  Params,
+  WalletOperation
+> {}
 
 // a generic type for ContractOperation polymorphism
 export type TTezosContractOperation<TParams> = new (
@@ -25,7 +15,7 @@ export type TTezosContractOperation<TParams> = new (
 ) => TezosContractOperation<TParams>
 
 export abstract class EthereumContractOperation<Params>
-  implements ContractOperation<Params>
+  implements ContractOperation<any, Params, any>
 {
   manager: any /* EthereumWalletManager */
   params: Params

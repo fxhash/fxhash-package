@@ -2,10 +2,12 @@ export interface IFxhashApis {
   website: string
   main: string
   hasura: string
+  hasuraGql: string
   file: string
   fsEmulator: string
   extract: string
   media: string
+  ethMetadata: string
   ipfsGateway: string
   ipfsGatewaySafe: string
   onchfsProxy: string
@@ -31,12 +33,14 @@ export interface IFxhashApis {
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
-  main: "https://api.fxhash-dev.xyz/graphql",
+  main: "https://api.v2-temp.dev.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
+  hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.dev.fxhash-dev.xyz",
+  ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
@@ -68,6 +72,7 @@ export const fxhashLocalApis: IFxhashApis = {
   //       docker-compose, maybe outside of this package idk
   ...fxhashDevApis,
   hasura: "http://host.docker.internal:8888",
+  hasuraGql: "http://host.docker.internal:8888/v1/graphql",
 }
 
 // list of APIs prod leverages
@@ -75,10 +80,12 @@ export const fxhashPrdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
   main: "https://api.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
+  hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
   fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
+  ethMetadata: "https://media.fxhash.xyz/metadata/ethereum/",
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
   onchfsProxy: "https://onchfs.fxhash2.xyz",

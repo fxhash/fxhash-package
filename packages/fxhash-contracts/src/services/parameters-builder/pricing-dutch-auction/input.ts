@@ -1,4 +1,4 @@
-import { MichelsonMap } from "@taquito/taquito"
+import { MichelsonMap } from "@taquito/michelson-encoder"
 
 export type TInputPricingDutchAuction<N = number> = {
   levels: MichelsonMap<number, N>

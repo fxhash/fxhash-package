@@ -22,6 +22,13 @@ export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
   walletConnectId: string
+  ethFeeReceiver: `0x${string}`
+  wertRelayer: string
+  fxhashPrimaryFee: number
+  fxhashSecondaryFee: number
+  projectLockTime: number
+  referrerShare: number
+  fxhashTeamSafeAddress: string
 }
 
 // the variations supported by the config
@@ -92,7 +99,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethTestnetContracts,
         config: {
-          network: "Sepolia",
+          network: "Goerli",
         },
         apis: ethTestnetApis,
       },
@@ -121,6 +128,13 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "local",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
     dev: {
@@ -129,6 +143,13 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "development",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
     prd: {
@@ -137,6 +158,13 @@ export const fxhashConfig: IFxhashConfig = {
         envName: "production",
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
+        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 3330,
+        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
     },
   },

@@ -21,18 +21,8 @@ import { TTezosContractOperation } from "./operations"
 
 const TEZOS_SIGNING_PREFIX = "050100"
 
-/**
- * Encodes the payload into the desired format.
- *
- * @param {string} payload - The payload to encode.
- * @return {string} - The encoded payload.
- */
-export const encodeSignInPayload = (payload: string): string => {
-  const bytes = char2Bytes(payload)
-  return TEZOS_SIGNING_PREFIX + char2Bytes(bytes.length.toString()) + bytes
-}
-
 interface TezosWalletManagerParams {
+  address: string
   beaconWallet: BeaconWallet
   tezosToolkit: TezosToolkit
   rpcNodes: string[]
@@ -46,13 +36,13 @@ export class TezosWalletManager extends WalletManager {
   rpcNodes: string[]
 
   constructor(params: TezosWalletManagerParams) {
-    super()
+    super(params.address)
     this.beaconWallet = params.beaconWallet
     this.tezosToolkit = params.tezosToolkit
     this.rpcNodes = params.rpcNodes
   }
 
-  async signMessage(
+  async signMessageWithWallet(
     message: string
   ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
     if (this.signingInProgress) {
@@ -61,11 +51,11 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeSignInPayload(message)
+      const payloadBytes = this.encodeSignInPayload(message)
       const { signature } = await this.beaconWallet.client.requestSignPayload({
         signingType: SigningType.MICHELINE,
         payload: payloadBytes,
-        sourceAddress: await this.tezosToolkit.wallet.pkh(),
+        sourceAddress: this.address,
       })
       return success(signature)
     } catch (error) {
@@ -85,6 +75,7 @@ export class TezosWalletManager extends WalletManager {
     {
       operation: WalletOperation
       message: string
+      hash: string
     },
     UserRejectedError | PendingSigningRequestError
   > {
@@ -105,6 +96,7 @@ export class TezosWalletManager extends WalletManager {
         return success({
           operation,
           message,
+          hash: operation.opHash,
         })
       } catch (error) {
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
@@ -163,6 +155,17 @@ export class TezosWalletManager extends WalletManager {
     this.rpcNodes.push(out)
     console.log(`update RPC provider: ${this.rpcNodes[0]}`)
     this.tezosToolkit.setRpcProvider(this.rpcNodes[0])
+  }
+
+  /**
+   * Encodes the payload into the desired format.
+   *
+   * @param {string} payload - The payload to encode.
+   * @return {string} - The encoded payload.
+   */
+  private encodeSignInPayload(payload: string): string {
+    const bytes = char2Bytes(payload)
+    return TEZOS_SIGNING_PREFIX + char2Bytes(bytes.length.toString()) + bytes
   }
 }
 

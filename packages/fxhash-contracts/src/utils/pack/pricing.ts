@@ -1,4 +1,4 @@
-import { MichelsonMap } from "@taquito/taquito"
+import { MichelsonMap } from "@taquito/michelson-encoder"
 import {
   EBuildableParams,
   pack,
