@@ -6,6 +6,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
 
 /**
  * The following type represents the parameters required for a mint operation in a fixed price Ethereum
@@ -24,6 +25,7 @@ export type TMintFixedPriceEthV1OperationParams = {
   reserveId: number
   amount: bigint
   to: string | null
+  whitelist: boolean
 }
 
 /**
@@ -31,12 +33,22 @@ export type TMintFixedPriceEthV1OperationParams = {
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
 export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMintFixedPriceEthV1OperationParams> {
+  private mintFixedPriceWhitelistEthV1Operation: MintFixedPriceWhitelistEthV1Operation
+
   async prepare() {
+    if (this.params.whitelist) {
+      this.mintFixedPriceWhitelistEthV1Operation =
+        new MintFixedPriceWhitelistEthV1Operation(this.manager, this.params)
+      return
+    }
     if (!this.params.to) {
       this.params.to = this.manager.address
     }
   }
   async call(): Promise<TransactionReceipt> {
+    if (this.params.whitelist) {
+      return this.mintFixedPriceWhitelistEthV1Operation.call()
+    }
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
       abi: FIXED_PRICE_MINTER_ABI,
@@ -54,6 +66,9 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
   }
 
   success(): string {
+    if (this.params.whitelist) {
+      return this.mintFixedPriceWhitelistEthV1Operation.success()
+    }
     return `Successfully minted fixed price token ${this.params.token}`
   }
 }

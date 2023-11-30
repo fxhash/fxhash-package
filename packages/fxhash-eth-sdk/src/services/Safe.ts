@@ -2,9 +2,13 @@ import SafeApiKit, { SafeInfoResponse } from "@safe-global/api-kit"
 import Safe, { EthersAdapter, SafeFactory } from "@safe-global/protocol-kit"
 import { ethers } from "ethers-v5"
 import { config } from "@fxhash/config"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  SafeSignature,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 import { EthereumWalletManager } from "./Wallet"
 import { getAddress } from "viem"
+import { UserRejectedError } from "@fxhash/contracts-shared"
 
 /**
  * The function `getSafeSDK` returns a Promise that resolves to an instance of the Safe SDK, given a
@@ -122,9 +126,17 @@ export async function proposeSafeTransaction(
   const safeTxHash = await walletManager.safe.getTransactionHash(
     safeTransaction
   )
-  const senderSignature = await walletManager.safe.signTransactionHash(
-    safeTxHash
-  )
+  let senderSignature: SafeSignature
+  try {
+    senderSignature = await walletManager.safe.signTransactionHash(safeTxHash)
+  } catch (error) {
+    // User rejected signing the message
+    if (error.action === "signMessage" && error.code === "ACTION_REJECTED") {
+      throw new UserRejectedError()
+    }
+    throw error
+  }
+
   await getSafeService(walletManager.signer).proposeTransaction({
     safeAddress: await walletManager.safe.getAddress(),
     safeTransactionData: safeTransaction.data,

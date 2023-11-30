@@ -9,6 +9,7 @@ import { getSafeService } from "@/services/Safe"
  */
 export type TApproveSafeMultisigTxEthV1OperationParams = {
   txHash: string
+  collabAddress: string
 }
 
 /**
@@ -18,6 +19,8 @@ export class ApproveSafeMultisigTxEthV1Operation extends EthereumContractOperati
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
+    await this.manager.connectSafe(this.params.collabAddress)
+
     const safeService = getSafeService(this.manager.signer)
     const signature = await this.manager.safe.signTransactionHash(
       this.params.txHash

@@ -95,7 +95,7 @@ export type TCreateProjectEthV1OperationParams = {
       | TicketMintInfoArgs
     )[]
   }
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -122,9 +122,13 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       "secondary"
     )
 
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
+    }
+
     const owner = (
-      this.params.isCollab
-        ? await this.manager.safe.getAddress()
+      this.params.collabAddress
+        ? this.params.collabAddress
         : this.manager.address
     ) as `0x${string}`
 
@@ -232,7 +236,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         this.params.royalties,
       ]
     }
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(FxhashContracts.ETH_PROJECT_FACTORY),
         data: encodeFunctionData({

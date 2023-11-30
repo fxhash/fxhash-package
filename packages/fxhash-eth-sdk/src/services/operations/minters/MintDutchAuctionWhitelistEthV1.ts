@@ -81,6 +81,6 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
   }
 
   success(): string {
-    return `Successfully minted fixed price token ${this.params.token}`
+    return `Successfully minted dutch auction token ${this.params.token}`
   }
 }

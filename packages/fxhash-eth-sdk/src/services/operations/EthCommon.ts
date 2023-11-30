@@ -6,6 +6,9 @@ import {
   PublicClient,
   TransactionReceipt,
   getContract,
+  ContractFunctionExecutionError,
+  InsufficientFundsError as InsufficientFundsErrorViem,
+  TransactionExecutionError,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
@@ -17,6 +20,11 @@ import {
   FX_ISSUER_FACTORY_ABI,
   SPLITS_MAIN_ABI,
 } from "@/abi"
+import {
+  InsufficientFundsError,
+  TransactionRevertedError,
+  UserRejectedError,
+} from "@fxhash/contracts-shared"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -144,6 +152,24 @@ export const onchainConfig: ConfigInfo = {
  * object.
  */
 export async function handleContractError(error: any): Promise<string> {
+  // This can be thrown by the simulateContract function
+  if (error instanceof ContractFunctionExecutionError) {
+    const isInsufficientFundsError = error.walk(
+      e => e instanceof InsufficientFundsErrorViem
+    )
+    if (isInsufficientFundsError) {
+      throw new InsufficientFundsError()
+    }
+  }
+
+  // This can be thrown by the writeContract function
+  if (
+    error instanceof TransactionExecutionError &&
+    error.cause.name === "UserRejectedRequestError"
+  ) {
+    throw new UserRejectedError()
+  }
+
   //if it's an error sent by the contract, we want to throw a more meaningful error
   if (error instanceof BaseError) {
     const revertError = error.walk(
@@ -153,6 +179,9 @@ export async function handleContractError(error: any): Promise<string> {
       let errorName = revertError.data?.errorName ?? ""
       if (!errorName) {
         errorName = await getOpenChainError(revertError.signature)
+      }
+      if (errorName) {
+        throw new TransactionRevertedError(errorName)
       }
       console.log("error: ", error)
       return "Failed: " + errorName
@@ -352,6 +381,48 @@ export function prepareReceivers(
   }
 
   return mergeSameReceivers(receivers)
+}
+
+/**
+ * Reverses the fee deduction from each receiver in an array and
+ * ensures that the total percentage is back to 10,000.
+ * @param {ReceiverEntry[]} receivers - An array of objects representing the receivers. Each object
+ * should have the following properties:
+ * @param {"primary" | "secondary"} type - The `type` parameter is a string that can have two possible
+ * values: "primary" or "secondary". It determines which fee allocation ratio to use for reversing the
+ * fee deduction from each receiver.
+ * @returns the properly processed `ReceiverEntry` array.
+ */
+export function revertReceiversFee(
+  receivers: ReceiverEntry[],
+  type: "primary" | "secondary"
+): ReceiverEntry[] {
+  // Define the fee ratio
+  const feeRatio =
+    type === "primary"
+      ? onchainConfig.primaryFeeAllocation / ALLOCATION_BASE
+      : onchainConfig.secondaryFeeAllocation / ALLOCATION_BASE
+
+  // Reverse the fee deduction from each receiver
+  const originalReceivers = receivers
+    .map(account => {
+      // Skip the fee receiver
+      if (account.address === onchainConfig.feeReceiver) return null
+      return {
+        ...account,
+        // Reverse the fee deduction
+        pct: Math.round(account.pct / (100 * (1 - feeRatio))),
+      }
+    })
+    .filter(account => account !== null) // Remove null (fee receiver)
+
+  // Ensure the total is back to 10,000
+  const total = originalReceivers.reduce((sum, account) => sum + account.pct, 0)
+  if (total !== ALLOCATION_BASE) {
+    throw Error("The reverted receivers' total must be 10_000")
+  }
+
+  return originalReceivers
 }
 
 /**

@@ -11,7 +11,7 @@ import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 
 export type TUnpauseEthV1OperationParams = {
   token: `0x${string}`
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -21,7 +21,8 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<TransactionReceipt | string> {
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({

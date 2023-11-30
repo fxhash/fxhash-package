@@ -2,7 +2,7 @@ import "viem/window"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAccount, useDisconnect, useWalletClient } from "wagmi"
 import { PublicClient } from "viem"
-import { EthereumWalletManager } from "@fxhash/eth-sdk"
+import { EthereumWalletManager, getWeb3Provider } from "@fxhash/eth-sdk"
 import {
   BlockchainType,
   PendingSigningRequestError,
@@ -91,6 +91,7 @@ export function EthereumUserProvider({
         publicClient: config.publicClient,
         rpcNodes: config.rpcNodes,
         address: account.address,
+        signer: getWeb3Provider().getSigner(),
       })
       setContext(context => ({
         ...context,

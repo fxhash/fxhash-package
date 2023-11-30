@@ -6,7 +6,7 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { apolloClient } from "../Hasura"
-import { Qu_GetEthPrimarySplits, Qu_GetEthProceeds } from "@fxhash/gql"
+import { Qu_GetEthMinterProceeds } from "@fxhash/gql"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
@@ -32,10 +32,10 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
   async call(): Promise<TransactionReceipt | string> {
     //First we need to fetch the proceeds for the address
     const proceeds = await apolloClient.query({
-      query: Qu_GetEthProceeds,
+      query: Qu_GetEthMinterProceeds,
       variables: {
         where: {
-          id: {
+          user_address: {
             _eq: this.params.address,
           },
         },
@@ -45,36 +45,26 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     const multicallArgs: CallData[] = []
     const splitsWithEarnings: string[] = []
     //we loop on the all the minters, to prepare the withdraw operations
-    for (const minterProceeds of proceeds.data.onchain.eth_token_proceeds) {
-      //first we process dutch auction earnings
-      for (const dutchAuctionProceeds of minterProceeds.dutch_auction_proceeds) {
-        multicallArgs.push({
-          address: config.eth.contracts
-            .dutch_auction_minter_v1 as `0x${string}`,
-          data: encodeFunctionData({
-            abi: DUTCH_AUCTION_MINTER_ABI,
-            functionName: "withdraw",
-            args: [
-              dutchAuctionProceeds.tokenAddress,
-              dutchAuctionProceeds.reserveId,
-            ],
-          }),
-        })
-        splitsWithEarnings.push(dutchAuctionProceeds.primaryReceiver)
-      }
+    for (const minterProceeds of proceeds.data.onchain.eth_minter_proceeds) {
+      const isDutchAuction =
+        minterProceeds.minter_address ===
+        config.eth.contracts.dutch_auction_minter_v1
+      const abi = isDutchAuction
+        ? DUTCH_AUCTION_MINTER_ABI
+        : FIXED_PRICE_MINTER_ABI
+      const args = isDutchAuction
+        ? [minterProceeds.token_address, minterProceeds.reserve_id]
+        : [minterProceeds.token_address]
 
-      //then fixed price minter earnings
-      for (const fixedPriceProceeds of minterProceeds.fixed_price_proceeds) {
-        multicallArgs.push({
-          address: config.eth.contracts.fixed_price_minter_v1 as `0x${string}`,
-          data: encodeFunctionData({
-            abi: FIXED_PRICE_MINTER_ABI,
-            functionName: "withdraw",
-            args: [fixedPriceProceeds.tokenAddress],
-          }),
-        })
-        splitsWithEarnings.push(fixedPriceProceeds.primaryReceiver)
-      }
+      multicallArgs.push({
+        address: minterProceeds.minter_address,
+        data: encodeFunctionData({
+          abi: abi,
+          functionName: "withdraw",
+          args: args,
+        }),
+      })
+      splitsWithEarnings.push(minterProceeds.primary_receiver)
     }
 
     /**

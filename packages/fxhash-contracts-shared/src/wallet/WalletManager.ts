@@ -12,6 +12,22 @@ export class UserRejectedError extends Error {
   message = "User rejected the request"
 }
 
+export class InsufficientFundsError extends Error {
+  name = "InsufficientFundsError" as const
+  message =
+    "The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account."
+}
+
+export class TransactionRevertedError extends Error {
+  name = "TransactionRevertedError" as const
+  errorName: string
+
+  constructor(readonly paramErrorName: string) {
+    super(`Transaction reverted with error: ${paramErrorName}`)
+    this.errorName = paramErrorName
+  }
+}
+
 export type SignMessageOptions = {
   /**
    * An string-identifier to define the type of the operation. It is used to
@@ -101,7 +117,13 @@ export abstract class WalletManager {
   abstract sendTransaction<TParams>(
     operation: TContractOperation<this, TParams, any>,
     params: TParams
-  ): PromiseResult<unknown, PendingSigningRequestError | UserRejectedError>
+  ): PromiseResult<
+    unknown,
+    | PendingSigningRequestError
+    | UserRejectedError
+    | InsufficientFundsError
+    | TransactionRevertedError
+  >
 
   abstract waitForTransaction(params: {
     hash: string

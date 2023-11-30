@@ -13,7 +13,7 @@ export type TOwnerMintEthV1OperationParams = {
   token: `0x${string}`
   params?: string | undefined
   to: `0x${string}`
-  isCollab: boolean
+  collabAddress?: string
 }
 
 /**
@@ -28,7 +28,8 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
       ? [this.params.to, this.params.params]
       : [this.params.to]
     const functionName = isParams ? "ownerMintParams" : "ownerMint"
-    if (this.params.isCollab) {
+    if (this.params.collabAddress) {
+      await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
