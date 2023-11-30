@@ -32,6 +32,7 @@ const documents = {
     "\n  fragment GenerativeToken_Pricing on generative_token {\n    pricing_fixeds {\n      price\n      opens_at\n    }\n    pricing_dutch_auctions {\n      levels\n      resting_price\n      final_price\n      decrement_duration\n      opens_at\n    }\n  }\n": types.GenerativeToken_PricingFragmentDoc,
     "\n  query GetEthMinterProceeds($where: eth_minter_proceeds_bool_exp = {}) {\n    onchain {\n      eth_minter_proceeds(where: $where) {\n        id\n        minter_address\n        primary_receiver\n        reserve_id\n        token_address\n        user_address\n        amount\n      }\n    }\n  }\n": types.GetEthMinterProceedsDocument,
     "\n  query GetReserves($where: reserve_bool_exp = {}) {\n    onchain {\n      reserve(where: $where) {\n        data\n        id\n        method\n        token_id\n        amount\n      }\n    }\n  }\n": types.GetReservesDocument,
+    "\n  query GetEthUserProceeds($where: eth_user_proceeds_bool_exp = {}) {\n    onchain {\n      eth_user_proceeds(where: $where) {\n        id\n        total_proceeds\n      }\n    }\n  }\n": types.GetEthUserProceedsDocument,
 };
 
 /**
@@ -124,6 +125,10 @@ export function graphql(source: "\n  query GetEthMinterProceeds($where: eth_mint
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetReserves($where: reserve_bool_exp = {}) {\n    onchain {\n      reserve(where: $where) {\n        data\n        id\n        method\n        token_id\n        amount\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetReserves($where: reserve_bool_exp = {}) {\n    onchain {\n      reserve(where: $where) {\n        data\n        id\n        method\n        token_id\n        amount\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetEthUserProceeds($where: eth_user_proceeds_bool_exp = {}) {\n    onchain {\n      eth_user_proceeds(where: $where) {\n        id\n        total_proceeds\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetEthUserProceeds($where: eth_user_proceeds_bool_exp = {}) {\n    onchain {\n      eth_user_proceeds(where: $where) {\n        id\n        total_proceeds\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
