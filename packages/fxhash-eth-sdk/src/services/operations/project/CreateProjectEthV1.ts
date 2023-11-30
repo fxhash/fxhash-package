@@ -136,10 +136,18 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
       randomizer: FxhashContracts.ETH_RANDOMIZER_V1 as `0x${string}`,
-      renderer:
-        this.params.initInfo.renderer === "ipfs"
-          ? (FxhashContracts.ETH_IPFS_RENDERER_V1 as any)
-          : FxhashContracts.ETH_ONCHFS_RENDERER_V1,
+      /**
+       * TODO
+       * -------------------------------------------------------------------
+       * @note For now the ONCHFS renderer doesn't work as we want it to work,
+       * so we'll use the IPFS renderer for all the projects, and we'll swap
+       * out the IPFS renderer by the ONCHFS one down the line.
+       * Only then, the ONCHFS renderer will be used on onchfs projects.
+       */
+      renderer: FxhashContracts.ETH_IPFS_RENDERER_V1 as any,
+      // this.params.initInfo.renderer === "ipfs"
+      //   ? (FxhashContracts.ETH_IPFS_RENDERER_V1 as any)
+      //   : FxhashContracts.ETH_ONCHFS_RENDERER_V1,
       tagIds: this.params.initInfo.tagIds,
       primaryReceivers: primaryReceivers.map(entry => entry.address),
       allocations: primaryReceivers.map(entry => entry.pct),
