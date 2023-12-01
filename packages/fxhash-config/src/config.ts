@@ -1,4 +1,4 @@
-import { ethTestnetApis, IEthApis } from "api/eth"
+import { ethMainnetApis, ethTestnetApis, IEthApis } from "api/eth"
 import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
 import {
   IFxhashApis,
@@ -11,7 +11,11 @@ import {
   tezosMainnetContracts,
   tezosTestnetContracts,
 } from "contracts/tezos"
-import { ethTestnetContracts, IEthContracts } from "contracts/eth"
+import {
+  ethMainnetContracts,
+  ethTestnetContracts,
+  IEthContracts,
+} from "contracts/eth"
 import { getConfigForEnv } from "utils"
 
 export interface IFxhashNetworkConfig {
@@ -39,7 +43,7 @@ export type TEnv = "dev" | "prd" | "local"
 type TBlockchainContacts = {
   [B in TBlockchain]: {
     tez: ITezosContracts
-    eth: IEthContracts | null
+    eth: IEthContracts
   }[B]
 }
 
@@ -113,11 +117,11 @@ export const fxhashConfig: IFxhashConfig = {
         apis: tezosMainnetApis,
       },
       eth: {
-        contracts: null,
+        contracts: ethMainnetContracts,
         config: {
           network: "Mainnet",
         },
-        apis: null,
+        apis: ethMainnetApis,
       },
     },
   },
