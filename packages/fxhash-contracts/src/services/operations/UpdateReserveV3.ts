@@ -23,7 +23,7 @@ export type TUpdateReservesV3OperationParams = {
 /**
  * Updates the pricing of a Generative Token
  */
-export class UpdateReservesV3Operation extends TezosContractOperation<TUpdateReservesV3OperationParams> {
+export class TezosUpdateReservesV3Operation extends TezosContractOperation<TUpdateReservesV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

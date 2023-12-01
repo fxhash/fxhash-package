@@ -21,7 +21,13 @@ import {
   predictFxContractAddress,
 } from "@/services/operations"
 import { FxhashContracts } from "@/contracts/Contracts"
-import { EthereumWalletManager } from ".."
+import {
+  DUTCH_AUCTION_MINTER_ABI,
+  EthereumWalletManager,
+  FIXED_PRICE_MINTER_ABI,
+} from ".."
+import { ApolloQueryResult } from "@apollo/client"
+import { GetTokenPricingsAndReservesQuery } from "@fxhash/gql"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -388,4 +394,75 @@ export function decodeFixedPriceMinterParams(
   } catch (error) {
     return undefined
   }
+}
+
+export function getPricingFromParams(
+  generativeToken: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"],
+  whitelist: boolean
+) {
+  const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
+  const isFixed = pricing_fixeds.length > 0
+  const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
+
+  if (!whitelist) {
+    // We find the first pricing that doesn't have a reserve
+    const pricing =
+      reserves.length === 0
+        ? pricingList[0]
+        : // @ts-ignore
+          pricingList.find(pricing =>
+            reserves.every(
+              reserve =>
+                reserve.data.reserveId !== pricing.id.split("-")[1] ||
+                !reserve.data.merkleRoot
+            )
+          )
+    return { pricing }
+  }
+  return { pricing: pricingList[0] }
+}
+
+export function getPricingAndReserveFromParams(
+  generativeToken: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"],
+  whitelist: boolean
+) {
+  const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
+  const isFixed = pricing_fixeds.length > 0
+  const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
+
+  const findPricingAndReserve = () => {
+    if (whitelist) {
+      for (const pricing of pricingList) {
+        const reserveId = pricing.id.split("-")[1]
+        const reserve = reserves.find(
+          reserve =>
+            reserve.data.reserveId === reserveId && reserve.data.merkleRoot
+        )
+        if (reserve) {
+          return { pricing, reserve }
+        }
+      }
+      throw new Error("No pricing with matching reserve found")
+    } else {
+      const pricing =
+        reserves.length === 0
+          ? pricingList[0]
+          : // @ts-ignore
+            pricingList.find(pricing =>
+              reserves.every(
+                reserve =>
+                  reserve.data.reserveId !== pricing.id.split("-")[1] ||
+                  !reserve.data.merkleRoot
+              )
+            )
+
+      if (!pricing) {
+        throw new Error("No suitable pricing found")
+      }
+
+      return { pricing, reserve: undefined }
+    }
+  }
+
+  return findPricingAndReserve()
 }

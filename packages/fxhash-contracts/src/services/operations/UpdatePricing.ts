@@ -20,23 +20,10 @@ export type TUpdatePricingOperationParams = {
   token: GenerativeToken
 }
 
-export class UpdatePricingOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosUpdatePricingOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Updates the pricing of a Generative Token
  */
-class TezosUpdatePricingOperation extends TezosContractOperation<TUpdatePricingOperationParams> {
+export class TezosUpdatePricingOperation extends TezosContractOperation<TUpdatePricingOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

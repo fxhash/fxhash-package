@@ -22,24 +22,10 @@ export const mapModKtKeyToContract: Record<TModContractKey, string> = {
   article: FxhashContracts.ARTICLE_MODERATION,
 }
 
-export class ModerateOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosModerateOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Updates user profile
  */
-class TezosModerateOperation extends TezosContractOperation<TModerateParams> {
+export class TezosModerateOperation extends TezosContractOperation<TModerateParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

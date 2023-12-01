@@ -11,23 +11,10 @@ export type TResonAddParams = {
   contract: TModContractKey
 }
 
-export class ReasonAddOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosReasonAddOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Updates user profile
  */
-class TezosReasonAddOperation extends TezosContractOperation<TResonAddParams> {
+export class TezosReasonAddOperation extends TezosContractOperation<TResonAddParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

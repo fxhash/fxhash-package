@@ -5,6 +5,7 @@ import {
   Mu_CreateWhitelist,
   Qu_GetReserves,
   Qu_GetWhitelists,
+  GetTokenPricingsAndReservesQuery,
 } from "@fxhash/gql"
 
 /**
@@ -244,4 +245,29 @@ export async function getMerkleRootForToken(
     const data = results?.onchain.reserve[0].data as WhitelistReserveData
     return data.merkleRoot
   }
+}
+export function getFirstAvailableIndexAndProofForUser(
+  user: `0x${string}`,
+  whitelist: MerkleTreeWhitelist,
+  whitelistReserve: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["reserves"][0]
+): { index: number; proof: string[] } | null {
+  const reducedWhiteList = structuredClone(whitelist.whitelist)
+  // Remove consumed slots from whitelist
+  for (const slot of whitelistReserve.data.consumedSlots) {
+    const [index, address] = slot
+    const findIndex = reducedWhiteList.findIndex(
+      entry => entry[1] === address && entry[0] === index
+    )
+    reducedWhiteList.splice(findIndex, 1)
+  }
+  // Get the first available index for the user
+  const findIndex = reducedWhiteList.findIndex(entry => entry[1] === user)
+
+  if (findIndex === -1) {
+    return null
+  }
+  const index = Number(reducedWhiteList[findIndex][0])
+  const tree = getWhitelistTree(whitelist.whitelist)
+  const proof = tree.getProof(index)
+  return { index, proof }
 }

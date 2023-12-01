@@ -3,26 +3,12 @@ import { FxhashContracts } from "../../types/Contracts"
 import { NFTArticle } from "../../types/entities/Article"
 import { Listing } from "../../types/entities/Listing"
 import { displayMutez } from "../../utils/units"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TListingV3AcceptOperationParams = {
   listing: Listing
   article: NFTArticle
   amount: number
-}
-
-export class ListingV3AcceptOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosListingV3AcceptOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
 }
 
 /**

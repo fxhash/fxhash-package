@@ -13,7 +13,7 @@ import { IReserveConsumption } from "@/types/Reserve"
 import { genTokCurrentPrice } from "@/utils/genTokCurrentPrice"
 import { isTicketOwner, isTicketUsed } from "@/services/Blockchain"
 import { prepareReserveConsumption } from "@/utils/pack/reserves"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 import {
   EBuildableParams,
   buildParameters,
@@ -47,25 +47,12 @@ export type TMintV3AbstractionOperationParams = {
   consumeReserve?: IReserveConsumption | null
 }
 
-export class MintV3AbstractionOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintV3AbstractionOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Provides a single entity to either:
  * - mint with a ticket, if provided
  * - mint directly on the issuer, with input bytes
  */
-class TezosMintV3AbstractionOperation extends TezosContractOperation<TMintV3AbstractionOperationParams> {
+export class TezosMintV3AbstractionOperation extends TezosContractOperation<TMintV3AbstractionOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   useTicket: boolean | null = null
   ticketId: number | null = null

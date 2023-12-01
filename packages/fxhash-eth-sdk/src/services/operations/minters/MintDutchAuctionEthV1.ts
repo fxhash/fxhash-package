@@ -26,7 +26,6 @@ export type TMintDAEthV1OperationParams = {
   amount: bigint
   reserveId: number
   to: string | null
-  whitelist: boolean
 }
 
 /**
@@ -34,21 +33,12 @@ export type TMintDAEthV1OperationParams = {
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
 export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1OperationParams> {
-  private mintDutchAuctionWhitelistEthV1Operation: MintDutchAutionWhitelistEthV1Operation
   async prepare() {
-    if (this.params.whitelist) {
-      this.mintDutchAuctionWhitelistEthV1Operation =
-        new MintDutchAutionWhitelistEthV1Operation(this.manager, this.params)
-      return
-    }
     if (!this.params.to) {
       this.params.to = this.manager.address
     }
   }
   async call(): Promise<TransactionReceipt> {
-    if (this.params.whitelist) {
-      return this.mintDutchAuctionWhitelistEthV1Operation.call()
-    }
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       abi: DUTCH_AUCTION_MINTER_ABI,
@@ -66,9 +56,6 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
   }
 
   success(): string {
-    if (this.params.whitelist) {
-      return this.mintDutchAuctionWhitelistEthV1Operation.success()
-    }
     return `Successfully minted dutch auction token ${this.params.token}`
   }
 }

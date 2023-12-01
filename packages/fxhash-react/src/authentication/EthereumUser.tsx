@@ -19,6 +19,7 @@ import {
   IConnexionPayload,
   TUserWalletContext,
 } from "../types/UserWalletContext"
+import { useEthersSigner } from "./SignerWagmi"
 
 export interface TUserEthereumWalletContext extends TUserWalletContext {
   walletManager: EthereumWalletManager | null
@@ -64,6 +65,7 @@ export function EthereumUserProvider({
 }: EthereumUserProviderProps) {
   const [context, setContext] = useState<TUserEthereumWalletContext>(defaultCtx)
   const { data: walletClient, isIdle } = useWalletClient()
+  const signer = useEthersSigner()
   const accountState = useAccount()
   const { setOpen: setConnectkitOpen } = useModal()
   const { disconnectAsync } = useDisconnect()
@@ -82,7 +84,7 @@ export function EthereumUserProvider({
   }, [accountState.address])
 
   useEffect(() => {
-    if (window.ethereum && walletClient) {
+    if (walletClient && signer) {
       const account = walletClient.account
       if (!account) return
 
@@ -91,7 +93,7 @@ export function EthereumUserProvider({
         publicClient: config.publicClient,
         rpcNodes: config.rpcNodes,
         address: account.address,
-        signer: getWeb3Provider().getSigner(),
+        signer,
       })
       setContext(context => ({
         ...context,
@@ -109,7 +111,7 @@ export function EthereumUserProvider({
         initialized: !!(context.initialized || walletClient || isIdle),
       }))
     }
-  }, [walletClient, isIdle])
+  }, [walletClient, signer, isIdle])
 
   const signConnectionMessage = async (): PromiseResult<
     IConnexionPayload,

@@ -6,7 +6,7 @@ import {
 import { Objkt } from "@/types/entities/Objkt"
 import { RedeemableDetails } from "@/types/entities/Redeemable"
 import { redeemTotalCost } from "@/utils/entities/redeem"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TRedeemTokenParams = {
   redeemable: RedeemableDetails
@@ -20,25 +20,12 @@ export type TRedeemTokenParams = {
   signature: string
 }
 
-export class RedeemTokenOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosRedeemTokenOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Redeem a token
  * The Smart Contract will check if the user truly owns the token and if so,
  * it will mark the token as being redeemed in its storage.
  */
-class TezosRedeemTokenOperation extends TezosContractOperation<TRedeemTokenParams> {
+export class TezosRedeemTokenOperation extends TezosContractOperation<TRedeemTokenParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
