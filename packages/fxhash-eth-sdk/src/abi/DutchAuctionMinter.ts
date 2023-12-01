@@ -6,11 +6,6 @@ export const DUTCH_AUCTION_MINTER_ABI = [
   },
   {
     inputs: [],
-    name: "Ended",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "InsufficientFunds",
     type: "error",
   },

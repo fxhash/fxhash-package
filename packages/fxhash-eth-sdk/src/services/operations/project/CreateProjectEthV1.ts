@@ -67,6 +67,7 @@ export type TCreateProjectEthV1OperationParams = {
     symbol: string
     tagIds: bigint[]
     renderer: "ipfs" | "onchfs"
+    onchainData?: `0x${string}`
   }
   projectInfo: {
     mintEnabled: boolean
@@ -151,6 +152,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       tagIds: this.params.initInfo.tagIds,
       primaryReceivers: primaryReceivers.map(entry => entry.address),
       allocations: primaryReceivers.map(entry => entry.pct),
+      onchainData: this.params.initInfo.onchainData
+        ? this.params.initInfo.onchainData
+        : "0x",
     }
 
     const projectInfo: ProjectInfo = {
@@ -199,9 +203,11 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     })
 
     let args: unknown[]
+    let functionName: string
     if (hasTicketMintInfo && !this.params.ticketInfo) {
       throw Error("Ticket mint info required")
     } else if (hasTicketMintInfo && this.params.ticketInfo) {
+      functionName = "createProjectWithTicket"
       /**
        * this scenario requires calling a different endpoint and encoding
        * the parameters as bytes
@@ -233,6 +239,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
       ]
     } else {
+      functionName = "createProjectWithParams"
+
       args = [
         owner,
         initInfo,
@@ -249,7 +257,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         to: getAddress(FxhashContracts.ETH_PROJECT_FACTORY),
         data: encodeFunctionData({
           abi: FX_ISSUER_FACTORY_ABI,
-          functionName: "createProject",
+          functionName: functionName,
           args: args,
         }),
         value: "0",
@@ -261,7 +269,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       const contractArgs: SimulateAndExecuteContractRequest = {
         address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
         abi: FX_ISSUER_FACTORY_ABI,
-        functionName: "createProject",
+        functionName: functionName,
         args: args,
         account: this.manager.address as `0x${string}`,
       }

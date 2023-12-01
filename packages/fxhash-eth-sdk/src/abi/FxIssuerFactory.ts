@@ -162,6 +162,25 @@ export const FX_ISSUER_FACTORY_ABI = [
   {
     inputs: [
       {
+        internalType: "bytes",
+        name: "_creationInfo",
+        type: "bytes",
+      },
+    ],
+    name: "createProject",
+    outputs: [
+      {
+        internalType: "address",
+        name: "genArt721",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_owner",
         type: "address",
@@ -202,6 +221,11 @@ export const FX_ISSUER_FACTORY_ABI = [
             internalType: "uint256[]",
             name: "tagIds",
             type: "uint256[]",
+          },
+          {
+            internalType: "bytes",
+            name: "onchainData",
+            type: "bytes",
           },
         ],
         internalType: "struct InitInfo",
@@ -312,7 +336,7 @@ export const FX_ISSUER_FACTORY_ABI = [
         type: "uint96",
       },
     ],
-    name: "createProject",
+    name: "createProjectWithParams",
     outputs: [
       {
         internalType: "address",
@@ -341,7 +365,7 @@ export const FX_ISSUER_FACTORY_ABI = [
         type: "address",
       },
     ],
-    name: "createProject",
+    name: "createProjectWithTicket",
     outputs: [
       {
         internalType: "address",
@@ -351,25 +375,6 @@ export const FX_ISSUER_FACTORY_ABI = [
       {
         internalType: "address",
         name: "mintTicket",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "_creationInfo",
-        type: "bytes",
-      },
-    ],
-    name: "createProject",
-    outputs: [
-      {
-        internalType: "address",
-        name: "genArt721",
         type: "address",
       },
     ],
