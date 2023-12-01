@@ -20,24 +20,11 @@ export type TUpdateIssuerV3OperationParams = {
   data: UpdateIssuerForm<string>
 }
 
-export class UpdateIssuerV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosUpdateIssuerV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Update the general settings of the an issuer
  * issuer > update_issuer
  */
-class TezosUpdateIssuerV3Operation extends TezosContractOperation<TUpdateIssuerV3OperationParams> {
+export class TezosUpdateIssuerV3Operation extends TezosContractOperation<TUpdateIssuerV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

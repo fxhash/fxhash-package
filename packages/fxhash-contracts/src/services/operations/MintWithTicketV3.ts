@@ -13,23 +13,10 @@ export type TMintWithTicketOperationParams = {
   inputBytes: string
 }
 
-export class MintWithTicketOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintWithTicketOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
-class TezosMintWithTicketOperation extends TezosContractOperation<TMintWithTicketOperationParams> {
+export class TezosMintWithTicketOperation extends TezosContractOperation<TMintWithTicketOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

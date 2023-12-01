@@ -7,24 +7,10 @@ import {
 import { FxhashContracts } from "../../types/Contracts"
 import { MintArticleData } from "../../types/MintArticle"
 import { stringToByteString } from "../../utils/convert"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TMintArticleOperationParams = {
   data: MintArticleData<string>
-}
-
-export class MintArticleOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintArticleOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
 }
 
 /**

@@ -13,23 +13,10 @@ export type TTicketClaimV3OperationParams = {
   taxationSettings: ITaxationSettings
 }
 
-export class TicketClaimV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosTicketClaimV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
-class TezosTicketClaimV3Operation extends TezosContractOperation<TTicketClaimV3OperationParams> {
+export class TezosTicketClaimV3Operation extends TezosContractOperation<TTicketClaimV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

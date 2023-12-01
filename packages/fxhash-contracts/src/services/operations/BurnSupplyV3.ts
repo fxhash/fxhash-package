@@ -10,7 +10,7 @@ import {
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { UserType } from "../../types/entities/User"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TBurnSupplyV3OperationParams = {
   token: GenerativeToken
@@ -20,7 +20,7 @@ export type TBurnSupplyV3OperationParams = {
 /**
  * Burns some supply of a Generative Token
  */
-export class BurnSupplyV3Operation extends TezosContractOperation<TBurnSupplyV3OperationParams> {
+export class TezosBurnSupplyV3Operation extends TezosContractOperation<TBurnSupplyV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

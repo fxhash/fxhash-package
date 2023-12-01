@@ -20,7 +20,7 @@ export type TBurnTokenV3OperationParams = {
  * Update the general settings of the an issuer
  * issuer > update_issuer
  */
-export class BurnTokenV3Operation extends TezosContractOperation<TBurnTokenV3OperationParams> {
+export class TezosBurnTokenV3Operation extends TezosContractOperation<TBurnTokenV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

@@ -10,24 +10,10 @@ export type TCollabWithdrawParams = {
   collaboration: Collaboration
 }
 
-export class CollabWithdrawOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosCollabWithdrawOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Vote for a proposal
  */
-class TezosCollabWithdrawOperation extends TezosContractOperation<TCollabWithdrawParams> {
+export class TezosCollabWithdrawOperation extends TezosContractOperation<TCollabWithdrawParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

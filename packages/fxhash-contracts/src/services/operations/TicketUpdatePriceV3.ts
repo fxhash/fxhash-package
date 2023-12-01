@@ -13,23 +13,10 @@ export type TTicketUpdatePriceV3OperationParams = {
   taxationSettings: ITaxationSettings
 }
 
-export class TicketUpdatePriceV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosTicketUpdatePriceV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Update the ticket price to extend or remove day coverage
  */
-class TezosTicketUpdatePriceV3Operation extends TezosContractOperation<TTicketUpdatePriceV3OperationParams> {
+export class TezosTicketUpdatePriceV3Operation extends TezosContractOperation<TTicketUpdatePriceV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

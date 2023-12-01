@@ -22,20 +22,6 @@ export type TMintIssuerOperationParams = {
   metadataBytes: string
 }
 
-export class MintIssuerOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintIssuerOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
