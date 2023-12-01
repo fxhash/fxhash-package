@@ -119,7 +119,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethMainnetContracts,
         config: {
-          network: "Mainnet",
+          network: "Ethereum",
         },
         apis: ethMainnetApis,
       },

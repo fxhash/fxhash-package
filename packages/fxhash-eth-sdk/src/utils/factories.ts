@@ -42,6 +42,7 @@ export function encodeProjectFactoryArgs(
           { name: "randomizer", type: "address" },
           { name: "renderer", type: "address" },
           { name: "tagIds", type: "uint256[]" },
+          { name: "onchainData", type: "bytes" },
         ],
       },
       {

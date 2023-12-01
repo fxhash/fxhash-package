@@ -321,12 +321,12 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "bytes",
-        name: "_data",
-        type: "bytes",
+        internalType: "address",
+        name: "_pointer",
+        type: "address",
       },
     ],
-    name: "OnchainDataUpdated",
+    name: "OnchainPointerUpdated",
     type: "event",
   },
   {
@@ -1036,6 +1036,11 @@ export const FX_GEN_ART_721_ABI = [
             name: "tagIds",
             type: "uint256[]",
           },
+          {
+            internalType: "bytes",
+            name: "onchainData",
+            type: "bytes",
+          },
         ],
         internalType: "struct InitInfo",
         name: "_initInfo",
@@ -1728,7 +1733,7 @@ export const FX_GEN_ART_721_ABI = [
     inputs: [
       {
         internalType: "bytes",
-        name: "_data",
+        name: "_onchainData",
         type: "bytes",
       },
       {
@@ -1737,7 +1742,7 @@ export const FX_GEN_ART_721_ABI = [
         type: "bytes",
       },
     ],
-    name: "setOnchainData",
+    name: "setOnchainPointer",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

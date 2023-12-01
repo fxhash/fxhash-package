@@ -62,6 +62,7 @@ export interface InitInfo {
   randomizer: `0x${string}`
   renderer: `0x${string}`
   tagIds: bigint[]
+  onchainData: `0x${string}`
 }
 
 export interface ProjectInfo {
