@@ -80,8 +80,8 @@ export function getWeb3Provider(): ethers.providers.Web3Provider {
  * @returns an instance of the ethers Wallet class, which is initialized with the provided private key
  * and a JsonRpcProvider instance.
  */
-export function getWalletProvider(privateKey: string): ethers.Wallet {
-  const provider = new ethers.providers.JsonRpcProvider(config.eth.apis.rpcs[0])
+export function getWalletProvider(privateKey: string, rpc: string): ethers.Wallet {
+  const provider = new ethers.providers.JsonRpcProvider(rpc)
   return new ethers.Wallet(privateKey, provider)
 }
 
