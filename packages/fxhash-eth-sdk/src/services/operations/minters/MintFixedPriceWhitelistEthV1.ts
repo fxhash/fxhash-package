@@ -6,13 +6,6 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import {
-  getProof,
-  getWhitelist,
-  getUserWhitelistIndex,
-  getWhitelistTree,
-  getMerkleRootForToken,
-} from "@/utils/whitelist"
 
 /**
  * The above type represents the parameters required for a mint fixed price whitelist Ethereum V1
@@ -35,6 +28,8 @@ import {
 export type TMintFixedPriceWhitelistEthV1OperationParams = {
   token: string
   reserveId: number
+  index: number
+  proof: string[]
   price: bigint
   amount: bigint
   to: string | null
@@ -49,42 +44,21 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
     }
   }
   async call(): Promise<TransactionReceipt> {
-    const merkleRoot = await getMerkleRootForToken(this.params.token)
-    if (merkleRoot === undefined) {
-      throw new Error("No merkle root found for token " + this.params.token)
+    const args: SimulateAndExecuteContractRequest = {
+      address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
+      abi: FIXED_PRICE_MINTER_ABI,
+      functionName: "buyAllowlist",
+      args: [
+        this.params.token,
+        this.params.reserveId,
+        this.params.to,
+        [this.params.index],
+        [this.params.proof],
+      ],
+      account: this.manager.address as `0x${string}`,
+      value: this.params.price,
     }
-    const whitelists = await getWhitelist(merkleRoot)
-    if (whitelists.length === 0) {
-      throw new Error(
-        "No active whitelists found for token " + this.params.token
-      )
-    } else {
-      const activeWhitelist = whitelists[0]
-      const index = getUserWhitelistIndex(
-        activeWhitelist.whitelist,
-        this.manager.address
-      )
-      const proof = getProof(
-        getWhitelistTree(activeWhitelist.whitelist),
-        activeWhitelist.whitelist,
-        this.manager.address
-      )
-      const args: SimulateAndExecuteContractRequest = {
-        address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
-        abi: FIXED_PRICE_MINTER_ABI,
-        functionName: "buyAllowlist",
-        args: [
-          this.params.token,
-          this.params.reserveId,
-          this.params.to,
-          [index],
-          [proof],
-        ],
-        account: this.manager.address as `0x${string}`,
-        value: this.params.price,
-      }
-      return simulateAndExecuteContract(this.manager, args)
-    }
+    return simulateAndExecuteContract(this.manager, args)
   }
 
   success(): string {
