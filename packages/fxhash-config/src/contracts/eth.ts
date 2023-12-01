@@ -66,5 +66,5 @@ export const ethMainnetContracts: IEthContracts = {
   gen_art_token_impl_v1: "0xFeD4c55c532fF206F0359636b82c1153381642d4",
   mint_ticket_impl_v1: "0xa2b00a0c52DAd0f2E3b802bE16d2303fb05b7654",
   onchfs_file_system: "0x9e0f2864c6f125bbf599df6ca6e6c3774c5b2e04",
-  onchfs_content_store: "0x7c1730B7bE9424D0b983B84aEb254e3a2a105d91",
+  onchfs_content_store: "0xC6806fd75745bB5F5B32ADa19963898155f9DB91",
 }
