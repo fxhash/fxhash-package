@@ -38,6 +38,11 @@ export const CONTRACT_REGISTRY_ABI = [
             name: "defaultMetadataURI",
             type: "string",
           },
+          {
+            internalType: "string",
+            name: "externalURI",
+            type: "string",
+          },
         ],
         internalType: "struct ConfigInfo",
         name: "_configInfo",
@@ -111,6 +116,11 @@ export const CONTRACT_REGISTRY_ABI = [
           {
             internalType: "string",
             name: "defaultMetadataURI",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "externalURI",
             type: "string",
           },
         ],
@@ -247,6 +257,11 @@ export const CONTRACT_REGISTRY_ABI = [
         name: "defaultMetadataURI",
         type: "string",
       },
+      {
+        internalType: "string",
+        name: "externalURI",
+        type: "string",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -366,6 +381,11 @@ export const CONTRACT_REGISTRY_ABI = [
           {
             internalType: "string",
             name: "defaultMetadataURI",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "externalURI",
             type: "string",
           },
         ],
