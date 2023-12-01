@@ -37,7 +37,7 @@ export const ethTestnetContracts: IEthContracts = {
   role_registry_v1: "0x6731d1354fA3b2fd6B4f6cB36aE8D602B1652025",
   contract_registry_v1: "0xC3D416f526975a9562A235DaCde1Dd07AE511210",
   gen_art_token_impl_v1: "0x3eB000Db72a044335AD52CE772a7EE262913f34F",
-  mint_ticket_impl_v1: "0x6B3554f8B0437BC75B64520827dE394d1043c0F3",
+  mint_ticket_impl_v1: "0x0e9bf86ff3836a3dbd0e76147c3402b799399744",
   onchfs_file_system: "0xc3f5ef1a0256b9ceb1452650db72344809bb3a85",
   onchfs_content_store: "0x7c1730B7bE9424D0b983B84aEb254e3a2a105d91",
 }
