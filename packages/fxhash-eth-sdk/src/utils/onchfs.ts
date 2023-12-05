@@ -88,18 +88,6 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
         }),
       }
     case "directory":
-      console.log(
-        Object.keys(ins.files)
-          .sort()
-          .map(key => [key, ins.files[key]])
-          .reduce(
-            (acc, [name, content]) => [
-              [...acc[0], name],
-              [...acc[1], bytesToHex(content as any)],
-            ],
-            [[], []]
-          )
-      )
       return {
         address: config.eth.contracts.onchfs_file_system,
         data: encodeFunctionData({
@@ -117,6 +105,8 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
             ),
         }),
       }
+    default:
+      throw new Error("wrong inode type")
   }
 }
 

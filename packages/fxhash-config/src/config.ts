@@ -134,9 +134,16 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+
+        /**
+         * ! Beware ! Changing any of these 3 values will result in current
+         * projects breaking.
+         * https://github.com/fxhash/monorepo/issues/701
+         */
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
         wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
@@ -149,9 +156,16 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+
+        /**
+         * ! Beware ! Changing any of these 3 values will result in current
+         * projects breaking.
+         * https://github.com/fxhash/monorepo/issues/701
+         */
         ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
         wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
@@ -164,9 +178,16 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+
+        /**
+         * ! Beware ! Changing any of these 3 values will result in current
+         * projects breaking.
+         * https://github.com/fxhash/monorepo/issues/701
+         */
         ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
         wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
