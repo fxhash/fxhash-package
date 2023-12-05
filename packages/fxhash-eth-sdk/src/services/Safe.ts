@@ -64,23 +64,16 @@ export function getSafeService(
 }
 
 /**
- * The function returns a new instance of the Web3Provider class from the ethers library, using the
- * ethereum object from the window object.
- * @returns a new instance of the ethers.providers.Web3Provider class, with the window.ethereum object
- * as the provider
- */
-export function getWeb3Provider(): ethers.providers.Web3Provider {
-  return new ethers.providers.Web3Provider((window as any).ethereum, "any")
-}
-
-/**
  * The function returns a wallet provider object initialized with a private key and a JSON-RPC
  * provider.
  * @param {string} privateKey - A string representing the private key of a wallet.
  * @returns an instance of the ethers Wallet class, which is initialized with the provided private key
  * and a JsonRpcProvider instance.
  */
-export function getWalletProvider(privateKey: string, rpc: string): ethers.Wallet {
+export function getWalletProvider(
+  privateKey: string,
+  rpc: string
+): ethers.Wallet {
   const provider = new ethers.providers.JsonRpcProvider(rpc)
   return new ethers.Wallet(privateKey, provider)
 }
