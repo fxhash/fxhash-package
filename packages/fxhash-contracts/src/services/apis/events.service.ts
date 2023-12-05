@@ -13,7 +13,7 @@ interface IMintPassPayload {
 
 export async function apiEventsSignPayload(payload: IMintPassPayload): Promise<any> {
   const response = await fetch(
-    `${config.apis.dashboard.backend}/graphql/sign-payload`,
+    `${config.apis.dashboard.backend}/sign-payload`,
     {
       method: "POST",
       body: JSON.stringify(payload),
