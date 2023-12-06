@@ -28,6 +28,16 @@ export class TransactionRevertedError extends Error {
   }
 }
 
+export class NetworkError extends Error {
+  name = "NetworkError" as const
+  message = "Network error"
+}
+
+export class BadRequestError extends Error {
+  name = "BadRequestError" as const
+  message = "Bad request"
+}
+
 export type SignMessageOptions = {
   /**
    * An string-identifier to define the type of the operation. It is used to
