@@ -426,28 +426,6 @@ export function revertReceiversFee(
   return originalReceivers
 }
 
-/**
- * Uses the Main Split contract to predict the split address given the
- * receivers.
- * @param receivers list of receivers
- * @returns the address of the immutable split
- */
-export function predictImmutableSplitAddress(
-  receivers: ReceiverEntry[],
-  publicClient: PublicClient
-): Promise<`0x${string}`> {
-  const mainSplit = getContract({
-    abi: SPLITS_MAIN_ABI,
-    address: config.eth.contracts.splits_main,
-    publicClient,
-  })
-  return mainSplit.read.predictImmutableSplitAddress([
-    receivers.map(r => r.address),
-    receivers.map(r => r.pct),
-    0,
-  ]) as any as Promise<`0x${string}`>
-}
-
 export function generateOnchainDataHash(
   bytes: `0x${string}`,
   publicClient: PublicClient

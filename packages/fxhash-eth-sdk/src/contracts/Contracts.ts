@@ -25,9 +25,6 @@ export type ContractInteractionMethod<T> = (
 export const FxhashContracts = {
   ETH_ROLE_REGISTRY: config.eth.contracts.role_registry_v1,
   ETH_PROJECT_FACTORY: config.eth.contracts.project_factory_v1,
-  ETH_SPLITS_MAIN: config.eth.contracts.splits_main,
-  ETH_SCRIPTY_STORAGE: config.eth.contracts.scripty_storage,
-  ETH_SCRIPTY_BUILDER: config.eth.contracts.scripty_builder,
   ETH_SEAPORT_ZONE: config.eth.contracts.seaport_zone,
   ETH_FIXED_PRICE_MINTER_V1: config.eth.contracts.fixed_price_minter_v1,
   ETH_DUTCH_AUCTION_V1: config.eth.contracts.dutch_auction_minter_v1,
