@@ -22,6 +22,7 @@ export const libraries: Library[] = [
     versions: [
       {
         version: "4.0.0",
+        filename: "fxhash.min.js",
         license: "MIT",
         content: fx__4_0_0,
         availability: [
@@ -43,6 +44,7 @@ export const libraries: Library[] = [
     versions: [
       {
         version: "1.7.0",
+        filename: "p5.min.js",
         license: "GNU Lesser General Public License v2.1",
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
@@ -52,6 +54,7 @@ export const libraries: Library[] = [
       },
       {
         version: "1.5.0",
+        filename: "p5.min.js",
         license: "GNU Lesser General Public License v2.1",
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
@@ -77,6 +80,7 @@ export const libraries: Library[] = [
     versions: [
       {
         version: "r157",
+        filename: "three.module.min.js",
         license: "MIT",
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
