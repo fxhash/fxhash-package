@@ -1,5 +1,7 @@
 import p5js__1_7_0 from "./libs/p5.js/1.7.0.lib"
 import p5js__1_5_0 from "./libs/p5.js/1.5.0.lib"
+import fx__4_0_0 from "./libs/fxhash.js/4.0.0.lib"
+import threejs__r157 from "./libs/three.js/r157.lib"
 import { Library } from "./types"
 import { BlockchainIdentifier, BlockchainIdentifiers } from "@fxhash/config"
 
@@ -10,6 +12,28 @@ export * from "./types"
  * if uploaded by community members). Libraries are identified by their
  */
 export const libraries: Library[] = [
+  {
+    name: "fxhash.js",
+    description:
+      "The fxhash artist SDK, exposing a set of utilities to interact with fxhash inside an fxhash artwork.",
+    authors: "fxhash",
+    documentation: "https://fxhash.xyz/doc",
+    filenames: ["fxhash.js", "fxhash.min.js", "fx.js", "fx.min.js"],
+    versions: [
+      {
+        version: "4.0.0",
+        license: "MIT",
+        content: fx__4_0_0,
+        availability: [
+          BlockchainIdentifiers.TezosGhostnet,
+          BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumSepolia,
+          BlockchainIdentifiers.EthereumMainnet,
+        ],
+      },
+    ],
+  },
+
   {
     name: "p5.js",
     description:
@@ -34,6 +58,31 @@ export const libraries: Library[] = [
           BlockchainIdentifiers.TezosMainnet,
         ],
         content: p5js__1_5_0,
+      },
+    ],
+  },
+
+  {
+    name: "three.js",
+    description:
+      "Threejs aims to be an easy to use, lightweight, cross-browser, general purpose 3D library. The current builds only include a WebGL renderer but WebGPU (experimental), SVG and CSS3D renderers are also available as addons.",
+    documentation: "https://threejs.org/docs/",
+    filenames: [
+      "three.min.js",
+      "three.js",
+      "three.module.js",
+      "three.module.min.js",
+      "three.cjs",
+    ],
+    versions: [
+      {
+        version: "r157",
+        license: "MIT",
+        availability: [
+          BlockchainIdentifiers.TezosGhostnet,
+          BlockchainIdentifiers.TezosMainnet,
+        ],
+        content: threejs__r157,
       },
     ],
   },
