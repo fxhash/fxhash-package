@@ -119,7 +119,8 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
  */
 export async function simulateOnchfsInscriptions(
   inscriptions: Inscription[],
-  walletManager: EthereumWalletManager
+  walletManager: EthereumWalletManager,
+  gasPrice?: bigint
 ) {
   const calldatas = inscriptions.map(ins => ethOnchfsInscriptionCallData(ins))
   const callRequests = calldatas.map(call => ({
@@ -132,6 +133,7 @@ export async function simulateOnchfsInscriptions(
     functionName: "aggregate",
     args: [callRequests],
     account: walletManager.walletClient.account,
+    gasPrice: gasPrice,
   })
   return estimate
 }
