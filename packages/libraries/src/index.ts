@@ -3,6 +3,8 @@ import p5js__1_5_0 from "./libs/p5.js/1.5.0.lib"
 import { Library } from "./types"
 import { BlockchainIdentifier, BlockchainIdentifiers } from "@fxhash/config"
 
+export * from "./types"
+
 /**
  * The collection of libraries made available by fxhash (or referenced by fxhash
  * if uploaded by community members). Libraries are identified by their

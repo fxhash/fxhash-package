@@ -21,6 +21,8 @@ import {
   localConfig,
 } from "config"
 
+export * from "./types"
+
 const isProd = (() => {
   // We can't destructure process.envs
   // https://nextjs.org/docs/pages/api-reference/next-config-js/env
