@@ -1,469 +1,469 @@
 export const FX_TICKETS_FACTORY_ABI = [
   {
+    type: "constructor",
     inputs: [
       {
-        internalType: "address",
         name: "_admin",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "_implementation",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
   },
   {
-    inputs: [],
-    name: "InvalidGracePeriod",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidOwner",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidRedeemer",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidRenderer",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidToken",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NewOwnerIsZeroAddress",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NoHandoverRequest",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "Unauthorized",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint48",
-        name: "_gracePeriod",
-        type: "uint48",
-      },
-    ],
-    name: "GracePeriodUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_implementation",
-        type: "address",
-      },
-    ],
-    name: "ImplementationUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "pendingOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipHandoverCanceled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "pendingOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipHandoverRequested",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "oldOwner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint96",
-        name: "_ticketId",
-        type: "uint96",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_mintTicket",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
-    ],
-    name: "TicketCreated",
-    type: "event",
-  },
-  {
-    inputs: [],
+    type: "function",
     name: "cancelOwnershipHandover",
+    inputs: [],
     outputs: [],
     stateMutability: "payable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "completeOwnershipHandover",
     inputs: [
       {
-        internalType: "address",
         name: "pendingOwner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "completeOwnershipHandover",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "createTicket",
     inputs: [
       {
-        internalType: "bytes",
         name: "_creationInfo",
         type: "bytes",
+        internalType: "bytes",
       },
     ],
-    name: "createTicket",
     outputs: [
       {
-        internalType: "address",
         name: "mintTicket",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "createTicket",
     inputs: [
       {
-        internalType: "address",
         name: "_owner",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "_genArt721",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "_redeemer",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "_renderer",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
+        internalType: "uint48",
       },
       {
-        components: [
-          {
-            internalType: "address",
-            name: "minter",
-            type: "address",
-          },
-          {
-            components: [
-              {
-                internalType: "uint64",
-                name: "startTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint64",
-                name: "endTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint128",
-                name: "allocation",
-                type: "uint128",
-              },
-            ],
-            internalType: "struct ReserveInfo",
-            name: "reserveInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes",
-            name: "params",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct MintInfo[]",
         name: "_mintInfo",
         type: "tuple[]",
+        internalType: "struct MintInfo[]",
+        components: [
+          {
+            name: "minter",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "reserveInfo",
+            type: "tuple",
+            internalType: "struct ReserveInfo",
+            components: [
+              {
+                name: "startTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "endTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "allocation",
+                type: "uint128",
+                internalType: "uint128",
+              },
+            ],
+          },
+          {
+            name: "params",
+            type: "bytes",
+            internalType: "bytes",
+          },
+        ],
       },
     ],
-    name: "createTicket",
     outputs: [
       {
-        internalType: "address",
         name: "mintTicket",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getTicketAddress",
     inputs: [
       {
-        internalType: "address",
         name: "_sender",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "getTicketAddress",
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "implementation",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "minGracePeriod",
+    inputs: [],
     outputs: [
       {
-        internalType: "uint48",
         name: "",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "nonces",
     inputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "nonces",
     outputs: [
       {
-        internalType: "uint256",
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "owner",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "result",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "ownershipHandoverExpiresAt",
     inputs: [
       {
-        internalType: "address",
         name: "pendingOwner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "ownershipHandoverExpiresAt",
     outputs: [
       {
-        internalType: "uint256",
         name: "result",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "requestOwnershipHandover",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "requestOwnershipHandover",
+    inputs: [],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "setImplementation",
     inputs: [
       {
-        internalType: "address",
         name: "_implementation",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "setImplementation",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "setMinGracePeriod",
     inputs: [
       {
-        internalType: "uint48",
         name: "_gracePeriod",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
-    name: "setMinGracePeriod",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "ticketId",
+    inputs: [],
     outputs: [
       {
-        internalType: "uint48",
         name: "",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "tickets",
     inputs: [
       {
-        internalType: "uint48",
         name: "",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
-    name: "tickets",
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "transferOwnership",
     inputs: [
       {
-        internalType: "address",
         name: "newOwner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "transferOwnership",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
+  },
+  {
+    type: "event",
+    name: "GracePeriodUpdated",
+    inputs: [
+      {
+        name: "_owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_gracePeriod",
+        type: "uint48",
+        indexed: true,
+        internalType: "uint48",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ImplementationUpdated",
+    inputs: [
+      {
+        name: "_owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_implementation",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipHandoverCanceled",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipHandoverRequested",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferred",
+    inputs: [
+      {
+        name: "oldOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "newOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TicketCreated",
+    inputs: [
+      {
+        name: "_ticketId",
+        type: "uint96",
+        indexed: true,
+        internalType: "uint96",
+      },
+      {
+        name: "_mintTicket",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "error",
+    name: "InvalidGracePeriod",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidOwner",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidRedeemer",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidRenderer",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidToken",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NewOwnerIsZeroAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoHandoverRequest",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "Unauthorized",
+    inputs: [],
   },
 ]
