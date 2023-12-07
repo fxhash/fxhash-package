@@ -2,7 +2,7 @@ import "viem/window"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAccount, useDisconnect, useWalletClient } from "wagmi"
 import { PublicClient } from "viem"
-import { EthereumWalletManager, getWeb3Provider } from "@fxhash/eth-sdk"
+import { EthereumWalletManager } from "@fxhash/eth-sdk"
 import {
   BlockchainType,
   PendingSigningRequestError,

@@ -106,7 +106,7 @@ export const fxhashConfig: IFxhashConfig = {
       eth: {
         contracts: ethTestnetContracts,
         config: {
-          network: "Goerli",
+          network: "Sepolia",
           chainId: BlockchainIdentifiers.EthereumSepolia,
         },
         apis: ethTestnetApis,
@@ -140,13 +140,12 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
-
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        ethFeeReceiver: "0x6B882B1855cdCE826d920c12Ada7f284ef20Ee5C",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
 
@@ -162,13 +161,12 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
-
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0x13123840f1aDe2a60d316679938874227905bd97",
+        ethFeeReceiver: "0x6B882B1855cdCE826d920c12Ada7f284ef20Ee5C",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
 

@@ -151,6 +151,7 @@ export function TezosUserProvider({
 
     setContext(context => ({
       ...context,
+      address: pkh,
       beaconWallet: provider as BeaconWallet,
       walletManager,
     }))
