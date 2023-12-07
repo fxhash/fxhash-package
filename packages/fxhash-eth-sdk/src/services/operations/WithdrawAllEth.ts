@@ -56,14 +56,23 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         ? [minterProceeds.token_address, minterProceeds.reserve_id]
         : [minterProceeds.token_address]
 
-      multicallArgs.push({
-        address: minterProceeds.minter_address,
+      const multicallPayload = {
+        address: minterProceeds.minter_address as `0x${string}`,
         data: encodeFunctionData({
           abi: abi,
           functionName: "withdraw",
           args: args,
         }),
-      })
+      }
+      if (
+        !multicallArgs.find(
+          m =>
+            m.address === multicallPayload.address &&
+            m.data === multicallPayload.data
+        )
+      ) {
+        multicallArgs.push(multicallPayload)
+      }
       splitsWithEarnings.push(minterProceeds.primary_receiver)
     }
 
