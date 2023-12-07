@@ -27,7 +27,11 @@ import {
   FIXED_PRICE_MINTER_ABI,
 } from ".."
 import { ApolloQueryResult } from "@apollo/client"
-import { GetTokenPricingsAndReservesQuery } from "@fxhash/gql"
+import {
+  GetTokenPricingsAndReservesQuery,
+  Qu_GetTokenPricingsAndReserves,
+} from "@fxhash/gql"
+import { apolloClient } from "@/services/Hasura"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -465,4 +469,24 @@ export function getPricingAndReserveFromParams(
   }
 
   return findPricingAndReserve()
+}
+
+
+export const fetchTokenReserveId = async (
+  tokenId: string,
+  useWhitelist: boolean = false
+) => {
+  const tokenPricingsAndReserves = await apolloClient.query({
+    query: Qu_GetTokenPricingsAndReserves,
+    variables: {
+      id: tokenId,
+    },
+    fetchPolicy: "no-cache",
+  })
+  const { pricing } = getPricingFromParams(
+    tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
+    useWhitelist
+  )
+  if (!pricing) throw new Error("No pricing found")
+  return pricing.id.split("-")[1]
 }
