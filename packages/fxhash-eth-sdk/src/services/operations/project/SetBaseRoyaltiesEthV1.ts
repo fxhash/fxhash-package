@@ -7,7 +7,10 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  MetaTransactionData,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 
 export type TSetBaseRoyaltiesEthV1OperationParams = {
@@ -34,7 +37,7 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
     )
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
-      const safeTransactionData: SafeTransactionDataPartial = {
+      const safeTransactionData: MetaTransactionData = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
           abi: FX_GEN_ART_721_ABI,
@@ -47,7 +50,7 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
         }),
         value: "0",
       }
-      return await proposeSafeTransaction(safeTransactionData, this.manager)
+      return await proposeSafeTransaction([safeTransactionData], this.manager)
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: getAddress(this.params.token) as `0x${string}`,

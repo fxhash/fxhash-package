@@ -1,5 +1,5 @@
 import { FX_GEN_ART_721_ABI } from "@/abi"
-import { Interface, type TransactionReceipt } from "ethers-v6"
+import { Interface, type TransactionReceipt } from "ethers"
 import { Hash } from "viem"
 
 const genArtInterface = new Interface(FX_GEN_ART_721_ABI)

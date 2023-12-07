@@ -1,12 +1,18 @@
 import SafeApiKit, { SafeInfoResponse } from "@safe-global/api-kit"
 import Safe, { EthersAdapter, SafeFactory } from "@safe-global/protocol-kit"
-import { ethers } from "ethers-v5"
-import { config } from "@fxhash/config"
+import {
+  JsonRpcProvider,
+  JsonRpcSigner,
+  Provider,
+  Signer,
+  Wallet,
+  ethers,
+} from "ethers"
 import {
   SafeSignature,
-  SafeTransactionDataPartial,
+  MetaTransactionData,
 } from "@safe-global/safe-core-sdk-types"
-import { EthereumWalletManager } from "./Wallet"
+import { CURRENT_CHAIN, EthereumWalletManager } from "./Wallet"
 import { getAddress } from "viem"
 import { UserRejectedError } from "@fxhash/contracts-shared"
 
@@ -22,8 +28,9 @@ import { UserRejectedError } from "@fxhash/contracts-shared"
  */
 export async function getSafeSDK(
   safeAddress: string,
-  signer: ethers.providers.JsonRpcSigner | ethers.providers.Provider
+  signer: JsonRpcSigner | Provider
 ): Promise<Safe> {
+  // @dev: we have to add this otherwise it won't compile, however runtime is fine ...
   // @ts-ignore
   return await Safe.default.create({
     ethAdapter: getEthersAdapterForSafe(signer),
@@ -37,9 +44,7 @@ export async function getSafeSDK(
  * represents an Ethereum account that can sign transactions and interact with the Ethereum network.
  * @returns a Promise that resolves to a SafeFactory instance.
  */
-export async function getSafeFactory(
-  signer: ethers.providers.JsonRpcSigner | ethers.providers.Provider
-) {
+export async function getSafeFactory(signer: JsonRpcSigner | Provider) {
   return await SafeFactory.create({
     ethAdapter: getEthersAdapterForSafe(signer),
   })
@@ -53,13 +58,11 @@ export async function getSafeFactory(
  * and authorize actions performed by the SafeApiKit instance.
  * @returns an instance of the `SafeApiKit` class.
  */
-export function getSafeService(
-  signer: ethers.providers.JsonRpcSigner | ethers.providers.Provider
-): SafeApiKit {
+export function getSafeService(): SafeApiKit {
+  // @dev: we have to add this otherwise it won't compile, however runtime is fine ...
   // @ts-ignore
   return new SafeApiKit.default({
-    txServiceUrl: config.eth.apis.safe,
-    ethAdapter: getEthersAdapterForSafe(signer),
+    chainId: BigInt(CURRENT_CHAIN.id),
   })
 }
 
@@ -74,8 +77,8 @@ export function getWalletProvider(
   privateKey: string,
   rpc: string
 ): ethers.Wallet {
-  const provider = new ethers.providers.JsonRpcProvider(rpc)
-  return new ethers.Wallet(privateKey, provider)
+  const provider = new JsonRpcProvider(rpc)
+  return new Wallet(privateKey, provider)
 }
 
 /**
@@ -85,14 +88,12 @@ export function getWalletProvider(
  * @returns an instance of the `EthersAdapter` class.
  */
 export function getEthersAdapterForSafe(
-  signer: ethers.Signer | ethers.providers.Provider
+  signer: Signer | Provider
 ): EthersAdapter {
-  const ethAdapter = new EthersAdapter({
-    // @ts-ignore
+  return new EthersAdapter({
     ethers,
     signerOrProvider: signer,
   })
-  return ethAdapter
 }
 
 /**
@@ -109,11 +110,11 @@ export function getEthersAdapterForSafe(
  * @returns the safeTxHash, which is the hash of the safe transaction.
  */
 export async function proposeSafeTransaction(
-  safeTransactionData: SafeTransactionDataPartial,
+  safeTransactionData: MetaTransactionData[],
   walletManager: EthereumWalletManager
 ) {
   const safeTransaction = await walletManager.safe.createTransaction({
-    safeTransactionData,
+    transactions: safeTransactionData,
   })
 
   const safeTxHash = await walletManager.safe.getTransactionHash(
@@ -130,7 +131,7 @@ export async function proposeSafeTransaction(
     throw error
   }
 
-  await getSafeService(walletManager.signer).proposeTransaction({
+  await getSafeService().proposeTransaction({
     safeAddress: await walletManager.safe.getAddress(),
     safeTransactionData: safeTransaction.data,
     safeTxHash,
@@ -146,11 +147,8 @@ export async function proposeSafeTransaction(
  * user.
  * @returns the list of safes related to the user.
  */
-export async function getUserSafes(
-  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
-  userAddress: string
-) {
-  return await getSafeService(provider).getSafesByOwner(userAddress)
+export async function getUserSafes(userAddress: string) {
+  return await getSafeService().getSafesByOwner(userAddress)
 }
 
 /**
@@ -158,11 +156,8 @@ export async function getUserSafes(
  * @param {string} safeAddress - address of a safe.
  * @returns pending transactions for the safe with the specified address.
  */
-export async function getPendingTransactionsForSafe(
-  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
-  safeAddress: string
-) {
-  return await getSafeService(provider).getPendingTransactions(safeAddress)
+export async function getPendingTransactionsForSafe(safeAddress: string) {
+  return await getSafeService().getPendingTransactions(safeAddress)
 }
 
 /**
@@ -170,26 +165,22 @@ export async function getPendingTransactionsForSafe(
  * @param {string} safeAddress - address of a safe contract.
  * @returns all transactions associated with the safe with the specified address.
  */
-export async function getAllSafeTransactions(
-  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
-  safeAddress: string
-) {
-  return await getSafeService(provider).getAllTransactions(safeAddress)
+export async function getAllSafeTransactions(safeAddress: string) {
+  return await getSafeService().getAllTransactions(safeAddress)
 }
 
 /**
  * Retrieves information about a safe
- * @param {ethers.providers.JsonRpcSigner | ethers.providers.Provider} provider - The `provider`
+ * @param {JsonRpcSigner | Provider} provider - The `provider`
  * parameter is an instance of `ethers.providers.JsonRpcSigner` or `ethers.providers.Provider`.
  * @param {string} safeAdress - The `safeAddress` parameter is a string that represents the address of
  * a safe.
  * @returns {SafeInfoResponse} safe data
  */
 export async function getSafeData(
-  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
   safeAdress: string
 ): Promise<SafeInfoResponse> {
-  return await getSafeService(provider).getSafeInfo(safeAdress)
+  return await getSafeService().getSafeInfo(safeAdress)
 }
 
 /**
@@ -197,9 +188,6 @@ export async function getSafeData(
  * @param {string} safeAddress - address of a safe contract.
  * @returns {SafeCreationInfoResponse} safe creation information
  */
-export async function getSafeCreationInfo(
-  provider: ethers.providers.JsonRpcSigner | ethers.providers.Provider,
-  safeAddress: string
-) {
-  return await getSafeService(provider).getSafeCreationInfo(safeAddress)
+export async function getSafeCreationInfo(safeAddress: string) {
+  return await getSafeService().getSafeCreationInfo(safeAddress)
 }

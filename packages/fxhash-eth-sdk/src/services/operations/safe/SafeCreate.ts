@@ -1,8 +1,7 @@
 import Safe, { SafeAccountConfig } from "@safe-global/protocol-kit"
 import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt } from "viem"
-import { getEthersAdapterForSafe, getSafeFactory } from "@/services/Safe"
-import { ethers } from "ethers-v5"
+import { getSafeFactory } from "@/services/Safe"
 
 /**
  * The above type represents the parameters required to create a safe multisig Ethereum V1 operation.

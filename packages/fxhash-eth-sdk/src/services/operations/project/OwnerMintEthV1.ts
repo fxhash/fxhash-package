@@ -7,7 +7,10 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  MetaTransactionData,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 
 export type TOwnerMintEthV1OperationParams = {
   token: `0x${string}`
@@ -30,7 +33,7 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
     const functionName = isParams ? "ownerMintParams" : "ownerMint"
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
-      const safeTransactionData: SafeTransactionDataPartial = {
+      const safeTransactionData: MetaTransactionData = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
           abi: FX_GEN_ART_721_ABI,
@@ -39,7 +42,7 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
         }),
         value: "0",
       }
-      return await proposeSafeTransaction(safeTransactionData, this.manager)
+      return await proposeSafeTransaction([safeTransactionData], this.manager)
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,

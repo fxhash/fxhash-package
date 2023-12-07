@@ -6,7 +6,10 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  MetaTransactionData,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { getHashFromIPFSCID } from "@/utils"
 
@@ -25,7 +28,7 @@ export type TSetBaseURIEthV1OperationParams = {
   collabAddress?: string
 }
 
-export function getSafeTxData(): SafeTransactionDataPartial {
+export function getSafeTxData(): MetaTransactionData {
   return {
     to: getAddress(this.params.token),
     data: encodeFunctionData({
@@ -48,7 +51,7 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
       : getHashFromIPFSCID(this.params.baseURI)
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
-      return await proposeSafeTransaction(getSafeTxData(), this.manager)
+      return await proposeSafeTransaction([getSafeTxData()], this.manager)
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,

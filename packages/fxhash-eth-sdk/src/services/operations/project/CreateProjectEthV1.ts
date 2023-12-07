@@ -20,7 +20,10 @@ import {
 } from "@/services/operations/EthCommon"
 import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  MetaTransactionData,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 import { getHashFromIPFSCID } from "@/utils/ipfs"
 import {
   encodeProjectFactoryArgs,
@@ -253,7 +256,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       ]
     }
     if (this.params.collabAddress) {
-      const safeTransactionData: SafeTransactionDataPartial = {
+      const safeTransactionData: MetaTransactionData = {
         to: getAddress(FxhashContracts.ETH_PROJECT_FACTORY),
         data: encodeFunctionData({
           abi: FX_ISSUER_FACTORY_ABI,
@@ -263,7 +266,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         value: "0",
       }
 
-      return await proposeSafeTransaction(safeTransactionData, this.manager)
+      return await proposeSafeTransaction([safeTransactionData], this.manager)
     } else {
       //prepare the actual request to be able to simulate the transaction outcome
       const contractArgs: SimulateAndExecuteContractRequest = {
