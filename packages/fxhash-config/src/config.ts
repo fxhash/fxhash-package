@@ -145,7 +145,7 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0x6B882B1855cdCE826d920c12Ada7f284ef20Ee5C",
+        ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
 
@@ -166,7 +166,7 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0x6B882B1855cdCE826d920c12Ada7f284ef20Ee5C",
+        ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
 

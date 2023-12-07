@@ -19,7 +19,7 @@ import { mainnet, sepolia, hardhat, goerli } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "@/services/Safe"
 import { TEthereumContractOperation } from "./operations"
-import { ethers } from "ethers-v5"
+import { JsonRpcSigner } from "ethers"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, goerli, hardhat]
@@ -51,14 +51,14 @@ interface EthereumWalletManagerParams {
   walletClient: WalletClient
   publicClient: PublicClient
   rpcNodes: string[]
-  signer: ethers.providers.JsonRpcSigner
+  signer: JsonRpcSigner
 }
 
 export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
   public walletClient: WalletClient
   public publicClient: PublicClient
-  public signer: ethers.providers.JsonRpcSigner
+  public signer: JsonRpcSigner
   public safe: Safe | undefined
   private rpcNodes: string[]
 

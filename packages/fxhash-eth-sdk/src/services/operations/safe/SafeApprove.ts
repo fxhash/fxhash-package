@@ -21,7 +21,7 @@ export class ApproveSafeMultisigTxEthV1Operation extends EthereumContractOperati
   async call(): Promise<TransactionReceipt | string> {
     await this.manager.connectSafe(this.params.collabAddress)
 
-    const safeService = getSafeService(this.manager.signer)
+    const safeService = getSafeService()
     const signature = await this.manager.safe.signTransactionHash(
       this.params.txHash
     )

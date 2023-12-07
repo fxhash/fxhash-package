@@ -21,14 +21,14 @@ export class ExecuteSafeMultisigTxEthV1Operation extends EthereumContractOperati
   async call(): Promise<TransactionReceipt | string> {
     await this.manager.connectSafe(this.params.collabAddress)
 
-    const safeService = getSafeService(this.manager.signer)
+    const safeService = getSafeService()
     const tx = await safeService.getTransaction(this.params.safeTxHash)
     const executeTxResponse = await this.manager.safe.executeTransaction(tx)
     const receipt =
       executeTxResponse.transactionResponse &&
       (await executeTxResponse.transactionResponse.wait())
     console.log(receipt)
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   success(): string {

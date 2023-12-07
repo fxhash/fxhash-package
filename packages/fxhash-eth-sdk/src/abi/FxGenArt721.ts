@@ -1,1943 +1,1948 @@
 export const FX_GEN_ART_721_ABI = [
   {
+    type: "constructor",
     inputs: [
       {
-        internalType: "address",
         name: "_contractRegistry",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "_roleRegistry",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
   },
   {
-    inputs: [],
-    name: "AllocationExceeded",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "BaseRoyaltiesNotSet",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "BurnInactive",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "FeeReceiverMissing",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InsufficientSupply",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidAmount",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidEndTime",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidFeeReceiver",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidInputSize",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidRoyaltyConfig",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidShortString",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidStartTime",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "LengthMismatch",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "MintActive",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "MintInactive",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "MoreThanOneRoyaltyReceiver",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NewOwnerIsZeroAddress",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NoHandoverRequest",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NoRoyaltyReceiver",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NonExistentToken",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NotAuthorized",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NotOwner",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "OverMaxBasisPointsAllowed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "str",
-        type: "string",
-      },
-    ],
-    name: "StringTooLong",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "SupplyRemaining",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "TokenRoyaltiesNotSet",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "Unauthorized",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "UnauthorizedAccount",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "UnauthorizedMinter",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "UnregisteredMinter",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "WriteError",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "approved",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
-    ],
-    name: "ApprovalForAll",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "_uri",
-        type: "bytes",
-      },
-    ],
-    name: "BaseURIUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_fromTokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_toTokenId",
-        type: "uint256",
-      },
-    ],
-    name: "BatchMetadataUpdate",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bool",
-        name: "_flag",
-        type: "bool",
-      },
-    ],
-    name: "BurnEnabled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: "EIP712DomainChanged",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint8",
-        name: "version",
-        type: "uint8",
-      },
-    ],
-    name: "Initialized",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "MetadataUpdate",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bool",
-        name: "_flag",
-        type: "bool",
-      },
-    ],
-    name: "MintEnabled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "_pointer",
-        type: "address",
-      },
-    ],
-    name: "OnchainPointerUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "pendingOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipHandoverCanceled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "pendingOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipHandoverRequested",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "oldOwner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Paused",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_receiver",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        indexed: false,
-        internalType: "uint32[]",
-        name: "_allocations",
-        type: "uint32[]",
-      },
-    ],
-    name: "PrimaryReceiverUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: "ProjectDeleted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_primaryReceiver",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "mintEnabled",
-            type: "bool",
-          },
-          {
-            internalType: "bool",
-            name: "burnEnabled",
-            type: "bool",
-          },
-          {
-            internalType: "uint120",
-            name: "maxSupply",
-            type: "uint120",
-          },
-          {
-            internalType: "uint88",
-            name: "inputSize",
-            type: "uint88",
-          },
-          {
-            internalType: "uint32",
-            name: "earliestStartTime",
-            type: "uint32",
-          },
-        ],
-        indexed: false,
-        internalType: "struct ProjectInfo",
-        name: "_projectInfo",
-        type: "tuple",
-      },
-      {
-        components: [
-          {
-            internalType: "bytes",
-            name: "baseURI",
-            type: "bytes",
-          },
-          {
-            internalType: "address",
-            name: "onchainPointer",
-            type: "address",
-          },
-        ],
-        indexed: false,
-        internalType: "struct MetadataInfo",
-        name: "_metadataInfo",
-        type: "tuple",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "minter",
-            type: "address",
-          },
-          {
-            components: [
-              {
-                internalType: "uint64",
-                name: "startTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint64",
-                name: "endTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint128",
-                name: "allocation",
-                type: "uint128",
-              },
-            ],
-            internalType: "struct ReserveInfo",
-            name: "reserveInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes",
-            name: "params",
-            type: "bytes",
-          },
-        ],
-        indexed: false,
-        internalType: "struct MintInfo[]",
-        name: "_mintInfo",
-        type: "tuple[]",
-      },
-    ],
-    name: "ProjectInitialized",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256[]",
-        name: "_tagIds",
-        type: "uint256[]",
-      },
-    ],
-    name: "ProjectTags",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_randomizer",
-        type: "address",
-      },
-    ],
-    name: "RandomizerUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_renderer",
-        type: "address",
-      },
-    ],
-    name: "RendererUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_randomizer",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "_seed",
-        type: "bytes32",
-      },
-    ],
-    name: "SeedFulfilled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint120",
-        name: "_prevSupply",
-        type: "uint120",
-      },
-      {
-        indexed: true,
-        internalType: "uint120",
-        name: "_newSupply",
-        type: "uint120",
-      },
-    ],
-    name: "SupplyReduced",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "_receiver",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint96",
-        name: "_basisPoints",
-        type: "uint96",
-      },
-    ],
-    name: "TokenIdRoyaltiesUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "_receiver",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        indexed: false,
-        internalType: "uint32[]",
-        name: "_allocations",
-        type: "uint32[]",
-      },
-      {
-        indexed: false,
-        internalType: "uint96",
-        name: "_basisPoints",
-        type: "uint96",
-      },
-    ],
-    name: "TokenRoyaltiesUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Unpaused",
-    type: "event",
-  },
-  {
-    inputs: [],
+    type: "function",
     name: "activeMinters",
+    inputs: [],
     outputs: [
       {
-        internalType: "address[]",
         name: "",
         type: "address[]",
+        internalType: "address[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "approve",
     inputs: [
       {
-        internalType: "address",
         name: "to",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "approve",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "balanceOf",
     inputs: [
       {
-        internalType: "address",
         name: "owner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "balanceOf",
     outputs: [
       {
-        internalType: "uint256",
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "baseRoyalties",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "receiver",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint96",
         name: "basisPoints",
         type: "uint96",
+        internalType: "uint96",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "burn",
     inputs: [
       {
-        internalType: "uint256",
         name: "_tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "burn",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "cancelOwnershipHandover",
+    inputs: [],
     outputs: [],
     stateMutability: "payable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "completeOwnershipHandover",
     inputs: [
       {
-        internalType: "address",
         name: "pendingOwner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "completeOwnershipHandover",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "contractRegistry",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "contractURI",
+    inputs: [],
     outputs: [
       {
-        internalType: "string",
         name: "",
         type: "string",
+        internalType: "string",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "eip712Domain",
+    inputs: [],
     outputs: [
       {
-        internalType: "bytes1",
         name: "fields",
         type: "bytes1",
+        internalType: "bytes1",
       },
       {
-        internalType: "string",
         name: "name",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "version",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "uint256",
         name: "chainId",
         type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "address",
         name: "verifyingContract",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "bytes32",
         name: "salt",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "uint256[]",
         name: "extensions",
         type: "uint256[]",
+        internalType: "uint256[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "fulfillSeedRequest",
     inputs: [
       {
-        internalType: "uint256",
         name: "_tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "bytes32",
         name: "_seed",
         type: "bytes32",
+        internalType: "bytes32",
       },
     ],
-    name: "fulfillSeedRequest",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "genArtInfo",
     inputs: [
       {
-        internalType: "uint256",
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "genArtInfo",
     outputs: [
       {
-        internalType: "bytes32",
+        name: "minter",
+        type: "address",
+        internalType: "address",
+      },
+      {
         name: "seed",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "bytes",
         name: "fxParams",
         type: "bytes",
+        internalType: "bytes",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "generateOnchainPointerHash",
     inputs: [
       {
-        internalType: "bytes",
         name: "_data",
         type: "bytes",
+        internalType: "bytes",
       },
     ],
-    name: "generateOnchainDataHash",
     outputs: [
       {
-        internalType: "bytes32",
         name: "",
         type: "bytes32",
+        internalType: "bytes32",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "generateRendererHash",
     inputs: [
       {
-        internalType: "address",
         name: "_renderer",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "generateRendererHash",
     outputs: [
       {
-        internalType: "bytes32",
         name: "",
         type: "bytes32",
+        internalType: "bytes32",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getApproved",
     inputs: [
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "getApproved",
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getRoyalties",
     inputs: [
       {
-        internalType: "uint256",
         name: "_tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "getRoyalties",
     outputs: [
       {
-        internalType: "address[]",
         name: "receivers",
         type: "address[]",
+        internalType: "address[]",
       },
       {
-        internalType: "uint256[]",
         name: "basisPoints",
         type: "uint256[]",
+        internalType: "uint256[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "initialize",
     inputs: [
       {
-        internalType: "address",
         name: "_owner",
         type: "address",
+        internalType: "address",
       },
       {
-        components: [
-          {
-            internalType: "string",
-            name: "name",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "symbol",
-            type: "string",
-          },
-          {
-            internalType: "address[]",
-            name: "primaryReceivers",
-            type: "address[]",
-          },
-          {
-            internalType: "uint32[]",
-            name: "allocations",
-            type: "uint32[]",
-          },
-          {
-            internalType: "address",
-            name: "randomizer",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "renderer",
-            type: "address",
-          },
-          {
-            internalType: "uint256[]",
-            name: "tagIds",
-            type: "uint256[]",
-          },
-          {
-            internalType: "bytes",
-            name: "onchainData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct InitInfo",
         name: "_initInfo",
         type: "tuple",
-      },
-      {
+        internalType: "struct InitInfo",
         components: [
           {
-            internalType: "bool",
-            name: "mintEnabled",
-            type: "bool",
+            name: "name",
+            type: "string",
+            internalType: "string",
           },
           {
-            internalType: "bool",
-            name: "burnEnabled",
-            type: "bool",
+            name: "symbol",
+            type: "string",
+            internalType: "string",
           },
           {
-            internalType: "uint120",
-            name: "maxSupply",
-            type: "uint120",
+            name: "primaryReceivers",
+            type: "address[]",
+            internalType: "address[]",
           },
           {
-            internalType: "uint88",
-            name: "inputSize",
-            type: "uint88",
+            name: "allocations",
+            type: "uint32[]",
+            internalType: "uint32[]",
           },
           {
-            internalType: "uint32",
-            name: "earliestStartTime",
-            type: "uint32",
+            name: "randomizer",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "renderer",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "tagIds",
+            type: "uint256[]",
+            internalType: "uint256[]",
+          },
+          {
+            name: "onchainData",
+            type: "bytes",
+            internalType: "bytes",
           },
         ],
-        internalType: "struct ProjectInfo",
+      },
+      {
         name: "_projectInfo",
         type: "tuple",
-      },
-      {
+        internalType: "struct ProjectInfo",
         components: [
           {
-            internalType: "bytes",
-            name: "baseURI",
-            type: "bytes",
-          },
-          {
-            internalType: "address",
-            name: "onchainPointer",
-            type: "address",
-          },
-        ],
-        internalType: "struct MetadataInfo",
-        name: "_metadataInfo",
-        type: "tuple",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "minter",
-            type: "address",
-          },
-          {
-            components: [
-              {
-                internalType: "uint64",
-                name: "startTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint64",
-                name: "endTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint128",
-                name: "allocation",
-                type: "uint128",
-              },
-            ],
-            internalType: "struct ReserveInfo",
-            name: "reserveInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes",
-            name: "params",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct MintInfo[]",
-        name: "_mintInfo",
-        type: "tuple[]",
-      },
-      {
-        internalType: "address[]",
-        name: "_royaltyReceivers",
-        type: "address[]",
-      },
-      {
-        internalType: "uint32[]",
-        name: "_allocations",
-        type: "uint32[]",
-      },
-      {
-        internalType: "uint96",
-        name: "_basisPoints",
-        type: "uint96",
-      },
-    ],
-    name: "initialize",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "isApprovedForAll",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_minter",
-        type: "address",
-      },
-    ],
-    name: "isMinter",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "issuerInfo",
-    outputs: [
-      {
-        internalType: "address",
-        name: "primaryReceiver",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "bool",
             name: "mintEnabled",
             type: "bool",
+            internalType: "bool",
           },
           {
-            internalType: "bool",
             name: "burnEnabled",
             type: "bool",
+            internalType: "bool",
           },
           {
-            internalType: "uint120",
             name: "maxSupply",
             type: "uint120",
+            internalType: "uint120",
           },
           {
-            internalType: "uint88",
             name: "inputSize",
             type: "uint88",
+            internalType: "uint88",
           },
           {
-            internalType: "uint32",
             name: "earliestStartTime",
             type: "uint32",
+            internalType: "uint32",
           },
         ],
-        internalType: "struct ProjectInfo",
-        name: "projectInfo",
+      },
+      {
+        name: "_metadataInfo",
         type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "metadataInfo",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "baseURI",
-        type: "bytes",
-      },
-      {
-        internalType: "address",
-        name: "onchainPointer",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "mint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "_fxParams",
-        type: "bytes",
-      },
-    ],
-    name: "mintParams",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "nonce",
-    outputs: [
-      {
-        internalType: "uint96",
-        name: "",
-        type: "uint96",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "result",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-    ],
-    name: "ownerMint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "_fxParams",
-        type: "bytes",
-      },
-    ],
-    name: "ownerMintParams",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ownerOf",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "pendingOwner",
-        type: "address",
-      },
-    ],
-    name: "ownershipHandoverExpiresAt",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "result",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pause",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paused",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "primaryReceiver",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "randomizer",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint120",
-        name: "_supply",
-        type: "uint120",
-      },
-    ],
-    name: "reduceSupply",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
+        internalType: "struct MetadataInfo",
         components: [
           {
-            internalType: "address",
-            name: "minter",
-            type: "address",
-          },
-          {
-            components: [
-              {
-                internalType: "uint64",
-                name: "startTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint64",
-                name: "endTime",
-                type: "uint64",
-              },
-              {
-                internalType: "uint128",
-                name: "allocation",
-                type: "uint128",
-              },
-            ],
-            internalType: "struct ReserveInfo",
-            name: "reserveInfo",
-            type: "tuple",
-          },
-          {
-            internalType: "bytes",
-            name: "params",
+            name: "baseURI",
             type: "bytes",
+            internalType: "bytes",
+          },
+          {
+            name: "onchainPointer",
+            type: "address",
+            internalType: "address",
           },
         ],
-        internalType: "struct MintInfo[]",
+      },
+      {
         name: "_mintInfo",
         type: "tuple[]",
-      },
-    ],
-    name: "registerMinters",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "remainingSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renderer",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "requestOwnershipHandover",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "roleRegistry",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
+        internalType: "struct MintInfo[]",
+        components: [
+          {
+            name: "minter",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "reserveInfo",
+            type: "tuple",
+            internalType: "struct ReserveInfo",
+            components: [
+              {
+                name: "startTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "endTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "allocation",
+                type: "uint128",
+                internalType: "uint128",
+              },
+            ],
+          },
+          {
+            name: "params",
+            type: "bytes",
+            internalType: "bytes",
+          },
+        ],
       },
       {
-        internalType: "uint256",
-        name: "_salePrice",
-        type: "uint256",
-      },
-    ],
-    name: "royaltyInfo",
-    outputs: [
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
-    ],
-    name: "setApprovalForAll",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address[]",
-        name: "_receivers",
+        name: "_royaltyReceivers",
         type: "address[]",
+        internalType: "address[]",
       },
       {
-        internalType: "uint32[]",
         name: "_allocations",
         type: "uint32[]",
+        internalType: "uint32[]",
       },
       {
-        internalType: "uint96",
         name: "_basisPoints",
         type: "uint96",
+        internalType: "uint96",
       },
     ],
-    name: "setBaseRoyalties",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "_uri",
-        type: "bytes",
-      },
-    ],
-    name: "setBaseURI",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
-  },
-  {
+    name: "isApprovedForAll",
     inputs: [
       {
-        internalType: "bool",
-        name: "_flag",
-        type: "bool",
-      },
-    ],
-    name: "setBurnEnabled",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "_flag",
-        type: "bool",
-      },
-    ],
-    name: "setMintEnabled",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "_onchainData",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
-      },
-    ],
-    name: "setOnchainPointer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address[]",
-        name: "_receivers",
-        type: "address[]",
-      },
-      {
-        internalType: "uint32[]",
-        name: "_allocations",
-        type: "uint32[]",
-      },
-    ],
-    name: "setPrimaryReceivers",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_randomizer",
+        name: "owner",
         type: "address",
-      },
-    ],
-    name: "setRandomizer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
-        name: "_renderer",
+      },
+      {
+        name: "operator",
         type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "_signature",
-        type: "bytes",
+        internalType: "address",
       },
     ],
-    name: "setRenderer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "_tagIds",
-        type: "uint256[]",
-      },
-    ],
-    name: "setTags",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "interfaceId",
-        type: "bytes4",
-      },
-    ],
-    name: "supportsInterface",
     outputs: [
       {
-        internalType: "bool",
         name: "",
         type: "bool",
+        internalType: "bool",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "isMinter",
+    inputs: [
+      {
+        name: "_minter",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "issuerInfo",
     inputs: [],
-    name: "symbol",
     outputs: [
       {
-        internalType: "string",
-        name: "",
-        type: "string",
+        name: "primaryReceiver",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "projectInfo",
+        type: "tuple",
+        internalType: "struct ProjectInfo",
+        components: [
+          {
+            name: "mintEnabled",
+            type: "bool",
+            internalType: "bool",
+          },
+          {
+            name: "burnEnabled",
+            type: "bool",
+            internalType: "bool",
+          },
+          {
+            name: "maxSupply",
+            type: "uint120",
+            internalType: "uint120",
+          },
+          {
+            name: "inputSize",
+            type: "uint88",
+            internalType: "uint88",
+          },
+          {
+            name: "earliestStartTime",
+            type: "uint32",
+            internalType: "uint32",
+          },
+        ],
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "metadataInfo",
+    inputs: [],
+    outputs: [
+      {
+        name: "baseURI",
+        type: "bytes",
+        internalType: "bytes",
+      },
+      {
+        name: "onchainPointer",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "mint",
     inputs: [
       {
+        name: "_to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_amount",
+        type: "uint256",
         internalType: "uint256",
+      },
+      {
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "tokenRoyalties",
-    outputs: [
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-      {
-        internalType: "uint96",
-        name: "basisPoints",
-        type: "uint96",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
+    type: "function",
+    name: "mintParams",
     inputs: [
       {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
+        name: "_to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_fxParams",
+        type: "bytes",
+        internalType: "bytes",
       },
     ],
-    name: "tokenURI",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "name",
+    inputs: [],
     outputs: [
       {
-        internalType: "string",
         name: "",
         type: "string",
+        internalType: "string",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "nonce",
     inputs: [],
-    name: "totalSupply",
     outputs: [
       {
-        internalType: "uint96",
         name: "",
         type: "uint96",
+        internalType: "uint96",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "owner",
+    inputs: [],
+    outputs: [
+      {
+        name: "result",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "ownerMint",
     inputs: [
       {
-        internalType: "address",
-        name: "from",
+        name: "_to",
         type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "ownerMintParams",
+    inputs: [
+      {
+        name: "_to",
+        type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
-        name: "to",
-        type: "address",
+        name: "_fxParams",
+        type: "bytes",
+        internalType: "bytes",
       },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "ownerOf",
+    inputs: [
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "transferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
   },
   {
+    type: "function",
+    name: "ownershipHandoverExpiresAt",
     inputs: [
       {
-        internalType: "address",
-        name: "newOwner",
+        name: "pendingOwner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
+    outputs: [
+      {
+        name: "result",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
   },
   {
+    type: "function",
+    name: "pause",
     inputs: [],
-    name: "unpause",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
     type: "function",
+    name: "paused",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "primaryReceiver",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "randomizer",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "reduceSupply",
+    inputs: [
+      {
+        name: "_supply",
+        type: "uint120",
+        internalType: "uint120",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "registerMinters",
+    inputs: [
+      {
+        name: "_mintInfo",
+        type: "tuple[]",
+        internalType: "struct MintInfo[]",
+        components: [
+          {
+            name: "minter",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "reserveInfo",
+            type: "tuple",
+            internalType: "struct ReserveInfo",
+            components: [
+              {
+                name: "startTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "endTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "allocation",
+                type: "uint128",
+                internalType: "uint128",
+              },
+            ],
+          },
+          {
+            name: "params",
+            type: "bytes",
+            internalType: "bytes",
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "remainingSupply",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "renderer",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "renounceOwnership",
+    inputs: [],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "requestOwnershipHandover",
+    inputs: [],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "roleRegistry",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "royaltyInfo",
+    inputs: [
+      {
+        name: "_tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "_salePrice",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "receiver",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "safeTransferFrom",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "safeTransferFrom",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "data",
+        type: "bytes",
+        internalType: "bytes",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setApprovalForAll",
+    inputs: [
+      {
+        name: "operator",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "approved",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setBaseRoyalties",
+    inputs: [
+      {
+        name: "_receivers",
+        type: "address[]",
+        internalType: "address[]",
+      },
+      {
+        name: "_allocations",
+        type: "uint32[]",
+        internalType: "uint32[]",
+      },
+      {
+        name: "_basisPoints",
+        type: "uint96",
+        internalType: "uint96",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setBaseURI",
+    inputs: [
+      {
+        name: "_uri",
+        type: "bytes",
+        internalType: "bytes",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setBurnEnabled",
+    inputs: [
+      {
+        name: "_flag",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setMintEnabled",
+    inputs: [
+      {
+        name: "_flag",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setOnchainPointer",
+    inputs: [
+      {
+        name: "_onchainData",
+        type: "bytes",
+        internalType: "bytes",
+      },
+      {
+        name: "_signature",
+        type: "bytes",
+        internalType: "bytes",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setPrimaryReceivers",
+    inputs: [
+      {
+        name: "_receivers",
+        type: "address[]",
+        internalType: "address[]",
+      },
+      {
+        name: "_allocations",
+        type: "uint32[]",
+        internalType: "uint32[]",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setRandomizer",
+    inputs: [
+      {
+        name: "_randomizer",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setRenderer",
+    inputs: [
+      {
+        name: "_renderer",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_signature",
+        type: "bytes",
+        internalType: "bytes",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setTags",
+    inputs: [
+      {
+        name: "_tagIds",
+        type: "uint256[]",
+        internalType: "uint256[]",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "supportsInterface",
+    inputs: [
+      {
+        name: "interfaceId",
+        type: "bytes4",
+        internalType: "bytes4",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "symbol",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "string",
+        internalType: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "tokenRoyalties",
+    inputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "receiver",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "basisPoints",
+        type: "uint96",
+        internalType: "uint96",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "tokenURI",
+    inputs: [
+      {
+        name: "_tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "string",
+        internalType: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "totalSupply",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint96",
+        internalType: "uint96",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "transferFrom",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "transferOwnership",
+    inputs: [
+      {
+        name: "newOwner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "unpause",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "event",
+    name: "Approval",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "approved",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ApprovalForAll",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "operator",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "approved",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "BaseURIUpdated",
+    inputs: [
+      {
+        name: "_uri",
+        type: "bytes",
+        indexed: false,
+        internalType: "bytes",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "BatchMetadataUpdate",
+    inputs: [
+      {
+        name: "_fromTokenId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "_toTokenId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "BurnEnabled",
+    inputs: [
+      {
+        name: "_flag",
+        type: "bool",
+        indexed: true,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "EIP712DomainChanged",
+    inputs: [],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Initialized",
+    inputs: [
+      {
+        name: "version",
+        type: "uint8",
+        indexed: false,
+        internalType: "uint8",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MetadataUpdate",
+    inputs: [
+      {
+        name: "_tokenId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MintEnabled",
+    inputs: [
+      {
+        name: "_flag",
+        type: "bool",
+        indexed: true,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OnchainPointerUpdated",
+    inputs: [
+      {
+        name: "_pointer",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipHandoverCanceled",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipHandoverRequested",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferred",
+    inputs: [
+      {
+        name: "oldOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "newOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Paused",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PrimaryReceiverUpdated",
+    inputs: [
+      {
+        name: "_receiver",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_receivers",
+        type: "address[]",
+        indexed: false,
+        internalType: "address[]",
+      },
+      {
+        name: "_allocations",
+        type: "uint32[]",
+        indexed: false,
+        internalType: "uint32[]",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ProjectDeleted",
+    inputs: [],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ProjectInitialized",
+    inputs: [
+      {
+        name: "_primaryReceiver",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_projectInfo",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct ProjectInfo",
+        components: [
+          {
+            name: "mintEnabled",
+            type: "bool",
+            internalType: "bool",
+          },
+          {
+            name: "burnEnabled",
+            type: "bool",
+            internalType: "bool",
+          },
+          {
+            name: "maxSupply",
+            type: "uint120",
+            internalType: "uint120",
+          },
+          {
+            name: "inputSize",
+            type: "uint88",
+            internalType: "uint88",
+          },
+          {
+            name: "earliestStartTime",
+            type: "uint32",
+            internalType: "uint32",
+          },
+        ],
+      },
+      {
+        name: "_metadataInfo",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct MetadataInfo",
+        components: [
+          {
+            name: "baseURI",
+            type: "bytes",
+            internalType: "bytes",
+          },
+          {
+            name: "onchainPointer",
+            type: "address",
+            internalType: "address",
+          },
+        ],
+      },
+      {
+        name: "_mintInfo",
+        type: "tuple[]",
+        indexed: false,
+        internalType: "struct MintInfo[]",
+        components: [
+          {
+            name: "minter",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "reserveInfo",
+            type: "tuple",
+            internalType: "struct ReserveInfo",
+            components: [
+              {
+                name: "startTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "endTime",
+                type: "uint64",
+                internalType: "uint64",
+              },
+              {
+                name: "allocation",
+                type: "uint128",
+                internalType: "uint128",
+              },
+            ],
+          },
+          {
+            name: "params",
+            type: "bytes",
+            internalType: "bytes",
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ProjectTags",
+    inputs: [
+      {
+        name: "_tagIds",
+        type: "uint256[]",
+        indexed: true,
+        internalType: "uint256[]",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RandomizerUpdated",
+    inputs: [
+      {
+        name: "_randomizer",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RendererUpdated",
+    inputs: [
+      {
+        name: "_renderer",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SeedFulfilled",
+    inputs: [
+      {
+        name: "_randomizer",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_tokenId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "_seed",
+        type: "bytes32",
+        indexed: false,
+        internalType: "bytes32",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SupplyReduced",
+    inputs: [
+      {
+        name: "_prevSupply",
+        type: "uint120",
+        indexed: true,
+        internalType: "uint120",
+      },
+      {
+        name: "_newSupply",
+        type: "uint120",
+        indexed: true,
+        internalType: "uint120",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TokenIdRoyaltiesUpdated",
+    inputs: [
+      {
+        name: "_tokenId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "_receiver",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "_basisPoints",
+        type: "uint96",
+        indexed: false,
+        internalType: "uint96",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TokenRoyaltiesUpdated",
+    inputs: [
+      {
+        name: "_receiver",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_receivers",
+        type: "address[]",
+        indexed: false,
+        internalType: "address[]",
+      },
+      {
+        name: "_allocations",
+        type: "uint32[]",
+        indexed: false,
+        internalType: "uint32[]",
+      },
+      {
+        name: "_basisPoints",
+        type: "uint96",
+        indexed: false,
+        internalType: "uint96",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Transfer",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Unpaused",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "error",
+    name: "AllocationExceeded",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "BaseRoyaltiesNotSet",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "BurnInactive",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "FeeReceiverMissing",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InsufficientSupply",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidAmount",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidEndTime",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidFeeReceiver",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidInputSize",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidRoyaltyConfig",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidShortString",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidStartTime",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "LengthMismatch",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "MintActive",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "MintInactive",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "MoreThanOneRoyaltyReceiver",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NewOwnerIsZeroAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoHandoverRequest",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoRoyaltyReceiver",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NonExistentToken",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NotAuthorized",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NotOwner",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "OverMaxBasisPointsAllowed",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "StringTooLong",
+    inputs: [
+      {
+        name: "str",
+        type: "string",
+        internalType: "string",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "SupplyRemaining",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "TokenRoyaltiesNotSet",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "Unauthorized",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "UnauthorizedAccount",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "UnauthorizedMinter",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "UnregisteredMinter",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "WriteError",
+    inputs: [],
   },
 ]

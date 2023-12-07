@@ -11,7 +11,10 @@ import {
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  MetaTransactionData,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 import { processAndFormatMintInfos } from "@/utils/minters"
 
 export type TRegisterMintersEthV1OperationParams = {
@@ -39,7 +42,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
     )
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
-      const safeTransactionData: SafeTransactionDataPartial = {
+      const safeTransactionData: MetaTransactionData = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
           abi: this.params.isTicket ? FX_TICKETS_ABI : FX_GEN_ART_721_ABI,
@@ -48,7 +51,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         }),
         value: "0",
       }
-      return await proposeSafeTransaction(safeTransactionData, this.manager)
+      return await proposeSafeTransaction([safeTransactionData], this.manager)
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,

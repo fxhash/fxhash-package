@@ -7,7 +7,10 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import {
+  MetaTransactionData,
+  SafeTransactionDataPartial,
+} from "@safe-global/safe-core-sdk-types"
 
 export type TUnpauseEthV1OperationParams = {
   token: `0x${string}`
@@ -23,7 +26,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
   async call(): Promise<TransactionReceipt | string> {
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
-      const safeTransactionData: SafeTransactionDataPartial = {
+      const safeTransactionData: MetaTransactionData = {
         to: getAddress(this.params.token),
         data: encodeFunctionData({
           abi: FX_GEN_ART_721_ABI,
@@ -32,7 +35,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
         }),
         value: "0",
       }
-      return await proposeSafeTransaction(safeTransactionData, this.manager)
+      return await proposeSafeTransaction([safeTransactionData], this.manager)
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
