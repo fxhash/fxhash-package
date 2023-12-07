@@ -7,33 +7,35 @@ import { BlockchainIdentifier, BlockchainIdentifiers } from "@fxhash/config"
 
 export * from "./types"
 
+export const fxLibrary: Library = {
+  name: "fxhash.js",
+  description:
+    "The fxhash artist SDK, exposing a set of utilities to interact with fxhash inside an fxhash artwork.",
+  authors: "fxhash",
+  documentation: "https://fxhash.xyz/doc",
+  filenames: ["fxhash.js", "fxhash.min.js", "fx.js", "fx.min.js"],
+  versions: [
+    {
+      version: "4.0.0",
+      filename: "fxhash.min.js",
+      license: "MIT",
+      content: fx__4_0_0,
+      availability: [
+        BlockchainIdentifiers.TezosGhostnet,
+        BlockchainIdentifiers.TezosMainnet,
+        BlockchainIdentifiers.EthereumSepolia,
+        BlockchainIdentifiers.EthereumMainnet,
+      ],
+    },
+  ],
+}
+
 /**
  * The collection of libraries made available by fxhash (or referenced by fxhash
  * if uploaded by community members). Libraries are identified by their
  */
 export const libraries: Library[] = [
-  {
-    name: "fxhash.js",
-    description:
-      "The fxhash artist SDK, exposing a set of utilities to interact with fxhash inside an fxhash artwork.",
-    authors: "fxhash",
-    documentation: "https://fxhash.xyz/doc",
-    filenames: ["fxhash.js", "fxhash.min.js", "fx.js", "fx.min.js"],
-    versions: [
-      {
-        version: "4.0.0",
-        filename: "fxhash.min.js",
-        license: "MIT",
-        content: fx__4_0_0,
-        availability: [
-          BlockchainIdentifiers.TezosGhostnet,
-          BlockchainIdentifiers.TezosMainnet,
-          BlockchainIdentifiers.EthereumSepolia,
-          BlockchainIdentifiers.EthereumMainnet,
-        ],
-      },
-    ],
-  },
+  fxLibrary,
 
   {
     name: "p5.js",
