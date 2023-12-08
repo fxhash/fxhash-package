@@ -66,6 +66,16 @@ export const Qu_getAllProjects = graphql(`
   }
 `)
 
+export const Qu_getAllProjectsAfterDate = graphql(`
+  query GetAllProjectsAfterDate($afterDate: timestamptz!) {
+    offchain {
+      Project(where: { releaseAt: { _gte: $afterDate } }) {
+        ...Project_BaseDetails
+      }
+    }
+  }
+`)
+
 /**
  * A user to get their submissions.
  * **Note**: This requires the user asking for their submissions to be
