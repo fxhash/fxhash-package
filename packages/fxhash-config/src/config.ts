@@ -107,7 +107,7 @@ export const fxhashConfig: IFxhashConfig = {
         contracts: ethTestnetContracts,
         config: {
           network: "Goerli",
-          chainId: BlockchainIdentifiers.EthereumSepolia,
+          chainId: BlockchainIdentifiers.EthereumGoerli,
         },
         apis: ethTestnetApis,
       },

@@ -23,7 +23,7 @@ export const fxLibrary: Library = {
       availability: [
         BlockchainIdentifiers.TezosGhostnet,
         BlockchainIdentifiers.TezosMainnet,
-        BlockchainIdentifiers.EthereumSepolia,
+        BlockchainIdentifiers.EthereumGoerli,
         BlockchainIdentifiers.EthereumMainnet,
       ],
     },

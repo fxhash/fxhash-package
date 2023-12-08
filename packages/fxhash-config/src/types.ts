@@ -6,6 +6,7 @@ export const BlockchainIdentifiers = {
   TezosGhostnet: "tezos:NetXnHfVqm9iesp",
   TezosMainnet: "tezos:NetXdQprcVkpaWU",
   EthereumMainnet: "eip155:1",
+  EthereumGoerli: "eip155:5",
   EthereumSepolia: "eip155:11155111",
 } as const
 
