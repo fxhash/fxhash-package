@@ -14,6 +14,8 @@ import {
   PromiseResult,
   failure,
   success,
+  NetworkError,
+  BadRequestError,
 } from "@fxhash/contracts-shared"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
@@ -137,6 +139,35 @@ export class TezosWalletManager extends WalletManager {
       this.contracts[address] = await this.tezosToolkit.wallet.at(address)
     }
     return this.contracts[address]!
+  }
+
+  /**
+   * Given a RPC endpoint, makes a query to such endpoint by trying over all the
+   * RPCs available if any fails with a retryable error.
+   * @param endpoint The RPC endpoint which will be queried
+   * @returns The JSON response from the RPC
+   */
+  async fetchRpc<ReturnType = any>(
+    endpoint: `/${string}`
+  ): PromiseResult<ReturnType, NetworkError | BadRequestError> {
+    if (!endpoint.startsWith("/")) {
+      return failure(
+        new BadRequestError("RPC call endpoint must start with a '/'")
+      )
+    }
+    for (let i = 0; i < this.rpcNodes.length + 2; i++) {
+      try {
+        const result = await fetch(`${this.rpcNodes[0]}${endpoint}`)
+        return success(await result.json())
+      } catch (err) {
+        if (this.canErrorBeCycled(err) && i < this.rpcNodes.length) {
+          this.cycleRpcNode()
+          continue
+        }
+        return failure(new BadRequestError())
+      }
+    }
+    return failure(new NetworkError())
   }
 
   // given an error, returns true if request can be cycled to another RPC node

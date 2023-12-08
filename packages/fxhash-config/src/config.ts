@@ -17,9 +17,11 @@ import {
   IEthContracts,
 } from "contracts/eth"
 import { getConfigForEnv } from "utils"
+import { BlockchainIdentifier, BlockchainIdentifiers } from "types"
 
 export interface IFxhashNetworkConfig {
   network: string
+  chainId: BlockchainIdentifier
 }
 
 export interface IFxhashEnvConfig {
@@ -97,6 +99,7 @@ export const fxhashConfig: IFxhashConfig = {
         contracts: tezosTestnetContracts,
         config: {
           network: "ghostnet",
+          chainId: BlockchainIdentifiers.TezosGhostnet,
         },
         apis: tezosTestnetApis,
       },
@@ -104,6 +107,7 @@ export const fxhashConfig: IFxhashConfig = {
         contracts: ethTestnetContracts,
         config: {
           network: "Goerli",
+          chainId: BlockchainIdentifiers.EthereumGoerli,
         },
         apis: ethTestnetApis,
       },
@@ -113,6 +117,7 @@ export const fxhashConfig: IFxhashConfig = {
         contracts: tezosMainnetContracts,
         config: {
           network: "mainnet",
+          chainId: BlockchainIdentifiers.TezosMainnet,
         },
         apis: tezosMainnetApis,
       },
@@ -120,6 +125,7 @@ export const fxhashConfig: IFxhashConfig = {
         contracts: ethMainnetContracts,
         config: {
           network: "Ethereum",
+          chainId: BlockchainIdentifiers.EthereumMainnet,
         },
         apis: ethMainnetApis,
       },

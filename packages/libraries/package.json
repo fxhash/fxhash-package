@@ -1,0 +1,46 @@
+{
+  "name": "@fxhash/libraries",
+  "description": "A collection of libraries artists can use in their projects.",
+  "private": true,
+  "version": "0.0.8",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@fxhash/config": "workspace:*"
+  },
+  "devDependencies": {
+    "tslib": "2.6.0",
+    "tsup": "6.6.0",
+    "typescript": "5.0.4"
+  }
+}
