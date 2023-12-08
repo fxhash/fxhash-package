@@ -35,6 +35,8 @@ export interface IFxhashEnvConfig {
   projectLockTime: number
   referrerShare: number
   fxhashTeamSafeAddress: string
+  signerSafe: string
+  moderationSafe: string
 }
 
 // the variations supported by the config
@@ -150,6 +152,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
 
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        signerSafe: "0x4153926910DFbf51b466Faa5Fe085D60AeE1BB29",
+        moderationSafe: "0x9652226918198106e9C00630C39B7d347156A95E",
         wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
@@ -171,6 +175,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
 
         fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        signerSafe: "0x4153926910DFbf51b466Faa5Fe085D60AeE1BB29",
+        moderationSafe: "0x9652226918198106e9C00630C39B7d347156A95E",
         wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
@@ -192,7 +198,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
 
-        fxhashTeamSafeAddress: "0x33A1aA6eDd38fD3978148F36cA6293467f243ff6",
+        fxhashTeamSafeAddress: "",
+        signerSafe: "",
+        moderationSafe: "",
         wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
     },
