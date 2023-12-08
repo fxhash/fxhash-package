@@ -15,6 +15,7 @@ export interface IEthContracts {
   mint_ticket_impl_v1: `0x${string}`
   onchfs_file_system: `0x${string}`
   onchfs_content_store: `0x${string}`
+  seaport: `0x${string}`
 }
 
 export const ethTestnetContracts: IEthContracts = {
@@ -34,6 +35,7 @@ export const ethTestnetContracts: IEthContracts = {
   mint_ticket_impl_v1: "0xC2eb064668397442C416a66499e64A04b9d6B396",
   onchfs_file_system: "0xc3f5ef1a0256b9ceb1452650db72344809bb3a85",
   onchfs_content_store: "0x7c1730B7bE9424D0b983B84aEb254e3a2a105d91",
+  seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
 }
 
 /**
@@ -58,4 +60,5 @@ export const ethMainnetContracts: IEthContracts = {
   mint_ticket_impl_v1: "0xa2b00a0c52DAd0f2E3b802bE16d2303fb05b7654",
   onchfs_file_system: "0x9e0f2864c6f125bbf599df6ca6e6c3774c5b2e04",
   onchfs_content_store: "0xC6806fd75745bB5F5B32ADa19963898155f9DB91",
+  seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
 }
