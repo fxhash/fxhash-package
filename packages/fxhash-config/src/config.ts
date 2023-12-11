@@ -198,9 +198,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
 
-        fxhashTeamSafeAddress: "",
-        signerSafe: "",
-        moderationSafe: "",
+        fxhashTeamSafeAddress: "0xD8b1905022d70e74c6c8aaA2baaf275fBe1634f1",
+        signerSafe: "0xB456aF77dEB65065462BD1f0D9098413E6CA4200",
+        moderationSafe: "0x99CDaECbe1be4B7232a4f2c79EF76D403886FE1E",
         wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
     },
