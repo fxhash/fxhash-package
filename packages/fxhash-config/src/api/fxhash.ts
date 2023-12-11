@@ -11,6 +11,7 @@ export interface IFxhashApis {
   ipfsGateway: string
   ipfsGatewaySafe: string
   onchfsProxy: string
+  opensea: string
   authority: {
     api: string
   }
@@ -44,6 +45,7 @@ export const fxhashDevApis: IFxhashApis = {
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
+  opensea: "https://testnets-api.opensea.io/api/v2/chain/goerli",
   authority: {
     api: "NONE",
   },
@@ -89,6 +91,7 @@ export const fxhashPrdApis: IFxhashApis = {
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
+  opensea: "https://api.opensea.io/api/v2/chain/ethereum",
   authority: {
     api: "NONE",
   },

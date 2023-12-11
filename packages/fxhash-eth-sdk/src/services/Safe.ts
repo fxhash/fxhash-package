@@ -113,8 +113,16 @@ export async function proposeSafeTransaction(
   safeTransactionData: MetaTransactionData[],
   walletManager: EthereumWalletManager
 ) {
+  const safeAddress = await walletManager.safe.getAddress()
+  //to avoid having conflicting transactions where only one will be executable, we get the next nonce
+  //and we use it to create the transaction so each transaction has a unique nonce
+  const nextNonce = await getSafeService().getNextNonce(safeAddress)
+
   const safeTransaction = await walletManager.safe.createTransaction({
     transactions: safeTransactionData,
+    options: {
+      nonce: nextNonce,
+    },
   })
 
   const safeTxHash = await walletManager.safe.getTransactionHash(
@@ -130,9 +138,8 @@ export async function proposeSafeTransaction(
     }
     throw error
   }
-
   await getSafeService().proposeTransaction({
-    safeAddress: await walletManager.safe.getAddress(),
+    safeAddress: safeAddress,
     safeTransactionData: safeTransaction.data,
     safeTxHash,
     senderAddress: getAddress(walletManager.address),
