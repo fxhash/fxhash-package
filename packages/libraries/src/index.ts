@@ -1,3 +1,4 @@
+import p5js__1_9_0 from "./libs/p5.js/1.9.0.lib"
 import p5js__1_7_0 from "./libs/p5.js/1.7.0.lib"
 import p5js__1_5_0 from "./libs/p5.js/1.5.0.lib"
 import fx__4_0_0 from "./libs/fxhash.js/4.0.0.lib"
@@ -45,12 +46,26 @@ export const libraries: Library[] = [
     filenames: ["p5.js", "p5.min.js", "processing.js", "processing.min.js"],
     versions: [
       {
+        version: "1.9.0",
+        filename: "p5.min.js",
+        license: "GNU Lesser General Public License v2.1",
+        availability: [
+          BlockchainIdentifiers.TezosGhostnet,
+          BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumGoerli,
+          BlockchainIdentifiers.EthereumMainnet,
+        ],
+        content: p5js__1_9_0,
+      },
+      {
         version: "1.7.0",
         filename: "p5.min.js",
         license: "GNU Lesser General Public License v2.1",
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
           BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumGoerli,
+          BlockchainIdentifiers.EthereumMainnet,
         ],
         content: p5js__1_7_0,
       },
@@ -87,6 +102,8 @@ export const libraries: Library[] = [
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
           BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumGoerli,
+          BlockchainIdentifiers.EthereumMainnet,
         ],
         content: threejs__r157,
       },
