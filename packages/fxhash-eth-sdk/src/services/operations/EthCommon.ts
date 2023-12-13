@@ -227,6 +227,8 @@ export async function simulateAndExecuteContract(
     //wait for the transaction receipt
     const receipt = await walletManager.publicClient.waitForTransactionReceipt({
       hash,
+      confirmations: 2,
+      timeout: 120_000,
     })
     console.log("tx success: ", receipt)
     return receipt
