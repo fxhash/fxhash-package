@@ -784,6 +784,7 @@ type Project {
   state: ProjectState!
   storage: Storage
   title: String!
+  tokenId: String
 }
 
 """
@@ -1234,6 +1235,7 @@ input Project_bool_exp {
   state: ProjectState_comparison_exp
   storage: Storage_comparison_exp
   title: String_comparison_exp
+  tokenId: String_comparison_exp
 }
 
 """
@@ -1295,6 +1297,7 @@ input Project_max_order_by {
   state: order_by
   storage: order_by
   title: order_by
+  tokenId: order_by
 }
 
 """
@@ -1310,6 +1313,7 @@ input Project_min_order_by {
   state: order_by
   storage: order_by
   title: order_by
+  tokenId: order_by
 }
 
 """
@@ -1358,6 +1362,7 @@ input Project_order_by {
   state: order_by
   storage: order_by
   title: order_by
+  tokenId: order_by
 }
 
 """primary key columns input for table: Project"""
@@ -1403,6 +1408,9 @@ enum Project_select_column {
 
   """column name"""
   title
+
+  """column name"""
+  tokenId
 }
 
 """
@@ -1440,6 +1448,7 @@ input Project_stream_cursor_value_input {
   state: ProjectState
   storage: Storage
   title: String
+  tokenId: String
 }
 
 """
