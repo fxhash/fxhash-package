@@ -2,6 +2,16 @@ import { CookieOptions } from "express"
 
 export const FOURTEEN_DAYS = 14 * 24 * 60 * 60
 
+/**
+ * takes CookieOptions and converts maxAge to milliseconds if it is defined
+ */
+export const getExpressCookieOptions = (
+  options: CookieOptions
+): CookieOptions => ({
+  ...options,
+  maxAge: options.maxAge ? options.maxAge * 1000 : undefined,
+})
+
 export const COOKIE_OPTIONS_LOCAL: CookieOptions = {
   httpOnly: true,
   maxAge: FOURTEEN_DAYS,
