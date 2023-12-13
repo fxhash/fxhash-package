@@ -3623,6 +3623,7 @@ export enum Cursor_Ordering {
 export type Eth_Minter_Proceeds = {
   __typename?: 'eth_minter_proceeds';
   amount: Scalars['numeric']['output'];
+  count: Scalars['numeric']['output'];
   id: Scalars['String']['output'];
   minter_address: Scalars['String']['output'];
   primary_receiver: Scalars['String']['output'];
@@ -3637,6 +3638,7 @@ export type Eth_Minter_Proceeds_Bool_Exp = {
   _not?: InputMaybe<Eth_Minter_Proceeds_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Minter_Proceeds_Bool_Exp>>;
   amount?: InputMaybe<Numeric_Comparison_Exp>;
+  count?: InputMaybe<Numeric_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   minter_address?: InputMaybe<String_Comparison_Exp>;
   primary_receiver?: InputMaybe<String_Comparison_Exp>;
@@ -3648,6 +3650,7 @@ export type Eth_Minter_Proceeds_Bool_Exp = {
 /** Ordering options when selecting data from "eth_minter_proceeds". */
 export type Eth_Minter_Proceeds_Order_By = {
   amount?: InputMaybe<Order_By>;
+  count?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   minter_address?: InputMaybe<Order_By>;
   primary_receiver?: InputMaybe<Order_By>;
@@ -3660,6 +3663,8 @@ export type Eth_Minter_Proceeds_Order_By = {
 export enum Eth_Minter_Proceeds_Select_Column {
   /** column name */
   Amount = 'amount',
+  /** column name */
+  Count = 'count',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3685,6 +3690,7 @@ export type Eth_Minter_Proceeds_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Eth_Minter_Proceeds_Stream_Cursor_Value_Input = {
   amount?: InputMaybe<Scalars['numeric']['input']>;
+  count?: InputMaybe<Scalars['numeric']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   minter_address?: InputMaybe<Scalars['String']['input']>;
   primary_receiver?: InputMaybe<Scalars['String']['input']>;
@@ -5196,12 +5202,12 @@ export type Market_Stats = {
   median?: Maybe<Scalars['numeric']['output']>;
   percent_listed?: Maybe<Scalars['Float']['output']>;
   percent_never_listed?: Maybe<Scalars['Float']['output']>;
-  prim_volume_nb?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Int']['output']>;
   prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_nb?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_nb7d?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_nb24?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_nb30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
   sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
   sec_volume_tz7d?: Maybe<Scalars['numeric']['output']>;
   sec_volume_tz24?: Maybe<Scalars['numeric']['output']>;
@@ -5241,12 +5247,12 @@ export type Market_Stats_Bool_Exp = {
   median?: InputMaybe<Numeric_Comparison_Exp>;
   percent_listed?: InputMaybe<Float_Comparison_Exp>;
   percent_never_listed?: InputMaybe<Float_Comparison_Exp>;
-  prim_volume_nb?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
   prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_nb?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_nb7d?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_nb24?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_nb30d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_nb7d?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_nb24?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_nb30d?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
   sec_volume_tz7d?: InputMaybe<Numeric_Comparison_Exp>;
   sec_volume_tz24?: InputMaybe<Numeric_Comparison_Exp>;
@@ -5258,15 +5264,15 @@ export type Market_Stats_Bool_Exp = {
 /** columns and relationships of "market_stats_history" */
 export type Market_Stats_History = {
   __typename?: 'market_stats_history';
-  average_sale_price?: Maybe<Scalars['bigint']['output']>;
-  floor?: Maybe<Scalars['bigint']['output']>;
+  average_sale_price?: Maybe<Scalars['numeric']['output']>;
+  floor?: Maybe<Scalars['numeric']['output']>;
   floor_listing_id?: Maybe<Scalars['String']['output']>;
   floor_listing_version?: Maybe<Scalars['Int']['output']>;
   from: Scalars['timestamptz']['output'];
   /** An object relationship */
   generative_token: Generative_Token;
-  highest_collection_offer?: Maybe<Scalars['bigint']['output']>;
-  highest_sold?: Maybe<Scalars['bigint']['output']>;
+  highest_collection_offer?: Maybe<Scalars['numeric']['output']>;
+  highest_sold?: Maybe<Scalars['numeric']['output']>;
   highest_sold_listing_id?: Maybe<Scalars['String']['output']>;
   highest_sold_listing_version?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
@@ -5278,16 +5284,16 @@ export type Market_Stats_History = {
   /** An object relationship */
   listingByHighestsoldlistingversionHighestsoldlistingid?: Maybe<Listing>;
   longest_average_held_in_seconds?: Maybe<Scalars['bigint']['output']>;
-  lowest_sold?: Maybe<Scalars['bigint']['output']>;
+  lowest_sold?: Maybe<Scalars['numeric']['output']>;
   lowest_sold_listing_id?: Maybe<Scalars['String']['output']>;
   lowest_sold_listing_version?: Maybe<Scalars['Int']['output']>;
-  median?: Maybe<Scalars['bigint']['output']>;
+  median?: Maybe<Scalars['numeric']['output']>;
   percent_listed?: Maybe<Scalars['Float']['output']>;
   percent_never_listed?: Maybe<Scalars['Float']['output']>;
-  prim_volume_nb?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_tz?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_nb?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_tz?: Maybe<Scalars['bigint']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Int']['output']>;
+  prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
   to: Scalars['timestamptz']['output'];
   token_id: Scalars['String']['output'];
 };
@@ -5334,14 +5340,14 @@ export type Market_Stats_History_Bool_Exp = {
   _and?: InputMaybe<Array<Market_Stats_History_Bool_Exp>>;
   _not?: InputMaybe<Market_Stats_History_Bool_Exp>;
   _or?: InputMaybe<Array<Market_Stats_History_Bool_Exp>>;
-  average_sale_price?: InputMaybe<Bigint_Comparison_Exp>;
-  floor?: InputMaybe<Bigint_Comparison_Exp>;
+  average_sale_price?: InputMaybe<Numeric_Comparison_Exp>;
+  floor?: InputMaybe<Numeric_Comparison_Exp>;
   floor_listing_id?: InputMaybe<String_Comparison_Exp>;
   floor_listing_version?: InputMaybe<Int_Comparison_Exp>;
   from?: InputMaybe<Timestamptz_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
-  highest_collection_offer?: InputMaybe<Bigint_Comparison_Exp>;
-  highest_sold?: InputMaybe<Bigint_Comparison_Exp>;
+  highest_collection_offer?: InputMaybe<Numeric_Comparison_Exp>;
+  highest_sold?: InputMaybe<Numeric_Comparison_Exp>;
   highest_sold_listing_id?: InputMaybe<String_Comparison_Exp>;
   highest_sold_listing_version?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
@@ -5350,16 +5356,16 @@ export type Market_Stats_History_Bool_Exp = {
   listingByFloorlistingversionFloorlistingid?: InputMaybe<Listing_Bool_Exp>;
   listingByHighestsoldlistingversionHighestsoldlistingid?: InputMaybe<Listing_Bool_Exp>;
   longest_average_held_in_seconds?: InputMaybe<Bigint_Comparison_Exp>;
-  lowest_sold?: InputMaybe<Bigint_Comparison_Exp>;
+  lowest_sold?: InputMaybe<Numeric_Comparison_Exp>;
   lowest_sold_listing_id?: InputMaybe<String_Comparison_Exp>;
   lowest_sold_listing_version?: InputMaybe<Int_Comparison_Exp>;
-  median?: InputMaybe<Bigint_Comparison_Exp>;
+  median?: InputMaybe<Numeric_Comparison_Exp>;
   percent_listed?: InputMaybe<Float_Comparison_Exp>;
   percent_never_listed?: InputMaybe<Float_Comparison_Exp>;
-  prim_volume_nb?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_tz?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_nb?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_tz?: InputMaybe<Bigint_Comparison_Exp>;
+  prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
+  prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
 };
@@ -5580,28 +5586,28 @@ export type Market_Stats_History_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Market_Stats_History_Stream_Cursor_Value_Input = {
-  average_sale_price?: InputMaybe<Scalars['bigint']['input']>;
-  floor?: InputMaybe<Scalars['bigint']['input']>;
+  average_sale_price?: InputMaybe<Scalars['numeric']['input']>;
+  floor?: InputMaybe<Scalars['numeric']['input']>;
   floor_listing_id?: InputMaybe<Scalars['String']['input']>;
   floor_listing_version?: InputMaybe<Scalars['Int']['input']>;
   from?: InputMaybe<Scalars['timestamptz']['input']>;
-  highest_collection_offer?: InputMaybe<Scalars['bigint']['input']>;
-  highest_sold?: InputMaybe<Scalars['bigint']['input']>;
+  highest_collection_offer?: InputMaybe<Scalars['numeric']['input']>;
+  highest_sold?: InputMaybe<Scalars['numeric']['input']>;
   highest_sold_listing_id?: InputMaybe<Scalars['String']['input']>;
   highest_sold_listing_version?: InputMaybe<Scalars['Int']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   listed?: InputMaybe<Scalars['Int']['input']>;
   longest_average_held_in_seconds?: InputMaybe<Scalars['bigint']['input']>;
-  lowest_sold?: InputMaybe<Scalars['bigint']['input']>;
+  lowest_sold?: InputMaybe<Scalars['numeric']['input']>;
   lowest_sold_listing_id?: InputMaybe<Scalars['String']['input']>;
   lowest_sold_listing_version?: InputMaybe<Scalars['Int']['input']>;
-  median?: InputMaybe<Scalars['bigint']['input']>;
+  median?: InputMaybe<Scalars['numeric']['input']>;
   percent_listed?: InputMaybe<Scalars['Float']['input']>;
   percent_never_listed?: InputMaybe<Scalars['Float']['input']>;
-  prim_volume_nb?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_tz?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_nb?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_tz?: InputMaybe<Scalars['bigint']['input']>;
+  prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
+  prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
 };
@@ -5840,12 +5846,12 @@ export type Market_Stats_Stream_Cursor_Value_Input = {
   median?: InputMaybe<Scalars['numeric']['input']>;
   percent_listed?: InputMaybe<Scalars['Float']['input']>;
   percent_never_listed?: InputMaybe<Scalars['Float']['input']>;
-  prim_volume_nb?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
   prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_nb?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_nb7d?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_nb24?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_nb30d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_nb7d?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_nb24?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_nb30d?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
   sec_volume_tz7d?: InputMaybe<Scalars['numeric']['input']>;
   sec_volume_tz24?: InputMaybe<Scalars['numeric']['input']>;
@@ -11420,22 +11426,22 @@ export enum User_Select_Column {
 export type User_Stats = {
   __typename?: 'user_stats';
   from?: Maybe<Scalars['timestamptz']['output']>;
-  prim_volume_nb?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_nb7d?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_nb24?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_nb30d?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_tz?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_tz7d?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_tz24?: Maybe<Scalars['bigint']['output']>;
-  prim_volume_tz30d?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_nb?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_nb7d?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_nb24?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_nb30d?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_tz?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_tz7d?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_tz24?: Maybe<Scalars['bigint']['output']>;
-  sec_volume_tz30d?: Maybe<Scalars['bigint']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Int']['output']>;
+  prim_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  prim_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  prim_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+  prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_tz7d?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_tz24?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_tz30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+  sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_tz7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_tz24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_tz30d?: Maybe<Scalars['numeric']['output']>;
   to?: Maybe<Scalars['timestamptz']['output']>;
   /** An object relationship */
   user: User;
@@ -11448,22 +11454,22 @@ export type User_Stats_Bool_Exp = {
   _not?: InputMaybe<User_Stats_Bool_Exp>;
   _or?: InputMaybe<Array<User_Stats_Bool_Exp>>;
   from?: InputMaybe<Timestamptz_Comparison_Exp>;
-  prim_volume_nb?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_nb7d?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_nb24?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_nb30d?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_tz?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_tz7d?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_tz24?: InputMaybe<Bigint_Comparison_Exp>;
-  prim_volume_tz30d?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_nb?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_nb7d?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_nb24?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_nb30d?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_tz?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_tz7d?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_tz24?: InputMaybe<Bigint_Comparison_Exp>;
-  sec_volume_tz30d?: InputMaybe<Bigint_Comparison_Exp>;
+  prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
+  prim_volume_nb7d?: InputMaybe<Int_Comparison_Exp>;
+  prim_volume_nb24?: InputMaybe<Int_Comparison_Exp>;
+  prim_volume_nb30d?: InputMaybe<Int_Comparison_Exp>;
+  prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_tz7d?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_tz24?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_tz30d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_nb7d?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_nb24?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_nb30d?: InputMaybe<Int_Comparison_Exp>;
+  sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_tz7d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_tz24?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_tz30d?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   user_id?: InputMaybe<String_Comparison_Exp>;
@@ -11546,22 +11552,22 @@ export type User_Stats_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type User_Stats_Stream_Cursor_Value_Input = {
   from?: InputMaybe<Scalars['timestamptz']['input']>;
-  prim_volume_nb?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_nb7d?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_nb24?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_nb30d?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_tz?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_tz7d?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_tz24?: InputMaybe<Scalars['bigint']['input']>;
-  prim_volume_tz30d?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_nb?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_nb7d?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_nb24?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_nb30d?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_tz?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_tz7d?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_tz24?: InputMaybe<Scalars['bigint']['input']>;
-  sec_volume_tz30d?: InputMaybe<Scalars['bigint']['input']>;
+  prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
+  prim_volume_nb7d?: InputMaybe<Scalars['Int']['input']>;
+  prim_volume_nb24?: InputMaybe<Scalars['Int']['input']>;
+  prim_volume_nb30d?: InputMaybe<Scalars['Int']['input']>;
+  prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_tz7d?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_tz24?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_tz30d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_nb7d?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_nb24?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_nb30d?: InputMaybe<Scalars['Int']['input']>;
+  sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_tz7d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_tz24?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_tz30d?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
   user_id?: InputMaybe<Scalars['String']['input']>;
 };
