@@ -8,7 +8,6 @@ export const MODERATOR_ROLE = keccak256(toHex("MODERATOR_ROLE"))
 export const METADATA_ROLE = keccak256(toHex("METADATA_ROLE"))
 export const SIGNER_ROLE = keccak256(toHex("SIGNER_ROLE"))
 
-console.log("MODERATOR_ROLE", MODERATOR_ROLE)
 export enum ETH_ROLES {
   ADMIN_ROLE = "ADMIN_ROLE",
   BANNED_USER_ROLE = "BANNED_USER_ROLE",
