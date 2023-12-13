@@ -5,9 +5,12 @@ import p5js__1_9_0 from "./libs/p5.js/1.9.0.lib"
 import p5js__1_7_0 from "./libs/p5.js/1.7.0.lib"
 import p5js__1_5_0 from "./libs/p5.js/1.5.0.lib"
 // three js
+import threejs_module__r157 from "./libs/three.js/r157.module.lib"
 import threejs__r157 from "./libs/three.js/r157.lib"
 // svg.js
 import svgjs__3_2_0 from "./libs/svg.js/3.2.0.lib"
+// chroma.js
+import chromajs__2_4_0 from "./libs/chroma.js/2.4.0.lib"
 
 import { Library } from "./types"
 import { BlockchainIdentifier, BlockchainIdentifiers } from "@fxhash/config"
@@ -103,8 +106,7 @@ export const libraries: Library[] = [
     versions: [
       {
         version: "r157",
-        filename: "three.module.min.js",
-        info: "(module version)",
+        filename: "three.min.js",
         license: "MIT",
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
@@ -114,6 +116,46 @@ export const libraries: Library[] = [
         ],
         content: threejs__r157,
       },
+      {
+        version: "r157.module",
+        filename: "three.module.min.js",
+        info: "(module version)",
+        license: "MIT",
+        availability: [
+          BlockchainIdentifiers.TezosGhostnet,
+          BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumGoerli,
+          BlockchainIdentifiers.EthereumMainnet,
+        ],
+        content: threejs_module__r157,
+      },
+    ],
+  },
+
+  {
+    name: "chroma.js",
+    description:
+      "Chroma.js is a small-ish zero-dependency JavaScript library (13.5kB) for all kinds of color conversions and color scales.",
+    documentation: "https://www.vis4.net/chromajs/",
+    filenames: [
+      "chroma.js",
+      "chroma.min.js",
+      "chroma-light.js",
+      "chroma-light.min.js",
+    ],
+    versions: [
+      {
+        version: "2.4.0",
+        filename: "chroma.min.js",
+        license: "Apache License, Version 2.0",
+        availability: [
+          BlockchainIdentifiers.TezosGhostnet,
+          BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumGoerli,
+          BlockchainIdentifiers.EthereumMainnet,
+        ],
+        content: chromajs__2_4_0,
+      },
     ],
   },
 
@@ -122,7 +164,7 @@ export const libraries: Library[] = [
     description:
       "A lightweight library for manipulating and animating SVG, without any dependencies.",
     documentation: "https://svgjs.dev/docs/3.0/",
-    filenames: ["svg.js", "svg.ming.js"],
+    filenames: ["svg.js", "svg.min.js"],
     versions: [
       {
         version: "3.2.0",

@@ -3,7 +3,10 @@ import { BlockchainIdentifier } from "@fxhash/config"
 /**
  * Type for various Licenses
  */
-export type License = "GNU Lesser General Public License v2.1" | "MIT"
+export type License =
+  | "GNU Lesser General Public License v2.1"
+  | "MIT"
+  | "Apache License, Version 2.0"
 
 /**
  * A version of a library
