@@ -80,7 +80,7 @@ export const fxhashLocalApis: IFxhashApis = {
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
-  main: "https://api.fxhash.xyz/graphql",
+  main: "https://api.v2-temp.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",

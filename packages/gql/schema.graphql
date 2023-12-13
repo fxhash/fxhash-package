@@ -784,6 +784,7 @@ type Project {
   state: ProjectState!
   storage: Storage
   title: String!
+  tokenId: String
 }
 
 """
@@ -1234,6 +1235,7 @@ input Project_bool_exp {
   state: ProjectState_comparison_exp
   storage: Storage_comparison_exp
   title: String_comparison_exp
+  tokenId: String_comparison_exp
 }
 
 """
@@ -1295,6 +1297,7 @@ input Project_max_order_by {
   state: order_by
   storage: order_by
   title: order_by
+  tokenId: order_by
 }
 
 """
@@ -1310,6 +1313,7 @@ input Project_min_order_by {
   state: order_by
   storage: order_by
   title: order_by
+  tokenId: order_by
 }
 
 """
@@ -1358,6 +1362,7 @@ input Project_order_by {
   state: order_by
   storage: order_by
   title: order_by
+  tokenId: order_by
 }
 
 """primary key columns input for table: Project"""
@@ -1403,6 +1408,9 @@ enum Project_select_column {
 
   """column name"""
   title
+
+  """column name"""
+  tokenId
 }
 
 """
@@ -1440,6 +1448,7 @@ input Project_stream_cursor_value_input {
   state: ProjectState
   storage: Storage
   title: String
+  tokenId: String
 }
 
 """
@@ -1928,21 +1937,21 @@ input _int4_comparison_exp {
   _nin: [_int4!]
 }
 
-scalar _int8
+scalar _numeric
 
 """
-Boolean expression to compare columns of type "_int8". All fields are combined with logical 'AND'.
+Boolean expression to compare columns of type "_numeric". All fields are combined with logical 'AND'.
 """
-input _int8_comparison_exp {
-  _eq: _int8
-  _gt: _int8
-  _gte: _int8
-  _in: [_int8!]
+input _numeric_comparison_exp {
+  _eq: _numeric
+  _gt: _numeric
+  _gte: _numeric
+  _in: [_numeric!]
   _is_null: Boolean
-  _lt: _int8
-  _lte: _int8
-  _neq: _int8
-  _nin: [_int8!]
+  _lt: _numeric
+  _lte: _numeric
+  _neq: _numeric
+  _nin: [_numeric!]
 }
 
 scalar _text
@@ -4200,6 +4209,7 @@ type collection_offer {
   generative_token: generative_token!
   id: String!
   initial_amount: numeric!
+  is_inactive: Boolean
   price: numeric!
   token_id: String!
 
@@ -4250,6 +4260,7 @@ input collection_offer_bool_exp {
   generative_token: generative_token_bool_exp
   id: String_comparison_exp
   initial_amount: numeric_comparison_exp
+  is_inactive: Boolean_comparison_exp
   price: numeric_comparison_exp
   token_id: String_comparison_exp
   user: user_bool_exp
@@ -4298,6 +4309,7 @@ input collection_offer_order_by {
   generative_token: generative_token_order_by
   id: order_by
   initial_amount: order_by
+  is_inactive: order_by
   price: order_by
   token_id: order_by
   user: user_order_by
@@ -4328,6 +4340,9 @@ enum collection_offer_select_column {
 
   """column name"""
   initial_amount
+
+  """column name"""
+  is_inactive
 
   """column name"""
   price
@@ -4389,6 +4404,7 @@ input collection_offer_stream_cursor_value_input {
   created_at: timestamptz
   id: String
   initial_amount: numeric
+  is_inactive: Boolean
   price: numeric
   token_id: String
   version: Int
@@ -4448,6 +4464,7 @@ columns and relationships of "eth_minter_proceeds"
 """
 type eth_minter_proceeds {
   amount: numeric!
+  count: numeric!
   id: String!
   minter_address: String!
   primary_receiver: String!
@@ -4464,6 +4481,7 @@ input eth_minter_proceeds_bool_exp {
   _not: eth_minter_proceeds_bool_exp
   _or: [eth_minter_proceeds_bool_exp!]
   amount: numeric_comparison_exp
+  count: numeric_comparison_exp
   id: String_comparison_exp
   minter_address: String_comparison_exp
   primary_receiver: String_comparison_exp
@@ -4475,6 +4493,7 @@ input eth_minter_proceeds_bool_exp {
 """Ordering options when selecting data from "eth_minter_proceeds"."""
 input eth_minter_proceeds_order_by {
   amount: order_by
+  count: order_by
   id: order_by
   minter_address: order_by
   primary_receiver: order_by
@@ -4489,6 +4508,9 @@ select columns of table "eth_minter_proceeds"
 enum eth_minter_proceeds_select_column {
   """column name"""
   amount
+
+  """column name"""
+  count
 
   """column name"""
   id
@@ -4523,6 +4545,7 @@ input eth_minter_proceeds_stream_cursor_input {
 """Initial value of the column from where the streaming should start"""
 input eth_minter_proceeds_stream_cursor_value_input {
   amount: numeric
+  count: numeric
   id: String
   minter_address: String
   primary_receiver: String
@@ -5985,6 +6008,7 @@ type listing {
   cancelled_at: timestamptz
   created_at: timestamptz!
   id: String!
+  is_inactive: Boolean
   issuer_id: String
 
   """An object relationship"""
@@ -6107,6 +6131,7 @@ input listing_bool_exp {
   cancelled_at: timestamptz_comparison_exp
   created_at: timestamptz_comparison_exp
   id: String_comparison_exp
+  is_inactive: Boolean_comparison_exp
   issuer_id: String_comparison_exp
   marketStatByIdVersion: market_stats_bool_exp
   marketStatByVersionId: market_stats_bool_exp
@@ -6169,6 +6194,7 @@ input listing_order_by {
   cancelled_at: order_by
   created_at: order_by
   id: order_by
+  is_inactive: order_by
   issuer_id: order_by
   marketStatByIdVersion: market_stats_order_by
   marketStatByVersionId: market_stats_order_by
@@ -6209,6 +6235,9 @@ enum listing_select_column {
 
   """column name"""
   id
+
+  """column name"""
+  is_inactive
 
   """column name"""
   issuer_id
@@ -6279,6 +6308,7 @@ input listing_stream_cursor_value_input {
   cancelled_at: timestamptz
   created_at: timestamptz
   id: String
+  is_inactive: Boolean
   issuer_id: String
   objkt_id: String
   price: numeric
@@ -6368,12 +6398,12 @@ type market_stats {
   median: numeric
   percent_listed: Float
   percent_never_listed: Float
-  prim_volume_nb: numeric
+  prim_volume_nb: Int
   prim_volume_tz: numeric
-  sec_volume_nb: numeric
-  sec_volume_nb7d: numeric
-  sec_volume_nb24: numeric
-  sec_volume_nb30d: numeric
+  sec_volume_nb: Int
+  sec_volume_nb7d: Int
+  sec_volume_nb24: Int
+  sec_volume_nb30d: Int
   sec_volume_tz: numeric
   sec_volume_tz7d: numeric
   sec_volume_tz24: numeric
@@ -6415,12 +6445,12 @@ input market_stats_bool_exp {
   median: numeric_comparison_exp
   percent_listed: Float_comparison_exp
   percent_never_listed: Float_comparison_exp
-  prim_volume_nb: numeric_comparison_exp
+  prim_volume_nb: Int_comparison_exp
   prim_volume_tz: numeric_comparison_exp
-  sec_volume_nb: numeric_comparison_exp
-  sec_volume_nb7d: numeric_comparison_exp
-  sec_volume_nb24: numeric_comparison_exp
-  sec_volume_nb30d: numeric_comparison_exp
+  sec_volume_nb: Int_comparison_exp
+  sec_volume_nb7d: Int_comparison_exp
+  sec_volume_nb24: Int_comparison_exp
+  sec_volume_nb30d: Int_comparison_exp
   sec_volume_tz: numeric_comparison_exp
   sec_volume_tz7d: numeric_comparison_exp
   sec_volume_tz24: numeric_comparison_exp
@@ -6433,16 +6463,16 @@ input market_stats_bool_exp {
 columns and relationships of "market_stats_history"
 """
 type market_stats_history {
-  average_sale_price: bigint
-  floor: bigint
+  average_sale_price: numeric
+  floor: numeric
   floor_listing_id: String
   floor_listing_version: Int
   from: timestamptz!
 
   """An object relationship"""
   generative_token: generative_token!
-  highest_collection_offer: bigint
-  highest_sold: bigint
+  highest_collection_offer: numeric
+  highest_sold: numeric
   highest_sold_listing_id: String
   highest_sold_listing_version: Int
   id: Int!
@@ -6457,16 +6487,16 @@ type market_stats_history {
   """An object relationship"""
   listingByHighestsoldlistingversionHighestsoldlistingid: listing
   longest_average_held_in_seconds: bigint
-  lowest_sold: bigint
+  lowest_sold: numeric
   lowest_sold_listing_id: String
   lowest_sold_listing_version: Int
-  median: bigint
+  median: numeric
   percent_listed: Float
   percent_never_listed: Float
-  prim_volume_nb: bigint
-  prim_volume_tz: bigint
-  sec_volume_nb: bigint
-  sec_volume_tz: bigint
+  prim_volume_nb: Int
+  prim_volume_tz: numeric
+  sec_volume_nb: Int
+  sec_volume_tz: numeric
   to: timestamptz!
   token_id: String!
 }
@@ -6519,14 +6549,14 @@ input market_stats_history_bool_exp {
   _and: [market_stats_history_bool_exp!]
   _not: market_stats_history_bool_exp
   _or: [market_stats_history_bool_exp!]
-  average_sale_price: bigint_comparison_exp
-  floor: bigint_comparison_exp
+  average_sale_price: numeric_comparison_exp
+  floor: numeric_comparison_exp
   floor_listing_id: String_comparison_exp
   floor_listing_version: Int_comparison_exp
   from: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
-  highest_collection_offer: bigint_comparison_exp
-  highest_sold: bigint_comparison_exp
+  highest_collection_offer: numeric_comparison_exp
+  highest_sold: numeric_comparison_exp
   highest_sold_listing_id: String_comparison_exp
   highest_sold_listing_version: Int_comparison_exp
   id: Int_comparison_exp
@@ -6535,16 +6565,16 @@ input market_stats_history_bool_exp {
   listingByFloorlistingversionFloorlistingid: listing_bool_exp
   listingByHighestsoldlistingversionHighestsoldlistingid: listing_bool_exp
   longest_average_held_in_seconds: bigint_comparison_exp
-  lowest_sold: bigint_comparison_exp
+  lowest_sold: numeric_comparison_exp
   lowest_sold_listing_id: String_comparison_exp
   lowest_sold_listing_version: Int_comparison_exp
-  median: bigint_comparison_exp
+  median: numeric_comparison_exp
   percent_listed: Float_comparison_exp
   percent_never_listed: Float_comparison_exp
-  prim_volume_nb: bigint_comparison_exp
-  prim_volume_tz: bigint_comparison_exp
-  sec_volume_nb: bigint_comparison_exp
-  sec_volume_tz: bigint_comparison_exp
+  prim_volume_nb: Int_comparison_exp
+  prim_volume_tz: numeric_comparison_exp
+  sec_volume_nb: Int_comparison_exp
+  sec_volume_tz: numeric_comparison_exp
   to: timestamptz_comparison_exp
   token_id: String_comparison_exp
 }
@@ -6803,28 +6833,28 @@ input market_stats_history_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input market_stats_history_stream_cursor_value_input {
-  average_sale_price: bigint
-  floor: bigint
+  average_sale_price: numeric
+  floor: numeric
   floor_listing_id: String
   floor_listing_version: Int
   from: timestamptz
-  highest_collection_offer: bigint
-  highest_sold: bigint
+  highest_collection_offer: numeric
+  highest_sold: numeric
   highest_sold_listing_id: String
   highest_sold_listing_version: Int
   id: Int
   listed: Int
   longest_average_held_in_seconds: bigint
-  lowest_sold: bigint
+  lowest_sold: numeric
   lowest_sold_listing_id: String
   lowest_sold_listing_version: Int
-  median: bigint
+  median: numeric
   percent_listed: Float
   percent_never_listed: Float
-  prim_volume_nb: bigint
-  prim_volume_tz: bigint
-  sec_volume_nb: bigint
-  sec_volume_tz: bigint
+  prim_volume_nb: Int
+  prim_volume_tz: numeric
+  sec_volume_nb: Int
+  sec_volume_tz: numeric
   to: timestamptz
   token_id: String
 }
@@ -7109,12 +7139,12 @@ input market_stats_stream_cursor_value_input {
   median: numeric
   percent_listed: Float
   percent_never_listed: Float
-  prim_volume_nb: numeric
+  prim_volume_nb: Int
   prim_volume_tz: numeric
-  sec_volume_nb: numeric
-  sec_volume_nb7d: numeric
-  sec_volume_nb24: numeric
-  sec_volume_nb30d: numeric
+  sec_volume_nb: Int
+  sec_volume_nb7d: Int
+  sec_volume_nb24: Int
+  sec_volume_nb30d: Int
   sec_volume_tz: numeric
   sec_volume_tz7d: numeric
   sec_volume_tz24: numeric
@@ -9258,6 +9288,7 @@ type offer {
   cancelled_at: timestamptz
   created_at: timestamptz!
   id: String!
+  is_inactive: Boolean
 
   """An object relationship"""
   objkt: objkt
@@ -9306,6 +9337,7 @@ input offer_bool_exp {
   cancelled_at: timestamptz_comparison_exp
   created_at: timestamptz_comparison_exp
   id: String_comparison_exp
+  is_inactive: Boolean_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
   price: numeric_comparison_exp
@@ -9348,6 +9380,7 @@ input offer_order_by {
   cancelled_at: order_by
   created_at: order_by
   id: order_by
+  is_inactive: order_by
   objkt: objkt_order_by
   objkt_id: order_by
   price: order_by
@@ -9373,6 +9406,9 @@ enum offer_select_column {
 
   """column name"""
   id
+
+  """column name"""
+  is_inactive
 
   """column name"""
   objkt_id
@@ -9426,6 +9462,7 @@ input offer_stream_cursor_value_input {
   cancelled_at: timestamptz
   created_at: timestamptz
   id: String
+  is_inactive: Boolean
   objkt_id: String
   price: numeric
   version: Int
@@ -12063,12 +12100,12 @@ columns and relationships of "pricing_dutch_auction"
 """
 type pricing_dutch_auction {
   decrement_duration: bigint!
-  final_price: bigint
+  final_price: numeric
 
   """An object relationship"""
   generative_token: generative_token
   id: String!
-  levels: _int8!
+  levels: _numeric!
   opens_at: timestamptz
   refundable: Boolean
   resting_price: String!
@@ -12108,10 +12145,10 @@ input pricing_dutch_auction_bool_exp {
   _not: pricing_dutch_auction_bool_exp
   _or: [pricing_dutch_auction_bool_exp!]
   decrement_duration: bigint_comparison_exp
-  final_price: bigint_comparison_exp
+  final_price: numeric_comparison_exp
   generative_token: generative_token_bool_exp
   id: String_comparison_exp
-  levels: _int8_comparison_exp
+  levels: _numeric_comparison_exp
   opens_at: timestamptz_comparison_exp
   refundable: Boolean_comparison_exp
   resting_price: String_comparison_exp
@@ -12222,9 +12259,9 @@ input pricing_dutch_auction_stream_cursor_input {
 """Initial value of the column from where the streaming should start"""
 input pricing_dutch_auction_stream_cursor_value_input {
   decrement_duration: bigint
-  final_price: bigint
+  final_price: numeric
   id: String
-  levels: _int8
+  levels: _numeric
   opens_at: timestamptz
   refundable: Boolean
   resting_price: String
@@ -14311,22 +14348,22 @@ columns and relationships of "user_stats"
 """
 type user_stats {
   from: timestamptz
-  prim_volume_nb: bigint
-  prim_volume_nb7d: bigint
-  prim_volume_nb24: bigint
-  prim_volume_nb30d: bigint
-  prim_volume_tz: bigint
-  prim_volume_tz7d: bigint
-  prim_volume_tz24: bigint
-  prim_volume_tz30d: bigint
-  sec_volume_nb: bigint
-  sec_volume_nb7d: bigint
-  sec_volume_nb24: bigint
-  sec_volume_nb30d: bigint
-  sec_volume_tz: bigint
-  sec_volume_tz7d: bigint
-  sec_volume_tz24: bigint
-  sec_volume_tz30d: bigint
+  prim_volume_nb: Int
+  prim_volume_nb7d: Int
+  prim_volume_nb24: Int
+  prim_volume_nb30d: Int
+  prim_volume_tz: numeric
+  prim_volume_tz7d: numeric
+  prim_volume_tz24: numeric
+  prim_volume_tz30d: numeric
+  sec_volume_nb: Int
+  sec_volume_nb7d: Int
+  sec_volume_nb24: Int
+  sec_volume_nb30d: Int
+  sec_volume_tz: numeric
+  sec_volume_tz7d: numeric
+  sec_volume_tz24: numeric
+  sec_volume_tz30d: numeric
   to: timestamptz
 
   """An object relationship"""
@@ -14342,22 +14379,22 @@ input user_stats_bool_exp {
   _not: user_stats_bool_exp
   _or: [user_stats_bool_exp!]
   from: timestamptz_comparison_exp
-  prim_volume_nb: bigint_comparison_exp
-  prim_volume_nb7d: bigint_comparison_exp
-  prim_volume_nb24: bigint_comparison_exp
-  prim_volume_nb30d: bigint_comparison_exp
-  prim_volume_tz: bigint_comparison_exp
-  prim_volume_tz7d: bigint_comparison_exp
-  prim_volume_tz24: bigint_comparison_exp
-  prim_volume_tz30d: bigint_comparison_exp
-  sec_volume_nb: bigint_comparison_exp
-  sec_volume_nb7d: bigint_comparison_exp
-  sec_volume_nb24: bigint_comparison_exp
-  sec_volume_nb30d: bigint_comparison_exp
-  sec_volume_tz: bigint_comparison_exp
-  sec_volume_tz7d: bigint_comparison_exp
-  sec_volume_tz24: bigint_comparison_exp
-  sec_volume_tz30d: bigint_comparison_exp
+  prim_volume_nb: Int_comparison_exp
+  prim_volume_nb7d: Int_comparison_exp
+  prim_volume_nb24: Int_comparison_exp
+  prim_volume_nb30d: Int_comparison_exp
+  prim_volume_tz: numeric_comparison_exp
+  prim_volume_tz7d: numeric_comparison_exp
+  prim_volume_tz24: numeric_comparison_exp
+  prim_volume_tz30d: numeric_comparison_exp
+  sec_volume_nb: Int_comparison_exp
+  sec_volume_nb7d: Int_comparison_exp
+  sec_volume_nb24: Int_comparison_exp
+  sec_volume_nb30d: Int_comparison_exp
+  sec_volume_tz: numeric_comparison_exp
+  sec_volume_tz7d: numeric_comparison_exp
+  sec_volume_tz24: numeric_comparison_exp
+  sec_volume_tz30d: numeric_comparison_exp
   to: timestamptz_comparison_exp
   user: user_bool_exp
   user_id: String_comparison_exp
@@ -14463,22 +14500,22 @@ input user_stats_stream_cursor_input {
 """Initial value of the column from where the streaming should start"""
 input user_stats_stream_cursor_value_input {
   from: timestamptz
-  prim_volume_nb: bigint
-  prim_volume_nb7d: bigint
-  prim_volume_nb24: bigint
-  prim_volume_nb30d: bigint
-  prim_volume_tz: bigint
-  prim_volume_tz7d: bigint
-  prim_volume_tz24: bigint
-  prim_volume_tz30d: bigint
-  sec_volume_nb: bigint
-  sec_volume_nb7d: bigint
-  sec_volume_nb24: bigint
-  sec_volume_nb30d: bigint
-  sec_volume_tz: bigint
-  sec_volume_tz7d: bigint
-  sec_volume_tz24: bigint
-  sec_volume_tz30d: bigint
+  prim_volume_nb: Int
+  prim_volume_nb7d: Int
+  prim_volume_nb24: Int
+  prim_volume_nb30d: Int
+  prim_volume_tz: numeric
+  prim_volume_tz7d: numeric
+  prim_volume_tz24: numeric
+  prim_volume_tz30d: numeric
+  sec_volume_nb: Int
+  sec_volume_nb7d: Int
+  sec_volume_nb24: Int
+  sec_volume_nb30d: Int
+  sec_volume_tz: numeric
+  sec_volume_tz7d: numeric
+  sec_volume_tz24: numeric
+  sec_volume_tz30d: numeric
   to: timestamptz
   user_id: String
 }
