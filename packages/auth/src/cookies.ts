@@ -1,6 +1,6 @@
 import { CookieOptions } from "express"
 
-export const FOURTEEN_DAYS = 14 * 24 * 60 * 60 * 1000
+export const FOURTEEN_DAYS = 14 * 24 * 60 * 60
 
 /**
  * takes CookieOptions and converts maxAge to milliseconds if it is defined
