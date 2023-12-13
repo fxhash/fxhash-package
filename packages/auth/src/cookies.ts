@@ -2,6 +2,13 @@ import { CookieOptions } from "express"
 
 export const FOURTEEN_DAYS = 14 * 24 * 60 * 60 * 1000
 
+export const getNextCookieOptions = (
+  options: CookieOptions
+): CookieOptions => ({
+  ...options,
+  maxAge: options.maxAge ? options.maxAge / 1000 : undefined,
+})
+
 export const COOKIE_OPTIONS_LOCAL: CookieOptions = {
   httpOnly: true,
   maxAge: FOURTEEN_DAYS,
