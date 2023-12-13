@@ -6,7 +6,12 @@ import {
   encodePacked,
   getContract,
 } from "viem"
-import { MerkleTreeWhitelist, getWhitelistTree } from "./whitelist"
+import {
+  MerkleTreeWhitelist,
+  getFirstAvailableIndexAndProofForUser,
+  getWhitelist,
+  getWhitelistTree,
+} from "./whitelist"
 import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants"
 
 import { sign } from "viem/accounts"
@@ -471,6 +476,70 @@ export function getPricingAndReserveFromParams(
   return findPricingAndReserve()
 }
 
+interface PrepareMintParamsPayload {
+  pricing:
+    | GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["pricing_fixeds"][0]
+    | GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["pricing_dutch_auctions"][0]
+  reserve?: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["reserves"][0]
+  indexAndProof?: {
+    index: number
+    proof: string[]
+  }
+}
+
+export const prepareMintParams = async (
+  tokenId: string,
+  whitelistedAddress: `0x${string}` | null = null
+): Promise<PrepareMintParamsPayload> => {
+  const tokenPricingsAndReserves = await apolloClient.query({
+    query: Qu_GetTokenPricingsAndReserves,
+    variables: {
+      id: tokenId,
+    },
+    fetchPolicy: "no-cache",
+  })
+  const { pricing } = getPricingFromParams(
+    tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
+    !!whitelistedAddress
+  )
+  if (!pricing) {
+    throw new Error("No pricing found")
+  }
+  if (!whitelistedAddress) return { pricing }
+
+  let indexAndProof:
+    | {
+        index: number
+        proof: string[]
+      }
+    | undefined = undefined
+  let reserveSave: any = undefined
+  for (const reserve of tokenPricingsAndReserves.data.onchain
+    .generative_token_by_pk.reserves) {
+    const merkleTreeWhitelist = await getWhitelist(reserve.data.merkleRoot)
+    if (!merkleTreeWhitelist || merkleTreeWhitelist.length === 0) {
+      throw new Error("No whitelist found")
+    }
+    const indexAndProofForUser = getFirstAvailableIndexAndProofForUser(
+      whitelistedAddress,
+      merkleTreeWhitelist[0],
+      reserve
+    )
+    if (indexAndProofForUser) {
+      indexAndProof = indexAndProofForUser
+      reserveSave = reserve
+      break
+    }
+  }
+  if (!indexAndProof) {
+    throw new Error("No index and proof found")
+  }
+  return {
+    pricing,
+    reserve: reserveSave,
+    indexAndProof,
+  }
+}
 
 export const fetchTokenReserveId = async (
   tokenId: string,
