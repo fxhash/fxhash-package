@@ -1,8 +1,14 @@
+// fx sdk
+import fx__4_0_0 from "./libs/fxhash.js/4.0.0.lib"
+// p5
 import p5js__1_9_0 from "./libs/p5.js/1.9.0.lib"
 import p5js__1_7_0 from "./libs/p5.js/1.7.0.lib"
 import p5js__1_5_0 from "./libs/p5.js/1.5.0.lib"
-import fx__4_0_0 from "./libs/fxhash.js/4.0.0.lib"
+// three js
 import threejs__r157 from "./libs/three.js/r157.lib"
+// svg.js
+import svgjs__3_2_0 from "./libs/svg.js/3.2.0.lib"
+
 import { Library } from "./types"
 import { BlockchainIdentifier, BlockchainIdentifiers } from "@fxhash/config"
 
@@ -98,6 +104,7 @@ export const libraries: Library[] = [
       {
         version: "r157",
         filename: "three.module.min.js",
+        info: "(module version)",
         license: "MIT",
         availability: [
           BlockchainIdentifiers.TezosGhostnet,
@@ -106,6 +113,28 @@ export const libraries: Library[] = [
           BlockchainIdentifiers.EthereumMainnet,
         ],
         content: threejs__r157,
+      },
+    ],
+  },
+
+  {
+    name: "svg.js",
+    description:
+      "A lightweight library for manipulating and animating SVG, without any dependencies.",
+    documentation: "https://svgjs.dev/docs/3.0/",
+    filenames: ["svg.js", "svg.ming.js"],
+    versions: [
+      {
+        version: "3.2.0",
+        filename: "svg.min.js",
+        license: "MIT",
+        availability: [
+          BlockchainIdentifiers.TezosGhostnet,
+          BlockchainIdentifiers.TezosMainnet,
+          BlockchainIdentifiers.EthereumGoerli,
+          BlockchainIdentifiers.EthereumMainnet,
+        ],
+        content: svgjs__3_2_0,
       },
     ],
   },

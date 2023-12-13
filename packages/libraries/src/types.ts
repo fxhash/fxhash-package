@@ -20,6 +20,11 @@ export type LibraryVersion = {
   filename: string
 
   /**
+   * An optional small information which may be displayed alongside the library.
+   */
+  info?: string
+
+  /**
    * The License attached to this version of the library
    */
   license: License
