@@ -20,7 +20,7 @@ export type Scalars = {
   Storage: { input: any; output: any; }
   _int2: { input: any; output: any; }
   _int4: { input: any; output: any; }
-  _numeric: { input: any; output: any; }
+  _int8: { input: any; output: any; }
   _text: { input: any; output: any; }
   action_type_enum: { input: any; output: any; }
   article_flag_enum: { input: any; output: any; }
@@ -1565,17 +1565,17 @@ export type _Int4_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['_int4']['input']>>;
 };
 
-/** Boolean expression to compare columns of type "_numeric". All fields are combined with logical 'AND'. */
-export type _Numeric_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['_numeric']['input']>;
-  _gt?: InputMaybe<Scalars['_numeric']['input']>;
-  _gte?: InputMaybe<Scalars['_numeric']['input']>;
-  _in?: InputMaybe<Array<Scalars['_numeric']['input']>>;
+/** Boolean expression to compare columns of type "_int8". All fields are combined with logical 'AND'. */
+export type _Int8_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['_int8']['input']>;
+  _gt?: InputMaybe<Scalars['_int8']['input']>;
+  _gte?: InputMaybe<Scalars['_int8']['input']>;
+  _in?: InputMaybe<Array<Scalars['_int8']['input']>>;
   _is_null?: InputMaybe<Scalars['Boolean']['input']>;
-  _lt?: InputMaybe<Scalars['_numeric']['input']>;
-  _lte?: InputMaybe<Scalars['_numeric']['input']>;
-  _neq?: InputMaybe<Scalars['_numeric']['input']>;
-  _nin?: InputMaybe<Array<Scalars['_numeric']['input']>>;
+  _lt?: InputMaybe<Scalars['_int8']['input']>;
+  _lte?: InputMaybe<Scalars['_int8']['input']>;
+  _neq?: InputMaybe<Scalars['_int8']['input']>;
+  _nin?: InputMaybe<Array<Scalars['_int8']['input']>>;
 };
 
 /** Boolean expression to compare columns of type "_text". All fields are combined with logical 'AND'. */
@@ -3418,7 +3418,6 @@ export type Collection_Offer = {
   generative_token: Generative_Token;
   id: Scalars['String']['output'];
   initial_amount: Scalars['numeric']['output'];
-  is_inactive?: Maybe<Scalars['Boolean']['output']>;
   price: Scalars['numeric']['output'];
   token_id: Scalars['String']['output'];
   /** An object relationship */
@@ -3462,7 +3461,6 @@ export type Collection_Offer_Bool_Exp = {
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   initial_amount?: InputMaybe<Numeric_Comparison_Exp>;
-  is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
@@ -3507,7 +3505,6 @@ export type Collection_Offer_Order_By = {
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   id?: InputMaybe<Order_By>;
   initial_amount?: InputMaybe<Order_By>;
-  is_inactive?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
@@ -3530,8 +3527,6 @@ export enum Collection_Offer_Select_Column {
   Id = 'id',
   /** column name */
   InitialAmount = 'initial_amount',
-  /** column name */
-  IsInactive = 'is_inactive',
   /** column name */
   Price = 'price',
   /** column name */
@@ -3581,7 +3576,6 @@ export type Collection_Offer_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   initial_amount?: InputMaybe<Scalars['numeric']['input']>;
-  is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
@@ -4890,7 +4884,6 @@ export type Listing = {
   cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
   created_at: Scalars['timestamptz']['output'];
   id: Scalars['String']['output'];
-  is_inactive?: Maybe<Scalars['Boolean']['output']>;
   issuer_id?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   marketStatByIdVersion?: Maybe<Market_Stats>;
@@ -4983,7 +4976,6 @@ export type Listing_Bool_Exp = {
   cancelled_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
-  is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
   marketStatByIdVersion?: InputMaybe<Market_Stats_Bool_Exp>;
   marketStatByVersionId?: InputMaybe<Market_Stats_Bool_Exp>;
@@ -5042,7 +5034,6 @@ export type Listing_Order_By = {
   cancelled_at?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  is_inactive?: InputMaybe<Order_By>;
   issuer_id?: InputMaybe<Order_By>;
   marketStatByIdVersion?: InputMaybe<Market_Stats_Order_By>;
   marketStatByVersionId?: InputMaybe<Market_Stats_Order_By>;
@@ -5075,8 +5066,6 @@ export enum Listing_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
-  /** column name */
-  IsInactive = 'is_inactive',
   /** column name */
   IssuerId = 'issuer_id',
   /** column name */
@@ -5133,7 +5122,6 @@ export type Listing_Stream_Cursor_Value_Input = {
   cancelled_at?: InputMaybe<Scalars['timestamptz']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
   issuer_id?: InputMaybe<Scalars['String']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
@@ -7537,7 +7525,6 @@ export type Offer = {
   cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
   created_at: Scalars['timestamptz']['output'];
   id: Scalars['String']['output'];
-  is_inactive?: Maybe<Scalars['Boolean']['output']>;
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
@@ -7578,7 +7565,6 @@ export type Offer_Bool_Exp = {
   cancelled_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
-  is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
@@ -7617,7 +7603,6 @@ export type Offer_Order_By = {
   cancelled_at?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  is_inactive?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
@@ -7637,8 +7622,6 @@ export enum Offer_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
-  /** column name */
-  IsInactive = 'is_inactive',
   /** column name */
   ObjktId = 'objkt_id',
   /** column name */
@@ -7680,7 +7663,6 @@ export type Offer_Stream_Cursor_Value_Input = {
   cancelled_at?: InputMaybe<Scalars['timestamptz']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
@@ -9634,11 +9616,11 @@ export enum Order_By {
 export type Pricing_Dutch_Auction = {
   __typename?: 'pricing_dutch_auction';
   decrement_duration: Scalars['bigint']['output'];
-  final_price?: Maybe<Scalars['numeric']['output']>;
+  final_price?: Maybe<Scalars['bigint']['output']>;
   /** An object relationship */
   generative_token?: Maybe<Generative_Token>;
   id: Scalars['String']['output'];
-  levels: Scalars['_numeric']['output'];
+  levels: Scalars['_int8']['output'];
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
   refundable?: Maybe<Scalars['Boolean']['output']>;
   resting_price: Scalars['String']['output'];
@@ -9672,10 +9654,10 @@ export type Pricing_Dutch_Auction_Bool_Exp = {
   _not?: InputMaybe<Pricing_Dutch_Auction_Bool_Exp>;
   _or?: InputMaybe<Array<Pricing_Dutch_Auction_Bool_Exp>>;
   decrement_duration?: InputMaybe<Bigint_Comparison_Exp>;
-  final_price?: InputMaybe<Numeric_Comparison_Exp>;
+  final_price?: InputMaybe<Bigint_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
-  levels?: InputMaybe<_Numeric_Comparison_Exp>;
+  levels?: InputMaybe<_Int8_Comparison_Exp>;
   opens_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   refundable?: InputMaybe<Boolean_Comparison_Exp>;
   resting_price?: InputMaybe<String_Comparison_Exp>;
@@ -9764,9 +9746,9 @@ export type Pricing_Dutch_Auction_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Pricing_Dutch_Auction_Stream_Cursor_Value_Input = {
   decrement_duration?: InputMaybe<Scalars['bigint']['input']>;
-  final_price?: InputMaybe<Scalars['numeric']['input']>;
+  final_price?: InputMaybe<Scalars['bigint']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  levels?: InputMaybe<Scalars['_numeric']['input']>;
+  levels?: InputMaybe<Scalars['_int8']['input']>;
   opens_at?: InputMaybe<Scalars['timestamptz']['input']>;
   refundable?: InputMaybe<Scalars['Boolean']['input']>;
   resting_price?: InputMaybe<Scalars['String']['input']>;
