@@ -20,14 +20,6 @@
       "import": "./dist/fxhash.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],

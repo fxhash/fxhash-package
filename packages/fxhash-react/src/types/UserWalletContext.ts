@@ -4,8 +4,8 @@ import {
   PromiseResult,
   UserRejectedError,
 } from "@fxhash/contracts-shared"
-import { TezosWalletManager } from "@fxhash/contracts/index"
-import { EthereumWalletManager } from "@fxhash/eth-sdk/index"
+import { TezosWalletManager } from "@fxhash/contracts"
+import { EthereumWalletManager } from "@fxhash/eth-sdk"
 // to avoid having to include there utilities
 export {
   UserRejectedError,
