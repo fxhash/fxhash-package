@@ -230,6 +230,10 @@ export async function simulateAndExecuteContract(
       confirmations: 2,
       timeout: 120_000,
     })
+    if (receipt.status !== "success") {
+      throw new TransactionRevertedError("execution reverted")
+    }
+
     console.log("tx success: ", receipt)
     return receipt
   } catch (error) {
