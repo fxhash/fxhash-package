@@ -35,13 +35,6 @@
       "import": "./dist/*.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*"
-      ]
-    }
-  },
   "files": [
     "dist",
     "static"

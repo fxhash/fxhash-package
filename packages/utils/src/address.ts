@@ -29,6 +29,9 @@ export function isTezosAddressValid(address: string): boolean {
   if (address.length !== 36) {
     return false
   }
+  if (!/^(tz|KT)[1-4]/.test(address)) {
+    return false
+  }
   for (let i = 0; i < address.length; i++) {
     if (!BASE58_CHARSET.includes(address[i])) return false
   }

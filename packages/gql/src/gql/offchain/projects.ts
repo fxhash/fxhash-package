@@ -9,6 +9,7 @@ export const Frag_ProjectBaseDetails = graphql(`
     id
     title
     description
+    tokenId
     releaseAt
     blockchain
     storage
