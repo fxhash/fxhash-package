@@ -32,7 +32,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         this.mintOperation = new MintFixedPriceEthV1Operation(this.manager, {
           token: this.params.token,
           to: this.params.to,
-          reserveId: parseInt(pricing.id.split("-")[1]),
+          reserveId: Number(pricing.id.split("-")[1]),
           price: this.params.price,
           amount: 1n,
         })
@@ -40,7 +40,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         this.mintOperation = new MintDAEthV1Operation(this.manager, {
           token: this.params.token,
           to: this.params.to,
-          reserveId: parseInt(pricing.id.split("-")[1]),
+          reserveId: Number(pricing.id.split("-")[1]),
           amount: 1n,
           price: this.params.price,
         })
