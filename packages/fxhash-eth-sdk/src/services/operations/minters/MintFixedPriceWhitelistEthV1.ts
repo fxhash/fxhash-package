@@ -28,8 +28,8 @@ import {
 export type TMintFixedPriceWhitelistEthV1OperationParams = {
   token: string
   reserveId: number
-  index: number
-  proof: string[]
+  index: number[]
+  proof: string[][]
   price: bigint
   amount: bigint
   to: string | null
@@ -52,8 +52,8 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
         this.params.token,
         this.params.reserveId,
         this.params.to,
-        [this.params.index],
-        [this.params.proof],
+        this.params.index,
+        this.params.proof,
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,

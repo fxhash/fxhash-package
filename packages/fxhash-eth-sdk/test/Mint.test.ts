@@ -1,7 +1,7 @@
 import {
   Whitelist,
   flattenWhitelist,
-  getFirstAvailableIndexAndProofForUser,
+  getAvailableIndexesAndProofsForUser,
   getPricingAndReserveFromParams,
   getWhitelistTree,
 } from "@/utils"
@@ -121,8 +121,8 @@ describe("Mint reserves nightmare - whitelist", () => {
       consumedSlots: [],
     },
   }
-  it("should return the correct index and proof for a user with an available slot", () => {
-    const result = getFirstAvailableIndexAndProofForUser(
+  it("should return the correct index and proof for a user with a single available slot", () => {
+    const result = getAvailableIndexesAndProofsForUser(
       userA,
       {
         merkleRoot: tree.root as `0x${string}`,
@@ -132,17 +132,57 @@ describe("Mint reserves nightmare - whitelist", () => {
     )
 
     expect(result).toEqual({
-      index: flattenedWhitelist.findIndex(entry => entry[1] === userA),
-      proof: tree.getProof(
-        flattenedWhitelist.findIndex(entry => entry[1] === userA)
-      ),
+      indexes: [0],
+      proofs: [tree.getProof(0)],
+    })
+  })
+
+  it("should return the correct indexes and proofs for a user with multiple available slots and non consumed", () => {
+    const result = getAvailableIndexesAndProofsForUser(
+      userB,
+      {
+        merkleRoot: tree.root as `0x${string}`,
+        whitelist: flattenedWhitelist,
+      },
+      reserve
+    )
+
+    expect(result).toEqual({
+      indexes: [1, 2],
+      proofs: [tree.getProof(1), tree.getProof(2)],
+    })
+  })
+
+  it("should return the correct indexes and proofs for a user with multiple available slots and some consumed", () => {
+    const modifiedReserve = {
+      ...reserve,
+      data: {
+        ...reserve.data,
+        consumedSlots: [
+          ["3", userC],
+          ["4", userC],
+        ],
+      },
+    }
+    const result = getAvailableIndexesAndProofsForUser(
+      userC,
+      {
+        merkleRoot: tree.root as `0x${string}`,
+        whitelist: flattenedWhitelist,
+      },
+      modifiedReserve
+    )
+
+    expect(result).toEqual({
+      indexes: [5],
+      proofs: [tree.getProof(5)],
     })
   })
 
   it("should throw an error if the user is not in the whitelist", () => {
     const nonWhitelistedUser = "0xNonExistingUser"
     expect(() =>
-      getFirstAvailableIndexAndProofForUser(
+      getAvailableIndexesAndProofsForUser(
         nonWhitelistedUser,
         {
           merkleRoot: tree.root as `0x${string}`,
@@ -153,17 +193,17 @@ describe("Mint reserves nightmare - whitelist", () => {
     ).toThrowError("User has not any available slot in whitelist")
   })
 
-  it("should throw an error if the user's slot is already consumed", () => {
+  it("should throw an error if all the user's slot are already consumed", () => {
     const modifiedReserve = {
       ...reserve,
       data: {
         ...reserve.data,
-        consumedSlots: [{ address: userA }],
+        consumedSlots: [["0", userA]],
       },
     }
 
     expect(() =>
-      getFirstAvailableIndexAndProofForUser(
+      getAvailableIndexesAndProofsForUser(
         userA,
         {
           merkleRoot: tree.root as `0x${string}`,
@@ -175,7 +215,7 @@ describe("Mint reserves nightmare - whitelist", () => {
   })
 
   it("should return a valid proof for the user's slot", () => {
-    const result = getFirstAvailableIndexAndProofForUser(
+    const result = getAvailableIndexesAndProofsForUser(
       userA,
       {
         merkleRoot: tree.root as `0x${string}`,
@@ -184,7 +224,7 @@ describe("Mint reserves nightmare - whitelist", () => {
       reserve
     )
 
-    const isValidProof = tree.verify(result.index, result.proof)
+    const isValidProof = tree.verify(result.indexes[0], result.proofs[0])
 
     expect(isValidProof).toBeTruthy()
   })

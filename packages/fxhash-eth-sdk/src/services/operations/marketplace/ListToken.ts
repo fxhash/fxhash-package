@@ -4,7 +4,6 @@ import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
 
 import { listToken } from "../Marketplace"
 
-
 export type TListTokenEthV1OperationParams = {
   token: string
   tokenId: string
@@ -25,6 +24,12 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
         weiPrice: this.params.price,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
+        options: {
+          "seaport-v1.5": {
+            useOffChainCancellation: true,
+          },
+        },
+        automatedRoyalties: true,
         expirationTime: this.params.expiration
           ? this.params.expiration
           : undefined,
