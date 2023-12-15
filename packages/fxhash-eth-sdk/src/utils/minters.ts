@@ -8,7 +8,7 @@ import {
 } from "viem"
 import {
   MerkleTreeWhitelist,
-  getFirstAvailableIndexAndProofForUser,
+  getAvailableIndexesAndProofsForUser,
   getWhitelist,
   getWhitelistTree,
 } from "./whitelist"
@@ -481,14 +481,15 @@ interface PrepareMintParamsPayload {
     | GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["pricing_fixeds"][0]
     | GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["pricing_dutch_auctions"][0]
   reserve?: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["reserves"][0]
-  indexAndProof?: {
-    index: number
-    proof: string[]
+  indexesAndProofs?: {
+    indexes: number[]
+    proofs: string[][]
   }
 }
 
 export const prepareMintParams = async (
   tokenId: string,
+  qty: bigint,
   whitelistedAddress: `0x${string}` | null = null
 ): Promise<PrepareMintParamsPayload> => {
   const tokenPricingsAndReserves = await apolloClient.query({
@@ -507,10 +508,10 @@ export const prepareMintParams = async (
   }
   if (!whitelistedAddress) return { pricing }
 
-  let indexAndProof:
+  let indexesAndProofs:
     | {
-        index: number
-        proof: string[]
+        indexes: number[]
+        proofs: string[][]
       }
     | undefined = undefined
   let reserveSave: any = undefined
@@ -520,24 +521,29 @@ export const prepareMintParams = async (
     if (!merkleTreeWhitelist || merkleTreeWhitelist.length === 0) {
       throw new Error("No whitelist found")
     }
-    const indexAndProofForUser = getFirstAvailableIndexAndProofForUser(
+    const indexesAndProofsForUser = getAvailableIndexesAndProofsForUser(
       whitelistedAddress,
       merkleTreeWhitelist[0],
       reserve
     )
-    if (indexAndProofForUser) {
-      indexAndProof = indexAndProofForUser
+    if (indexesAndProofsForUser) {
+      indexesAndProofs = indexesAndProofsForUser
       reserveSave = reserve
       break
     }
   }
-  if (!indexAndProof) {
-    throw new Error("No index and proof found")
+  if (qty > BigInt(indexesAndProofs.indexes.length)) {
+    throw new Error(
+      "Not enough allow list entries found for the requested quantity"
+    )
+  } else {
+    indexesAndProofs.indexes = indexesAndProofs.indexes.slice(0, Number(qty))
+    indexesAndProofs.proofs = indexesAndProofs.proofs.slice(0, Number(qty))
   }
   return {
     pricing,
     reserve: reserveSave,
-    indexAndProof,
+    indexesAndProofs,
   }
 }
 

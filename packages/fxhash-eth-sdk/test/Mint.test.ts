@@ -1,7 +1,7 @@
 import {
   Whitelist,
   flattenWhitelist,
-  getFirstAvailableIndexAndProofForUser,
+  getAvailableIndexesAndProofsForUser,
   getPricingAndReserveFromParams,
   getWhitelistTree,
 } from "@/utils"
@@ -122,7 +122,7 @@ describe("Mint reserves nightmare - whitelist", () => {
     },
   }
   it("should return the correct index and proof for a user with an available slot", () => {
-    const result = getFirstAvailableIndexAndProofForUser(
+    const result = getAvailableIndexesAndProofsForUser(
       userA,
       {
         merkleRoot: tree.root as `0x${string}`,
@@ -142,7 +142,7 @@ describe("Mint reserves nightmare - whitelist", () => {
   it("should throw an error if the user is not in the whitelist", () => {
     const nonWhitelistedUser = "0xNonExistingUser"
     expect(() =>
-      getFirstAvailableIndexAndProofForUser(
+      getAvailableIndexesAndProofsForUser(
         nonWhitelistedUser,
         {
           merkleRoot: tree.root as `0x${string}`,
@@ -163,7 +163,7 @@ describe("Mint reserves nightmare - whitelist", () => {
     }
 
     expect(() =>
-      getFirstAvailableIndexAndProofForUser(
+      getAvailableIndexesAndProofsForUser(
         userA,
         {
           merkleRoot: tree.root as `0x${string}`,
@@ -175,7 +175,7 @@ describe("Mint reserves nightmare - whitelist", () => {
   })
 
   it("should return a valid proof for the user's slot", () => {
-    const result = getFirstAvailableIndexAndProofForUser(
+    const result = getAvailableIndexesAndProofsForUser(
       userA,
       {
         merkleRoot: tree.root as `0x${string}`,
