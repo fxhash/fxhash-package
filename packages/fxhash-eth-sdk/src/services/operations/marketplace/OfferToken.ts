@@ -25,6 +25,12 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
         quantity: this.params.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
+        options: {
+          "seaport-v1.5": {
+            useOffChainCancellation: true,
+          },
+        },
+        automatedRoyalties: true,
       },
     ]
     return await placeBid(args, this.manager.walletClient)
