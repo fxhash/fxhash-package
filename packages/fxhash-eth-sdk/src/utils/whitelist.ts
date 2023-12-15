@@ -267,7 +267,7 @@ export function getAvailableIndexesAndProofsForUser(
 
   const indexesAndProofs = { indexes: [], proofs: [] }
   if (filteredWhitelist.length === 0) {
-    throw new Error("User has not any available slot in whitelist")
+    return null
   }
 
   const tree = getWhitelistTree(whitelist.whitelist)
