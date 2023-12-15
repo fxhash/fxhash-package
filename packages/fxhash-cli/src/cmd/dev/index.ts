@@ -164,12 +164,10 @@ export const commandDev: CommandModule = {
             commandCapture.handler(yargs).then(() => {
               const jpg = readdirSync(CWD_PATH)
                 .filter(file => {
-                  console.log(file)
                   return file.endsWith(".jpg")
                 })
                 .sort()
                 .at(-1)
-                console.log(jpg)
               res.sendFile(`${jpg}`, {root:CWD_PATH}, err => {
                 if (err) {
                   res.send(err)
