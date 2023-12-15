@@ -258,14 +258,16 @@ export function getAvailableIndexesAndProofsForUser(
     const findIndex = reducedWhiteList.findIndex(
       entry => entry[1] === address && entry[0] === index
     )
-    reducedWhiteList.splice(findIndex, 1)
+    if (findIndex != -1) {
+      reducedWhiteList.splice(findIndex, 1)
+    }
   }
   // Get the first available index for the user
   const filteredWhitelist = reducedWhiteList.filter(entry => entry[1] === user)
 
   const indexesAndProofs = { indexes: [], proofs: [] }
   if (filteredWhitelist.length === 0) {
-    return indexesAndProofs
+    throw new Error("User has not any available slot in whitelist")
   }
 
   const tree = getWhitelistTree(whitelist.whitelist)
