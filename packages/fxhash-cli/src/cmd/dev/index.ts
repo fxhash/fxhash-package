@@ -1,23 +1,26 @@
-import type { CommandModule } from "yargs"
-import Webpack, { Configuration } from "webpack"
-import WebpackDevServer from "webpack-dev-server"
-import open from "open"
+import { existsSync, readdirSync } from "fs"
+import path from "path"
 import chalk from "chalk"
 import express from "express"
+import open from "open"
+import Webpack, { Configuration } from "webpack"
+import WebpackDevServer from "webpack-dev-server"
+import type { CommandModule } from "yargs"
+import yargsd from "yargs"
 import env, {
   CWD_PATH,
   FXSTUDIO_PATH,
   WEBPACK_CONFIG_DEV_FILE_NAME,
 } from "../../constants"
-import { createDevConfig } from "../../webpack/webpack.config.dev"
-import { logger } from "../../utils/logger"
-import { isEjectedProject, validateProjecStructure } from "../../validate/index"
-import path from "path"
-import { existsSync } from "fs"
-import { updateToolkit } from "../../updates/toolkit/toolkit"
+import { getProjectPaths } from "../../templates/paths"
 import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
 import { projectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
-import { getProjectPaths } from "../../templates/paths"
+import { updateToolkit } from "../../updates/toolkit/toolkit"
+import { logger } from "../../utils/logger"
+import { isEjectedProject, validateProjecStructure } from "../../validate/index"
+import { createDevConfig } from "../../webpack/webpack.config.dev"
+import { commandBuild, commandBuildBuilder } from "../build/index"
+import { commandCapture } from "../capture/index"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
@@ -97,7 +100,7 @@ export const commandDev: CommandModule = {
     if (isEjected) {
       const localDevConfigPath = path.resolve(
         CWD_PATH,
-        WEBPACK_CONFIG_DEV_FILE_NAME + ".js"
+        `${WEBPACK_CONFIG_DEV_FILE_NAME}.js`
       )
       if (!existsSync(localDevConfigPath)) {
         throw new Error(`Could not find webpack config: ${localDevConfigPath}`)
@@ -140,6 +143,44 @@ export const commandDev: CommandModule = {
       // start fxlens
       const app = express()
       app.use(express.static(FXSTUDIO_PATH))
+      app.get("/preview", async (req, res) => {
+        const { fxhash, fxiteration, fxminter, inputBytes } = req.query
+        const { resX, resY, mode, trigger, delay, selector } = req.query
+        const yargs = {
+          hash: fxhash,
+          iteration: fxiteration,
+          minter: fxminter,
+          inputBytes: inputBytes,
+          x: resX,
+          y: resY,
+          trigger: trigger,
+          delay: delay,
+          selector: selector,
+          zip: "upload.zip",
+        }
+        commandBuild
+          .handler({ srcPath: "./", minify: false, noZip: false })
+          .then(() => {
+            commandCapture.handler(yargs).then(() => {
+              const jpg = readdirSync(CWD_PATH)
+                .filter(file => {
+                  console.log(file)
+                  return file.endsWith(".jpg")
+                })
+                .sort()
+                .at(-1)
+                console.log(jpg)
+              res.sendFile(`${jpg}`, {root:CWD_PATH}, err => {
+                if (err) {
+                  res.send(err)
+                }
+              })
+            })
+          })
+          .catch(err => {
+            res.send(err)
+          })
+      })
       app.listen(portStudio, () => {
         console.log(
           `${logger.successC("[fxlens] fx(lens) is running on")} ${logger.url(
@@ -160,7 +201,7 @@ export const commandDev: CommandModule = {
       console.log()
       if (noLensArg) {
         target = URL_PROJECT
-        console.log(`noLens argument found; starting project only`)
+        console.log("noLens argument found; starting project only")
         console.log(`opening project: ${logger.url(target)}`)
       } else {
         console.log(
