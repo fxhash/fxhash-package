@@ -37,8 +37,13 @@ export const fxlensUpdateConfig: ModuleUpdater = {
       recursive: true,
       force: true,
     })
-    // move download to ./lib/fxlens
-    fs.renameSync(path.join(tmpPath, "build"), path.join(FXSTUDIO_PATH))
+    // copy download to ./lib/fxlens then rm src
+    // linux /tmp usually on separate tmpfs device mount
+    // and nodejs will complain about cross-device EXDEV error if moving
+    fs.cpSync(path.join(tmpPath, "build"), path.join(FXSTUDIO_PATH), {
+      recursive: true,
+    })
+    fs.rmSync(tmpPath,{recursive:true})
     return latestVersion
   },
 }
