@@ -1,6 +1,5 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import {
   DutchAuctionMintInfoArgs,
@@ -10,7 +9,7 @@ import {
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
 import { processAndFormatMintInfos } from "@/utils/minters"
-import { getHashFromIPFSCID } from "@/utils"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TCreateTicketEthV1OperationParams = {
   token: string
@@ -36,7 +35,7 @@ export type TCreateTicketEthV1OperationParams = {
 export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreateTicketEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
       abi: FX_TICKETS_FACTORY_ABI,
@@ -51,7 +50,11 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
       ],
       account: this.manager.address as `0x${string}`,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {
