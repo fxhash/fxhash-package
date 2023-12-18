@@ -2,6 +2,7 @@ import { EthereumContractOperation } from "../contractOperation"
 import { ReservoirPlaceBidParams } from "@/services/reservoir/types"
 import { placeBid } from "../Marketplace"
 import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TMakeOfferEthV1OperationParams = {
   token: string
@@ -17,7 +18,7 @@ export type TMakeOfferEthV1OperationParams = {
 export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOfferEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<string> {
+  async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
     const args: ReservoirPlaceBidParams = [
       {
         token: `${this.params.token}:${this.params.tokenId}`,
@@ -33,7 +34,11 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
         automatedRoyalties: true,
       },
     ]
-    return await placeBid(args, this.manager.walletClient)
+    const transactionHash = await placeBid(args, this.manager.walletClient)
+    return {
+      type: TransactionType.OFFCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {
