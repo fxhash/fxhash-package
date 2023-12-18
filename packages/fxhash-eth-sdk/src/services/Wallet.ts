@@ -8,6 +8,8 @@ import {
   success,
   InsufficientFundsError,
   TransactionRevertedError,
+  TransactionReceiptError,
+  TransactionUnknownError,
   TransactionType,
 } from "@fxhash/contracts-shared"
 import {
@@ -21,7 +23,7 @@ import { mainnet, sepolia, hardhat, goerli } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "@/services/Safe"
 import { TEthereumContractOperation } from "./operations"
-import { JsonRpcSigner } from "ethers"
+import { JsonRpcSigner, Transaction } from "ethers"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, goerli, hardhat]
@@ -185,19 +187,28 @@ export class EthereumWalletManager extends WalletManager {
     hash: string
   }): PromiseResult<
     TransactionReceipt,
-    UserRejectedError | TransactionRevertedError
+    | UserRejectedError
+    | TransactionRevertedError
+    | TransactionReceiptError
+    | TransactionUnknownError
   > {
-    const receipt = await this.publicClient.waitForTransactionReceipt({
-      hash: hash as `0x${string}`,
-      confirmations: 2,
-      timeout: 120_000,
-    })
-    if (receipt.status !== "success") {
-      console.error("Transaction failed", receipt)
-      return failure(new TransactionRevertedError("Execution reverted"))
+    try {
+      const receipt = await this.publicClient.waitForTransactionReceipt({
+        hash: hash as `0x${string}`,
+        confirmations: 2,
+        timeout: 120_000,
+      })
+      if (receipt.status !== "success") {
+        console.error("Transaction failed", receipt)
+        return failure(new TransactionRevertedError("Execution reverted"))
+      }
+      console.log("tx success: ", receipt)
+      return success(receipt)
+    } catch (error: any) {
+      if (error instanceof TransactionNotFoundError)
+        return failure(new TransactionReceiptError())
+      return failure(new TransactionUnknownError())
     }
-    console.log("tx success: ", receipt)
-    return success(receipt)
   }
 
   // given an error, returns true if request can be cycled to another RPC node
