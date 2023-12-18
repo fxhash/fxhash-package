@@ -1,12 +1,12 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 /**
  * The following type represents the parameters required for a mint operation in a fixed price Ethereum
@@ -37,7 +37,7 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
       this.params.to = this.manager.address
     }
   }
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
       abi: FIXED_PRICE_MINTER_ABI,
@@ -51,7 +51,11 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

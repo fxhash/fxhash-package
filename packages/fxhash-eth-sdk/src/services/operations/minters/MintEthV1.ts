@@ -5,6 +5,7 @@ import { prepareMintParams } from "@/utils"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TMintEthV1OperationParams = {
   token: `0x${string}`
@@ -78,8 +79,8 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
       )
     }
   }
-  async call(): Promise<TransactionReceipt> {
-    return (await this.mintOperation.call()) as TransactionReceipt
+  async call(): Promise<{ type: TransactionType; hash: string }> {
+    return await this.mintOperation.call()
   }
 
   success(): string {
