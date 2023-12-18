@@ -138,7 +138,7 @@ export abstract class WalletManager {
   abstract waitForTransaction(params: {
     hash: string
     // TODO proper error type
-  }): PromiseResult<unknown, UserRejectedError>
+  }): PromiseResult<unknown, UserRejectedError | TransactionRevertedError>
 }
 
 // a generic type for ContractOperation polymorphism
