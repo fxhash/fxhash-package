@@ -28,13 +28,6 @@ export class TransactionRevertedError extends Error {
   }
 }
 
-export class TransactionReceiptError extends Error {
-  name = "TransactionReceiptError" as const
-
-  constructor(readonly paramHash: string) {
-    super(`An error occurred waiting for transaction with hash: ${paramHash}. Please check your wallet transactions before resubmitting.`)
-  }
-}
 
 export class NetworkError extends Error {
   name = "NetworkError" as const
@@ -146,7 +139,7 @@ export abstract class WalletManager {
   abstract waitForTransaction(params: {
     hash: string
     // TODO proper error type
-  }): PromiseResult<unknown, UserRejectedError | TransactionRevertedError | TransactionReceiptError>
+  }): PromiseResult<unknown, UserRejectedError | TransactionRevertedError>
 }
 
 // a generic type for ContractOperation polymorphism

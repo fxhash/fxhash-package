@@ -9,7 +9,6 @@ import {
   InsufficientFundsError,
   TransactionRevertedError,
   TransactionType,
-  TransactionReceiptError,
 } from "@fxhash/contracts-shared"
 import {
   PublicClient,
@@ -186,27 +185,19 @@ export class EthereumWalletManager extends WalletManager {
     hash: string
   }): PromiseResult<
     TransactionReceipt,
-    UserRejectedError | TransactionRevertedError | TransactionReceiptError
+    UserRejectedError | TransactionRevertedError
   > {
-    try {
-      const receipt = await this.publicClient.waitForTransactionReceipt({
-        hash: hash as `0x${string}`,
-        confirmations: 2,
-        timeout: 120_000,
-      })
-      if (receipt.status !== "success") {
-        console.error("Transaction failed", receipt)
-        return failure(new TransactionRevertedError("Execution reverted"))
-      }
-      console.log("tx success: ", receipt)
-      return success(receipt)
-    } catch (error: any) {
-      if (error instanceof TransactionNotFoundError)
-        return failure(
-          new TransactionReceiptError(hash)
-        )
-      throw error
+    const receipt = await this.publicClient.waitForTransactionReceipt({
+      hash: hash as `0x${string}`,
+      confirmations: 2,
+      timeout: 120_000,
+    })
+    if (receipt.status !== "success") {
+      console.error("Transaction failed", receipt)
+      return failure(new TransactionRevertedError("Execution reverted"))
     }
+    console.log("tx success: ", receipt)
+    return success(receipt)
   }
 
   // given an error, returns true if request can be cycled to another RPC node
