@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { getSafeService } from "@/services/Safe"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 /**
  * The above type defines the parameters for executing a safe multisig transaction operation in
@@ -18,7 +18,7 @@ export type TExecuteSafeMultisigTxEthV1OperationParams = {
 export class ExecuteSafeMultisigTxEthV1Operation extends EthereumContractOperation<TExecuteSafeMultisigTxEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     await this.manager.connectSafe(this.params.collabAddress)
 
     const safeService = getSafeService()
@@ -27,8 +27,11 @@ export class ExecuteSafeMultisigTxEthV1Operation extends EthereumContractOperati
     const receipt =
       executeTxResponse.transactionResponse &&
       (await executeTxResponse.transactionResponse.wait())
-    console.log(receipt)
-    return receipt.hash
+    console.log("Safe executed", receipt)
+    return {
+      type: TransactionType.OFFCHAIN,
+      hash: receipt.hash,
+    }
   }
 
   success(): string {
