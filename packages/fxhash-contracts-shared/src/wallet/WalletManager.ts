@@ -28,6 +28,23 @@ export class TransactionRevertedError extends Error {
   }
 }
 
+export class TransactionReceiptError extends Error {
+  name = "TransactionReceiptError" as const
+
+  constructor() {
+    super(`Failed to locate transaction - please check for pending transactions in your wallet before resubmitting.`)
+  }
+}
+
+export class TransactionUnknownError extends Error {
+  name = "TransactionUnknownError" as const
+
+  constructor() {
+    super(`An unknown error occurred waiting for transaction - please check for pending transactions in your wallet before resubmitting.`)
+  }
+}
+
+
 export class NetworkError extends Error {
   name = "NetworkError" as const
   message = "Network error"
@@ -133,12 +150,14 @@ export abstract class WalletManager {
     | UserRejectedError
     | InsufficientFundsError
     | TransactionRevertedError
+ 
   >
 
   abstract waitForTransaction(params: {
     hash: string
     // TODO proper error type
-  }): PromiseResult<unknown, UserRejectedError | TransactionRevertedError>
+  }): PromiseResult<unknown, UserRejectedError | TransactionRevertedError    | TransactionReceiptError
+  | TransactionUnknownError>
 }
 
 // a generic type for ContractOperation polymorphism
