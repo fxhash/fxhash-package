@@ -12,7 +12,7 @@ import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
 import { CallData } from "@0xsplits/splits-sdk"
-import { TransactionType } from "@fxhash/contracts-shared"
+import { TransactionCaughtError, TransactionType } from "@fxhash/contracts-shared"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -159,10 +159,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         hash: transactionHash,
       }
     } else {
-      return {
-        type: TransactionType.OFFCHAIN,
-        hash: "",
-      }
+      throw new TransactionCaughtError("Nothing to withdraw")
     }
   }
   success(): string {

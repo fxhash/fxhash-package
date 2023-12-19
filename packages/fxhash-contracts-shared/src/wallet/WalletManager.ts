@@ -28,6 +28,16 @@ export class TransactionRevertedError extends Error {
   }
 }
 
+export class TransactionCaughtError extends Error {
+  name = "TransactionCaughtError" as const
+  errorName: string
+
+  constructor(readonly paramErrorName: string) {
+    super(`Unable to submit transaction: ${paramErrorName}`)
+    this.errorName = paramErrorName
+  }
+}
+
 export class TransactionReceiptError extends Error {
   name = "TransactionReceiptError" as const
 
@@ -150,7 +160,7 @@ export abstract class WalletManager {
     | UserRejectedError
     | InsufficientFundsError
     | TransactionRevertedError
- 
+    | TransactionCaughtError
   >
 
   abstract waitForTransaction(params: {
