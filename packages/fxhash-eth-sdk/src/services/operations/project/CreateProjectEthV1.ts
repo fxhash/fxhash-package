@@ -20,15 +20,13 @@ import {
 } from "@/services/operations/EthCommon"
 import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils"
 import { proposeSafeTransaction } from "@/services/Safe"
-import {
-  MetaTransactionData,
-  SafeTransactionDataPartial,
-} from "@safe-global/safe-core-sdk-types"
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { getHashFromIPFSCID } from "@/utils/ipfs"
 import {
   encodeProjectFactoryArgs,
   encodeTicketFactoryArgs,
 } from "@/utils/factories"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -111,7 +109,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const primaryReceivers = prepareReceivers(
       this.params.primaryReceivers,
       "primary"
@@ -266,7 +264,14 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         value: "0",
       }
 
-      return await proposeSafeTransaction([safeTransactionData], this.manager)
+      const transactionHash = await proposeSafeTransaction(
+        [safeTransactionData],
+        this.manager
+      )
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: transactionHash,
+      }
     } else {
       //prepare the actual request to be able to simulate the transaction outcome
       const contractArgs: SimulateAndExecuteContractRequest = {
@@ -277,7 +282,14 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         account: this.manager.address as `0x${string}`,
       }
       //simulate the transaction and execute it, will throw an error if it fails
-      return simulateAndExecuteContract(this.manager, contractArgs)
+      const transactionHash = await simulateAndExecuteContract(
+        this.manager,
+        contractArgs
+      )
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: transactionHash,
+      }
     }
   }
 

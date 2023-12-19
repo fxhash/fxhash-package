@@ -1,12 +1,11 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 /**
  * The TMintDAEthV1OperationParams type represents the parameters required for a mint operation in a
@@ -38,7 +37,7 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
       this.params.to = this.manager.address
     }
   }
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       abi: DUTCH_AUCTION_MINTER_ABI,
@@ -52,7 +51,11 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

@@ -1,12 +1,11 @@
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { TICKET_REDEEMER_ABI } from "@/abi/TicketRedeemer"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-
 import { config } from "@fxhash/config"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TRedeemTicketEthV1OperationParams = {
   ticket: string
@@ -22,7 +21,7 @@ export type TRedeemTicketEthV1OperationParams = {
 export class RedeemTicketEthV1Operation extends EthereumContractOperation<TRedeemTicketEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: config.eth.contracts.ticket_redeemer_v1 as `0x${string}`,
       abi: TICKET_REDEEMER_ABI,
@@ -30,7 +29,11 @@ export class RedeemTicketEthV1Operation extends EthereumContractOperation<TRedee
       args: [this.params.ticket, this.params.tokenId, this.params.params],
       account: this.manager.address as `0x${string}`,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

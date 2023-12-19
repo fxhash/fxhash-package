@@ -1,6 +1,5 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
+import { encodeFunctionData, getAddress } from "viem"
 import {
   prepareReceivers,
   ReceiverEntry,
@@ -8,11 +7,9 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import {
-  MetaTransactionData,
-  SafeTransactionDataPartial,
-} from "@safe-global/safe-core-sdk-types"
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TSetPrimaryReceiversEthV1OperationParams = {
   token: string
@@ -26,7 +23,7 @@ export type TSetPrimaryReceiversEthV1OperationParams = {
 export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation<TSetPrimaryReceiversEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const preparedPrimaryReceivers = prepareReceivers(
       this.params.receivers,
       "primary"
@@ -45,7 +42,14 @@ export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation
         }),
         value: "0",
       }
-      return await proposeSafeTransaction([safeTransactionData], this.manager)
+      const transactionHash = await proposeSafeTransaction(
+        [safeTransactionData],
+        this.manager
+      )
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: transactionHash,
+      }
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: getAddress(this.params.token) as `0x${string}`,
@@ -57,7 +61,14 @@ export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation
         ],
         account: this.manager.address as `0x${string}`,
       }
-      return simulateAndExecuteContract(this.manager, args)
+      const transactionHash = await simulateAndExecuteContract(
+        this.manager,
+        args
+      )
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: transactionHash,
+      }
     }
   }
 

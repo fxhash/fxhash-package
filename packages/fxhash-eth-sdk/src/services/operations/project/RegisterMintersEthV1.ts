@@ -1,8 +1,7 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
+import { encodeFunctionData, getAddress } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 import { FX_TICKETS_ABI } from "@/abi/FxTicket"
-
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
@@ -11,11 +10,9 @@ import {
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import {
-  MetaTransactionData,
-  SafeTransactionDataPartial,
-} from "@safe-global/safe-core-sdk-types"
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { processAndFormatMintInfos } from "@/utils/minters"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TRegisterMintersEthV1OperationParams = {
   token: `0x${string}`
@@ -35,7 +32,7 @@ export type TRegisterMintersEthV1OperationParams = {
 export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRegisterMintersEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const payloadArgs = await processAndFormatMintInfos(
       this.params.mintInfo,
       this.manager
@@ -51,7 +48,14 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         }),
         value: "0",
       }
-      return await proposeSafeTransaction([safeTransactionData], this.manager)
+      const transactionHash = await proposeSafeTransaction(
+        [safeTransactionData],
+        this.manager
+      )
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: transactionHash,
+      }
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
@@ -60,7 +64,14 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         args: [payloadArgs],
         account: this.manager.address as `0x${string}`,
       }
-      return simulateAndExecuteContract(this.manager, args)
+      const transactionHash = await simulateAndExecuteContract(
+        this.manager,
+        args
+      )
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: transactionHash,
+      }
     }
   }
 

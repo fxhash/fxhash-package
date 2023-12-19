@@ -6,6 +6,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 /**
  * The above type represents the parameters required for a mint fixed price whitelist Ethereum V1
@@ -43,7 +44,7 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
       this.params.to = this.manager.address
     }
   }
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
       abi: FIXED_PRICE_MINTER_ABI,
@@ -58,7 +59,11 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

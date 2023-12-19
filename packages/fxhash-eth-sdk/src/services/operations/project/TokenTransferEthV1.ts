@@ -6,6 +6,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TTransferTokenEthV1OperationParams = {
   token: `0x${string}`
@@ -20,7 +21,7 @@ export type TTransferTokenEthV1OperationParams = {
 export class TransferTokenEthV1Operation extends EthereumContractOperation<TTransferTokenEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.token,
       abi: FX_GEN_ART_721_ABI,
@@ -28,7 +29,11 @@ export class TransferTokenEthV1Operation extends EthereumContractOperation<TTran
       args: [this.params.from, this.params.to, this.params.tokenId],
       account: this.manager.address as `0x${string}`,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {
