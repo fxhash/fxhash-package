@@ -24,7 +24,6 @@ import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "@/services/Safe"
 import { TEthereumContractOperation } from "./operations"
 import { JsonRpcSigner, Transaction } from "ethers"
-import { TransactionCaughtError } from "@fxhash/contracts-shared"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, goerli, hardhat]
@@ -134,7 +133,7 @@ export class EthereumWalletManager extends WalletManager {
     | PendingSigningRequestError
     | InsufficientFundsError
     | TransactionRevertedError
-    | TransactionCaughtError
+    | TransactionUnknownError
   > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
@@ -166,7 +165,7 @@ export class EthereumWalletManager extends WalletManager {
           return failure(error)
         } else if (error instanceof TransactionRevertedError) {
           return failure(error)
-        } else if (error instanceof TransactionCaughtError) {
+        } else if (error instanceof TransactionUnknownError) {
           return failure(error)
         }
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
