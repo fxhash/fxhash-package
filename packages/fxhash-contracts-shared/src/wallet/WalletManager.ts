@@ -38,12 +38,15 @@ export class TransactionReceiptError extends Error {
 
 export class TransactionUnknownError extends Error {
   name = "TransactionUnknownError" as const
+  errorName?: string
 
-  constructor() {
-    super(`An unknown error occurred waiting for transaction - please check for pending transactions in your wallet before resubmitting.`)
+  constructor(readonly paramErrorName?: string) {
+    super(
+      paramErrorName ||
+      `An unknown error occurred waiting for transaction - please check for pending transactions in your wallet before resubmitting.`)
+    this.errorName = paramErrorName
   }
 }
-
 
 export class NetworkError extends Error {
   name = "NetworkError" as const
@@ -150,7 +153,7 @@ export abstract class WalletManager {
     | UserRejectedError
     | InsufficientFundsError
     | TransactionRevertedError
- 
+    | TransactionUnknownError
   >
 
   abstract waitForTransaction(params: {
