@@ -1,6 +1,7 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { ReservoirBuyTokenParams } from "@/services/reservoir/types"
 import { buyToken } from "../Marketplace"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TBuyTokenEthV1OperationParams = {
   orderId: string
@@ -12,13 +13,17 @@ export type TBuyTokenEthV1OperationParams = {
 export class BuyTokenEthV1Operation extends EthereumContractOperation<TBuyTokenEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<string> {
+  async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
     const args: ReservoirBuyTokenParams = [
       {
         orderId: this.params.orderId,
       },
     ]
-    return await buyToken(args, this.manager.walletClient)
+    const transactionHash = await buyToken(args, this.manager.walletClient)
+    return {
+      type: TransactionType.OFFCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

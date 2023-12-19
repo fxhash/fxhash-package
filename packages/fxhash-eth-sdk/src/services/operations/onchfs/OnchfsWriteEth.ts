@@ -1,5 +1,4 @@
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -8,6 +7,7 @@ import { type Inscription } from "onchfs"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { ethOnchfsInscriptionCallData } from "@/utils"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]
@@ -19,7 +19,7 @@ export type TOnchfsWriteOperationParams = {
 export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWriteOperationParams> {
   async prepare() {}
 
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const callRequests = this.params.inscriptions
       .map(ins => ethOnchfsInscriptionCallData(ins))
       .map(call => {
@@ -37,7 +37,14 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
       }
-      return simulateAndExecuteContract(this.manager, args)
+      const transactionHash = await simulateAndExecuteContract(
+        this.manager,
+        args
+      )
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: transactionHash,
+      }
     } else {
       return undefined
     }

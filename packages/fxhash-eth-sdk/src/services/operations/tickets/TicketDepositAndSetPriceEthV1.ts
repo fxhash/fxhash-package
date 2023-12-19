@@ -1,10 +1,10 @@
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TTicketDepositAndSetPriceEthV1OperationParams = {
   ticket: string
@@ -21,7 +21,7 @@ export type TTicketDepositAndSetPriceEthV1OperationParams = {
 export class TicketDepositAndSetPriceEthV1Operation extends EthereumContractOperation<TTicketDepositAndSetPriceEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.ticket as `0x${string}`,
       abi: FX_TICKETS_ABI,
@@ -30,7 +30,11 @@ export class TicketDepositAndSetPriceEthV1Operation extends EthereumContractOper
       account: this.manager.address as `0x${string}`,
       value: this.params.value,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

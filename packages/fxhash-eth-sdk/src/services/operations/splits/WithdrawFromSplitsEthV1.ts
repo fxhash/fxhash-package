@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { getSplitsClient } from "../../Splits"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TWithdrawFromSplitsEthV1OperationParams = {
   split: string
@@ -12,7 +12,7 @@ export type TWithdrawFromSplitsEthV1OperationParams = {
 export class WithdrawFromSplitsEthV1Operation extends EthereumContractOperation<TWithdrawFromSplitsEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args = {
       splitAddress: this.params.split,
       tokens: ["0x0000000000000000000000000000000000000000"],
@@ -22,7 +22,10 @@ export class WithdrawFromSplitsEthV1Operation extends EthereumContractOperation<
       this.manager.publicClient,
       this.manager.walletClient
     ).batchDistributeAndWithdrawForAll(args)
-    return event.events[0].transactionHash
+    return {
+      type: TransactionType.OFFCHAIN,
+      hash: event.events[0].transactionHash,
+    }
   }
 
   success(): string {

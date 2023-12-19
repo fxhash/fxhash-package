@@ -1,5 +1,10 @@
 import { WalletManager } from "./WalletManager"
 
+export enum TransactionType {
+  OFFCHAIN = "OFFCHAIN",
+  ONCHAIN = "ONCHAIN",
+}
+
 export enum BlockchainType {
   ETHEREUM = "ETHEREUM",
   TEZOS = "TEZOS",

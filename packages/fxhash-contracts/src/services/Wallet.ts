@@ -16,6 +16,7 @@ import {
   success,
   NetworkError,
   BadRequestError,
+  TransactionType,
 } from "@fxhash/contracts-shared"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
@@ -75,6 +76,7 @@ export class TezosWalletManager extends WalletManager {
     params: TParams
   ): PromiseResult<
     {
+      type: TransactionType.ONCHAIN
       operation: WalletOperation
       message: string
       hash: string
@@ -96,6 +98,7 @@ export class TezosWalletManager extends WalletManager {
         const message = contractOperation.success()
 
         return success({
+          type: TransactionType.ONCHAIN,
           operation,
           message,
           hash: operation.opHash,

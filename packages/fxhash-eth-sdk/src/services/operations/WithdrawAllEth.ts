@@ -12,6 +12,7 @@ import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
 import { CallData } from "@0xsplits/splits-sdk"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -29,7 +30,7 @@ export type TWithdrawAllEthV1OperationParams = {
 export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdrawAllEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     //First we need to fetch the proceeds for the address
     const proceeds = await apolloClient.query({
       query: Qu_GetEthMinterProceeds,
@@ -149,7 +150,14 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
       }
-      return simulateAndExecuteContract(this.manager, args)
+      const transactionHash = await simulateAndExecuteContract(
+        this.manager,
+        args
+      )
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: transactionHash,
+      }
     } else {
       return undefined
     }
