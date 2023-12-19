@@ -159,7 +159,10 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         hash: transactionHash,
       }
     } else {
-      return undefined
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: "",
+      }
     }
   }
   success(): string {
