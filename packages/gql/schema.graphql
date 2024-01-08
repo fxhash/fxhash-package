@@ -451,6 +451,26 @@ input Float_comparison_exp {
 """
 Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
 """
+input Int_array_comparison_exp {
+  """is the array contained in the given array value"""
+  _contained_in: [Int!]
+
+  """does the array contain the given value"""
+  _contains: [Int!]
+  _eq: [Int!]
+  _gt: [Int!]
+  _gte: [Int!]
+  _in: [[Int!]!]
+  _is_null: Boolean
+  _lt: [Int!]
+  _lte: [Int!]
+  _neq: [Int!]
+  _nin: [[Int!]!]
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
 input Int_comparison_exp {
   _eq: Int
   _gt: Int
@@ -837,7 +857,7 @@ unique or primary key constraints on table "ProjectCollaborator"
 """
 enum ProjectCollaborator_constraint {
   """
-  unique or primary key constraint on columns "collaboratorId", "projectId"
+  unique or primary key constraint on columns "projectId", "collaboratorId"
   """
   ProjectCollaborator_projectId_collaboratorId_key
 }
@@ -1529,6 +1549,26 @@ input Storage_comparison_exp {
 """
 Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
 """
+input String_array_comparison_exp {
+  """is the array contained in the given array value"""
+  _contained_in: [String!]
+
+  """does the array contain the given value"""
+  _contains: [String!]
+  _eq: [String!]
+  _gt: [String!]
+  _gte: [String!]
+  _in: [[String!]!]
+  _is_null: Boolean
+  _lt: [String!]
+  _lte: [String!]
+  _neq: [String!]
+  _nin: [[String!]!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
 input String_comparison_exp {
   _eq: String
   _gt: String
@@ -1583,6 +1623,8 @@ input String_comparison_exp {
 columns and relationships of "Wallet"
 """
 type Wallet {
+  """An object relationship"""
+  account: Account!
   accountId: uuid!
   address: String!
   network: BlockchainNetwork!
@@ -1620,6 +1662,7 @@ input Wallet_bool_exp {
   _and: [Wallet_bool_exp!]
   _not: Wallet_bool_exp
   _or: [Wallet_bool_exp!]
+  account: Account_bool_exp
   accountId: uuid_comparison_exp
   address: String_comparison_exp
   network: BlockchainNetwork_comparison_exp
@@ -1645,6 +1688,7 @@ input Wallet_min_order_by {
 
 """Ordering options when selecting data from "Wallet"."""
 input Wallet_order_by {
+  account: Account_order_by
   accountId: order_by
   address: order_by
   network: order_by
@@ -1903,74 +1947,6 @@ input Whitelist_stream_cursor_value_input {
   merkleRoot: String
 }
 
-scalar _int2
-
-"""
-Boolean expression to compare columns of type "_int2". All fields are combined with logical 'AND'.
-"""
-input _int2_comparison_exp {
-  _eq: _int2
-  _gt: _int2
-  _gte: _int2
-  _in: [_int2!]
-  _is_null: Boolean
-  _lt: _int2
-  _lte: _int2
-  _neq: _int2
-  _nin: [_int2!]
-}
-
-scalar _int4
-
-"""
-Boolean expression to compare columns of type "_int4". All fields are combined with logical 'AND'.
-"""
-input _int4_comparison_exp {
-  _eq: _int4
-  _gt: _int4
-  _gte: _int4
-  _in: [_int4!]
-  _is_null: Boolean
-  _lt: _int4
-  _lte: _int4
-  _neq: _int4
-  _nin: [_int4!]
-}
-
-scalar _numeric
-
-"""
-Boolean expression to compare columns of type "_numeric". All fields are combined with logical 'AND'.
-"""
-input _numeric_comparison_exp {
-  _eq: _numeric
-  _gt: _numeric
-  _gte: _numeric
-  _in: [_numeric!]
-  _is_null: Boolean
-  _lt: _numeric
-  _lte: _numeric
-  _neq: _numeric
-  _nin: [_numeric!]
-}
-
-scalar _text
-
-"""
-Boolean expression to compare columns of type "_text". All fields are combined with logical 'AND'.
-"""
-input _text_comparison_exp {
-  _eq: _text
-  _gt: _text
-  _gte: _text
-  _in: [_text!]
-  _is_null: Boolean
-  _lt: _text
-  _lte: _text
-  _neq: _text
-  _nin: [_text!]
-}
-
 """
 columns and relationships of "action"
 """
@@ -1983,6 +1959,9 @@ type action {
   """An object relationship"""
   generative_token: generative_token
   id: uuid!
+
+  """An object relationship"""
+  issuer: user
   issuer_id: String
   metadata(
     """JSON select path"""
@@ -2047,6 +2026,7 @@ input action_bool_exp {
   created_at: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
   id: uuid_comparison_exp
+  issuer: user_bool_exp
   issuer_id: String_comparison_exp
   metadata: jsonb_comparison_exp
   numeric_value: numeric_comparison_exp
@@ -2106,6 +2086,7 @@ input action_order_by {
   created_at: order_by
   generative_token: generative_token_order_by
   id: order_by
+  issuer: user_order_by
   issuer_id: order_by
   metadata: order_by
   numeric_value: order_by
@@ -2366,7 +2347,7 @@ type article {
   """An object relationship"""
   moderation_reason: moderation_reason
   moderation_reason_id: String
-  platforms: _text
+  platforms: [String!]
   royalties: Int!
   slug: String!
 
@@ -2387,7 +2368,7 @@ type article {
     """filter the rows returned"""
     where: split_bool_exp
   ): [split!]!
-  tags: _text!
+  tags: [String!]!
   thumbnail_caption: String
   thumbnail_media_id: bpchar
   thumbnail_uri: String!
@@ -2469,11 +2450,11 @@ input article_bool_exp {
   mint_op_hash: String_comparison_exp
   moderation_reason: moderation_reason_bool_exp
   moderation_reason_id: String_comparison_exp
-  platforms: _text_comparison_exp
+  platforms: String_array_comparison_exp
   royalties: Int_comparison_exp
   slug: String_comparison_exp
   splits: split_bool_exp
-  tags: _text_comparison_exp
+  tags: String_array_comparison_exp
   thumbnail_caption: String_comparison_exp
   thumbnail_media_id: bpchar_comparison_exp
   thumbnail_uri: String_comparison_exp
@@ -2745,8 +2726,10 @@ input article_max_order_by {
   metadata_uri: order_by
   mint_op_hash: order_by
   moderation_reason_id: order_by
+  platforms: order_by
   royalties: order_by
   slug: order_by
+  tags: order_by
   thumbnail_caption: order_by
   thumbnail_media_id: order_by
   thumbnail_uri: order_by
@@ -2770,8 +2753,10 @@ input article_min_order_by {
   metadata_uri: order_by
   mint_op_hash: order_by
   moderation_reason_id: order_by
+  platforms: order_by
   royalties: order_by
   slug: order_by
+  tags: order_by
   thumbnail_caption: order_by
   thumbnail_media_id: order_by
   thumbnail_uri: order_by
@@ -3124,10 +3109,10 @@ input article_stream_cursor_value_input {
   metadata_uri: String
   mint_op_hash: String
   moderation_reason_id: String
-  platforms: _text
+  platforms: [String!]
   royalties: Int
   slug: String
-  tags: _text
+  tags: [String!]
   thumbnail_caption: String
   thumbnail_media_id: bpchar
   thumbnail_uri: String
@@ -4558,10 +4543,10 @@ input eth_minter_proceeds_stream_cursor_value_input {
 columns and relationships of "eth_primary_splits"
 """
 type eth_primary_splits {
-  allocations: _int4!
+  allocations: [Int!]!
   id: String!
   receiver: String!
-  receivers: _text!
+  receivers: [String!]!
 }
 
 """
@@ -4571,10 +4556,10 @@ input eth_primary_splits_bool_exp {
   _and: [eth_primary_splits_bool_exp!]
   _not: eth_primary_splits_bool_exp
   _or: [eth_primary_splits_bool_exp!]
-  allocations: _int4_comparison_exp
+  allocations: Int_array_comparison_exp
   id: String_comparison_exp
   receiver: String_comparison_exp
-  receivers: _text_comparison_exp
+  receivers: String_array_comparison_exp
 }
 
 """Ordering options when selecting data from "eth_primary_splits"."""
@@ -4615,21 +4600,21 @@ input eth_primary_splits_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input eth_primary_splits_stream_cursor_value_input {
-  allocations: _int4
+  allocations: [Int!]
   id: String
   receiver: String
-  receivers: _text
+  receivers: [String!]
 }
 
 """
 columns and relationships of "eth_secondary_splits"
 """
 type eth_secondary_splits {
-  allocations: _int4!
+  allocations: [Int!]!
   basis_points: Int!
   id: String!
   receiver: String!
-  receivers: _text!
+  receivers: [String!]!
 }
 
 """
@@ -4639,11 +4624,11 @@ input eth_secondary_splits_bool_exp {
   _and: [eth_secondary_splits_bool_exp!]
   _not: eth_secondary_splits_bool_exp
   _or: [eth_secondary_splits_bool_exp!]
-  allocations: _int4_comparison_exp
+  allocations: Int_array_comparison_exp
   basis_points: Int_comparison_exp
   id: String_comparison_exp
   receiver: String_comparison_exp
-  receivers: _text_comparison_exp
+  receivers: String_array_comparison_exp
 }
 
 """Ordering options when selecting data from "eth_secondary_splits"."""
@@ -4688,11 +4673,11 @@ input eth_secondary_splits_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input eth_secondary_splits_stream_cursor_value_input {
-  allocations: _int4
+  allocations: [Int!]
   basis_points: Int
   id: String
   receiver: String
-  receivers: _text
+  receivers: [String!]
 }
 
 """
@@ -4786,6 +4771,9 @@ type generative_token {
     """filter the rows returned"""
     where: action_bool_exp
   ): [action!]!
+
+  """An object relationship"""
+  author: user
   author_id: String
   balance: numeric!
   capture_media_id: bpchar
@@ -4837,7 +4825,7 @@ type generative_token {
   id: String!
   input_bytes_size: Int!
   iterations_count: numeric
-  labels: _int4!
+  labels: [Int!]!
   lock_end: timestamptz!
   lock_price_for_reserves: Boolean!
   locked_seconds: Int!
@@ -5067,7 +5055,7 @@ type generative_token {
     where: split_bool_exp
   ): [split!]!
   supply: numeric!
-  tags: _text
+  tags: [String!]
   thumbnail_uri: String
 
   """An array relationship"""
@@ -5132,6 +5120,7 @@ input generative_token_bool_exp {
   _not: generative_token_bool_exp
   _or: [generative_token_bool_exp!]
   actions: action_bool_exp
+  author: user_bool_exp
   author_id: String_comparison_exp
   balance: numeric_comparison_exp
   capture_media_id: bpchar_comparison_exp
@@ -5147,7 +5136,7 @@ input generative_token_bool_exp {
   id: String_comparison_exp
   input_bytes_size: Int_comparison_exp
   iterations_count: numeric_comparison_exp
-  labels: _int4_comparison_exp
+  labels: Int_array_comparison_exp
   lock_end: timestamptz_comparison_exp
   lock_price_for_reserves: Boolean_comparison_exp
   locked_seconds: Int_comparison_exp
@@ -5178,7 +5167,7 @@ input generative_token_bool_exp {
   splits: split_bool_exp
   splitsByGenerativeTokenPrimaryId: split_bool_exp
   supply: numeric_comparison_exp
-  tags: _text_comparison_exp
+  tags: String_array_comparison_exp
   thumbnail_uri: String_comparison_exp
   transactions: transaction_bool_exp
   updated_at: timestamptz_comparison_exp
@@ -5218,6 +5207,7 @@ input generative_token_max_order_by {
   id: order_by
   input_bytes_size: order_by
   iterations_count: order_by
+  labels: order_by
   lock_end: order_by
   locked_seconds: order_by
   metadata_uri: order_by
@@ -5230,6 +5220,7 @@ input generative_token_max_order_by {
   royalties: order_by
   slug: order_by
   supply: order_by
+  tags: order_by
   thumbnail_uri: order_by
   updated_at: order_by
   version: order_by
@@ -5250,6 +5241,7 @@ input generative_token_min_order_by {
   id: order_by
   input_bytes_size: order_by
   iterations_count: order_by
+  labels: order_by
   lock_end: order_by
   locked_seconds: order_by
   metadata_uri: order_by
@@ -5262,6 +5254,7 @@ input generative_token_min_order_by {
   royalties: order_by
   slug: order_by
   supply: order_by
+  tags: order_by
   thumbnail_uri: order_by
   updated_at: order_by
   version: order_by
@@ -5270,6 +5263,7 @@ input generative_token_min_order_by {
 """Ordering options when selecting data from "generative_token"."""
 input generative_token_order_by {
   actions_aggregate: action_aggregate_order_by
+  author: user_order_by
   author_id: order_by
   balance: order_by
   capture_media_id: order_by
@@ -5492,7 +5486,7 @@ input generative_token_stream_cursor_value_input {
   id: String
   input_bytes_size: Int
   iterations_count: numeric
-  labels: _int4
+  labels: [Int!]
   lock_end: timestamptz
   lock_price_for_reserves: Boolean
   locked_seconds: Int
@@ -5509,7 +5503,7 @@ input generative_token_stream_cursor_value_input {
   royalties: Int
   slug: String
   supply: numeric
-  tags: _text
+  tags: [String!]
   thumbnail_uri: String
   updated_at: timestamptz
   version: generative_token_version
@@ -7855,6 +7849,26 @@ scalar numeric
 """
 Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
 """
+input numeric_array_comparison_exp {
+  """is the array contained in the given array value"""
+  _contained_in: [numeric!]
+
+  """does the array contain the given value"""
+  _contains: [numeric!]
+  _eq: [numeric!]
+  _gt: [numeric!]
+  _gte: [numeric!]
+  _in: [[numeric!]!]
+  _is_null: Boolean
+  _lt: [numeric!]
+  _lte: [numeric!]
+  _neq: [numeric!]
+  _nin: [[numeric!]!]
+}
+
+"""
+Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
+"""
 input numeric_comparison_exp {
   _eq: numeric
   _gt: numeric
@@ -8013,7 +8027,7 @@ type objkt {
     """filter the rows returned"""
     where: split_bool_exp
   ): [split!]!
-  tags: _text
+  tags: [String!]
   thumbnail_uri: bpchar
 
   """An array relationship"""
@@ -8106,7 +8120,7 @@ input objkt_bool_exp {
   royalties: Int_comparison_exp
   slug: String_comparison_exp
   splits: split_bool_exp
-  tags: _text_comparison_exp
+  tags: String_array_comparison_exp
   thumbnail_uri: bpchar_comparison_exp
   transactions: transaction_bool_exp
   updated_at: timestamptz_comparison_exp
@@ -8135,6 +8149,7 @@ input objkt_max_order_by {
   rarity: order_by
   royalties: order_by
   slug: order_by
+  tags: order_by
   thumbnail_uri: order_by
   updated_at: order_by
   version: order_by
@@ -8160,6 +8175,7 @@ input objkt_min_order_by {
   rarity: order_by
   royalties: order_by
   slug: order_by
+  tags: order_by
   thumbnail_uri: order_by
   updated_at: order_by
   version: order_by
@@ -8345,7 +8361,7 @@ input objkt_stream_cursor_value_input {
   rarity: float8
   royalties: Int
   slug: String
-  tags: _text
+  tags: [String!]
   thumbnail_uri: bpchar
   updated_at: timestamptz
   version: Int
@@ -12105,7 +12121,7 @@ type pricing_dutch_auction {
   """An object relationship"""
   generative_token: generative_token
   id: String!
-  levels: _numeric!
+  levels: [numeric!]!
   opens_at: timestamptz
   refundable: Boolean
   resting_price: String!
@@ -12148,7 +12164,7 @@ input pricing_dutch_auction_bool_exp {
   final_price: numeric_comparison_exp
   generative_token: generative_token_bool_exp
   id: String_comparison_exp
-  levels: _numeric_comparison_exp
+  levels: numeric_array_comparison_exp
   opens_at: timestamptz_comparison_exp
   refundable: Boolean_comparison_exp
   resting_price: String_comparison_exp
@@ -12162,6 +12178,7 @@ input pricing_dutch_auction_max_order_by {
   decrement_duration: order_by
   final_price: order_by
   id: order_by
+  levels: order_by
   opens_at: order_by
   resting_price: order_by
   token_id: order_by
@@ -12174,6 +12191,7 @@ input pricing_dutch_auction_min_order_by {
   decrement_duration: order_by
   final_price: order_by
   id: order_by
+  levels: order_by
   opens_at: order_by
   resting_price: order_by
   token_id: order_by
@@ -12261,7 +12279,7 @@ input pricing_dutch_auction_stream_cursor_value_input {
   decrement_duration: bigint
   final_price: numeric
   id: String
-  levels: _numeric
+  levels: [numeric!]
   opens_at: timestamptz
   refundable: Boolean
   resting_price: String
@@ -13237,6 +13255,26 @@ scalar smallint
 """
 Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'.
 """
+input smallint_array_comparison_exp {
+  """is the array contained in the given array value"""
+  _contained_in: [smallint!]
+
+  """does the array contain the given value"""
+  _contains: [smallint!]
+  _eq: [smallint!]
+  _gt: [smallint!]
+  _gte: [smallint!]
+  _in: [[smallint!]!]
+  _is_null: Boolean
+  _lt: [smallint!]
+  _lte: [smallint!]
+  _neq: [smallint!]
+  _nin: [[smallint!]!]
+}
+
+"""
+Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'.
+"""
 input smallint_comparison_exp {
   _eq: smallint
   _gt: smallint
@@ -13875,7 +13913,7 @@ type user {
     """filter the rows returned"""
     where: auction_bool_exp
   ): [auction!]!
-  authorizations: _int2!
+  authorizations: [smallint!]!
   avatar_media_id: bpchar
   avatar_uri: String
 
@@ -14152,6 +14190,7 @@ type user {
 
   """An object relationship"""
   user_stat: user_stats
+  wallet: Wallet
 }
 
 """
@@ -14176,7 +14215,7 @@ input user_bool_exp {
   articles: article_bool_exp
   auction_bids: auction_bid_bool_exp
   auctions: auction_bool_exp
-  authorizations: _int2_comparison_exp
+  authorizations: smallint_array_comparison_exp
   avatar_media_id: bpchar_comparison_exp
   avatar_uri: String_comparison_exp
   codexes: codex_bool_exp
@@ -14229,6 +14268,7 @@ input user_flag_enum_comparison_exp {
 order by max() on columns of table "user"
 """
 input user_max_order_by {
+  authorizations: order_by
   avatar_media_id: order_by
   avatar_uri: order_by
   created_at: order_by
@@ -14246,6 +14286,7 @@ input user_max_order_by {
 order by min() on columns of table "user"
 """
 input user_min_order_by {
+  authorizations: order_by
   avatar_media_id: order_by
   avatar_uri: order_by
   created_at: order_by
@@ -14533,7 +14574,7 @@ input user_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input user_stream_cursor_value_input {
-  authorizations: _int2
+  authorizations: [smallint!]
   avatar_media_id: bpchar
   avatar_uri: String
   created_at: timestamptz

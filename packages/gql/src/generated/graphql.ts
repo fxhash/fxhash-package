@@ -18,10 +18,6 @@ export type Scalars = {
   BlockchainNetwork: { input: any; output: any; }
   ProjectState: { input: string; output: string; }
   Storage: { input: any; output: any; }
-  _int2: { input: any; output: any; }
-  _int4: { input: any; output: any; }
-  _numeric: { input: any; output: any; }
-  _text: { input: any; output: any; }
   action_type_enum: { input: any; output: any; }
   article_flag_enum: { input: any; output: any; }
   bigint: { input: any; output: any; }
@@ -388,6 +384,23 @@ export type Float_Comparison_Exp = {
 };
 
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
+export type Int_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  /** does the array contain the given value */
+  _contains?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _eq?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _gt?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _gte?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _in?: InputMaybe<Array<Array<Scalars['Int']['input']>>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _lte?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _neq?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _nin?: InputMaybe<Array<Array<Scalars['Int']['input']>>>;
+};
+
+/** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['Int']['input']>;
   _gt?: InputMaybe<Scalars['Int']['input']>;
@@ -706,7 +719,7 @@ export type ProjectCollaborator_Bool_Exp = {
 
 /** unique or primary key constraints on table "ProjectCollaborator" */
 export enum ProjectCollaborator_Constraint {
-  /** unique or primary key constraint on columns "collaboratorId", "projectId" */
+  /** unique or primary key constraint on columns "projectId", "collaboratorId" */
   ProjectCollaboratorProjectIdCollaboratorIdKey = 'ProjectCollaborator_projectId_collaboratorId_key'
 }
 
@@ -1250,6 +1263,23 @@ export type Storage_Comparison_Exp = {
 };
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
+export type String_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** does the array contain the given value */
+  _contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  _eq?: InputMaybe<Array<Scalars['String']['input']>>;
+  _gt?: InputMaybe<Array<Scalars['String']['input']>>;
+  _gte?: InputMaybe<Array<Scalars['String']['input']>>;
+  _in?: InputMaybe<Array<Array<Scalars['String']['input']>>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Array<Scalars['String']['input']>>;
+  _lte?: InputMaybe<Array<Scalars['String']['input']>>;
+  _neq?: InputMaybe<Array<Scalars['String']['input']>>;
+  _nin?: InputMaybe<Array<Array<Scalars['String']['input']>>>;
+};
+
+/** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['String']['input']>;
   _gt?: InputMaybe<Scalars['String']['input']>;
@@ -1285,6 +1315,8 @@ export type String_Comparison_Exp = {
 /** columns and relationships of "Wallet" */
 export type Wallet = {
   __typename?: 'Wallet';
+  /** An object relationship */
+  account: Account;
   accountId: Scalars['uuid']['output'];
   address: Scalars['String']['output'];
   network: Scalars['BlockchainNetwork']['output'];
@@ -1313,6 +1345,7 @@ export type Wallet_Bool_Exp = {
   _and?: InputMaybe<Array<Wallet_Bool_Exp>>;
   _not?: InputMaybe<Wallet_Bool_Exp>;
   _or?: InputMaybe<Array<Wallet_Bool_Exp>>;
+  account?: InputMaybe<Account_Bool_Exp>;
   accountId?: InputMaybe<Uuid_Comparison_Exp>;
   address?: InputMaybe<String_Comparison_Exp>;
   network?: InputMaybe<BlockchainNetwork_Comparison_Exp>;
@@ -1334,6 +1367,7 @@ export type Wallet_Min_Order_By = {
 
 /** Ordering options when selecting data from "Wallet". */
 export type Wallet_Order_By = {
+  account?: InputMaybe<Account_Order_By>;
   accountId?: InputMaybe<Order_By>;
   address?: InputMaybe<Order_By>;
   network?: InputMaybe<Order_By>;
@@ -1539,58 +1573,6 @@ export type Whitelist_Stream_Cursor_Value_Input = {
   merkleRoot?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Boolean expression to compare columns of type "_int2". All fields are combined with logical 'AND'. */
-export type _Int2_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['_int2']['input']>;
-  _gt?: InputMaybe<Scalars['_int2']['input']>;
-  _gte?: InputMaybe<Scalars['_int2']['input']>;
-  _in?: InputMaybe<Array<Scalars['_int2']['input']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
-  _lt?: InputMaybe<Scalars['_int2']['input']>;
-  _lte?: InputMaybe<Scalars['_int2']['input']>;
-  _neq?: InputMaybe<Scalars['_int2']['input']>;
-  _nin?: InputMaybe<Array<Scalars['_int2']['input']>>;
-};
-
-/** Boolean expression to compare columns of type "_int4". All fields are combined with logical 'AND'. */
-export type _Int4_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['_int4']['input']>;
-  _gt?: InputMaybe<Scalars['_int4']['input']>;
-  _gte?: InputMaybe<Scalars['_int4']['input']>;
-  _in?: InputMaybe<Array<Scalars['_int4']['input']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
-  _lt?: InputMaybe<Scalars['_int4']['input']>;
-  _lte?: InputMaybe<Scalars['_int4']['input']>;
-  _neq?: InputMaybe<Scalars['_int4']['input']>;
-  _nin?: InputMaybe<Array<Scalars['_int4']['input']>>;
-};
-
-/** Boolean expression to compare columns of type "_numeric". All fields are combined with logical 'AND'. */
-export type _Numeric_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['_numeric']['input']>;
-  _gt?: InputMaybe<Scalars['_numeric']['input']>;
-  _gte?: InputMaybe<Scalars['_numeric']['input']>;
-  _in?: InputMaybe<Array<Scalars['_numeric']['input']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
-  _lt?: InputMaybe<Scalars['_numeric']['input']>;
-  _lte?: InputMaybe<Scalars['_numeric']['input']>;
-  _neq?: InputMaybe<Scalars['_numeric']['input']>;
-  _nin?: InputMaybe<Array<Scalars['_numeric']['input']>>;
-};
-
-/** Boolean expression to compare columns of type "_text". All fields are combined with logical 'AND'. */
-export type _Text_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['_text']['input']>;
-  _gt?: InputMaybe<Scalars['_text']['input']>;
-  _gte?: InputMaybe<Scalars['_text']['input']>;
-  _in?: InputMaybe<Array<Scalars['_text']['input']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
-  _lt?: InputMaybe<Scalars['_text']['input']>;
-  _lte?: InputMaybe<Scalars['_text']['input']>;
-  _neq?: InputMaybe<Scalars['_text']['input']>;
-  _nin?: InputMaybe<Array<Scalars['_text']['input']>>;
-};
-
 /** columns and relationships of "action" */
 export type Action = {
   __typename?: 'action';
@@ -1601,6 +1583,8 @@ export type Action = {
   /** An object relationship */
   generative_token?: Maybe<Generative_Token>;
   id: Scalars['uuid']['output'];
+  /** An object relationship */
+  issuer?: Maybe<User>;
   issuer_id?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Scalars['jsonb']['output']>;
   numeric_value?: Maybe<Scalars['numeric']['output']>;
@@ -1658,6 +1642,7 @@ export type Action_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  issuer?: InputMaybe<User_Bool_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   numeric_value?: InputMaybe<Numeric_Comparison_Exp>;
@@ -1713,6 +1698,7 @@ export type Action_Order_By = {
   created_at?: InputMaybe<Order_By>;
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   id?: InputMaybe<Order_By>;
+  issuer?: InputMaybe<User_Order_By>;
   issuer_id?: InputMaybe<Order_By>;
   metadata?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
@@ -1869,12 +1855,12 @@ export type Article = {
   /** An object relationship */
   moderation_reason?: Maybe<Moderation_Reason>;
   moderation_reason_id?: Maybe<Scalars['String']['output']>;
-  platforms?: Maybe<Scalars['_text']['output']>;
+  platforms?: Maybe<Array<Scalars['String']['output']>>;
   royalties: Scalars['Int']['output'];
   slug: Scalars['String']['output'];
   /** An array relationship */
   splits: Array<Split>;
-  tags: Scalars['_text']['output'];
+  tags: Array<Scalars['String']['output']>;
   thumbnail_caption?: Maybe<Scalars['String']['output']>;
   thumbnail_media_id?: Maybe<Scalars['bpchar']['output']>;
   thumbnail_uri: Scalars['String']['output'];
@@ -1999,11 +1985,11 @@ export type Article_Bool_Exp = {
   mint_op_hash?: InputMaybe<String_Comparison_Exp>;
   moderation_reason?: InputMaybe<Moderation_Reason_Bool_Exp>;
   moderation_reason_id?: InputMaybe<String_Comparison_Exp>;
-  platforms?: InputMaybe<_Text_Comparison_Exp>;
+  platforms?: InputMaybe<String_Array_Comparison_Exp>;
   royalties?: InputMaybe<Int_Comparison_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
   splits?: InputMaybe<Split_Bool_Exp>;
-  tags?: InputMaybe<_Text_Comparison_Exp>;
+  tags?: InputMaybe<String_Array_Comparison_Exp>;
   thumbnail_caption?: InputMaybe<String_Comparison_Exp>;
   thumbnail_media_id?: InputMaybe<Bpchar_Comparison_Exp>;
   thumbnail_uri?: InputMaybe<String_Comparison_Exp>;
@@ -2225,8 +2211,10 @@ export type Article_Max_Order_By = {
   metadata_uri?: InputMaybe<Order_By>;
   mint_op_hash?: InputMaybe<Order_By>;
   moderation_reason_id?: InputMaybe<Order_By>;
+  platforms?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
   thumbnail_caption?: InputMaybe<Order_By>;
   thumbnail_media_id?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
@@ -2248,8 +2236,10 @@ export type Article_Min_Order_By = {
   metadata_uri?: InputMaybe<Order_By>;
   mint_op_hash?: InputMaybe<Order_By>;
   moderation_reason_id?: InputMaybe<Order_By>;
+  platforms?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
   thumbnail_caption?: InputMaybe<Order_By>;
   thumbnail_media_id?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
@@ -2535,10 +2525,10 @@ export type Article_Stream_Cursor_Value_Input = {
   metadata_uri?: InputMaybe<Scalars['String']['input']>;
   mint_op_hash?: InputMaybe<Scalars['String']['input']>;
   moderation_reason_id?: InputMaybe<Scalars['String']['input']>;
-  platforms?: InputMaybe<Scalars['_text']['input']>;
+  platforms?: InputMaybe<Array<Scalars['String']['input']>>;
   royalties?: InputMaybe<Scalars['Int']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Scalars['_text']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   thumbnail_caption?: InputMaybe<Scalars['String']['input']>;
   thumbnail_media_id?: InputMaybe<Scalars['bpchar']['input']>;
   thumbnail_uri?: InputMaybe<Scalars['String']['input']>;
@@ -3710,10 +3700,10 @@ export type Eth_Minter_Proceeds_Stream_Cursor_Value_Input = {
 /** columns and relationships of "eth_primary_splits" */
 export type Eth_Primary_Splits = {
   __typename?: 'eth_primary_splits';
-  allocations: Scalars['_int4']['output'];
+  allocations: Array<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
   receiver: Scalars['String']['output'];
-  receivers: Scalars['_text']['output'];
+  receivers: Array<Scalars['String']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "eth_primary_splits". All fields are combined with a logical 'AND'. */
@@ -3721,10 +3711,10 @@ export type Eth_Primary_Splits_Bool_Exp = {
   _and?: InputMaybe<Array<Eth_Primary_Splits_Bool_Exp>>;
   _not?: InputMaybe<Eth_Primary_Splits_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Primary_Splits_Bool_Exp>>;
-  allocations?: InputMaybe<_Int4_Comparison_Exp>;
+  allocations?: InputMaybe<Int_Array_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   receiver?: InputMaybe<String_Comparison_Exp>;
-  receivers?: InputMaybe<_Text_Comparison_Exp>;
+  receivers?: InputMaybe<String_Array_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "eth_primary_splits". */
@@ -3757,20 +3747,20 @@ export type Eth_Primary_Splits_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Eth_Primary_Splits_Stream_Cursor_Value_Input = {
-  allocations?: InputMaybe<Scalars['_int4']['input']>;
+  allocations?: InputMaybe<Array<Scalars['Int']['input']>>;
   id?: InputMaybe<Scalars['String']['input']>;
   receiver?: InputMaybe<Scalars['String']['input']>;
-  receivers?: InputMaybe<Scalars['_text']['input']>;
+  receivers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** columns and relationships of "eth_secondary_splits" */
 export type Eth_Secondary_Splits = {
   __typename?: 'eth_secondary_splits';
-  allocations: Scalars['_int4']['output'];
+  allocations: Array<Scalars['Int']['output']>;
   basis_points: Scalars['Int']['output'];
   id: Scalars['String']['output'];
   receiver: Scalars['String']['output'];
-  receivers: Scalars['_text']['output'];
+  receivers: Array<Scalars['String']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "eth_secondary_splits". All fields are combined with a logical 'AND'. */
@@ -3778,11 +3768,11 @@ export type Eth_Secondary_Splits_Bool_Exp = {
   _and?: InputMaybe<Array<Eth_Secondary_Splits_Bool_Exp>>;
   _not?: InputMaybe<Eth_Secondary_Splits_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Secondary_Splits_Bool_Exp>>;
-  allocations?: InputMaybe<_Int4_Comparison_Exp>;
+  allocations?: InputMaybe<Int_Array_Comparison_Exp>;
   basis_points?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   receiver?: InputMaybe<String_Comparison_Exp>;
-  receivers?: InputMaybe<_Text_Comparison_Exp>;
+  receivers?: InputMaybe<String_Array_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "eth_secondary_splits". */
@@ -3818,11 +3808,11 @@ export type Eth_Secondary_Splits_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Eth_Secondary_Splits_Stream_Cursor_Value_Input = {
-  allocations?: InputMaybe<Scalars['_int4']['input']>;
+  allocations?: InputMaybe<Array<Scalars['Int']['input']>>;
   basis_points?: InputMaybe<Scalars['Int']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   receiver?: InputMaybe<Scalars['String']['input']>;
-  receivers?: InputMaybe<Scalars['_text']['input']>;
+  receivers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** columns and relationships of "eth_user_proceeds" */
@@ -3887,6 +3877,8 @@ export type Generative_Token = {
   __typename?: 'generative_token';
   /** An array relationship */
   actions: Array<Action>;
+  /** An object relationship */
+  author?: Maybe<User>;
   author_id?: Maybe<Scalars['String']['output']>;
   balance: Scalars['numeric']['output'];
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
@@ -3905,7 +3897,7 @@ export type Generative_Token = {
   id: Scalars['String']['output'];
   input_bytes_size: Scalars['Int']['output'];
   iterations_count?: Maybe<Scalars['numeric']['output']>;
-  labels: Scalars['_int4']['output'];
+  labels: Array<Scalars['Int']['output']>;
   lock_end: Scalars['timestamptz']['output'];
   lock_price_for_reserves: Scalars['Boolean']['output'];
   locked_seconds: Scalars['Int']['output'];
@@ -3950,7 +3942,7 @@ export type Generative_Token = {
   /** An array relationship */
   splitsByGenerativeTokenPrimaryId: Array<Split>;
   supply: Scalars['numeric']['output'];
-  tags?: Maybe<Scalars['_text']['output']>;
+  tags?: Maybe<Array<Scalars['String']['output']>>;
   thumbnail_uri?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   transactions: Array<Transaction>;
@@ -4154,6 +4146,7 @@ export type Generative_Token_Bool_Exp = {
   _not?: InputMaybe<Generative_Token_Bool_Exp>;
   _or?: InputMaybe<Array<Generative_Token_Bool_Exp>>;
   actions?: InputMaybe<Action_Bool_Exp>;
+  author?: InputMaybe<User_Bool_Exp>;
   author_id?: InputMaybe<String_Comparison_Exp>;
   balance?: InputMaybe<Numeric_Comparison_Exp>;
   capture_media_id?: InputMaybe<Bpchar_Comparison_Exp>;
@@ -4169,7 +4162,7 @@ export type Generative_Token_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   input_bytes_size?: InputMaybe<Int_Comparison_Exp>;
   iterations_count?: InputMaybe<Numeric_Comparison_Exp>;
-  labels?: InputMaybe<_Int4_Comparison_Exp>;
+  labels?: InputMaybe<Int_Array_Comparison_Exp>;
   lock_end?: InputMaybe<Timestamptz_Comparison_Exp>;
   lock_price_for_reserves?: InputMaybe<Boolean_Comparison_Exp>;
   locked_seconds?: InputMaybe<Int_Comparison_Exp>;
@@ -4200,7 +4193,7 @@ export type Generative_Token_Bool_Exp = {
   splits?: InputMaybe<Split_Bool_Exp>;
   splitsByGenerativeTokenPrimaryId?: InputMaybe<Split_Bool_Exp>;
   supply?: InputMaybe<Numeric_Comparison_Exp>;
-  tags?: InputMaybe<_Text_Comparison_Exp>;
+  tags?: InputMaybe<String_Array_Comparison_Exp>;
   thumbnail_uri?: InputMaybe<String_Comparison_Exp>;
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -4234,6 +4227,7 @@ export type Generative_Token_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   input_bytes_size?: InputMaybe<Order_By>;
   iterations_count?: InputMaybe<Order_By>;
+  labels?: InputMaybe<Order_By>;
   lock_end?: InputMaybe<Order_By>;
   locked_seconds?: InputMaybe<Order_By>;
   metadata_uri?: InputMaybe<Order_By>;
@@ -4246,6 +4240,7 @@ export type Generative_Token_Max_Order_By = {
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
   supply?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -4264,6 +4259,7 @@ export type Generative_Token_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   input_bytes_size?: InputMaybe<Order_By>;
   iterations_count?: InputMaybe<Order_By>;
+  labels?: InputMaybe<Order_By>;
   lock_end?: InputMaybe<Order_By>;
   locked_seconds?: InputMaybe<Order_By>;
   metadata_uri?: InputMaybe<Order_By>;
@@ -4276,6 +4272,7 @@ export type Generative_Token_Min_Order_By = {
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
   supply?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -4284,6 +4281,7 @@ export type Generative_Token_Min_Order_By = {
 /** Ordering options when selecting data from "generative_token". */
 export type Generative_Token_Order_By = {
   actions_aggregate?: InputMaybe<Action_Aggregate_Order_By>;
+  author?: InputMaybe<User_Order_By>;
   author_id?: InputMaybe<Order_By>;
   balance?: InputMaybe<Order_By>;
   capture_media_id?: InputMaybe<Order_By>;
@@ -4463,7 +4461,7 @@ export type Generative_Token_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes_size?: InputMaybe<Scalars['Int']['input']>;
   iterations_count?: InputMaybe<Scalars['numeric']['input']>;
-  labels?: InputMaybe<Scalars['_int4']['input']>;
+  labels?: InputMaybe<Array<Scalars['Int']['input']>>;
   lock_end?: InputMaybe<Scalars['timestamptz']['input']>;
   lock_price_for_reserves?: InputMaybe<Scalars['Boolean']['input']>;
   locked_seconds?: InputMaybe<Scalars['Int']['input']>;
@@ -4480,7 +4478,7 @@ export type Generative_Token_Stream_Cursor_Value_Input = {
   royalties?: InputMaybe<Scalars['Int']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   supply?: InputMaybe<Scalars['numeric']['input']>;
-  tags?: InputMaybe<Scalars['_text']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   thumbnail_uri?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
   version?: InputMaybe<Scalars['generative_token_version']['input']>;
@@ -6446,6 +6444,23 @@ export type Mutation_RootSet_WhitelistArgs = {
 };
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
+export type Numeric_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  /** does the array contain the given value */
+  _contains?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _eq?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _gt?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _gte?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _in?: InputMaybe<Array<Array<Scalars['numeric']['input']>>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _lte?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _neq?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _nin?: InputMaybe<Array<Array<Scalars['numeric']['input']>>>;
+};
+
+/** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
 export type Numeric_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['numeric']['input']>;
   _gt?: InputMaybe<Scalars['numeric']['input']>;
@@ -6499,7 +6514,7 @@ export type Objkt = {
   slug?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   splits: Array<Split>;
-  tags?: Maybe<Scalars['_text']['output']>;
+  tags?: Maybe<Array<Scalars['String']['output']>>;
   thumbnail_uri?: Maybe<Scalars['bpchar']['output']>;
   /** An array relationship */
   transactions: Array<Transaction>;
@@ -6650,7 +6665,7 @@ export type Objkt_Bool_Exp = {
   royalties?: InputMaybe<Int_Comparison_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
   splits?: InputMaybe<Split_Bool_Exp>;
-  tags?: InputMaybe<_Text_Comparison_Exp>;
+  tags?: InputMaybe<String_Array_Comparison_Exp>;
   thumbnail_uri?: InputMaybe<Bpchar_Comparison_Exp>;
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -6677,6 +6692,7 @@ export type Objkt_Max_Order_By = {
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -6700,6 +6716,7 @@ export type Objkt_Min_Order_By = {
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
@@ -6851,7 +6868,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
   rarity?: InputMaybe<Scalars['float8']['input']>;
   royalties?: InputMaybe<Scalars['Int']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Scalars['_text']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   thumbnail_uri?: InputMaybe<Scalars['bpchar']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
@@ -9638,7 +9655,7 @@ export type Pricing_Dutch_Auction = {
   /** An object relationship */
   generative_token?: Maybe<Generative_Token>;
   id: Scalars['String']['output'];
-  levels: Scalars['_numeric']['output'];
+  levels: Array<Scalars['numeric']['output']>;
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
   refundable?: Maybe<Scalars['Boolean']['output']>;
   resting_price: Scalars['String']['output'];
@@ -9675,7 +9692,7 @@ export type Pricing_Dutch_Auction_Bool_Exp = {
   final_price?: InputMaybe<Numeric_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
-  levels?: InputMaybe<_Numeric_Comparison_Exp>;
+  levels?: InputMaybe<Numeric_Array_Comparison_Exp>;
   opens_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   refundable?: InputMaybe<Boolean_Comparison_Exp>;
   resting_price?: InputMaybe<String_Comparison_Exp>;
@@ -9687,6 +9704,7 @@ export type Pricing_Dutch_Auction_Max_Order_By = {
   decrement_duration?: InputMaybe<Order_By>;
   final_price?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  levels?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
   resting_price?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
@@ -9697,6 +9715,7 @@ export type Pricing_Dutch_Auction_Min_Order_By = {
   decrement_duration?: InputMaybe<Order_By>;
   final_price?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  levels?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
   resting_price?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
@@ -9766,7 +9785,7 @@ export type Pricing_Dutch_Auction_Stream_Cursor_Value_Input = {
   decrement_duration?: InputMaybe<Scalars['bigint']['input']>;
   final_price?: InputMaybe<Scalars['numeric']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  levels?: InputMaybe<Scalars['_numeric']['input']>;
+  levels?: InputMaybe<Array<Scalars['numeric']['input']>>;
   opens_at?: InputMaybe<Scalars['timestamptz']['input']>;
   refundable?: InputMaybe<Scalars['Boolean']['input']>;
   resting_price?: InputMaybe<Scalars['String']['input']>;
@@ -10559,6 +10578,23 @@ export type Reserve_Variance_Order_By = {
 };
 
 /** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
+export type Smallint_Array_Comparison_Exp = {
+  /** is the array contained in the given array value */
+  _contained_in?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  /** does the array contain the given value */
+  _contains?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _eq?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _gt?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _gte?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _in?: InputMaybe<Array<Array<Scalars['smallint']['input']>>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _lte?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _neq?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  _nin?: InputMaybe<Array<Array<Scalars['smallint']['input']>>>;
+};
+
+/** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
 export type Smallint_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['smallint']['input']>;
   _gt?: InputMaybe<Scalars['smallint']['input']>;
@@ -11012,7 +11048,7 @@ export type User = {
   auction_bids: Array<Auction_Bid>;
   /** An array relationship */
   auctions: Array<Auction>;
-  authorizations: Scalars['_int2']['output'];
+  authorizations: Array<Scalars['smallint']['output']>;
   avatar_media_id?: Maybe<Scalars['bpchar']['output']>;
   avatar_uri?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
@@ -11059,6 +11095,7 @@ export type User = {
   updated_at: Scalars['timestamptz']['output'];
   /** An object relationship */
   user_stat?: Maybe<User_Stats>;
+  wallet?: Maybe<Wallet>;
 };
 
 
@@ -11285,7 +11322,7 @@ export type User_Bool_Exp = {
   articles?: InputMaybe<Article_Bool_Exp>;
   auction_bids?: InputMaybe<Auction_Bid_Bool_Exp>;
   auctions?: InputMaybe<Auction_Bool_Exp>;
-  authorizations?: InputMaybe<_Int2_Comparison_Exp>;
+  authorizations?: InputMaybe<Smallint_Array_Comparison_Exp>;
   avatar_media_id?: InputMaybe<Bpchar_Comparison_Exp>;
   avatar_uri?: InputMaybe<String_Comparison_Exp>;
   codexes?: InputMaybe<Codex_Bool_Exp>;
@@ -11332,6 +11369,7 @@ export type User_Flag_Enum_Comparison_Exp = {
 
 /** order by max() on columns of table "user" */
 export type User_Max_Order_By = {
+  authorizations?: InputMaybe<Order_By>;
   avatar_media_id?: InputMaybe<Order_By>;
   avatar_uri?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
@@ -11347,6 +11385,7 @@ export type User_Max_Order_By = {
 
 /** order by min() on columns of table "user" */
 export type User_Min_Order_By = {
+  authorizations?: InputMaybe<Order_By>;
   avatar_media_id?: InputMaybe<Order_By>;
   avatar_uri?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
@@ -11590,7 +11629,7 @@ export type User_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type User_Stream_Cursor_Value_Input = {
-  authorizations?: InputMaybe<Scalars['_int2']['input']>;
+  authorizations?: InputMaybe<Array<Scalars['smallint']['input']>>;
   avatar_media_id?: InputMaybe<Scalars['bpchar']['input']>;
   avatar_uri?: InputMaybe<Scalars['String']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
@@ -11719,9 +11758,9 @@ export type GetEthPrimarySplitsQueryVariables = Exact<{
 }>;
 
 
-export type GetEthPrimarySplitsQuery = { __typename?: 'query_root', onchain?: { __typename: 'onchain_query', eth_primary_splits: Array<{ __typename?: 'eth_primary_splits', id: string, receiver: string, receivers: any, allocations: any }> } | null };
+export type GetEthPrimarySplitsQuery = { __typename?: 'query_root', onchain?: { __typename: 'onchain_query', eth_primary_splits: Array<{ __typename?: 'eth_primary_splits', id: string, receiver: string, receivers: Array<string>, allocations: Array<number> }> } | null };
 
-export type GenerativeToken_PricingFragment = { __typename?: 'generative_token', pricing_fixeds: Array<{ __typename?: 'pricing_fixed', price: any, opens_at?: any | null }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', levels: any, resting_price: string, final_price?: any | null, decrement_duration: any, opens_at?: any | null }> };
+export type GenerativeToken_PricingFragment = { __typename?: 'generative_token', pricing_fixeds: Array<{ __typename?: 'pricing_fixed', price: any, opens_at?: any | null }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', levels: Array<any>, resting_price: string, final_price?: any | null, decrement_duration: any, opens_at?: any | null }> };
 
 export type GetEthMinterProceedsQueryVariables = Exact<{
   where?: InputMaybe<Eth_Minter_Proceeds_Bool_Exp>;
@@ -11737,12 +11776,19 @@ export type GetReservesQueryVariables = Exact<{
 
 export type GetReservesQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', reserve: Array<{ __typename?: 'reserve', data?: any | null, id: number, method: number, token_id?: string | null, amount: any }> } | null };
 
+export type GetActionSalesBotQueryVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type GetActionSalesBotQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', action_by_pk?: { __typename?: 'action', id: string, type: any, numeric_value?: any | null, created_at: any, issuer_id?: string | null, target_id?: string | null, issuer?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null, user?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null, objkt?: { __typename?: 'objkt', id: string, name?: string | null, metadata?: any | null } | null, generative_token?: { __typename?: 'generative_token', id: string, thumbnail_uri?: string | null, author_id?: string | null, author?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null } | null } | null } | null };
+
 export type GetTokenPricingsAndReservesQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type GetTokenPricingsAndReservesQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', generative_token_by_pk?: { __typename?: 'generative_token', reserves: Array<{ __typename?: 'reserve', id: number, method: number, amount: any, data?: any | null }>, pricing_fixeds: Array<{ __typename?: 'pricing_fixed', id: string, opens_at?: any | null, price: any }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', id: string, opens_at?: any | null, levels: any, decrement_duration: any }> } | null } | null };
+export type GetTokenPricingsAndReservesQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', generative_token_by_pk?: { __typename?: 'generative_token', reserves: Array<{ __typename?: 'reserve', id: number, method: number, amount: any, data?: any | null }>, pricing_fixeds: Array<{ __typename?: 'pricing_fixed', id: string, opens_at?: any | null, price: any }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', id: string, opens_at?: any | null, levels: Array<any>, decrement_duration: any }> } | null } | null };
 
 export type GetEthUserProceedsQueryVariables = Exact<{
   where?: InputMaybe<Eth_User_Proceeds_Bool_Exp>;
@@ -11771,5 +11817,6 @@ export const GetWhitelistDocument = {"kind":"Document","definitions":[{"kind":"O
 export const GetEthPrimarySplitsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthPrimarySplits"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_primary_splits_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"eth_primary_splits"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"receiver"}},{"kind":"Field","name":{"kind":"Name","value":"receivers"}},{"kind":"Field","name":{"kind":"Name","value":"allocations"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthPrimarySplitsQuery, GetEthPrimarySplitsQueryVariables>;
 export const GetEthMinterProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthMinterProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_minter_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_minter_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"minter_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_receiver"}},{"kind":"Field","name":{"kind":"Name","value":"reserve_id"}},{"kind":"Field","name":{"kind":"Name","value":"token_address"}},{"kind":"Field","name":{"kind":"Name","value":"user_address"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthMinterProceedsQuery, GetEthMinterProceedsQueryVariables>;
 export const GetReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"reserve_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"token_id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]} as unknown as DocumentNode<GetReservesQuery, GetReservesQueryVariables>;
+export const GetActionSalesBotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetActionSalesBot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"action_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"numeric_value"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"issuer_id"}},{"kind":"Field","name":{"kind":"Name","value":"issuer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"target_id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"objkt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}}]}},{"kind":"Field","name":{"kind":"Name","value":"generative_token"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail_uri"}},{"kind":"Field","name":{"kind":"Name","value":"author_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetActionSalesBotQuery, GetActionSalesBotQueryVariables>;
 export const GetTokenPricingsAndReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTokenPricingsAndReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generative_token_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reserves"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"data"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_fixeds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"opens_at"}},{"kind":"Field","name":{"kind":"Name","value":"price"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_dutch_auctions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"opens_at"}},{"kind":"Field","name":{"kind":"Name","value":"levels"}},{"kind":"Field","name":{"kind":"Name","value":"decrement_duration"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetTokenPricingsAndReservesQuery, GetTokenPricingsAndReservesQueryVariables>;
 export const GetEthUserProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthUserProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_user_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_user_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"total_proceeds"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthUserProceedsQuery, GetEthUserProceedsQueryVariables>;
