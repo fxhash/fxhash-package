@@ -11,6 +11,7 @@ import { User } from "./User"
 import { MediaImage } from "./MediaImage"
 import { Redeemable } from "./Redeemable"
 import { MintTicket, MintTicketSettings } from "./MintTicket"
+import { CollectionOffer } from "./Offer"
 
 export enum GenTokFlag {
   NONE = "NONE",
@@ -160,6 +161,7 @@ export interface GenerativeToken {
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
   gentkContractAddress: string
+  collectionOffers: CollectionOffer[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
