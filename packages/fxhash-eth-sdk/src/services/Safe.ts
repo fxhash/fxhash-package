@@ -114,15 +114,9 @@ export async function proposeSafeTransaction(
   walletManager: EthereumWalletManager
 ) {
   const safeAddress = await walletManager.safe.getAddress()
-  //to avoid having conflicting transactions where only one will be executable, we get the next nonce
-  //and we use it to create the transaction so each transaction has a unique nonce
-  const nextNonce = await getSafeService().getNextNonce(safeAddress)
 
   const safeTransaction = await walletManager.safe.createTransaction({
     transactions: safeTransactionData,
-    options: {
-      nonce: nextNonce,
-    },
   })
 
   const safeTxHash = await walletManager.safe.getTransactionHash(
@@ -165,6 +159,15 @@ export async function getUserSafes(userAddress: string) {
  */
 export async function getPendingTransactionsForSafe(safeAddress: string) {
   return await getSafeService().getPendingTransactions(safeAddress)
+}
+
+/**
+ * Retrieves the executed multisig transactions for a given safe address.
+ * @param {string} safeAddress - address of a safe.
+ * @returns executed multisig transactions for the safe with the specified address.
+ */
+export async function getMultisigTransactions(safeAddress: string) {
+  return await getSafeService().getMultisigTransactions(safeAddress)
 }
 
 /**
