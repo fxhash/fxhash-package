@@ -133,6 +133,7 @@ export class EthereumWalletManager extends WalletManager {
     | PendingSigningRequestError
     | InsufficientFundsError
     | TransactionRevertedError
+    | TransactionUnknownError
   > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
@@ -163,6 +164,8 @@ export class EthereumWalletManager extends WalletManager {
         } else if (error instanceof InsufficientFundsError) {
           return failure(error)
         } else if (error instanceof TransactionRevertedError) {
+          return failure(error)
+        } else if (error instanceof TransactionUnknownError) {
           return failure(error)
         }
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
