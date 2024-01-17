@@ -119,9 +119,8 @@ export async function proposeSafeTransaction(
     transactions: safeTransactionData,
   })
 
-  const safeTxHash = await walletManager.safe.getTransactionHash(
-    safeTransaction
-  )
+  const safeTxHash =
+    await walletManager.safe.getTransactionHash(safeTransaction)
   let senderSignature: SafeSignature
   try {
     senderSignature = await walletManager.safe.signTransactionHash(safeTxHash)

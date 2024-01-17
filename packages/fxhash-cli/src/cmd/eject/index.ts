@@ -90,7 +90,9 @@ export const commandEject: CommandModule = {
       const packageJsonPath = path.join(CWD_PATH, "package.json")
       writeFileSync(packageJsonPath, pkgJson)
       logger.log(`Created: ${packageJsonPath}`)
-      logger.success("Your project was successfully ejected. Good Luck! (｡◕‿◕｡)")
+      logger.success(
+        "Your project was successfully ejected. Good Luck! (｡◕‿◕｡)"
+      )
     } catch (error: any) {
       logger.log("Error ejecting project")
       logger.errorExit(error.message)

@@ -20,7 +20,6 @@ export type TUpdateReservesOperationParams = {
   token: GenerativeToken
 }
 
-
 /**
  * Updates the pricing of a Generative Token
  */

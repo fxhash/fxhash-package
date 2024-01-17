@@ -33,7 +33,7 @@ function ControllerBlade(props: ControllerBladeProps) {
           className={classes.lockButton}
           title={`toggle lock ${parameter.id} param`}
           isLocked={lockedParamIds?.includes(parameter.id)}
-          onClick={(e) => onClickLockButton(parameter.id)}
+          onClick={e => onClickLockButton(parameter.id)}
         />
       )}
     </div>

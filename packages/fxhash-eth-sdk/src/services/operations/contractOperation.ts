@@ -2,7 +2,7 @@ import { ContractOperation, TransactionType } from "@fxhash/contracts-shared"
 import { EthereumWalletManager } from "../Wallet"
 
 export abstract class EthereumContractOperation<
-  Params
+  Params,
 > extends ContractOperation<
   EthereumWalletManager,
   Params,

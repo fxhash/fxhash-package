@@ -49,7 +49,7 @@ export function transformPricingDutchInputToNumbers(
   input: IPricingDutchAuction<string>
 ): IPricingDutchAuction<number> {
   return {
-    levels: input.levels.map((v) => transformTezosInputToMutezNumber(v)),
+    levels: input.levels.map(v => transformTezosInputToMutezNumber(v)),
     decrementDuration: parseInt(input.decrementDuration),
     opensAt: input.opensAt,
   }
@@ -62,7 +62,7 @@ export function transformPricingDutchNumbersToString(
   input: IPricingDutchAuction<number>
 ): IPricingDutchAuction<string> {
   return {
-    levels: input.levels.map((v) => transformTezosMutezToInputString(v)),
+    levels: input.levels.map(v => transformTezosMutezToInputString(v)),
     decrementDuration: (input.decrementDuration / 60).toFixed(0),
     opensAt: input.opensAt ? new Date(input.opensAt as any) : null,
   }

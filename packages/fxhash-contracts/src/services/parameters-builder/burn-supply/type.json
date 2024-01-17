@@ -3,15 +3,11 @@
   "args": [
     {
       "prim": "nat",
-      "annots": [
-        "%amount"
-      ]
+      "annots": ["%amount"]
     },
     {
       "prim": "nat",
-      "annots": [
-        "%issuer_id"
-      ]
+      "annots": ["%issuer_id"]
     }
   ]
 }
