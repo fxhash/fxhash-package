@@ -28,9 +28,3 @@ SIGNER_PK=
 ```
 npm i
 ```
-
-4. Run prettier
-
-```
-npm run prettier
-```
