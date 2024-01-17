@@ -78,15 +78,20 @@ export interface GenerativeTokenMarketStats {
   listed: number | null
   highestSold: number | null
   lowestSold: number | null
-  primVolumeTz: number | null
+  primVolume: number | null
+  primVolumeFiat: number | null
   primVolumeNb: number | null
-  secVolumeTz: number | null
+  secVolume: number | null
+  secVolumeFiat: number | null
   secVolumeNb: number | null
-  secVolumeTz24: number | null
+  secVolume24: number | null
+  secVolumeFiat24: number | null
   secVolumeNb24: number | null
-  secVolumeTz7d: number | null
+  secVolume7d: number | null
+  secVolumeFiat7d: number | null
   secVolumeNb7d: number | null
-  secVolumeTz30d: number | null
+  secVolume30d: number | null
+  secVolumeFiat30d: number | null
   secVolumeNb30d: number | null
   generativeToken?: GenerativeToken
 }
@@ -97,9 +102,11 @@ export interface GenerativeTokenMarketStatsHistory {
   listed: number | null
   highestSold: number | null
   lowestSold: number | null
-  primVolumeTz: number | null
+  primVolume: number | null
+  primVolumeFiat: number | null
   primVolumeNb: number | null
-  secVolumeTz: number | null
+  secVolume: number | null
+  secVolumeFiat: number | null
   secVolumeNb: number | null
   from: string
   to: string

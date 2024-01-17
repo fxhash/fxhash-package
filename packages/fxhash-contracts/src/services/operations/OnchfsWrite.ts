@@ -34,6 +34,8 @@ export class OnchfsWriteOperation extends TezosContractOperation<TOnchfsWriteOpe
         })
       case "directory": {
         const formatted = Object.fromEntries(
+          //TODO: need to fix this problem
+          //@ts-ignore
           Object.entries(ins.files).map(([_, buf]) => [_, uint8hex(buf)])
         )
         return this.onchfsKt.methodsObject.create_directory(formatted)
