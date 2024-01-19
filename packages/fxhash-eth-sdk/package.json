@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/prettier-config": "workspace:*",
     "@swc/core": "1.3.83",
     "@types/dotenv": "8.2.0",
     "@types/react": "18.2.15",

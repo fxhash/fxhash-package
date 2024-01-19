@@ -3,40 +3,30 @@
   "args": [
     {
       "prim": "nat",
-      "annots": [
-        "%issuer_id"
-      ]
+      "annots": ["%issuer_id"]
     },
     {
       "prim": "pair",
       "args": [
         {
           "prim": "bytes",
-          "annots": [
-            "%details"
-          ]
+          "annots": ["%details"]
         },
         {
           "prim": "pair",
           "args": [
             {
               "prim": "bool",
-              "annots": [
-                "%lock_for_reserves"
-              ]
+              "annots": ["%lock_for_reserves"]
             },
             {
               "prim": "nat",
-              "annots": [
-                "%pricing_id"
-              ]
+              "annots": ["%pricing_id"]
             }
           ]
         }
       ],
-      "annots": [
-        "%pricing"
-      ]
+      "annots": ["%pricing"]
     }
   ]
 }

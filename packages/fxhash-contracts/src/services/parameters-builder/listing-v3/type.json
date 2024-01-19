@@ -3,9 +3,7 @@
   "args": [
     {
       "prim": "nat",
-      "annots": [
-        "%amount"
-      ]
+      "annots": ["%amount"]
     },
     {
       "prim": "pair",
@@ -15,40 +13,30 @@
           "args": [
             {
               "prim": "nat",
-              "annots": [
-                "%contract_id"
-              ]
+              "annots": ["%contract_id"]
             },
             {
               "prim": "pair",
               "args": [
                 {
                   "prim": "nat",
-                  "annots": [
-                    "%asset_id"
-                  ]
+                  "annots": ["%asset_id"]
                 },
                 {
                   "prim": "nat",
-                  "annots": [
-                    "%amount"
-                  ]
+                  "annots": ["%amount"]
                 }
               ]
             }
           ],
-          "annots": [
-            "%asset"
-          ]
+          "annots": ["%asset"]
         },
         {
           "prim": "or",
           "args": [
             {
               "prim": "address",
-              "annots": [
-                "%fa12"
-              ]
+              "annots": ["%fa12"]
             },
             {
               "prim": "or",
@@ -58,33 +46,23 @@
                   "args": [
                     {
                       "prim": "address",
-                      "annots": [
-                        "%address"
-                      ]
+                      "annots": ["%address"]
                     },
                     {
                       "prim": "nat",
-                      "annots": [
-                        "%token_id"
-                      ]
+                      "annots": ["%token_id"]
                     }
                   ],
-                  "annots": [
-                    "%fa2"
-                  ]
+                  "annots": ["%fa2"]
                 },
                 {
                   "prim": "unit",
-                  "annots": [
-                    "%tez"
-                  ]
+                  "annots": ["%tez"]
                 }
               ]
             }
           ],
-          "annots": [
-            "%currency"
-          ]
+          "annots": ["%currency"]
         }
       ]
     }

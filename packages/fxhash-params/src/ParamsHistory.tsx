@@ -59,7 +59,7 @@ export function ParamsHistoryProvider({ children }: Props) {
 
   const pushHistory = useCallback(
     debounce((entry: IParamsHistoryEntry) => {
-      setHistory((prev) => [entry, ...prev])
+      setHistory(prev => [entry, ...prev])
       setOffset(0)
       lastActionData.current = entry.data
     }, 200),

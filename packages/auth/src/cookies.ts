@@ -49,8 +49,8 @@ export const COOKIE_OPTIONS: CookieOptions =
   process.env.FXHASH_ENV === "local"
     ? COOKIE_OPTIONS_LOCAL
     : process.env.FXHASH_ENV === "dev"
-    ? COOKIE_OPTIONS_DEV
-    : COOKIE_OPTIONS_PRD
+      ? COOKIE_OPTIONS_DEV
+      : COOKIE_OPTIONS_PRD
 
 const SPECIAL_COOKIE_KEYS = {
   maxAge: "Max-Age",
