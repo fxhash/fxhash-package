@@ -34,8 +34,8 @@ export function truncateEnd(
 export function tagsFromString(str: string): string[] {
   return str
     .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0)
+    .map(tag => tag.trim())
+    .filter(tag => tag.length > 0)
 }
 
 /**

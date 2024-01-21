@@ -1,8 +1,4 @@
-import {
-  FxParamDefinition,
-  FxParamType,
-  FxParamsData,
-} from "types"
+import { FxParamDefinition, FxParamType, FxParamsData } from "types"
 import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
 import sha1 from "sha1"
@@ -55,7 +51,7 @@ function hashRuntimeHardState(
 ): string {
   const staticParams: FxParamsData = {}
   for (const id in state.params) {
-    const def = definition?.find((def) => def.id === id)
+    const def = definition?.find(def => def.id === id)
     // if no definition, or update == "page-reload" (which is default value)
     if (!def || !def.update || def.update === "page-reload") {
       staticParams[id] = state.params[id]
@@ -124,15 +120,15 @@ export function RuntimeProvider({ children }: Props) {
     version: null,
   })
 
-  const update: TUpdateStateFn<RuntimeState> = (data) => {
-    setState((lastState) => ({
+  const update: TUpdateStateFn<RuntimeState> = data => {
+    setState(lastState => ({
       ...lastState,
       ...data,
     }))
   }
 
-  const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (data) => {
-    setDefinition((lastDefinition) => ({
+  const updateDefinition: TUpdateStateFn<RuntimeDefinition> = data => {
+    setDefinition(lastDefinition => ({
       ...lastDefinition,
       ...data,
     }))

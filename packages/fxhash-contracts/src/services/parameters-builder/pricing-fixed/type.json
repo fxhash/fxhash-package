@@ -3,18 +3,16 @@
   "args": [
     {
       "prim": "option",
-      "args": [{
-        "prim": "timestamp"
-      }],
-      "annots": [
-        "%opens_at"
-      ]
+      "args": [
+        {
+          "prim": "timestamp"
+        }
+      ],
+      "annots": ["%opens_at"]
     },
     {
       "prim": "mutez",
-      "annots": [
-        "%price"
-      ]
+      "annots": ["%price"]
     }
   ]
 }

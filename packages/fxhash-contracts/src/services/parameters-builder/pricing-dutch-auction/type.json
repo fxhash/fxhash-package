@@ -1,31 +1,22 @@
 {
   "prim": "pair",
   "args": [
-    { 
+    {
       "prim": "nat",
-      "annots": [
-        "%decrement_duration"
-      ]
+      "annots": ["%decrement_duration"]
     },
-    { 
-      "prim": "pair", 
+    {
+      "prim": "pair",
       "args": [
-        { 
-          "prim": "map", 
-          "args": [
-            { "prim": "nat" },
-            { "prim": "mutez" } 
-          ],
-          "annots": [
-            "%levels"
-          ]
-        }, 
-        { 
+        {
+          "prim": "map",
+          "args": [{ "prim": "nat" }, { "prim": "mutez" }],
+          "annots": ["%levels"]
+        },
+        {
           "prim": "timestamp",
-          "annots": [
-            "%opens_at"
-          ]
-        } 
+          "annots": ["%opens_at"]
+        }
       ]
     }
   ]

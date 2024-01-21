@@ -1,6 +1,6 @@
 # fx(params)
 
-`@fxhash/params` contains all code related to fx(params) feature 
+`@fxhash/params` contains all code related to fx(params) feature
 
 ## Installation
 
