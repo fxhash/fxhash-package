@@ -5,7 +5,7 @@ import { ModuleUpdater } from "./toolkit"
 import { getSha256 } from "./utils"
 
 const PROJECT_SDK_SHA_KEY = "project-sdk"
-const PROJECT_SDK_DIST_ENTRY = "dist/fxhash.js"
+const PROJECT_SDK_DIST_ENTRY = "dist/fxhash.min.js"
 
 export const projectSdkUpdateConfig: ModuleUpdater = {
   requiresUpdate: async ({ fxhashSdkPath }) => {

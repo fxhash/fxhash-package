@@ -50,7 +50,7 @@ export function validateProjecStructure(srcPath: string): boolean {
     if (!existsSync(htmlEntryPath))
       throw new Error(`Main html file not found: ${htmlEntryPath}`)
     if (!existsSync(fxhashSdkPath))
-      throw new Error(`fxhash.js file not found: ${fxhashSdkPath}`)
+      throw new Error(`fxhash.min.js file not found: ${fxhashSdkPath}`)
   } catch (e: any) {
     logger.errorExit(e.message)
   }
