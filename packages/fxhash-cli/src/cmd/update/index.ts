@@ -1,7 +1,10 @@
 import type { CommandModule } from "yargs"
 import env from "../../constants"
 import { logger } from "../../utils/logger"
-import { isEjectedProject, validateProjecStructure } from "../../validate/index"
+import {
+  isEjectedProject,
+  validateProjectStructure,
+} from "../../validate/index"
 import { getProjectPaths } from "../../templates/paths"
 import { updateToolkit } from "../../updates/toolkit/toolkit"
 import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
@@ -21,7 +24,7 @@ export const commandUpdate: CommandModule = {
 
     const isEjected = isEjectedProject(srcPathArg)
     const srcPath = isEjected ? srcPathArg : ""
-    validateProjecStructure(srcPath)
+    await validateProjectStructure(srcPath)
     const project = getProjectPaths(srcPath)
     try {
       await updateToolkit(

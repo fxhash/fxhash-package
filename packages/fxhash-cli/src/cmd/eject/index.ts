@@ -33,7 +33,7 @@ export const commandEject: CommandModule = {
   handler: async yargs => {
     const srcPathArg = yargs.srcPath as string
     try {
-      isProjectEjectable("")
+      await isProjectEjectable("")
       const wantToEject = await yesno({
         title: "Are you sure you want to eject the project?",
         description: "The change can't be reversed.",

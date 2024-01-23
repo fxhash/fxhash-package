@@ -13,6 +13,7 @@ export interface FxhashProjectStructure {
   htmlEntryPath: string
   staticPath: string
   fxhashSdkPath: string
+  fxhashSdkPathOld: string
   distPath: string
 }
 
@@ -28,7 +29,8 @@ export function getProjectPaths(
     resolvedSrcPath,
     `${HTML_ENTRY_FILE_NAME}.html`
   )
-  const fxhashSdkPath = path.resolve(resolvedSrcPath, `${SDK_FILE_NAME}.js`)
+  const fxhashSdkPath = path.resolve(resolvedSrcPath, `${SDK_FILE_NAME}.min.js`)
+  const fxhashSdkPathOld = path.resolve(resolvedSrcPath, `${SDK_FILE_NAME}.js`)
   const staticPath = path.resolve(resolvedSrcPath)
 
   return {
@@ -37,6 +39,7 @@ export function getProjectPaths(
     htmlEntryPath,
     staticPath,
     fxhashSdkPath,
+    fxhashSdkPathOld,
     distPath,
   }
 }
