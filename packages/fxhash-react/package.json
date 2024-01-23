@@ -47,7 +47,7 @@
   "devDependencies": {
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/taquito": "17.3.1",
-    "@types/react": "18.2.15",
+    "@types/react": "18.2.48",
     "tsup": "6.6.0",
     "typescript": "5.0.4",
     "viem": "1.14.0",
