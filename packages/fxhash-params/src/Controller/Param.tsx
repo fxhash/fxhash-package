@@ -29,37 +29,37 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   number: {
     type: "number",
     controller: NumberController,
-    handler: e => Number(e.target.value),
+    handler: (e) => Number(e.target.value),
   },
   bigint: {
     type: "bigint",
     controller: BigIntController,
-    handler: e => BigInt(e.target.value),
+    handler: (e) => BigInt(e.target.value),
   },
   string: {
     type: "string",
     controller: StringController,
-    handler: e => e.target.value,
+    handler: (e) => e.target.value,
   },
   bytes: {
     type: "bytes",
     controller: BytesController,
-    handler: e => e.target.value,
+    handler: (e) => e.target.value,
   },
   boolean: {
     type: "boolean",
     controller: BooleanController,
-    handler: e => (e as React.ChangeEvent<HTMLInputElement>).target.checked,
+    handler: (e) => (e as React.ChangeEvent<HTMLInputElement>).target.checked,
   },
   color: {
     type: "color",
     controller: ColorController,
-    handler: v => v,
+    handler: (v) => v,
   },
   select: {
     type: "select",
     controller: SelectController,
-    handler: e => e.target.value,
+    handler: (e) => e.target.value,
   },
 }
 

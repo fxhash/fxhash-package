@@ -3,7 +3,9 @@
   "args": [
     {
       "prim": "nat",
-      "annots": ["%issuer_id"]
+      "annots": [
+        "%issuer_id"
+      ]
     },
     {
       "prim": "pair",
@@ -15,7 +17,9 @@
               "prim": "address"
             }
           ],
-          "annots": ["%referrer"]
+          "annots": [
+            "%referrer"
+          ]
         },
         {
           "prim": "option",
@@ -24,7 +28,9 @@
               "prim": "bytes"
             }
           ],
-          "annots": ["%reserve_input"]
+          "annots": [
+            "%reserve_input"
+          ]
         }
       ]
     }

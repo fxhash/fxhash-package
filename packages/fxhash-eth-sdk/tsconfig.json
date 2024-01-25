@@ -23,9 +23,9 @@
     "isolatedModules": true,
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["./src/*"],
-    },
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*", "test"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

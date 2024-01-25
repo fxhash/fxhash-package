@@ -1,17 +1,14 @@
-import { HTMLElement, parse } from "node-html-parser"
+import { HTMLElement, parse } from 'node-html-parser'
 
 export function htmlToNodes(html: string): HTMLElement {
   return parse(html)
 }
 
-export function fxhashSnippetNode(html: HTMLElement): HTMLElement | null {
+export function fxhashSnippetNode(html: HTMLElement): HTMLElement|null {
   return html.querySelector("#fxhash-snippet")
 }
 
-export function replaceNodeContents(
-  node: HTMLElement,
-  content: string
-): HTMLElement {
+export function replaceNodeContents(node: HTMLElement, content: string): HTMLElement {
   node.set_content(content)
   return node
 }

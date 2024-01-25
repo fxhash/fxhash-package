@@ -11,7 +11,6 @@ import { User } from "./User"
 import { MediaImage } from "./MediaImage"
 import { Redeemable } from "./Redeemable"
 import { MintTicket, MintTicketSettings } from "./MintTicket"
-import { CollectionOffer } from "./Offer"
 
 export enum GenTokFlag {
   NONE = "NONE",
@@ -78,20 +77,15 @@ export interface GenerativeTokenMarketStats {
   listed: number | null
   highestSold: number | null
   lowestSold: number | null
-  primVolume: number | null
-  primVolumeFiat: number | null
+  primVolumeTz: number | null
   primVolumeNb: number | null
-  secVolume: number | null
-  secVolumeFiat: number | null
+  secVolumeTz: number | null
   secVolumeNb: number | null
-  secVolume24: number | null
-  secVolumeFiat24: number | null
+  secVolumeTz24: number | null
   secVolumeNb24: number | null
-  secVolume7d: number | null
-  secVolumeFiat7d: number | null
+  secVolumeTz7d: number | null
   secVolumeNb7d: number | null
-  secVolume30d: number | null
-  secVolumeFiat30d: number | null
+  secVolumeTz30d: number | null
   secVolumeNb30d: number | null
   generativeToken?: GenerativeToken
 }
@@ -102,11 +96,9 @@ export interface GenerativeTokenMarketStatsHistory {
   listed: number | null
   highestSold: number | null
   lowestSold: number | null
-  primVolume: number | null
-  primVolumeFiat: number | null
+  primVolumeTz: number | null
   primVolumeNb: number | null
-  secVolume: number | null
-  secVolumeFiat: number | null
+  secVolumeTz: number | null
   secVolumeNb: number | null
   from: string
   to: string
@@ -168,7 +160,6 @@ export interface GenerativeToken {
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
   gentkContractAddress: string
-  collectionOffers: CollectionOffer[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

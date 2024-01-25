@@ -1,6 +1,6 @@
-import { differenceInSeconds } from "date-fns"
-import { GenerativeToken } from "../types/entities/GenerativeToken"
-import { clamp } from "./math"
+import { differenceInSeconds } from "date-fns";
+import { GenerativeToken } from "../types/entities/GenerativeToken";
+import { clamp } from "./math";
 
 /**
  * Outputs the current price of a Generative Token based on its pricing
@@ -8,26 +8,26 @@ import { clamp } from "./math"
  */
 
 export function genTokCurrentPrice(token: GenerativeToken): number {
-  let price = 0
+  let price = 0;
   if (token.pricingFixed) {
-    price = token.pricingFixed.price
+    price = token.pricingFixed.price;
   } else if (token.pricingDutchAuction) {
-    const da = token.pricingDutchAuction
+    const da = token.pricingDutchAuction;
     // if there's a final price for the auction, we set it
     if (da.finalPrice) {
-      price = da.finalPrice
+      price = da.finalPrice;
     }
 
     // otherwise we compute price based on timer
     else {
-      const diff = differenceInSeconds(new Date(), new Date(da.opensAt!))
+      const diff = differenceInSeconds(new Date(), new Date(da.opensAt!));
       const idx = clamp(
         Math.floor(diff / da.decrementDuration),
         0,
         da.levels.length - 1
-      )
-      price = da.levels[idx]
+      );
+      price = da.levels[idx];
     }
   }
-  return price
+  return price;
 }
