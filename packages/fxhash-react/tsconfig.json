@@ -12,7 +12,7 @@
     "jsx": "react-jsx",
     "target": "ESNext",
     "moduleResolution": "node",
-    "outDir": "dist"
+    "outDir": "dist",
   },
-  "include": ["./src"]
+  "include": ["./src"],
 }

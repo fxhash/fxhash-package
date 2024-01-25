@@ -10,7 +10,7 @@ import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
-import {  TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TOfferAcceptOperationParams = {
   offer: Offer
