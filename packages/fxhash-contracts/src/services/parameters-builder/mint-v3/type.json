@@ -11,18 +11,24 @@
               "prim": "bytes"
             }
           ],
-          "annots": ["%create_ticket"]
+          "annots": [
+            "%create_ticket"
+          ]
         },
         {
           "prim": "pair",
           "args": [
             {
               "prim": "bytes",
-              "annots": ["%input_bytes"]
+              "annots": [
+                "%input_bytes"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%issuer_id"]
+              "annots": [
+                "%issuer_id"
+              ]
             }
           ]
         }
@@ -38,7 +44,9 @@
               "prim": "address"
             }
           ],
-          "annots": ["%recipient"]
+          "annots": [
+            "%recipient"
+          ]
         },
         {
           "prim": "pair",
@@ -50,7 +58,9 @@
                   "prim": "address"
                 }
               ],
-              "annots": ["%referrer"]
+              "annots": [
+                "%referrer"
+              ]
             },
             {
               "prim": "option",
@@ -59,7 +69,9 @@
                   "prim": "bytes"
                 }
               ],
-              "annots": ["%reserve_input"]
+              "annots": [
+                "%reserve_input"
+              ]
             }
           ]
         }

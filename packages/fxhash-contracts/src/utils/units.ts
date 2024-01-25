@@ -17,7 +17,7 @@ export function bigMutezFormatter(num: number, digits: number = 1) {
   var item = lookup
     .slice()
     .reverse()
-    .find(item => {
+    .find((item) => {
       return num >= item.value
     })
 

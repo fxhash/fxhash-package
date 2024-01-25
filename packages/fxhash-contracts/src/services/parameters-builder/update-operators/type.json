@@ -9,36 +9,52 @@
           "args": [
             {
               "prim": "address",
-              "annots": ["%owner"]
+              "annots": [
+                "%owner"
+              ]
             },
             {
               "prim": "address",
-              "annots": ["%operator"]
+              "annots": [
+                "%operator"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%token_id"]
+              "annots": [
+                "%token_id"
+              ]
             }
           ],
-          "annots": ["%add_operator"]
+          "annots": [
+            "%add_operator"
+          ]
         },
         {
           "prim": "pair",
           "args": [
             {
               "prim": "address",
-              "annots": ["%owner"]
+              "annots": [
+                "%owner"
+              ]
             },
             {
               "prim": "address",
-              "annots": ["%operator"]
+              "annots": [
+                "%operator"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%token_id"]
+              "annots": [
+                "%token_id"
+              ]
             }
           ],
-          "annots": ["%remove_operator"]
+          "annots": [
+            "%remove_operator"
+          ]
         }
       ]
     }

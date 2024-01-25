@@ -7,7 +7,7 @@
     "rootDir": "src",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
@@ -21,8 +21,8 @@
     "noUnusedParameters": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "strictNullChecks": false,
+    "strictNullChecks": false
   },
   "include": ["src/**/*", "__tests__/**/*", "_old"],
-  "exclude": ["src/static/**"],
+  "exclude": ["src/static/**"]
 }

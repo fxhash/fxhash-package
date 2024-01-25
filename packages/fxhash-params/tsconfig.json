@@ -21,9 +21,11 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "strictNullChecks": false,
-    "declaration": true,
+    "declaration": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
-  "types": ["typePatches"],
+  "types": [
+    "typePatches"
+  ]
 }

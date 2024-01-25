@@ -8,11 +8,15 @@
           "prim": "bytes"
         }
       ],
-      "annots": ["%input"]
+      "annots": [
+        "%input"
+      ]
     },
     {
       "prim": "nat",
-      "annots": ["%method_id"]
+      "annots": [
+        "%method_id"
+      ]
     }
   ]
 }

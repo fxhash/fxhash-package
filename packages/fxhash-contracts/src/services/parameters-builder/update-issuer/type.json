@@ -6,11 +6,15 @@
       "args": [
         {
           "prim": "bool",
-          "annots": ["%enabled"]
+          "annots": [
+            "%enabled"
+          ]
         },
         {
           "prim": "nat",
-          "annots": ["%issuer_id"]
+          "annots": [
+            "%issuer_id"
+          ]
         }
       ]
     },
@@ -22,20 +26,28 @@
           "args": [
             {
               "prim": "address",
-              "annots": ["%address"]
+              "annots": [
+                "%address"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%pct"]
+              "annots": [
+                "%pct"
+              ]
             }
           ]
         }
       ],
-      "annots": ["%primary_split"]
+      "annots": [
+        "%primary_split"
+      ]
     },
     {
       "prim": "nat",
-      "annots": ["%royalties"]
+      "annots": [
+        "%royalties"
+      ]
     },
     {
       "prim": "list",
@@ -45,16 +57,22 @@
           "args": [
             {
               "prim": "address",
-              "annots": ["%address"]
+              "annots": [
+                "%address"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%pct"]
+              "annots": [
+                "%pct"
+              ]
             }
           ]
         }
       ],
-      "annots": ["%royalties_split"]
+      "annots": [
+        "%royalties_split"
+      ]
     }
   ]
 }

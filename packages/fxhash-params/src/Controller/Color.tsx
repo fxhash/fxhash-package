@@ -24,7 +24,7 @@ export function ColorController(props: FxParamControllerProps<"color">) {
   const { label, id, onChange, value, layout = "box", isCodeDriven } = props
   const [showPicker, setShowPicker] = useState(false)
   const handleToggleShowPicker = () => {
-    setShowPicker(show => !show)
+    setShowPicker((show) => !show)
   }
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value)

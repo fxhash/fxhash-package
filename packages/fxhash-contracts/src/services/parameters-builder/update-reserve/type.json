@@ -3,7 +3,9 @@
   "args": [
     {
       "prim": "nat",
-      "annots": ["%issuer_id"]
+      "annots": [
+        "%issuer_id"
+      ]
     },
     {
       "prim": "list",
@@ -13,20 +15,28 @@
           "args": [
             {
               "prim": "nat",
-              "annots": ["%amount"]
+              "annots": [
+                "%amount"
+              ]
             },
             {
               "prim": "bytes",
-              "annots": ["%data"]
+              "annots": [
+                "%data"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%method_id"]
+              "annots": [
+                "%method_id"
+              ]
             }
           ]
         }
       ],
-      "annots": ["%reserves"]
+      "annots": [
+        "%reserves"
+      ]
     }
   ]
 }

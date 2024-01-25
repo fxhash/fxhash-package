@@ -9,7 +9,7 @@ import { useCallback, useState } from "react"
 export type DeferrableTask<
   TData,
   TError extends IEquatableError = never,
-  TInput = void,
+  TInput = void
 > = (input: TInput) => PromiseResult<TData, TError>
 
 /**
@@ -109,7 +109,7 @@ export type DeferredTaskState<TData, TError extends IEquatableError> =
 export type UseDeferredTask<
   TData = void,
   TError extends IEquatableError = never,
-  TInput = void,
+  TInput = void
 > = DeferredTaskState<TData, TError> & {
   execute: DeferrableTask<TData, TError, TInput>
 }
@@ -120,7 +120,7 @@ export type UseDeferredTask<
 export function useDeferredTask<
   TData,
   TError extends IEquatableError,
-  TInput = never,
+  TInput = never
 >(
   handler: DeferrableTask<TData, TError, TInput>
 ): UseDeferredTask<TData, TError, TInput> {

@@ -9,42 +9,58 @@
           "args": [
             {
               "prim": "nat",
-              "annots": ["%type"]
+              "annots": [
+                "%type"
+              ]
             },
             {
               "prim": "bytes",
-              "annots": ["%value"]
+              "annots": [
+                "%value"
+              ]
             }
           ],
-          "annots": ["%codex_entry"]
+          "annots": [
+            "%codex_entry"
+          ]
         },
         {
           "prim": "nat",
-          "annots": ["%codex_id"]
+          "annots": [
+            "%codex_id"
+          ]
         }
       ],
-      "annots": ["%codex"]
+      "annots": [
+        "%codex"
+      ]
     },
     {
       "prim": "pair",
       "args": [
         {
           "prim": "bytes",
-          "annots": ["%metadata"]
+          "annots": [
+            "%metadata"
+          ]
         },
         {
           "prim": "pair",
           "args": [
             {
               "prim": "nat",
-              "annots": ["%input_bytes_size"]
+              "annots": [
+                "%input_bytes_size"
+              ]
             },
             {
               "prim": "pair",
               "args": [
                 {
                   "prim": "nat",
-                  "annots": ["%amount"]
+                  "annots": [
+                    "%amount"
+                  ]
                 },
                 {
                   "prim": "pair",
@@ -62,7 +78,9 @@
                                   "prim": "timestamp"
                                 }
                               ],
-                              "annots": ["%closing_time"]
+                              "annots": [
+                                "%closing_time"
+                              ]
                             },
                             {
                               "prim": "option",
@@ -71,12 +89,16 @@
                                   "prim": "bytes"
                                 }
                               ],
-                              "annots": ["%extra"]
+                              "annots": [
+                                "%extra"
+                              ]
                             }
                           ]
                         }
                       ],
-                      "annots": ["%open_editions"]
+                      "annots": [
+                        "%open_editions"
+                      ]
                     },
                     {
                       "prim": "pair",
@@ -89,16 +111,22 @@
                               "args": [
                                 {
                                   "prim": "nat",
-                                  "annots": ["%gracing_period"]
+                                  "annots": [
+                                    "%gracing_period"
+                                  ]
                                 },
                                 {
                                   "prim": "bytes",
-                                  "annots": ["%metadata"]
+                                  "annots": [
+                                    "%metadata"
+                                  ]
                                 }
                               ]
                             }
                           ],
-                          "annots": ["%mint_ticket_settings"]
+                          "annots": [
+                            "%mint_ticket_settings"
+                          ]
                         },
                         {
                           "prim": "pair",
@@ -111,25 +139,33 @@
                                   "args": [
                                     {
                                       "prim": "nat",
-                                      "annots": ["%amount"]
+                                      "annots": [
+                                        "%amount"
+                                      ]
                                     },
                                     {
                                       "prim": "pair",
                                       "args": [
                                         {
                                           "prim": "bytes",
-                                          "annots": ["%data"]
+                                          "annots": [
+                                            "%data"
+                                          ]
                                         },
                                         {
                                           "prim": "nat",
-                                          "annots": ["%method_id"]
+                                          "annots": [
+                                            "%method_id"
+                                          ]
                                         }
                                       ]
                                     }
                                   ]
                                 }
                               ],
-                              "annots": ["%reserves"]
+                              "annots": [
+                                "%reserves"
+                              ]
                             },
                             {
                               "prim": "pair",
@@ -139,23 +175,31 @@
                                   "args": [
                                     {
                                       "prim": "bytes",
-                                      "annots": ["%details"]
+                                      "annots": [
+                                        "%details"
+                                      ]
                                     },
                                     {
                                       "prim": "pair",
                                       "args": [
                                         {
                                           "prim": "bool",
-                                          "annots": ["%lock_for_reserves"]
+                                          "annots": [
+                                            "%lock_for_reserves"
+                                          ]
                                         },
                                         {
                                           "prim": "nat",
-                                          "annots": ["%pricing_id"]
+                                          "annots": [
+                                            "%pricing_id"
+                                          ]
                                         }
                                       ]
                                     }
                                   ],
-                                  "annots": ["%pricing"]
+                                  "annots": [
+                                    "%pricing"
+                                  ]
                                 },
                                 {
                                   "prim": "pair",
@@ -168,23 +212,31 @@
                                           "args": [
                                             {
                                               "prim": "address",
-                                              "annots": ["%address"]
+                                              "annots": [
+                                                "%address"
+                                              ]
                                             },
                                             {
                                               "prim": "nat",
-                                              "annots": ["%pct"]
+                                              "annots": [
+                                                "%pct"
+                                              ]
                                             }
                                           ]
                                         }
                                       ],
-                                      "annots": ["%primary_split"]
+                                      "annots": [
+                                        "%primary_split"
+                                      ]
                                     },
                                     {
                                       "prim": "pair",
                                       "args": [
                                         {
                                           "prim": "nat",
-                                          "annots": ["%royalties"]
+                                          "annots": [
+                                            "%royalties"
+                                          ]
                                         },
                                         {
                                           "prim": "pair",
@@ -197,23 +249,31 @@
                                                   "args": [
                                                     {
                                                       "prim": "address",
-                                                      "annots": ["%address"]
+                                                      "annots": [
+                                                        "%address"
+                                                      ]
                                                     },
                                                     {
                                                       "prim": "nat",
-                                                      "annots": ["%pct"]
+                                                      "annots": [
+                                                        "%pct"
+                                                      ]
                                                     }
                                                   ]
                                                 }
                                               ],
-                                              "annots": ["%royalties_split"]
+                                              "annots": [
+                                                "%royalties_split"
+                                              ]
                                             },
                                             {
                                               "prim": "pair",
                                               "args": [
                                                 {
                                                   "prim": "bool",
-                                                  "annots": ["%enabled"]
+                                                  "annots": [
+                                                    "%enabled"
+                                                  ]
                                                 },
                                                 {
                                                   "prim": "list",
@@ -222,7 +282,9 @@
                                                       "prim": "nat"
                                                     }
                                                   ],
-                                                  "annots": ["%tags"]
+                                                  "annots": [
+                                                    "%tags"
+                                                  ]
                                                 }
                                               ]
                                             }
