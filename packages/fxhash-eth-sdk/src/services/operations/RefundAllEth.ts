@@ -13,6 +13,7 @@ import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { apolloClient } from "../Hasura"
 import { FxhashContracts } from "@/contracts/Contracts"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TRefundAllEthOperationParams = {
   token: string
@@ -27,7 +28,7 @@ export type TRefundAllEthOperationParams = {
 export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllEthOperationParams> {
   async prepare() {}
 
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const multicallArgs = this.params.reserveIds.map(reserveId => ({
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       data: encodeFunctionData({
@@ -50,7 +51,11 @@ export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllE
       account: this.manager.address as `0x${string}`,
     }
 
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

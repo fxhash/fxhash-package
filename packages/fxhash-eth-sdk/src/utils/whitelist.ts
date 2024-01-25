@@ -246,11 +246,11 @@ export async function getMerkleRootForToken(
     return data.merkleRoot
   }
 }
-export function getFirstAvailableIndexAndProofForUser(
+export function getAvailableIndexesAndProofsForUser(
   user: `0x${string}`,
   whitelist: MerkleTreeWhitelist,
   whitelistReserve: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["reserves"][0]
-): { index: number; proof: string[] } | null {
+): { indexes: number[]; proofs: string[][] } {
   const reducedWhiteList = structuredClone(whitelist.whitelist)
   // Remove consumed slots from whitelist
   for (const slot of whitelistReserve.data.consumedSlots) {
@@ -258,16 +258,24 @@ export function getFirstAvailableIndexAndProofForUser(
     const findIndex = reducedWhiteList.findIndex(
       entry => entry[1] === address && entry[0] === index
     )
-    reducedWhiteList.splice(findIndex, 1)
+    if (findIndex != -1) {
+      reducedWhiteList.splice(findIndex, 1)
+    }
   }
   // Get the first available index for the user
-  const findIndex = reducedWhiteList.findIndex(entry => entry[1] === user)
+  const filteredWhitelist = reducedWhiteList.filter(entry => entry[1] === user)
 
-  if (findIndex === -1) {
+  const indexesAndProofs = { indexes: [], proofs: [] }
+  if (filteredWhitelist.length === 0) {
     return null
   }
-  const index = Number(reducedWhiteList[findIndex][0])
+
   const tree = getWhitelistTree(whitelist.whitelist)
-  const proof = tree.getProof(index)
-  return { index, proof }
+
+  filteredWhitelist.forEach(entry => {
+    const index = Number(entry[0])
+    indexesAndProofs.indexes.push(index)
+    indexesAndProofs.proofs.push(tree.getProof(index))
+  })
+  return indexesAndProofs
 }

@@ -1,13 +1,12 @@
-import { TransactionReceipt } from "viem"
-import { ContractOperation } from "@fxhash/contracts-shared"
+import { ContractOperation, TransactionType } from "@fxhash/contracts-shared"
 import { EthereumWalletManager } from "../Wallet"
 
 export abstract class EthereumContractOperation<
-  Params
+  Params,
 > extends ContractOperation<
   EthereumWalletManager,
   Params,
-  TransactionReceipt | string
+  { type: TransactionType; hash: string }
 > {}
 
 // a generic type for ContractOperation polymorphism

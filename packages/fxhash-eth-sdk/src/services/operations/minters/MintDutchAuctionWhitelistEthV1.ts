@@ -1,18 +1,11 @@
 import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import {
-  getProof,
-  getWhitelist,
-  getUserWhitelistIndex,
-  getWhitelistTree,
-  getMerkleRootForToken,
-} from "@/utils/whitelist"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 /**
  * The above type represents the parameters required for a MintDutchAuctionWhitelistEthV1 operation in
@@ -30,8 +23,8 @@ export type TMintDutchAuctionWhitelistEthV1OperationParams = {
   price: bigint
   amount: bigint
   reserveId: number
-  index: number
-  proof: string[]
+  index: number[]
+  proof: string[][]
   to: string | null
 }
 
@@ -43,7 +36,7 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
       this.params.to = this.manager.address
     }
   }
-  async call(): Promise<TransactionReceipt> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest = {
       address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
       abi: DUTCH_AUCTION_MINTER_ABI,
@@ -52,13 +45,17 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
         this.params.token,
         this.params.reserveId,
         this.params.to,
-        [this.params.index],
-        [this.params.proof],
+        this.params.index,
+        this.params.proof,
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
     }
-    return simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
+    }
   }
 
   success(): string {

@@ -5,10 +5,12 @@ import { prepareMintParams } from "@/utils"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TMintEthV1OperationParams = {
   token: `0x${string}`
   to: string | null
+  qty: bigint
   whitelist: boolean
   price: bigint
 }
@@ -21,8 +23,9 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
   private mintOperation: EthereumContractOperation<unknown>
 
   async prepare() {
-    const { pricing, indexAndProof, reserve } = await prepareMintParams(
+    const { pricing, indexesAndProofs, reserve } = await prepareMintParams(
       this.params.token,
+      this.params.qty,
       this.params.whitelist ? (this.params.to as `0x${string}`) : null
     )
 
@@ -34,14 +37,14 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
           to: this.params.to,
           reserveId: Number(pricing.id.split("-")[1]),
           price: this.params.price,
-          amount: 1n,
+          amount: this.params.qty,
         })
       } else {
         this.mintOperation = new MintDAEthV1Operation(this.manager, {
           token: this.params.token,
           to: this.params.to,
           reserveId: Number(pricing.id.split("-")[1]),
-          amount: 1n,
+          amount: this.params.qty,
           price: this.params.price,
         })
       }
@@ -54,11 +57,11 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         {
           token: this.params.token,
           to: this.params.to,
-          index: indexAndProof.index,
-          proof: indexAndProof.proof,
+          index: indexesAndProofs.indexes,
+          proof: indexesAndProofs.proofs,
           reserveId: reserve.data.reserveId,
           price: this.params.price,
-          amount: 1n,
+          amount: this.params.qty,
         }
       )
     } else {
@@ -67,17 +70,17 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         {
           token: this.params.token,
           to: this.params.to,
-          index: indexAndProof.index,
-          proof: indexAndProof.proof,
+          index: indexesAndProofs.indexes,
+          proof: indexesAndProofs.proofs,
           reserveId: reserve.data.reserveId,
-          amount: 1n,
+          amount: this.params.qty,
           price: this.params.price,
         }
       )
     }
   }
-  async call(): Promise<TransactionReceipt> {
-    return (await this.mintOperation.call()) as TransactionReceipt
+  async call(): Promise<{ type: TransactionType; hash: string }> {
+    return await this.mintOperation.call()
   }
 
   success(): string {

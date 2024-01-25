@@ -1,16 +1,13 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { encodeFunctionData, getAddress, TransactionReceipt } from "viem"
+import { encodeFunctionData, getAddress } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
-
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { proposeSafeTransaction } from "@/services/Safe"
-import {
-  MetaTransactionData,
-  SafeTransactionDataPartial,
-} from "@safe-global/safe-core-sdk-types"
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TOwnerMintEthV1OperationParams = {
   token: `0x${string}`
@@ -25,7 +22,7 @@ export type TOwnerMintEthV1OperationParams = {
 export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMintEthV1OperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
-  async call(): Promise<TransactionReceipt | string> {
+  async call(): Promise<{ type: TransactionType; hash: string }> {
     const isParams = this.params.params ? true : false
     const functionArgs = isParams
       ? [this.params.to, this.params.params]
@@ -42,7 +39,14 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
         }),
         value: "0",
       }
-      return await proposeSafeTransaction([safeTransactionData], this.manager)
+      const transactionHash = await proposeSafeTransaction(
+        [safeTransactionData],
+        this.manager
+      )
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: transactionHash,
+      }
     } else {
       const args: SimulateAndExecuteContractRequest = {
         address: this.params.token,
@@ -51,7 +55,14 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
         args: functionArgs,
         account: this.manager.address as `0x${string}`,
       }
-      return simulateAndExecuteContract(this.manager, args)
+      const transactionHash = await simulateAndExecuteContract(
+        this.manager,
+        args
+      )
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: transactionHash,
+      }
     }
   }
 

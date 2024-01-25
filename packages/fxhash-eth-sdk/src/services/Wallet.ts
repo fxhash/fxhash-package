@@ -8,9 +8,13 @@ import {
   success,
   InsufficientFundsError,
   TransactionRevertedError,
+  TransactionReceiptError,
+  TransactionUnknownError,
+  TransactionType,
 } from "@fxhash/contracts-shared"
 import {
   PublicClient,
+  TransactionNotFoundError,
   TransactionReceipt,
   UserRejectedRequestError,
   WalletClient,
@@ -19,7 +23,7 @@ import { mainnet, sepolia, hardhat, goerli } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "@/services/Safe"
 import { TEthereumContractOperation } from "./operations"
-import { JsonRpcSigner } from "ethers"
+import { JsonRpcSigner, Transaction } from "ethers"
 
 //list of supported chains by the SDK
 export const chains = [mainnet, sepolia, goerli, hardhat]
@@ -121,7 +125,7 @@ export class EthereumWalletManager extends WalletManager {
     params: TParams
   ): PromiseResult<
     {
-      operation?: TransactionReceipt
+      type: TransactionType
       message: string
       hash: string
     },
@@ -129,6 +133,7 @@ export class EthereumWalletManager extends WalletManager {
     | PendingSigningRequestError
     | InsufficientFundsError
     | TransactionRevertedError
+    | TransactionUnknownError
   > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
@@ -145,12 +150,9 @@ export class EthereumWalletManager extends WalletManager {
         const message = contractOperation.success()
 
         return success({
-          operation: typeof operation === "string" ? undefined : operation,
+          type: operation.type,
           message,
-          hash:
-            typeof operation === "string"
-              ? operation
-              : operation.transactionHash,
+          hash: operation.hash,
         })
       } catch (error) {
         if (
@@ -162,6 +164,8 @@ export class EthereumWalletManager extends WalletManager {
         } else if (error instanceof InsufficientFundsError) {
           return failure(error)
         } else if (error instanceof TransactionRevertedError) {
+          return failure(error)
+        } else if (error instanceof TransactionUnknownError) {
           return failure(error)
         }
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
@@ -184,12 +188,30 @@ export class EthereumWalletManager extends WalletManager {
     hash,
   }: {
     hash: string
-  }): PromiseResult<TransactionReceipt, UserRejectedError> {
-    return success(
-      await this.publicClient.waitForTransactionReceipt({
+  }): PromiseResult<
+    TransactionReceipt,
+    | UserRejectedError
+    | TransactionRevertedError
+    | TransactionReceiptError
+    | TransactionUnknownError
+  > {
+    try {
+      const receipt = await this.publicClient.waitForTransactionReceipt({
         hash: hash as `0x${string}`,
+        confirmations: 2,
+        timeout: 120_000,
       })
-    )
+      if (receipt.status !== "success") {
+        console.error("Transaction failed", receipt)
+        return failure(new TransactionRevertedError("Execution reverted"))
+      }
+      console.log("tx success: ", receipt)
+      return success(receipt)
+    } catch (error: any) {
+      if (error instanceof TransactionNotFoundError)
+        return failure(new TransactionReceiptError())
+      return failure(new TransactionUnknownError())
+    }
   }
 
   // given an error, returns true if request can be cycled to another RPC node

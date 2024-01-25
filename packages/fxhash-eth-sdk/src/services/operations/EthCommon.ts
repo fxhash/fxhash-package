@@ -204,12 +204,12 @@ export async function handleContractError(error: any): Promise<string> {
  * @param {SimulateAndExecuteContractRequest} args - The `args` parameter is an object that contains
  * the necessary information to simulate and execute a contract. It likely includes properties such as
  * the contract address, the contract method to call, and any arguments required for the method.
- * @returns a Promise that resolves to a TransactionReceipt object.
+ * @returns a Promise that resolves to the submitted hash.
  */
 export async function simulateAndExecuteContract(
   walletManager: EthereumWalletManager,
   args: SimulateAndExecuteContractRequest
-): Promise<TransactionReceipt> {
+): Promise<string> {
   //fetch the account from the wallet
   const account = walletManager.walletClient.account
   try {
@@ -223,19 +223,7 @@ export async function simulateAndExecuteContract(
       ...request,
       account: account,
     })
-
-    //wait for the transaction receipt
-    const receipt = await walletManager.publicClient.waitForTransactionReceipt({
-      hash,
-      confirmations: 2,
-      timeout: 120_000,
-    })
-    if (receipt.status !== "success") {
-      throw new TransactionRevertedError("execution reverted")
-    }
-
-    console.log("tx success: ", receipt)
-    return receipt
+    return hash
   } catch (error) {
     //handle any error from the execution
     const errorMessage = await handleContractError(error)

@@ -10,10 +10,10 @@ import {
   ReservoirPlaceBidParams,
 } from "@/services/reservoir/types"
 import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api"
-import { FxhashContracts } from "@/contracts/Contracts"
 import { RESERVOIR_ABI } from "@/abi/Reservoir"
 import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
 import { config } from "@fxhash/config"
+import { RESERVOIR_ORDER_KIND } from "../Reservoir"
 
 export const stepHandler = (steps, path) => {}
 /**
@@ -43,15 +43,16 @@ export async function handleAction<T>(action: Promise<T>): Promise<T> {
  * @dev: As we want to use our own Seaport zone, and it is not currently supported by Reservoir, we need to intercept and override the parameters
  */
 export function overrideSellStepsParameters(steps: Execute): void {
-  steps.steps
-    .filter(step => step.id === "order-signature")
-    .forEach(step => {
-      step.items.forEach(item => {
-        //For each order we override the zone and zone hash parameters
-        item.data.sign.value.zone = FxhashContracts.ETH_SEAPORT_ZONE
-        item.data.post.body.order.data.zone = FxhashContracts.ETH_SEAPORT_ZONE
-      })
-    })
+  // ! @dev we can't use our seaport zone for now, as it does not allow offchain cancellation
+  // steps.steps
+  //   .filter(step => step.id === "order-signature")
+  //   .forEach(step => {
+  //     step.items.forEach(item => {
+  //       //For each order we override the zone and zone hash parameters
+  //       item.data.sign.value.zone = FxhashContracts.ETH_SEAPORT_ZONE
+  //       item.data.post.body.order.data.zone = FxhashContracts.ETH_SEAPORT_ZONE
+  //     })
+  //   })
 }
 
 /**

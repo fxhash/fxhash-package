@@ -1,5 +1,10 @@
 import { WalletManager } from "./WalletManager"
 
+export enum TransactionType {
+  OFFCHAIN = "OFFCHAIN",
+  ONCHAIN = "ONCHAIN",
+}
+
 export enum BlockchainType {
   ETHEREUM = "ETHEREUM",
   TEZOS = "TEZOS",
@@ -20,7 +25,7 @@ export enum BlockchainType {
 export abstract class ContractOperation<
   TWalletManager extends WalletManager,
   TParams,
-  TData
+  TData,
 > {
   manager: TWalletManager
   params: TParams
@@ -57,9 +62,8 @@ export abstract class ContractOperation<
 export type TContractOperation<
   TWalletManager extends WalletManager,
   TParams,
-  TData
-> = new (manager: TWalletManager, params: TParams) => ContractOperation<
-  TWalletManager,
-  TParams,
-  TData
->
+  TData,
+> = new (
+  manager: TWalletManager,
+  params: TParams
+) => ContractOperation<TWalletManager, TParams, TData>

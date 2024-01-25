@@ -73,7 +73,7 @@ export const useSignMessage = () => {
 
       return success({
         message,
-        signature: result.value,
+        signature: result.value.signature,
       })
     }
   )
