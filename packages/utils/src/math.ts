@@ -21,7 +21,11 @@ function b58dec(str: string): number {
   }, 0)
 }
 
-function sfc32([a, b, c, d]: number[]): () => number {
+function sfc32(seed: number[]): () => number {
+  let a = seed[0] | 0
+  let b = seed[1] | 0
+  let c = seed[2] | 0
+  let d = seed[3] | 0
   return function () {
     a |= 0
     b |= 0
@@ -50,7 +54,7 @@ function matcher(
 
 function getSeedFromHash(hash: string): number[] {
   if (isEthereumTransactionHashValid(hash) || isEthereumAddressValid(hash)) {
-    return matcher(hash, 2, s => Number(BigInt(`0x${s}`) % BigInt(0xffffffff)))
+    return matcher(hash, 2, s => parseInt(s, 16) | 0)
   } else if (isTezosAddressValid(hash)) {
     return matcher(hash, 3)
   } else {

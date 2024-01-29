@@ -13,7 +13,7 @@ export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
   const name = "simple"
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: `<script src="./${SDK_FILE_NAME}.min.js"></script>`,
+    snippet: `<script src="./${SDK_FILE_NAME}.js"></script>`,
     head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
@@ -26,7 +26,7 @@ export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
     files: [
       [`${HTML_ENTRY_FILE_NAME}.html`, pHtml],
       ["styles.css", ""],
-      [`${SDK_FILE_NAME}.min.js`, sdkContent],
+      [`${SDK_FILE_NAME}.js`, sdkContent],
     ],
     staticFiles: [
       [`${JS_ENTRY_FILE_NAME}.js`, "static/examples/params.js"],

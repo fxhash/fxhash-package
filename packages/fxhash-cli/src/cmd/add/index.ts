@@ -6,13 +6,11 @@ import { librariesListQuery } from "../../gql/queries"
 import { readFileSync, writeFileSync } from "fs"
 import env, { CWD_PATH } from "../../constants"
 import path from "path"
-import {
-  isEjectedProject,
-  validateProjectStructure,
-} from "../../validate/index"
+import { isEjectedProject, validateProjecStructure } from "../../validate/index"
 import { yesno } from "../../utils/prompts"
 import { getProjectPaths } from "../../templates/paths"
-import { formatAndWriteHtml, readAndParseHtml } from "../../utils/parseHtml"
+import parse from "node-html-parser"
+import { format } from "prettier"
 
 export const commandAdd: CommandModule = {
   command: "add [module]",
@@ -46,7 +44,7 @@ export const commandAdd: CommandModule = {
       const response = await apolloFxHashClient.query({
         query: librariesListQuery,
       })
-      await validateProjectStructure(srcPath)
+      validateProjecStructure(srcPath)
       const { htmlEntryPath } = getProjectPaths(srcPath)
       const {
         data: { libraries },
@@ -108,9 +106,11 @@ export const commandAdd: CommandModule = {
           })
         if (doInject) {
           try {
-            const htmlRoot = await readAndParseHtml(htmlEntryPath)
-            const head = htmlRoot.querySelector("head")
-            const scriptExists = htmlRoot.querySelector(
+            const indexHtml = readFileSync(htmlEntryPath)
+            const html = indexHtml.toString()
+            const root = parse(html)
+            const head = root.querySelector("head")
+            const scriptExists = root.querySelector(
               `script[src="./${libraryVersion.filename}"]`
             )
             if (scriptExists) {
@@ -120,7 +120,9 @@ export const commandAdd: CommandModule = {
               return
             }
             head.insertAdjacentHTML("beforeend", scriptTag)
-            await formatAndWriteHtml(htmlRoot, htmlEntryPath)
+            const newHtml = root.toString()
+            const pNewHtml = format(newHtml, { parser: "html" })
+            writeFileSync(htmlEntryPath, pNewHtml)
             logger.success(
               "We have injected the script into your html entry file successfully."
             )
