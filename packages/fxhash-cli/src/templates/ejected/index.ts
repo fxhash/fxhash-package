@@ -18,7 +18,7 @@ export async function ejectedTemplate({
 }): Promise<TemplateFactoryResponse> {
   const html = render(baseHtmlTemplate, {
     name,
-    snippet: `<script src="./${SDK_FILE_NAME}.js"></script>`,
+    snippet: `<script src="./${SDK_FILE_NAME}.min.js"></script>`,
     head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
@@ -47,7 +47,7 @@ export async function ejectedTemplate({
       [`src/${HTML_ENTRY_FILE_NAME}.html`, pHtml],
       ["src/styles.css", ""],
       ["package.json", pkgJson],
-      [`src/${SDK_FILE_NAME}.js`, sdkContent],
+      [`src/${SDK_FILE_NAME}.min.js`, sdkContent],
       [`${WEBPACK_CONFIG_DEV_FILE_NAME}.js`, pWebpackDevConfig],
       [`${WEBPACK_CONFIG_PROD_FILE_NAME}.js`, pWebpackProdConfig],
     ],
