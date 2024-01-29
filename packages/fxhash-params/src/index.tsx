@@ -1,3 +1,5 @@
-import { BaseInput } from "BaseInput"
+import { BaseInput } from "BaseInput";
 
-export { BaseInput }
+export {
+  BaseInput
+} 

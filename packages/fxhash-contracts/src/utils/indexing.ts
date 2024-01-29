@@ -7,6 +7,6 @@ export function getDiffByPath<K = any, V = any>(
   diffs: TzktBigmapDiff[],
   path: string
 ): TzktBigmapDiff<K, V> | undefined {
-  const diff = diffs.find(d => d.path === path)
+  const diff = diffs.find((d) => d.path === path)
   return diff
 }

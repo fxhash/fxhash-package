@@ -18,7 +18,7 @@ export function SelectController({
         value={value}
         disabled={isCodeDriven}
       >
-        {options?.options.map(o => (
+        {options?.options.map((o) => (
           <option key={o} value={o}>
             {o}
           </option>

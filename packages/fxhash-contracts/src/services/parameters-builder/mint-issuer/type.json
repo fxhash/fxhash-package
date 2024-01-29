@@ -9,31 +9,43 @@
           "args": [
             {
               "prim": "nat",
-              "annots": ["%amount"]
+              "annots": [
+                "%amount"
+              ]
             },
             {
               "prim": "bool",
-              "annots": ["%enabled"]
+              "annots": [
+                "%enabled"
+              ]
             }
           ]
         },
         {
           "prim": "bytes",
-          "annots": ["%metadata"]
+          "annots": [
+            "%metadata"
+          ]
         },
         {
           "prim": "pair",
           "args": [
             {
               "prim": "bytes",
-              "annots": ["%details"]
+              "annots": [
+                "%details"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%pricing_id"]
+              "annots": [
+                "%pricing_id"
+              ]
             }
           ],
-          "annots": ["%pricing"]
+          "annots": [
+            "%pricing"
+          ]
         }
       ]
     },
@@ -48,16 +60,22 @@
               "args": [
                 {
                   "prim": "address",
-                  "annots": ["%address"]
+                  "annots": [
+                    "%address"
+                  ]
                 },
                 {
                   "prim": "nat",
-                  "annots": ["%pct"]
+                  "annots": [
+                    "%pct"
+                  ]
                 }
               ]
             }
           ],
-          "annots": ["%primary_split"]
+          "annots": [
+            "%primary_split"
+          ]
         },
         {
           "prim": "list",
@@ -67,26 +85,36 @@
               "args": [
                 {
                   "prim": "nat",
-                  "annots": ["%amount"]
+                  "annots": [
+                    "%amount"
+                  ]
                 },
                 {
                   "prim": "bytes",
-                  "annots": ["%data"]
+                  "annots": [
+                    "%data"
+                  ]
                 },
                 {
                   "prim": "nat",
-                  "annots": ["%method_id"]
+                  "annots": [
+                    "%method_id"
+                  ]
                 }
               ]
             }
           ],
-          "annots": ["%reserves"]
+          "annots": [
+            "%reserves"
+          ]
         }
       ]
     },
     {
       "prim": "nat",
-      "annots": ["%royalties"]
+      "annots": [
+        "%royalties"
+      ]
     },
     {
       "prim": "list",
@@ -96,16 +124,22 @@
           "args": [
             {
               "prim": "address",
-              "annots": ["%address"]
+              "annots": [
+                "%address"
+              ]
             },
             {
               "prim": "nat",
-              "annots": ["%pct"]
+              "annots": [
+                "%pct"
+              ]
             }
           ]
         }
       ],
-      "annots": ["%royalties_split"]
+      "annots": [
+        "%royalties_split"
+      ]
     },
     {
       "prim": "list",
@@ -114,7 +148,9 @@
           "prim": "nat"
         }
       ],
-      "annots": ["%tags"]
+      "annots": [
+        "%tags"
+      ]
     }
   ]
 }

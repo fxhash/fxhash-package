@@ -4,6 +4,7 @@ The `@fxhash/project-sdk` is the library to create generatives artworks on fx(ha
 
 This packages is intended to be used in the browser and therefore exposes a IIFE (Immediately Invoked Function Expression) that exposes the `$fx` API on the window.
 
+
 ## API
 
 The `window.$fx` exposes the following API.
@@ -28,7 +29,6 @@ The `window.$fx` exposes the following API.
   stringifyParams: (definitions) => string, // JSON.stringify that can handle bigint
 }
 ```
-
 ## fx(params)
 
 The following fx(params) types are available. All types share the same attributes but have different options available to e.g. constrain your parameters to your needs.
@@ -98,7 +98,7 @@ No options.
 Options:
 
 ```typescript
-undefined
+undefined;
 ```
 
 #### `color`
@@ -108,7 +108,7 @@ No options.
 Options:
 
 ```typescript
-undefined
+undefined;
 ```
 
 #### `string`

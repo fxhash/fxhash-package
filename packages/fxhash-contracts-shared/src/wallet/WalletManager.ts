@@ -32,9 +32,7 @@ export class TransactionReceiptError extends Error {
   name = "TransactionReceiptError" as const
 
   constructor() {
-    super(
-      `Failed to locate transaction - please check for pending transactions in your wallet before resubmitting.`
-    )
+    super(`Failed to locate transaction - please check for pending transactions in your wallet before resubmitting.`)
   }
 }
 
@@ -45,8 +43,7 @@ export class TransactionUnknownError extends Error {
   constructor(readonly paramErrorName?: string) {
     super(
       paramErrorName ||
-        `An unknown error occurred waiting for transaction - please check for pending transactions in your wallet before resubmitting.`
-    )
+      `An unknown error occurred waiting for transaction - please check for pending transactions in your wallet before resubmitting.`)
     this.errorName = paramErrorName
   }
 }
@@ -162,13 +159,8 @@ export abstract class WalletManager {
   abstract waitForTransaction(params: {
     hash: string
     // TODO proper error type
-  }): PromiseResult<
-    unknown,
-    | UserRejectedError
-    | TransactionRevertedError
-    | TransactionReceiptError
-    | TransactionUnknownError
-  >
+  }): PromiseResult<unknown, UserRejectedError | TransactionRevertedError    | TransactionReceiptError
+  | TransactionUnknownError>
 }
 
 // a generic type for ContractOperation polymorphism

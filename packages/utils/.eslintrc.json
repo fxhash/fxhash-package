@@ -1,3 +1,8 @@
 {
-  "extends": ["@fxhash/eslint-config"]
+  "plugins": ["prettier"],
+  "extends": ["@fxhash/eslint-config"],
+  "rules": {
+    "prettier/prettier": "error"
+  }
 }
+
