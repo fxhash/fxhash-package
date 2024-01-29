@@ -1,4 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation"
+import { TransactionReceipt } from "viem"
 import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
 import { prepareMintParams } from "@/utils"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1"

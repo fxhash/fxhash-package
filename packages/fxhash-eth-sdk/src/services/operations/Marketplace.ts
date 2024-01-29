@@ -164,7 +164,6 @@ export const buyToken = async (
     items: items,
     source: getClient().source,
     taker: walletClient.account.address,
-    normalizeRoyalties: true,
   }
 
   let orderId: string = undefined
@@ -323,9 +322,6 @@ export const acceptOffer = async (
   const result = await handleAction(
     getClient().actions.acceptOffer({
       items: offers,
-      options: {
-        normalizeRoyalties: true,
-      },
       wallet: walletClient,
       onProgress: hashCallBack,
     })
