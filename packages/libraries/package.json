@@ -23,16 +23,16 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
-    "@fxhash/config": "workspace:*"
+    "@fxhash/config": "0.0.8"
   },
   "devDependencies": {
     "tslib": "2.6.0",
     "tsup": "6.6.0",
     "typescript": "5.0.4"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }

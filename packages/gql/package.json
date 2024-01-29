@@ -19,14 +19,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
-    "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
-    "codegen": "npm run codegen:schema && npm run codegen:typescript",
-    "codegen:dev": "npm run codegen:typescript && npm run build",
-    "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent",
-    "build": "tsup"
-  },
   "peerDependencies": {
     "graphql": "16.7.1"
   },
@@ -47,5 +39,13 @@
     "chokidar-cli": "3.0.0",
     "graphql": "16.7.1",
     "typescript": "5.0.4"
+  },
+  "scripts": {
+    "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
+    "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
+    "codegen": "npm run codegen:schema && npm run codegen:typescript",
+    "codegen:dev": "npm run codegen:typescript && npm run build",
+    "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent",
+    "build": "tsup"
   }
 }

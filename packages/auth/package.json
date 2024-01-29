@@ -24,22 +24,22 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "cookie": "0.5.0",
     "express": "4.18.2",
     "jsonwebtoken": "9.0.0"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
     "@types/cookie": "0.5.1",
     "@types/express": "4.17.17",
     "@types/jsonwebtoken": "9.0.4",
     "@types/node": "18.7.13",
     "tsup": "6.6.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "@fxhash/eslint-config": "1.0.2"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }
