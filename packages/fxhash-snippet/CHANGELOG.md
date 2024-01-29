@@ -1,5 +1,11 @@
 # @fxhash/fxhash-snippet
 
+## 0.0.8
+
+### Patch Changes
+
+- 615f7cd: Release fix for eth prng on safari
+
 ## 0.0.7
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.10
+
+### Patch Changes
+
+- 615f7cd: Release fix for eth prng on safari
+- Updated dependencies [615f7cd]
+  - @fxhash/cli@0.0.16
+
 ## 0.0.9
 
 ### Patch Changes
