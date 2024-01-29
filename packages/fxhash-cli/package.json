@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "author": "fxhash",
   "license": "MIT",
   "engines": {
@@ -81,7 +81,6 @@
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/prettier-config": "workspace:*",
     "@types/adm-zip": "0.5.0",
     "@types/chalk": "2.2.0",
     "@types/ejs": "3.1.2",
@@ -103,8 +102,6 @@
     "chokidar": "3.5.3",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.7",
-    "eslint-config-prettier": "8.8.0",
-    "eslint-plugin-prettier": "4.2.1",
     "tsc-alias": "1.8.5",
     "tslib": "2.6.0",
     "tsup": "7.2.0",

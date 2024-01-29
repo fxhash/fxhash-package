@@ -7,8 +7,7 @@
   "author": "fxhash",
   "license": "MIT",
   "main": "index.js",
-  "devDependencies": {
-    "@types/prettier": "2.7.3",
-    "prettier": "2.8.8"
+  "peerDependencies": {
+    "prettier": "^3.0.0"
   }
 }

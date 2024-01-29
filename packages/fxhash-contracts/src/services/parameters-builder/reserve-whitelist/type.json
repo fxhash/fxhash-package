@@ -1,7 +1,4 @@
 {
-  "prim": "map", 
-  "args": [
-    { "prim": "address" },
-    { "prim": "nat" } 
-  ]
+  "prim": "map",
+  "args": [{ "prim": "address" }, { "prim": "nat" }]
 }

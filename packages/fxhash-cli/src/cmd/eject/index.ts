@@ -33,7 +33,7 @@ export const commandEject: CommandModule = {
   handler: async yargs => {
     const srcPathArg = yargs.srcPath as string
     try {
-      isProjectEjectable("")
+      await isProjectEjectable("")
       const wantToEject = await yesno({
         title: "Are you sure you want to eject the project?",
         description: "The change can't be reversed.",
@@ -90,7 +90,9 @@ export const commandEject: CommandModule = {
       const packageJsonPath = path.join(CWD_PATH, "package.json")
       writeFileSync(packageJsonPath, pkgJson)
       logger.log(`Created: ${packageJsonPath}`)
-      logger.success("Your project was successfully ejected. Good Luck! (｡◕‿◕｡)")
+      logger.success(
+        "Your project was successfully ejected. Good Luck! (｡◕‿◕｡)"
+      )
     } catch (error: any) {
       logger.log("Error ejecting project")
       logger.errorExit(error.message)
