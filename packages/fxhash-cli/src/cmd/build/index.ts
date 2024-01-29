@@ -3,10 +3,7 @@ import Webpack, { Configuration, Stats, WebpackError } from "webpack"
 import env, { CWD_PATH, WEBPACK_CONFIG_PROD_FILE_NAME } from "../../constants"
 import { createProdConfig } from "../../webpack/webpack.config.prod"
 import { logger } from "../../utils/logger"
-import {
-  isEjectedProject,
-  validateProjectStructure,
-} from "../../validate/index"
+import { isEjectedProject, validateProjecStructure } from "../../validate/index"
 import { existsSync } from "fs"
 import path from "path"
 
@@ -42,7 +39,7 @@ export const commandBuild: CommandModule = {
 
     const srcPath = isEjected ? srcPathArg : ""
 
-    await validateProjectStructure(srcPath)
+    validateProjecStructure(srcPath)
 
     const webpackConfigFactoryOptions = {
       srcPath,

@@ -1,7 +1,6 @@
 // fx sdk
 import fx__4_0_0 from "./libs/fxhash.js/4.0.0.lib"
-import fx__4_0_1 from "./libs/fxhash.js/4.0.1.lib"
-// 15
+// p5
 import p5js__1_9_0 from "./libs/p5.js/1.9.0.lib"
 import p5js__1_7_0 from "./libs/p5.js/1.7.0.lib"
 import p5js__1_5_0 from "./libs/p5.js/1.5.0.lib"
@@ -26,18 +25,6 @@ export const fxLibrary: Library = {
   documentation: "https://fxhash.xyz/doc",
   filenames: ["fxhash.js", "fxhash.min.js", "fx.js", "fx.min.js"],
   versions: [
-    {
-      version: "4.0.1",
-      filename: "fxhash.min.js",
-      license: "MIT",
-      content: fx__4_0_1,
-      availability: [
-        BlockchainIdentifiers.TezosGhostnet,
-        BlockchainIdentifiers.TezosMainnet,
-        BlockchainIdentifiers.EthereumGoerli,
-        BlockchainIdentifiers.EthereumMainnet,
-      ],
-    },
     {
       version: "4.0.0",
       filename: "fxhash.min.js",

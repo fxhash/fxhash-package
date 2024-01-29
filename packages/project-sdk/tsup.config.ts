@@ -7,7 +7,7 @@ export default defineConfig([
     },
     outExtension() {
       return {
-        js: `.min.js`,
+        js: `.js`,
       }
     },
     outDir: "dist",

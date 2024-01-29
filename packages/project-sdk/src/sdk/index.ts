@@ -35,7 +35,7 @@ export function createFxhashSdk(window, options): FxHashApi {
   const initialInputBytes = searchParams?.replace("#0x", "")
 
   const $fx = {
-    _version: "4.0.1",
+    _version: "4.0.0",
     _processors: ParameterProcessors,
     // where params def & features will be stored
     _params: undefined,
