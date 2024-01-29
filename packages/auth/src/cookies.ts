@@ -2,6 +2,16 @@ import { CookieOptions } from "express"
 
 export const FOURTEEN_DAYS = 14 * 24 * 60 * 60
 
+/**
+ * takes CookieOptions and converts maxAge to milliseconds if it is defined
+ */
+export const getExpressCookieOptions = (
+  options: CookieOptions
+): CookieOptions => ({
+  ...options,
+  maxAge: options.maxAge ? options.maxAge * 1000 : undefined,
+})
+
 export const COOKIE_OPTIONS_LOCAL: CookieOptions = {
   httpOnly: true,
   maxAge: FOURTEEN_DAYS,
@@ -39,8 +49,8 @@ export const COOKIE_OPTIONS: CookieOptions =
   process.env.FXHASH_ENV === "local"
     ? COOKIE_OPTIONS_LOCAL
     : process.env.FXHASH_ENV === "dev"
-    ? COOKIE_OPTIONS_DEV
-    : COOKIE_OPTIONS_PRD
+      ? COOKIE_OPTIONS_DEV
+      : COOKIE_OPTIONS_PRD
 
 const SPECIAL_COOKIE_KEYS = {
   maxAge: "Max-Age",

@@ -1,5 +1,5 @@
 export interface MediaImage {
-  cid: string
+  id: string
   width?: number
   height?: number
   metadata?: {} | null

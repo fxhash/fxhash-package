@@ -10,7 +10,7 @@ import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TOfferAcceptOperationParams = {
   offer: Offer
@@ -18,23 +18,10 @@ export type TOfferAcceptOperationParams = {
   price: number
 }
 
-export class OfferAcceptOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosOfferAcceptOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * List a gentk on the Marketplace
  */
-class TezosOfferAcceptOperation extends TezosContractOperation<TOfferAcceptOperationParams> {
+export class OfferAcceptOperation extends TezosContractOperation<TOfferAcceptOperationParams> {
   async prepare() {}
 
   async call(): Promise<WalletOperation> {

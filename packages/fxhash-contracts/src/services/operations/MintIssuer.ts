@@ -22,20 +22,6 @@ export type TMintIssuerOperationParams = {
   metadataBytes: string
 }
 
-export class MintIssuerOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosMintIssuerOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Mint an unique iteration of a Generative Token
  */
@@ -81,7 +67,7 @@ export class TezosMintIssuerOperation extends TezosContractOperation<TMintIssuer
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
     if (this.params.data.collaboration) {
-      const packed = packMintIssuer(params)
+      const packed = packMintIssuer(params as any)
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.MINT_ISSUER,
         call_params: packed,

@@ -14,6 +14,9 @@ import {
   PromiseResult,
   failure,
   success,
+  NetworkError,
+  BadRequestError,
+  TransactionType,
 } from "@fxhash/contracts-shared"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
@@ -21,18 +24,8 @@ import { TTezosContractOperation } from "./operations"
 
 const TEZOS_SIGNING_PREFIX = "050100"
 
-/**
- * Encodes the payload into the desired format.
- *
- * @param {string} payload - The payload to encode.
- * @return {string} - The encoded payload.
- */
-export const encodeSignInPayload = (payload: string): string => {
-  const bytes = char2Bytes(payload)
-  return TEZOS_SIGNING_PREFIX + char2Bytes(bytes.length.toString()) + bytes
-}
-
 interface TezosWalletManagerParams {
+  address: string
   beaconWallet: BeaconWallet
   tezosToolkit: TezosToolkit
   rpcNodes: string[]
@@ -46,13 +39,13 @@ export class TezosWalletManager extends WalletManager {
   rpcNodes: string[]
 
   constructor(params: TezosWalletManagerParams) {
-    super()
+    super(params.address)
     this.beaconWallet = params.beaconWallet
     this.tezosToolkit = params.tezosToolkit
     this.rpcNodes = params.rpcNodes
   }
 
-  async signMessage(
+  async signMessageWithWallet(
     message: string
   ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
     if (this.signingInProgress) {
@@ -61,11 +54,11 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeSignInPayload(message)
+      const payloadBytes = this.encodeSignInPayload(message)
       const { signature } = await this.beaconWallet.client.requestSignPayload({
         signingType: SigningType.MICHELINE,
         payload: payloadBytes,
-        sourceAddress: await this.tezosToolkit.wallet.pkh(),
+        sourceAddress: this.address,
       })
       return success(signature)
     } catch (error) {
@@ -83,8 +76,10 @@ export class TezosWalletManager extends WalletManager {
     params: TParams
   ): PromiseResult<
     {
+      type: TransactionType.ONCHAIN
       operation: WalletOperation
       message: string
+      hash: string
     },
     UserRejectedError | PendingSigningRequestError
   > {
@@ -103,8 +98,10 @@ export class TezosWalletManager extends WalletManager {
         const message = contractOperation.success()
 
         return success({
+          type: TransactionType.ONCHAIN,
           operation,
           message,
+          hash: operation.opHash,
         })
       } catch (error) {
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
@@ -147,6 +144,35 @@ export class TezosWalletManager extends WalletManager {
     return this.contracts[address]!
   }
 
+  /**
+   * Given a RPC endpoint, makes a query to such endpoint by trying over all the
+   * RPCs available if any fails with a retryable error.
+   * @param endpoint The RPC endpoint which will be queried
+   * @returns The JSON response from the RPC
+   */
+  async fetchRpc<ReturnType = any>(
+    endpoint: `/${string}`
+  ): PromiseResult<ReturnType, NetworkError | BadRequestError> {
+    if (!endpoint.startsWith("/")) {
+      return failure(
+        new BadRequestError("RPC call endpoint must start with a '/'")
+      )
+    }
+    for (let i = 0; i < this.rpcNodes.length + 2; i++) {
+      try {
+        const result = await fetch(`${this.rpcNodes[0]}${endpoint}`)
+        return success(await result.json())
+      } catch (err) {
+        if (this.canErrorBeCycled(err) && i < this.rpcNodes.length) {
+          this.cycleRpcNode()
+          continue
+        }
+        return failure(new BadRequestError())
+      }
+    }
+    return failure(new NetworkError())
+  }
+
   // given an error, returns true if request can be cycled to another RPC node
   private canErrorBeCycled(err: any): boolean {
     return (
@@ -163,6 +189,17 @@ export class TezosWalletManager extends WalletManager {
     this.rpcNodes.push(out)
     console.log(`update RPC provider: ${this.rpcNodes[0]}`)
     this.tezosToolkit.setRpcProvider(this.rpcNodes[0])
+  }
+
+  /**
+   * Encodes the payload into the desired format.
+   *
+   * @param {string} payload - The payload to encode.
+   * @return {string} - The encoded payload.
+   */
+  private encodeSignInPayload(payload: string): string {
+    const bytes = char2Bytes(payload)
+    return TEZOS_SIGNING_PREFIX + char2Bytes(bytes.length.toString()) + bytes
   }
 }
 

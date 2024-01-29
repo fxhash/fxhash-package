@@ -8,30 +8,17 @@ import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingAcceptEp, getListingFA2Contract } from "../../utils/listing"
 import { displayMutez } from "../../utils/units"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TListingAcceptOperationParams = {
   listing: Listing
   objkt: Objkt
 }
 
-export class ListingAcceptOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosListingAcceptOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * List a gentk on the Marketplace
  */
-export class TezosListingAcceptOperation extends TezosContractOperation<TListingAcceptOperationParams> {
+export class ListingAcceptOperation extends TezosContractOperation<TListingAcceptOperationParams> {
   marketplaceContract?: ContractAbstraction<Wallet>
   entrypoint?: string
 

@@ -16,24 +16,11 @@ export type TBurnTokenV3OperationParams = {
   token: GenerativeToken
 }
 
-export class BurnTokenV3Operation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosBurnTokenV3Operation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Update the general settings of the an issuer
  * issuer > update_issuer
  */
-class TezosBurnTokenV3Operation extends TezosContractOperation<TBurnTokenV3OperationParams> {
+export class TezosBurnTokenV3Operation extends TezosContractOperation<TBurnTokenV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   collab = false
 

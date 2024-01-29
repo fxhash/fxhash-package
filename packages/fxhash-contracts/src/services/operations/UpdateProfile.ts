@@ -12,24 +12,10 @@ export type TUpdateProfileParams = {
   name: string
 }
 
-export class UpdateProfileOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosUpdateProfileOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Updates user profile
  */
-class TezosUpdateProfileOperation extends TezosContractOperation<TUpdateProfileParams> {
+export class TezosUpdateProfileOperation extends TezosContractOperation<TUpdateProfileParams> {
   userRegister: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

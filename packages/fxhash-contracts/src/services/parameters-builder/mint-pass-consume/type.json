@@ -3,15 +3,11 @@
   "args": [
     {
       "prim": "bytes",
-      "annots": [
-        "%payload"
-      ]
+      "annots": ["%payload"]
     },
     {
       "prim": "signature",
-      "annots": [
-        "%signature"
-      ]
+      "annots": ["%signature"]
     }
   ]
 }

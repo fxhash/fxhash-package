@@ -6,26 +6,18 @@
       "args": [
         {
           "prim": "nat",
-          "annots": [
-            "%id"
-          ]
+          "annots": ["%id"]
         },
         {
           "prim": "nat",
-          "annots": [
-            "%version"
-          ]
+          "annots": ["%version"]
         }
       ],
-      "annots": [
-        "%gentk"
-      ]
+      "annots": ["%gentk"]
     },
     {
       "prim": "mutez",
-      "annots": [
-        "%price"
-      ]
+      "annots": ["%price"]
     }
   ]
 }

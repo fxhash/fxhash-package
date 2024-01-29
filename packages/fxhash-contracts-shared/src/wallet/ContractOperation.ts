@@ -1,8 +1,13 @@
 import { WalletManager } from "./WalletManager"
 
+export enum TransactionType {
+  OFFCHAIN = "OFFCHAIN",
+  ONCHAIN = "ONCHAIN",
+}
+
 export enum BlockchainType {
-  TEZOS = "TEZOS",
   ETHEREUM = "ETHEREUM",
+  TEZOS = "TEZOS",
 }
 
 /**
@@ -17,11 +22,15 @@ export enum BlockchainType {
  * is swapped with another one. This logic is handled by an external runner.
  */
 
-export abstract class ContractOperation<TParams> {
-  manager: WalletManager
+export abstract class ContractOperation<
+  TWalletManager extends WalletManager,
+  TParams,
+  TData,
+> {
+  manager: TWalletManager
   params: TParams
 
-  constructor(manager: WalletManager, params: TParams) {
+  constructor(manager: TWalletManager, params: TParams) {
     this.manager = manager
     this.params = params
   }
@@ -39,7 +48,7 @@ export abstract class ContractOperation<TParams> {
    * Wallet Operation and can be observed to track the success/failure of
    * the transaction emitted
    */
-  abstract call(): Promise<any>
+  abstract call(): Promise<TData>
 
   /**
    * Each Contract Operation should implement a success message based on the
@@ -50,7 +59,11 @@ export abstract class ContractOperation<TParams> {
 }
 
 // a generic type for ContractOperation polymorphism
-export type TContractOperation<TParams> = new (
-  manager: WalletManager,
+export type TContractOperation<
+  TWalletManager extends WalletManager,
+  TParams,
+  TData,
+> = new (
+  manager: TWalletManager,
   params: TParams
-) => ContractOperation<TParams>
+) => ContractOperation<TWalletManager, TParams, TData>

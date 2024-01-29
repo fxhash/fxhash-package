@@ -12,19 +12,6 @@ export type TUpdateTokenModOperationParams = {
   tags: number[]
 }
 
-export class UpdateTokenModOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosUpdateTokenModOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Update the general settings of the an issuer
  * issuer > update_issuer

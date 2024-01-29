@@ -14,23 +14,10 @@ type TReportTokenParams = {
   reason: number
 }
 
-export class ReportTokenOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosReportTokenOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * Updates user profile
  */
-class TezosReportTokenOperation extends TezosContractOperation<TReportTokenParams> {
+export class TezosReportTokenOperation extends TezosContractOperation<TReportTokenParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

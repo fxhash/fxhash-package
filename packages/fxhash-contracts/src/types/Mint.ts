@@ -107,9 +107,35 @@ export interface GenTokPricingForm<N> {
   lockForReserves?: boolean
 }
 
+export enum GenTokEditions {
+  FIXED = "FIXED",
+  OPENED = "OPENED",
+}
+
+export type GenTokOpenEditionsForm<N> = {
+  closesAt?: Date | null
+}
+
+export type GenTokFixedEditionsForm<N> = {
+  amount: N
+}
+
+export type GenTokEditionsForm<N> = {
+  type: GenTokEditions
+  fixed: GenTokFixedEditionsForm<N>
+  opened: GenTokOpenEditionsForm<N>
+}
+
+export interface GenTokPricingForm<N> {
+  pricingMethod?: GenTokPricing
+  pricingFixed: Partial<IPricingFixed<N>>
+  pricingDutchAuction: Partial<IPricingDutchAuction<N>>
+  lockForReserves?: boolean
+}
+
 export interface GenTokDistributionForm<N> {
+  editions: GenTokEditionsForm<N>
   pricing: GenTokPricingForm<N>
-  editions?: N
   royalties?: N
   enabled: boolean
   splitsPrimary: ISplit[]

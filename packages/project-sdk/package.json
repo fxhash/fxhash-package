@@ -10,22 +10,14 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/fxhash.js",
-  "module": "./dist/fxhash.js",
+  "main": "./dist/fxhash.min.js",
+  "module": "./dist/fxhash.min.js",
   "types": "./dist/fxhash.d.ts",
   "exports": {
     ".": {
       "types": "./dist/fxhash.d.ts",
-      "require": "./dist/fxhash.js",
-      "import": "./dist/fxhash.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
+      "require": "./dist/fxhash.min.js",
+      "import": "./dist/fxhash.min.js"
     }
   },
   "files": [
@@ -43,7 +35,6 @@
     "tslib": "2.6.0",
     "tsup": "7.2.0",
     "typescript": "4.9.5",
-    "@fxhash/prettier-config": "1.0.2",
     "@fxhash/eslint-config": "1.0.2"
   },
   "scripts": {
@@ -51,3 +42,4 @@
     "dev": "tsup --watch"
   }
 }
+

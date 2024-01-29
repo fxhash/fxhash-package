@@ -1,6 +1,6 @@
 import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 import type { Inscription } from "onchfs"
 import Onchfs from "onchfs"
 import { uint8hex } from "@/utils/convert"
@@ -9,23 +9,10 @@ export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]
 }
 
-export class OnchfsWriteOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosOnchfsWriteOperation
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
-}
-
 /**
  * List a gentk on the Marketplace
  */
-export class TezosOnchfsWriteOperation extends TezosContractOperation<TOnchfsWriteOperationParams> {
+export class OnchfsWriteOperation extends TezosContractOperation<TOnchfsWriteOperationParams> {
   onchfsKt: ContractAbstraction<Wallet> | null = null
   bytesLength: number = 0
 
@@ -47,6 +34,8 @@ export class TezosOnchfsWriteOperation extends TezosContractOperation<TOnchfsWri
         })
       case "directory": {
         const formatted = Object.fromEntries(
+          //TODO: need to fix this problem
+          //@ts-ignore
           Object.entries(ins.files).map(([_, buf]) => [_, uint8hex(buf)])
         )
         return this.onchfsKt.methodsObject.create_directory(formatted)

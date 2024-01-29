@@ -16,25 +16,17 @@
       "import": "./dist/index.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
   "peerDependencies": {
-    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0"
+    "graphql": "16.7.1"
   },
   "dependencies": {
-    "tslib": "2.6.2",
-    "tsup": "7.2.0"
+    "tslib": "2.6.2"
   },
   "devDependencies": {
+    "tsup": "7.2.0",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/client-preset": "4.1.0",
     "@graphql-codegen/introspection": "4.0.0",
@@ -45,6 +37,7 @@
     "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "2.3.0",
     "chokidar-cli": "3.0.0",
+    "graphql": "16.7.1",
     "typescript": "5.0.4"
   },
   "scripts": {

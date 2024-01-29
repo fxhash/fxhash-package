@@ -142,7 +142,7 @@ export const clientSideClient = new ApolloClient({
 export function createApolloClient(
   uri = config.apis.main,
   headers?: Record<string, any>
-) : ApolloClient<any> {
+): ApolloClient<any> {
   return new ApolloClient({
     uri,
     cache: new InMemoryCache(),

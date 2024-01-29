@@ -51,16 +51,16 @@ export type FxParamTransformationTypeMap = {
     bigint: bigint
     boolean: boolean
     color: {
-      hex:{
+      hex: {
         rgb: string
         rgba: string
       }
       obj: {
-        rgb: { r: number, g: number, b: number},
-        rgba: { r: number, g: number, b: number, a:number},
+        rgb: { r: number; g: number; b: number }
+        rgba: { r: number; g: number; b: number; a: number }
       }
       arr: {
-        rgb: [number, number, number],
+        rgb: [number, number, number]
         rgba: [number, number, number, number]
       }
     }
@@ -72,7 +72,8 @@ export type FxParamTransformationTypeMap = {
 
 export type FxParamUpdateMode = "page-reload" | "sync" | "code-driven"
 
-export type FxParamValue<Type extends FxParamType> = FxParamTypeMap[keyof FxParamTypeMap];
+export type FxParamValue<Type extends FxParamType> =
+  FxParamTypeMap[keyof FxParamTypeMap]
 
 export interface FxParamDefinition<Type extends FxParamType> {
   id: string
@@ -87,9 +88,15 @@ export interface FxParamDefinition<Type extends FxParamType> {
 
 export type hexString = `#${string}`
 
-export type FxParamProcessorTransformer<Type extends FxParamType> = (value: FxParamTypeMap[Type], definition?: FxParamDefinition<Type>) => FxParamTransformationTypeMap[Type]
+export type FxParamProcessorTransformer<Type extends FxParamType> = (
+  value: FxParamTypeMap[Type],
+  definition?: FxParamDefinition<Type>
+) => FxParamTransformationTypeMap[Type]
 
-export type FxParamProcessorConstrainer<Type extends FxParamType> = (value: FxParamTypeMap[Type], definition?: FxParamDefinition<Type>) => FxParamTypeMap[Type]
+export type FxParamProcessorConstrainer<Type extends FxParamType> = (
+  value: FxParamTypeMap[Type],
+  definition?: FxParamDefinition<Type>
+) => FxParamTypeMap[Type]
 
 export interface FxParamProcessor<Type extends FxParamType> {
   serialize: (

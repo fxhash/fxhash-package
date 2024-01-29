@@ -19,14 +19,6 @@
       "import": "./dist/index.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -34,19 +26,27 @@
     "@airgap/beacon-sdk": "4.0.10",
     "@taquito/utils": "17.3.1",
     "autonomy-irl-js": "1.0.0",
-    "@fxhash/contracts": "0.0.8",
-    "@fxhash/contracts-shared": "0.0.0"
+    "ethers": "6.8.1",
+    "rxjs": "7.8.1",
+    "@fxhash/eth-sdk": "0.0.8",
+    "@fxhash/contracts-shared": "0.0.0",
+    "@fxhash/contracts": "0.0.8"
   },
   "peerDependencies": {
     "@taquito/beacon-wallet": "^17.3.1",
     "@taquito/taquito": "^17.3.1",
-    "react": "^18.2.0"
+    "connectkit": "^1.6.0",
+    "react": "^18.2.0",
+    "viem": "^1.14.0",
+    "wagmi": "^1.4.5"
   },
   "devDependencies": {
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/taquito": "17.3.1",
-    "@types/react": "18.2.15",
+    "@types/react": "18.2.48",
     "typescript": "5.0.4",
+    "viem": "1.14.0",
+    "wagmi": "1.4.5",
     "tsup": "6.6.0"
   },
   "scripts": {
@@ -54,3 +54,4 @@
     "dev": "tsup --watch"
   }
 }
+

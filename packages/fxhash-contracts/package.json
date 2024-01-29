@@ -19,14 +19,6 @@
       "import": "./dist/index.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -47,26 +39,26 @@
     "@taquito/taquito": "17.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@fxhash/config": "0.0.8",
     "@fxhash/gql": "0.0.8",
-    "onchfs": "0.0.0"
+    "onchfs": "0.0.0",
+    "@fxhash/config": "0.0.8"
   },
   "devDependencies": {
     "@airgap/beacon-sdk": "4.0.10",
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/taquito": "17.3.1",
-    "@types/lodash.debounce": "4.0.7",
-    "@types/react": "18.2.15",
-    "@types/react-dom": "18.2.7",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
     "tslib": "2.6.0",
     "tsup": "6.6.0",
     "typescript": "5.0.4",
-    "@fxhash/config": "0.0.8",
     "@fxhash/gql": "0.0.8",
-    "onchfs": "0.0.0"
+    "onchfs": "0.0.0",
+    "@fxhash/config": "0.0.8"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   }
 }
+

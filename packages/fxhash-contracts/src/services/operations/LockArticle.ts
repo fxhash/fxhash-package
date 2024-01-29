@@ -5,24 +5,10 @@ import {
 } from "@taquito/taquito"
 import { NFTArticle } from "../../types/entities/Article"
 import { FxhashContracts } from "../../types/Contracts"
-import { BlockchainType, TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TLockArticleOperationParams = {
   article: NFTArticle
-}
-
-export class LockArticleOperation {
-  static create(blockchainType: BlockchainType) {
-    switch (blockchainType) {
-      case BlockchainType.TEZOS:
-        return TezosLockArticleOperation
-
-      case BlockchainType.ETHEREUM:
-        throw new Error(`ethereum not implemented`)
-      default:
-        throw new Error(`Unsupported blockchain type: ${blockchainType}`)
-    }
-  }
 }
 
 /**
