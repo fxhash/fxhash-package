@@ -23,12 +23,13 @@
     "dist"
   ],
   "dependencies": {
+    "@fxhash/config": "0.0.8",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
-    "graphql": "16.7.1",
-    "@fxhash/config": "0.0.8"
+    "graphql": "16.7.1"
   },
   "devDependencies": {
+    "@types/node": "20.11.10",
     "tsup": "6.6.0",
     "typescript": "5.0.4"
   },
