@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/project-sdk",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
@@ -25,8 +25,8 @@
   ],
   "dependencies": {
     "node-html-parser": "6.1.5",
-    "@fxhash/params": "0.0.9",
-    "@fxhash/utils": "0.0.1"
+    "@fxhash/params": "0.0.10",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
@@ -42,4 +42,3 @@
     "dev": "tsup --watch"
   }
 }
-

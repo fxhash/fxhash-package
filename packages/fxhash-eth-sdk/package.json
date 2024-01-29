@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth-sdk",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -36,7 +36,7 @@
     "use-async-effect": "2.2.7",
     "viem": "1.14.0",
     "@fxhash/contracts-shared": "0.0.0",
-    "@fxhash/gql-client": "0.0.0",
+    "@fxhash/gql-client": "0.0.1",
     "@fxhash/gql": "0.0.8",
     "onchfs": "0.0.0"
   },
@@ -58,7 +58,7 @@
   "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@fxhash/config": "0.0.8"
+    "@fxhash/config": "0.0.9"
   },
   "scripts": {
     "test": "vitest",

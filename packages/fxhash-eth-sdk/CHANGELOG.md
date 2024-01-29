@@ -1,5 +1,13 @@
 # @fxhash/evm-sdk
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies [615f7cd]
+  - @fxhash/config@0.0.9
+  - @fxhash/gql-client@0.0.1
+
 ## 0.0.8
 
 ### Patch Changes
