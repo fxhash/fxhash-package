@@ -42,10 +42,10 @@ function matcher(
   start: number,
   decoder: (s: string) => number = b58dec
 ): number[] {
-  return str
+  const matches = str
     .slice(start)
     .match(new RegExp(".{" + ((str.length - start) >> 2) + "}", "g"))
-    .map(decoder)
+  return matches ? matches.map(decoder) : []
 }
 
 function getSeedFromHash(hash: string): number[] {
