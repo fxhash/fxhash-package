@@ -46,11 +46,12 @@
     "wagmi": "^1.4.5"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/taquito": "17.3.1",
     "@types/react": "18.2.48",
-    "tsup": "6.6.0",
-    "typescript": "5.0.4",
+    "tsup": "7.2.0",
+    "typescript": "5.3.3",
     "viem": "1.14.0",
     "wagmi": "1.4.5"
   }
