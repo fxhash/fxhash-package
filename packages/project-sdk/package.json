@@ -24,7 +24,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build-sdk": "tsup",
     "dev": "tsup --watch"
   },
   "dependencies": {
