@@ -63,7 +63,7 @@ const SPECIAL_COOKIE_KEYS = {
  * @returns string
  */
 export function parseCookieOptions(options: CookieOptions): string {
-  const cookieParts = []
+  const cookieParts: string[] = []
   for (const [k, value] of Object.entries(options)) {
     const key = SPECIAL_COOKIE_KEYS[k] || k
     if (value === true) {
