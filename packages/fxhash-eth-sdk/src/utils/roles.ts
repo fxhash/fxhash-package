@@ -30,7 +30,10 @@ export const ETH_ROLES_HASHES = [
 
 export const ETH_ROLES_MAP: Record<string, `0x${string}`> = Object.keys(
   ETH_ROLES
-).reduce((acc, key, index) => {
-  acc[ETH_ROLES[key as keyof typeof ETH_ROLES]] = ETH_ROLES_HASHES[index]
-  return acc
-}, {} as Record<string, `0x${string}`>)
+).reduce(
+  (acc, key, index) => {
+    acc[ETH_ROLES[key as keyof typeof ETH_ROLES]] = ETH_ROLES_HASHES[index]
+    return acc
+  },
+  {} as Record<string, `0x${string}`>
+)

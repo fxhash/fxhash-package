@@ -3,7 +3,7 @@ import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { Offer } from "../../types/entities/Offer"
 import { displayMutez } from "../../utils/units"
-import {  TezosContractOperation } from "./ContractOperation"
+import { TezosContractOperation } from "./ContractOperation"
 
 export type TOfferCancelOperationParams = {
   offer: Offer

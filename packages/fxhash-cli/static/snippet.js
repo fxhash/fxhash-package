@@ -1,7 +1,7 @@
 //---- do not edit the following code (you can indent as you wish)
 let search = new URLSearchParams(window.location.search)
 let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-let b58dec = (str) =>
+let b58dec = str =>
   [...str].reduce((p, c) => (p * alphabet.length + alphabet.indexOf(c)) | 0, 0)
 let sfc32 = (a, b, c, d) => {
   return () => {
@@ -18,10 +18,10 @@ let sfc32 = (a, b, c, d) => {
     return (t >>> 0) / 4294967296
   }
 }
-let rndHash = (n) =>
+let rndHash = n =>
   Array(n)
     .fill(0)
-    .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
+    .map(_ => alphabet[(Math.random() * alphabet.length) | 0])
     .join("")
 let matcher = (str, start) =>
   str
@@ -61,7 +61,7 @@ const throttle = (func, delay) => {
   }
 }
 
-const stringToHex = (s) => {
+const stringToHex = s => {
   let rtn = ""
   for (let i = 0; i < s.length; i++) {
     rtn += s.charCodeAt(i).toString(16).padStart(4, "0")
@@ -69,7 +69,7 @@ const stringToHex = (s) => {
   return rtn
 }
 
-const completeHexColor = (hexCode) => {
+const completeHexColor = hexCode => {
   let hex = hexCode.replace("#", "")
   if (hex.length === 6) {
     hex = `${hex}ff`
@@ -83,12 +83,12 @@ const completeHexColor = (hexCode) => {
 // the parameter processor, used to parse fxparams
 const processors = {
   number: {
-    serialize: (input) => {
+    serialize: input => {
       const view = new DataView(new ArrayBuffer(8))
       view.setFloat64(0, input)
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
-    deserialize: (input) => {
+    deserialize: input => {
       const view = new DataView(new ArrayBuffer(8))
       for (let i = 0; i < 8; i++) {
         view.setUint8(i, parseInt(input.substring(i * 2, i * 2 + 2), 16))
@@ -112,7 +112,7 @@ const processors = {
       }
       return v
     },
-    random: (definition) => {
+    random: definition => {
       let min = Number.MIN_SAFE_INTEGER
       if (typeof definition.options?.min !== "undefined")
         min = Number(definition.options.min)
@@ -130,12 +130,12 @@ const processors = {
     },
   },
   bigint: {
-    serialize: (input) => {
+    serialize: input => {
       const view = new DataView(new ArrayBuffer(8))
       view.setBigInt64(0, BigInt(input))
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
-    deserialize: (input) => {
+    deserialize: input => {
       const view = new DataView(new ArrayBuffer(8))
       for (let i = 0; i < 8; i++) {
         view.setUint8(i, parseInt(input.substring(i * 2, i * 2 + 2), 16))
@@ -143,7 +143,7 @@ const processors = {
       return view.getBigInt64(0)
     },
     bytesLength: () => 8,
-    random: (definition) => {
+    random: definition => {
       const MIN_SAFE_INT64 = -9223372036854775808n
       const MAX_SAFE_INT64 = 9223372036854775807n
       let min = MIN_SAFE_INT64
@@ -161,7 +161,7 @@ const processors = {
             Array.from(
               crypto.getRandomValues(new Uint8Array(Math.ceil(bits / 8)))
             )
-              .map((b) => b.toString(2).padStart(8, "0"))
+              .map(b => b.toString(2).padStart(8, "0"))
               .join("")
         )
       } while (random > range)
@@ -169,25 +169,25 @@ const processors = {
     },
   },
   boolean: {
-    serialize: (input) =>
+    serialize: input =>
       (typeof input === "boolean" && input) ||
       (typeof input === "string" && input === "true")
         ? "01"
         : "00",
     // if value is "00" -> 0 -> false, otherwise we consider it's 1
-    deserialize: (input) => {
+    deserialize: input => {
       return input === "00" ? false : true
     },
     bytesLength: () => 1,
     random: () => Math.random() < 0.5,
   },
   color: {
-    serialize: (input) => {
+    serialize: input => {
       return completeHexColor(input)
     },
-    deserialize: (input) => input,
+    deserialize: input => input,
     bytesLength: () => 4,
-    transform: (input) => {
+    transform: input => {
       const r = parseInt(input.slice(0, 2), 16)
       const g = parseInt(input.slice(2, 4), 16)
       const b = parseInt(input.slice(4, 6), 16)
@@ -225,7 +225,7 @@ const processors = {
       hex = hex.padEnd(max * 4, "0")
       return hex
     },
-    deserialize: (input) => {
+    deserialize: input => {
       const hx = input.match(/.{1,4}/g) || []
       let rtn = ""
       for (let i = 0; i < hx.length; i++) {
@@ -235,7 +235,7 @@ const processors = {
       }
       return rtn
     },
-    bytesLength: (options) => {
+    bytesLength: options => {
       if (typeof options?.maxLength !== "undefined")
         return Number(options.maxLength) * 2
       return 64 * 2
@@ -253,7 +253,7 @@ const processors = {
       }
       return v
     },
-    random: (definition) => {
+    random: definition => {
       let min = 0
       if (typeof definition.options?.minLength !== "undefined")
         min = definition.options.minLength
@@ -262,14 +262,14 @@ const processors = {
         max = definition.options.maxLength
       const length = Math.round(Math.random() * (max - min) + min)
       return [...Array(length)]
-        .map((i) => (~~(Math.random() * 36)).toString(36))
+        .map(i => (~~(Math.random() * 36)).toString(36))
         .join("")
     },
   },
   bytes: {
     serialize: (input, def) => {
       const out = Array.from(input)
-        .map((i) => i.toString(16).padStart(2, "0"))
+        .map(i => i.toString(16).padStart(2, "0"))
         .join("")
       return out
     },
@@ -283,11 +283,11 @@ const processors = {
       }
       return uint8
     },
-    bytesLength: (opt) => opt.length,
+    bytesLength: opt => opt.length,
     constain: (value, def) => {
       return value
     },
-    random: (def) => {
+    random: def => {
       const len = def.options?.length || 0
       const uint8 = new Uint8Array(len)
       for (let i = 0; i < len; i++) {
@@ -315,7 +315,7 @@ const processors = {
       }
       return definition.options.options[0]
     },
-    random: (definition) => {
+    random: definition => {
       const index = Math.round(
         Math.random() * (definition?.options?.options?.length - 1) + 0
       )
@@ -382,7 +382,7 @@ const deserializeParams = (bytes, definition) => {
 }
 
 const processParam = (paramId, value, definitions, transformer) => {
-  const definition = definitions.find((d) => d.id === paramId)
+  const definition = definitions.find(d => d.id === paramId)
   const processor = processors[definition.type]
   return processor[transformer]?.(value, definition) || value
 }
@@ -428,7 +428,7 @@ window.$fx = {
       this._params,
       "constrain"
     )
-    Object.keys(constrained).forEach((paramId) => {
+    Object.keys(constrained).forEach(paramId => {
       this._rawValues[paramId] = constrained[paramId]
     })
     this._paramValues = processParams(
@@ -504,7 +504,7 @@ window.$fx = {
     return this._rawValues
   },
   getRandomParam: function (id) {
-    const definition = this._params.find((d) => d.id === id)
+    const definition = this._params.find(d => d.id === id)
     const processor = processors[definition.type]
     return processor.random(definition)
   },
@@ -569,7 +569,7 @@ const resetFxRandMinter = () => {
   fxrandminter.reset = resetFxRandMinter
 }
 fxrandminter.reset = resetFxRandMinter
-window.addEventListener("message", (event) => {
+window.addEventListener("message", event => {
   if (event.data === "fxhash_getInfo") {
     parent.postMessage(
       {

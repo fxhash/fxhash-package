@@ -25,7 +25,7 @@ export enum BlockchainType {
 export abstract class ContractOperation<
   TWalletManager extends WalletManager,
   TParams,
-  TData
+  TData,
 > {
   manager: TWalletManager
   params: TParams
@@ -62,9 +62,8 @@ export abstract class ContractOperation<
 export type TContractOperation<
   TWalletManager extends WalletManager,
   TParams,
-  TData
-> = new (manager: TWalletManager, params: TParams) => ContractOperation<
-  TWalletManager,
-  TParams,
-  TData
->
+  TData,
+> = new (
+  manager: TWalletManager,
+  params: TParams
+) => ContractOperation<TWalletManager, TParams, TData>

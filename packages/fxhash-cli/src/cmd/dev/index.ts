@@ -11,7 +11,10 @@ import env, {
 } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
 import { logger } from "../../utils/logger"
-import { isEjectedProject, validateProjecStructure } from "../../validate/index"
+import {
+  isEjectedProject,
+  validateProjectStructure,
+} from "../../validate/index"
 import path from "path"
 import { existsSync } from "fs"
 import { updateToolkit } from "../../updates/toolkit/toolkit"
@@ -62,7 +65,7 @@ export const commandDev: CommandModule = {
 
     const srcPath = isEjected ? srcPathArg : ""
 
-    validateProjecStructure(srcPath)
+    await validateProjectStructure(srcPath)
     const project = getProjectPaths(srcPath)
 
     // commonly used variable for ease

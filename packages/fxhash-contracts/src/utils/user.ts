@@ -1,5 +1,5 @@
-import { config }from "@fxhash/config"
-import{
+import { config } from "@fxhash/config"
+import {
   Collaboration,
   ConnectedUser,
   User,
@@ -34,8 +34,8 @@ export function getUserName(user: User, truncateLength?: number): string {
       ? user.name!.substring(0, 64)
       : user.name!
     : truncateLength
-    ? truncateMiddle(user.id, truncateLength)
-    : user.id
+      ? truncateMiddle(user.id, truncateLength)
+      : user.id
 }
 
 /**
@@ -378,7 +378,7 @@ export function isUserVerified(user: User): boolean {
 export function isUserOrCollaborator(user: User, entity: User): boolean {
   if (entity.type === UserType.COLLAB_CONTRACT_V1) {
     return !!(entity as Collaboration).collaborators.find(
-      (entity) => entity.id === user.id
+      entity => entity.id === user.id
     )
   } else {
     return entity.id === user.id
