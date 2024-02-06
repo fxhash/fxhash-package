@@ -95,7 +95,7 @@ export type FxParamProcessorTransformer<Type extends FxParamType> = (
 
 export type FxParamProcessorConstrainer<Type extends FxParamType> = (
   value: FxParamTypeMap[Type],
-  definition?: FxParamDefinition<Type>
+  definition: FxParamDefinition<Type>
 ) => FxParamTypeMap[Type]
 
 export interface FxParamProcessor<Type extends FxParamType> {

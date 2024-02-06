@@ -489,6 +489,9 @@ export const processParam = (
   transformType: FxParamTranformType
 ): FxParamValue<FxParamType> | FxParamTransformationTypeMap[FxParamType] => {
   const definition = definitions.find(d => d.id === paramId)
+  if (!definition) {
+    throw new Error(`No definition found for param ${paramId}`)
+  }
   const processor = ParameterProcessors[definition.type]
   const transformer = processor[
     transformType
