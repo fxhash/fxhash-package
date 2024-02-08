@@ -1,13 +1,9 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "sourceMap": true,
-    "importHelpers": true,
-    "alwaysStrict": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false
+    "noImplicitAny": true,
+    "noImplicitThis": true
   }
 }
