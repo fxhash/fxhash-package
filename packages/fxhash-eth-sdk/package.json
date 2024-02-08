@@ -44,7 +44,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "use-async-effect": "2.2.7",
-    "viem": "1.14.0"
+    "viem": "1.21.4"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
@@ -58,7 +58,7 @@
     "tslib": "2.6.2",
     "tsup": "6.6.0",
     "typescript": "5.0.4",
-    "viem": "1.14.0",
+    "viem": "1.21.4",
     "vitest": "0.34.6"
   },
   "peerDependencies": {
