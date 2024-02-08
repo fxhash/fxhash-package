@@ -18,7 +18,7 @@ import {
   BadRequestError,
   TransactionType,
 } from "@fxhash/contracts-shared"
-import { TzktOperation } from "../types/Tzkt"
+import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
 
