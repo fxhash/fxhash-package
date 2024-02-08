@@ -1,9 +1,6 @@
 import { isEthereumAddressValid, isTezosAddressValid } from "./address"
 import { BASE58_CHARSET } from "./base58"
-import {
-  isEthereumTransactionHashValid,
-  isTezosTransactionHashValid,
-} from "./hash"
+import { isEthereumTransactionHashValid } from "./hash"
 import { ResettableRandFunction } from "./types/math"
 
 export function getRandomHash(n: number): string {
