@@ -1,4 +1,4 @@
-import { createRef, useEffect, useMemo, useState } from "react"
+import { createRef, useEffect, useMemo } from "react"
 import { consolidateParams } from "./utils"
 import { ParameterController } from "./Controller/Param"
 import { LockButton } from "./LockButton/LockButton"

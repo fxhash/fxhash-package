@@ -503,8 +503,8 @@ export const processParams = (
   values: FxParamsData,
   definitions: FxParamDefinition<FxParamType>[],
   transformType: FxParamTranformType
-) => {
-  const paramValues = {}
+): Record<string, FxParamValue<FxParamType>> => {
+  const paramValues: Record<string, FxParamValue<FxParamType>> = {}
   for (const definition of definitions) {
     const processor = ParameterProcessors[definition.type]
     const value = values[definition.id]
