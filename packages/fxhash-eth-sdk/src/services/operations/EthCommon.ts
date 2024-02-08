@@ -9,6 +9,7 @@ import {
   ContractFunctionExecutionError,
   InsufficientFundsError as InsufficientFundsErrorViem,
   TransactionExecutionError,
+  Client,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
@@ -270,8 +271,8 @@ export async function predictFxContractAddress(
         : (FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`),
     abi:
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
-    walletClient: walletManager.walletClient,
-    publicClient: walletManager.publicClient,
+    walletClient: walletManager.walletClient as Client,
+    publicClient: walletManager.publicClient as Client,
   })
   const address =
     factoryType === "ticket"
@@ -427,7 +428,7 @@ export function generateOnchainDataHash(
   const genArt = getContract({
     abi: FX_GEN_ART_721_ABI,
     address: config.eth.contracts.gen_art_token_impl_v1,
-    publicClient,
+    publicClient: publicClient as Client,
   })
   return genArt.read.generateOnchainDataHash([bytes])
 }
