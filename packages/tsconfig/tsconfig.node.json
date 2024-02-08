@@ -1,6 +1,6 @@
 {
   "extends": [
-    "@tsconfig/node-lts/tsconfig.json",
+    "@tsconfig/node18/tsconfig.json",
     "./tsconfig.compiler.options.json"
   ]
 }

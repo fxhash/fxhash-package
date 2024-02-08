@@ -8,9 +8,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@tsconfig/create-react-app": "2.0.2",
-    "@tsconfig/node-lts": "20.1.1",
+    "@tsconfig/node18": "18.2.2",
     "@tsconfig/recommended": "1.0.3"
   },
   "exports": {
