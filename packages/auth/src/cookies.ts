@@ -52,7 +52,7 @@ export const COOKIE_OPTIONS: CookieOptions =
       ? COOKIE_OPTIONS_DEV
       : COOKIE_OPTIONS_PRD
 
-const SPECIAL_COOKIE_KEYS = {
+const SPECIAL_COOKIE_KEYS: Record<string, string> = {
   maxAge: "Max-Age",
 }
 
