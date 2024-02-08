@@ -11,5 +11,7 @@
     // FIXME: resolve type errors when removing the following lines
     "strict": false,
     "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "noImplicitAny": false,
   },
 }
