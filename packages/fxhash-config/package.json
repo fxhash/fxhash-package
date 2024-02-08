@@ -33,7 +33,7 @@
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tslib": "2.6.2",
-    "tsup": "7.2.0",
+    "tsup": "8.0.1",
     "typescript": "5.3.3"
   }
 }
