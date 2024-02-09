@@ -13,8 +13,5 @@
     "strict": false,
     "noUnusedParameters": false,
     "noUnusedLocals": false,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
   },
 }
