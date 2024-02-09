@@ -206,7 +206,7 @@ const _available: Partial<Record<BlockchainIdentifier, Library[]>> = {}
  * given chain
  */
 export function librariesAvailable(chainId: BlockchainIdentifier): Library[] {
-  if (_available[chainId]) return _available[chainId]
+  if (_available[chainId]) return _available[chainId] || []
   const out: Library[] = []
   for (const lib of libraries) {
     const cop = { ...lib }

@@ -11,7 +11,7 @@ import {
   validateParameterDefinition,
   ControllerDefinitionSchemaType,
 } from "../validation"
-import { SafeParseError, SafeParseSuccess, z } from "zod"
+import { SafeParseError, SafeParseSuccess } from "zod"
 import { ControllerInvalid } from "./Invalid"
 import { BytesController } from "./Bytes"
 
