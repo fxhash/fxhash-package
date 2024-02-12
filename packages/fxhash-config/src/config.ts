@@ -1,23 +1,23 @@
-import { ethMainnetApis, ethTestnetApis, IEthApis } from "api/eth"
-import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
+import { ethMainnetApis, ethTestnetApis, IEthApis } from "./api/eth"
+import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "./api/tezos"
 import {
   IFxhashApis,
   fxhashDevApis,
   fxhashLocalApis,
   fxhashPrdApis,
-} from "api/fxhash"
+} from "./api/fxhash"
 import {
   ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
-} from "contracts/tezos"
+} from "./contracts/tezos"
 import {
   ethMainnetContracts,
   ethTestnetContracts,
   IEthContracts,
-} from "contracts/eth"
-import { getConfigForEnv } from "utils"
-import { BlockchainIdentifier, BlockchainIdentifiers } from "types"
+} from "./contracts/eth"
+import { getConfigForEnv } from "./utils"
+import { BlockchainIdentifier, BlockchainIdentifiers } from "./types"
 
 export interface IFxhashNetworkConfig {
   network: string

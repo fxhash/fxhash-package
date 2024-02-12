@@ -1,4 +1,5 @@
 import {
+  Client,
   PublicClient,
   WalletClient,
   decodeAbiParameters,
@@ -238,8 +239,8 @@ export async function signMintPass(
   const contract = getContract({
     address: minter,
     abi: abi,
-    walletClient: walletClient,
-    publicClient: publicClient,
+    walletClient: walletClient as Client,
+    publicClient: publicClient as Client,
   })
   const nonce = await contract.read.reserveNonce([token, reserveId])
   const typedDataHash = await contract.read.generateTypedDataHash([
