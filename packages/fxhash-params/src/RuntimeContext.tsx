@@ -1,8 +1,7 @@
-import { FxParamDefinition, FxParamType, FxParamsData } from "types"
-import { PropsWithChildren, useMemo, useState } from "react"
-import { createContext } from "react"
+import { PropsWithChildren, useMemo, useState, createContext } from "react"
 import sha1 from "sha1"
-import { jsonStringifyBigint, sumBytesParams } from "utils"
+import { FxParamDefinition, FxParamType, FxParamsData } from "./types"
+import { jsonStringifyBigint, sumBytesParams } from "./utils"
 
 export type TUpdateStateFn<T> = (data: Partial<T>) => void
 

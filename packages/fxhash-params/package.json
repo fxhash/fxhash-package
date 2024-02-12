@@ -49,6 +49,7 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
     "@types/lodash.debounce": "4.0.7",
     "@types/node-sass": "4.11.3",
@@ -61,7 +62,7 @@
     "node-sass": "8.0.0",
     "postcss": "8.4.26",
     "tslib": "2.6.0",
-    "tsup": "6.6.0",
-    "typescript": "4.9.5"
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
   }
 }

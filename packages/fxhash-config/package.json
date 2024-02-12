@@ -10,15 +10,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.cjs",
+      "import": "./dist/*.js"
     }
   },
   "files": [
@@ -28,10 +29,11 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
-    "typescript": "5.0.4",
-    "tsup": "6.6.0"
+    "tslib": "2.6.2",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
   }
 }

@@ -81,6 +81,7 @@
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/adm-zip": "0.5.0",
     "@types/chalk": "2.2.0",
     "@types/ejs": "3.1.2",
@@ -104,7 +105,7 @@
     "eslint-config-next": "13.4.7",
     "tsc-alias": "1.8.5",
     "tslib": "2.6.0",
-    "tsup": "7.2.0",
-    "typescript": "4.9.5"
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
   }
 }

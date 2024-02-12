@@ -1,12 +1,12 @@
-import { IEthApis, ethTestnetApis } from "api/eth"
-import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "api/tezos"
-import { IFxhashApis, fxhashDevApis, fxhashPrdApis } from "api/fxhash"
+import { IEthApis, ethTestnetApis } from "./api/eth"
+import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "./api/tezos"
+import { IFxhashApis, fxhashDevApis, fxhashPrdApis } from "./api/fxhash"
 import {
   ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
-} from "contracts/tezos"
-import { IEthContracts, ethTestnetContracts } from "contracts/eth"
+} from "./contracts/tezos"
+import { IEthContracts, ethTestnetContracts } from "./contracts/eth"
 import {
   IFxhashEnvConfig,
   IFxhashNetworkConfig,
@@ -19,9 +19,7 @@ import {
   devConfig,
   IFxhashConfigSingleEnv,
   localConfig,
-} from "config"
-
-export * from "./types"
+} from "./config"
 
 const isProd = (() => {
   // We can't destructure process.envs
@@ -59,30 +57,32 @@ function setConfig(
 }
 
 export {
-  IEthApis,
   ethTestnetApis,
-  ITezosApis,
   tezosTestnetApis,
   tezosMainnetApis,
-  IFxhashApis,
   fxhashDevApis,
   fxhashPrdApis,
-  ITezosContracts,
   tezosTestnetContracts,
   tezosMainnetContracts,
-  IEthContracts,
   ethTestnetContracts,
-  IFxhashEnvConfig,
-  IFxhashNetworkConfig,
-  TBlockchain,
-  TBlockchainNetwork,
-  TEnv,
-  IFxhashConfig,
   fxhashConfig,
   devConfig,
   prdConfig,
   config,
   setConfig,
+  type IEthApis,
+  type ITezosApis,
+  type IFxhashApis,
+  type ITezosContracts,
+  type IEthContracts,
+  type IFxhashEnvConfig,
+  type IFxhashNetworkConfig,
+  type TBlockchain,
+  type TBlockchainNetwork,
+  type TEnv,
+  type IFxhashConfig,
 }
+
+export * from "./types"
 
 export default fxhashConfig
