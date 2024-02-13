@@ -109,7 +109,7 @@ export function overrideSellStepsParameters(steps: Execute): void {
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.eth.apis!.reservoir,
+        baseURL: getConfigForChain(chain).apis?.reservoir,
       },
       adaptViemWallet(walletManager.walletClient),
       hashCallBack,
@@ -161,7 +161,7 @@ export const placeBid = async (
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.eth.apis!.reservoir,
+        baseURL: getConfigForChain(chain).apis?.reservoir,
       },
       adaptViemWallet(walletManager.walletClient),
       hashCallBack,
@@ -212,7 +212,7 @@ export const buyToken = async (
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.eth.apis!.reservoir,
+        baseURL: getConfigForChain(chain).apis?.reservoir,
       },
       adaptViemWallet(walletManager.walletClient),
       hashCallBack,
