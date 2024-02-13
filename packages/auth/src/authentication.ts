@@ -78,7 +78,7 @@ export function signAuthToken(
   jwtPrivateKey?: string
 ): string {
   const authPrivate =
-    jwtPrivateKey || process.env.AUTH_JWT_PRIVATE_KEY.replace(/\\n/g, "\n")
+    jwtPrivateKey || process.env.AUTH_JWT_PRIVATE_KEY?.replace(/\\n/g, "\n")
 
   if (!authPrivate) {
     throw new Error(

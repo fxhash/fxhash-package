@@ -22,7 +22,6 @@
       "import": "./dist/index.js"
     }
   },
-  "typesVersions": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -34,8 +33,9 @@
   "dependencies": {},
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
-    "tsup": "6.6.0",
-    "typescript": "5.0.4",
+    "@fxhash/tsconfig": "workspace:*",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3",
     "vitest": "0.34.6"
   }
 }

@@ -19,14 +19,14 @@ import {
   UserRejectedRequestError,
   WalletClient,
 } from "viem"
-import { mainnet, sepolia, hardhat, goerli } from "viem/chains"
+import { mainnet, sepolia, hardhat, goerli, type Chain } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
-import { getSafeSDK } from "@/services/Safe"
+import { getSafeSDK } from "../services/Safe"
 import { TEthereumContractOperation } from "./operations"
 import { JsonRpcSigner, Transaction } from "ethers"
 
 //list of supported chains by the SDK
-export const chains = [mainnet, sepolia, goerli, hardhat]
+export const chains: Chain[] = [mainnet, sepolia, goerli, hardhat]
 //Since the configuration of SDK is only for one chain at a time, we select the one configured
 export const CURRENT_CHAIN = chains.find(
   chain => chain.name === config.eth.config.network

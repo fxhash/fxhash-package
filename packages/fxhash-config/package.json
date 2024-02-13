@@ -28,10 +28,11 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
-    "typescript": "5.0.4",
-    "tsup": "6.6.0"
+    "tslib": "2.6.2",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
   }
 }

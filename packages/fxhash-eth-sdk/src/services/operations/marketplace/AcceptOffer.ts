@@ -4,8 +4,7 @@ import { acceptOffer } from "../Marketplace"
 import { TransactionType } from "@fxhash/contracts-shared"
 
 export type TAcceptOfferEthV1OperationParams = {
-  orderId: string
-  tokens: { token: string; tokenId: string }[]
+  orders: { orderId: string; token: { token: string; tokenId: string } }[]
 }
 
 /**
@@ -15,10 +14,10 @@ export class AcceptOfferEthV1Operation extends EthereumContractOperation<TAccept
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
-    const args: ReservoirAcceptOfferParams = this.params.tokens.map(token => {
+    const args: ReservoirAcceptOfferParams = this.params.orders.map(order => {
       return {
-        orderId: this.params.orderId,
-        token: `${token.token}:${token.tokenId}`,
+        orderId: order.orderId,
+        token: `${order.token.token}:${order.token.tokenId}`,
       }
     })
     const transactionHash = await acceptOffer(args, this.manager.walletClient)
