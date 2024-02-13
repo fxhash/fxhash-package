@@ -102,7 +102,7 @@ export function overrideSellStepsParameters(steps: Execute): void {
   }
 
   // Fetch and override steps
-  const fetchedSteps = await getListingSteps(listingParams)
+  const fetchedSteps = await getListingSteps(chain, listingParams)
   overrideSellStepsParameters(fetchedSteps)
 
   // Execute steps and handle actions
@@ -147,7 +147,7 @@ export const placeBid = async (
   }
 
   // Fetch and override steps
-  const fetchedSteps = await getBidSteps(bidStepsParams)
+  const fetchedSteps = await getBidSteps(chain, bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
@@ -207,7 +207,7 @@ export const buyToken = async (
     }
   }
   // Fetch and override steps
-  const fetchedSteps = await getBuySteps(buyStepsParams)
+  const fetchedSteps = await getBuySteps(chain, buyStepsParams)
   // Execute steps and handle actions
   await handleAction(
     getClient().utils.executeSteps(
@@ -253,7 +253,7 @@ export const getBuyPayloadForWert = async (
     relayer: getConfigForChain(chain).config.wertRelayer,
   }
 
-  const fetchedSteps = await getBuySteps(buyStepsParams)
+  const fetchedSteps = await getBuySteps(chain, buyStepsParams)
   const saleStep = fetchedSteps.steps.find(step => step.id === "sale")
 
   invariant(
@@ -288,7 +288,7 @@ export const buyTokenAdvanced = async (
   }
 
   // Fetch and override steps
-  const fetchedSteps = await getBuySteps(buyStepsParams)
+  const fetchedSteps = await getBuySteps(chain, buyStepsParams)
 
   const saleStep = fetchedSteps.steps.find(step => step.id === "sale")
   if (!saleStep || !saleStep.items || saleStep.items.length === 0) {

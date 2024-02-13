@@ -1,6 +1,6 @@
-import { config } from "@fxhash/config"
 import { createClient } from "@reservoir0x/reservoir-sdk"
-import { chains } from "./Wallet"
+import { chains, getConfigForChain } from "./Wallet"
+import { BlockchainType } from "@fxhash/contracts-shared"
 
 const reservoirAPIURLs = {
   1: "https://api.reservoir.tools/",
@@ -53,12 +53,14 @@ createClient({
 //Creates a generic fetch function for interacting with Reservoir API
 //it wraps the call, error handling and parsing of the response
 export async function fetchReservoir<T>(
+  chain: BlockchainType,
   method: API_METHODS,
   path: string,
   body: string | undefined = undefined
 ): Promise<T> {
   try {
-    const response = await fetch(`${config.eth.apis.reservoir}${path}`, {
+    const reservoirUrl = getConfigForChain(chain).apis?.reservoir
+    const response = await fetch(`${reservoirUrl}${path}`, {
       method: method,
       body: body,
       headers: headers,
