@@ -7,6 +7,7 @@ import {
   Qu_GetWhitelists,
   GetTokenPricingsAndReservesQuery,
 } from "@fxhash/gql"
+import { invariant } from "@fxhash/contracts-shared"
 
 /**
  * High level wrapper time for the whitelist for easier use in the UI
@@ -118,7 +119,10 @@ export function inflateWhitelist(
   for (const entry of flattenedWhitelist) {
     const address = entry[1] as `0x${string}`
     if (whitelist.has(address)) {
-      whitelist.set(address, whitelist.get(address) + 1)
+      whitelist.set(
+        address,
+        whitelist.get(address) ? whitelist.get(address)! + 1 : 0
+      )
     } else {
       whitelist.set(address, 1)
     }
@@ -140,11 +144,10 @@ export async function uploadWhitelist(
   const { data } = await gqlClient.mutation(Mu_CreateWhitelist, {
     whitelist: flattenWhitelist(whitelist),
   })
-  if (data.set_whitelist.success) {
-    console.log("Whitelist uploaded successfully")
-  } else {
-    throw new Error("Failed to upload whitelist: " + data.set_whitelist.message)
-  }
+  invariant(
+    data?.set_whitelist?.success,
+    "Failed to upload whitelist " + data?.set_whitelist?.message
+  )
   return data.set_whitelist.merkleRoot as `0x${string}`
 }
 
@@ -193,7 +196,7 @@ export function getUserWhitelistIndex(
  */
 export async function getWhitelist(
   merkleRoot: string
-): Promise<MerkleTreeWhitelist[]> {
+): Promise<MerkleTreeWhitelist[] | undefined> {
   const { data } = await gqlClient.query(Qu_GetWhitelists, {
     where: {
       merkleRoot: {
@@ -201,25 +204,23 @@ export async function getWhitelist(
       },
     },
   })
-  if (data.offchain.Whitelist.length === 0) {
-    return undefined
-  } else {
-    const whitelists = data.offchain.Whitelist.map(whitelist => {
-      let whitelistIndex = 0
-      return {
-        merkleRoot: whitelist.merkleRoot as `0x${string}`,
-        whitelist: whitelist.entries.map(entry => {
-          const flattenedEntry = [
-            whitelistIndex.toString(),
-            entry.walletAddress,
-          ]
-          whitelistIndex++
-          return flattenedEntry
-        }),
-      }
-    })
-    return whitelists
-  }
+  invariant(
+    data?.offchain?.Whitelist && data.offchain.Whitelist.length > 0,
+    "Failed to get whitelist"
+  )
+
+  const whitelists = data.offchain.Whitelist.map(whitelist => {
+    let whitelistIndex = 0
+    return {
+      merkleRoot: whitelist.merkleRoot as `0x${string}`,
+      whitelist: whitelist.entries.map(entry => {
+        const flattenedEntry = [whitelistIndex.toString(), entry.walletAddress]
+        whitelistIndex++
+        return flattenedEntry
+      }),
+    }
+  })
+  return whitelists
 }
 
 /**
@@ -229,9 +230,7 @@ export async function getWhitelist(
  * @returns The function `getMerkleRootForToken` returns a `Promise` that resolves to a string (the merkle root) or
  * `undefined`.
  */
-export async function getMerkleRootForToken(
-  token: string
-): Promise<string | undefined> {
+export async function getMerkleRootForToken(token: string): Promise<string> {
   const { data: results } = await gqlClient.query(Qu_GetReserves, {
     where: {
       token_id: {
@@ -239,17 +238,22 @@ export async function getMerkleRootForToken(
       },
     },
   })
-  if (results?.onchain?.reserve.length === 0) {
-    return undefined
-  } else {
-    const data = results?.onchain.reserve[0].data as WhitelistReserveData
-    return data.merkleRoot
-  }
+  invariant(
+    results?.onchain?.reserve && results.onchain.reserve.length > 0,
+    "Failed to get reserve"
+  )
+
+  const data = results?.onchain.reserve[0].data as WhitelistReserveData
+  return data.merkleRoot
 }
 export function getAvailableIndexesAndProofsForUser(
   user: `0x${string}`,
   whitelist: MerkleTreeWhitelist,
-  whitelistReserve: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["reserves"][0]
+  whitelistReserve: NonNullable<
+    NonNullable<
+      GetTokenPricingsAndReservesQuery["onchain"]
+    >["generative_token_by_pk"]
+  >["reserves"][0]
 ): { indexes: number[]; proofs: string[][] } {
   const reducedWhiteList = structuredClone(whitelist.whitelist)
   // Remove consumed slots from whitelist
@@ -265,9 +269,12 @@ export function getAvailableIndexesAndProofsForUser(
   // Get the first available index for the user
   const filteredWhitelist = reducedWhiteList.filter(entry => entry[1] === user)
 
-  const indexesAndProofs = { indexes: [], proofs: [] }
+  const indexesAndProofs: { indexes: number[]; proofs: string[][] } = {
+    indexes: [],
+    proofs: [],
+  }
   if (filteredWhitelist.length === 0) {
-    return null
+    return { indexes: [], proofs: [] }
   }
 
   const tree = getWhitelistTree(whitelist.whitelist)

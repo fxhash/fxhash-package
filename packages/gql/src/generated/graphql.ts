@@ -3621,6 +3621,7 @@ export enum Cursor_Ordering {
 export type Eth_Minter_Proceeds = {
   __typename?: 'eth_minter_proceeds';
   amount: Scalars['numeric']['output'];
+  chain: Scalars['String']['output'];
   count: Scalars['numeric']['output'];
   id: Scalars['String']['output'];
   minter_address: Scalars['String']['output'];
@@ -3636,6 +3637,7 @@ export type Eth_Minter_Proceeds_Bool_Exp = {
   _not?: InputMaybe<Eth_Minter_Proceeds_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Minter_Proceeds_Bool_Exp>>;
   amount?: InputMaybe<Numeric_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   count?: InputMaybe<Numeric_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   minter_address?: InputMaybe<String_Comparison_Exp>;
@@ -3648,6 +3650,7 @@ export type Eth_Minter_Proceeds_Bool_Exp = {
 /** Ordering options when selecting data from "eth_minter_proceeds". */
 export type Eth_Minter_Proceeds_Order_By = {
   amount?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
   count?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   minter_address?: InputMaybe<Order_By>;
@@ -3661,6 +3664,8 @@ export type Eth_Minter_Proceeds_Order_By = {
 export enum Eth_Minter_Proceeds_Select_Column {
   /** column name */
   Amount = 'amount',
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Count = 'count',
   /** column name */
@@ -3688,6 +3693,7 @@ export type Eth_Minter_Proceeds_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Eth_Minter_Proceeds_Stream_Cursor_Value_Input = {
   amount?: InputMaybe<Scalars['numeric']['input']>;
+  chain?: InputMaybe<Scalars['String']['input']>;
   count?: InputMaybe<Scalars['numeric']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   minter_address?: InputMaybe<Scalars['String']['input']>;
@@ -3818,6 +3824,7 @@ export type Eth_Secondary_Splits_Stream_Cursor_Value_Input = {
 /** columns and relationships of "eth_user_proceeds" */
 export type Eth_User_Proceeds = {
   __typename?: 'eth_user_proceeds';
+  chain: Scalars['String']['output'];
   id: Scalars['String']['output'];
   total_proceeds: Scalars['numeric']['output'];
 };
@@ -3827,18 +3834,22 @@ export type Eth_User_Proceeds_Bool_Exp = {
   _and?: InputMaybe<Array<Eth_User_Proceeds_Bool_Exp>>;
   _not?: InputMaybe<Eth_User_Proceeds_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_User_Proceeds_Bool_Exp>>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   total_proceeds?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "eth_user_proceeds". */
 export type Eth_User_Proceeds_Order_By = {
+  chain?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   total_proceeds?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "eth_user_proceeds" */
 export enum Eth_User_Proceeds_Select_Column {
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3855,6 +3866,7 @@ export type Eth_User_Proceeds_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Eth_User_Proceeds_Stream_Cursor_Value_Input = {
+  chain?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   total_proceeds?: InputMaybe<Scalars['numeric']['input']>;
 };
@@ -5208,16 +5220,21 @@ export type Market_Stats = {
   median?: Maybe<Scalars['numeric']['output']>;
   percent_listed?: Maybe<Scalars['Float']['output']>;
   percent_never_listed?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
   prim_volume_nb?: Maybe<Scalars['Int']['output']>;
-  prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
   sec_volume_nb?: Maybe<Scalars['Int']['output']>;
   sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
   sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
   sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
-  sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_tz7d?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_tz24?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_tz30d?: Maybe<Scalars['numeric']['output']>;
   to?: Maybe<Scalars['timestamptz']['output']>;
   token_id: Scalars['String']['output'];
 };
@@ -5253,16 +5270,21 @@ export type Market_Stats_Bool_Exp = {
   median?: InputMaybe<Numeric_Comparison_Exp>;
   percent_listed?: InputMaybe<Float_Comparison_Exp>;
   percent_never_listed?: InputMaybe<Float_Comparison_Exp>;
+  prim_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
-  prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume7d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume24?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume30d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat7d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat24?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat30d?: InputMaybe<Numeric_Comparison_Exp>;
   sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_nb7d?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_nb24?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_nb30d?: InputMaybe<Int_Comparison_Exp>;
-  sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_tz7d?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_tz24?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_tz30d?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
 };
@@ -5296,10 +5318,12 @@ export type Market_Stats_History = {
   median?: Maybe<Scalars['numeric']['output']>;
   percent_listed?: Maybe<Scalars['Float']['output']>;
   percent_never_listed?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
   prim_volume_nb?: Maybe<Scalars['Int']['output']>;
-  prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
   sec_volume_nb?: Maybe<Scalars['Int']['output']>;
-  sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
   to: Scalars['timestamptz']['output'];
   token_id: Scalars['String']['output'];
 };
@@ -5335,10 +5359,12 @@ export type Market_Stats_History_Avg_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "market_stats_history". All fields are combined with a logical 'AND'. */
@@ -5368,10 +5394,12 @@ export type Market_Stats_History_Bool_Exp = {
   median?: InputMaybe<Numeric_Comparison_Exp>;
   percent_listed?: InputMaybe<Float_Comparison_Exp>;
   percent_never_listed?: InputMaybe<Float_Comparison_Exp>;
+  prim_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
-  prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
-  sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
 };
@@ -5396,10 +5424,12 @@ export type Market_Stats_History_Max_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5424,10 +5454,12 @@ export type Market_Stats_History_Min_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5456,10 +5488,12 @@ export type Market_Stats_History_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5503,13 +5537,17 @@ export enum Market_Stats_History_Select_Column {
   /** column name */
   PercentNeverListed = 'percent_never_listed',
   /** column name */
+  PrimVolume = 'prim_volume',
+  /** column name */
+  PrimVolumeFiat = 'prim_volume_fiat',
+  /** column name */
   PrimVolumeNb = 'prim_volume_nb',
   /** column name */
-  PrimVolumeTz = 'prim_volume_tz',
+  SecVolume = 'sec_volume',
+  /** column name */
+  SecVolumeFiat = 'sec_volume_fiat',
   /** column name */
   SecVolumeNb = 'sec_volume_nb',
-  /** column name */
-  SecVolumeTz = 'sec_volume_tz',
   /** column name */
   To = 'to',
   /** column name */
@@ -5532,10 +5570,12 @@ export type Market_Stats_History_Stddev_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by stddev_pop() on columns of table "market_stats_history" */
@@ -5554,10 +5594,12 @@ export type Market_Stats_History_Stddev_Pop_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by stddev_samp() on columns of table "market_stats_history" */
@@ -5576,10 +5618,12 @@ export type Market_Stats_History_Stddev_Samp_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "market_stats_history" */
@@ -5610,10 +5654,12 @@ export type Market_Stats_History_Stream_Cursor_Value_Input = {
   median?: InputMaybe<Scalars['numeric']['input']>;
   percent_listed?: InputMaybe<Scalars['Float']['input']>;
   percent_never_listed?: InputMaybe<Scalars['Float']['input']>;
+  prim_volume?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
   prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
-  prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
   sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
-  sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
 };
@@ -5634,10 +5680,12 @@ export type Market_Stats_History_Sum_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by var_pop() on columns of table "market_stats_history" */
@@ -5656,10 +5704,12 @@ export type Market_Stats_History_Var_Pop_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by var_samp() on columns of table "market_stats_history" */
@@ -5678,10 +5728,12 @@ export type Market_Stats_History_Var_Samp_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by variance() on columns of table "market_stats_history" */
@@ -5700,10 +5752,12 @@ export type Market_Stats_History_Variance_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "market_stats". */
@@ -5734,16 +5788,21 @@ export type Market_Stats_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume7d?: InputMaybe<Order_By>;
+  sec_volume24?: InputMaybe<Order_By>;
+  sec_volume30d?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
+  sec_volume_fiat7d?: InputMaybe<Order_By>;
+  sec_volume_fiat24?: InputMaybe<Order_By>;
+  sec_volume_fiat30d?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
   sec_volume_nb7d?: InputMaybe<Order_By>;
   sec_volume_nb24?: InputMaybe<Order_By>;
   sec_volume_nb30d?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
-  sec_volume_tz7d?: InputMaybe<Order_By>;
-  sec_volume_tz24?: InputMaybe<Order_By>;
-  sec_volume_tz30d?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5795,9 +5854,27 @@ export enum Market_Stats_Select_Column {
   /** column name */
   PercentNeverListed = 'percent_never_listed',
   /** column name */
+  PrimVolume = 'prim_volume',
+  /** column name */
+  PrimVolumeFiat = 'prim_volume_fiat',
+  /** column name */
   PrimVolumeNb = 'prim_volume_nb',
   /** column name */
-  PrimVolumeTz = 'prim_volume_tz',
+  SecVolume = 'sec_volume',
+  /** column name */
+  SecVolume7d = 'sec_volume7d',
+  /** column name */
+  SecVolume24 = 'sec_volume24',
+  /** column name */
+  SecVolume30d = 'sec_volume30d',
+  /** column name */
+  SecVolumeFiat = 'sec_volume_fiat',
+  /** column name */
+  SecVolumeFiat7d = 'sec_volume_fiat7d',
+  /** column name */
+  SecVolumeFiat24 = 'sec_volume_fiat24',
+  /** column name */
+  SecVolumeFiat30d = 'sec_volume_fiat30d',
   /** column name */
   SecVolumeNb = 'sec_volume_nb',
   /** column name */
@@ -5806,14 +5883,6 @@ export enum Market_Stats_Select_Column {
   SecVolumeNb24 = 'sec_volume_nb24',
   /** column name */
   SecVolumeNb30d = 'sec_volume_nb30d',
-  /** column name */
-  SecVolumeTz = 'sec_volume_tz',
-  /** column name */
-  SecVolumeTz7d = 'sec_volume_tz7d',
-  /** column name */
-  SecVolumeTz24 = 'sec_volume_tz24',
-  /** column name */
-  SecVolumeTz30d = 'sec_volume_tz30d',
   /** column name */
   To = 'to',
   /** column name */
@@ -5852,16 +5921,21 @@ export type Market_Stats_Stream_Cursor_Value_Input = {
   median?: InputMaybe<Scalars['numeric']['input']>;
   percent_listed?: InputMaybe<Scalars['Float']['input']>;
   percent_never_listed?: InputMaybe<Scalars['Float']['input']>;
+  prim_volume?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
   prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
-  prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume7d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume24?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume30d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat7d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat24?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat30d?: InputMaybe<Scalars['numeric']['input']>;
   sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_nb7d?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_nb24?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_nb30d?: InputMaybe<Scalars['Int']['input']>;
-  sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_tz7d?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_tz24?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_tz30d?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
 };

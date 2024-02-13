@@ -1,4 +1,4 @@
-export interface IEthContracts {
+export interface IBaseContracts {
   multicall3: `0x${string}`
   seaport_zone: `0x${string}`
   project_factory_v1: `0x${string}`
@@ -21,27 +21,36 @@ export interface IEthContracts {
   moderationSafe: `0x${string}`
 }
 
-export const ethTestnetContracts: IEthContracts = {
+/**
+ * ! TODO
+ * -----------------------------------------------------------------------------
+ * Put the actual addresses for the testnet and mainnet contracts.
+ * NEED TO DEPLOY:
+ * - onchfs
+ */
+
+export const baseTestnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
-  project_factory_v1: "0x4e9ef916F55B5d4a27E6406C7Ce8bcd29c2693d6",
-  mint_ticket_factory_v1: "0xbaed21d8C57caf71578b9aE1E09a68721d0Dd02d",
-  dutch_auction_minter_v1: "0x2F8ea350E7F29BCaC2AEE5889d64df07EE3Fa98d",
-  fixed_price_minter_v1: "0xa6c9c758e80ec18e1a28d485b97400B11dCFCD64",
-  ticket_redeemer_v1: "0xdd29eA613e0553fc03f5762Bf643710a7987A216",
-  ipfs_renderer_v1: "0x17b9c8a7C6F9D3768D4DA75EBB6abDe9FBe900cf",
-  onchfs_renderer_v1: "0x25B087D2c87a0b34188a530dC9cCfDa30822AA8e",
-  randomizer_v1: "0x5962e4dEeDe2DB4A83259255D30c19F4397FD5A6",
-  role_registry_v1: "0x92B70c5C6E676BdC395DfD911c07392fc7C36E4F",
-  contract_registry_v1: "0xb7CFDcDb2c6a1D05D7b85FB4ae7B7bccd028010F",
-  gen_art_token_impl_v1: "0x1feeb359e96E6Dd6F19F1FC98e8FffDdf5AeaD58",
-  mint_ticket_impl_v1: "0x0303e3a5be6e9Fa21E72cE446a402a6AEec13c60",
+  project_factory_v1: "0xBFc7C4627054Daf3fbeC5b772A5218321950B55F",
+  mint_ticket_factory_v1: "0xD7A0FD7Ec343e11577145f4b87289126Ecebc580",
+  dutch_auction_minter_v1: "0x3CeBD2f3C0BB9436257f3126556e273eeE601D9C",
+  fixed_price_minter_v1: "0x6E3A60C5f740875c8Fe483895520069BBf39dE1C",
+  ticket_redeemer_v1: "0x9cBd118a6c8f23245330b5FD2A819feFfd77Ba75",
+  ipfs_renderer_v1: "0xce2dD5ceA326bE986327811C1f226d5c40AB2bF8",
+  onchfs_renderer_v1: "0xeD61933bEb28c6E0CC73FFC520FBA5511C7D1eDa",
+  randomizer_v1: "0xE89C72379eD94F97EbFDDC40603f68972AB171DB",
+  role_registry_v1: "0xB809Cd1675bb6a200128661C5A8e342a64a01748",
+  contract_registry_v1: "0x58acdAaab9119e82c179Fa63FB1B4295e2dc127a",
+  gen_art_token_impl_v1: "0x7F9d75b45DeBe787edE3e1828D8E4B3D51Bd6Fb9",
+  mint_ticket_impl_v1: "0x4D8CFF9A6bA5255508f2b82abb4b97b17ED8bC4d",
   onchfs_file_system: "0xc3f5ef1a0256b9ceb1452650db72344809bb3a85",
   onchfs_content_store: "0x7c1730B7bE9424D0b983B84aEb254e3a2a105d91",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
-  fxhashTeamSafeAddress: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-  signerSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-  moderationSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
+  // !TODO: update those addresses
+  fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
 }
 
 /**
@@ -49,7 +58,7 @@ export const ethTestnetContracts: IEthContracts = {
  * -----------------------------------------------------------------------------
  * Put the actual addresses.
  */
-export const ethMainnetContracts: IEthContracts = {
+export const baseMainnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
   project_factory_v1: "0x442295de8A31d65026dBc09c29d469F6854f188a",
@@ -67,7 +76,7 @@ export const ethMainnetContracts: IEthContracts = {
   onchfs_file_system: "0x9e0f2864c6f125bbf599df6ca6e6c3774c5b2e04",
   onchfs_content_store: "0xC6806fd75745bB5F5B32ADa19963898155f9DB91",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
-  fxhashTeamSafeAddress: "0xD8b1905022d70e74c6c8aaA2baaf275fBe1634f1",
-  signerSafe: "0xB456aF77dEB65065462BD1f0D9098413E6CA4200",
-  moderationSafe: "0x99CDaECbe1be4B7232a4f2c79EF76D403886FE1E",
+  fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
 }

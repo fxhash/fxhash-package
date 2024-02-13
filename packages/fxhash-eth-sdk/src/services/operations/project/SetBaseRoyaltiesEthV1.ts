@@ -30,6 +30,7 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
     }
 
     const preparedPrimaryReceivers = prepareReceivers(
+      this.chain,
       this.params.receivers,
       "secondary"
     )
@@ -49,6 +50,7 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

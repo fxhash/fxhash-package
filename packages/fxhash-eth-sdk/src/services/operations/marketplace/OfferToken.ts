@@ -48,7 +48,7 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
         automatedRoyalties: true,
       }
     })
-    const transactionHash = await placeBid(args, this.manager.walletClient)
+    const transactionHash = await placeBid(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
       hash: transactionHash,

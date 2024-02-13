@@ -33,6 +33,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

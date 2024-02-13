@@ -19,7 +19,7 @@ export class BuyTokenEthV1Operation extends EthereumContractOperation<TBuyTokenE
         orderId: orderId,
       }
     })
-    const transactionHash = await buyToken(args, this.manager.walletClient)
+    const transactionHash = await buyToken(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
       hash: transactionHash,

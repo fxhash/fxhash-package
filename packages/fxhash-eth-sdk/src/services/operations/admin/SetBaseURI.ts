@@ -49,6 +49,7 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [getSafeTxData()],
         this.manager
       )

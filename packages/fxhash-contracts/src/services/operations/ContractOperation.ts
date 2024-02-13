@@ -11,36 +11,14 @@ export abstract class TezosContractOperation<Params> extends ContractOperation<
 // a generic type for ContractOperation polymorphism
 export type TTezosContractOperation<TParams> = new (
   manager: TezosWalletManager,
-  params: TParams
+  params: TParams,
+  chain: BlockchainType
 ) => TezosContractOperation<TParams>
 
-export abstract class EthereumContractOperation<Params>
-  implements ContractOperation<any, Params, any>
-{
-  manager: any /* EthereumWalletManager */
-  params: Params
-
-  constructor(manager: any /* EthereumWalletManager */, params: Params) {
-    this.manager = manager
-    this.params = params
-  }
-
-  abstract prepare(): Promise<void>
-  abstract call(): Promise<any /* EthereumWalletOperation */>
-  abstract success(): string
-}
-
-// a generic type for EthereumContractOperation polymorphism
-type TEthereumContractOperation<Params> = new (
-  manager: any, // EthereumWalletManager,
-  params: Params
-) => EthereumContractOperation<Params>
-
-export type TAnyContractOperation<Params> =
-  | TTezosContractOperation<Params>
-  | TEthereumContractOperation<Params>
+export type TAnyContractOperation<Params> = TTezosContractOperation<Params>
 
 export enum BlockchainType {
   TEZOS = "TEZOS",
   ETHEREUM = "ETHEREUM",
+  BASE = "BASE",
 }

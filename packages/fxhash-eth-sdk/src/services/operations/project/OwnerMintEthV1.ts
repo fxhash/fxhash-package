@@ -40,6 +40,7 @@ export class OwnerMintEthV1Operation extends EthereumContractOperation<TOwnerMin
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

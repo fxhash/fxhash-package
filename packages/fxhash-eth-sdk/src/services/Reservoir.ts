@@ -1,6 +1,13 @@
 import { config } from "@fxhash/config"
 import { createClient } from "@reservoir0x/reservoir-sdk"
-import { CURRENT_CHAIN } from "./Wallet"
+import { chains } from "./Wallet"
+
+const reservoirAPIURLs = {
+  1: "https://api.reservoir.tools/",
+  11155111: "https://api-sepolia.reservoir.tools",
+  8453: "https://api-base.reservoir.tools",
+  84532: "https://api-base-sepolia.reservoir.tools/",
+}
 
 //API key used for interacting with Reservoir API
 export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
@@ -31,14 +38,15 @@ export enum API_METHODS {
 
 //Defines the global Reservoir client used by the SDK
 createClient({
-  chains: [
-    {
-      id: CURRENT_CHAIN.id,
-      baseApiUrl: config.eth.apis.reservoir,
+  chains: Object.keys(chains).map(chain => {
+    return {
+      id: chains[chain].id,
+      baseApiUrl: reservoirAPIURLs[chains[chain].id],
       active: true,
-      apiKey: RESERVOIR_API_KEY,
-    },
-  ],
+      name: chains[chain].name,
+    }
+  }),
+  apiKey: RESERVOIR_API_KEY,
   source: RESERVOIR_SOURCE,
 })
 
@@ -47,7 +55,7 @@ createClient({
 export async function fetchReservoir<T>(
   method: API_METHODS,
   path: string,
-  body: string
+  body: string | undefined = undefined
 ): Promise<T> {
   try {
     const response = await fetch(`${config.eth.apis.reservoir}${path}`, {

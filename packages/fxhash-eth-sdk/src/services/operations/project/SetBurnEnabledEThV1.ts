@@ -34,6 +34,7 @@ export class SetBurnEnabledEthV1Operation extends EthereumContractOperation<TSet
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

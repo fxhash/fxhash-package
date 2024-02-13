@@ -8,6 +8,7 @@ import {
 import { Inscription } from "onchfs"
 import { CallData } from "@0xsplits/splits-sdk"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
+import { invariant } from "@fxhash/contracts-shared"
 
 /**
  * Checks if an inode exists by querying the ONCHFS File System contract.
@@ -96,15 +97,16 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
           args: Object.keys(ins.files)
             .sort()
             .map(key => [key, ins.files[key]])
-            .reduce(
+            .reduce<[string[], string[]]>(
               (acc, [name, content]) => [
-                [...acc[0], name],
-                [...acc[1], bytesToHex(content as any)],
+                [...acc[0], name as string],
+                [...acc[1], bytesToHex(content as Uint8Array)],
               ],
               [[], []]
             ),
         }),
       }
+
     default:
       throw new Error("wrong inode type")
   }
@@ -122,6 +124,8 @@ export async function simulateOnchfsInscriptions(
   walletManager: EthereumWalletManager,
   gasPrice?: bigint
 ) {
+  invariant(walletManager.walletClient.account, "walletClient account not set")
+
   const calldatas = inscriptions.map(ins => ethOnchfsInscriptionCallData(ins))
   const callRequests = calldatas.map(call => ({
     target: call.address,

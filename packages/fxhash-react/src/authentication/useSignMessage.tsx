@@ -47,7 +47,10 @@ export const useSignMessage = () => {
     }) => {
       let walletManager: TezosWalletManager | EthereumWalletManager | null
 
-      if (network === BlockchainType.ETHEREUM) {
+      if (
+        network === BlockchainType.ETHEREUM ||
+        network === BlockchainType.BASE
+      ) {
         walletManager = ethereumWalletManager
       } else if (network === BlockchainType.TEZOS) {
         walletManager = tezosWalletManager

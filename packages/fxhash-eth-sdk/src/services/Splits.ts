@@ -1,15 +1,17 @@
 import { SplitsClient } from "@0xsplits/splits-sdk"
-import { CURRENT_CHAIN } from "./Wallet"
+import { BlockchainType } from "@fxhash/contracts-shared"
 import { PublicClient, WalletClient } from "viem"
+import { getChainIdForChain } from "./Wallet"
 
 export const SPLITS_ETHER_TOKEN = "0x0000000000000000000000000000000000000000"
 
 export function getSplitsClient(
+  chain: BlockchainType,
   publicClient: PublicClient,
   walletClient: WalletClient
 ): SplitsClient {
   return new SplitsClient({
-    chainId: CURRENT_CHAIN.id,
+    chainId: getChainIdForChain(chain),
     // TODO: for some reason the splits sdk is not happy with the client types but it seems to work fine
     // @ts-ignore
     publicClient: publicClient, // viem public client (optional, required if using any of the contract functions)

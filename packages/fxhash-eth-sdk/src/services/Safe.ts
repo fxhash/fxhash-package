@@ -12,9 +12,13 @@ import {
   SafeSignature,
   MetaTransactionData,
 } from "@safe-global/safe-core-sdk-types"
-import { CURRENT_CHAIN, EthereumWalletManager } from "./Wallet"
+import { EthereumWalletManager, getChainIdForChain } from "./Wallet"
 import { getAddress } from "viem"
-import { UserRejectedError } from "@fxhash/contracts-shared"
+import {
+  BlockchainType,
+  UserRejectedError,
+  invariant,
+} from "@fxhash/contracts-shared"
 
 /**
  * The function `getSafeSDK` returns a Promise that resolves to an instance of the Safe SDK, given a
@@ -58,11 +62,11 @@ export async function getSafeFactory(signer: JsonRpcSigner | Provider) {
  * and authorize actions performed by the SafeApiKit instance.
  * @returns an instance of the `SafeApiKit` class.
  */
-export function getSafeService(): SafeApiKit {
+export function getSafeService(chain: BlockchainType): SafeApiKit {
   // @dev: we have to add this otherwise it won't compile, however runtime is fine ...
   // @ts-ignore
   return new SafeApiKit.default({
-    chainId: BigInt(CURRENT_CHAIN.id),
+    chainId: getChainIdForChain(chain),
   })
 }
 
@@ -110,33 +114,35 @@ export function getEthersAdapterForSafe(
  * @returns the safeTxHash, which is the hash of the safe transaction.
  */
 export async function proposeSafeTransaction(
+  chain: BlockchainType,
   safeTransactionData: MetaTransactionData[],
   walletManager: EthereumWalletManager
 ) {
+  invariant(walletManager.safe, "Safe not initialized")
+
   const safeAddress = await walletManager.safe.getAddress()
 
-  const safeTransaction = await walletManager.safe.createTransaction({
+  let safeTransaction = await walletManager.safe.createTransaction({
     transactions: safeTransactionData,
   })
 
   const safeTxHash =
     await walletManager.safe.getTransactionHash(safeTransaction)
-  let senderSignature: SafeSignature
   try {
-    senderSignature = await walletManager.safe.signTransactionHash(safeTxHash)
-  } catch (error) {
+    safeTransaction = await walletManager.safe.signTransaction(safeTransaction)
+  } catch (error: any) {
     // User rejected signing the message
     if (error.action === "signMessage" && error.code === "ACTION_REJECTED") {
       throw new UserRejectedError()
     }
     throw error
   }
-  await getSafeService().proposeTransaction({
+  await getSafeService(chain).proposeTransaction({
     safeAddress: safeAddress,
     safeTransactionData: safeTransaction.data,
     safeTxHash,
     senderAddress: getAddress(walletManager.address),
-    senderSignature: senderSignature.data,
+    senderSignature: safeTransaction.signatures[0],
   })
   return safeTxHash
 }
@@ -147,8 +153,8 @@ export async function proposeSafeTransaction(
  * user.
  * @returns the list of safes related to the user.
  */
-export async function getUserSafes(userAddress: string) {
-  return await getSafeService().getSafesByOwner(userAddress)
+export async function getUserSafes(userAddress: string, chain: BlockchainType) {
+  return await getSafeService(chain).getSafesByOwner(userAddress)
 }
 
 /**
@@ -156,8 +162,11 @@ export async function getUserSafes(userAddress: string) {
  * @param {string} safeAddress - address of a safe.
  * @returns pending transactions for the safe with the specified address.
  */
-export async function getPendingTransactionsForSafe(safeAddress: string) {
-  return await getSafeService().getPendingTransactions(safeAddress)
+export async function getPendingTransactionsForSafe(
+  safeAddress: string,
+  chain: BlockchainType
+) {
+  return await getSafeService(chain).getPendingTransactions(safeAddress)
 }
 
 /**
@@ -165,8 +174,11 @@ export async function getPendingTransactionsForSafe(safeAddress: string) {
  * @param {string} safeAddress - address of a safe.
  * @returns executed multisig transactions for the safe with the specified address.
  */
-export async function getMultisigTransactions(safeAddress: string) {
-  return await getSafeService().getMultisigTransactions(safeAddress)
+export async function getMultisigTransactions(
+  safeAddress: string,
+  chain: BlockchainType
+) {
+  return await getSafeService(chain).getMultisigTransactions(safeAddress)
 }
 
 /**
@@ -174,8 +186,11 @@ export async function getMultisigTransactions(safeAddress: string) {
  * @param {string} safeAddress - address of a safe contract.
  * @returns all transactions associated with the safe with the specified address.
  */
-export async function getAllSafeTransactions(safeAddress: string) {
-  return await getSafeService().getAllTransactions(safeAddress)
+export async function getAllSafeTransactions(
+  safeAddress: string,
+  chain: BlockchainType
+) {
+  return await getSafeService(chain).getAllTransactions(safeAddress)
 }
 
 /**
@@ -187,9 +202,10 @@ export async function getAllSafeTransactions(safeAddress: string) {
  * @returns {SafeInfoResponse} safe data
  */
 export async function getSafeData(
-  safeAdress: string
+  safeAdress: string,
+  chain: BlockchainType
 ): Promise<SafeInfoResponse> {
-  return await getSafeService().getSafeInfo(safeAdress)
+  return await getSafeService(chain).getSafeInfo(safeAdress)
 }
 
 /**
@@ -197,6 +213,9 @@ export async function getSafeData(
  * @param {string} safeAddress - address of a safe contract.
  * @returns {SafeCreationInfoResponse} safe creation information
  */
-export async function getSafeCreationInfo(safeAddress: string) {
-  return await getSafeService().getSafeCreationInfo(safeAddress)
+export async function getSafeCreationInfo(
+  safeAddress: string,
+  chain: BlockchainType
+) {
+  return await getSafeService(chain).getSafeCreationInfo(safeAddress)
 }

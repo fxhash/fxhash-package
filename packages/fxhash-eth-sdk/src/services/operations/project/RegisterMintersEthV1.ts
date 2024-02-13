@@ -35,7 +35,8 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const payloadArgs = await processAndFormatMintInfos(
       this.params.mintInfo,
-      this.manager
+      this.manager,
+      this.chain
     )
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
@@ -49,6 +50,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

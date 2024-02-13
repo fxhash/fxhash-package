@@ -1,1 +1,1 @@
-export type Blockchain = "ETHEREUM" | "TEZOS"
+export type Blockchain = "ETHEREUM" | "TEZOS" | "BASE"

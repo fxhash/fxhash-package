@@ -46,7 +46,10 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
         hash: transactionHash,
       }
     } else {
-      return undefined
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: "",
+      }
     }
   }
 

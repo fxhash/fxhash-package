@@ -6,10 +6,10 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { ETH_ROLES, ETH_ROLES_MAP } from "@/utils/roles"
-import { FxhashContracts } from "@/contracts/Contracts"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getConfigForChain } from "@/services/Wallet"
 
 export type TGrantOrRevokeRoleEthV1OperationParams = {
   user: `0x${string}`
@@ -25,12 +25,13 @@ export class GrantOrRevokeRoleEthV1Operation extends EthereumContractOperation<T
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const functionName =
       this.params.action === "grant" ? "grantRole" : "revokeRole"
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
       const safeTransactionData: SafeTransactionDataPartial = {
-        to: FxhashContracts.ETH_ROLE_REGISTRY as `0x${string}`,
+        to: currentConfig.contracts.role_registry_v1,
         data: encodeFunctionData({
           abi: FX_ROLE_REGISTRY_ABI,
           functionName: functionName,
@@ -39,6 +40,7 @@ export class GrantOrRevokeRoleEthV1Operation extends EthereumContractOperation<T
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )
@@ -48,7 +50,7 @@ export class GrantOrRevokeRoleEthV1Operation extends EthereumContractOperation<T
       }
     } else {
       const args: SimulateAndExecuteContractRequest = {
-        address: FxhashContracts.ETH_ROLE_REGISTRY as `0x${string}`,
+        address: currentConfig.contracts.role_registry_v1,
         abi: FX_ROLE_REGISTRY_ABI,
         functionName: functionName,
         args: [ETH_ROLES_MAP[this.params.role], this.params.user],

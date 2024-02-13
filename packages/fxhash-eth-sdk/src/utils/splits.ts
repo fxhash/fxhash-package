@@ -1,15 +1,13 @@
 import { ReceiverEntry, prepareReceivers } from "@/services/operations"
 import { Split, SplitsClient } from "@0xsplits/splits-sdk"
-import { PublicClient, WalletClient, encodePacked, getContract } from "viem"
-import { sign } from "viem/accounts"
-import { EthereumWalletManager, FX_GEN_ART_721_ABI } from ".."
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import { BlockchainType } from "@fxhash/contracts-shared"
 
 function sortAndNormalizeReceivers(
+  chain: BlockchainType,
   receivers: ReceiverEntry[],
   type: "primary" | "secondary"
 ) {
-  return prepareReceivers(receivers, type)
+  return prepareReceivers(chain, receivers, type)
     .map(r => ({
       account: r.address.toLowerCase(),
       value: r.pct / 10000,
@@ -41,11 +39,16 @@ function checkSplits(
 }
 
 export async function getExistingSplits(
+  chain: BlockchainType,
   splitsClient: SplitsClient,
   user: string,
   receivers: ReceiverEntry[]
 ) {
-  const preparedReceivers = sortAndNormalizeReceivers(receivers, "primary")
+  const preparedReceivers = sortAndNormalizeReceivers(
+    chain,
+    receivers,
+    "primary"
+  )
 
   const userSplits = await splitsClient.getRelatedSplits({
     address: user,

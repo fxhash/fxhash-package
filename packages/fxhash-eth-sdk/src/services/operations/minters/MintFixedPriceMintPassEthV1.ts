@@ -1,7 +1,6 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
-import { TransactionReceipt } from "viem"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
+import { getConfigForChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -40,8 +39,9 @@ export class MintFixedPriceMintPassEthV1Operation extends EthereumContractOperat
     }
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
+      address: currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buyMintPass",
       args: [

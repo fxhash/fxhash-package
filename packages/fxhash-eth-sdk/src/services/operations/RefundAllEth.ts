@@ -4,16 +4,11 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import {
-  Qu_GetEthMinterProceeds,
-  Qu_GetTokenPricingsAndReserves,
-} from "@fxhash/gql"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { apolloClient } from "../Hasura"
-import { FxhashContracts } from "@/contracts/Contracts"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getConfigForChain } from "../Wallet"
 
 export type TRefundAllEthOperationParams = {
   token: string
@@ -29,8 +24,9 @@ export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllE
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const multicallArgs = this.params.reserveIds.map(reserveId => ({
-      address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
+      address: currentConfig.contracts.dutch_auction_minter_v1,
       data: encodeFunctionData({
         abi: DUTCH_AUCTION_MINTER_ABI,
         functionName: "refund",

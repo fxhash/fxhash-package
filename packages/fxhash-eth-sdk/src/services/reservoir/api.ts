@@ -61,8 +61,7 @@ export async function getCollection(
 ): Promise<ReservoirGetCollectionResponse> {
   return await fetchReservoir<ReservoirGetCollectionResponse>(
     API_METHODS.GET,
-    `/collections/v7?id=${collection}`,
-    undefined
+    `/collections/v7?id=${collection}`
   )
 }
 
@@ -77,8 +76,7 @@ export async function getToken(
 ): Promise<ReservoirGetTokenResponse> {
   return await fetchReservoir<ReservoirGetTokenResponse>(
     API_METHODS.GET,
-    `/tokens/v6?tokens=${token}`,
-    undefined
+    `/tokens/v6?tokens=${token}`
   )
 }
 
@@ -92,7 +90,6 @@ export async function getOffer(
 ): Promise<ReservoirGetOfferResponse> {
   return await fetchReservoir<ReservoirGetOfferResponse>(
     API_METHODS.GET,
-    `/orders/bids/v6?ids=${offerId}`,
-    undefined
+    `/orders/bids/v6?ids=${offerId}`
   )
 }

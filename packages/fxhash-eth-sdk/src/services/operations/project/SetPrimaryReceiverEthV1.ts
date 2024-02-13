@@ -25,6 +25,7 @@ export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const preparedPrimaryReceivers = prepareReceivers(
+      this.chain,
       this.params.receivers,
       "primary"
     )
@@ -43,6 +44,7 @@ export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

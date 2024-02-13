@@ -32,6 +32,7 @@ export class BurnSupplyEthV1Operation extends EthereumContractOperation<TBurnSup
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

@@ -1,58 +1,68 @@
+import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 import { PublicClient, getContract } from "viem"
-import { FX_TICKETS_ABI } from ".."
+import { EthereumWalletManager } from ".."
+import { BlockchainType } from "@fxhash/contracts-shared"
 
 export async function getBalance(
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   ticket: `0x${string}`,
-  user: `0x${string}`
+  user: `0x${string}`,
+  chain: BlockchainType
 ) {
+  await walletManager.prepareSigner({ blockchainType: chain })
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: publicClient,
+    publicClient: walletManager.publicClient,
   })
   const dailyTax = await contract.read.balances([user])
   return dailyTax as bigint
 }
 
 export async function getDailyTax(
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   ticket: `0x${string}`,
-  price: bigint
+  price: bigint,
+  chain: BlockchainType
 ) {
+  await walletManager.prepareSigner({ blockchainType: chain })
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: publicClient,
+    publicClient: walletManager.publicClient,
   })
   const dailyTax = await contract.read.getDailyTax([price])
   return dailyTax as bigint
 }
 
 export async function isForeclosed(
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   ticket: `0x${string}`,
-  tokenId: bigint
+  tokenId: bigint,
+  chain: BlockchainType
 ) {
+  await walletManager.prepareSigner({ blockchainType: chain })
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: publicClient,
+    publicClient: walletManager.publicClient,
   })
   const isForeclosed = await contract.read.isForeclosed([tokenId])
   return isForeclosed as boolean
 }
 
 export async function getAuctionPrice(
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   ticket: `0x${string}`,
   price: bigint,
-  foreclosureTime: bigint
+  foreclosureTime: bigint,
+  chain: BlockchainType
 ) {
+  await walletManager.prepareSigner({ blockchainType: chain })
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: publicClient,
+    publicClient: walletManager.publicClient,
   })
   const auctionPrice = await contract.read.getAuctionPrice([
     price,
@@ -62,16 +72,18 @@ export async function getAuctionPrice(
 }
 
 export async function getTaxInfo(
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   ticket: `0x${string}`,
-  tokenId: bigint
+  tokenId: bigint,
+  chain: BlockchainType
 ) {
+  await walletManager.prepareSigner({ blockchainType: chain })
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: publicClient,
+    publicClient: walletManager.publicClient,
   })
-  const taxInfo = await contract.read.taxes([tokenId])
+  const taxInfo = (await contract.read.taxes([tokenId])) as unknown as bigint[]
   return {
     startTime: taxInfo[0],
     foreclosureTime: taxInfo[1],
@@ -81,20 +93,29 @@ export async function getTaxInfo(
 }
 
 export async function getMinimumClaimValueForNewPrice(
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   ticket: `0x${string}`,
   tokenId: bigint,
-  newPrice: bigint
+  newPrice: bigint,
+  chain: BlockchainType
 ) {
-  const taxInfo = await getTaxInfo(publicClient, ticket, tokenId)
-  const isTicketForeclosed = await isForeclosed(publicClient, ticket, tokenId)
-  const newDailyTax = await getDailyTax(publicClient, ticket, newPrice)
+  await walletManager.prepareSigner({ blockchainType: chain })
+
+  const taxInfo = await getTaxInfo(walletManager, ticket, tokenId, chain)
+  const isTicketForeclosed = await isForeclosed(
+    walletManager,
+    ticket,
+    tokenId,
+    chain
+  )
+  const newDailyTax = await getDailyTax(walletManager, ticket, newPrice, chain)
   if (isTicketForeclosed) {
     const auctionPrice = await getAuctionPrice(
-      publicClient,
+      walletManager,
       ticket,
       newPrice,
-      taxInfo.foreclosureTime
+      taxInfo.foreclosureTime,
+      chain
     )
     return auctionPrice + newDailyTax
   } else {

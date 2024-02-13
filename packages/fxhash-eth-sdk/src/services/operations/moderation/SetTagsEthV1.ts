@@ -34,6 +34,7 @@ export class SetTagsEthV1Operation extends EthereumContractOperation<TSetTagsEth
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )

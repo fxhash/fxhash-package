@@ -1,6 +1,6 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
+import { getConfigForChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -19,8 +19,9 @@ export class WithdrawFromFixedPriceMinterEthV1Operation extends EthereumContract
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
+      address: currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "withdraw",
       args: [this.params.token],

@@ -5341,6 +5341,7 @@ columns and relationships of "eth_minter_proceeds"
 """
 type eth_minter_proceeds {
   amount: numeric!
+  chain: String!
   count: numeric!
   id: String!
   minter_address: String!
@@ -5358,6 +5359,7 @@ input eth_minter_proceeds_bool_exp {
   _not: eth_minter_proceeds_bool_exp
   _or: [eth_minter_proceeds_bool_exp!]
   amount: numeric_comparison_exp
+  chain: String_comparison_exp
   count: numeric_comparison_exp
   id: String_comparison_exp
   minter_address: String_comparison_exp
@@ -5372,6 +5374,7 @@ Ordering options when selecting data from "eth_minter_proceeds".
 """
 input eth_minter_proceeds_order_by {
   amount: order_by
+  chain: order_by
   count: order_by
   id: order_by
   minter_address: order_by
@@ -5389,6 +5392,11 @@ enum eth_minter_proceeds_select_column {
   column name
   """
   amount
+
+  """
+  column name
+  """
+  chain
 
   """
   column name
@@ -5446,6 +5454,7 @@ Initial value of the column from where the streaming should start
 """
 input eth_minter_proceeds_stream_cursor_value_input {
   amount: numeric
+  chain: String
   count: numeric
   id: String
   minter_address: String
@@ -5634,6 +5643,7 @@ input eth_secondary_splits_stream_cursor_value_input {
 columns and relationships of "eth_user_proceeds"
 """
 type eth_user_proceeds {
+  chain: String!
   id: String!
   total_proceeds: numeric!
 }
@@ -5645,6 +5655,7 @@ input eth_user_proceeds_bool_exp {
   _and: [eth_user_proceeds_bool_exp!]
   _not: eth_user_proceeds_bool_exp
   _or: [eth_user_proceeds_bool_exp!]
+  chain: String_comparison_exp
   id: String_comparison_exp
   total_proceeds: numeric_comparison_exp
 }
@@ -5653,6 +5664,7 @@ input eth_user_proceeds_bool_exp {
 Ordering options when selecting data from "eth_user_proceeds".
 """
 input eth_user_proceeds_order_by {
+  chain: order_by
   id: order_by
   total_proceeds: order_by
 }
@@ -5661,6 +5673,11 @@ input eth_user_proceeds_order_by {
 select columns of table "eth_user_proceeds"
 """
 enum eth_user_proceeds_select_column {
+  """
+  column name
+  """
+  chain
+
   """
   column name
   """
@@ -5691,6 +5708,7 @@ input eth_user_proceeds_stream_cursor_input {
 Initial value of the column from where the streaming should start
 """
 input eth_user_proceeds_stream_cursor_value_input {
+  chain: String
   id: String
   total_proceeds: numeric
 }
@@ -7804,16 +7822,21 @@ type market_stats {
   median: numeric
   percent_listed: Float
   percent_never_listed: Float
+  prim_volume: numeric
+  prim_volume_fiat: numeric
   prim_volume_nb: Int
-  prim_volume_tz: numeric
+  sec_volume: numeric
+  sec_volume7d: numeric
+  sec_volume24: numeric
+  sec_volume30d: numeric
+  sec_volume_fiat: numeric
+  sec_volume_fiat7d: numeric
+  sec_volume_fiat24: numeric
+  sec_volume_fiat30d: numeric
   sec_volume_nb: Int
   sec_volume_nb7d: Int
   sec_volume_nb24: Int
   sec_volume_nb30d: Int
-  sec_volume_tz: numeric
-  sec_volume_tz7d: numeric
-  sec_volume_tz24: numeric
-  sec_volume_tz30d: numeric
   to: timestamptz
   token_id: String!
 }
@@ -7851,16 +7874,21 @@ input market_stats_bool_exp {
   median: numeric_comparison_exp
   percent_listed: Float_comparison_exp
   percent_never_listed: Float_comparison_exp
+  prim_volume: numeric_comparison_exp
+  prim_volume_fiat: numeric_comparison_exp
   prim_volume_nb: Int_comparison_exp
-  prim_volume_tz: numeric_comparison_exp
+  sec_volume: numeric_comparison_exp
+  sec_volume7d: numeric_comparison_exp
+  sec_volume24: numeric_comparison_exp
+  sec_volume30d: numeric_comparison_exp
+  sec_volume_fiat: numeric_comparison_exp
+  sec_volume_fiat7d: numeric_comparison_exp
+  sec_volume_fiat24: numeric_comparison_exp
+  sec_volume_fiat30d: numeric_comparison_exp
   sec_volume_nb: Int_comparison_exp
   sec_volume_nb7d: Int_comparison_exp
   sec_volume_nb24: Int_comparison_exp
   sec_volume_nb30d: Int_comparison_exp
-  sec_volume_tz: numeric_comparison_exp
-  sec_volume_tz7d: numeric_comparison_exp
-  sec_volume_tz24: numeric_comparison_exp
-  sec_volume_tz30d: numeric_comparison_exp
   to: timestamptz_comparison_exp
   token_id: String_comparison_exp
 }
@@ -7907,10 +7935,12 @@ type market_stats_history {
   median: numeric
   percent_listed: Float
   percent_never_listed: Float
+  prim_volume: numeric
+  prim_volume_fiat: numeric
   prim_volume_nb: Int
-  prim_volume_tz: numeric
+  sec_volume: numeric
+  sec_volume_fiat: numeric
   sec_volume_nb: Int
-  sec_volume_tz: numeric
   to: timestamptz!
   token_id: String!
 }
@@ -7950,10 +7980,12 @@ input market_stats_history_avg_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -7985,10 +8017,12 @@ input market_stats_history_bool_exp {
   median: numeric_comparison_exp
   percent_listed: Float_comparison_exp
   percent_never_listed: Float_comparison_exp
+  prim_volume: numeric_comparison_exp
+  prim_volume_fiat: numeric_comparison_exp
   prim_volume_nb: Int_comparison_exp
-  prim_volume_tz: numeric_comparison_exp
+  sec_volume: numeric_comparison_exp
+  sec_volume_fiat: numeric_comparison_exp
   sec_volume_nb: Int_comparison_exp
-  sec_volume_tz: numeric_comparison_exp
   to: timestamptz_comparison_exp
   token_id: String_comparison_exp
 }
@@ -8015,10 +8049,12 @@ input market_stats_history_max_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
   to: order_by
   token_id: order_by
 }
@@ -8045,10 +8081,12 @@ input market_stats_history_min_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
   to: order_by
   token_id: order_by
 }
@@ -8079,10 +8117,12 @@ input market_stats_history_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
   to: order_by
   token_id: order_by
 }
@@ -8184,22 +8224,32 @@ enum market_stats_history_select_column {
   """
   column name
   """
+  prim_volume
+
+  """
+  column name
+  """
+  prim_volume_fiat
+
+  """
+  column name
+  """
   prim_volume_nb
 
   """
   column name
   """
-  prim_volume_tz
+  sec_volume
+
+  """
+  column name
+  """
+  sec_volume_fiat
 
   """
   column name
   """
   sec_volume_nb
-
-  """
-  column name
-  """
-  sec_volume_tz
 
   """
   column name
@@ -8230,10 +8280,12 @@ input market_stats_history_stddev_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8254,10 +8306,12 @@ input market_stats_history_stddev_pop_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8278,10 +8332,12 @@ input market_stats_history_stddev_samp_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8321,10 +8377,12 @@ input market_stats_history_stream_cursor_value_input {
   median: numeric
   percent_listed: Float
   percent_never_listed: Float
+  prim_volume: numeric
+  prim_volume_fiat: numeric
   prim_volume_nb: Int
-  prim_volume_tz: numeric
+  sec_volume: numeric
+  sec_volume_fiat: numeric
   sec_volume_nb: Int
-  sec_volume_tz: numeric
   to: timestamptz
   token_id: String
 }
@@ -8347,10 +8405,12 @@ input market_stats_history_sum_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8371,10 +8431,12 @@ input market_stats_history_var_pop_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8395,10 +8457,12 @@ input market_stats_history_var_samp_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8419,10 +8483,12 @@ input market_stats_history_variance_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume_fiat: order_by
   sec_volume_nb: order_by
-  sec_volume_tz: order_by
 }
 
 """
@@ -8455,16 +8521,21 @@ input market_stats_order_by {
   median: order_by
   percent_listed: order_by
   percent_never_listed: order_by
+  prim_volume: order_by
+  prim_volume_fiat: order_by
   prim_volume_nb: order_by
-  prim_volume_tz: order_by
+  sec_volume: order_by
+  sec_volume7d: order_by
+  sec_volume24: order_by
+  sec_volume30d: order_by
+  sec_volume_fiat: order_by
+  sec_volume_fiat7d: order_by
+  sec_volume_fiat24: order_by
+  sec_volume_fiat30d: order_by
   sec_volume_nb: order_by
   sec_volume_nb7d: order_by
   sec_volume_nb24: order_by
   sec_volume_nb30d: order_by
-  sec_volume_tz: order_by
-  sec_volume_tz7d: order_by
-  sec_volume_tz24: order_by
-  sec_volume_tz30d: order_by
   to: order_by
   token_id: order_by
 }
@@ -8586,12 +8657,57 @@ enum market_stats_select_column {
   """
   column name
   """
+  prim_volume
+
+  """
+  column name
+  """
+  prim_volume_fiat
+
+  """
+  column name
+  """
   prim_volume_nb
 
   """
   column name
   """
-  prim_volume_tz
+  sec_volume
+
+  """
+  column name
+  """
+  sec_volume7d
+
+  """
+  column name
+  """
+  sec_volume24
+
+  """
+  column name
+  """
+  sec_volume30d
+
+  """
+  column name
+  """
+  sec_volume_fiat
+
+  """
+  column name
+  """
+  sec_volume_fiat7d
+
+  """
+  column name
+  """
+  sec_volume_fiat24
+
+  """
+  column name
+  """
+  sec_volume_fiat30d
 
   """
   column name
@@ -8612,26 +8728,6 @@ enum market_stats_select_column {
   column name
   """
   sec_volume_nb30d
-
-  """
-  column name
-  """
-  sec_volume_tz
-
-  """
-  column name
-  """
-  sec_volume_tz7d
-
-  """
-  column name
-  """
-  sec_volume_tz24
-
-  """
-  column name
-  """
-  sec_volume_tz30d
 
   """
   column name
@@ -8685,16 +8781,21 @@ input market_stats_stream_cursor_value_input {
   median: numeric
   percent_listed: Float
   percent_never_listed: Float
+  prim_volume: numeric
+  prim_volume_fiat: numeric
   prim_volume_nb: Int
-  prim_volume_tz: numeric
+  sec_volume: numeric
+  sec_volume7d: numeric
+  sec_volume24: numeric
+  sec_volume30d: numeric
+  sec_volume_fiat: numeric
+  sec_volume_fiat7d: numeric
+  sec_volume_fiat24: numeric
+  sec_volume_fiat30d: numeric
   sec_volume_nb: Int
   sec_volume_nb7d: Int
   sec_volume_nb24: Int
   sec_volume_nb30d: Int
-  sec_volume_tz: numeric
-  sec_volume_tz7d: numeric
-  sec_volume_tz24: numeric
-  sec_volume_tz30d: numeric
   to: timestamptz
   token_id: String
 }
