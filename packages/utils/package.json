@@ -22,7 +22,6 @@
       "import": "./dist/index.js"
     }
   },
-  "typesVersions": "./dist/index.d.ts",
   "files": [
     "dist"
   ],

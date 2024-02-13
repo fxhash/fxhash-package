@@ -25,7 +25,7 @@
   ],
   "scripts": {
     "build-sdk": "tsup",
-    "dev": "tsup --watch"
+    "dev-sdk": "tsup --watch"
   },
   "dependencies": {
     "@fxhash/params": "workspace:*",
