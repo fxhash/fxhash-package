@@ -3707,6 +3707,7 @@ export type Eth_Minter_Proceeds_Stream_Cursor_Value_Input = {
 export type Eth_Primary_Splits = {
   __typename?: 'eth_primary_splits';
   allocations: Array<Scalars['Int']['output']>;
+  chain: Scalars['String']['output'];
   id: Scalars['String']['output'];
   receiver: Scalars['String']['output'];
   receivers: Array<Scalars['String']['output']>;
@@ -3718,6 +3719,7 @@ export type Eth_Primary_Splits_Bool_Exp = {
   _not?: InputMaybe<Eth_Primary_Splits_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Primary_Splits_Bool_Exp>>;
   allocations?: InputMaybe<Int_Array_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   receiver?: InputMaybe<String_Comparison_Exp>;
   receivers?: InputMaybe<String_Array_Comparison_Exp>;
@@ -3726,6 +3728,7 @@ export type Eth_Primary_Splits_Bool_Exp = {
 /** Ordering options when selecting data from "eth_primary_splits". */
 export type Eth_Primary_Splits_Order_By = {
   allocations?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   receiver?: InputMaybe<Order_By>;
   receivers?: InputMaybe<Order_By>;
@@ -3735,6 +3738,8 @@ export type Eth_Primary_Splits_Order_By = {
 export enum Eth_Primary_Splits_Select_Column {
   /** column name */
   Allocations = 'allocations',
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3754,6 +3759,7 @@ export type Eth_Primary_Splits_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Eth_Primary_Splits_Stream_Cursor_Value_Input = {
   allocations?: InputMaybe<Array<Scalars['Int']['input']>>;
+  chain?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   receiver?: InputMaybe<Scalars['String']['input']>;
   receivers?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -3764,6 +3770,7 @@ export type Eth_Secondary_Splits = {
   __typename?: 'eth_secondary_splits';
   allocations: Array<Scalars['Int']['output']>;
   basis_points: Scalars['Int']['output'];
+  chain: Scalars['String']['output'];
   id: Scalars['String']['output'];
   receiver: Scalars['String']['output'];
   receivers: Array<Scalars['String']['output']>;
@@ -3776,6 +3783,7 @@ export type Eth_Secondary_Splits_Bool_Exp = {
   _or?: InputMaybe<Array<Eth_Secondary_Splits_Bool_Exp>>;
   allocations?: InputMaybe<Int_Array_Comparison_Exp>;
   basis_points?: InputMaybe<Int_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   receiver?: InputMaybe<String_Comparison_Exp>;
   receivers?: InputMaybe<String_Array_Comparison_Exp>;
@@ -3785,6 +3793,7 @@ export type Eth_Secondary_Splits_Bool_Exp = {
 export type Eth_Secondary_Splits_Order_By = {
   allocations?: InputMaybe<Order_By>;
   basis_points?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   receiver?: InputMaybe<Order_By>;
   receivers?: InputMaybe<Order_By>;
@@ -3796,6 +3805,8 @@ export enum Eth_Secondary_Splits_Select_Column {
   Allocations = 'allocations',
   /** column name */
   BasisPoints = 'basis_points',
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3816,6 +3827,7 @@ export type Eth_Secondary_Splits_Stream_Cursor_Input = {
 export type Eth_Secondary_Splits_Stream_Cursor_Value_Input = {
   allocations?: InputMaybe<Array<Scalars['Int']['input']>>;
   basis_points?: InputMaybe<Scalars['Int']['input']>;
+  chain?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   receiver?: InputMaybe<Scalars['String']['input']>;
   receivers?: InputMaybe<Array<Scalars['String']['input']>>;

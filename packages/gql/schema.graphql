@@ -5469,6 +5469,7 @@ columns and relationships of "eth_primary_splits"
 """
 type eth_primary_splits {
   allocations: [Int!]!
+  chain: String!
   id: String!
   receiver: String!
   receivers: [String!]!
@@ -5482,6 +5483,7 @@ input eth_primary_splits_bool_exp {
   _not: eth_primary_splits_bool_exp
   _or: [eth_primary_splits_bool_exp!]
   allocations: Int_array_comparison_exp
+  chain: String_comparison_exp
   id: String_comparison_exp
   receiver: String_comparison_exp
   receivers: String_array_comparison_exp
@@ -5492,6 +5494,7 @@ Ordering options when selecting data from "eth_primary_splits".
 """
 input eth_primary_splits_order_by {
   allocations: order_by
+  chain: order_by
   id: order_by
   receiver: order_by
   receivers: order_by
@@ -5505,6 +5508,11 @@ enum eth_primary_splits_select_column {
   column name
   """
   allocations
+
+  """
+  column name
+  """
+  chain
 
   """
   column name
@@ -5542,6 +5550,7 @@ Initial value of the column from where the streaming should start
 """
 input eth_primary_splits_stream_cursor_value_input {
   allocations: [Int!]
+  chain: String
   id: String
   receiver: String
   receivers: [String!]
@@ -5553,6 +5562,7 @@ columns and relationships of "eth_secondary_splits"
 type eth_secondary_splits {
   allocations: [Int!]!
   basis_points: Int!
+  chain: String!
   id: String!
   receiver: String!
   receivers: [String!]!
@@ -5567,6 +5577,7 @@ input eth_secondary_splits_bool_exp {
   _or: [eth_secondary_splits_bool_exp!]
   allocations: Int_array_comparison_exp
   basis_points: Int_comparison_exp
+  chain: String_comparison_exp
   id: String_comparison_exp
   receiver: String_comparison_exp
   receivers: String_array_comparison_exp
@@ -5578,6 +5589,7 @@ Ordering options when selecting data from "eth_secondary_splits".
 input eth_secondary_splits_order_by {
   allocations: order_by
   basis_points: order_by
+  chain: order_by
   id: order_by
   receiver: order_by
   receivers: order_by
@@ -5596,6 +5608,11 @@ enum eth_secondary_splits_select_column {
   column name
   """
   basis_points
+
+  """
+  column name
+  """
+  chain
 
   """
   column name
@@ -5634,6 +5651,7 @@ Initial value of the column from where the streaming should start
 input eth_secondary_splits_stream_cursor_value_input {
   allocations: [Int!]
   basis_points: Int
+  chain: String
   id: String
   receiver: String
   receivers: [String!]
