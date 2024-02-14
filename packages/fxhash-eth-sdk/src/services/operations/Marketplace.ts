@@ -19,6 +19,7 @@ import {
   getCurrentChain,
 } from "../Wallet"
 import { BlockchainType, invariant } from "@fxhash/contracts-shared"
+import { RESERVOIR_API_URLS } from "../Reservoir"
 
 export const stepHandler = (steps, path) => {}
 /**
@@ -37,7 +38,7 @@ export async function handleAction<T>(action: Promise<T>): Promise<T> {
   }
 }
 
-async function requireWalletClientReady(
+async function prepareClient(
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ) {
@@ -46,6 +47,17 @@ async function requireWalletClientReady(
     "Wallet client is not connected"
   )
   await walletManager.prepareSigner({ blockchainType: chain })
+  const currentChain = getCurrentChain(chain)
+  getClient().configure({
+    chains: [
+      {
+        id: currentChain.id,
+        baseApiUrl: RESERVOIR_API_URLS[currentChain.id],
+        active: true,
+        name: currentChain.name,
+      },
+    ],
+  })
 }
 
 /**
@@ -81,7 +93,7 @@ export function overrideSellStepsParameters(steps: Execute): void {
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ): Promise<string> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   let orderId: string | undefined = undefined
 
@@ -135,7 +147,7 @@ export const placeBid = async (
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ): Promise<string> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   let orderId: string | undefined = undefined
 
@@ -187,7 +199,7 @@ export const buyToken = async (
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ): Promise<string> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   // Prepare listing parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
@@ -243,7 +255,7 @@ export const getBuyPayloadForWert = async (
   data: `0x${string}`
   value: `0x${string}`
 }> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   // Prepare listing parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
@@ -277,7 +289,7 @@ export const buyTokenAdvanced = async (
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ): Promise<true> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   // Prepare buy parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
@@ -360,7 +372,7 @@ export const acceptOffer = async (
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ): Promise<string> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   let orderId: string | undefined = undefined
   const hashCallBack = (steps, path) => {
@@ -398,7 +410,7 @@ export const cancelOrder = async (
   walletManager: EthereumWalletManager,
   chain: BlockchainType
 ): Promise<string> => {
-  await requireWalletClientReady(walletManager, chain)
+  await prepareClient(walletManager, chain)
 
   const hashCallBack = steps => {}
   const result = await handleAction(

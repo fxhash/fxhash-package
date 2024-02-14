@@ -2,7 +2,7 @@ import { createClient } from "@reservoir0x/reservoir-sdk"
 import { chains, getConfigForChain } from "./Wallet"
 import { BlockchainType } from "@fxhash/contracts-shared"
 
-const reservoirAPIURLs = {
+export const RESERVOIR_API_URLS = {
   1: "https://api.reservoir.tools/",
   11155111: "https://api-sepolia.reservoir.tools",
   8453: "https://api-base.reservoir.tools",
@@ -38,14 +38,7 @@ export enum API_METHODS {
 
 //Defines the global Reservoir client used by the SDK
 createClient({
-  chains: Object.keys(chains).map(chain => {
-    return {
-      id: chains[chain].id,
-      baseApiUrl: reservoirAPIURLs[chains[chain].id],
-      active: true,
-      name: chains[chain].name,
-    }
-  }),
+  chains: [],
   apiKey: RESERVOIR_API_KEY,
   source: RESERVOIR_SOURCE,
 })
