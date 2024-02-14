@@ -1,5 +1,10 @@
 import { getClient, Execute, adaptViemWallet } from "@reservoir0x/reservoir-sdk"
-import { decodeFunctionData, encodeFunctionData, WalletClient } from "viem"
+import {
+  decodeFunctionData,
+  encodeFunctionData,
+  TransactionExecutionError,
+  WalletClient,
+} from "viem"
 import {
   ReservoirAcceptOfferParams,
   ReservoirBuyTokenParams,
@@ -18,7 +23,11 @@ import {
   getConfigForChain,
   getCurrentChain,
 } from "../Wallet"
-import { BlockchainType, invariant } from "@fxhash/contracts-shared"
+import {
+  BlockchainType,
+  UserRejectedError,
+  invariant,
+} from "@fxhash/contracts-shared"
 import { RESERVOIR_API_URLS } from "../Reservoir"
 
 export const stepHandler = (steps, path) => {}
@@ -33,6 +42,12 @@ export async function handleAction<T>(action: Promise<T>): Promise<T> {
   try {
     return await action
   } catch (error) {
+    if (
+      error instanceof TransactionExecutionError &&
+      error.cause.name === "UserRejectedRequestError"
+    ) {
+      throw new UserRejectedError()
+    }
     console.error(`Action failed with error: ${error}`)
     throw error
   }
@@ -127,7 +142,7 @@ export function overrideSellStepsParameters(steps: Execute): void {
       hashCallBack,
       fetchedSteps,
       undefined,
-      walletManager.walletClient.chain!.id
+      getCurrentChain(chain).id
     )
   )
 
@@ -179,7 +194,7 @@ export const placeBid = async (
       hashCallBack,
       fetchedSteps,
       undefined,
-      walletManager.walletClient.chain!.id
+      getCurrentChain(chain).id
     )
   )
 
@@ -230,7 +245,7 @@ export const buyToken = async (
       hashCallBack,
       fetchedSteps,
       undefined,
-      walletManager.walletClient.chain!.id
+      getCurrentChain(chain).id
     )
   )
 
@@ -355,7 +370,7 @@ export const buyTokenAdvanced = async (
       stepHandler,
       fetchedSteps,
       undefined,
-      walletManager.walletClient.chain!.id
+      getCurrentChain(chain).id
     )
   )
   return true
