@@ -18,7 +18,11 @@ import {
   invariant,
   BlockchainType,
 } from "@fxhash/contracts-shared"
-import { getChainIdForChain, getConfigForChain } from "../Wallet"
+import {
+  getChainIdForChain,
+  getConfigForChain,
+  getCurrentChain,
+} from "../Wallet"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -167,6 +171,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         functionName: "aggregate",
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

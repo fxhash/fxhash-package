@@ -8,8 +8,6 @@ import { EthereumWalletManager } from "../Wallet"
 export abstract class EthereumContractOperation<
   Params,
 > extends ContractOperation<
-  // ! TODO: to fix
-  //@ts-ignore
   EthereumWalletManager,
   Params,
   { type: TransactionType; hash: string }

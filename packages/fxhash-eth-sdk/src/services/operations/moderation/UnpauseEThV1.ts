@@ -8,6 +8,7 @@ import {
 import { proposeSafeTransaction } from "@/services/Safe"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TUnpauseEthV1OperationParams = {
   token: `0x${string}`
@@ -48,6 +49,7 @@ export class UnpauseEthV1Operation extends EthereumContractOperation<TUnpauseEth
         functionName: "unpause",
         args: [],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

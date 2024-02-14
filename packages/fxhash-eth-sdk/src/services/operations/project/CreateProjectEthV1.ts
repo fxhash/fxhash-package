@@ -31,7 +31,7 @@ import {
   invariant,
 } from "@fxhash/contracts-shared"
 import { config } from "@fxhash/config"
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -300,6 +300,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         functionName: functionName,
         args: args,
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       //simulate the transaction and execute it, will throw an error if it fails
       const transactionHash = await simulateAndExecuteContract(

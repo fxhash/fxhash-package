@@ -1,4 +1,4 @@
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 import { EthereumContractOperation } from "../contractOperation"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import {
@@ -53,6 +53,7 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
           this.chain
         ),
       ],
+      chain: getCurrentChain(this.chain),
       account: this.manager.address as `0x${string}`,
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)

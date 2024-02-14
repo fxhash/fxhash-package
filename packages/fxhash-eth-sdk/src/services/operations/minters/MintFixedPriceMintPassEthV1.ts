@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -54,6 +54,7 @@ export class MintFixedPriceMintPassEthV1Operation extends EthereumContractOperat
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

@@ -9,7 +9,7 @@ import { ETH_ROLES, ETH_ROLES_MAP } from "@/utils/roles"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { TransactionType } from "@fxhash/contracts-shared"
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 
 export type TGrantOrRevokeRoleEthV1OperationParams = {
   user: `0x${string}`
@@ -55,6 +55,7 @@ export class GrantOrRevokeRoleEthV1Operation extends EthereumContractOperation<T
         functionName: functionName,
         args: [ETH_ROLES_MAP[this.params.role], this.params.user],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

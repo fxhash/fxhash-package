@@ -10,6 +10,7 @@ import { proposeSafeTransaction } from "@/services/Safe"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TSetBaseRoyaltiesEthV1OperationParams = {
   token: string
@@ -69,6 +70,7 @@ export class SetBaseRoyaltiesEthV1Operation extends EthereumContractOperation<TS
           this.params.basisPoints,
         ],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

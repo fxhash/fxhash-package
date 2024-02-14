@@ -9,6 +9,7 @@ import {
   InsufficientFundsError as InsufficientFundsErrorViem,
   TransactionExecutionError,
   Client,
+  Chain,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
@@ -49,6 +50,7 @@ export interface SimulateAndExecuteContractRequest {
   args: any[]
   account: `0x${string}`
   value?: bigint
+  chain: Chain
 }
 
 export interface MintInfo {

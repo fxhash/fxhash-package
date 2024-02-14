@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -51,6 +51,7 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

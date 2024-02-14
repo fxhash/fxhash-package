@@ -8,6 +8,7 @@ import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { ethOnchfsInscriptionCallData } from "@/utils"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]
@@ -36,6 +37,7 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
         functionName: "aggregate",
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

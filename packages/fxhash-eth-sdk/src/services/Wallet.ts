@@ -14,7 +14,6 @@ import {
   BlockchainType,
   WalletConnectionErrorReason,
   WalletConnectionError,
-  invariant,
 } from "@fxhash/contracts-shared"
 import {
   Chain,
@@ -183,14 +182,8 @@ export class EthereumWalletManager extends WalletManager {
           return failure(result.error)
         }
 
-        // ! TODO: to fix
-        // @ts-ignore
         await contractOperation.prepare()
-        // ! TODO: to fix
-        // @ts-ignore
         const operation = await contractOperation.call()
-        // ! TODO: to fix
-        // @ts-ignore
         const message = contractOperation.success()
 
         return success({

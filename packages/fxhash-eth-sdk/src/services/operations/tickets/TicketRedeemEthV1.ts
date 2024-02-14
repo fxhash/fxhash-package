@@ -1,3 +1,4 @@
+import { getCurrentChain } from "@/services/Wallet"
 import { EthereumContractOperation } from "../contractOperation"
 import { TICKET_REDEEMER_ABI } from "@/abi/TicketRedeemer"
 import {
@@ -28,6 +29,7 @@ export class RedeemTicketEthV1Operation extends EthereumContractOperation<TRedee
       functionName: "redeem",
       args: [this.params.ticket, this.params.tokenId, this.params.params],
       account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

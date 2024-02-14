@@ -5,7 +5,7 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { TransactionType } from "@fxhash/contracts-shared"
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 
 /**
  * The TMintDAMintPassEthV1OperationParams type represents the parameters required for a mint operation in a
@@ -55,6 +55,7 @@ export class MintDAMintPassEthV1Operation extends EthereumContractOperation<TMin
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

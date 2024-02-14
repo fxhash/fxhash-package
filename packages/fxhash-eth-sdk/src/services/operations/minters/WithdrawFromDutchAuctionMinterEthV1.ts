@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
-import { getConfigForChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -26,6 +26,7 @@ export class WithdrawFromDutchAuctionMinterEthV1Operation extends EthereumContra
       functionName: "withdraw",
       args: [this.params.token, this.params.reserveId],
       account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

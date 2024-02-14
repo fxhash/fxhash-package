@@ -8,7 +8,7 @@ import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { TransactionType } from "@fxhash/contracts-shared"
-import { getConfigForChain } from "../Wallet"
+import { getConfigForChain, getCurrentChain } from "../Wallet"
 
 export type TRefundAllEthOperationParams = {
   token: string
@@ -45,6 +45,7 @@ export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllE
       functionName: "aggregate",
       args: [callRequests],
       account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
     }
 
     const transactionHash = await simulateAndExecuteContract(this.manager, args)

@@ -8,6 +8,7 @@ import {
 import { proposeSafeTransaction } from "@/services/Safe"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TBurnSupplyEthV1OperationParams = {
   token: `0x${string}`
@@ -47,6 +48,7 @@ export class BurnSupplyEthV1Operation extends EthereumContractOperation<TBurnSup
         functionName: "reduceSupply",
         args: [this.params.supply],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

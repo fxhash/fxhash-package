@@ -9,6 +9,7 @@ import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { getHashFromIPFSCID } from "@/utils"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 /**
  * The above type represents the parameters for setting the base URI for an Ethereum V1 operation.
@@ -64,6 +65,7 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
         functionName: "setBaseURI",
         args: [parsedCID],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,
