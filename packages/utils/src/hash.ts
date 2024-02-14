@@ -20,14 +20,18 @@ export function mockEthereumTransactionHash(): string {
   return `0x${hexString}`
 }
 
+export const mockBaseTransactionHash = mockEthereumTransactionHash
+
 export function mockTransactionHash(chain: Blockchain): string {
-  if (chain === "ETHEREUM") return mockEthereumTransactionHash()
+  if (["ETHEREUM", "BASE"].includes(chain)) return mockEthereumTransactionHash()
   return mockTezosTransactionHash()
 }
 
 export function isEthereumTransactionHashValid(hash: string): boolean {
   return /^(0x)?([A-Fa-f0-9]{64})$/.test(hash)
 }
+
+export const isBaseTransactionHashValid = isEthereumTransactionHashValid
 
 export function isTezosTransactionHashValid(hash: string): boolean {
   if (hash.length !== 51) {
@@ -48,4 +52,12 @@ export function getBlockchainFromTransactionHash(hash: string): Blockchain {
   throw new Error(
     "The provided value is not a valid tezos or ethereum transaction hash"
   )
+}
+
+export function isTransactionHashValid(address: string): boolean {
+  return [
+    isTezosTransactionHashValid,
+    isEthereumTransactionHashValid,
+    isBaseTransactionHashValid,
+  ].some(validation => validation(address))
 }
