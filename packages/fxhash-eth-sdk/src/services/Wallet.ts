@@ -22,6 +22,8 @@ import {
   TransactionReceipt,
   UserRejectedRequestError,
   WalletClient,
+  createPublicClient,
+  http,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
@@ -294,6 +296,10 @@ export class EthereumWalletManager extends WalletManager {
   ): PromiseResult<void, WalletConnectionError> {
     try {
       await this.walletClient.switchChain({ id: chain.id })
+      this.publicClient = createPublicClient({
+        chain: chain,
+        transport: http(),
+      })
       return success()
     } catch (error) {
       // Do nothing as we return an error below
