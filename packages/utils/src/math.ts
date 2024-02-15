@@ -46,6 +46,7 @@ function matcher(
 }
 
 function getSeedFromHash(hash: string): number[] {
+  // Accounting for ethereum and base
   if (isEthereumTransactionHashValid(hash) || isEthereumAddressValid(hash)) {
     return matcher(hash, 2, s => Number(BigInt(`0x${s}`) % BigInt(0xffffffff)))
   } else if (isTezosAddressValid(hash)) {
