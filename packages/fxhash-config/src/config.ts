@@ -161,8 +161,7 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "Base",
           chainId: BlockchainIdentifiers.BaseMainnet,
-          // TODO: change this to the correct address
-          ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
+          ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           // TODO: change this to the correct address
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
         },
