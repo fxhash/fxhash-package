@@ -1,4 +1,3 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
 import {
@@ -6,6 +5,7 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 
 /**
  * The TMintDAMintPassEthV1OperationParams type represents the parameters required for a mint operation in a
@@ -40,8 +40,9 @@ export class MintDAMintPassEthV1Operation extends EthereumContractOperation<TMin
     }
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
+      address: currentConfig.contracts.dutch_auction_minter_v1,
       abi: DUTCH_AUCTION_MINTER_ABI,
       functionName: "buyMintPass",
       args: [
@@ -54,6 +55,7 @@ export class MintDAMintPassEthV1Operation extends EthereumContractOperation<TMin
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

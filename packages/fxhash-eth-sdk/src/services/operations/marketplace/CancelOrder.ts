@@ -15,7 +15,8 @@ export class CancelOrderEthV1Operation extends EthereumContractOperation<TCancel
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
     const transactionHash = await cancelOrder(
       this.params.orderIds,
-      this.manager.walletClient
+      this.manager,
+      this.chain
     )
     return {
       type: TransactionType.OFFCHAIN,

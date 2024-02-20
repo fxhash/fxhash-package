@@ -1,5 +1,10 @@
 import { getClient, Execute, adaptViemWallet } from "@reservoir0x/reservoir-sdk"
-import { decodeFunctionData, encodeFunctionData, WalletClient } from "viem"
+import {
+  decodeFunctionData,
+  encodeFunctionData,
+  TransactionExecutionError,
+  WalletClient,
+} from "viem"
 import {
   ReservoirAcceptOfferParams,
   ReservoirBuyTokenParams,
@@ -13,7 +18,17 @@ import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api"
 import { RESERVOIR_ABI } from "@/abi/Reservoir"
 import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
 import { config } from "@fxhash/config"
-import { RESERVOIR_ORDER_KIND } from "../Reservoir"
+import {
+  EthereumWalletManager,
+  getConfigForChain,
+  getCurrentChain,
+} from "../Wallet"
+import {
+  BlockchainType,
+  UserRejectedError,
+  invariant,
+} from "@fxhash/contracts-shared"
+import { RESERVOIR_API_URLS } from "../Reservoir"
 
 export const stepHandler = (steps, path) => {}
 /**
@@ -27,9 +42,37 @@ export async function handleAction<T>(action: Promise<T>): Promise<T> {
   try {
     return await action
   } catch (error) {
+    if (
+      error instanceof TransactionExecutionError &&
+      error.cause.name === "UserRejectedRequestError"
+    ) {
+      throw new UserRejectedError()
+    }
     console.error(`Action failed with error: ${error}`)
     throw error
   }
+}
+
+async function prepareClient(
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
+) {
+  invariant(
+    walletManager.walletClient.account && walletManager.walletClient.chain,
+    "Wallet client is not connected"
+  )
+  await walletManager.prepareSigner({ blockchainType: chain })
+  const currentChain = getCurrentChain(chain)
+  getClient().configure({
+    chains: [
+      {
+        id: currentChain.id,
+        baseApiUrl: RESERVOIR_API_URLS[currentChain.id],
+        active: true,
+        name: currentChain.name,
+      },
+    ],
+  })
 }
 
 /**
@@ -62,9 +105,12 @@ export function overrideSellStepsParameters(steps: Execute): void {
  * @returns {Promise<boolean>} - True if the listing is successful.
  */ export const listToken = async (
   reservoirListings: ReservoirListingParams,
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<string> => {
-  let orderId: string = undefined
+  await prepareClient(walletManager, chain)
+
+  let orderId: string | undefined = undefined
 
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
@@ -77,28 +123,30 @@ export function overrideSellStepsParameters(steps: Execute): void {
 
   // Prepare listing parameters
   const listingParams: ReservoirExecuteListParams = {
-    maker: walletClient.account.address,
+    maker: walletManager.walletClient.account!.address,
     source: getClient().source,
     params: reservoirListings,
   }
 
   // Fetch and override steps
-  const fetchedSteps = await getListingSteps(listingParams)
+  const fetchedSteps = await getListingSteps(chain, listingParams)
   overrideSellStepsParameters(fetchedSteps)
 
   // Execute steps and handle actions
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.eth.apis.reservoir,
+        baseURL: getConfigForChain(chain).apis?.reservoir,
       },
-      adaptViemWallet(walletClient),
+      adaptViemWallet(walletManager.walletClient),
       hashCallBack,
       fetchedSteps,
       undefined,
-      walletClient.chain.id
+      getCurrentChain(chain).id
     )
   )
+
+  invariant(orderId, "Failed to list token")
 
   return orderId
 }
@@ -111,19 +159,22 @@ export function overrideSellStepsParameters(steps: Execute): void {
  */
 export const placeBid = async (
   bids: ReservoirPlaceBidParams,
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<string> => {
-  let orderId: string = undefined
+  await prepareClient(walletManager, chain)
+
+  let orderId: string | undefined = undefined
 
   // Prepare listing parameters
   const bidStepsParams: ReservoirExecuteBidParams = {
-    maker: walletClient.account.address,
+    maker: walletManager.walletClient.account!.address,
     source: getClient().source,
     params: bids,
   }
 
   // Fetch and override steps
-  const fetchedSteps = await getBidSteps(bidStepsParams)
+  const fetchedSteps = await getBidSteps(chain, bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "order-signature")
@@ -137,15 +188,18 @@ export const placeBid = async (
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.eth.apis.reservoir,
+        baseURL: getConfigForChain(chain).apis?.reservoir,
       },
-      adaptViemWallet(walletClient),
+      adaptViemWallet(walletManager.walletClient),
       hashCallBack,
       fetchedSteps,
       undefined,
-      walletClient.chain.id
+      getCurrentChain(chain).id
     )
   )
+
+  invariant(orderId, "Failed to place bid")
+
   return orderId
 }
 
@@ -157,17 +211,20 @@ export const placeBid = async (
  */
 export const buyToken = async (
   items: ReservoirBuyTokenParams,
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<string> => {
+  await prepareClient(walletManager, chain)
+
   // Prepare listing parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
     items: items,
     source: getClient().source,
-    taker: walletClient.account.address,
+    taker: walletManager.walletClient.account!.address,
     normalizeRoyalties: true,
   }
 
-  let orderId: string = undefined
+  let orderId: string | undefined = undefined
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "sale")
     if (step && step.items.length > 0) {
@@ -177,20 +234,22 @@ export const buyToken = async (
     }
   }
   // Fetch and override steps
-  const fetchedSteps = await getBuySteps(buyStepsParams)
+  const fetchedSteps = await getBuySteps(chain, buyStepsParams)
   // Execute steps and handle actions
   await handleAction(
     getClient().utils.executeSteps(
       {
-        baseURL: config.eth.apis.reservoir,
+        baseURL: getConfigForChain(chain).apis?.reservoir,
       },
-      adaptViemWallet(walletClient),
+      adaptViemWallet(walletManager.walletClient),
       hashCallBack,
       fetchedSteps,
       undefined,
-      walletClient.chain.id
+      getCurrentChain(chain).id
     )
   )
+
+  invariant(orderId, "Failed to buy token")
 
   return orderId
 }
@@ -203,24 +262,33 @@ export const buyToken = async (
  */
 export const getBuyPayloadForWert = async (
   items: ReservoirBuyTokenParams,
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<{
   from: `0x${string}`
   to: `0x${string}`
   data: `0x${string}`
   value: `0x${string}`
 }> => {
+  await prepareClient(walletManager, chain)
+
   // Prepare listing parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
     items: items,
     source: getClient().source,
-    taker: walletClient.account.address,
-    relayer: config.config.wertRelayer,
+    taker: walletManager.walletClient.account!.address,
+    relayer: getConfigForChain(chain).config.wertRelayer,
   }
 
-  const fetchedSteps = await getBuySteps(buyStepsParams)
+  const fetchedSteps = await getBuySteps(chain, buyStepsParams)
+  const saleStep = fetchedSteps.steps.find(step => step.id === "sale")
 
-  return fetchedSteps.steps.find(step => step.id === "sale").items[0].data
+  invariant(
+    saleStep?.items && saleStep?.items.length > 0,
+    "Failed to fetch buy steps"
+  )
+
+  return saleStep.items[0].data
 }
 
 /**
@@ -233,22 +301,29 @@ export const getBuyPayloadForWert = async (
 export const buyTokenAdvanced = async (
   items: ReservoirBuyTokenParams,
   feesOnTop: string[],
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<true> => {
+  await prepareClient(walletManager, chain)
+
   // Prepare buy parameters
   const buyStepsParams: ReservoirExecuteBuyParams = {
     items: items,
     feesOnTop: feesOnTop,
     source: getClient().source,
-    taker: walletClient.account.address,
+    taker: walletManager.walletClient.account!.address,
   }
 
   // Fetch and override steps
-  const fetchedSteps = await getBuySteps(buyStepsParams)
+  const fetchedSteps = await getBuySteps(chain, buyStepsParams)
+
+  const saleStep = fetchedSteps.steps.find(step => step.id === "sale")
+  if (!saleStep || !saleStep.items || saleStep.items.length === 0) {
+    throw new Error("Failed to fetch buy steps")
+  }
 
   //we store the actual data that will be forwarded to Seaport
-  const orderData = fetchedSteps.steps.find(step => step.id === "sale").items[0]
-    .data
+  const orderData = saleStep.items[0].data
 
   //we decode the function parameters from the `execute` call done on the Reservoir contract
   //this will give us the order parameters sent to Seaport
@@ -291,11 +366,11 @@ export const buyTokenAdvanced = async (
   await handleAction(
     getClient().utils.executeSteps(
       {},
-      adaptViemWallet(walletClient),
+      adaptViemWallet(walletManager.walletClient),
       stepHandler,
       fetchedSteps,
       undefined,
-      walletClient.chain.id
+      getCurrentChain(chain).id
     )
   )
   return true
@@ -309,9 +384,12 @@ export const buyTokenAdvanced = async (
  */
 export const acceptOffer = async (
   offers: ReservoirAcceptOfferParams,
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<string> => {
-  let orderId: string = undefined
+  await prepareClient(walletManager, chain)
+
+  let orderId: string | undefined = undefined
   const hashCallBack = (steps, path) => {
     const step = steps.find(step => step.id === "sale")
     if (step.items.length > 0) {
@@ -323,16 +401,16 @@ export const acceptOffer = async (
   const result = await handleAction(
     getClient().actions.acceptOffer({
       items: offers,
+      wallet: walletManager.walletClient,
       options: {
         normalizeRoyalties: true,
       },
-      wallet: walletClient,
       onProgress: hashCallBack,
     })
   )
-  if (!result) {
-    throw new Error("Failed to accept offer")
-  }
+
+  invariant(result && orderId, "Failed to accept offer")
+
   return orderId
 }
 
@@ -344,19 +422,21 @@ export const acceptOffer = async (
  */
 export const cancelOrder = async (
   orders: string[],
-  walletClient: WalletClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<string> => {
+  await prepareClient(walletManager, chain)
+
   const hashCallBack = steps => {}
   const result = await handleAction(
     getClient().actions.cancelOrder({
       ids: orders,
-      wallet: walletClient,
+      wallet: walletManager.walletClient,
       onProgress: hashCallBack,
     })
   )
 
-  if (!result) {
-    throw new Error("Failed to accept offer")
-  }
+  invariant(result, "Failed to cancel offer")
+
   return orders[0]
 }

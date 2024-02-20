@@ -20,6 +20,7 @@ export function useBlockchainUsers() {
   return useMemo(
     () => ({
       [BlockchainType.ETHEREUM]: ethUser,
+      [BlockchainType.BASE]: ethUser,
       [BlockchainType.TEZOS]: tezUser,
     }),
     [ethUser, tezUser]

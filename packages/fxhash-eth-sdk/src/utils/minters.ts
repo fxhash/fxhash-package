@@ -26,18 +26,14 @@ import {
   defineReserveInfo,
   predictFxContractAddress,
 } from "@/services/operations"
-import { FxhashContracts } from "@/contracts/Contracts"
-import {
-  DUTCH_AUCTION_MINTER_ABI,
-  EthereumWalletManager,
-  FIXED_PRICE_MINTER_ABI,
-} from ".."
-import { ApolloQueryResult } from "@apollo/client"
 import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
 import { apolloClient } from "@/services/Hasura"
+import { BlockchainType, invariant } from "@fxhash/contracts-shared"
+import { config } from "@fxhash/config"
+import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -230,17 +226,20 @@ export async function signMintPass(
   reserveId: number,
   index: number,
   claimer: `0x${string}`,
-  walletClient: WalletClient,
-  publicClient: PublicClient,
+  walletManager: EthereumWalletManager,
   privateKey: `0x${string}`,
   minter: `0x${string}`,
-  abi: any
+  abi: any,
+  chain: BlockchainType
 ) {
+  await walletManager.prepareSigner({ blockchainType: chain })
   const contract = getContract({
     address: minter,
     abi: abi,
-    walletClient: walletClient as Client,
-    publicClient: publicClient as Client,
+    //@ts-ignore
+    walletClient: walletManager.walletClient,
+    //@ts-ignore
+    publicClient: walletManager.publicClient,
   })
   const nonce = await contract.read.reserveNonce([token, reserveId])
   const typedDataHash = await contract.read.generateTypedDataHash([
@@ -254,7 +253,7 @@ export async function signMintPass(
     throw Error("Could not get typed hash for mint pass")
   }
   const signature = await sign({
-    hash: typedDataHash,
+    hash: typedDataHash as `0x${string}`,
     privateKey: privateKey,
   })
   return encodePacked(
@@ -269,8 +268,11 @@ export async function processAndFormatMintInfos(
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
   )[],
-  manager: EthereumWalletManager
+  manager: EthereumWalletManager,
+  chain: BlockchainType
 ): Promise<MintInfo[]> {
+  const currentConfig =
+    chain === BlockchainType.ETHEREUM ? config.eth : config.base
   return await Promise.all(
     mintInfos.map(async argsMintInfo => {
       const reserveInfo: ReserveInfo = defineReserveInfo(
@@ -278,7 +280,7 @@ export async function processAndFormatMintInfos(
       )
       if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
         const mintInfo: MintInfo = {
-          minter: FxhashContracts.ETH_FIXED_PRICE_MINTER_V1 as `0x${string}`,
+          minter: currentConfig.contracts.fixed_price_minter_v1,
           reserveInfo: reserveInfo,
           params: getFixedPriceMinterEncodedParams(
             argsMintInfo.params.price,
@@ -291,7 +293,7 @@ export async function processAndFormatMintInfos(
         return mintInfo
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
         const mintInfo: MintInfo = {
-          minter: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
+          minter: currentConfig.contracts.dutch_auction_minter_v1,
           reserveInfo: reserveInfo,
           params: getDutchAuctionMinterEncodedParams(
             argsMintInfo.params.prices,
@@ -308,14 +310,15 @@ export async function processAndFormatMintInfos(
         const predictedAddress = await predictFxContractAddress(
           manager.address,
           "ticket",
-          manager
+          manager,
+          chain
         )
         const encodedPredictedAddress = encodeAbiParameters(
           [{ name: "address", type: "address" }],
           [predictedAddress as `0x${string}`]
         )
         const mintInfo: MintInfo = {
-          minter: FxhashContracts.ETH_TICKET_REDEEMER_V1 as `0x${string}`,
+          minter: currentConfig.contracts.ticket_redeemer_v1,
           reserveInfo: reserveInfo,
           params: encodedPredictedAddress,
         }
@@ -407,9 +410,14 @@ export function decodeFixedPriceMinterParams(
 }
 
 export function getPricingFromParams(
-  generativeToken: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"],
+  generativeToken: NonNullable<
+    GetTokenPricingsAndReservesQuery["onchain"]
+  >["generative_token_by_pk"],
   whitelist: boolean
 ) {
+  if (!generativeToken) {
+    throw new Error("generativeToken is null or undefined")
+  }
   const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
   const isFixed = pricing_fixeds.length > 0
   const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
@@ -433,9 +441,12 @@ export function getPricingFromParams(
 }
 
 export function getPricingAndReserveFromParams(
-  generativeToken: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"],
+  generativeToken: NonNullable<
+    GetTokenPricingsAndReservesQuery["onchain"]
+  >["generative_token_by_pk"],
   whitelist: boolean
 ) {
+  invariant(generativeToken, "generativeToken is null or undefined")
   const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
   const isFixed = pricing_fixeds.length > 0
   const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
@@ -466,9 +477,7 @@ export function getPricingAndReserveFromParams(
               )
             )
 
-      if (!pricing) {
-        throw new Error("No suitable pricing found")
-      }
+      invariant(pricing, "No suitable pricing found")
 
       return { pricing, reserve: undefined }
     }
@@ -479,9 +488,21 @@ export function getPricingAndReserveFromParams(
 
 interface PrepareMintParamsPayload {
   pricing:
-    | GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["pricing_fixeds"][0]
-    | GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["pricing_dutch_auctions"][0]
-  reserve?: GetTokenPricingsAndReservesQuery["onchain"]["generative_token_by_pk"]["reserves"][0]
+    | NonNullable<
+        NonNullable<
+          GetTokenPricingsAndReservesQuery["onchain"]
+        >["generative_token_by_pk"]
+      >["pricing_fixeds"][0]
+    | NonNullable<
+        NonNullable<
+          GetTokenPricingsAndReservesQuery["onchain"]
+        >["generative_token_by_pk"]
+      >["pricing_dutch_auctions"][0]
+  reserve?: NonNullable<
+    NonNullable<
+      GetTokenPricingsAndReservesQuery["onchain"]
+    >["generative_token_by_pk"]
+  >["reserves"][0]
   indexesAndProofs?: {
     indexes: number[]
     proofs: string[][]
@@ -500,13 +521,19 @@ export const prepareMintParams = async (
     },
     fetchPolicy: "no-cache",
   })
+
+  invariant(
+    tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
+    "No token found"
+  )
+
   const { pricing } = getPricingFromParams(
     tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
     !!whitelistedAddress
   )
-  if (!pricing) {
-    throw new Error("No pricing found")
-  }
+
+  invariant(pricing, "No pricing found")
+
   if (!whitelistedAddress) return { pricing }
 
   let indexesAndProofs:
@@ -519,9 +546,12 @@ export const prepareMintParams = async (
   for (const reserve of tokenPricingsAndReserves.data.onchain
     .generative_token_by_pk.reserves) {
     const merkleTreeWhitelist = await getWhitelist(reserve.data.merkleRoot)
-    if (!merkleTreeWhitelist || merkleTreeWhitelist.length === 0) {
-      throw new Error("No whitelist found")
-    }
+
+    invariant(
+      merkleTreeWhitelist && merkleTreeWhitelist.length > 0,
+      "No whitelist found"
+    )
+
     const indexesAndProofsForUser = getAvailableIndexesAndProofsForUser(
       whitelistedAddress,
       merkleTreeWhitelist[0],
@@ -533,14 +563,16 @@ export const prepareMintParams = async (
       break
     }
   }
-  if (qty > BigInt(indexesAndProofs.indexes.length)) {
-    throw new Error(
-      "Not enough allow list entries found for the requested quantity"
-    )
-  } else {
-    indexesAndProofs.indexes = indexesAndProofs.indexes.slice(0, Number(qty))
-    indexesAndProofs.proofs = indexesAndProofs.proofs.slice(0, Number(qty))
-  }
+
+  invariant(indexesAndProofs, "No indexes and proofs found")
+  invariant(
+    qty > BigInt(indexesAndProofs.indexes.length),
+    "Not enough allow list entries found for the requested quantity"
+  )
+
+  indexesAndProofs.indexes = indexesAndProofs.indexes.slice(0, Number(qty))
+  indexesAndProofs.proofs = indexesAndProofs.proofs.slice(0, Number(qty))
+
   return {
     pricing,
     reserve: reserveSave,
@@ -559,10 +591,16 @@ export const fetchTokenReserveId = async (
     },
     fetchPolicy: "no-cache",
   })
+
+  invariant(
+    tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
+    "No token found"
+  )
+
   const { pricing } = getPricingFromParams(
     tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
     useWhitelist
   )
-  if (!pricing) throw new Error("No pricing found")
+  invariant(pricing, "No pricing found")
   return pricing.id.split("-")[1]
 }

@@ -49,7 +49,7 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
         options: options,
       }
     })
-    const transactionHash = await placeBid(args, this.manager.walletClient)
+    const transactionHash = await placeBid(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
       hash: transactionHash,

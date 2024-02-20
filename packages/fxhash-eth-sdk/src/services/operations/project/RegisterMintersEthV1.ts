@@ -13,6 +13,7 @@ import { proposeSafeTransaction } from "@/services/Safe"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { processAndFormatMintInfos } from "@/utils/minters"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TRegisterMintersEthV1OperationParams = {
   token: `0x${string}`
@@ -35,7 +36,8 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const payloadArgs = await processAndFormatMintInfos(
       this.params.mintInfo,
-      this.manager
+      this.manager,
+      this.chain
     )
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
@@ -49,6 +51,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )
@@ -63,6 +66,7 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         functionName: "registerMinters",
         args: [payloadArgs],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

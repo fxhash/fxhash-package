@@ -8,6 +8,8 @@ export const BlockchainIdentifiers = {
   EthereumMainnet: "eip155:1",
   EthereumGoerli: "eip155:5",
   EthereumSepolia: "eip155:11155111",
+  BaseSepolia: "eip155:84532",
+  BaseMainnet: "eip155:8453",
 } as const
 
 /**

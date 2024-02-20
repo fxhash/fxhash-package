@@ -32,6 +32,8 @@ export type ReservoirExecuteBuyParams =
  * Represents the specific 'params' section within the body for a listing operation.
  */
 export type ReservoirListingParams =
+  // TODO: TS says that it does not exist but it actually does
+  //@ts-ignore
   paths["/execute/list/v5"]["post"]["parameters"]["body"]["body"]["params"]
 
 /**
@@ -39,6 +41,8 @@ export type ReservoirListingParams =
  * Represents the 'items' section within the body parameters for a buy operation.
  */
 export type ReservoirBuyTokenParams =
+  // TODO: TS says that it does not exist but it actually does
+  //@ts-ignore
   paths["/execute/buy/v7"]["post"]["parameters"]["body"]["body"]["items"]
 
 /**
@@ -46,6 +50,8 @@ export type ReservoirBuyTokenParams =
  * Represents the 'params' section within the body parameters for a bid operation.
  */
 export type ReservoirPlaceBidParams =
+  // TODO: TS says that it does not exist but it actually does
+  //@ts-ignore
   paths["/execute/bid/v5"]["post"]["parameters"]["body"]["body"]["params"]
 
 /**
@@ -53,6 +59,8 @@ export type ReservoirPlaceBidParams =
  * Represents the 'items' section within the body parameters for accepting an offer.
  */
 export type ReservoirAcceptOfferParams =
+  // TODO: TS says that it does not exist but it actually does
+  //@ts-ignore
   paths["/execute/sell/v7"]["post"]["parameters"]["body"]["body"]["items"]
 
 /**

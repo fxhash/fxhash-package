@@ -8,6 +8,7 @@ export enum TransactionType {
 export enum BlockchainType {
   ETHEREUM = "ETHEREUM",
   TEZOS = "TEZOS",
+  BASE = "BASE",
 }
 
 /**
@@ -29,10 +30,12 @@ export abstract class ContractOperation<
 > {
   manager: TWalletManager
   params: TParams
+  chain: BlockchainType
 
-  constructor(manager: TWalletManager, params: TParams) {
+  constructor(manager: TWalletManager, params: TParams, chain: BlockchainType) {
     this.manager = manager
     this.params = params
+    this.chain = chain
   }
 
   /**
@@ -65,5 +68,6 @@ export type TContractOperation<
   TData,
 > = new (
   manager: TWalletManager,
-  params: TParams
+  params: TParams,
+  chain: BlockchainType
 ) => ContractOperation<TWalletManager, TParams, TData>

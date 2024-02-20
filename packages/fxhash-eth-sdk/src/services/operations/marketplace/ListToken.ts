@@ -47,7 +47,7 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
         expirationTime: order.expiration ? order.expiration : undefined,
       }
     })
-    const transactionHash = await listToken(args, this.manager.walletClient)
+    const transactionHash = await listToken(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
       hash: transactionHash,

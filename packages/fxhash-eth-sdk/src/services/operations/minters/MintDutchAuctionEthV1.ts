@@ -1,6 +1,6 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -38,8 +38,9 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
     }
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_DUTCH_AUCTION_V1 as `0x${string}`,
+      address: currentConfig.contracts.dutch_auction_minter_v1,
       abi: DUTCH_AUCTION_MINTER_ABI,
       functionName: "buy",
       args: [
@@ -50,6 +51,7 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { getSplitsClient } from "../../Splits"
-import { TransactionType } from "@fxhash/contracts-shared"
+import { TransactionType, invariant } from "@fxhash/contracts-shared"
 
 export type TWithdrawFromSplitsEthV1OperationParams = {
   split: string
@@ -19,9 +19,14 @@ export class WithdrawFromSplitsEthV1Operation extends EthereumContractOperation<
     }
 
     const event = await getSplitsClient(
+      this.chain,
       this.manager.publicClient,
       this.manager.walletClient
     ).batchDistributeAndWithdrawForAll(args)
+    invariant(
+      event.events.length > 0 && event.events[0].transactionHash,
+      "Could not fetch withdraw event hash from splits batchDistributeAndWithdrawForAll operation"
+    )
     return {
       type: TransactionType.OFFCHAIN,
       hash: event.events[0].transactionHash,

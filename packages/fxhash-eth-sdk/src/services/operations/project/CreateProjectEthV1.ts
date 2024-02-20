@@ -1,4 +1,3 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { EthereumContractOperation } from "../contractOperation"
 import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
@@ -26,7 +25,13 @@ import {
   encodeProjectFactoryArgs,
   encodeTicketFactoryArgs,
 } from "@/utils/factories"
-import { TransactionType } from "@fxhash/contracts-shared"
+import {
+  BlockchainType,
+  TransactionType,
+  invariant,
+} from "@fxhash/contracts-shared"
+import { config } from "@fxhash/config"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 
 export type ScriptyHTMLTag = {
   name: string
@@ -110,7 +115,9 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const primaryReceivers = prepareReceivers(
+      this.chain,
       this.params.primaryReceivers,
       "primary"
     )
@@ -120,6 +127,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     }
 
     const secondaryReceivers = prepareReceivers(
+      this.chain,
       this.params.royaltiesReceivers,
       "secondary"
     )
@@ -137,7 +145,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const initInfo: InitInfo = {
       name: this.params.initInfo.name,
       symbol: this.params.initInfo.symbol,
-      randomizer: FxhashContracts.ETH_RANDOMIZER_V1 as `0x${string}`,
+      randomizer: currentConfig.contracts.randomizer_v1 as `0x${string}`,
       /**
        * TODO
        * -------------------------------------------------------------------
@@ -146,7 +154,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
        * out the IPFS renderer by the ONCHFS one down the line.
        * Only then, the ONCHFS renderer will be used on onchfs projects.
        */
-      renderer: FxhashContracts.ETH_IPFS_RENDERER_V1 as any,
+      renderer: currentConfig.contracts.ipfs_renderer_v1 as any,
       // this.params.initInfo.renderer === "ipfs"
       //   ? (FxhashContracts.ETH_IPFS_RENDERER_V1 as any)
       //   : FxhashContracts.ETH_ONCHFS_RENDERER_V1,
@@ -171,6 +179,10 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     let baseURI = ""
     let onchainPointer = ZERO_ADDRESS
     if (this.params.metadataInfo) {
+      invariant(
+        this.params.metadataInfo.baseURI,
+        "baseURI or onchainPointer is required"
+      )
       baseURI = this.params.metadataInfo.baseURI
       if (this.params.metadataInfo.baseURI) {
         if (this.params.metadataInfo.baseURI.startsWith("ipfs://")) {
@@ -196,7 +208,8 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
 
     const mintInfos: MintInfo[] = await processAndFormatMintInfos(
       this.params.mintInfo,
-      this.manager
+      this.manager,
+      this.chain
     )
 
     const hasTicketMintInfo = this.params.mintInfo.some(mint => {
@@ -225,19 +238,25 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       )
       const ticketEncodedArgs = encodeTicketFactoryArgs(
         owner,
-        await predictFxContractAddress(owner, "issuer", this.manager),
-        FxhashContracts.ETH_TICKET_REDEEMER_V1,
-        FxhashContracts.ETH_IPFS_RENDERER_V1,
+        await predictFxContractAddress(
+          owner,
+          "issuer",
+          this.manager,
+          this.chain
+        ),
+        currentConfig.contracts.ticket_redeemer_v1,
+        currentConfig.contracts.ipfs_renderer_v1,
         this.params.ticketInfo.gracePeriod,
         await processAndFormatMintInfos(
           this.params.ticketInfo.mintInfo,
-          this.manager
+          this.manager,
+          this.chain
         )
       )
       args = [
         projectEncodedArgs,
         ticketEncodedArgs,
-        FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
+        currentConfig.contracts.mint_ticket_factory_v1,
       ]
     } else {
       functionName = "createProjectWithParams"
@@ -255,7 +274,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     }
     if (this.params.collabAddress) {
       const safeTransactionData: MetaTransactionData = {
-        to: getAddress(FxhashContracts.ETH_PROJECT_FACTORY),
+        to: getAddress(currentConfig.contracts.project_factory_v1),
         data: encodeFunctionData({
           abi: FX_ISSUER_FACTORY_ABI,
           functionName: functionName,
@@ -265,6 +284,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       }
 
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )
@@ -275,11 +295,12 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     } else {
       //prepare the actual request to be able to simulate the transaction outcome
       const contractArgs: SimulateAndExecuteContractRequest = {
-        address: FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`,
+        address: currentConfig.contracts.project_factory_v1,
         abi: FX_ISSUER_FACTORY_ABI,
         functionName: functionName,
         args: args,
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       //simulate the transaction and execute it, will throw an error if it fails
       const transactionHash = await simulateAndExecuteContract(

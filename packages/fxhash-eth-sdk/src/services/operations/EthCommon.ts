@@ -1,4 +1,3 @@
-import { FxhashContracts } from "@/contracts/Contracts"
 import { config } from "@fxhash/config"
 import {
   BaseError,
@@ -10,11 +9,12 @@ import {
   InsufficientFundsError as InsufficientFundsErrorViem,
   TransactionExecutionError,
   Client,
+  Chain,
 } from "viem"
 
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { ALLOCATION_BASE, MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
-import { EthereumWalletManager } from "@/services/Wallet"
+import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
 import {
   FX_GEN_ART_721_ABI,
@@ -22,9 +22,12 @@ import {
   SPLITS_MAIN_ABI,
 } from "@/abi"
 import {
+  BlockchainType,
   InsufficientFundsError,
   TransactionRevertedError,
   UserRejectedError,
+  WalletManager,
+  invariant,
 } from "@fxhash/contracts-shared"
 
 export enum MintTypes {
@@ -47,6 +50,7 @@ export interface SimulateAndExecuteContractRequest {
   args: any[]
   account: `0x${string}`
   value?: bigint
+  chain: Chain
 }
 
 export interface MintInfo {
@@ -124,7 +128,6 @@ export interface DutchAuctionParams extends BaseReserves {
 }
 
 export interface ConfigInfo {
-  feeReceiver: `0x${string}`
   secondaryFeeAllocation: number
   primaryFeeAllocation: number
   lockTime: number
@@ -137,7 +140,6 @@ export interface ConfigInfo {
  * static and instanciated at runtime from the config.
  */
 export const onchainConfig: ConfigInfo = {
-  feeReceiver: config.config.ethFeeReceiver,
   secondaryFeeAllocation: config.config.fxhashSecondaryFee,
   primaryFeeAllocation: config.config.fxhashPrimaryFee,
   lockTime: config.config.projectLockTime,
@@ -180,7 +182,9 @@ export async function handleContractError(error: any): Promise<string> {
     if (revertError instanceof ContractFunctionRevertedError) {
       let errorName = revertError.data?.errorName ?? ""
       if (!errorName) {
-        errorName = await getOpenChainError(revertError.signature)
+        errorName = revertError.signature
+          ? await getOpenChainError(revertError.signature)
+          : ""
       }
       if (errorName) {
         throw new TransactionRevertedError(errorName)
@@ -213,16 +217,17 @@ export async function simulateAndExecuteContract(
 ): Promise<string> {
   //fetch the account from the wallet
   const account = walletManager.walletClient.account
+
+  invariant(walletManager.isConnected(), "wallet client account is not defined")
+
   try {
     //simulate the contract call
     const { request } = await walletManager.publicClient.simulateContract(args)
 
-    //TODO: process the actual request result
-
     //execute the contract call
     const hash = await walletManager.walletClient.writeContract({
       ...request,
-      account: account,
+      account: account!,
     })
     return hash
   } catch (error) {
@@ -262,13 +267,17 @@ export function defineReserveInfo(
 export async function predictFxContractAddress(
   nonceAddress: string,
   factoryType: "issuer" | "ticket",
-  walletManager: EthereumWalletManager
+  walletManager: EthereumWalletManager,
+  blockchainType: BlockchainType
 ): Promise<`0x${string}`> {
+  const chainConfig =
+    blockchainType === BlockchainType.ETHEREUM ? config.eth : config.base
+  await walletManager.prepareSigner({ blockchainType: blockchainType })
   const factory = getContract({
     address:
       factoryType === "ticket"
-        ? (FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1 as `0x${string}`)
-        : (FxhashContracts.ETH_PROJECT_FACTORY as `0x${string}`),
+        ? chainConfig.contracts.mint_ticket_factory_v1
+        : chainConfig.contracts.project_factory_v1,
     abi:
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
     walletClient: walletManager.walletClient as Client,
@@ -331,6 +340,7 @@ export function mergeSameReceivers(
  * @returns an array of ReceiverEntry objects.
  */
 export function prepareReceivers(
+  chain: BlockchainType,
   receivers: ReceiverEntry[],
   type: "primary" | "secondary"
 ): ReceiverEntry[] {
@@ -345,7 +355,7 @@ export function prepareReceivers(
   }
 
   const feeReceiver: ReceiverEntry = {
-    address: onchainConfig.feeReceiver as `0x${string}`,
+    address: getConfigForChain(chain).config.ethFeeReceiver as `0x${string}`,
     pct:
       type === "primary"
         ? onchainConfig.primaryFeeAllocation
@@ -390,6 +400,7 @@ export function prepareReceivers(
  * @returns the properly processed `ReceiverEntry` array.
  */
 export function revertReceiversFee(
+  chain: BlockchainType,
   receivers: ReceiverEntry[],
   type: "primary" | "secondary"
 ): ReceiverEntry[] {
@@ -401,19 +412,25 @@ export function revertReceiversFee(
 
   // Reverse the fee deduction from each receiver
   const originalReceivers = receivers
+    .filter(account => {
+      if (account.address === getConfigForChain(chain).config.ethFeeReceiver)
+        return false
+      else return true
+    })
     .map(account => {
-      // Skip the fee receiver
-      if (account.address === onchainConfig.feeReceiver) return null
       return {
         ...account,
         // Reverse the fee deduction
         pct: Math.round(account.pct / (100 * (1 - feeRatio))),
-      }
+      } as ReceiverEntry
     })
     .filter(account => account !== null) // Remove null (fee receiver)
 
   // Ensure the total is back to 10,000
-  const total = originalReceivers.reduce((sum, account) => sum + account.pct, 0)
+  const total = originalReceivers.reduce(
+    (sum, account) => (account ? sum + account.pct : 0),
+    0
+  )
   if (total !== ALLOCATION_BASE) {
     throw Error("The reverted receivers' total must be 10_000")
   }
@@ -421,14 +438,17 @@ export function revertReceiversFee(
   return originalReceivers
 }
 
-export function generateOnchainDataHash(
+export async function generateOnchainDataHash(
   bytes: `0x${string}`,
-  publicClient: PublicClient
+  walletManager: EthereumWalletManager,
+  chain: BlockchainType
 ) {
+  const currentConfig = getConfigForChain(chain)
+  await walletManager.prepareSigner({ blockchainType: chain })
   const genArt = getContract({
     abi: FX_GEN_ART_721_ABI,
-    address: config.eth.contracts.gen_art_token_impl_v1,
-    publicClient: publicClient as Client,
+    address: currentConfig.contracts.gen_art_token_impl_v1,
+    publicClient: walletManager.publicClient as Client,
   })
   return genArt.read.generateOnchainDataHash([bytes])
 }

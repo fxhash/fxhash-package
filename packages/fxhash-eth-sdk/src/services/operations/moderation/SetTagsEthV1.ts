@@ -8,6 +8,7 @@ import {
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TSetTagsEthV1OperationParams = {
   token: `0x${string}`
@@ -34,6 +35,7 @@ export class SetTagsEthV1Operation extends EthereumContractOperation<TSetTagsEth
         value: "0",
       }
       const transactionHash = await proposeSafeTransaction(
+        this.chain,
         [safeTransactionData],
         this.manager
       )
@@ -48,6 +50,7 @@ export class SetTagsEthV1Operation extends EthereumContractOperation<TSetTagsEth
         functionName: "setTags",
         args: [this.params.tags],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

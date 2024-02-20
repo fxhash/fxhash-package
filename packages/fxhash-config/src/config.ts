@@ -11,36 +11,39 @@ import {
   tezosMainnetContracts,
   tezosTestnetContracts,
 } from "./contracts/tezos"
+import { BlockchainIdentifier, BlockchainIdentifiers } from "./types"
 import {
   ethMainnetContracts,
   ethTestnetContracts,
   IEthContracts,
 } from "./contracts/eth"
+import {
+  baseMainnetContracts,
+  baseTestnetContracts,
+  IBaseContracts,
+} from "./contracts/base"
+import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
 import { getConfigForEnv } from "./utils"
-import { BlockchainIdentifier, BlockchainIdentifiers } from "./types"
 
 export interface IFxhashNetworkConfig {
   network: string
   chainId: BlockchainIdentifier
+  ethFeeReceiver: `0x${string}`
+  wertRelayer: string
 }
 
 export interface IFxhashEnvConfig {
   envName: string
   gtMinPrice: string
   walletConnectId: string
-  ethFeeReceiver: `0x${string}`
-  wertRelayer: string
-  fxhashPrimaryFee: number
-  fxhashSecondaryFee: number
   projectLockTime: number
   referrerShare: number
-  fxhashTeamSafeAddress: string
-  signerSafe: string
-  moderationSafe: string
+  fxhashPrimaryFee: number
+  fxhashSecondaryFee: number
 }
 
 // the variations supported by the config
-export type TBlockchain = "tez" | "eth"
+export type TBlockchain = "tez" | "eth" | "base"
 export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local"
 
@@ -48,6 +51,7 @@ type TBlockchainContacts = {
   [B in TBlockchain]: {
     tez: ITezosContracts
     eth: IEthContracts
+    base: IBaseContracts
   }[B]
 }
 
@@ -55,6 +59,7 @@ type TBlockchainApis = {
   [B in TBlockchain]: {
     tez: ITezosApis
     eth: IEthApis | null
+    base: IBaseApis | null
   }[B]
 }
 
@@ -62,6 +67,7 @@ type TNetworkBlockchainConfig = {
   [B in TBlockchain]: {
     tez: IFxhashNetworkConfig
     eth: IFxhashNetworkConfig
+    base: IFxhashNetworkConfig
   }[B]
 }
 
@@ -102,6 +108,8 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "ghostnet",
           chainId: BlockchainIdentifiers.TezosGhostnet,
+          ethFeeReceiver: "0x",
+          wertRelayer: "",
         },
         apis: tezosTestnetApis,
       },
@@ -110,8 +118,21 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "Sepolia",
           chainId: BlockchainIdentifiers.EthereumSepolia,
+          ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
+          wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
         },
         apis: ethTestnetApis,
+      },
+      base: {
+        contracts: baseTestnetContracts,
+        config: {
+          network: "Base Sepolia",
+          chainId: BlockchainIdentifiers.BaseSepolia,
+          ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
+          // TODO: change this to the correct address
+          wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
+        },
+        apis: baseTestnetApis,
       },
     },
     mainnet: {
@@ -120,6 +141,8 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "mainnet",
           chainId: BlockchainIdentifiers.TezosMainnet,
+          ethFeeReceiver: "0x",
+          wertRelayer: "",
         },
         apis: tezosMainnetApis,
       },
@@ -128,8 +151,21 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "Ethereum",
           chainId: BlockchainIdentifiers.EthereumMainnet,
+          ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
+          wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
         },
         apis: ethMainnetApis,
+      },
+      base: {
+        contracts: baseMainnetContracts,
+        config: {
+          network: "Base",
+          chainId: BlockchainIdentifiers.BaseMainnet,
+          ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
+          // TODO: change this to the correct address
+          wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
+        },
+        apis: baseMainnetApis,
       },
     },
   },
@@ -147,14 +183,8 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
-
-        fxhashTeamSafeAddress: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-        signerSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-        moderationSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-        wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
     dev: {
@@ -170,14 +200,8 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
-
-        fxhashTeamSafeAddress: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-        signerSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-        moderationSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-        wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
       },
     },
     prd: {
@@ -194,14 +218,8 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
-
-        fxhashTeamSafeAddress: "0xD8b1905022d70e74c6c8aaA2baaf275fBe1634f1",
-        signerSafe: "0xB456aF77dEB65065462BD1f0D9098413E6CA4200",
-        moderationSafe: "0x99CDaECbe1be4B7232a4f2c79EF76D403886FE1E",
-        wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
       },
     },
   },

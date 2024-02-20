@@ -15,7 +15,14 @@ import { CallData } from "@0xsplits/splits-sdk"
 import {
   TransactionUnknownError,
   TransactionType,
+  invariant,
+  BlockchainType,
 } from "@fxhash/contracts-shared"
+import {
+  getChainIdForChain,
+  getConfigForChain,
+  getCurrentChain,
+} from "../Wallet"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -34,6 +41,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     //First we need to fetch the proceeds for the address
     const proceeds = await apolloClient.query({
       query: Qu_GetEthMinterProceeds,
@@ -42,17 +50,27 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
           user_address: {
             _eq: this.params.address,
           },
+          chain: {
+            _eq: this.chain === BlockchainType.ETHEREUM ? "ETH" : "BASE",
+          },
         },
       },
     })
 
     const multicallArgs: CallData[] = []
     const splitsWithEarnings: string[] = []
+
+    invariant(
+      proceeds.data.onchain &&
+        proceeds.data.onchain.eth_minter_proceeds.length > 0,
+      "No proceeds found"
+    )
+
     //we loop on the all the minters, to prepare the withdraw operations
     for (const minterProceeds of proceeds.data.onchain.eth_minter_proceeds) {
       const isDutchAuction =
         minterProceeds.minter_address ===
-        config.eth.contracts.dutch_auction_minter_v1
+        currentConfig.contracts.dutch_auction_minter_v1
       const abi = isDutchAuction
         ? DUTCH_AUCTION_MINTER_ABI
         : FIXED_PRICE_MINTER_ABI
@@ -85,6 +103,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
      * it means we now have to withdraw from the splits
      */
     const splitsClient = getSplitsClient(
+      this.chain,
       this.manager.publicClient,
       this.manager.walletClient
     )
@@ -147,11 +166,12 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //if we have anything to do, we trigger the call, otherwise return undefined
     if (callRequests.length > 0) {
       const args: SimulateAndExecuteContractRequest = {
-        address: config.eth.contracts.multicall3 as `0x${string}`,
+        address: currentConfig.contracts.multicall3 as `0x${string}`,
         abi: MULTICALL3_ABI,
         functionName: "aggregate",
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,

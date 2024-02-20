@@ -1,5 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { FX_TICKETS_ABI } from "@/abi/FxTicket"
+import { getCurrentChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -30,6 +31,7 @@ export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimT
       args: [this.params.tokenId, this.params.maxPrice, this.params.newPrice],
       account: this.manager.address as `0x${string}`,
       value: this.params.value,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

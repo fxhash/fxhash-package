@@ -1,5 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { FX_TICKETS_ABI } from "@/abi/FxTicket"
+import { getCurrentChain } from "@/services/Wallet"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
@@ -26,6 +27,7 @@ export class WithdrawTicketEthV1Operation extends EthereumContractOperation<TWit
       functionName: "withdraw",
       args: [this.params.address],
       account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

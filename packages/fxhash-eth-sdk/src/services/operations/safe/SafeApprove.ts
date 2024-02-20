@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { getSafeService } from "@/services/Safe"
-import { TransactionType } from "@fxhash/contracts-shared"
+import { TransactionType, invariant } from "@fxhash/contracts-shared"
 
 /**
  * The above type represents the parameters required for approving a safe multisig transaction on the
@@ -19,13 +19,18 @@ export class ApproveSafeMultisigTxEthV1Operation extends EthereumContractOperati
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    invariant(this.manager.safe, "Safe not connected")
+
     await this.manager.connectSafe(this.params.collabAddress)
 
-    const safeService = getSafeService()
-    const signature = await this.manager.safe.signTransactionHash(
-      this.params.txHash
+    const safeService = getSafeService(this.chain)
+    const signedSafeTx = await this.manager.safe.signTransaction(
+      await safeService.getTransaction(this.params.txHash)
     )
-    await safeService.confirmTransaction(this.params.txHash, signature.data)
+    await safeService.confirmTransaction(
+      this.params.txHash,
+      signedSafeTx.signatures[signedSafeTx.signatures.size - 1]
+    )
     return {
       type: TransactionType.OFFCHAIN,
       hash: this.params.txHash,

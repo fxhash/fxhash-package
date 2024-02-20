@@ -20,7 +20,7 @@ export class AcceptOfferEthV1Operation extends EthereumContractOperation<TAccept
         token: `${order.token.token}:${order.token.tokenId}`,
       }
     })
-    const transactionHash = await acceptOffer(args, this.manager.walletClient)
+    const transactionHash = await acceptOffer(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
       hash: transactionHash,

@@ -1,4 +1,4 @@
-import { FxhashContracts } from "@/contracts/Contracts"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 import { EthereumContractOperation } from "../contractOperation"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import {
@@ -36,18 +36,24 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest = {
-      address: FxhashContracts.ETH_MINT_TICKETS_FACTORY_V1,
+      address: currentConfig.contracts.mint_ticket_factory_v1,
       abi: FX_TICKETS_FACTORY_ABI,
       functionName: "createTicket",
       args: [
         this.manager.address,
         this.params.token,
-        FxhashContracts.ETH_TICKET_REDEEMER_V1,
-        FxhashContracts.ETH_IPFS_RENDERER_V1,
+        currentConfig.contracts.ticket_redeemer_v1,
+        currentConfig.contracts.ipfs_renderer_v1,
         this.params.gracePeriod,
-        await processAndFormatMintInfos(this.params.mintInfo, this.manager),
+        await processAndFormatMintInfos(
+          this.params.mintInfo,
+          this.manager,
+          this.chain
+        ),
       ],
+      chain: getCurrentChain(this.chain),
       account: this.manager.address as `0x${string}`,
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)

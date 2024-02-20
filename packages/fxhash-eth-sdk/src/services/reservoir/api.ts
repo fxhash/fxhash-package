@@ -8,6 +8,7 @@ import {
   ReservoirGetOfferResponse,
   ReservoirGetTokenResponse,
 } from "./types"
+import { BlockchainType } from "@fxhash/contracts-shared"
 
 /**
  * Fetches the listing steps.
@@ -16,9 +17,11 @@ import {
  * @dev this is only intended for internal use, it is not needed suitable for the integration
  */
 export const getListingSteps = async (
+  chain: BlockchainType,
   params: ReservoirExecuteListParams
 ): Promise<Execute> => {
   return await fetchReservoir<Execute>(
+    chain,
     API_METHODS.POST,
     "/execute/list/v5",
     JSON.stringify(params)
@@ -32,9 +35,11 @@ export const getListingSteps = async (
  * @dev this is only intended for internal use, it is not needed suitable for the integration
  */
 export const getBidSteps = async (
+  chain: BlockchainType,
   params: ReservoirExecuteBidParams
 ): Promise<Execute> => {
   return await fetchReservoir<Execute>(
+    chain,
     API_METHODS.POST,
     "/execute/bid/v5",
     JSON.stringify(params)
@@ -42,9 +47,11 @@ export const getBidSteps = async (
 }
 
 export const getBuySteps = async (
+  chain: BlockchainType,
   params: ReservoirExecuteBuyParams
 ): Promise<Execute> => {
   return await fetchReservoir<Execute>(
+    chain,
     API_METHODS.POST,
     "/execute/buy/v7",
     JSON.stringify(params)
@@ -57,12 +64,13 @@ export const getBuySteps = async (
  * @returns Return a `ReservoirGetCollectionResponse` object containing the collection data.
  */
 export async function getCollection(
+  chain: BlockchainType,
   collection: string
 ): Promise<ReservoirGetCollectionResponse> {
   return await fetchReservoir<ReservoirGetCollectionResponse>(
+    chain,
     API_METHODS.GET,
-    `/collections/v7?id=${collection}`,
-    undefined
+    `/collections/v7?id=${collection}`
   )
 }
 
@@ -73,12 +81,13 @@ export async function getCollection(
  * @returns Return a `ReservoirGetTokenResponse` object containing the token data.
  */
 export async function getToken(
+  chain: BlockchainType,
   token: string
 ): Promise<ReservoirGetTokenResponse> {
   return await fetchReservoir<ReservoirGetTokenResponse>(
+    chain,
     API_METHODS.GET,
-    `/tokens/v6?tokens=${token}`,
-    undefined
+    `/tokens/v6?tokens=${token}`
   )
 }
 
@@ -88,11 +97,12 @@ export async function getToken(
  * @returns the bid data.
  */
 export async function getOffer(
+  chain: BlockchainType,
   offerId: string
 ): Promise<ReservoirGetOfferResponse> {
   return await fetchReservoir<ReservoirGetOfferResponse>(
+    chain,
     API_METHODS.GET,
-    `/orders/bids/v6?ids=${offerId}`,
-    undefined
+    `/orders/bids/v6?ids=${offerId}`
   )
 }

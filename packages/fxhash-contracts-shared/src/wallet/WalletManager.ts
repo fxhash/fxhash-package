@@ -1,10 +1,22 @@
 import { PromiseResult, success } from "../Result"
-import { TContractOperation } from "./ContractOperation"
+import { BlockchainType, TContractOperation } from "./ContractOperation"
 import { WalletCache } from "./WalletCache"
 
 export class PendingSigningRequestError extends Error {
   name = "PendingSigningRequestError" as const
   message = "There is already a pending signing request"
+}
+
+export enum WalletConnectionErrorReason {
+  INCORRECT_CHAIN = "INCORRECT_CHAIN",
+}
+
+export class WalletConnectionError extends Error {
+  name = "WalletConnectionError" as const
+
+  constructor(readonly reason: WalletConnectionErrorReason) {
+    super(`Wallet connection failed due to ${reason} error`)
+  }
 }
 
 export class UserRejectedError extends Error {
@@ -149,9 +161,11 @@ export abstract class WalletManager {
 
   abstract sendTransaction<TParams>(
     operation: TContractOperation<this, TParams, any>,
-    params: TParams
+    params: TParams,
+    chain: BlockchainType
   ): PromiseResult<
     unknown,
+    | WalletConnectionError
     | PendingSigningRequestError
     | UserRejectedError
     | InsufficientFundsError

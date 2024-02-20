@@ -1,6 +1,13 @@
-import { config } from "@fxhash/config"
 import { createClient } from "@reservoir0x/reservoir-sdk"
-import { CURRENT_CHAIN } from "./Wallet"
+import { chains, getConfigForChain } from "./Wallet"
+import { BlockchainType } from "@fxhash/contracts-shared"
+
+export const RESERVOIR_API_URLS = {
+  1: "https://api.reservoir.tools/",
+  11155111: "https://api-sepolia.reservoir.tools",
+  8453: "https://api-base.reservoir.tools",
+  84532: "https://api-base-sepolia.reservoir.tools/",
+}
 
 //API key used for interacting with Reservoir API
 export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
@@ -31,26 +38,22 @@ export enum API_METHODS {
 
 //Defines the global Reservoir client used by the SDK
 createClient({
-  chains: [
-    {
-      id: CURRENT_CHAIN.id,
-      baseApiUrl: config.eth.apis.reservoir,
-      active: true,
-      apiKey: RESERVOIR_API_KEY,
-    },
-  ],
+  chains: [],
+  apiKey: RESERVOIR_API_KEY,
   source: RESERVOIR_SOURCE,
 })
 
 //Creates a generic fetch function for interacting with Reservoir API
 //it wraps the call, error handling and parsing of the response
 export async function fetchReservoir<T>(
+  chain: BlockchainType,
   method: API_METHODS,
   path: string,
-  body: string
+  body: string | undefined = undefined
 ): Promise<T> {
   try {
-    const response = await fetch(`${config.eth.apis.reservoir}${path}`, {
+    const reservoirUrl = getConfigForChain(chain).apis?.reservoir
+    const response = await fetch(`${reservoirUrl}${path}`, {
       method: method,
       body: body,
       headers: headers,

@@ -4,10 +4,10 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { type Inscription } from "onchfs"
-import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { ethOnchfsInscriptionCallData } from "@/utils"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
 
 export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]
@@ -20,8 +20,10 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    const contracts = getConfigForChain(this.chain).contracts
+
     const callRequests = this.params.inscriptions
-      .map(ins => ethOnchfsInscriptionCallData(ins))
+      .map(ins => ethOnchfsInscriptionCallData(ins, this.chain))
       .map(call => {
         return {
           target: call.address,
@@ -31,11 +33,12 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
 
     if (callRequests.length > 0) {
       const args: SimulateAndExecuteContractRequest = {
-        address: config.eth.contracts.multicall3,
+        address: contracts.multicall3,
         abi: MULTICALL3_ABI,
         functionName: "aggregate",
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
+        chain: getCurrentChain(this.chain),
       }
       const transactionHash = await simulateAndExecuteContract(
         this.manager,
@@ -46,7 +49,10 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
         hash: transactionHash,
       }
     } else {
-      return undefined
+      return {
+        type: TransactionType.ONCHAIN,
+        hash: "",
+      }
     }
   }
 

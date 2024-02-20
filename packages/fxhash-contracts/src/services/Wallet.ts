@@ -17,6 +17,7 @@ import {
   NetworkError,
   BadRequestError,
   TransactionType,
+  BlockchainType,
 } from "@fxhash/contracts-shared"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
@@ -73,7 +74,8 @@ export class TezosWalletManager extends WalletManager {
 
   async sendTransaction<TParams>(
     OperationClass: TTezosContractOperation<TParams>,
-    params: TParams
+    params: TParams,
+    chain: BlockchainType
   ): PromiseResult<
     {
       type: TransactionType.ONCHAIN
@@ -89,7 +91,7 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     // Prepare the contract operation
-    const contractOperation = new OperationClass(this, params)
+    const contractOperation = new OperationClass(this, params, chain)
 
     for (let i = 0; i < this.rpcNodes.length + 2; i++) {
       try {

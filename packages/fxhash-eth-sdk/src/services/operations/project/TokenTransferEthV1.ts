@@ -7,6 +7,7 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
 import { TransactionType } from "@fxhash/contracts-shared"
+import { getCurrentChain } from "@/services/Wallet"
 
 export type TTransferTokenEthV1OperationParams = {
   token: `0x${string}`
@@ -28,6 +29,7 @@ export class TransferTokenEthV1Operation extends EthereumContractOperation<TTran
       functionName: "safeTransferFrom",
       args: [this.params.from, this.params.to, this.params.tokenId],
       account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {

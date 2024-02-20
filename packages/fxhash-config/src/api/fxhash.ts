@@ -73,8 +73,8 @@ export const fxhashLocalApis: IFxhashApis = {
   // todo: eventually, find a better way to inject the values from the
   //       docker-compose, maybe outside of this package idk
   ...fxhashDevApis,
-  hasura: "http://host.docker.internal:8888",
-  hasuraGql: "http://host.docker.internal:8888/v1/graphql",
+  hasura: "http://localhost:8888",
+  hasuraGql: "http://localhost:8888/v1/graphql",
 }
 
 // list of APIs prod leverages

@@ -11,26 +11,48 @@ import {
   TransactionReceiptError,
   TransactionUnknownError,
   TransactionType,
+  BlockchainType,
+  WalletConnectionErrorReason,
+  WalletConnectionError,
 } from "@fxhash/contracts-shared"
 import {
+  Chain,
   PublicClient,
   TransactionNotFoundError,
   TransactionReceipt,
   UserRejectedRequestError,
   WalletClient,
+  createPublicClient,
+  http,
 } from "viem"
-import { mainnet, sepolia, hardhat, goerli, type Chain } from "viem/chains"
+import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "../services/Safe"
 import { TEthereumContractOperation } from "./operations"
-import { JsonRpcSigner, Transaction } from "ethers"
+import { JsonRpcSigner } from "ethers"
 
-//list of supported chains by the SDK
-export const chains: Chain[] = [mainnet, sepolia, goerli, hardhat]
-//Since the configuration of SDK is only for one chain at a time, we select the one configured
-export const CURRENT_CHAIN = chains.find(
-  chain => chain.name === config.eth.config.network
-)
+export const chains: Record<string, Chain> =
+  config.config.envName === "production"
+    ? { [BlockchainType.ETHEREUM]: mainnet, [BlockchainType.BASE]: base }
+    : { [BlockchainType.ETHEREUM]: sepolia, [BlockchainType.BASE]: baseSepolia }
+
+export function getChainIdForChain(chain: BlockchainType) {
+  return chains[chain].id
+}
+
+export function getCurrentChain(chain: BlockchainType): Chain {
+  return config.config.envName === "production"
+    ? chain === BlockchainType.ETHEREUM
+      ? mainnet
+      : base
+    : chain === BlockchainType.ETHEREUM
+      ? sepolia
+      : baseSepolia
+}
+
+export function getConfigForChain(chain: BlockchainType) {
+  return chain === BlockchainType.ETHEREUM ? config.eth : config.base
+}
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -74,6 +96,10 @@ export class EthereumWalletManager extends WalletManager {
     this.signer = params.signer
   }
 
+  isConnected(): boolean {
+    return !(!this.walletClient.account || !this.walletClient.chain)
+  }
+
   async signMessageWithWallet(
     message: string
   ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
@@ -85,6 +111,8 @@ export class EthereumWalletManager extends WalletManager {
     try {
       const signature = await this.walletClient.signMessage({
         message,
+        // ! TODO: to fix
+        // @ts-ignore
         account: this.address as `0x${string}`,
       })
       return success(signature)
@@ -115,20 +143,24 @@ export class EthereumWalletManager extends WalletManager {
       const safeSdk = await getSafeSDK(safeAddress, this.signer)
       this.safe = safeSdk
       return success(safeAddress)
-    } catch (error) {
+    } catch (error: any) {
       return failure(new Error(error))
     }
   }
 
+  // ! TODO: to fix
+  // @ts-ignore
   async sendTransaction<TParams>(
     OperationClass: TEthereumContractOperation<TParams>,
-    params: TParams
+    params: TParams,
+    blockchainType: BlockchainType
   ): PromiseResult<
     {
       type: TransactionType
       message: string
       hash: string
     },
+    | WalletConnectionError
     | UserRejectedError
     | PendingSigningRequestError
     | InsufficientFundsError
@@ -141,10 +173,17 @@ export class EthereumWalletManager extends WalletManager {
     this.signingInProgress = true
 
     // Prepare the contract operation
-    const contractOperation = new OperationClass(this, params)
+    const contractOperation = new OperationClass(this, params, blockchainType)
 
     for (let i = 0; i < this.rpcNodes.length + 2; i++) {
       try {
+        const result = await this.prepareSigner({
+          blockchainType,
+        })
+        if (result.isFailure()) {
+          return failure(result.error)
+        }
+
         await contractOperation.prepare()
         const operation = await contractOperation.call()
         const message = contractOperation.success()
@@ -212,6 +251,62 @@ export class EthereumWalletManager extends WalletManager {
         return failure(new TransactionReceiptError())
       return failure(new TransactionUnknownError())
     }
+  }
+
+  /**
+   * Prepare the Ethereum signer. Will add the chain config to the signer if it's not already there.
+   * If the wrong chain is selected, it will switch to the correct chain.
+   */
+  public async prepareSigner({
+    blockchainType,
+  }: {
+    blockchainType: BlockchainType
+  }): PromiseResult<void, WalletConnectionError> {
+    const chain = chains[blockchainType]
+    try {
+      const signerChainId = await this.walletClient.getChainId()
+      if (signerChainId !== chain.id) {
+        // Add the chain config to the wallet, if already set it will be ignored
+        await this.addChain(chain)
+        const result = await this.switchChain(chain)
+        if (result.isFailure()) {
+          return result
+        }
+      }
+    } catch (error: any) {
+      if (error.code === "UNSUPPORTED_OPERATION") {
+        return failure(
+          new WalletConnectionError(WalletConnectionErrorReason.INCORRECT_CHAIN)
+        )
+      }
+    }
+    return success()
+  }
+
+  private async addChain(chain: Chain): Promise<void> {
+    try {
+      await this.walletClient.addChain({ chain })
+    } catch (error) {
+      // Do nothing in case the wallet doesn't support adding chains
+    }
+  }
+
+  private async switchChain(
+    chain: Chain
+  ): PromiseResult<void, WalletConnectionError> {
+    try {
+      await this.walletClient.switchChain({ id: chain.id })
+      this.publicClient = createPublicClient({
+        chain: chain,
+        transport: http(),
+      })
+      return success()
+    } catch (error) {
+      // Do nothing as we return an error below
+    }
+    return failure(
+      new WalletConnectionError(WalletConnectionErrorReason.INCORRECT_CHAIN)
+    )
   }
 
   // given an error, returns true if request can be cycled to another RPC node
