@@ -1,14 +1,14 @@
-import { config } from "@fxhash/config"
 import { PublicClient, bytesToHex, encodeFunctionData, hexToBytes } from "viem"
 import {
   EthereumWalletManager,
   ONCHFS_CONTENT_STORE,
   ONCHFS_FILE_SYSTEM_ABI,
+  getConfigForChain,
 } from ".."
 import { Inscription } from "onchfs"
 import { CallData } from "@0xsplits/splits-sdk"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { invariant } from "@fxhash/contracts-shared"
+import { BlockchainType, invariant } from "@fxhash/contracts-shared"
 
 /**
  * Checks if an inode exists by querying the ONCHFS File System contract.
@@ -18,10 +18,12 @@ import { invariant } from "@fxhash/contracts-shared"
  */
 export async function onchfsInodeExists(
   client: PublicClient,
-  cid: string
+  cid: string,
+  chain: BlockchainType
 ): Promise<boolean> {
+  const config = getConfigForChain(chain).contracts
   return !!(await client.readContract({
-    address: config.eth.contracts.onchfs_file_system,
+    address: config.onchfs_file_system,
     abi: ONCHFS_FILE_SYSTEM_ABI,
     functionName: "inodeExists",
     args: [`0x${cid}`],
@@ -37,10 +39,12 @@ export async function onchfsInodeExists(
  */
 export async function onchfsChunkExists(
   client: PublicClient,
-  cid: string
+  cid: string,
+  chain: BlockchainType
 ): Promise<boolean> {
+  const config = getConfigForChain(chain).contracts
   return !!(await client.readContract({
-    address: config.eth.contracts.onchfs_content_store,
+    address: config.onchfs_content_store,
     abi: ONCHFS_CONTENT_STORE,
     functionName: "checksumExists",
     args: [`0x${cid}`],
@@ -55,21 +59,15 @@ export async function onchfsGetInodeAtPath(
   throw new Error("todo")
 }
 
-export async function readFile(client: PublicClient, cid: string) {
-  const hexByteString = await client.readContract({
-    address: config.eth.contracts.onchfs_file_system,
-    abi: ONCHFS_FILE_SYSTEM_ABI,
-    functionName: "readFile",
-    args: [`0x${cid}`],
-  })
-  return hexToBytes(hexByteString as any)
-}
-
-export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
+export function ethOnchfsInscriptionCallData(
+  ins: Inscription,
+  chain: BlockchainType
+): CallData {
+  const config = getConfigForChain(chain).contracts
   switch (ins.type) {
     case "chunk":
       return {
-        address: config.eth.contracts.onchfs_content_store,
+        address: config.onchfs_content_store,
         data: encodeFunctionData({
           abi: ONCHFS_CONTENT_STORE,
           functionName: "addContent",
@@ -78,7 +76,7 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
       }
     case "file":
       return {
-        address: config.eth.contracts.onchfs_file_system,
+        address: config.onchfs_file_system,
         data: encodeFunctionData({
           abi: ONCHFS_FILE_SYSTEM_ABI,
           functionName: "createFile",
@@ -90,7 +88,7 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
       }
     case "directory":
       return {
-        address: config.eth.contracts.onchfs_file_system,
+        address: config.onchfs_file_system,
         data: encodeFunctionData({
           abi: ONCHFS_FILE_SYSTEM_ABI,
           functionName: "createDirectory",
@@ -110,34 +108,4 @@ export function ethOnchfsInscriptionCallData(ins: Inscription): CallData {
     default:
       throw new Error("wrong inode type")
   }
-}
-
-/**
- * Estimate the cost of simulating a onchfs inscriptions
- * @param inscriptions A list of inscriptions to estimate cost
- * @param client Public client
- * @param gasPrice The gas price (in _wei_)
- * @returns
- */
-export async function simulateOnchfsInscriptions(
-  inscriptions: Inscription[],
-  walletManager: EthereumWalletManager,
-  gasPrice?: bigint
-) {
-  invariant(walletManager.walletClient.account, "walletClient account not set")
-
-  const calldatas = inscriptions.map(ins => ethOnchfsInscriptionCallData(ins))
-  const callRequests = calldatas.map(call => ({
-    target: call.address,
-    callData: call.data,
-  }))
-  const estimate = await walletManager.publicClient.estimateContractGas({
-    address: config.eth.contracts.multicall3,
-    abi: MULTICALL3_ABI,
-    functionName: "aggregate",
-    args: [callRequests],
-    account: walletManager.walletClient.account,
-    gasPrice: gasPrice,
-  })
-  return estimate
 }
