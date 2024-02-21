@@ -2,6 +2,12 @@
 
 Provides utilities for anything related to fxhash authentication.
 
+## Installation
+
+```
+pnpm add -E @fxhash/react react react-dom viewm wagmi @taquito/taquito @taquito/beacon-wallet
+```
+
 ## Config
 
 This module is best suited for having the JWT public key accessible in the env variable `AUTH_JWT_PUBLIC_KEY`.

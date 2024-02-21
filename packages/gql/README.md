@@ -1,8 +1,5 @@
 # `@fxhash/gql2`
 
-> **Note**
-> This package will replace [`@fxhash/gql`](../fxhash-gql/) once it will have reached maturity. For now we keep both packages alive.
-
 > fxhash unopiniated typed GraphQL client & common queries ready for consumption.
 
 # Gettings started
@@ -53,7 +50,7 @@ This package uses `@graphql-codegen` for generating the GraphQL types automatica
 - generates schema typings (models, enums, resolvers, mutations...)
 - generates typings for GraphQL queries written manually (and exposed by the package)
 
-As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, which are exposed for consuming.
+As such, the directory `src/gql/` hosts the different queries, which are exposed for consuming.
 
 ```
 .
@@ -72,8 +69,8 @@ As such, the directory [`src/gql/`](./src/gql/) hosts the different queries, whi
 
 The code generation is divided in 2 steps, designed to optimise and improve the robustness of the process:
 
-- `codegen:schema`: generates a global [`schema.graphql`](./schema.graphql) file from the hasura instance running at `http://localhost:8888`
-- `codegen:typescript`: generates the TS typings and query typings from the graphql schema & the queries in [`stc/gql`](./src/gql/)
+- `codegen:schema`: generates a global `schema.graphql` file from the hasura instance running at `http://localhost:8888`
+- `codegen:typescript`: generates the TS typings and query typings from the graphql schema & the queries in `stc/gql`
 
 **Only tun `pnpm run codegen:schema` when you update the Hasura API.**
 
@@ -82,8 +79,8 @@ The code generation is divided in 2 steps, designed to optimise and improve the 
 
 ## How to write a new GraphQL query
 
-- add the query to [`./src/gql/queries`](./src/gql/queries/) (or to the `mutations` / `subscriptions`)
-- encapsulate the query with the `graphql()` function from [`./src/generated/gql.ts`](./src/generated/gql.ts)
+- add the query to `./src/gql/queries` (or to the `mutations` / `subscriptions`)
+- encapsulate the query with the `graphql()` function from `./src/generated/gql.ts`
 
   ```ts
   import { graphql } from "@/generated"
@@ -164,7 +161,7 @@ As seen in the example, only the properties defined in the query are exposed by 
 
 ## Custom scalars
 
-To define the input/output type of scalars, a setting can be defined in the [`codegen.ts`](./codegen.ts) config file.
+To define the input/output type of scalars, a setting can be defined in the `codegen.ts` config file.
 
 ```ts
 const config: CodegenConfig = {
