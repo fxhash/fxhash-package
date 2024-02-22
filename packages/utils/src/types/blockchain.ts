@@ -1,1 +1,3 @@
-export type Blockchain = "ETHEREUM" | "TEZOS" | "BASE"
+import { BlockchainType } from "@fxhash/shared"
+
+export type Blockchain = keyof typeof BlockchainType
