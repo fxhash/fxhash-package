@@ -1,5 +1,6 @@
 export interface IFxhashApis {
   website: string
+  docs: string
   main: string
   hasura: string
   hasuraGql: string
@@ -34,6 +35,7 @@ export interface IFxhashApis {
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {
   website: "https://dev.fxhash-dev.xyz",
+  docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.dev.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
@@ -80,6 +82,7 @@ export const fxhashLocalApis: IFxhashApis = {
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
   website: "https://fxhash.xyz",
+  docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
