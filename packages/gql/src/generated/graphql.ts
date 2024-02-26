@@ -3621,6 +3621,7 @@ export enum Cursor_Ordering {
 export type Eth_Minter_Proceeds = {
   __typename?: 'eth_minter_proceeds';
   amount: Scalars['numeric']['output'];
+  chain: Scalars['String']['output'];
   count: Scalars['numeric']['output'];
   id: Scalars['String']['output'];
   minter_address: Scalars['String']['output'];
@@ -3636,6 +3637,7 @@ export type Eth_Minter_Proceeds_Bool_Exp = {
   _not?: InputMaybe<Eth_Minter_Proceeds_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Minter_Proceeds_Bool_Exp>>;
   amount?: InputMaybe<Numeric_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   count?: InputMaybe<Numeric_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   minter_address?: InputMaybe<String_Comparison_Exp>;
@@ -3648,6 +3650,7 @@ export type Eth_Minter_Proceeds_Bool_Exp = {
 /** Ordering options when selecting data from "eth_minter_proceeds". */
 export type Eth_Minter_Proceeds_Order_By = {
   amount?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
   count?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   minter_address?: InputMaybe<Order_By>;
@@ -3661,6 +3664,8 @@ export type Eth_Minter_Proceeds_Order_By = {
 export enum Eth_Minter_Proceeds_Select_Column {
   /** column name */
   Amount = 'amount',
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Count = 'count',
   /** column name */
@@ -3688,6 +3693,7 @@ export type Eth_Minter_Proceeds_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Eth_Minter_Proceeds_Stream_Cursor_Value_Input = {
   amount?: InputMaybe<Scalars['numeric']['input']>;
+  chain?: InputMaybe<Scalars['String']['input']>;
   count?: InputMaybe<Scalars['numeric']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   minter_address?: InputMaybe<Scalars['String']['input']>;
@@ -3701,6 +3707,7 @@ export type Eth_Minter_Proceeds_Stream_Cursor_Value_Input = {
 export type Eth_Primary_Splits = {
   __typename?: 'eth_primary_splits';
   allocations: Array<Scalars['Int']['output']>;
+  chain: Scalars['String']['output'];
   id: Scalars['String']['output'];
   receiver: Scalars['String']['output'];
   receivers: Array<Scalars['String']['output']>;
@@ -3712,6 +3719,7 @@ export type Eth_Primary_Splits_Bool_Exp = {
   _not?: InputMaybe<Eth_Primary_Splits_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Primary_Splits_Bool_Exp>>;
   allocations?: InputMaybe<Int_Array_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   receiver?: InputMaybe<String_Comparison_Exp>;
   receivers?: InputMaybe<String_Array_Comparison_Exp>;
@@ -3720,6 +3728,7 @@ export type Eth_Primary_Splits_Bool_Exp = {
 /** Ordering options when selecting data from "eth_primary_splits". */
 export type Eth_Primary_Splits_Order_By = {
   allocations?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   receiver?: InputMaybe<Order_By>;
   receivers?: InputMaybe<Order_By>;
@@ -3729,6 +3738,8 @@ export type Eth_Primary_Splits_Order_By = {
 export enum Eth_Primary_Splits_Select_Column {
   /** column name */
   Allocations = 'allocations',
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3748,6 +3759,7 @@ export type Eth_Primary_Splits_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Eth_Primary_Splits_Stream_Cursor_Value_Input = {
   allocations?: InputMaybe<Array<Scalars['Int']['input']>>;
+  chain?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   receiver?: InputMaybe<Scalars['String']['input']>;
   receivers?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -3758,6 +3770,7 @@ export type Eth_Secondary_Splits = {
   __typename?: 'eth_secondary_splits';
   allocations: Array<Scalars['Int']['output']>;
   basis_points: Scalars['Int']['output'];
+  chain: Scalars['String']['output'];
   id: Scalars['String']['output'];
   receiver: Scalars['String']['output'];
   receivers: Array<Scalars['String']['output']>;
@@ -3770,6 +3783,7 @@ export type Eth_Secondary_Splits_Bool_Exp = {
   _or?: InputMaybe<Array<Eth_Secondary_Splits_Bool_Exp>>;
   allocations?: InputMaybe<Int_Array_Comparison_Exp>;
   basis_points?: InputMaybe<Int_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   receiver?: InputMaybe<String_Comparison_Exp>;
   receivers?: InputMaybe<String_Array_Comparison_Exp>;
@@ -3779,6 +3793,7 @@ export type Eth_Secondary_Splits_Bool_Exp = {
 export type Eth_Secondary_Splits_Order_By = {
   allocations?: InputMaybe<Order_By>;
   basis_points?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   receiver?: InputMaybe<Order_By>;
   receivers?: InputMaybe<Order_By>;
@@ -3790,6 +3805,8 @@ export enum Eth_Secondary_Splits_Select_Column {
   Allocations = 'allocations',
   /** column name */
   BasisPoints = 'basis_points',
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3810,6 +3827,7 @@ export type Eth_Secondary_Splits_Stream_Cursor_Input = {
 export type Eth_Secondary_Splits_Stream_Cursor_Value_Input = {
   allocations?: InputMaybe<Array<Scalars['Int']['input']>>;
   basis_points?: InputMaybe<Scalars['Int']['input']>;
+  chain?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   receiver?: InputMaybe<Scalars['String']['input']>;
   receivers?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -3818,6 +3836,7 @@ export type Eth_Secondary_Splits_Stream_Cursor_Value_Input = {
 /** columns and relationships of "eth_user_proceeds" */
 export type Eth_User_Proceeds = {
   __typename?: 'eth_user_proceeds';
+  chain: Scalars['String']['output'];
   id: Scalars['String']['output'];
   total_proceeds: Scalars['numeric']['output'];
 };
@@ -3827,18 +3846,22 @@ export type Eth_User_Proceeds_Bool_Exp = {
   _and?: InputMaybe<Array<Eth_User_Proceeds_Bool_Exp>>;
   _not?: InputMaybe<Eth_User_Proceeds_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_User_Proceeds_Bool_Exp>>;
+  chain?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   total_proceeds?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "eth_user_proceeds". */
 export type Eth_User_Proceeds_Order_By = {
+  chain?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   total_proceeds?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "eth_user_proceeds" */
 export enum Eth_User_Proceeds_Select_Column {
+  /** column name */
+  Chain = 'chain',
   /** column name */
   Id = 'id',
   /** column name */
@@ -3855,6 +3878,7 @@ export type Eth_User_Proceeds_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Eth_User_Proceeds_Stream_Cursor_Value_Input = {
+  chain?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   total_proceeds?: InputMaybe<Scalars['numeric']['input']>;
 };
@@ -5208,16 +5232,21 @@ export type Market_Stats = {
   median?: Maybe<Scalars['numeric']['output']>;
   percent_listed?: Maybe<Scalars['Float']['output']>;
   percent_never_listed?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
   prim_volume_nb?: Maybe<Scalars['Int']['output']>;
-  prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
   sec_volume_nb?: Maybe<Scalars['Int']['output']>;
   sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
   sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
   sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
-  sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_tz7d?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_tz24?: Maybe<Scalars['numeric']['output']>;
-  sec_volume_tz30d?: Maybe<Scalars['numeric']['output']>;
   to?: Maybe<Scalars['timestamptz']['output']>;
   token_id: Scalars['String']['output'];
 };
@@ -5253,16 +5282,21 @@ export type Market_Stats_Bool_Exp = {
   median?: InputMaybe<Numeric_Comparison_Exp>;
   percent_listed?: InputMaybe<Float_Comparison_Exp>;
   percent_never_listed?: InputMaybe<Float_Comparison_Exp>;
+  prim_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
-  prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume7d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume24?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume30d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat7d?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat24?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat30d?: InputMaybe<Numeric_Comparison_Exp>;
   sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_nb7d?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_nb24?: InputMaybe<Int_Comparison_Exp>;
   sec_volume_nb30d?: InputMaybe<Int_Comparison_Exp>;
-  sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_tz7d?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_tz24?: InputMaybe<Numeric_Comparison_Exp>;
-  sec_volume_tz30d?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
 };
@@ -5296,10 +5330,12 @@ export type Market_Stats_History = {
   median?: Maybe<Scalars['numeric']['output']>;
   percent_listed?: Maybe<Scalars['Float']['output']>;
   percent_never_listed?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
   prim_volume_nb?: Maybe<Scalars['Int']['output']>;
-  prim_volume_tz?: Maybe<Scalars['numeric']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
   sec_volume_nb?: Maybe<Scalars['Int']['output']>;
-  sec_volume_tz?: Maybe<Scalars['numeric']['output']>;
   to: Scalars['timestamptz']['output'];
   token_id: Scalars['String']['output'];
 };
@@ -5335,10 +5371,12 @@ export type Market_Stats_History_Avg_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "market_stats_history". All fields are combined with a logical 'AND'. */
@@ -5368,10 +5406,12 @@ export type Market_Stats_History_Bool_Exp = {
   median?: InputMaybe<Numeric_Comparison_Exp>;
   percent_listed?: InputMaybe<Float_Comparison_Exp>;
   percent_never_listed?: InputMaybe<Float_Comparison_Exp>;
+  prim_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  prim_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   prim_volume_nb?: InputMaybe<Int_Comparison_Exp>;
-  prim_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume?: InputMaybe<Numeric_Comparison_Exp>;
+  sec_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   sec_volume_nb?: InputMaybe<Int_Comparison_Exp>;
-  sec_volume_tz?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
 };
@@ -5396,10 +5436,12 @@ export type Market_Stats_History_Max_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5424,10 +5466,12 @@ export type Market_Stats_History_Min_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5456,10 +5500,12 @@ export type Market_Stats_History_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5503,13 +5549,17 @@ export enum Market_Stats_History_Select_Column {
   /** column name */
   PercentNeverListed = 'percent_never_listed',
   /** column name */
+  PrimVolume = 'prim_volume',
+  /** column name */
+  PrimVolumeFiat = 'prim_volume_fiat',
+  /** column name */
   PrimVolumeNb = 'prim_volume_nb',
   /** column name */
-  PrimVolumeTz = 'prim_volume_tz',
+  SecVolume = 'sec_volume',
+  /** column name */
+  SecVolumeFiat = 'sec_volume_fiat',
   /** column name */
   SecVolumeNb = 'sec_volume_nb',
-  /** column name */
-  SecVolumeTz = 'sec_volume_tz',
   /** column name */
   To = 'to',
   /** column name */
@@ -5532,10 +5582,12 @@ export type Market_Stats_History_Stddev_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by stddev_pop() on columns of table "market_stats_history" */
@@ -5554,10 +5606,12 @@ export type Market_Stats_History_Stddev_Pop_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by stddev_samp() on columns of table "market_stats_history" */
@@ -5576,10 +5630,12 @@ export type Market_Stats_History_Stddev_Samp_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "market_stats_history" */
@@ -5610,10 +5666,12 @@ export type Market_Stats_History_Stream_Cursor_Value_Input = {
   median?: InputMaybe<Scalars['numeric']['input']>;
   percent_listed?: InputMaybe<Scalars['Float']['input']>;
   percent_never_listed?: InputMaybe<Scalars['Float']['input']>;
+  prim_volume?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
   prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
-  prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
   sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
-  sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
 };
@@ -5634,10 +5692,12 @@ export type Market_Stats_History_Sum_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by var_pop() on columns of table "market_stats_history" */
@@ -5656,10 +5716,12 @@ export type Market_Stats_History_Var_Pop_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by var_samp() on columns of table "market_stats_history" */
@@ -5678,10 +5740,12 @@ export type Market_Stats_History_Var_Samp_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** order by variance() on columns of table "market_stats_history" */
@@ -5700,10 +5764,12 @@ export type Market_Stats_History_Variance_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "market_stats". */
@@ -5734,16 +5800,21 @@ export type Market_Stats_Order_By = {
   median?: InputMaybe<Order_By>;
   percent_listed?: InputMaybe<Order_By>;
   percent_never_listed?: InputMaybe<Order_By>;
+  prim_volume?: InputMaybe<Order_By>;
+  prim_volume_fiat?: InputMaybe<Order_By>;
   prim_volume_nb?: InputMaybe<Order_By>;
-  prim_volume_tz?: InputMaybe<Order_By>;
+  sec_volume?: InputMaybe<Order_By>;
+  sec_volume7d?: InputMaybe<Order_By>;
+  sec_volume24?: InputMaybe<Order_By>;
+  sec_volume30d?: InputMaybe<Order_By>;
+  sec_volume_fiat?: InputMaybe<Order_By>;
+  sec_volume_fiat7d?: InputMaybe<Order_By>;
+  sec_volume_fiat24?: InputMaybe<Order_By>;
+  sec_volume_fiat30d?: InputMaybe<Order_By>;
   sec_volume_nb?: InputMaybe<Order_By>;
   sec_volume_nb7d?: InputMaybe<Order_By>;
   sec_volume_nb24?: InputMaybe<Order_By>;
   sec_volume_nb30d?: InputMaybe<Order_By>;
-  sec_volume_tz?: InputMaybe<Order_By>;
-  sec_volume_tz7d?: InputMaybe<Order_By>;
-  sec_volume_tz24?: InputMaybe<Order_By>;
-  sec_volume_tz30d?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
 };
@@ -5795,9 +5866,27 @@ export enum Market_Stats_Select_Column {
   /** column name */
   PercentNeverListed = 'percent_never_listed',
   /** column name */
+  PrimVolume = 'prim_volume',
+  /** column name */
+  PrimVolumeFiat = 'prim_volume_fiat',
+  /** column name */
   PrimVolumeNb = 'prim_volume_nb',
   /** column name */
-  PrimVolumeTz = 'prim_volume_tz',
+  SecVolume = 'sec_volume',
+  /** column name */
+  SecVolume7d = 'sec_volume7d',
+  /** column name */
+  SecVolume24 = 'sec_volume24',
+  /** column name */
+  SecVolume30d = 'sec_volume30d',
+  /** column name */
+  SecVolumeFiat = 'sec_volume_fiat',
+  /** column name */
+  SecVolumeFiat7d = 'sec_volume_fiat7d',
+  /** column name */
+  SecVolumeFiat24 = 'sec_volume_fiat24',
+  /** column name */
+  SecVolumeFiat30d = 'sec_volume_fiat30d',
   /** column name */
   SecVolumeNb = 'sec_volume_nb',
   /** column name */
@@ -5806,14 +5895,6 @@ export enum Market_Stats_Select_Column {
   SecVolumeNb24 = 'sec_volume_nb24',
   /** column name */
   SecVolumeNb30d = 'sec_volume_nb30d',
-  /** column name */
-  SecVolumeTz = 'sec_volume_tz',
-  /** column name */
-  SecVolumeTz7d = 'sec_volume_tz7d',
-  /** column name */
-  SecVolumeTz24 = 'sec_volume_tz24',
-  /** column name */
-  SecVolumeTz30d = 'sec_volume_tz30d',
   /** column name */
   To = 'to',
   /** column name */
@@ -5852,16 +5933,21 @@ export type Market_Stats_Stream_Cursor_Value_Input = {
   median?: InputMaybe<Scalars['numeric']['input']>;
   percent_listed?: InputMaybe<Scalars['Float']['input']>;
   percent_never_listed?: InputMaybe<Scalars['Float']['input']>;
+  prim_volume?: InputMaybe<Scalars['numeric']['input']>;
+  prim_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
   prim_volume_nb?: InputMaybe<Scalars['Int']['input']>;
-  prim_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume7d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume24?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume30d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat7d?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat24?: InputMaybe<Scalars['numeric']['input']>;
+  sec_volume_fiat30d?: InputMaybe<Scalars['numeric']['input']>;
   sec_volume_nb?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_nb7d?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_nb24?: InputMaybe<Scalars['Int']['input']>;
   sec_volume_nb30d?: InputMaybe<Scalars['Int']['input']>;
-  sec_volume_tz?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_tz7d?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_tz24?: InputMaybe<Scalars['numeric']['input']>;
-  sec_volume_tz30d?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
 };
@@ -11758,7 +11844,7 @@ export type GetEthPrimarySplitsQueryVariables = Exact<{
 }>;
 
 
-export type GetEthPrimarySplitsQuery = { __typename?: 'query_root', onchain?: { __typename: 'onchain_query', eth_primary_splits: Array<{ __typename?: 'eth_primary_splits', id: string, receiver: string, receivers: Array<string>, allocations: Array<number> }> } | null };
+export type GetEthPrimarySplitsQuery = { __typename?: 'query_root', onchain?: { __typename: 'onchain_query', eth_primary_splits: Array<{ __typename?: 'eth_primary_splits', id: string, receiver: string, receivers: Array<string>, allocations: Array<number>, chain: string }> } | null };
 
 export type GenerativeToken_PricingFragment = { __typename?: 'generative_token', pricing_fixeds: Array<{ __typename?: 'pricing_fixed', price: any, opens_at?: any | null }>, pricing_dutch_auctions: Array<{ __typename?: 'pricing_dutch_auction', levels: Array<any>, resting_price: string, final_price?: any | null, decrement_duration: any, opens_at?: any | null }> };
 
@@ -11767,7 +11853,7 @@ export type GetEthMinterProceedsQueryVariables = Exact<{
 }>;
 
 
-export type GetEthMinterProceedsQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', eth_minter_proceeds: Array<{ __typename?: 'eth_minter_proceeds', id: string, minter_address: string, primary_receiver: string, reserve_id?: any | null, token_address: string, user_address: string, amount: any }> } | null };
+export type GetEthMinterProceedsQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', eth_minter_proceeds: Array<{ __typename?: 'eth_minter_proceeds', id: string, minter_address: string, primary_receiver: string, reserve_id?: any | null, token_address: string, user_address: string, amount: any, chain: string }> } | null };
 
 export type GetReservesQueryVariables = Exact<{
   where?: InputMaybe<Reserve_Bool_Exp>;
@@ -11781,7 +11867,7 @@ export type GetActionSalesBotQueryVariables = Exact<{
 }>;
 
 
-export type GetActionSalesBotQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', action_by_pk?: { __typename?: 'action', id: string, type: any, numeric_value?: any | null, created_at: any, issuer_id?: string | null, target_id?: string | null, issuer?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null, user?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null, objkt?: { __typename?: 'objkt', id: string, name?: string | null, metadata?: any | null } | null, generative_token?: { __typename?: 'generative_token', id: string, thumbnail_uri?: string | null, author_id?: string | null, author?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null } | null } | null } | null };
+export type GetActionSalesBotQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', action_by_pk?: { __typename?: 'action', id: string, type: any, numeric_value?: any | null, created_at: any, issuer_id?: string | null, target_id?: string | null, issuer?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null, user?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null, objkt?: { __typename?: 'objkt', id: string, name?: string | null, metadata?: any | null, thumbnail_uri?: any | null } | null, generative_token?: { __typename?: 'generative_token', id: string, thumbnail_uri?: string | null, author_id?: string | null, author?: { __typename?: 'user', wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', username: string } } | null } | null } | null } | null } | null };
 
 export type GetTokenPricingsAndReservesQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -11814,9 +11900,9 @@ export const CreateProjectDocument = {"kind":"Document","definitions":[{"kind":"
 export const Update_ProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Update_Project"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Project_set_input"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectMedia_insert_input"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectCollaborator_insert_input"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"update_Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}}]}}]}}]} as unknown as DocumentNode<Update_ProjectMutation, Update_ProjectMutationVariables>;
 export const GetWhitelistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWhitelists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Whitelist"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"WhitelistEntries"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WhitelistEntries"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAddress"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistIndex"}}]}}]}}]} as unknown as DocumentNode<GetWhitelistsQuery, GetWhitelistsQueryVariables>;
 export const GetWhitelistDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWhitelist"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"merkleRoot"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"defaultValue":{"kind":"StringValue","value":"","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Whitelist_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"merkleRoot"},"value":{"kind":"Variable","name":{"kind":"Name","value":"merkleRoot"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"WhitelistEntries"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WhitelistEntries"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whitelist"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"walletAddress"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistIndex"}}]}}]}}]} as unknown as DocumentNode<GetWhitelistQuery, GetWhitelistQueryVariables>;
-export const GetEthPrimarySplitsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthPrimarySplits"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_primary_splits_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"eth_primary_splits"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"receiver"}},{"kind":"Field","name":{"kind":"Name","value":"receivers"}},{"kind":"Field","name":{"kind":"Name","value":"allocations"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthPrimarySplitsQuery, GetEthPrimarySplitsQueryVariables>;
-export const GetEthMinterProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthMinterProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_minter_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_minter_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"minter_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_receiver"}},{"kind":"Field","name":{"kind":"Name","value":"reserve_id"}},{"kind":"Field","name":{"kind":"Name","value":"token_address"}},{"kind":"Field","name":{"kind":"Name","value":"user_address"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthMinterProceedsQuery, GetEthMinterProceedsQueryVariables>;
+export const GetEthPrimarySplitsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthPrimarySplits"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_primary_splits_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"eth_primary_splits"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"receiver"}},{"kind":"Field","name":{"kind":"Name","value":"receivers"}},{"kind":"Field","name":{"kind":"Name","value":"allocations"}},{"kind":"Field","name":{"kind":"Name","value":"chain"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthPrimarySplitsQuery, GetEthPrimarySplitsQueryVariables>;
+export const GetEthMinterProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthMinterProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_minter_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_minter_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"minter_address"}},{"kind":"Field","name":{"kind":"Name","value":"primary_receiver"}},{"kind":"Field","name":{"kind":"Name","value":"reserve_id"}},{"kind":"Field","name":{"kind":"Name","value":"token_address"}},{"kind":"Field","name":{"kind":"Name","value":"user_address"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"chain"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthMinterProceedsQuery, GetEthMinterProceedsQueryVariables>;
 export const GetReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"reserve_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"token_id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]} as unknown as DocumentNode<GetReservesQuery, GetReservesQueryVariables>;
-export const GetActionSalesBotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetActionSalesBot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"action_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"numeric_value"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"issuer_id"}},{"kind":"Field","name":{"kind":"Name","value":"issuer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"target_id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"objkt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}}]}},{"kind":"Field","name":{"kind":"Name","value":"generative_token"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail_uri"}},{"kind":"Field","name":{"kind":"Name","value":"author_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetActionSalesBotQuery, GetActionSalesBotQueryVariables>;
+export const GetActionSalesBotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetActionSalesBot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"action_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"numeric_value"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"issuer_id"}},{"kind":"Field","name":{"kind":"Name","value":"issuer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"target_id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"objkt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail_uri"}}]}},{"kind":"Field","name":{"kind":"Name","value":"generative_token"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail_uri"}},{"kind":"Field","name":{"kind":"Name","value":"author_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetActionSalesBotQuery, GetActionSalesBotQueryVariables>;
 export const GetTokenPricingsAndReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTokenPricingsAndReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generative_token_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reserves"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"data"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_fixeds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"opens_at"}},{"kind":"Field","name":{"kind":"Name","value":"price"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_dutch_auctions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"opens_at"}},{"kind":"Field","name":{"kind":"Name","value":"levels"}},{"kind":"Field","name":{"kind":"Name","value":"decrement_duration"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetTokenPricingsAndReservesQuery, GetTokenPricingsAndReservesQueryVariables>;
 export const GetEthUserProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthUserProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_user_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_user_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"total_proceeds"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthUserProceedsQuery, GetEthUserProceedsQueryVariables>;

@@ -1,0 +1,64 @@
+{
+  "name": "@fxhash/tez",
+  "private": true,
+  "version": "0.0.8",
+  "author": "fxhash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fxhash/fxhash-package"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@apollo/client": "3.8.1",
+    "@fxhash/shared": "workspace:*",
+    "@taquito/michel-codec": "17.3.1",
+    "@taquito/michelson-encoder": "17.3.1",
+    "@taquito/rpc": "17.3.1",
+    "@taquito/utils": "17.3.1",
+    "date-fns": "2.30.0",
+    "next": "13.4.19",
+    "use-async-effect": "2.2.7"
+  },
+  "peerDependencies": {
+    "@airgap/beacon-sdk": "4.0.10",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@taquito/beacon-wallet": "17.3.1",
+    "@taquito/taquito": "17.3.1",
+    "onchfs": "workspace:*",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@airgap/beacon-sdk": "4.0.10",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@taquito/beacon-wallet": "17.3.1",
+    "@taquito/taquito": "17.3.1",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "onchfs": "workspace:*",
+    "tslib": "2.6.0",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
+  }
+}

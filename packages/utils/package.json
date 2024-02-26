@@ -30,7 +30,9 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@fxhash/shared": "workspace:*"
+  },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",

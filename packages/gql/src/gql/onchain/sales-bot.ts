@@ -31,6 +31,7 @@ export const Qu_GetActionSalesBot = graphql(`
           id
           name
           metadata
+          thumbnail_uri
         }
         generative_token {
           id
