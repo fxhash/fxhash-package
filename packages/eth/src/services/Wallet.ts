@@ -266,13 +266,8 @@ export class EthereumWalletManager extends WalletManager {
     try {
       const signerChainId = await this.walletClient.getChainId()
       if (signerChainId !== chain.id) {
-        // MetaMask will try to create an existing chain if the name is not the same
-        // see https://github.com/wevm/viem/issues/1193 so to avoid this, we only add chain
-        // different than mainnet (id 1)
-        if (chain.id !== 1) {
-          // Add the chain config to the wallet, if already set it will be ignored
-          await this.addChain(chain)
-        }
+        // Add the chain config to the wallet, if already set it will be ignored
+        await this.addChain(chain)
         const result = await this.switchChain(chain)
         if (result.isFailure()) {
           return result
@@ -289,6 +284,12 @@ export class EthereumWalletManager extends WalletManager {
   }
 
   private async addChain(chain: Chain): Promise<void> {
+    // MetaMask will try to create an existing chain if the name is not the same
+    // see https://github.com/wevm/viem/issues/1193 so to avoid this, we only add chain
+    // different than mainnet (id 1)
+    if (chain.id === 1) {
+      return
+    }
     try {
       await this.walletClient.addChain({ chain })
     } catch (error) {
