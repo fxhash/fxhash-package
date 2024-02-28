@@ -190,7 +190,7 @@ export class TezosWalletManager extends WalletManager {
     const out = this.rpcNodes.shift()!
     this.rpcNodes.push(out)
     console.log(`update RPC provider: ${this.rpcNodes[0]}`)
-    this.tezosToolkit.setRpcProvider(this.rpcNodes[0])
+    this.tezosToolkit.setProvider({ rpc: this.rpcNodes[0] })
   }
 
   /**
