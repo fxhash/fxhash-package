@@ -286,7 +286,7 @@ export class EthereumWalletManager extends WalletManager {
   private async addChain(chain: Chain): Promise<void> {
     // MetaMask will try to create an existing chain if the name is not the same
     // see https://github.com/wevm/viem/issues/1193 so to avoid this, we only add chain
-    // different than mainnet (id 1)
+    // different than mainnet (id 1) as we assume that mainnet is already added in all wallets
     if (chain.id === 1) {
       return
     }
