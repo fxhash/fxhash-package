@@ -12,6 +12,7 @@ export const Qu_GetEthPrimarySplits = graphql(`
         receiver
         receivers
         allocations
+        chain
       }
     }
   }
