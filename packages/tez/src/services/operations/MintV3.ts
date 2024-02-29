@@ -33,10 +33,6 @@ export class MintV3Operation extends TezosContractOperation<TMintV3OperationPara
   payloadSignature: string | null = null
 
   async prepare() {
-    this.issuerContract = await this.manager.getContract(
-      FxhashContracts.ISSUER_V3
-    )
-
     // if there is a consume method, pack the data
     if (this.params.consumeReserve) {
       const { reserveInput, payloadPacked, payloadSignature } =

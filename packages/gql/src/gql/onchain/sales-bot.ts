@@ -8,6 +8,7 @@ export const Qu_GetActionSalesBot = graphql(`
     onchain {
       action_by_pk(id: $id) {
         id
+        chain
         type
         numeric_value
         created_at

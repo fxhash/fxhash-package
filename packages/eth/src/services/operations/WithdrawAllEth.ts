@@ -51,7 +51,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
             _eq: this.params.address,
           },
           chain: {
-            _eq: this.chain === BlockchainType.ETHEREUM ? "ETH" : "BASE",
+            _eq: this.chain === BlockchainType.ETHEREUM ? "ETHEREUM" : "BASE",
           },
         },
       },
