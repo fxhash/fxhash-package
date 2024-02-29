@@ -2390,6 +2390,11 @@ type action {
   """
   article: article
   article_id: Int
+
+  """
+  A computed field, executes function "token_or_objkt_chain_for_action"
+  """
+  chain: String
   created_at: timestamptz!
 
   """
@@ -2473,6 +2478,7 @@ input action_bool_exp {
   _or: [action_bool_exp!]
   article: article_bool_exp
   article_id: Int_comparison_exp
+  chain: String_comparison_exp
   created_at: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
   id: uuid_comparison_exp
@@ -2535,6 +2541,7 @@ Ordering options when selecting data from "action".
 input action_order_by {
   article: article_order_by
   article_id: order_by
+  chain: order_by
   created_at: order_by
   generative_token: generative_token_order_by
   id: order_by
@@ -5791,6 +5798,11 @@ type generative_token {
   capture_media_id: bpchar
 
   """
+  A computed field, executes function "token_chain_for_token"
+  """
+  chain: String
+
+  """
   An object relationship
   """
   codex: codex
@@ -6318,6 +6330,7 @@ input generative_token_bool_exp {
   author_id: String_comparison_exp
   balance: numeric_comparison_exp
   capture_media_id: bpchar_comparison_exp
+  chain: String_comparison_exp
   codex: codex_bool_exp
   codex_id: String_comparison_exp
   codex_update_requests: codex_update_request_bool_exp
@@ -6463,6 +6476,7 @@ input generative_token_order_by {
   author_id: order_by
   balance: order_by
   capture_media_id: order_by
+  chain: order_by
   codex: codex_order_by
   codex_id: order_by
   codex_update_requests_aggregate: codex_update_request_aggregate_order_by
