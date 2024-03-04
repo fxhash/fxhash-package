@@ -129,7 +129,6 @@ export const fxhashConfig: IFxhashConfig = {
           network: "Base Sepolia",
           chainId: BlockchainIdentifiers.BaseSepolia,
           ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
-          // TODO: change this to the correct address
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
         },
         apis: baseTestnetApis,
@@ -162,7 +161,6 @@ export const fxhashConfig: IFxhashConfig = {
           network: "Base",
           chainId: BlockchainIdentifiers.BaseMainnet,
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
-          // TODO: change this to the correct address
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
         },
         apis: baseMainnetApis,
