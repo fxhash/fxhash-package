@@ -557,7 +557,7 @@ export const prepareMintParams = async (
       merkleTreeWhitelist[0],
       reserve
     )
-    if (indexesAndProofsForUser) {
+    if (indexesAndProofsForUser.indexes.length) {
       indexesAndProofs = indexesAndProofsForUser
       reserveSave = reserve
       break
