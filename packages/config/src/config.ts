@@ -128,7 +128,7 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "Base Sepolia",
           chainId: BlockchainIdentifiers.BaseSepolia,
-          ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
+          ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
         },
         apis: baseTestnetApis,
