@@ -66,8 +66,13 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       "No proceeds found"
     )
 
+    const withdrawableProceeds =
+      proceeds.data.onchain.eth_minter_proceeds.filter(
+        (proceed: any) => proceed.amount > 0
+      )
+
     //we loop on the all the minters, to prepare the withdraw operations
-    for (const minterProceeds of proceeds.data.onchain.eth_minter_proceeds) {
+    for (const minterProceeds of withdrawableProceeds) {
       const isDutchAuction =
         minterProceeds.minter_address ===
         currentConfig.contracts.dutch_auction_minter_v1
