@@ -66,8 +66,13 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       "No proceeds found"
     )
 
+    const withdrawableProceeds =
+      proceeds.data.onchain.eth_minter_proceeds.filter(
+        (proceed: any) => proceed.amount > 0
+      )
+
     //we loop on the all the minters, to prepare the withdraw operations
-    for (const minterProceeds of proceeds.data.onchain.eth_minter_proceeds) {
+    for (const minterProceeds of withdrawableProceeds) {
       const isDutchAuction =
         minterProceeds.minter_address ===
         currentConfig.contracts.dutch_auction_minter_v1
@@ -159,7 +164,6 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     const callRequests = multicallArgs.map(call => {
       return {
         target: call.address,
-        allowFailure: true,
         callData: call.data,
       }
     })
@@ -169,7 +173,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       const args: SimulateAndExecuteContractRequest = {
         address: currentConfig.contracts.multicall3 as `0x${string}`,
         abi: MULTICALL3_ABI,
-        functionName: "aggregate3",
+        functionName: "aggregate",
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
         chain: getCurrentChain(this.chain),
