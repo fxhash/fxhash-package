@@ -159,6 +159,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     const callRequests = multicallArgs.map(call => {
       return {
         target: call.address,
+        allowFailure: true,
         callData: call.data,
       }
     })
@@ -168,7 +169,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       const args: SimulateAndExecuteContractRequest = {
         address: currentConfig.contracts.multicall3 as `0x${string}`,
         abi: MULTICALL3_ABI,
-        functionName: "aggregate",
+        functionName: "aggregate3",
         args: [callRequests],
         account: this.manager.address as `0x${string}`,
         chain: getCurrentChain(this.chain),
