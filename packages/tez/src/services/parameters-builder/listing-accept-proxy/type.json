@@ -1,0 +1,20 @@
+{
+  "prim": "pair",
+  "args": [
+    { "prim": "nat", "annots": ["%gentk_version"] },
+    {
+      "prim": "pair",
+      "args": [
+        { "prim": "nat", "annots": ["%listing_id"] },
+        {
+          "prim": "pair",
+          "args": [
+            { "prim": "address", "annots": ["%recipient"] },
+            { "prim": "nat", "annots": ["%token_id"] }
+          ]
+        }
+      ]
+    }
+  ],
+  "annots": ["%listing_accept"]
+}

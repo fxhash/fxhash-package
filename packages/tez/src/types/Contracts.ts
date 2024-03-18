@@ -42,6 +42,7 @@ export const FxhashContracts = {
   ARTICLE_MODERATION: config.tez.contracts.moderation_articles,
   COLLAB_FACTORY: config.tez.contracts.collaboration_factory,
   ONCHFS_FILES: config.tez.contracts.onchfs_files,
+  CARD_PROXY: config.tez.contracts.card_proxy,
 }
 
 export const FxhashCollabFactoryCalls = {
