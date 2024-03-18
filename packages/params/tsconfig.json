@@ -6,6 +6,6 @@
     "rootDir": "src",
     "outDir": "dist",
     // FIXME: resolve type errors when removing the following lines
-    "noUnusedParameters": false,
-  },
+    "noUnusedParameters": false
+  }
 }
