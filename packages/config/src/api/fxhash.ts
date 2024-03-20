@@ -30,6 +30,11 @@ export interface IFxhashApis {
   events: {
     liveBackend: string
   }
+  indexer: {
+    tez: string
+    eth: string
+    base: string
+  }
 }
 
 // list of APIs dev leverages
@@ -67,6 +72,11 @@ export const fxhashDevApis: IFxhashApis = {
   },
   events: {
     liveBackend: "_NONE",
+  },
+  indexer: {
+    tez: "http://fxhash-multichain-dev-testnet-indexer-v2.fxhash-multichain-dev-testnet.svc.cluster.local:4001",
+    eth: "http://fxhash-multichain-dev-testnet-eth-indexer.fxhash-multichain-dev-testnet.svc.cluster.local:3000",
+    base: "http://fxhash-multichain-dev-testnet-base-indexer.fxhash-multichain-dev-testnet.svc.cluster.local:3000",
   },
 }
 
@@ -114,5 +124,10 @@ export const fxhashPrdApis: IFxhashApis = {
   },
   events: {
     liveBackend: "_NONE",
+  },
+  indexer: {
+    tez: "http://fxhash-multichain-prd-indexer-v2.fxhash-multichain-prd.svc.cluster.local:4001",
+    eth: "http://fxhash-multichain-prd-eth-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
+    base: "http://fxhash-multichain-prd-base-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
   },
 }
