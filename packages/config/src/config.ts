@@ -38,6 +38,7 @@ export interface IFxhashEnvConfig {
   walletConnectId: string
   projectLockTime: number
   referrerShare: number
+  cloudflareTurnstileSiteKey: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
 }
@@ -176,6 +177,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -193,6 +195,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -210,7 +213,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
-
+        cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
