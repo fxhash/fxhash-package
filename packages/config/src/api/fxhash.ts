@@ -22,6 +22,10 @@ export interface IFxhashApis {
       medium: string
       large: string
     }
+    proxy: {
+      ipfs: string
+      onchfs: string
+    }
   }
   dashboard: {
     backend: string
@@ -64,6 +68,11 @@ export const fxhashDevApis: IFxhashApis = {
         "https://jgfz7a6km7fsqonej2sp3lqwvu0utnyy.lambda-url.us-east-1.on.aws/",
       large:
         "https://fzezvbp2f74yturkj4akjyrq3e0zswhb.lambda-url.us-east-1.on.aws/",
+    },
+    proxy: {
+      ipfs: "ipfs://QmdB7nFtxsMhr1XKUfwBeTmPgWTY2LQtjqXq1xu2wqMKYD",
+      onchfs:
+        "onchfs://63d57e37ea7b6b6fba101b09758f72561205cbf49ffdf264d0de6618646a0a5a",
     },
   },
   dashboard: {
@@ -116,6 +125,10 @@ export const fxhashPrdApis: IFxhashApis = {
         "https://tuupcq6eesbfk4veuzdfrhu7zm0zwuqy.lambda-url.us-east-1.on.aws/",
       large:
         "https://bojj24y6ucxmsyfi4uccdmiliy0dzhji.lambda-url.us-east-1.on.aws/",
+    },
+    proxy: {
+      ipfs: "TODO",
+      onchfs: "TODO",
     },
   },
   dashboard: {
