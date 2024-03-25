@@ -70,7 +70,7 @@ export const fxhashDevApis: IFxhashApis = {
         "https://fzezvbp2f74yturkj4akjyrq3e0zswhb.lambda-url.us-east-1.on.aws/",
     },
     proxy: {
-      ipfs: "ipfs://QmdB7nFtxsMhr1XKUfwBeTmPgWTY2LQtjqXq1xu2wqMKYD",
+      ipfs: "ipfs://QmQJs44swYWpKtR6XaAEt13iBJkQyNTCuexofYUBugTexu",
       onchfs:
         "onchfs://63d57e37ea7b6b6fba101b09758f72561205cbf49ffdf264d0de6618646a0a5a",
     },
