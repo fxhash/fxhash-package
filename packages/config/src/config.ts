@@ -4,6 +4,7 @@ import {
   IFxhashApis,
   fxhashDevApis,
   fxhashLocalApis,
+  fxhashLocalDockerApis,
   fxhashPrdApis,
 } from "./api/fxhash"
 import {
@@ -28,8 +29,8 @@ import { getConfigForEnv } from "./utils"
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
 export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd" | "local"
-export type TEnvName = "development" | "production" | "local"
+export type TEnv = "dev" | "prd" | "local" | "localDocker"
+export type TEnvName = "development" | "production" | "local" | "localDocker"
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -186,6 +187,23 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
       },
     },
+    localDocker: {
+      apis: fxhashLocalDockerApis,
+      config: {
+        envName: "localDocker",
+        gtMinPrice: "0",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
+        /**
+         * ! Beware ! Changing any of these 3 values will result in current
+         * projects breaking.
+         * https://github.com/fxhash/monorepo/issues/701
+         */
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 2500,
+      },
+    },
     dev: {
       apis: fxhashDevApis,
       config: {
@@ -225,5 +243,6 @@ export const fxhashConfig: IFxhashConfig = {
 }
 
 export const localConfig = getConfigForEnv("local")
+export const localDockerConfig = getConfigForEnv("localDocker")
 export const devConfig = getConfigForEnv("dev")
 export const prdConfig = getConfigForEnv("prd")

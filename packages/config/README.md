@@ -25,4 +25,6 @@ This singleton will expose variables for testnet/mainnet based on the `FXHASH_EN
 
 ### Local development
 
-Additional to the testnet and mainnet specific configuration there is the 3rd option of local development. This option is designed to be used within the fxhash monorepository.
+Additional to the testnet and mainnet specific configuration there is the 3rd option for `local` development. This option is designed to be used within the fxhash monorepository. You can use it by setting the `FXHASH_ENV=local` environment variable. Since all services are dockerised there is an additional `localDocker` configuration. This configuration is automatically used when the `@fxhash/config` package is used inside a docker container and the `FXHASH_ENV` is set to `local`. The `localDocker` configuration basically just replaces all "localhost" urls with "host.docker.internal".
+
+- Set `FXHASH_ENV=local` to expose the config for local development within the fxhash monorepository

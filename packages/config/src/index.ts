@@ -19,32 +19,17 @@ import {
   devConfig,
   IFxhashConfigSingleEnv,
   localConfig,
+  localDockerConfig,
 } from "./config"
+import { isLocal, isProd, isDockerLocal } from "./helpers"
 
-const isProd = (() => {
-  // We can't destructure process.envs
-  // https://nextjs.org/docs/pages/api-reference/next-config-js/env
-  return (
-    process.env.FXHASH_ENV === "prd" ||
-    process.env.FXHASH_ENV === "production" ||
-    process.env.NEXT_PUBLIC_FXHASH_ENV === "prd" ||
-    process.env.NEXT_PUBLIC_FXHASH_ENV === "production" ||
-    process.env.REACT_APP_FXHASH_ENV === "prd" ||
-    process.env.REACT_APP_FXHASH_ENV === "production"
-  )
-})()
-
-const isLocal = (() => {
-  // We can't destructure process.envs
-  // https://nextjs.org/docs/pages/api-reference/next-config-js/env
-  return (
-    process.env.FXHASH_ENV === "local" ||
-    process.env.NEXT_PUBLIC_FXHASH_ENV === "local" ||
-    process.env.REACT_APP_FXHASH_ENV === "local"
-  )
-})()
-
-let config = isProd ? prdConfig : isLocal ? localConfig : devConfig
+let config = isProd
+  ? prdConfig
+  : isLocal
+    ? isDockerLocal
+      ? localDockerConfig
+      : localConfig
+    : devConfig
 
 function setConfig(
   userConfig: Partial<IFxhashConfigSingleEnv>
@@ -84,5 +69,6 @@ export {
 }
 
 export * from "./types"
+export * from "./helpers"
 
 export default fxhashConfig
