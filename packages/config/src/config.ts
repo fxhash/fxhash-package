@@ -25,6 +25,12 @@ import {
 import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
 import { getConfigForEnv } from "./utils"
 
+// the variations supported by the config
+export type TBlockchain = "tez" | "eth" | "base"
+export type TBlockchainNetwork = "testnet" | "mainnet"
+export type TEnv = "dev" | "prd" | "local"
+export type TEnvName = "development" | "production" | "local"
+
 export interface IFxhashNetworkConfig {
   network: string
   chainId: BlockchainIdentifier
@@ -33,7 +39,7 @@ export interface IFxhashNetworkConfig {
 }
 
 export interface IFxhashEnvConfig {
-  envName: string
+  envName: TEnvName
   gtMinPrice: string
   walletConnectId: string
   projectLockTime: number
@@ -41,11 +47,6 @@ export interface IFxhashEnvConfig {
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
 }
-
-// the variations supported by the config
-export type TBlockchain = "tez" | "eth" | "base"
-export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd" | "local"
 
 type TBlockchainContacts = {
   [B in TBlockchain]: {
