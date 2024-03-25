@@ -72,7 +72,7 @@ export const fxhashDevApis: IFxhashApis = {
     proxy: {
       ipfs: "ipfs://Qme6E5z1GDqrHyPomGEw5LChxmE9pdEYGWjwxrv6ZgwZRo",
       onchfs:
-        "onchfs://63d57e37ea7b6b6fba101b09758f72561205cbf49ffdf264d0de6618646a0a5a",
+        "onchfs://4287364ed3219d3f2f77302a71eff0db49e971058ef87f163981ef89a445b143",
     },
   },
   dashboard: {
