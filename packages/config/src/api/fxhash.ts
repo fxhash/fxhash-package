@@ -1,3 +1,5 @@
+import { getDockerInternalUrl } from "../helpers"
+
 export interface IFxhashApis {
   website: string
   docs: string
@@ -22,6 +24,10 @@ export interface IFxhashApis {
       medium: string
       large: string
     }
+    proxy: {
+      ipfs: string
+      onchfs: string
+    }
   }
   dashboard: {
     backend: string
@@ -29,6 +35,11 @@ export interface IFxhashApis {
   }
   events: {
     liveBackend: string
+  }
+  indexer: {
+    tez: string
+    eth: string
+    base: string
   }
 }
 
@@ -60,6 +71,11 @@ export const fxhashDevApis: IFxhashApis = {
       large:
         "https://fzezvbp2f74yturkj4akjyrq3e0zswhb.lambda-url.us-east-1.on.aws/",
     },
+    proxy: {
+      ipfs: "ipfs://Qme6E5z1GDqrHyPomGEw5LChxmE9pdEYGWjwxrv6ZgwZRo",
+      onchfs:
+        "onchfs://4287364ed3219d3f2f77302a71eff0db49e971058ef87f163981ef89a445b143",
+    },
   },
   dashboard: {
     backend: "https://live-minting.fxhash-dev.xyz",
@@ -68,15 +84,27 @@ export const fxhashDevApis: IFxhashApis = {
   events: {
     liveBackend: "_NONE",
   },
+  indexer: {
+    tez: "http://fxhash-multichain-dev-testnet-indexer-v2.fxhash-multichain-dev-testnet.svc.cluster.local:4001",
+    eth: "http://fxhash-multichain-dev-testnet-eth-indexer.fxhash-multichain-dev-testnet.svc.cluster.local:3000",
+    base: "http://fxhash-multichain-dev-testnet-base-indexer.fxhash-multichain-dev-testnet.svc.cluster.local:3000",
+  },
 }
 
 // list of APIs for when fxhash is ran locally
+// The ports must correspond to the ports the services are running on
+// defined in the root docker compose file of the monorepo
 export const fxhashLocalApis: IFxhashApis = {
-  // todo: eventually, find a better way to inject the values from the
-  //       docker-compose, maybe outside of this package idk
   ...fxhashDevApis,
+  website: "http://localhost:3200",
   hasura: "http://localhost:8888",
   hasuraGql: "http://localhost:8888/v1/graphql",
+}
+
+export const fxhashLocalDockerApis: IFxhashApis = {
+  ...fxhashLocalApis,
+  hasura: getDockerInternalUrl(fxhashLocalApis.hasura),
+  hasuraGql: getDockerInternalUrl(fxhashLocalApis.hasuraGql),
 }
 
 // list of APIs prod leverages
@@ -107,6 +135,11 @@ export const fxhashPrdApis: IFxhashApis = {
       large:
         "https://bojj24y6ucxmsyfi4uccdmiliy0dzhji.lambda-url.us-east-1.on.aws/",
     },
+    proxy: {
+      ipfs: "ipfs://Qme6E5z1GDqrHyPomGEw5LChxmE9pdEYGWjwxrv6ZgwZRo",
+      onchfs:
+        "onchfs://4287364ed3219d3f2f77302a71eff0db49e971058ef87f163981ef89a445b143",
+    },
   },
   dashboard: {
     backend: "https://events.fxhash.xyz",
@@ -114,5 +147,10 @@ export const fxhashPrdApis: IFxhashApis = {
   },
   events: {
     liveBackend: "_NONE",
+  },
+  indexer: {
+    tez: "http://fxhash-multichain-prd-indexer-v2.fxhash-multichain-prd.svc.cluster.local:4001",
+    eth: "http://fxhash-multichain-prd-eth-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
+    base: "http://fxhash-multichain-prd-base-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
   },
 }

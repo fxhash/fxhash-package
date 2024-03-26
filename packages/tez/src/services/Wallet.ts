@@ -5,8 +5,8 @@ import {
   Wallet,
   WalletOperation,
 } from "@taquito/taquito"
-import { char2Bytes } from "@taquito/utils"
 import { AbortedBeaconError, SigningType } from "@airgap/beacon-sdk"
+import { encodeTezosSignInPayload } from "@fxhash/auth"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -22,8 +22,6 @@ import {
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
-
-const TEZOS_SIGNING_PREFIX = "050100"
 
 interface TezosWalletManagerParams {
   address: string
@@ -55,7 +53,7 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = this.encodeSignInPayload(message)
+      const payloadBytes = encodeTezosSignInPayload(message)
       const { signature } = await this.beaconWallet.client.requestSignPayload({
         signingType: SigningType.MICHELINE,
         payload: payloadBytes,
@@ -191,17 +189,6 @@ export class TezosWalletManager extends WalletManager {
     this.rpcNodes.push(out)
     console.log(`update RPC provider: ${this.rpcNodes[0]}`)
     this.tezosToolkit.setProvider({ rpc: this.rpcNodes[0] })
-  }
-
-  /**
-   * Encodes the payload into the desired format.
-   *
-   * @param {string} payload - The payload to encode.
-   * @return {string} - The encoded payload.
-   */
-  private encodeSignInPayload(payload: string): string {
-    const bytes = char2Bytes(payload)
-    return TEZOS_SIGNING_PREFIX + char2Bytes(bytes.length.toString()) + bytes
   }
 }
 

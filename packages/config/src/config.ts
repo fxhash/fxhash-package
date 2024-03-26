@@ -4,6 +4,7 @@ import {
   IFxhashApis,
   fxhashDevApis,
   fxhashLocalApis,
+  fxhashLocalDockerApis,
   fxhashPrdApis,
 } from "./api/fxhash"
 import {
@@ -25,6 +26,12 @@ import {
 import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
 import { getConfigForEnv } from "./utils"
 
+// the variations supported by the config
+export type TBlockchain = "tez" | "eth" | "base"
+export type TBlockchainNetwork = "testnet" | "mainnet"
+export type TEnv = "dev" | "prd" | "local" | "localDocker"
+export type TEnvName = "development" | "production" | "local" | "localDocker"
+
 export interface IFxhashNetworkConfig {
   network: string
   chainId: BlockchainIdentifier
@@ -33,19 +40,15 @@ export interface IFxhashNetworkConfig {
 }
 
 export interface IFxhashEnvConfig {
-  envName: string
+  envName: TEnvName
   gtMinPrice: string
   walletConnectId: string
   projectLockTime: number
   referrerShare: number
+  cloudflareTurnstileSiteKey: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
 }
-
-// the variations supported by the config
-export type TBlockchain = "tez" | "eth" | "base"
-export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd" | "local"
 
 type TBlockchainContacts = {
   [B in TBlockchain]: {
@@ -109,7 +112,7 @@ export const fxhashConfig: IFxhashConfig = {
           network: "ghostnet",
           chainId: BlockchainIdentifiers.TezosGhostnet,
           ethFeeReceiver: "0x",
-          wertRelayer: "",
+          wertRelayer: "tz1T2uyYTshSGrEg13VGJFqsWwbi2H175hZb",
         },
         apis: tezosTestnetApis,
       },
@@ -128,7 +131,7 @@ export const fxhashConfig: IFxhashConfig = {
         config: {
           network: "Base Sepolia",
           chainId: BlockchainIdentifiers.BaseSepolia,
-          ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
+          ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
         },
         apis: baseTestnetApis,
@@ -141,7 +144,7 @@ export const fxhashConfig: IFxhashConfig = {
           network: "mainnet",
           chainId: BlockchainIdentifiers.TezosMainnet,
           ethFeeReceiver: "0x",
-          wertRelayer: "",
+          wertRelayer: "tz1KkPS1TWFyDWfQwrdvmTmsCLUNMegDrrSi",
         },
         apis: tezosMainnetApis,
       },
@@ -176,6 +179,25 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        /**
+         * ! Beware ! Changing any of these 3 values will result in current
+         * projects breaking.
+         * https://github.com/fxhash/monorepo/issues/701
+         */
+        fxhashPrimaryFee: 1000,
+        fxhashSecondaryFee: 2500,
+      },
+    },
+    localDocker: {
+      apis: fxhashLocalDockerApis,
+      config: {
+        envName: "localDocker",
+        gtMinPrice: "0",
+        walletConnectId: "111994543d1b754bab82c368d0e61ae5",
+        projectLockTime: 3600,
+        referrerShare: 0,
+        cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -193,6 +215,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -210,7 +233,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
-
+        cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -224,5 +247,6 @@ export const fxhashConfig: IFxhashConfig = {
 }
 
 export const localConfig = getConfigForEnv("local")
+export const localDockerConfig = getConfigForEnv("localDocker")
 export const devConfig = getConfigForEnv("dev")
 export const prdConfig = getConfigForEnv("prd")

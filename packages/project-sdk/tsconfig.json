@@ -8,6 +8,6 @@
     "lib": ["dom"],
     // TODO: Decide if we want to lower the target for better compatibility
     // Current sdk is released with es2022 target
-    "target": "es2022",
-  },
+    "target": "es2022"
+  }
 }

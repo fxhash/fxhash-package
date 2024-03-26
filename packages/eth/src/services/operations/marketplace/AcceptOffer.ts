@@ -1,7 +1,8 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { ReservoirAcceptOfferParams } from "@/services/reservoir/types"
 import { acceptOffer } from "../Marketplace"
-import { TransactionType } from "@fxhash/shared"
+import { TransactionType, TransactionUnknownError } from "@fxhash/shared"
+import { extractReservoirError } from "@/utils"
 
 export type TAcceptOfferEthV1OperationParams = {
   orders: { orderId: string; token: { token: string; tokenId: string } }[]
@@ -20,10 +21,15 @@ export class AcceptOfferEthV1Operation extends EthereumContractOperation<TAccept
         token: `${order.token.token}:${order.token.tokenId}`,
       }
     })
-    const transactionHash = await acceptOffer(args, this.manager, this.chain)
-    return {
-      type: TransactionType.OFFCHAIN,
-      hash: transactionHash,
+    try {
+      const transactionHash = await acceptOffer(args, this.manager, this.chain)
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: transactionHash,
+      }
+    } catch (e) {
+      const message = extractReservoirError(e)
+      throw new TransactionUnknownError(message)
     }
   }
 

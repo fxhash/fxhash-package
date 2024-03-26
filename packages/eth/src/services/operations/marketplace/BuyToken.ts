@@ -1,7 +1,8 @@
 import { EthereumContractOperation } from "../contractOperation"
 import { ReservoirBuyTokenParams } from "@/services/reservoir/types"
 import { buyToken } from "../Marketplace"
-import { TransactionType } from "@fxhash/shared"
+import { TransactionType, TransactionUnknownError } from "@fxhash/shared"
+import { extractReservoirError } from "@/utils"
 
 export type TBuyTokenEthV1OperationParams = {
   orderIds: string[]
@@ -19,10 +20,15 @@ export class BuyTokenEthV1Operation extends EthereumContractOperation<TBuyTokenE
         orderId: orderId,
       }
     })
-    const transactionHash = await buyToken(args, this.manager, this.chain)
-    return {
-      type: TransactionType.OFFCHAIN,
-      hash: transactionHash,
+    try {
+      const transactionHash = await buyToken(args, this.manager, this.chain)
+      return {
+        type: TransactionType.OFFCHAIN,
+        hash: transactionHash,
+      }
+    } catch (e) {
+      const message = extractReservoirError(e)
+      throw new TransactionUnknownError(message)
     }
   }
 

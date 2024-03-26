@@ -557,7 +557,7 @@ export const prepareMintParams = async (
       merkleTreeWhitelist[0],
       reserve
     )
-    if (indexesAndProofsForUser) {
+    if (indexesAndProofsForUser.indexes.length) {
       indexesAndProofs = indexesAndProofsForUser
       reserveSave = reserve
       break
@@ -566,7 +566,7 @@ export const prepareMintParams = async (
 
   invariant(indexesAndProofs, "No indexes and proofs found")
   invariant(
-    qty > BigInt(indexesAndProofs.indexes.length),
+    qty <= BigInt(indexesAndProofs.indexes.length),
     "Not enough allow list entries found for the requested quantity"
   )
 

@@ -6,11 +6,12 @@
     "rootDir": "src",
     "outDir": "dist",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
+    "resolveJsonModule": true,
     // FIXME: resolve type errors when removing the following lines
     "strict": false,
     "noUnusedParameters": false,
-    "noUnusedLocals": false,
-  },
+    "noUnusedLocals": false
+  }
 }
