@@ -136,8 +136,9 @@ export const fxhashPrdApis: IFxhashApis = {
         "https://bojj24y6ucxmsyfi4uccdmiliy0dzhji.lambda-url.us-east-1.on.aws/",
     },
     proxy: {
-      ipfs: "TODO",
-      onchfs: "TODO",
+      ipfs: "ipfs://Qme6E5z1GDqrHyPomGEw5LChxmE9pdEYGWjwxrv6ZgwZRo",
+      onchfs:
+        "onchfs://4287364ed3219d3f2f77302a71eff0db49e971058ef87f163981ef89a445b143",
     },
   },
   dashboard: {
