@@ -4,6 +4,7 @@ export interface ITezosContracts {
   allowed_mint_issuer_v3: string
   allowed_mint_v3: string
   articles: string
+  card_proxy: string
   collaboration_factory: string
   consumable_database: string
   cycles: string
@@ -42,6 +43,7 @@ export const tezosTestnetContracts: ITezosContracts = {
   allowed_mint_issuer_v3: "KT1S3UqrLgMpVivNWWmBUnkPCaSFHDJ4HYvb",
   allowed_mint_v3: "KT1HUE2A6CHNw4NZZBWjJyG38nysWWfusagu",
   articles: "KT1HV8NXUCKWC1tWNHSD8LPPiKPshQuXvb8r",
+  card_proxy: "KT1R6N27Qdw4RqeSUnYkw436uZrFSRWtxqbd",
   collaboration_factory: "KT1WFXts7jwxpD9uGDKzyqTUTFaG222xmjoZ",
   consumable_database: "KT1FP9y1PJpJkXhdJCgYZhVbj9UBpxnA57Bx",
   cycles: "KT1BJBcvtgZM2Kf4rUapmp4AhXtWCmznxd6F",
@@ -80,6 +82,7 @@ export const tezosMainnetContracts: ITezosContracts = {
   allowed_mint_issuer_v3: "KT1LJ4R4xoEWMgTjrGrdHJAeHLYFaB4RsoVK",
   allowed_mint_v3: "KT1KgEjxqfRCMwtCGifT6fDPwC35RptTUEvE",
   articles: "KT1GtbuswcNMGhHF2TSuH1Yfaqn16do8Qtva",
+  card_proxy: "KT1DQGSRsgHcf2TPdKGc4qm5AT9JprJCAo7j",
   collaboration_factory: "KT1JrUPSCt1r2MB2J7Lk2KwiWSYr3Mr414ck",
   consumable_database: "KT1Wm3zZqRd6JBbZWuatKYZCmnqUMy2Y79BL",
   cycles: "KT1BgD9SPfysnMz3vkfm6ZEaGFKCVcE5ay91",
