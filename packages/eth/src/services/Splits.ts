@@ -7,8 +7,8 @@ export const SPLITS_ETHER_TOKEN = "0x0000000000000000000000000000000000000000"
 
 export function getSplitsClient(
   chain: BlockchainType,
-  publicClient: PublicClient,
-  walletClient: WalletClient
+  publicClient: PublicClient = undefined,
+  walletClient: WalletClient = undefined
 ): SplitsClient {
   return new SplitsClient({
     chainId: getChainIdForChain(chain),
