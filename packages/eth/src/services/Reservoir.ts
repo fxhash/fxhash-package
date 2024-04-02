@@ -2,7 +2,9 @@ import { createClient } from "@reservoir0x/reservoir-sdk"
 import { chains, getConfigForChain } from "./Wallet"
 import { BlockchainType } from "@fxhash/shared"
 
-export const RESERVOIR_API_URLS = {
+export const RESERVOIR_API_URLS: {
+  [key: number]: string
+} = {
   1: "https://api.reservoir.tools/",
   11155111: "https://api-sepolia.reservoir.tools",
   8453: "https://api-base.reservoir.tools",

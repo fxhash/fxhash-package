@@ -9,9 +9,10 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    // FIXME: resolve type errors when removing the following lines
-    "strict": false,
+    "strict": true,
+    "useUnknownInCatchVariables": false,
     "noUnusedParameters": false,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "maxNodeModuleJsDepth": 10
   }
 }

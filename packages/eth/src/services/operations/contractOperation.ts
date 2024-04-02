@@ -8,6 +8,7 @@ import { EthereumWalletManager } from "../Wallet"
 export abstract class EthereumContractOperation<
   Params,
 > extends ContractOperation<
+  // @ts-ignore https://github.com/fxhash/monorepo/issues/955
   EthereumWalletManager,
   Params,
   { type: TransactionType; hash: string }

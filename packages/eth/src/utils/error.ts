@@ -1,4 +1,4 @@
-export const extractReservoirError = (e: Error): string => {
+export const extractReservoirError = (e: Error): string | undefined => {
   // try to find a JSON substring within e.message
   const jsonStartIndex = e.message.indexOf("{")
   if (jsonStartIndex !== -1) {
@@ -9,10 +9,10 @@ export const extractReservoirError = (e: Error): string => {
       return errorObject.message
     } catch (parseError) {
       // failed to parse JSON
-      return null
+      return undefined
     }
   } else {
     // no JSON found
-    return null
+    return undefined
   }
 }

@@ -16,10 +16,13 @@ import {
   WalletConnectionError,
 } from "@fxhash/shared"
 import {
+  Account,
   Chain,
+  HttpTransport,
   PublicClient,
   TransactionNotFoundError,
   TransactionReceipt,
+  Transport,
   UserRejectedRequestError,
   WalletClient,
   createPublicClient,
@@ -33,21 +36,29 @@ import { JsonRpcSigner } from "ethers"
 
 export const chains: Record<string, Chain> =
   config.config.envName === "production"
-    ? { [BlockchainType.ETHEREUM]: mainnet, [BlockchainType.BASE]: base }
-    : { [BlockchainType.ETHEREUM]: sepolia, [BlockchainType.BASE]: baseSepolia }
+    ? {
+        [BlockchainType.ETHEREUM]: mainnet as Chain,
+        [BlockchainType.BASE]: base as Chain,
+      }
+    : {
+        [BlockchainType.ETHEREUM]: sepolia as Chain,
+        [BlockchainType.BASE]: baseSepolia as Chain,
+      }
 
 export function getChainIdForChain(chain: BlockchainType) {
   return chains[chain].id
 }
 
 export function getCurrentChain(chain: BlockchainType): Chain {
-  return config.config.envName === "production"
-    ? chain === BlockchainType.ETHEREUM
-      ? mainnet
-      : base
-    : chain === BlockchainType.ETHEREUM
-      ? sepolia
-      : baseSepolia
+  return (
+    config.config.envName === "production"
+      ? chain === BlockchainType.ETHEREUM
+        ? mainnet
+        : base
+      : chain === BlockchainType.ETHEREUM
+        ? sepolia
+        : baseSepolia
+  ) as Chain
 }
 
 export function getConfigForChain(chain: BlockchainType) {
@@ -74,16 +85,16 @@ export enum EWalletOperations {
 
 interface EthereumWalletManagerParams {
   address: `0x${string}`
-  walletClient: WalletClient
-  publicClient: PublicClient
+  walletClient: WalletClient<Transport, Chain, Account>
+  publicClient: PublicClient<Transport, Chain>
   rpcNodes: string[]
   signer: JsonRpcSigner
 }
 
 export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
-  public walletClient: WalletClient
-  public publicClient: PublicClient
+  public walletClient: WalletClient<Transport, Chain, Account>
+  public publicClient: PublicClient<Transport, Chain>
   public signer: JsonRpcSigner
   public safe: Safe | undefined
   private rpcNodes: string[]
@@ -302,7 +313,7 @@ export class EthereumWalletManager extends WalletManager {
   ): PromiseResult<void, WalletConnectionError> {
     try {
       await this.walletClient.switchChain({ id: chain.id })
-      this.publicClient = createPublicClient({
+      this.publicClient = createPublicClient<HttpTransport, Chain>({
         chain: chain,
         transport: http(),
       })
