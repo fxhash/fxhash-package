@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
