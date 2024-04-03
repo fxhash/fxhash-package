@@ -6,7 +6,7 @@ import {
   WalletOperation,
 } from "@taquito/taquito"
 import { AbortedBeaconError, SigningType } from "@airgap/beacon-sdk"
-import { encodeTezosSignInPayload } from "@fxhash/auth"
+import { encodeTezosPayload } from "@fxhash/auth"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -53,7 +53,7 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeTezosSignInPayload(message)
+      const payloadBytes = encodeTezosPayload(message)
       const { signature } = await this.beaconWallet.client.requestSignPayload({
         signingType: SigningType.MICHELINE,
         payload: payloadBytes,

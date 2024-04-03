@@ -108,7 +108,7 @@ const encodeSizePrefix = (payload: string): string => {
  * @param {string} payload - The payload to encode.
  * @return {string} - The encoded payload.
  */
-export function encodeTezosSignInPayload(payload: string): string {
+export function encodeTezosPayload(payload: string): string {
   const bytes = char2Bytes(payload)
   const sizePrefix = encodeSizePrefix(payload)
   return TEZOS_SIGNING_PREFIX + sizePrefix + bytes
