@@ -33,10 +33,7 @@
     "@taquito/michel-codec": "17.3.1",
     "@taquito/michelson-encoder": "17.3.1",
     "@taquito/rpc": "17.3.1",
-    "@taquito/utils": "17.3.1",
-    "date-fns": "2.30.0",
-    "next": "13.4.19",
-    "use-async-effect": "2.2.7"
+    "@taquito/utils": "17.3.1"
   },
   "peerDependencies": {
     "@airgap/beacon-sdk": "4.0.10",
@@ -44,9 +41,7 @@
     "@fxhash/gql": "workspace:*",
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/taquito": "17.3.1",
-    "onchfs": "workspace:*",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "onchfs": "workspace:*"
   },
   "devDependencies": {
     "@airgap/beacon-sdk": "4.0.10",
@@ -55,8 +50,6 @@
     "@fxhash/tsconfig": "workspace:*",
     "@taquito/beacon-wallet": "17.3.1",
     "@taquito/taquito": "17.3.1",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.18",
     "onchfs": "workspace:*",
     "tslib": "2.6.0",
     "tsup": "8.0.1",
