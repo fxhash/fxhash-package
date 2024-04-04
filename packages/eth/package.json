@@ -53,6 +53,8 @@
     "@types/dotenv": "8.2.0",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
+    "@wagmi/core": "2.6.9",
+    "@wagmi/connectors": "4.1.18",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "ts-node": "10.9.1",
@@ -64,6 +66,8 @@
   },
   "peerDependencies": {
     "@fxhash/config": "workspace:*",
+    "@wagmi/core": "2.6.9",
+    "@wagmi/connectors": "4.1.18",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   }
