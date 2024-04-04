@@ -28,6 +28,12 @@ export const indexerV2ConfigDev: IndexerV2Config = {
   wipeDbOnStartup: false,
 }
 
+export const indexerV2ConfigLocal: IndexerV2Config = {
+  ...indexerV2ConfigDev,
+  tracingEnabled: false,
+  openTelemetryTarget: "http://localhost:14268",
+}
+
 export const indexerV2ConfigProd: IndexerV2Config = {
   debugSigner: true,
   maintenanceMode: false,

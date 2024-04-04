@@ -33,6 +33,7 @@ import {
 import {
   IndexerV2Config,
   indexerV2ConfigDev,
+  indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexerV2"
 
@@ -202,7 +203,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         // service specific config
         algolia: algoliaConfigDev,
-        indexerV2: indexerV2ConfigDev,
+        indexerV2: indexerV2ConfigLocal,
       },
     },
     localDocker: {
@@ -223,7 +224,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         // service specific config
         algolia: algoliaConfigDev,
-        indexerV2: indexerV2ConfigDev,
+        indexerV2: indexerV2ConfigLocal,
       },
     },
     dev: {
