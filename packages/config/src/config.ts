@@ -25,6 +25,16 @@ import {
 } from "./contracts/base"
 import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
 import { getConfigForEnv } from "./utils"
+import {
+  AlgoliaConfig,
+  algoliaConfigDev,
+  algoliaConfigProd,
+} from "./config/algolia"
+import {
+  IndexerV2Config,
+  indexerV2ConfigDev,
+  indexerV2ConfigProd,
+} from "./config/indexerV2"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -48,6 +58,9 @@ export interface IFxhashEnvConfig {
   cloudflareTurnstileSiteKey: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
+  // service specific config
+  algolia: AlgoliaConfig
+  indexerV2: IndexerV2Config
 }
 
 type TBlockchainContacts = {
@@ -187,6 +200,9 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        // service specific config
+        algolia: algoliaConfigDev,
+        indexerV2: indexerV2ConfigDev,
       },
     },
     localDocker: {
@@ -205,6 +221,9 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        // service specific config
+        algolia: algoliaConfigDev,
+        indexerV2: indexerV2ConfigDev,
       },
     },
     dev: {
@@ -223,6 +242,9 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        // service specific config
+        algolia: algoliaConfigDev,
+        indexerV2: indexerV2ConfigDev,
       },
     },
     prd: {
@@ -241,6 +263,9 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        // service specific config
+        algolia: algoliaConfigProd,
+        indexerV2: indexerV2ConfigProd,
       },
     },
   },

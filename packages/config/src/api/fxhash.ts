@@ -13,7 +13,9 @@ export interface IFxhashApis {
   ethMetadata: string
   ipfsGateway: string
   ipfsGatewaySafe: string
+  ipfsGatewayInternal: string
   onchfsProxy: string
+  onchfsProxyInternal: string
   opensea: string
   authority: {
     api: string
@@ -57,7 +59,11 @@ export const fxhashDevApis: IFxhashApis = {
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
+  ipfsGatewayInternal:
+    "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
+  onchfsProxyInternal:
+    "http://fxhash-dev-testnet-onchfs-proxy.fxhash-dev-testnet.svc.cluster.local:4004",
   opensea: "https://testnets-api.opensea.io/api/v2/chain/goerli",
   authority: {
     api: "NONE",
@@ -121,7 +127,11 @@ export const fxhashPrdApis: IFxhashApis = {
   ethMetadata: "https://media.fxhash.xyz/metadata/ethereum/",
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
+  ipfsGatewayInternal:
+    "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
+  onchfsProxyInternal:
+    "http://fxhash-prd-onchfs-proxy.fxhash-prd.svc.cluster.local:4004",
   opensea: "https://api.opensea.io/api/v2/chain/ethereum",
   authority: {
     api: "NONE",
