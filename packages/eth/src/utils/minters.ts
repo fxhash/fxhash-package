@@ -233,22 +233,18 @@ export async function signMintPass(
   chain: BlockchainType
 ) {
   await walletManager.prepareSigner({ blockchainType: chain })
-  const contract = getContract({
+  const nonce = await walletManager.publicClient.readContract({
     address: minter,
     abi: abi,
-    //@ts-ignore
-    walletClient: walletManager.walletClient,
-    //@ts-ignore
-    publicClient: walletManager.publicClient,
+    functionName: "reserveNonce",
+    args: [token, reserveId],
   })
-  const nonce = await contract.read.reserveNonce([token, reserveId])
-  const typedDataHash = await contract.read.generateTypedDataHash([
-    token,
-    reserveId,
-    nonce,
-    index,
-    claimer,
-  ])
+  const typedDataHash = await walletManager.publicClient.readContract({
+    address: minter,
+    abi: abi,
+    functionName: "generateTypedDataHash",
+    args: [token, reserveId, nonce, index, claimer],
+  })
   if (typeof typedDataHash !== "string") {
     throw Error("Could not get typed hash for mint pass")
   }

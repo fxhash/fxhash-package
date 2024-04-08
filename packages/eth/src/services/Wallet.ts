@@ -1,4 +1,4 @@
-import { config } from "@fxhash/config"
+import { config, devConfig, prdConfig } from "@fxhash/config"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -16,40 +16,141 @@ import {
   WalletConnectionError,
 } from "@fxhash/shared"
 import {
+  Account,
   Chain,
+  HttpTransport,
   PublicClient,
   TransactionNotFoundError,
   TransactionReceipt,
+  Transport,
   UserRejectedRequestError,
   WalletClient,
   createPublicClient,
   http,
+  Client,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "../services/Safe"
 import { TEthereumContractOperation } from "./operations"
-import { JsonRpcSigner } from "ethers"
+import {
+  BrowserProvider,
+  JsonRpcSigner,
+  FallbackProvider,
+  JsonRpcProvider,
+} from "ethers"
+import {
+  fallback,
+  unstable_connector,
+  getConnectorClient,
+  Config,
+} from "@wagmi/core"
+import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
+
+export function clientToSigner(client: Client<Transport, Chain, Account>) {
+  const { account, chain, transport } = client
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  }
+  const provider = new BrowserProvider(transport, network)
+  const signer = new JsonRpcSigner(provider, account.address)
+  return signer
+}
+
+export async function getEthersSigner(
+  config: Config,
+  { chainId }: { chainId?: number } = {}
+) {
+  const client = await getConnectorClient(config, { chainId })
+  return clientToSigner(client)
+}
+
+export function clientToProvider(client: Client<Transport, Chain>) {
+  const { chain, transport } = client
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  }
+  if (transport.type === "fallback") {
+    const providers = (transport.transports as ReturnType<Transport>[]).map(
+      ({ value }) => new JsonRpcProvider(value?.url, network)
+    )
+    if (providers.length === 1) return providers[0]
+    return new FallbackProvider(providers)
+  }
+  return new JsonRpcProvider(transport.url, network)
+}
+
+export async function getEthersProvider(
+  config: Config,
+  { chainId }: { chainId?: number } = {}
+) {
+  const client = await getConnectorClient(config, { chainId })
+  return clientToProvider(client)
+}
 
 export const chains: Record<string, Chain> =
   config.config.envName === "production"
-    ? { [BlockchainType.ETHEREUM]: mainnet, [BlockchainType.BASE]: base }
-    : { [BlockchainType.ETHEREUM]: sepolia, [BlockchainType.BASE]: baseSepolia }
+    ? {
+        [BlockchainType.ETHEREUM]: mainnet as Chain,
+        [BlockchainType.BASE]: base as Chain,
+      }
+    : {
+        [BlockchainType.ETHEREUM]: sepolia as Chain,
+        [BlockchainType.BASE]: baseSepolia as Chain,
+      }
 
 export function getChainIdForChain(chain: BlockchainType) {
   return chains[chain].id
 }
 
 export function getCurrentChain(chain: BlockchainType): Chain {
-  return config.config.envName === "production"
-    ? chain === BlockchainType.ETHEREUM
-      ? mainnet
-      : base
-    : chain === BlockchainType.ETHEREUM
-      ? sepolia
-      : baseSepolia
+  return (
+    config.config.envName === "production"
+      ? chain === BlockchainType.ETHEREUM
+        ? mainnet
+        : base
+      : chain === BlockchainType.ETHEREUM
+        ? sepolia
+        : baseSepolia
+  ) as Chain
 }
 
+export const defaultTransports = [
+  unstable_connector(metaMask),
+  unstable_connector(walletConnect),
+  unstable_connector(coinbaseWallet),
+]
+
+export const transports: Record<string, Transport> =
+  config.config.envName === "production"
+    ? {
+        [BlockchainType.ETHEREUM]: fallback([
+          ...defaultTransports,
+          http(prdConfig.eth.apis!.rpcs[0]),
+          http(),
+        ]),
+        [BlockchainType.BASE]: fallback([
+          ...defaultTransports,
+          http(prdConfig.base.apis!.rpcs[0]),
+          http(),
+        ]),
+      }
+    : {
+        [BlockchainType.ETHEREUM]: fallback([
+          ...defaultTransports,
+          http(devConfig.eth.apis!.rpcs[0]),
+          http(),
+        ]),
+        [BlockchainType.BASE]: fallback([
+          ...defaultTransports,
+          http(devConfig.eth.apis!.rpcs[0]),
+          http(),
+        ]),
+      }
 export function getConfigForChain(chain: BlockchainType) {
   return chain === BlockchainType.ETHEREUM ? config.eth : config.base
 }
@@ -74,16 +175,16 @@ export enum EWalletOperations {
 
 interface EthereumWalletManagerParams {
   address: `0x${string}`
-  walletClient: WalletClient
-  publicClient: PublicClient
-  rpcNodes: string[]
+  walletClient: WalletClient<Transport, Chain, Account>
+  publicClient: PublicClient<Transport, Chain>
+  rpcNodes?: string[]
   signer: JsonRpcSigner
 }
 
 export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
-  public walletClient: WalletClient
-  public publicClient: PublicClient
+  public walletClient: WalletClient<Transport, Chain, Account>
+  public publicClient: PublicClient<Transport, Chain>
   public signer: JsonRpcSigner
   public safe: Safe | undefined
   private rpcNodes: string[]
@@ -92,7 +193,7 @@ export class EthereumWalletManager extends WalletManager {
     super(params.address)
     this.walletClient = params.walletClient
     this.publicClient = params.publicClient
-    this.rpcNodes = params.rpcNodes
+    this.rpcNodes = params.rpcNodes || config.eth.apis!.rpcs
     this.signer = params.signer
   }
 
@@ -302,7 +403,7 @@ export class EthereumWalletManager extends WalletManager {
   ): PromiseResult<void, WalletConnectionError> {
     try {
       await this.walletClient.switchChain({ id: chain.id })
-      this.publicClient = createPublicClient({
+      this.publicClient = createPublicClient<HttpTransport, Chain>({
         chain: chain,
         transport: http(),
       })

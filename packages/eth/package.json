@@ -39,20 +39,24 @@
     "multiformats": "9.9.0",
     "onchfs": "workspace:*",
     "path": "0.12.7",
-    "viem": "1.21.4"
+    "viem": "2.9.2"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/dotenv": "8.2.0",
+    "@wagmi/core": "2.6.9",
+    "@wagmi/connectors": "4.1.18",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
-    "viem": "1.21.4",
+    "viem": "2.9.2",
     "vitest": "0.34.6"
   },
   "peerDependencies": {
-    "@fxhash/config": "workspace:*"
+    "@fxhash/config": "workspace:*",
+    "@wagmi/core": "2.6.9",
+    "@wagmi/connectors": "4.1.18"
   }
 }

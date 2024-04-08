@@ -75,7 +75,7 @@ export class TezosMintV3AbstractionOperation extends TezosContractOperation<TMin
 
   async validate(): Promise<boolean> {
     if (this.useTicket) {
-      const pkh = await this.manager.beaconWallet.getPKH()
+      const pkh = await this.manager.getPublicKeyHash()
       if (this.params.ticketId instanceof Array) {
         const availableTicketId = await getFirstTicketAvailable(
           pkh,

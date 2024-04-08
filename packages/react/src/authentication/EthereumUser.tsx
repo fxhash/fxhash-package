@@ -1,7 +1,11 @@
 import "viem/window"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
-import { useAccount, useDisconnect, useWalletClient } from "wagmi"
-import { PublicClient } from "viem"
+import {
+  useAccount,
+  useDisconnect,
+  usePublicClient,
+  useWalletClient,
+} from "wagmi"
 import { EthereumWalletManager } from "@fxhash/eth"
 import {
   BlockchainType,
@@ -41,7 +45,6 @@ const EthereumUserContext =
   createContext<TUserEthereumWalletContext>(defaultCtx)
 
 export interface EthereumUserProviderConfig {
-  publicClient: PublicClient
   rpcNodes: string[]
 }
 
@@ -64,7 +67,8 @@ export function EthereumUserProvider({
   children,
 }: EthereumUserProviderProps) {
   const [context, setContext] = useState<TUserEthereumWalletContext>(defaultCtx)
-  const { data: walletClient, isIdle } = useWalletClient()
+  const { data: walletClient } = useWalletClient()
+  const publicClient = usePublicClient()
   const signer = useEthersSigner()
   const accountState = useAccount()
   const { setOpen: setConnectkitOpen } = useModal()
@@ -88,9 +92,11 @@ export function EthereumUserProvider({
       const account = walletClient.account
       if (!account) return
 
+      invariant(publicClient, "Public client not available")
+
       const walletManager = new EthereumWalletManager({
-        walletClient: walletClient,
-        publicClient: config.publicClient,
+        walletClient,
+        publicClient,
         rpcNodes: config.rpcNodes,
         address: account.address,
         signer,
@@ -108,10 +114,10 @@ export function EthereumUserProvider({
       setContext(context => ({
         ...context,
         walletManager: null,
-        initialized: !!(context.initialized || walletClient || isIdle),
+        initialized: !!(context.initialized || walletClient),
       }))
     }
-  }, [walletClient, signer, isIdle])
+  }, [walletClient, signer])
 
   const signConnectionMessage = async (): PromiseResult<
     IConnexionPayload,

@@ -8,10 +8,7 @@ import {
   Wallet,
   ethers,
 } from "ethers"
-import {
-  SafeSignature,
-  MetaTransactionData,
-} from "@safe-global/safe-core-sdk-types"
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { EthereumWalletManager, getChainIdForChain } from "./Wallet"
 import { getAddress } from "viem"
 import { BlockchainType, UserRejectedError, invariant } from "@fxhash/shared"
@@ -133,12 +130,16 @@ export async function proposeSafeTransaction(
     }
     throw error
   }
+  const userSignature = safeTransaction.signatures.get(walletManager.address)
+  if (!userSignature) {
+    throw new Error("User signature not found")
+  }
   await getSafeService(chain).proposeTransaction({
     safeAddress: safeAddress,
     safeTransactionData: safeTransaction.data,
     safeTxHash,
     senderAddress: getAddress(walletManager.address),
-    senderSignature: safeTransaction.signatures[0],
+    senderSignature: userSignature.data,
   })
   return safeTxHash
 }

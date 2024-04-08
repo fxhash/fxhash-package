@@ -27,10 +27,11 @@ export class ApproveSafeMultisigTxEthV1Operation extends EthereumContractOperati
     const signedSafeTx = await this.manager.safe.signTransaction(
       await safeService.getTransaction(this.params.txHash)
     )
-    await safeService.confirmTransaction(
-      this.params.txHash,
-      signedSafeTx.signatures[signedSafeTx.signatures.size - 1]
-    )
+    const userSignature = signedSafeTx.signatures.get(this.manager.address)
+    if (!userSignature) {
+      throw new Error("User signature not found")
+    }
+    await safeService.confirmTransaction(this.params.txHash, userSignature.data)
     return {
       type: TransactionType.OFFCHAIN,
       hash: this.params.txHash,

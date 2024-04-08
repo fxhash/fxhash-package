@@ -26,13 +26,15 @@ export type TSetBaseURIEthV1OperationParams = {
   collabAddress?: string
 }
 
-export function getSafeTxData(): MetaTransactionData {
+function getSafeTxData(
+  params: TSetBaseURIEthV1OperationParams
+): MetaTransactionData {
   return {
-    to: getAddress(this.params.token),
+    to: getAddress(params.token),
     data: encodeFunctionData({
       abi: FX_GEN_ART_721_ABI,
       functionName: "setBaseURI",
-      args: [this.params.baseURI],
+      args: [params.baseURI],
     }),
     value: "0",
   }
@@ -51,7 +53,7 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
       await this.manager.connectSafe(this.params.collabAddress)
       const transactionHash = await proposeSafeTransaction(
         this.chain,
-        [getSafeTxData()],
+        [getSafeTxData(this.params)],
         this.manager
       )
       return {

@@ -5,5 +5,5 @@
 ## Installation
 
 ```
-pnpm add @fxhash/react react react-dom onchfs @airgap/beacon-sdk @fxhash/config @fxhash/gql @taquito/beacon-wallet @taquito/taquito
+pnpm add @fxhash/react react react-dom onchfs @airgap/beacon-sdk @fxhash/config @fxhash/gql @taquito/beacon-wallet @taquito/taquito @taquito/signer
 ```

@@ -273,20 +273,17 @@ export async function predictFxContractAddress(
   const chainConfig =
     blockchainType === BlockchainType.ETHEREUM ? config.eth : config.base
   await walletManager.prepareSigner({ blockchainType: blockchainType })
-  const factory = getContract({
+  const address = await walletManager.publicClient.readContract({
     address:
       factoryType === "ticket"
         ? chainConfig.contracts.mint_ticket_factory_v1
         : chainConfig.contracts.project_factory_v1,
     abi:
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
-    walletClient: walletManager.walletClient as Client,
-    publicClient: walletManager.publicClient as Client,
+    functionName:
+      factoryType === "ticket" ? "getTicketAddress" : "getTokenAddress",
+    args: [nonceAddress],
   })
-  const address =
-    factoryType === "ticket"
-      ? await factory.read.getTicketAddress([nonceAddress])
-      : await factory.read.getTokenAddress([nonceAddress])
   return address as `0x${string}`
 }
 
@@ -445,10 +442,10 @@ export async function generateOnchainDataHash(
 ) {
   const currentConfig = getConfigForChain(chain)
   await walletManager.prepareSigner({ blockchainType: chain })
-  const genArt = getContract({
-    abi: FX_GEN_ART_721_ABI,
+  return await walletManager.publicClient.readContract({
     address: currentConfig.contracts.gen_art_token_impl_v1,
-    publicClient: walletManager.publicClient as Client,
+    abi: FX_GEN_ART_721_ABI,
+    functionName: "generateOnchainDataHash",
+    args: [bytes],
   })
-  return genArt.read.generateOnchainDataHash([bytes])
 }

@@ -5,8 +5,14 @@ import {
   Wallet,
   WalletOperation,
 } from "@taquito/taquito"
-import { AbortedBeaconError, SigningType } from "@airgap/beacon-sdk"
-import { encodeTezosSignInPayload } from "@fxhash/auth"
+import { InMemorySigner } from "@taquito/signer"
+import {
+  AbortedBeaconError,
+  DAppClientOptions,
+  NetworkType,
+  SigningType,
+} from "@airgap/beacon-sdk"
+import { encodeTezosPayload } from "@fxhash/auth"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -22,27 +28,79 @@ import {
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
+import { config } from "@fxhash/config"
+
+export const DefaultBeaconWalletConfig: DAppClientOptions = {
+  name: "fxhash",
+  // TODO: check the requirements of the icon
+  iconUrl:
+    "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG",
+  network: {
+    type: config.tez.config.network as NetworkType,
+  },
+}
+
+export function isInMemorySigner(
+  wallet: BeaconWallet | InMemorySigner
+): wallet is InMemorySigner {
+  return wallet instanceof InMemorySigner
+}
 
 interface TezosWalletManagerParams {
   address: string
-  beaconWallet: BeaconWallet
+  wallet: BeaconWallet | InMemorySigner
   tezosToolkit: TezosToolkit
-  rpcNodes: string[]
+  rpcNodes?: string[]
 }
 
 export class TezosWalletManager extends WalletManager {
   private signingInProgress = false
-  beaconWallet: BeaconWallet
+  wallet: BeaconWallet | InMemorySigner
   tezosToolkit: TezosToolkit
   contracts: Record<string, ContractAbstraction<Wallet> | null> = {}
   rpcNodes: string[]
 
   constructor(params: TezosWalletManagerParams) {
     super(params.address)
-    this.beaconWallet = params.beaconWallet
+    this.wallet = params.wallet
     this.tezosToolkit = params.tezosToolkit
-    this.rpcNodes = params.rpcNodes
+    this.rpcNodes = params.rpcNodes || config.tez.apis.rpcs
   }
+
+  /**
+   * This method is used to get the public key of the active wallet.
+   * @returns The public key of the wallet
+   * @throws {Error} If there is an unexpected error
+   */
+  async getPublicKey(): Promise<string> {
+    if (isInMemorySigner(this.wallet)) {
+      return await this.wallet.publicKey()
+    } else {
+      return (await this.wallet.client.getActiveAccount()).publicKey
+    }
+  }
+
+  /**
+   * This method is used to get the public key hash of the active wallet.
+   * @returns The public key hash of the wallet
+   * @throws {Error} If there is an unexpected error
+   */
+  getPublicKeyHash(): Promise<string> {
+    if (isInMemorySigner(this.wallet)) {
+      return this.wallet.publicKeyHash()
+    } else {
+      return this.wallet.getPKH()
+    }
+  }
+
+  /**
+   * This method is used to sign a message with the wallet.
+   * @param message The message to be signed
+   * @returns The signature of the message
+   * @throws {PendingSigningRequestError} If there is a pending signing request
+   * @throws {UserRejectedError} If the user rejects the signing request
+   * @throws {Error} If there is an unexpected error:console.warn();
+   */
 
   async signMessageWithWallet(
     message: string
@@ -53,12 +111,18 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeTezosSignInPayload(message)
-      const { signature } = await this.beaconWallet.client.requestSignPayload({
-        signingType: SigningType.MICHELINE,
-        payload: payloadBytes,
-        sourceAddress: this.address,
-      })
+      const payloadBytes = encodeTezosPayload(message)
+      let signature = null
+      if (isInMemorySigner(this.wallet)) {
+        signature = await this.wallet.sign(payloadBytes)
+      } else {
+        const res = await this.wallet.client.requestSignPayload({
+          signingType: SigningType.MICHELINE,
+          payload: payloadBytes,
+          sourceAddress: this.address,
+        })
+        signature = res.signature
+      }
       return success(signature)
     } catch (error) {
       if (error instanceof AbortedBeaconError) {
