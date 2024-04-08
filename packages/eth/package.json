@@ -45,8 +45,6 @@
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/dotenv": "8.2.0",
-    "@wagmi/core": "2.6.9",
-    "@wagmi/connectors": "4.1.18",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "tsup": "8.0.1",
@@ -55,8 +53,6 @@
     "vitest": "0.34.6"
   },
   "peerDependencies": {
-    "@fxhash/config": "workspace:*",
-    "@wagmi/core": "2.6.9",
-    "@wagmi/connectors": "4.1.18"
+    "@fxhash/config": "workspace:*"
   }
 }

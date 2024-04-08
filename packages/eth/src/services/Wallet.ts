@@ -39,6 +39,7 @@ import {
   FallbackProvider,
   JsonRpcProvider,
 } from "ethers"
+/* Temp remove until package is esm compatible
 import {
   fallback,
   unstable_connector,
@@ -46,6 +47,7 @@ import {
   Config,
 } from "@wagmi/core"
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
+*/
 
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
   const { account, chain, transport } = client
@@ -58,7 +60,7 @@ export function clientToSigner(client: Client<Transport, Chain, Account>) {
   const signer = new JsonRpcSigner(provider, account.address)
   return signer
 }
-
+/* Temp remove until package is esm compatible
 export async function getEthersSigner(
   config: Config,
   { chainId }: { chainId?: number } = {}
@@ -66,7 +68,7 @@ export async function getEthersSigner(
   const client = await getConnectorClient(config, { chainId })
   return clientToSigner(client)
 }
-
+*/
 export function clientToProvider(client: Client<Transport, Chain>) {
   const { chain, transport } = client
   const network = {
@@ -83,7 +85,7 @@ export function clientToProvider(client: Client<Transport, Chain>) {
   }
   return new JsonRpcProvider(transport.url, network)
 }
-
+/* Temp remove until package is esm compatible
 export async function getEthersProvider(
   config: Config,
   { chainId }: { chainId?: number } = {}
@@ -91,7 +93,7 @@ export async function getEthersProvider(
   const client = await getConnectorClient(config, { chainId })
   return clientToProvider(client)
 }
-
+*/
 export const chains: Record<string, Chain> =
   config.config.envName === "production"
     ? {
@@ -118,7 +120,7 @@ export function getCurrentChain(chain: BlockchainType): Chain {
         : baseSepolia
   ) as Chain
 }
-
+/* Temp remove until package is esm compatible
 export const defaultTransports = [
   unstable_connector(metaMask),
   unstable_connector(walletConnect),
@@ -151,6 +153,7 @@ export const transports: Record<string, Transport> =
           http(),
         ]),
       }
+*/
 export function getConfigForChain(chain: BlockchainType) {
   return chain === BlockchainType.ETHEREUM ? config.eth : config.base
 }
