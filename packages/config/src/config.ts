@@ -35,7 +35,7 @@ import {
   indexerV2ConfigDev,
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
-} from "./config/indexerV2"
+} from "./config/indexer-v2"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
