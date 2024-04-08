@@ -1,7 +1,7 @@
 export type EthIndexerConfig = {
   awsS3Bucket: string
   awsS3Region: string
-  chain: "sepolia" | "eth-mainnet"
+  chain: "sepolia" | "eth-mainnet" | "base-sepolia" | "base-mainnet"
   debugSigner: boolean
   moderationEnabled: boolean
   revealingBatchNumber: number
@@ -24,11 +24,11 @@ export const ethIndexerConfigDev: EthIndexerConfig = {
   debugSigner: true,
   moderationEnabled: false,
   revealingBatchNumber: 2,
-  revealingEnabled: false,
+  revealingEnabled: true,
   revealingMaxAttempts: 8,
   revealingMetadataQueue: 4,
   signingBatchNumber: 2,
-  signingEnabled: false,
+  signingEnabled: true,
   signingMaxAttempts: 8,
   signingMetadataQueue: 4,
   startBlock: 5013011,
@@ -38,24 +38,19 @@ export const ethIndexerConfigDev: EthIndexerConfig = {
 
 export const ethIndexerConfigLocal: EthIndexerConfig = {
   ...ethIndexerConfigDev,
-  // override some values
+  signingEnabled: false,
 }
 
 export const ethIndexerConfigProd: EthIndexerConfig = {
+  ...ethIndexerConfigDev,
   awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
   awsS3Region: "us-east-1",
   chain: "eth-mainnet",
-  debugSigner: true,
-  moderationEnabled: false,
   revealingBatchNumber: 1,
-  revealingEnabled: true,
   revealingMaxAttempts: 3,
   revealingMetadataQueue: 20,
   signingBatchNumber: 20,
-  signingEnabled: true,
   signingMaxAttempts: 8,
   signingMetadataQueue: 40,
   startBlock: 18762350,
-  subsquidSchema: "squid_processor",
-  wipeDbOnStartup: false,
 }

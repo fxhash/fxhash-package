@@ -42,6 +42,11 @@ import {
   ethIndexerConfigLocal,
   ethIndexerConfigProd,
 } from "./config/eth-indexer"
+import {
+  baseIndexerConfigDev,
+  baseIndexerConfigLocal,
+  baseIndexerConfigProd,
+} from "./config/base-indexer"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -70,6 +75,7 @@ export interface IFxhashEnvConfig {
   indexer: {
     tez: IndexerV2Config
     eth: EthIndexerConfig
+    base: EthIndexerConfig
   }
 }
 
@@ -215,6 +221,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigLocal,
           eth: ethIndexerConfigLocal,
+          base: baseIndexerConfigLocal,
         },
       },
     },
@@ -239,6 +246,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigLocal,
           eth: ethIndexerConfigLocal,
+          base: baseIndexerConfigLocal,
         },
       },
     },
@@ -263,6 +271,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigDev,
           eth: ethIndexerConfigDev,
+          base: baseIndexerConfigDev,
         },
       },
     },
@@ -287,6 +296,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigProd,
           eth: ethIndexerConfigProd,
+          base: baseIndexerConfigProd,
         },
       },
     },
