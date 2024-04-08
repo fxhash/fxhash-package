@@ -36,6 +36,12 @@ import {
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexer-v2"
+import {
+  EthIndexerConfig,
+  ethIndexerConfigDev,
+  ethIndexerConfigLocal,
+  ethIndexerConfigProd,
+} from "./config/eth-indexer"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -63,6 +69,7 @@ export interface IFxhashEnvConfig {
   algolia: AlgoliaConfig
   indexer: {
     tez: IndexerV2Config
+    eth: EthIndexerConfig
   }
 }
 
@@ -207,6 +214,7 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigDev,
         indexer: {
           tez: indexerV2ConfigLocal,
+          eth: ethIndexerConfigLocal,
         },
       },
     },
@@ -230,6 +238,7 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigDev,
         indexer: {
           tez: indexerV2ConfigLocal,
+          eth: ethIndexerConfigLocal,
         },
       },
     },
@@ -253,6 +262,7 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigDev,
         indexer: {
           tez: indexerV2ConfigDev,
+          eth: ethIndexerConfigDev,
         },
       },
     },
@@ -276,6 +286,7 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigProd,
         indexer: {
           tez: indexerV2ConfigProd,
+          eth: ethIndexerConfigProd,
         },
       },
     },
