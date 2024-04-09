@@ -48,6 +48,7 @@ export interface IFxhashEnvConfig {
   cloudflareTurnstileSiteKey: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
+  syndicateProjectId: string
 }
 
 type TBlockchainContacts = {
@@ -187,6 +188,7 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
       },
     },
     localDocker: {
@@ -205,6 +207,7 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
       },
     },
     dev: {
@@ -223,6 +226,7 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
       },
     },
     prd: {
@@ -241,6 +245,7 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
+        syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
       },
     },
   },

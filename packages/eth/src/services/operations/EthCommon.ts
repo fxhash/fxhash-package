@@ -2,7 +2,6 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
-  PublicClient,
   TransactionReceipt,
   getContract,
   ContractFunctionExecutionError,
@@ -11,22 +10,16 @@ import {
   Client,
   Chain,
 } from "viem"
-
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
 import { ALLOCATION_BASE, MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
 import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
 import { getOpenChainError } from "@/services/Openchain"
-import {
-  FX_GEN_ART_721_ABI,
-  FX_ISSUER_FACTORY_ABI,
-  SPLITS_MAIN_ABI,
-} from "@/abi"
+import { FX_GEN_ART_721_ABI, FX_ISSUER_FACTORY_ABI } from "@/abi"
 import {
   BlockchainType,
   InsufficientFundsError,
   TransactionRevertedError,
   UserRejectedError,
-  WalletManager,
   invariant,
 } from "@fxhash/shared"
 
@@ -34,6 +27,7 @@ export enum MintTypes {
   FIXED_PRICE,
   DUTCH_AUCTION,
   TICKET,
+  FREE_MINTING,
 }
 
 //Type definition for the primary and royalties receivers
@@ -112,6 +106,12 @@ export interface TicketMintInfoArgs {
   reserveInfo: ReserveInfoArgs
 }
 
+export interface FreeMintingMintInfoArgs {
+  type: MintTypes.FREE_MINTING
+  reserveInfo: ReserveInfoArgs
+  params: FreeMintParams
+}
+
 export interface BaseReserves {
   whitelist?: MerkleTreeWhitelist
   mintPassSigner?: string
@@ -119,6 +119,10 @@ export interface BaseReserves {
 
 export interface FixedPriceParams extends BaseReserves {
   price: bigint
+}
+
+export interface FreeMintParams extends BaseReserves {
+  maxAmountPerFid: bigint
 }
 
 export interface DutchAuctionParams extends BaseReserves {
