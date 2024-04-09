@@ -54,6 +54,8 @@ export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
 
+export type { EthIndexerConfig }
+
 export interface IFxhashNetworkConfig {
   network: string
   chainId: BlockchainIdentifier
