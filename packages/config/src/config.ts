@@ -36,6 +36,12 @@ import {
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexer-v2"
+import {
+  MarketStatsV2Config,
+  marketStatsV2ConfigDev,
+  marketStatsV2ConfigLocal,
+  marketStatsV2ConfigProd,
+} from "./config/marketstats-v2"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -64,6 +70,7 @@ export interface IFxhashEnvConfig {
   indexer: {
     tez: IndexerV2Config
   }
+  marketStats: MarketStatsV2Config
 }
 
 type TBlockchainContacts = {
@@ -208,6 +215,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigLocal,
         },
+        marketStats: marketStatsV2ConfigLocal,
       },
     },
     localDocker: {
@@ -231,6 +239,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigLocal,
         },
+        marketStats: marketStatsV2ConfigLocal,
       },
     },
     dev: {
@@ -254,6 +263,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigDev,
         },
+        marketStats: marketStatsV2ConfigDev,
       },
     },
     prd: {
@@ -277,6 +287,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigProd,
         },
+        marketStats: marketStatsV2ConfigProd,
       },
     },
   },
