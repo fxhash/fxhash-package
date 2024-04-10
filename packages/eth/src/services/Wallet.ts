@@ -32,7 +32,7 @@ import {
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 const Safe = require("@safe-global/protocol-kit").default
 import { getSafeSDK } from "../services/Safe.js"
-import { TEthereumContractOperation } from "./operations/contractOperation.js"
+import { TEthereumContractOperation } from "./operations/index.js"
 import {
   BrowserProvider,
   JsonRpcSigner,

@@ -1,9 +1,9 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
-import { prepareMintParams } from "@/utils"
-import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1"
-import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1"
-import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1.js"
+import { prepareMintParams } from "@/utils/index.js"
+import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
+import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
+import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
 import { TransactionType, invariant } from "@fxhash/shared"
 
 export type TMintEthV1OperationParams = {

@@ -10,6 +10,7 @@
       "@/*": ["./src/*"]
     },
     "strict": true,
+    "useUnknownInCatchVariables": false,
     // FIXME: can be removed when all packages are migrated to esm and @fxhash/base config uses those defaults
     "module": "Node16",
     "moduleResolution": "Node16"

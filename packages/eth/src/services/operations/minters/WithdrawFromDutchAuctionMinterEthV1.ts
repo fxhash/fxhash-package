@@ -1,10 +1,10 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter.js"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
 export type TWithdrawFromDutchAuctionMinterEthV1OperationParams = {

@@ -1,16 +1,11 @@
-import {
-  decodeAbiParameters,
-  encodeAbiParameters,
-  encodePacked,
-  getContract,
-} from "viem"
+import { decodeAbiParameters, encodeAbiParameters, encodePacked } from "viem"
 import {
   MerkleTreeWhitelist,
   getAvailableIndexesAndProofsForUser,
   getWhitelist,
   getWhitelistTree,
-} from "./whitelist"
-import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants"
+} from "./whitelist.js"
+import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants.js"
 
 import { sign } from "viem/accounts"
 import {
@@ -23,16 +18,15 @@ import {
   TicketMintInfoArgs,
   defineReserveInfo,
   predictFxContractAddress,
-} from "@/services/operations"
+} from "@/services/operations/index.js"
 import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import { apolloClient } from "@/services/Hasura"
+import { apolloClient } from "@/services/Hasura.js"
 import { BlockchainType, invariant } from "@fxhash/shared"
-import { config } from "@fxhash/config"
-import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
-import { IBaseContracts } from "@fxhash/config/dist/contracts/base"
+import { IEthContracts, config } from "@fxhash/config"
+import { EthereumWalletManager } from "@/services/Wallet.js"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -324,7 +318,7 @@ export async function processAndFormatMintInfos(
         chain === BlockchainType.BASE
       ) {
         const mintInfo: MintInfo = {
-          minter: (currentConfig.contracts as IBaseContracts)
+          minter: (currentConfig.contracts as IEthContracts)
             .free_minting_minter_v1,
           reserveInfo: reserveInfo,
           params: encodeAbiParameters(
@@ -534,7 +528,7 @@ export const prepareMintParams = async (
 
   invariant(
     tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
-    "No token found"
+    "No token found.js"
   )
 
   const { pricing } = getPricingFromParams(
@@ -559,7 +553,7 @@ export const prepareMintParams = async (
 
     invariant(
       merkleTreeWhitelist && merkleTreeWhitelist.length > 0,
-      "No whitelist found"
+      "No whitelist found.js"
     )
 
     const indexesAndProofsForUser = getAvailableIndexesAndProofsForUser(
@@ -577,7 +571,7 @@ export const prepareMintParams = async (
   invariant(indexesAndProofs, "No indexes and proofs found")
   invariant(
     qty <= BigInt(indexesAndProofs.indexes.length),
-    "Not enough allow list entries found for the requested quantity"
+    "Not enough allow list entries found for the requested quantity.js"
   )
 
   indexesAndProofs.indexes = indexesAndProofs.indexes.slice(0, Number(qty))
@@ -604,7 +598,7 @@ export const fetchTokenReserveId = async (
 
   invariant(
     tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
-    "No token found"
+    "No token found.js"
   )
 
   const { pricing } = getPricingFromParams(

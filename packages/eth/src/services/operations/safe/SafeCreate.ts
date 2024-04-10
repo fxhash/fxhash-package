@@ -1,6 +1,7 @@
-import Safe, { SafeAccountConfig } from "@safe-global/protocol-kit"
-import { EthereumContractOperation } from "../contractOperation"
-import { getSafeFactory } from "@/services/Safe"
+const Safe = require("@safe-global/protocol-kit").default
+import { SafeAccountConfig } from "@safe-global/protocol-kit"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { getSafeFactory } from "@/services/Safe.js"
 import { TransactionType } from "@fxhash/shared"
 
 /**
@@ -30,7 +31,7 @@ export class CreateSafeMultisigEthV1Operation extends EthereumContractOperation<
       threshold: this.params.threshold,
     }
 
-    const safeInstance: Safe = await safeFactory.deploySafe({
+    const safeInstance: typeof Safe = await safeFactory.deploySafe({
       safeAccountConfig,
     })
     this.manager.safe = safeInstance
