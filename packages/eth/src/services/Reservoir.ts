@@ -12,6 +12,8 @@ export const RESERVOIR_API_URLS: {
 }
 
 //API key used for interacting with Reservoir API
+if (!process.env.RESERVOIR_API_KEY)
+  throw new Error("RESERVOIR_API_KEY is required")
 export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
 
 //source used for interacting with Reservoir API and be able to easily filter on only our orders
