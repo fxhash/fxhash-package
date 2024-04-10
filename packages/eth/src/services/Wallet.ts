@@ -30,7 +30,7 @@ import {
   Client,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
-const Safe = require("@safe-global/protocol-kit").default
+import Safe from "@safe-global/protocol-kit"
 import { getSafeSDK } from "../services/Safe.js"
 import { TEthereumContractOperation } from "./operations/index.js"
 import {
@@ -189,7 +189,7 @@ export class EthereumWalletManager extends WalletManager {
   public walletClient: WalletClient<Transport, Chain, Account>
   public publicClient: PublicClient<Transport, Chain>
   public signer: JsonRpcSigner
-  public safe: typeof Safe | undefined
+  public safe: Safe.default | undefined
   private rpcNodes: string[]
 
   constructor(params: EthereumWalletManagerParams) {

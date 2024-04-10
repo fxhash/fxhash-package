@@ -1,4 +1,4 @@
-const Safe = require("@safe-global/protocol-kit").default
+import Safe from "@safe-global/protocol-kit"
 import { SafeAccountConfig } from "@safe-global/protocol-kit"
 import { EthereumContractOperation } from "../contractOperation.js"
 import { getSafeFactory } from "@/services/Safe.js"
@@ -31,7 +31,7 @@ export class CreateSafeMultisigEthV1Operation extends EthereumContractOperation<
       threshold: this.params.threshold,
     }
 
-    const safeInstance: typeof Safe = await safeFactory.deploySafe({
+    const safeInstance: Safe.default = await safeFactory.deploySafe({
       safeAccountConfig,
     })
     this.manager.safe = safeInstance
