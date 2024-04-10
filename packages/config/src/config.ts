@@ -33,8 +33,9 @@ import {
 import {
   IndexerV2Config,
   indexerV2ConfigDev,
+  indexerV2ConfigLocal,
   indexerV2ConfigProd,
-} from "./config/indexerV2"
+} from "./config/indexer-v2"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -60,7 +61,9 @@ export interface IFxhashEnvConfig {
   fxhashSecondaryFee: number
   // service specific config
   algolia: AlgoliaConfig
-  indexerV2: IndexerV2Config
+  indexer: {
+    tez: IndexerV2Config
+  }
 }
 
 type TBlockchainContacts = {
@@ -202,7 +205,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         // service specific config
         algolia: algoliaConfigDev,
-        indexerV2: indexerV2ConfigDev,
+        indexer: {
+          tez: indexerV2ConfigLocal,
+        },
       },
     },
     localDocker: {
@@ -223,7 +228,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         // service specific config
         algolia: algoliaConfigDev,
-        indexerV2: indexerV2ConfigDev,
+        indexer: {
+          tez: indexerV2ConfigLocal,
+        },
       },
     },
     dev: {
@@ -244,7 +251,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         // service specific config
         algolia: algoliaConfigDev,
-        indexerV2: indexerV2ConfigDev,
+        indexer: {
+          tez: indexerV2ConfigDev,
+        },
       },
     },
     prd: {
@@ -265,7 +274,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         // service specific config
         algolia: algoliaConfigProd,
-        indexerV2: indexerV2ConfigProd,
+        indexer: {
+          tez: indexerV2ConfigProd,
+        },
       },
     },
   },
