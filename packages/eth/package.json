@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@0xsplits/splits-sdk": "3.2.4",
-    "@apollo/client": "3.8.1",
     "@fxhash/shared": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
