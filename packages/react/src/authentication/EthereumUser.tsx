@@ -67,7 +67,7 @@ export function EthereumUserProvider({
   children,
 }: EthereumUserProviderProps) {
   const [context, setContext] = useState<TUserEthereumWalletContext>(defaultCtx)
-  const { data: walletClient } = useWalletClient()
+  const { data: walletClient, status } = useWalletClient()
   const publicClient = usePublicClient()
   const signer = useEthersSigner()
   const accountState = useAccount()
@@ -114,7 +114,11 @@ export function EthereumUserProvider({
       setContext(context => ({
         ...context,
         walletManager: null,
-        initialized: !!(context.initialized || walletClient),
+        initialized: !!(
+          context.initialized ||
+          walletClient ||
+          status === "pending"
+        ),
       }))
     }
   }, [walletClient, signer])
