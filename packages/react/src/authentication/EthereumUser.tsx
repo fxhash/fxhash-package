@@ -121,7 +121,7 @@ export function EthereumUserProvider({
         ),
       }))
     }
-  }, [walletClient, signer])
+  }, [walletClient, signer, status])
 
   const signConnectionMessage = async (): PromiseResult<
     IConnexionPayload,
