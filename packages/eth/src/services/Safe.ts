@@ -1,4 +1,8 @@
-import SafeApiKit, { SafeInfoResponse } from "@safe-global/api-kit"
+import SafeApiKit, {
+  OwnerResponse,
+  SafeInfoResponse,
+  SafeMultisigTransactionListResponse,
+} from "@safe-global/api-kit"
 import Safe, {
   EthersAdapter,
   EthersAdapterConfig,
@@ -155,7 +159,10 @@ export async function proposeSafeTransaction(
  * user.
  * @returns the list of safes related to the user.
  */
-export async function getUserSafes(userAddress: string, chain: BlockchainType) {
+export async function getUserSafes(
+  userAddress: string,
+  chain: BlockchainType
+): Promise<OwnerResponse> {
   return await getSafeService(chain).getSafesByOwner(userAddress)
 }
 
@@ -167,7 +174,7 @@ export async function getUserSafes(userAddress: string, chain: BlockchainType) {
 export async function getPendingTransactionsForSafe(
   safeAddress: string,
   chain: BlockchainType
-) {
+): Promise<SafeMultisigTransactionListResponse> {
   return await getSafeService(chain).getPendingTransactions(safeAddress)
 }
 
@@ -179,7 +186,7 @@ export async function getPendingTransactionsForSafe(
 export async function getMultisigTransactions(
   safeAddress: string,
   chain: BlockchainType
-) {
+): Promise<SafeMultisigTransactionListResponse> {
   return await getSafeService(chain).getMultisigTransactions(safeAddress)
 }
 
