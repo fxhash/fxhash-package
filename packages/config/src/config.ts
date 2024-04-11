@@ -60,6 +60,9 @@ export interface IFxhashEnvConfig {
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   syndicateProjectId: string
+  awsS3Bucket: string
+  awsS3Region: string
+  openTelemetryTarget: string
   // service specific config
   algolia: AlgoliaConfig
   indexer: {
@@ -205,6 +208,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
+        awsS3Region: "us-east-1",
+        openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
         indexer: {
@@ -229,6 +235,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
+        awsS3Region: "us-east-1",
+        openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
         indexer: {
@@ -253,6 +262,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
+        awsS3Region: "us-east-1",
+        openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigDev,
         indexer: {
@@ -277,6 +289,9 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
+        awsS3Region: "us-east-1",
+        openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigProd,
         indexer: {
