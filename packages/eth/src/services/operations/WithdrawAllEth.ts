@@ -61,7 +61,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     invariant(
       proceeds.data.onchain &&
         proceeds.data.onchain.eth_minter_proceeds.length > 0,
-      "No proceeds found.js"
+      "No proceeds found"
     )
 
     const withdrawableProceeds =

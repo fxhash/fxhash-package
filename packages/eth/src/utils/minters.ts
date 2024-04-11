@@ -528,7 +528,7 @@ export const prepareMintParams = async (
 
   invariant(
     tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
-    "No token found.js"
+    "No token found"
   )
 
   const { pricing } = getPricingFromParams(
@@ -553,7 +553,7 @@ export const prepareMintParams = async (
 
     invariant(
       merkleTreeWhitelist && merkleTreeWhitelist.length > 0,
-      "No whitelist found.js"
+      "No whitelist found"
     )
 
     const indexesAndProofsForUser = getAvailableIndexesAndProofsForUser(
@@ -571,7 +571,7 @@ export const prepareMintParams = async (
   invariant(indexesAndProofs, "No indexes and proofs found")
   invariant(
     qty <= BigInt(indexesAndProofs.indexes.length),
-    "Not enough allow list entries found for the requested quantity.js"
+    "Not enough allow list entries found for the requested quantity"
   )
 
   indexesAndProofs.indexes = indexesAndProofs.indexes.slice(0, Number(qty))
@@ -598,7 +598,7 @@ export const fetchTokenReserveId = async (
 
   invariant(
     tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
-    "No token found.js"
+    "No token found"
   )
 
   const { pricing } = getPricingFromParams(

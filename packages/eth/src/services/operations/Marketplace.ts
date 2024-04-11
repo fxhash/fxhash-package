@@ -41,7 +41,7 @@ export async function handleAction<T>(action: Promise<T>): Promise<T> {
   } catch (error) {
     if (
       error instanceof TransactionExecutionError &&
-      error.cause.name === "UserRejectedRequestError.js"
+      error.cause.name === "UserRejectedRequestError"
     ) {
       throw new UserRejectedError()
     }
@@ -56,7 +56,7 @@ async function prepareClient(
 ) {
   invariant(
     walletManager.walletClient.account && walletManager.walletClient.chain,
-    "Wallet client is not connected.js"
+    "Wallet client is not connected"
   )
   await walletManager.prepareSigner({ blockchainType: chain })
   const currentChain = getCurrentChain(chain)
@@ -282,7 +282,7 @@ export const getBuyPayloadForWert = async (
 
   invariant(
     saleStep?.items && saleStep?.items.length > 0,
-    "Failed to fetch buy steps.js"
+    "Failed to fetch buy steps"
   )
 
   return saleStep.items[0].data
@@ -337,7 +337,7 @@ export const buyTokenAdvanced = async (
 
   //we override the seaport order with our arbitrary values
   const overridenReservoirSeaportArgs: any = reservoirSeaportArgs
-  overridenReservoirSeaportArgs[0].extraData = "0x0001.js"
+  overridenReservoirSeaportArgs[0].extraData = "0x0001"
 
   //here we re-encode the payload to be able to submit it back to the Reservoir Seaport Module
   const encodedOverridenReservoirSeaportArgs = encodeFunctionData({
