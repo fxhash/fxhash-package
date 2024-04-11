@@ -5,9 +5,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon"
-import { apolloClient } from "../Hasura"
 import { Qu_GetEthMinterProceeds } from "@fxhash/gql"
-import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3"
 import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
@@ -18,11 +16,8 @@ import {
   invariant,
   BlockchainType,
 } from "@fxhash/shared"
-import {
-  getChainIdForChain,
-  getConfigForChain,
-  getCurrentChain,
-} from "../Wallet"
+import { getConfigForChain, getCurrentChain } from "../Wallet"
+import gqlClient from "@fxhash/gql-client"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -43,16 +38,13 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
     //First we need to fetch the proceeds for the address
-    const proceeds = await apolloClient.query({
-      query: Qu_GetEthMinterProceeds,
-      variables: {
-        where: {
-          user_address: {
-            _eq: this.params.address,
-          },
-          chain: {
-            _eq: this.chain === BlockchainType.ETHEREUM ? "ETHEREUM" : "BASE",
-          },
+    const proceeds = await gqlClient.query(Qu_GetEthMinterProceeds, {
+      where: {
+        user_address: {
+          _eq: this.params.address,
+        },
+        chain: {
+          _eq: this.chain === BlockchainType.ETHEREUM ? "ETHEREUM" : "BASE",
         },
       },
     })
@@ -61,7 +53,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     const splitsWithEarnings: string[] = []
 
     invariant(
-      proceeds.data.onchain &&
+      proceeds.data?.onchain &&
         proceeds.data.onchain.eth_minter_proceeds.length > 0,
       "No proceeds found"
     )
