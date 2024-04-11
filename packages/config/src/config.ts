@@ -25,6 +25,17 @@ import {
 } from "./contracts/base"
 import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
 import { getConfigForEnv } from "./utils"
+import {
+  AlgoliaConfig,
+  algoliaConfigDev,
+  algoliaConfigProd,
+} from "./config/algolia"
+import {
+  IndexerV2Config,
+  indexerV2ConfigDev,
+  indexerV2ConfigLocal,
+  indexerV2ConfigProd,
+} from "./config/indexer-v2"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -49,6 +60,11 @@ export interface IFxhashEnvConfig {
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   syndicateProjectId: string
+  // service specific config
+  algolia: AlgoliaConfig
+  indexer: {
+    tez: IndexerV2Config
+  }
 }
 
 type TBlockchainContacts = {
@@ -189,6 +205,11 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        // service specific config
+        algolia: algoliaConfigDev,
+        indexer: {
+          tez: indexerV2ConfigLocal,
+        },
       },
     },
     localDocker: {
@@ -208,6 +229,11 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        // service specific config
+        algolia: algoliaConfigDev,
+        indexer: {
+          tez: indexerV2ConfigLocal,
+        },
       },
     },
     dev: {
@@ -227,6 +253,11 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        // service specific config
+        algolia: algoliaConfigDev,
+        indexer: {
+          tez: indexerV2ConfigDev,
+        },
       },
     },
     prd: {
@@ -246,6 +277,11 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        // service specific config
+        algolia: algoliaConfigProd,
+        indexer: {
+          tez: indexerV2ConfigProd,
+        },
       },
     },
   },
