@@ -16,7 +16,7 @@ import { sign } from "viem/accounts"
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
-  FreeMintingMintInfoArgs,
+  FixedPriceFarcasterFrameMintingMintInfoArgs,
   MintInfo,
   MintTypes,
   ReserveInfo,
@@ -262,7 +262,7 @@ export async function processAndFormatMintInfos(
     | FixedPriceMintInfoArgs
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
-    | FreeMintingMintInfoArgs
+    | FixedPriceFarcasterFrameMintingMintInfoArgs
   )[],
   manager: EthereumWalletManager,
   chain: BlockchainType
@@ -320,16 +320,24 @@ export async function processAndFormatMintInfos(
         }
         return mintInfo
       } else if (
-        argsMintInfo.type === MintTypes.FREE_MINTING &&
+        argsMintInfo.type === MintTypes.FARCASTER_FRAME_FIXED_PRICE &&
         chain === BlockchainType.BASE
       ) {
         const mintInfo: MintInfo = {
           minter: (currentConfig.contracts as IBaseContracts)
-            .free_minting_minter_v1,
+            .farcaster_frame_fixed_price_minter_v1,
           reserveInfo: reserveInfo,
           params: encodeAbiParameters(
-            [{ type: "uint256", name: "maxAmountPerFid" }],
-            [argsMintInfo.params.maxAmountPerFid]
+            [
+              { type: "uint256", name: "price" },
+              { type: "uint256", name: "maxAmountPerFid" },
+            ],
+            [
+              argsMintInfo.params.price,
+              argsMintInfo.params.maxAmountPerFid
+                ? argsMintInfo.params.maxAmountPerFid
+                : BigInt(0),
+            ]
           ),
         }
         return mintInfo

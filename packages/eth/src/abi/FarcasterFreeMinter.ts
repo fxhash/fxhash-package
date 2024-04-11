@@ -1,4 +1,4 @@
-export const FARCASTER_FREE_MINTER = [
+export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
   {
     type: "constructor",
     inputs: [
@@ -12,7 +12,140 @@ export const FARCASTER_FREE_MINTER = [
   },
   {
     type: "function",
-    name: "maxAmountsPerFid",
+    name: "buy",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_reserveId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "_amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "_to",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "buyFreeFrame",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_reserveId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "_fid",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "cancelOwnershipHandover",
+    inputs: [],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "completeOwnershipHandover",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "getFirstValidReserve",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getLatestUpdate",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint40",
+        internalType: "uint40",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getSaleProceed",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint128",
+        internalType: "uint128",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "maxAmountPerFid",
     inputs: [
       {
         name: "",
@@ -31,35 +164,17 @@ export const FARCASTER_FREE_MINTER = [
   },
   {
     type: "function",
-    name: "mint",
-    inputs: [
-      {
-        name: "_token",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "_to",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "_fid",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "mintedByFid",
     inputs: [
       {
         name: "",
         type: "uint256",
         internalType: "uint256",
+      },
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
       },
     ],
     outputs: [
@@ -90,9 +205,28 @@ export const FARCASTER_FREE_MINTER = [
     inputs: [],
     outputs: [
       {
-        name: "",
+        name: "result",
         type: "address",
         internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "ownershipHandoverExpiresAt",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "result",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
@@ -119,10 +253,41 @@ export const FARCASTER_FREE_MINTER = [
   },
   {
     type: "function",
+    name: "prices",
+    inputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "renounceOwnership",
     inputs: [],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "requestOwnershipHandover",
+    inputs: [],
+    outputs: [],
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -132,6 +297,11 @@ export const FARCASTER_FREE_MINTER = [
         name: "",
         type: "address",
         internalType: "address",
+      },
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
     outputs: [
@@ -158,7 +328,7 @@ export const FARCASTER_FREE_MINTER = [
     name: "setMintDetails",
     inputs: [
       {
-        name: "_reserveInfo",
+        name: "_reserve",
         type: "tuple",
         internalType: "struct ReserveInfo",
         components: [
@@ -212,12 +382,25 @@ export const FARCASTER_FREE_MINTER = [
       },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
     name: "unpause",
     inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -257,7 +440,19 @@ export const FARCASTER_FREE_MINTER = [
         internalType: "address",
       },
       {
-        name: "_reserve",
+        name: "_reserveId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "_price",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "_reserveInfo",
         type: "tuple",
         indexed: false,
         internalType: "struct ReserveInfo",
@@ -280,7 +475,19 @@ export const FARCASTER_FREE_MINTER = [
         ],
       },
       {
-        name: "_maxAmount",
+        name: "_openEdition",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+      {
+        name: "_timeUnlimited",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+      {
+        name: "_maxAmountPerFid",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
@@ -290,10 +497,36 @@ export const FARCASTER_FREE_MINTER = [
   },
   {
     type: "event",
+    name: "OwnershipHandoverCanceled",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipHandoverRequested",
+    inputs: [
+      {
+        name: "pendingOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "OwnershipTransferred",
     inputs: [
       {
-        name: "previousOwner",
+        name: "oldOwner",
         type: "address",
         indexed: true,
         internalType: "address",
@@ -322,6 +555,49 @@ export const FARCASTER_FREE_MINTER = [
   },
   {
     type: "event",
+    name: "Purchase",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_reserveId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "_buyer",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "_to",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "_price",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "Unpaused",
     inputs: [
       {
@@ -334,18 +610,93 @@ export const FARCASTER_FREE_MINTER = [
     anonymous: false,
   },
   {
+    type: "event",
+    name: "Withdrawn",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_creator",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "_proceeds",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
     type: "error",
-    name: "AlreadyMinted",
+    name: "AddressZero",
     inputs: [],
   },
   {
     type: "error",
-    name: "InvalidTime",
+    name: "Ended",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InsufficientFunds",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidAllocation",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidPayment",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidReserve",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidTimes",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidToken",
     inputs: [],
   },
   {
     type: "error",
     name: "MaxAmountPerFidReached",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NewOwnerIsZeroAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoHandoverRequest",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NotStarted",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "TooMany",
     inputs: [],
   },
   {

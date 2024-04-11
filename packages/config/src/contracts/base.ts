@@ -19,7 +19,7 @@ export interface IBaseContracts {
   fxhashTeamSafeAddress: `0x${string}`
   signerSafe: `0x${string}`
   moderationSafe: `0x${string}`
-  free_minting_minter_v1: `0x${string}`
+  farcaster_frame_fixed_price_minter_v1: `0x${string}`
 }
 
 /**
@@ -52,7 +52,8 @@ export const baseTestnetContracts: IBaseContracts = {
   fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  free_minting_minter_v1: "0x983F1053aee3852e4DC303B036C6162fEF731aAb",
+  farcaster_frame_fixed_price_minter_v1:
+    "0x6991F279DD4b37d0bC961E829875f01Ab9B11597",
 }
 
 /**
@@ -82,5 +83,6 @@ export const baseMainnetContracts: IBaseContracts = {
   signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   // FIXME: Replace with mainnet address.
-  free_minting_minter_v1: "0xB91869704fe355CAffCc743CB5bb0010fA5d2bCe",
+  farcaster_frame_fixed_price_minter_v1:
+    "0x6991F279DD4b37d0bC961E829875f01Ab9B11597",
 }

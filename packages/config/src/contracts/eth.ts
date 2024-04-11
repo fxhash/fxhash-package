@@ -19,7 +19,7 @@ export interface IEthContracts {
   fxhashTeamSafeAddress: `0x${string}`
   signerSafe: `0x${string}`
   moderationSafe: `0x${string}`
-  free_minting_minter_v1: `0x${string}`
+  farcaster_frame_fixed_price_minter_v1: `0x${string}`
 }
 
 export const ethTestnetContracts: IEthContracts = {
@@ -43,7 +43,8 @@ export const ethTestnetContracts: IEthContracts = {
   fxhashTeamSafeAddress: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
   signerSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
   moderationSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
-  free_minting_minter_v1: "0xB91869704fe355CAffCc743CB5bb0010fA5d2bCe",
+  farcaster_frame_fixed_price_minter_v1:
+    "0xB91869704fe355CAffCc743CB5bb0010fA5d2bCe",
 }
 
 /**
@@ -72,5 +73,6 @@ export const ethMainnetContracts: IEthContracts = {
   fxhashTeamSafeAddress: "0xD8b1905022d70e74c6c8aaA2baaf275fBe1634f1",
   signerSafe: "0xB456aF77dEB65065462BD1f0D9098413E6CA4200",
   moderationSafe: "0x99CDaECbe1be4B7232a4f2c79EF76D403886FE1E",
-  free_minting_minter_v1: "0xB91869704fe355CAffCc743CB5bb0010fA5d2bCe",
+  farcaster_frame_fixed_price_minter_v1:
+    "0xB91869704fe355CAffCc743CB5bb0010fA5d2bCe",
 }
