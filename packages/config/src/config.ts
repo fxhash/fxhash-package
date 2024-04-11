@@ -36,6 +36,12 @@ import {
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexer-v2"
+import {
+  ExtractBalancerConfig,
+  extractBalancerConfigDev,
+  extractBalancerConfigLocal,
+  extractBalancerConfigProd,
+} from "./config/extract-balancer"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -65,6 +71,7 @@ export interface IFxhashEnvConfig {
   openTelemetryTarget: string
   // service specific config
   algolia: AlgoliaConfig
+  extractBalancer: ExtractBalancerConfig
   indexer: {
     tez: IndexerV2Config
   }
@@ -213,6 +220,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
+        extractBalancer: extractBalancerConfigLocal,
         indexer: {
           tez: indexerV2ConfigLocal,
         },
@@ -240,6 +248,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
+        extractBalancer: extractBalancerConfigLocal,
         indexer: {
           tez: indexerV2ConfigLocal,
         },
@@ -267,6 +276,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigDev,
+        extractBalancer: extractBalancerConfigDev,
         indexer: {
           tez: indexerV2ConfigDev,
         },
@@ -294,6 +304,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigProd,
+        extractBalancer: extractBalancerConfigProd,
         indexer: {
           tez: indexerV2ConfigProd,
         },
