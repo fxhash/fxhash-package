@@ -28,11 +28,6 @@ export const isLocal = (() => {
   )
 })()
 
-export const localOrElse = <T>(localValue: T, fallback: T) => {
-  if (isLocal) return localValue
-  return fallback
-}
-
 export const isDockerLocal = (() => {
   const isBrowser = typeof window !== "undefined"
   if (isBrowser) return false
