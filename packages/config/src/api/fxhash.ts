@@ -111,6 +111,8 @@ export const fxhashLocalApis: IFxhashApis = {
   website: "http://localhost:3200",
   hasura: "http://localhost:8888",
   hasuraGql: "http://localhost:8888/v1/graphql",
+  ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
+  onchfsProxyInternal: fxhashDevApis.onchfsProxy,
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
