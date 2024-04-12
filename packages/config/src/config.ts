@@ -46,6 +46,7 @@ export interface IFxhashEnvConfig {
   projectLockTime: number
   referrerShare: number
   cloudflareTurnstileSiteKey: string
+  cloudflareTurnstileSiteKeyV2: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   syndicateProjectId: string
@@ -181,6 +182,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -200,6 +202,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -219,6 +222,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -238,6 +242,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-yE4Q6Wdz6SNb",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
