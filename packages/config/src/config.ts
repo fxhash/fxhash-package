@@ -36,6 +36,12 @@ import {
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexer-v2"
+import {
+  SeedAuthorityWorkerConfig,
+  seedAuthorityWorkerConfigDev,
+  seedAuthorityWorkerConfigLocal,
+  seedAuthorityWorkerConfigProd,
+} from "./config/seed-authority-worker"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -71,6 +77,7 @@ export interface IFxhashEnvConfig {
   indexer: {
     tez: IndexerV2Config
   }
+  seedAuthorityWorker: SeedAuthorityWorkerConfig
 }
 
 type TBlockchainContacts = {
@@ -220,6 +227,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigLocal,
         },
+        seedAuthorityWorker: seedAuthorityWorkerConfigLocal,
       },
     },
     localDocker: {
@@ -248,6 +256,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigLocal,
         },
+        seedAuthorityWorker: seedAuthorityWorkerConfigLocal,
       },
     },
     dev: {
@@ -276,6 +285,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigDev,
         },
+        seedAuthorityWorker: seedAuthorityWorkerConfigDev,
       },
     },
     prd: {
@@ -304,6 +314,7 @@ export const fxhashConfig: IFxhashConfig = {
         indexer: {
           tez: indexerV2ConfigProd,
         },
+        seedAuthorityWorker: seedAuthorityWorkerConfigProd,
       },
     },
   },
