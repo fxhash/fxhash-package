@@ -27,7 +27,6 @@ export enum MintTypes {
   FIXED_PRICE,
   DUTCH_AUCTION,
   TICKET,
-  FARCASTER_FRAME_FIXED_PRICE,
 }
 
 //Type definition for the primary and royalties receivers
@@ -92,7 +91,8 @@ export interface ReserveInfoArgs {
 export interface FixedPriceMintInfoArgs {
   type: MintTypes.FIXED_PRICE
   reserveInfo: ReserveInfoArgs
-  params: FixedPriceParams
+  params: FixedPriceParams | FarcasterFrameFixedPriceMintParams
+  isFrame: boolean
 }
 
 export interface DutchAuctionMintInfoArgs {
@@ -104,12 +104,6 @@ export interface DutchAuctionMintInfoArgs {
 export interface TicketMintInfoArgs {
   type: MintTypes.TICKET
   reserveInfo: ReserveInfoArgs
-}
-
-export interface FixedPriceFarcasterFrameMintingMintInfoArgs {
-  type: MintTypes.FARCASTER_FRAME_FIXED_PRICE
-  reserveInfo: ReserveInfoArgs
-  params: FarcasterFrameFixedPriceMintParams
 }
 
 export interface BaseReserves {
