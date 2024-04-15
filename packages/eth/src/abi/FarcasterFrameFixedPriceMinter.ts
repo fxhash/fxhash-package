@@ -3,12 +3,25 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
     type: "constructor",
     inputs: [
       {
-        name: "_minter",
+        name: "_admin",
         type: "address",
         internalType: "address",
       },
     ],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "admin",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -37,34 +50,6 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
     ],
     outputs: [],
     stateMutability: "payable",
-  },
-  {
-    type: "function",
-    name: "buyFreeFrame",
-    inputs: [
-      {
-        name: "_token",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "_to",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "_reserveId",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_fid",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -164,6 +149,34 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
   },
   {
     type: "function",
+    name: "mint",
+    inputs: [
+      {
+        name: "_token",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_reserveId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "_fid",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "_to",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "mintedByFid",
     inputs: [
       {
@@ -182,19 +195,6 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
         name: "",
         type: "uint256",
         internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "minter",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
       },
     ],
     stateMutability: "view",
@@ -325,6 +325,19 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
   },
   {
     type: "function",
+    name: "setAdmin",
+    inputs: [
+      {
+        name: "_admin",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "setMintDetails",
     inputs: [
       {
@@ -353,19 +366,6 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
         name: "_mintDetails",
         type: "bytes",
         internalType: "bytes",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "setMinter",
-    inputs: [
-      {
-        name: "_minter",
-        type: "address",
-        internalType: "address",
       },
     ],
     outputs: [],
@@ -676,7 +676,7 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
   },
   {
     type: "error",
-    name: "MaxAmountPerFidReached",
+    name: "MaxAmountExceeded",
     inputs: [],
   },
   {
