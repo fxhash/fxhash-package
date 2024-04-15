@@ -36,6 +36,12 @@ import {
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexer-v2"
+import {
+  FileSystemEmulatorConfig,
+  fsEmulatorConfigDev,
+  fsEmulatorConfigLocal,
+  fsEmulatorConfigProd,
+} from "./config/fs-emulator"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -68,6 +74,7 @@ export interface IFxhashEnvConfig {
   openTelemetryTarget: string
   // service specific config
   algolia: AlgoliaConfig
+  fsEmulator: FileSystemEmulatorConfig
   indexer: {
     tez: IndexerV2Config
   }
@@ -217,6 +224,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
+        fsEmulator: fsEmulatorConfigLocal,
         indexer: {
           tez: indexerV2ConfigLocal,
         },
@@ -245,6 +253,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
+        fsEmulator: fsEmulatorConfigLocal,
         indexer: {
           tez: indexerV2ConfigLocal,
         },
@@ -273,6 +282,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigDev,
+        fsEmulator: fsEmulatorConfigDev,
         indexer: {
           tez: indexerV2ConfigDev,
         },
@@ -301,6 +311,7 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigProd,
+        fsEmulator: fsEmulatorConfigProd,
         indexer: {
           tez: indexerV2ConfigProd,
         },
