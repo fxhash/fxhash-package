@@ -170,6 +170,7 @@ export interface GenerativeToken {
   inputBytesSize: number
   gentkContractAddress: string
   collectionOffers: CollectionOffer[]
+  maxMintsPerFid: number
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
