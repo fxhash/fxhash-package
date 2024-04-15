@@ -16,10 +16,10 @@ export const indexerV2ConfigDev: IndexerV2Config = {
   maintenanceMode: false,
   reportNumberFlag: 3,
   signingBatchNumber: 2,
-  signingEnabled: false,
+  signingEnabled: true,
   signingMetadataQueue: 4,
   signingMaxAttempts: 8,
-  tracingEnabled: true,
+  tracingEnabled: false,
   tzktRequestsInterval: 2000,
   wipeDbOnStartup: false,
 }
