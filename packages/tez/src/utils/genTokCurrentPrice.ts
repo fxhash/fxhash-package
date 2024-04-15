@@ -1,6 +1,10 @@
-import { differenceInSeconds } from "date-fns"
 import { clamp } from "./math"
 import { GenerativeToken } from "@fxhash/shared"
+
+const differenceInSeconds = (d1: Date, d2: Date) => {
+  const diffInMilliseconds = d2.getTime() - d1.getTime()
+  return Math.floor(diffInMilliseconds / 1000)
+}
 
 /**
  * Outputs the current price of a Generative Token based on its pricing

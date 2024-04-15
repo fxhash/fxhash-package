@@ -7,6 +7,7 @@ export interface IFxhashApis {
   hasura: string
   hasuraGql: string
   file: string
+  fileInternal: string
   fsEmulator: string
   extract: string
   media: string
@@ -53,6 +54,8 @@ export const fxhashDevApis: IFxhashApis = {
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
+  fileInternal:
+    "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
   media: "https://media.dev.fxhash-dev.xyz",
@@ -105,6 +108,9 @@ export const fxhashLocalApis: IFxhashApis = {
   website: "http://localhost:3200",
   hasura: "http://localhost:8888",
   hasuraGql: "http://localhost:8888/v1/graphql",
+  fileInternal: fxhashDevApis.file,
+  ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
+  onchfsProxyInternal: fxhashDevApis.onchfsProxy,
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -121,6 +127,7 @@ export const fxhashPrdApis: IFxhashApis = {
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
+  fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
   fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
   extract: "https://extract.fxhash.xyz",
   media: "https://media.fxhash.xyz",
