@@ -29,11 +29,11 @@ import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import { apolloClient } from "@/services/Hasura"
 import { BlockchainType, invariant } from "@fxhash/shared"
 import { config } from "@fxhash/config"
-import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
+import { EthereumWalletManager } from "@/services/Wallet"
 import { IBaseContracts } from "@fxhash/config/dist/contracts/base"
+import gqlClient from "@fxhash/gql-client"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -539,16 +539,18 @@ export const prepareMintParams = async (
   qty: bigint,
   whitelistedAddress: `0x${string}` | null = null
 ): Promise<PrepareMintParamsPayload> => {
-  const tokenPricingsAndReserves = await apolloClient.query({
-    query: Qu_GetTokenPricingsAndReserves,
-    variables: {
+  const tokenPricingsAndReserves = await gqlClient.query(
+    Qu_GetTokenPricingsAndReserves,
+    {
       id: tokenId,
     },
-    fetchPolicy: "no-cache",
-  })
+    {
+      fetchPolicy: "no-cache",
+    }
+  )
 
   invariant(
-    tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
+    tokenPricingsAndReserves.data?.onchain?.generative_token_by_pk,
     "No token found"
   )
 
@@ -609,16 +611,18 @@ export const fetchTokenReserveId = async (
   tokenId: string,
   useWhitelist: boolean = false
 ) => {
-  const tokenPricingsAndReserves = await apolloClient.query({
-    query: Qu_GetTokenPricingsAndReserves,
-    variables: {
+  const tokenPricingsAndReserves = await gqlClient.query(
+    Qu_GetTokenPricingsAndReserves,
+    {
       id: tokenId,
     },
-    fetchPolicy: "no-cache",
-  })
+    {
+      fetchPolicy: "no-cache",
+    }
+  )
 
   invariant(
-    tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
+    tokenPricingsAndReserves.data?.onchain?.generative_token_by_pk,
     "No token found"
   )
 
