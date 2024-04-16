@@ -442,14 +442,15 @@ export function getPricingFromParams(
   if (!generativeToken) {
     throw new Error("generativeToken is null or undefined")
   }
-  const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
+  const { pricing_fixeds, pricing_dutch_auctions, reserves, is_frame } =
+    generativeToken
   const isFixed = pricing_fixeds.length > 0
   const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
 
   if (!whitelist) {
     // We find the first pricing that doesn't have a reserve
     const pricing =
-      reserves.length === 0
+      reserves.length === 0 || is_frame
         ? pricingList[0]
         : // @ts-ignore
           pricingList.find(pricing =>
