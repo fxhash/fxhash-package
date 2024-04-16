@@ -1,6 +1,7 @@
 import { createClient } from "@reservoir0x/reservoir-sdk"
-import { chains, getConfigForChain } from "./Wallet"
+import { getConfigForChain } from "./Wallet"
 import { BlockchainType } from "@fxhash/shared"
+import { URLSearchParams } from "url"
 
 export const RESERVOIR_API_URLS: {
   [key: number]: string
@@ -12,7 +13,7 @@ export const RESERVOIR_API_URLS: {
 }
 
 //API key used for interacting with Reservoir API
-export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
+export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY!
 
 //source used for interacting with Reservoir API and be able to easily filter on only our orders
 export const RESERVOIR_SOURCE = "fxhash.xyz"
@@ -51,10 +52,13 @@ export async function fetchReservoir<T>(
   chain: BlockchainType,
   method: API_METHODS,
   path: string,
-  body: string | undefined = undefined
+  body: string | undefined = undefined,
+  queryParams: { [key: string]: string } = {}
 ): Promise<T> {
   try {
-    const reservoirUrl = getConfigForChain(chain).apis?.reservoir
+    const reservoirUrl =
+      getConfigForChain(chain).apis?.reservoir +
+      new URLSearchParams(queryParams).toString()
     const response = await fetch(`${reservoirUrl}${path}`, {
       method: method,
       body: body,
