@@ -5,7 +5,6 @@ import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
-  FixedPriceFarcasterFrameMintingMintInfoArgs,
   InitInfo,
   MetadataInfo,
   MintInfo,
@@ -87,7 +86,6 @@ export type TCreateProjectEthV1OperationParams = {
     | FixedPriceMintInfoArgs
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
-    | FixedPriceFarcasterFrameMintingMintInfoArgs
   )[]
   primaryReceivers: ReceiverEntry[]
   royalties: bigint
@@ -98,7 +96,6 @@ export type TCreateProjectEthV1OperationParams = {
       | FixedPriceMintInfoArgs
       | DutchAuctionMintInfoArgs
       | TicketMintInfoArgs
-      | FixedPriceFarcasterFrameMintingMintInfoArgs
     )[]
   }
   collabAddress?: string

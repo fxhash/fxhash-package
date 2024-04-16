@@ -53,7 +53,7 @@ export const baseTestnetContracts: IBaseContracts = {
   signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   farcaster_frame_fixed_price_minter_v1:
-    "0x6991F279DD4b37d0bC961E829875f01Ab9B11597",
+    "0xA3f4BBeDdaea932463B690B7a3495f99F480906D",
 }
 
 /**
@@ -84,5 +84,5 @@ export const baseMainnetContracts: IBaseContracts = {
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   // FIXME: Replace with mainnet address.
   farcaster_frame_fixed_price_minter_v1:
-    "0x6991F279DD4b37d0bC961E829875f01Ab9B11597",
+    "0xA3f4BBeDdaea932463B690B7a3495f99F480906D",
 }
