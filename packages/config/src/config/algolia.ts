@@ -1,5 +1,6 @@
 export type AlgoliaConfig = {
   appId: string
+  enabled: boolean
   indexGenerativeTokens: string
   indexOffers: string
   indexUsers: string
@@ -7,6 +8,7 @@ export type AlgoliaConfig = {
 }
 
 const algoliaConfig = {
+  enabled: true,
   indexGenerativeTokens: "generative-tokens",
   indexOffers: "listings",
   indexUsers: "users",

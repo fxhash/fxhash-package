@@ -20,7 +20,7 @@ import {
   IFxhashConfigSingleEnv,
   localConfig,
   localDockerConfig,
-  EthIndexerConfig,
+  IndexerV2Config,
 } from "./config"
 import { isLocal, isProd, isDockerLocal } from "./helpers"
 
@@ -67,7 +67,7 @@ export {
   type TBlockchainNetwork,
   type TEnv,
   type IFxhashConfig,
-  type EthIndexerConfig,
+  type IndexerV2Config,
 }
 
 export * from "./types"
