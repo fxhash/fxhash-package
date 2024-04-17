@@ -31,10 +31,8 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         this.params.whitelist ? (this.params.to as `0x${string}`) : null
       )
 
-    console.log("isframe = ", this.params.isFrame)
     debugger
     if (!this.params.whitelist) {
-      console.log("isFixed = ", isFixed)
       if (isFixed) {
         this.mintOperation = new MintFixedPriceEthV1Operation(
           this.manager,
