@@ -49,6 +49,8 @@ export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
 
+export type { IndexerV2Config }
+
 export interface IFxhashNetworkConfig {
   network: string
   chainId: BlockchainIdentifier
@@ -63,11 +65,10 @@ export interface IFxhashEnvConfig {
   projectLockTime: number
   referrerShare: number
   cloudflareTurnstileSiteKey: string
+  cloudflareTurnstileSiteKeyV2: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   syndicateProjectId: string
-  awsS3Bucket: string
-  awsS3Region: string
   openTelemetryTarget: string
   // service specific config
   algolia: AlgoliaConfig
@@ -207,6 +208,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -215,8 +217,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
@@ -235,6 +235,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -243,8 +244,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
@@ -263,6 +262,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -271,8 +271,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigDev,
@@ -291,6 +289,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-yE4Q6Wdz6SNb",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -299,8 +298,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigProd,

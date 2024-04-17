@@ -16,28 +16,27 @@ export const indexerV2ConfigDev: IndexerV2Config = {
   maintenanceMode: false,
   reportNumberFlag: 3,
   signingBatchNumber: 2,
-  signingEnabled: false,
+  signingEnabled: true,
   signingMetadataQueue: 4,
   signingMaxAttempts: 8,
-  tracingEnabled: true,
+  tracingEnabled: false,
   tzktRequestsInterval: 2000,
   wipeDbOnStartup: false,
 }
 
 export const indexerV2ConfigLocal: IndexerV2Config = {
   ...indexerV2ConfigDev,
-  tracingEnabled: false,
 }
 
 export const indexerV2ConfigProd: IndexerV2Config = {
   debugSigner: true,
   maintenanceMode: false,
   reportNumberFlag: 3,
-  signingBatchNumber: 2,
+  signingBatchNumber: 60,
   signingEnabled: false,
-  signingMetadataQueue: 4,
-  signingMaxAttempts: 8,
-  tracingEnabled: true,
+  signingMetadataQueue: 120,
+  signingMaxAttempts: 10,
+  tracingEnabled: false,
   tzktRequestsInterval: 2000,
   wipeDbOnStartup: false,
 }
