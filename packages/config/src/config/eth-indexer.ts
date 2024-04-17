@@ -1,6 +1,4 @@
 export type EthIndexerConfig = {
-  awsS3Bucket: string
-  awsS3Region: string
   chain: "sepolia" | "eth-mainnet" | "base-sepolia" | "base-mainnet"
   debugSigner: boolean
   moderationEnabled: boolean
@@ -18,8 +16,6 @@ export type EthIndexerConfig = {
 }
 
 export const ethIndexerConfigDev: EthIndexerConfig = {
-  awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-  awsS3Region: "us-east-1",
   chain: "sepolia",
   debugSigner: true,
   moderationEnabled: false,
@@ -43,8 +39,6 @@ export const ethIndexerConfigLocal: EthIndexerConfig = {
 
 export const ethIndexerConfigProd: EthIndexerConfig = {
   ...ethIndexerConfigDev,
-  awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
-  awsS3Region: "us-east-1",
   chain: "eth-mainnet",
   revealingBatchNumber: 1,
   revealingMaxAttempts: 3,
