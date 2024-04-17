@@ -460,9 +460,9 @@ export function getPricingFromParams(
                 !reserve.data.merkleRoot
             )
           )
-    return { pricing }
+    return { pricing, isFixed: isFixed }
   }
-  return { pricing: pricingList[0] }
+  return { pricing: pricingList[0], isFixed: isFixed }
 }
 
 export function getPricingAndReserveFromParams(
@@ -532,6 +532,7 @@ interface PrepareMintParamsPayload {
     indexes: number[]
     proofs: string[][]
   }
+  isFixed: boolean
 }
 
 export const prepareMintParams = async (
@@ -554,14 +555,14 @@ export const prepareMintParams = async (
     "No token found"
   )
 
-  const { pricing } = getPricingFromParams(
+  const { pricing, isFixed } = getPricingFromParams(
     tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
     !!whitelistedAddress
   )
 
   invariant(pricing, "No pricing found")
 
-  if (!whitelistedAddress) return { pricing }
+  if (!whitelistedAddress) return { pricing, isFixed }
 
   let indexesAndProofs:
     | {
@@ -602,6 +603,7 @@ export const prepareMintParams = async (
 
   return {
     pricing,
+    isFixed: isFixed,
     reserve: reserveSave,
     indexesAndProofs,
   }

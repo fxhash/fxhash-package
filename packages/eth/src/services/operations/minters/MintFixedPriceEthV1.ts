@@ -56,6 +56,7 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
       value: this.params.price,
       chain: getCurrentChain(this.chain),
     }
+    console.log("args = ", args)
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {
       type: TransactionType.ONCHAIN,
