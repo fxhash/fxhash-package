@@ -1,5 +1,5 @@
 export type EthIndexerConfig = {
-  chain: "sepolia" | "eth-mainnet" | "base-sepolia" | "base-mainnet"
+  chain: "eth-sepolia" | "eth-mainnet" | "base-sepolia" | "base-mainnet"
   debugSigner: boolean
   revealingBatchNumber: number
   revealingEnabled: boolean
