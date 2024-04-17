@@ -5,7 +5,6 @@ import { FX_TICKETS_ABI } from "@/abi/FxTicket"
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
-  FreeMintingMintInfoArgs,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
   TicketMintInfoArgs,
@@ -22,7 +21,6 @@ export type TRegisterMintersEthV1OperationParams = {
     | FixedPriceMintInfoArgs
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
-    | FreeMintingMintInfoArgs
   )[]
   isTicket: boolean
   collabAddress?: string

@@ -8,7 +8,7 @@ export const Qu_GetFrameData = graphql(`
     onchain {
       eth_frame_data_by_pk(id: $id) {
         id
-        free_frame_minter_data
+        frame_minter_data
       }
     }
   }
