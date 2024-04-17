@@ -10,6 +10,7 @@ import { snippet_v3 } from "./snippets/v3"
 
 const latest = snippet_v3
 
+export type { HTMLElement } from "node-html-parser"
 export {
   snippet_v1,
   snippet_v2,
