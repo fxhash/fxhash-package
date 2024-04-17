@@ -1,6 +1,7 @@
 export type EthIndexerConfig = {
   chain: "eth-sepolia" | "eth-mainnet" | "base-sepolia" | "base-mainnet"
   debugSigner: boolean
+  moderationEnabled: boolean
   revealingBatchNumber: number
   revealingEnabled: boolean
   revealingMaxAttempts: number
@@ -17,6 +18,7 @@ export type EthIndexerConfig = {
 export const ethIndexerConfigDev: EthIndexerConfig = {
   chain: "eth-sepolia",
   debugSigner: true,
+  moderationEnabled: false,
   revealingBatchNumber: 2,
   revealingEnabled: true,
   revealingMaxAttempts: 8,
