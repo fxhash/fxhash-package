@@ -35,7 +35,7 @@
     "@safe-global/safe-core-sdk-types": "4.0.0",
     "dotenv": "16.3.1",
     "ethers": "6.8.1",
-    "multiformats": "9.9.0",
+    "multiformats": "13.1.0",
     "onchfs": "workspace:*",
     "path": "0.12.7",
     "viem": "2.9.2"

@@ -1,4 +1,4 @@
-import { ReserveListEntry } from "./minters"
+import { ReserveListEntry } from "./minters.js"
 
 export type MintPassReserveData = {
   signer: `0x${string}`

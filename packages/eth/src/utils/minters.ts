@@ -1,16 +1,11 @@
-import {
-  decodeAbiParameters,
-  encodeAbiParameters,
-  encodePacked,
-  getContract,
-} from "viem"
+import { decodeAbiParameters, encodeAbiParameters, encodePacked } from "viem"
 import {
   MerkleTreeWhitelist,
   getAvailableIndexesAndProofsForUser,
   getWhitelist,
   getWhitelistTree,
-} from "./whitelist"
-import { EMPTY_BYTES_32, MAX_UINT_256, ZERO_ADDRESS } from "./constants"
+} from "./whitelist.js"
+import { EMPTY_BYTES_32, MAX_UINT_256, ZERO_ADDRESS } from "./constants.js"
 
 import { sign } from "viem/accounts"
 import {
@@ -24,15 +19,15 @@ import {
   TicketMintInfoArgs,
   defineReserveInfo,
   predictFxContractAddress,
-} from "@/services/operations"
+} from "@/services/operations/index.js"
 import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
 import { BlockchainType, invariant } from "@fxhash/shared"
 import { config } from "@fxhash/config"
-import { EthereumWalletManager } from "@/services/Wallet"
-import { IBaseContracts } from "@fxhash/config/dist/contracts/base"
+import { EthereumWalletManager } from "@/services/Wallet.js"
+import { IEthContracts } from "@fxhash/config"
 import gqlClient from "@fxhash/gql-client"
 
 /**
@@ -280,7 +275,7 @@ export async function processAndFormatMintInfos(
             argsMintInfo.params as FarcasterFrameFixedPriceMintParams
 
           const mintInfo: MintInfo = {
-            minter: (currentConfig.contracts as IBaseContracts)
+            minter: (currentConfig.contracts as IEthContracts)
               .farcaster_frame_fixed_price_minter_v1,
             reserveInfo: reserveInfo,
             params: encodeAbiParameters(

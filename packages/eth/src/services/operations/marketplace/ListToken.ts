@@ -1,7 +1,10 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { ReservoirListingParams } from "@/services/reservoir/types"
-import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
-import { listToken } from "../Marketplace"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { ReservoirListingParams } from "@/services/reservoir/types.js"
+import {
+  RESERVOIR_ORDERBOOK,
+  RESERVOIR_ORDER_KIND,
+} from "@/services/Reservoir.js"
+import { listToken } from "../Marketplace.js"
 import { TransactionType } from "@fxhash/shared"
 
 export type TListTokenEthV1OperationParams = {
