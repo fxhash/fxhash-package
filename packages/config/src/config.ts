@@ -54,7 +54,7 @@ export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
 
-export type { IndexerV2Config }
+export type { IndexerV2Config, EthIndexerConfig }
 
 export interface IFxhashNetworkConfig {
   network: string

@@ -21,6 +21,7 @@ import {
   localConfig,
   localDockerConfig,
   IndexerV2Config,
+  EthIndexerConfig,
 } from "./config"
 import { isLocal, isProd, isDockerLocal } from "./helpers"
 
@@ -68,6 +69,7 @@ export {
   type TEnv,
   type IFxhashConfig,
   type IndexerV2Config,
+  type EthIndexerConfig,
 }
 
 export * from "./types"
