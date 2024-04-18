@@ -158,6 +158,12 @@ export function getConfigForChain(chain: BlockchainType): typeof config.eth {
   return chain === BlockchainType.ETHEREUM ? config.eth : config.base
 }
 
+export function getIndexerConfigForChain(chain: BlockchainType) {
+  return chain === BlockchainType.ETHEREUM
+    ? config.config.indexer.eth
+    : config.config.indexer.base
+}
+
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
   UPDATE_PROFILE = "UPDATE_PROFILE",

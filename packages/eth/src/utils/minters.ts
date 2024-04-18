@@ -5,13 +5,14 @@ import {
   getWhitelist,
   getWhitelistTree,
 } from "./whitelist.js"
-import { EMPTY_BYTES_32, ZERO_ADDRESS } from "./constants.js"
+import { EMPTY_BYTES_32, MAX_UINT_256, ZERO_ADDRESS } from "./constants.js"
 
 import { sign } from "viem/accounts"
 import {
   DutchAuctionMintInfoArgs,
+  FarcasterFrameFixedPriceMintParams,
   FixedPriceMintInfoArgs,
-  FreeMintingMintInfoArgs,
+  FixedPriceParams,
   MintInfo,
   MintTypes,
   ReserveInfo,
@@ -23,10 +24,11 @@ import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import { apolloClient } from "@/services/Hasura.js"
 import { BlockchainType, invariant } from "@fxhash/shared"
-import { IEthContracts, config } from "@fxhash/config"
+import { config } from "@fxhash/config"
 import { EthereumWalletManager } from "@/services/Wallet.js"
+import { IEthContracts } from "@fxhash/config"
+import gqlClient from "@fxhash/gql-client"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -256,7 +258,6 @@ export async function processAndFormatMintInfos(
     | FixedPriceMintInfoArgs
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
-    | FreeMintingMintInfoArgs
   )[],
   manager: EthereumWalletManager,
   chain: BlockchainType
@@ -269,18 +270,46 @@ export async function processAndFormatMintInfos(
         argsMintInfo.reserveInfo
       )
       if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-        const mintInfo: MintInfo = {
-          minter: currentConfig.contracts.fixed_price_minter_v1,
-          reserveInfo: reserveInfo,
-          params: getFixedPriceMinterEncodedParams(
-            argsMintInfo.params.price,
-            argsMintInfo.params.whitelist,
-            argsMintInfo.params.mintPassSigner
-              ? (argsMintInfo.params.mintPassSigner as `0x${string}`)
-              : undefined
-          ),
+        if (argsMintInfo.isFrame) {
+          const params =
+            argsMintInfo.params as FarcasterFrameFixedPriceMintParams
+
+          const mintInfo: MintInfo = {
+            minter: (currentConfig.contracts as IEthContracts)
+              .farcaster_frame_fixed_price_minter_v1,
+            reserveInfo: reserveInfo,
+            params: encodeAbiParameters(
+              [
+                { type: "uint256", name: "price" },
+                { type: "uint256", name: "maxAmountPerFid" },
+              ],
+              [
+                argsMintInfo.params.price,
+                params.maxAmountPerFid ? params.maxAmountPerFid : MAX_UINT_256,
+              ]
+            ),
+          }
+          console.log(
+            "maxAmountPerFid",
+            params.maxAmountPerFid ? params.maxAmountPerFid : MAX_UINT_256
+          )
+
+          return mintInfo
+        } else {
+          const params = argsMintInfo.params as FixedPriceParams
+          const mintInfo: MintInfo = {
+            minter: currentConfig.contracts.fixed_price_minter_v1,
+            reserveInfo: reserveInfo,
+            params: getFixedPriceMinterEncodedParams(
+              argsMintInfo.params.price,
+              params.whitelist,
+              params.mintPassSigner
+                ? (params.mintPassSigner as `0x${string}`)
+                : undefined
+            ),
+          }
+          return mintInfo
         }
-        return mintInfo
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
         const mintInfo: MintInfo = {
           minter: currentConfig.contracts.dutch_auction_minter_v1,
@@ -311,20 +340,6 @@ export async function processAndFormatMintInfos(
           minter: currentConfig.contracts.ticket_redeemer_v1,
           reserveInfo: reserveInfo,
           params: encodedPredictedAddress,
-        }
-        return mintInfo
-      } else if (
-        argsMintInfo.type === MintTypes.FREE_MINTING &&
-        chain === BlockchainType.BASE
-      ) {
-        const mintInfo: MintInfo = {
-          minter: (currentConfig.contracts as IEthContracts)
-            .free_minting_minter_v1,
-          reserveInfo: reserveInfo,
-          params: encodeAbiParameters(
-            [{ type: "uint256", name: "maxAmountPerFid" }],
-            [argsMintInfo.params.maxAmountPerFid]
-          ),
         }
         return mintInfo
       } else {
@@ -422,14 +437,15 @@ export function getPricingFromParams(
   if (!generativeToken) {
     throw new Error("generativeToken is null or undefined")
   }
-  const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
+  const { pricing_fixeds, pricing_dutch_auctions, reserves, is_frame } =
+    generativeToken
   const isFixed = pricing_fixeds.length > 0
   const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
 
   if (!whitelist) {
     // We find the first pricing that doesn't have a reserve
     const pricing =
-      reserves.length === 0
+      reserves.length === 0 || is_frame
         ? pricingList[0]
         : // @ts-ignore
           pricingList.find(pricing =>
@@ -439,9 +455,9 @@ export function getPricingFromParams(
                 !reserve.data.merkleRoot
             )
           )
-    return { pricing }
+    return { pricing, isFixed: isFixed }
   }
-  return { pricing: pricingList[0] }
+  return { pricing: pricingList[0], isFixed: isFixed }
 }
 
 export function getPricingAndReserveFromParams(
@@ -511,6 +527,7 @@ interface PrepareMintParamsPayload {
     indexes: number[]
     proofs: string[][]
   }
+  isFixed: boolean
 }
 
 export const prepareMintParams = async (
@@ -518,27 +535,29 @@ export const prepareMintParams = async (
   qty: bigint,
   whitelistedAddress: `0x${string}` | null = null
 ): Promise<PrepareMintParamsPayload> => {
-  const tokenPricingsAndReserves = await apolloClient.query({
-    query: Qu_GetTokenPricingsAndReserves,
-    variables: {
+  const tokenPricingsAndReserves = await gqlClient.query(
+    Qu_GetTokenPricingsAndReserves,
+    {
       id: tokenId,
     },
-    fetchPolicy: "no-cache",
-  })
+    {
+      fetchPolicy: "no-cache",
+    }
+  )
 
   invariant(
-    tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
+    tokenPricingsAndReserves.data?.onchain?.generative_token_by_pk,
     "No token found"
   )
 
-  const { pricing } = getPricingFromParams(
+  const { pricing, isFixed } = getPricingFromParams(
     tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
     !!whitelistedAddress
   )
 
   invariant(pricing, "No pricing found")
 
-  if (!whitelistedAddress) return { pricing }
+  if (!whitelistedAddress) return { pricing, isFixed }
 
   let indexesAndProofs:
     | {
@@ -579,6 +598,7 @@ export const prepareMintParams = async (
 
   return {
     pricing,
+    isFixed: isFixed,
     reserve: reserveSave,
     indexesAndProofs,
   }
@@ -588,16 +608,18 @@ export const fetchTokenReserveId = async (
   tokenId: string,
   useWhitelist: boolean = false
 ) => {
-  const tokenPricingsAndReserves = await apolloClient.query({
-    query: Qu_GetTokenPricingsAndReserves,
-    variables: {
+  const tokenPricingsAndReserves = await gqlClient.query(
+    Qu_GetTokenPricingsAndReserves,
+    {
       id: tokenId,
     },
-    fetchPolicy: "no-cache",
-  })
+    {
+      fetchPolicy: "no-cache",
+    }
+  )
 
   invariant(
-    tokenPricingsAndReserves.data.onchain?.generative_token_by_pk,
+    tokenPricingsAndReserves.data?.onchain?.generative_token_by_pk,
     "No token found"
   )
 

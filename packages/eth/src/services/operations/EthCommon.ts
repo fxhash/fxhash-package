@@ -29,7 +29,6 @@ export enum MintTypes {
   FIXED_PRICE,
   DUTCH_AUCTION,
   TICKET,
-  FREE_MINTING,
 }
 
 //Type definition for the primary and royalties receivers
@@ -94,7 +93,8 @@ export interface ReserveInfoArgs {
 export interface FixedPriceMintInfoArgs {
   type: MintTypes.FIXED_PRICE
   reserveInfo: ReserveInfoArgs
-  params: FixedPriceParams
+  params: FixedPriceParams | FarcasterFrameFixedPriceMintParams
+  isFrame: boolean
 }
 
 export interface DutchAuctionMintInfoArgs {
@@ -108,12 +108,6 @@ export interface TicketMintInfoArgs {
   reserveInfo: ReserveInfoArgs
 }
 
-export interface FreeMintingMintInfoArgs {
-  type: MintTypes.FREE_MINTING
-  reserveInfo: ReserveInfoArgs
-  params: FreeMintParams
-}
-
 export interface BaseReserves {
   whitelist?: MerkleTreeWhitelist
   mintPassSigner?: string
@@ -123,8 +117,9 @@ export interface FixedPriceParams extends BaseReserves {
   price: bigint
 }
 
-export interface FreeMintParams extends BaseReserves {
-  maxAmountPerFid: bigint
+export interface FarcasterFrameFixedPriceMintParams {
+  price: bigint
+  maxAmountPerFid?: bigint
 }
 
 export interface DutchAuctionParams extends BaseReserves {
