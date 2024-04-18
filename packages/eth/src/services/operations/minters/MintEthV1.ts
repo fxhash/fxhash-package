@@ -24,13 +24,13 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
     undefined
 
   async prepare() {
-    const { pricing, indexesAndProofs, reserve } = await prepareMintParams(
-      this.params.token,
-      this.params.qty,
-      this.params.whitelist ? (this.params.to as `0x${string}`) : null
-    )
+    const { pricing, indexesAndProofs, reserve, isFixed } =
+      await prepareMintParams(
+        this.params.token,
+        this.params.qty,
+        this.params.whitelist ? (this.params.to as `0x${string}`) : null
+      )
 
-    const isFixed = pricing.__typename === "pricing_fixed"
     if (!this.params.whitelist) {
       if (isFixed) {
         this.mintOperation = new MintFixedPriceEthV1Operation(
