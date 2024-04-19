@@ -36,12 +36,25 @@ import {
   indexerV2ConfigLocal,
   indexerV2ConfigProd,
 } from "./config/indexer-v2"
+import {
+  EthIndexerConfig,
+  ethIndexerConfigDev,
+  ethIndexerConfigLocal,
+  ethIndexerConfigProd,
+} from "./config/eth-indexer"
+import {
+  baseIndexerConfigDev,
+  baseIndexerConfigLocal,
+  baseIndexerConfigProd,
+} from "./config/base-indexer"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
 export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
+
+export type { IndexerV2Config, EthIndexerConfig }
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -68,6 +81,8 @@ export interface IFxhashEnvConfig {
   algolia: AlgoliaConfig
   indexer: {
     tez: IndexerV2Config
+    eth: EthIndexerConfig
+    base: EthIndexerConfig
   }
 }
 
@@ -217,6 +232,8 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigDev,
         indexer: {
           tez: indexerV2ConfigLocal,
+          eth: ethIndexerConfigLocal,
+          base: baseIndexerConfigLocal,
         },
       },
     },
@@ -245,6 +262,8 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigDev,
         indexer: {
           tez: indexerV2ConfigLocal,
+          eth: ethIndexerConfigLocal,
+          base: baseIndexerConfigLocal,
         },
       },
     },
@@ -273,6 +292,8 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigDev,
         indexer: {
           tez: indexerV2ConfigDev,
+          eth: ethIndexerConfigDev,
+          base: baseIndexerConfigDev,
         },
       },
     },
@@ -301,6 +322,8 @@ export const fxhashConfig: IFxhashConfig = {
         algolia: algoliaConfigProd,
         indexer: {
           tez: indexerV2ConfigProd,
+          eth: ethIndexerConfigProd,
+          base: baseIndexerConfigProd,
         },
       },
     },

@@ -5743,7 +5743,7 @@ enum cursor_ordering {
 columns and relationships of "eth_frame_data"
 """
 type eth_frame_data {
-  free_frame_minter_data(
+  frame_minter_data(
     """
     JSON select path
     """
@@ -5759,7 +5759,7 @@ input eth_frame_data_bool_exp {
   _and: [eth_frame_data_bool_exp!]
   _not: eth_frame_data_bool_exp
   _or: [eth_frame_data_bool_exp!]
-  free_frame_minter_data: jsonb_comparison_exp
+  frame_minter_data: jsonb_comparison_exp
   id: String_comparison_exp
 }
 
@@ -5767,7 +5767,7 @@ input eth_frame_data_bool_exp {
 Ordering options when selecting data from "eth_frame_data".
 """
 input eth_frame_data_order_by {
-  free_frame_minter_data: order_by
+  frame_minter_data: order_by
   id: order_by
 }
 
@@ -5778,7 +5778,7 @@ enum eth_frame_data_select_column {
   """
   column name
   """
-  free_frame_minter_data
+  frame_minter_data
 
   """
   column name
@@ -5805,7 +5805,7 @@ input eth_frame_data_stream_cursor_input {
 Initial value of the column from where the streaming should start
 """
 input eth_frame_data_stream_cursor_value_input {
-  free_frame_minter_data: jsonb
+  frame_minter_data: jsonb
   id: String
 }
 
@@ -6423,6 +6423,7 @@ type generative_token {
   generative_uri: String
   id: String!
   input_bytes_size: Int!
+  is_frame: Boolean
   iterations_count: numeric
   labels: [Int!]!
   lock_end: timestamptz!
@@ -6926,6 +6927,7 @@ input generative_token_bool_exp {
   generative_uri: String_comparison_exp
   id: String_comparison_exp
   input_bytes_size: Int_comparison_exp
+  is_frame: Boolean_comparison_exp
   iterations_count: numeric_comparison_exp
   labels: Int_array_comparison_exp
   lock_end: timestamptz_comparison_exp
@@ -7072,6 +7074,7 @@ input generative_token_order_by {
   generative_uri: order_by
   id: order_by
   input_bytes_size: order_by
+  is_frame: order_by
   iterations_count: order_by
   labels: order_by
   lock_end: order_by
@@ -7170,6 +7173,11 @@ enum generative_token_select_column {
   column name
   """
   input_bytes_size
+
+  """
+  column name
+  """
+  is_frame
 
   """
   column name
@@ -7351,6 +7359,7 @@ input generative_token_stream_cursor_value_input {
   generative_uri: String
   id: String
   input_bytes_size: Int
+  is_frame: Boolean
   iterations_count: numeric
   labels: [Int!]
   lock_end: timestamptz

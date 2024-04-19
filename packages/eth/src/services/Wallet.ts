@@ -1,4 +1,4 @@
-import { config, devConfig, prdConfig } from "@fxhash/config"
+import { config } from "@fxhash/config"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -31,14 +31,15 @@ import {
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
-import { getSafeSDK } from "../services/Safe"
-import { TEthereumContractOperation } from "./operations"
+import { getSafeSDK } from "../services/Safe.js"
+import { TEthereumContractOperation } from "./operations/index.js"
 import {
   BrowserProvider,
   JsonRpcSigner,
   FallbackProvider,
   JsonRpcProvider,
 } from "ethers"
+import { EthIndexerConfig } from "@fxhash/config"
 /* Temp remove until package is esm compatible
 import {
   fallback,
@@ -154,8 +155,16 @@ export const transports: Record<string, Transport> =
         ]),
       }
 */
-export function getConfigForChain(chain: BlockchainType) {
+export function getConfigForChain(chain: BlockchainType): typeof config.eth {
   return chain === BlockchainType.ETHEREUM ? config.eth : config.base
+}
+
+export function getIndexerConfigForChain(
+  chain: BlockchainType
+): EthIndexerConfig {
+  return chain === BlockchainType.ETHEREUM
+    ? config.config.indexer.eth
+    : config.config.indexer.base
 }
 
 // the different operations which can be performed by the wallet
@@ -189,7 +198,7 @@ export class EthereumWalletManager extends WalletManager {
   public walletClient: WalletClient<Transport, Chain, Account>
   public publicClient: PublicClient<Transport, Chain>
   public signer: JsonRpcSigner
-  public safe: Safe | undefined
+  public safe: Safe.default | undefined
   private rpcNodes: string[]
 
   constructor(params: EthereumWalletManagerParams) {

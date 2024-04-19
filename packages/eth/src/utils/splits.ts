@@ -1,4 +1,4 @@
-import { ReceiverEntry, prepareReceivers } from "@/services/operations"
+import { ReceiverEntry, prepareReceivers } from "@/services/operations/index.js"
 import { Split, SplitsClient } from "@0xsplits/splits-sdk"
 import { BlockchainType } from "@fxhash/shared"
 

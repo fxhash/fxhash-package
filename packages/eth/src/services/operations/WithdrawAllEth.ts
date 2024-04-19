@@ -1,14 +1,17 @@
-import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { encodeFunctionData, TransactionReceipt } from "viem"
+import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
+import { encodeFunctionData } from "viem"
 
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { Qu_GetEthMinterProceeds } from "@fxhash/gql"
-import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { FIXED_PRICE_MINTER_ABI, DUTCH_AUCTION_MINTER_ABI } from "@/abi"
-import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits"
+import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
+import {
+  FIXED_PRICE_MINTER_ABI,
+  DUTCH_AUCTION_MINTER_ABI,
+} from "@/abi/index.js"
+import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits.js"
 import { CallData } from "@0xsplits/splits-sdk"
 import {
   TransactionUnknownError,
@@ -16,7 +19,7 @@ import {
   invariant,
   BlockchainType,
 } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "../Wallet"
+import { getConfigForChain, getCurrentChain } from "../Wallet.js"
 import gqlClient from "@fxhash/gql-client"
 
 export type TWithdrawAllEthV1OperationParams = {

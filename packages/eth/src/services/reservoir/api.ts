@@ -1,5 +1,5 @@
 import { Execute } from "@reservoir0x/reservoir-sdk"
-import { API_METHODS, fetchReservoir } from "@/services/Reservoir"
+import { API_METHODS, fetchReservoir } from "@/services/Reservoir.js"
 import {
   ReservoirExecuteBidParams,
   ReservoirExecuteBuyParams,
@@ -7,7 +7,7 @@ import {
   ReservoirGetCollectionResponse,
   ReservoirGetOfferResponse,
   ReservoirGetTokenResponse,
-} from "./types"
+} from "./types.js"
 import { BlockchainType } from "@fxhash/shared"
 
 /**
