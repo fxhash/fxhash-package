@@ -58,12 +58,15 @@ export async function fetchReservoir<T>(
 ): Promise<T> {
   try {
     const params = new URLSearchParams(queryParams).toString()
-    const reservoirUrl = `${getConfigForChain(chain).apis?.reservoir}${path}${params ? "?" + params : ""}`
-    const response = await fetch(`${reservoirUrl}${path}`, {
-      method: method,
-      body: body,
-      headers: headers,
-    })
+    const reservoirUrl = `${getConfigForChain(chain).apis?.reservoir}`
+    const response = await fetch(
+      `${reservoirUrl}${path}${params ? "?" + params : ""}`,
+      {
+        method: method,
+        body: body,
+        headers: headers,
+      }
+    )
     const data = await response.json()
     if (!response.ok) {
       throw new Error(
