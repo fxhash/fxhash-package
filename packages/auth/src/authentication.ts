@@ -1,7 +1,9 @@
 import { char2Bytes } from "@taquito/utils"
 import { AuthToken } from "@/types/auth-token"
 import { AuthRole } from "@/types/roles"
-import { SignOptions, sign, verify } from "jsonwebtoken"
+import { SignOptions } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
+const { sign, verify } = jwt
 
 // local auth public, used to keep in-memory pointer of the key to be f4st
 let authPublic: string | null = null
