@@ -1,15 +1,23 @@
-import SafeApiKit, { SafeInfoResponse } from "@safe-global/api-kit"
-import Safe, { EthersAdapter, SafeFactory } from "@safe-global/protocol-kit"
+import SafeApiKit, {
+  OwnerResponse,
+  SafeInfoResponse,
+  SafeMultisigTransactionListResponse,
+} from "@safe-global/api-kit"
+import Safe, {
+  EthersAdapter,
+  EthersAdapterConfig,
+  SafeFactory,
+} from "@safe-global/protocol-kit"
 import {
   JsonRpcProvider,
   JsonRpcSigner,
   Provider,
-  Signer,
+  AbstractSigner,
   Wallet,
   ethers,
 } from "ethers"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
-import { EthereumWalletManager, getChainIdForChain } from "./Wallet"
+import { EthereumWalletManager, getChainIdForChain } from "./Wallet.js"
 import { getAddress } from "viem"
 import { BlockchainType, UserRejectedError, invariant } from "@fxhash/shared"
 
@@ -26,7 +34,7 @@ import { BlockchainType, UserRejectedError, invariant } from "@fxhash/shared"
 export async function getSafeSDK(
   safeAddress: string,
   signer: JsonRpcSigner | Provider
-): Promise<Safe> {
+) {
   // @dev: we have to add this otherwise it won't compile, however runtime is fine ...
   // @ts-ignore
   return await Safe.default.create({
@@ -55,11 +63,11 @@ export async function getSafeFactory(signer: JsonRpcSigner | Provider) {
  * and authorize actions performed by the SafeApiKit instance.
  * @returns an instance of the `SafeApiKit` class.
  */
-export function getSafeService(chain: BlockchainType): SafeApiKit {
+export function getSafeService(chain: BlockchainType): SafeApiKit.default {
   // @dev: we have to add this otherwise it won't compile, however runtime is fine ...
   // @ts-ignore
   return new SafeApiKit.default({
-    chainId: getChainIdForChain(chain),
+    chainId: BigInt(getChainIdForChain(chain)),
   })
 }
 
@@ -85,12 +93,13 @@ export function getWalletProvider(
  * @returns an instance of the `EthersAdapter` class.
  */
 export function getEthersAdapterForSafe(
-  signer: Signer | Provider
+  signer: Provider | AbstractSigner<Provider | null>
 ): EthersAdapter {
   return new EthersAdapter({
     ethers,
     signerOrProvider: signer,
-  })
+    // TODO: hack because of esm/cjs confusion with ethers
+  } as unknown as EthersAdapterConfig)
 }
 
 /**
@@ -150,7 +159,10 @@ export async function proposeSafeTransaction(
  * user.
  * @returns the list of safes related to the user.
  */
-export async function getUserSafes(userAddress: string, chain: BlockchainType) {
+export async function getUserSafes(
+  userAddress: string,
+  chain: BlockchainType
+): Promise<OwnerResponse> {
   return await getSafeService(chain).getSafesByOwner(userAddress)
 }
 
@@ -162,7 +174,7 @@ export async function getUserSafes(userAddress: string, chain: BlockchainType) {
 export async function getPendingTransactionsForSafe(
   safeAddress: string,
   chain: BlockchainType
-) {
+): Promise<SafeMultisigTransactionListResponse> {
   return await getSafeService(chain).getPendingTransactions(safeAddress)
 }
 
@@ -174,7 +186,7 @@ export async function getPendingTransactionsForSafe(
 export async function getMultisigTransactions(
   safeAddress: string,
   chain: BlockchainType
-) {
+): Promise<SafeMultisigTransactionListResponse> {
   return await getSafeService(chain).getMultisigTransactions(safeAddress)
 }
 

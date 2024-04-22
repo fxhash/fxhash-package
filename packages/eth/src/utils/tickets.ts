@@ -1,4 +1,4 @@
-import { FX_TICKETS_ABI } from "@/abi/FxTicket"
+import { FX_TICKETS_ABI } from "@/abi/FxTicket.js"
 import { PublicClient, getContract } from "viem"
 import { EthereumWalletManager } from ".."
 import { BlockchainType } from "@fxhash/shared"

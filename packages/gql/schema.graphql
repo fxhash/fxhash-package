@@ -566,6 +566,317 @@ input Boolean_comparison_exp {
 }
 
 """
+columns and relationships of "Event"
+"""
+type Event {
+  """
+  An object relationship
+  """
+  Featured: Featured
+  availabilities: [EventAvailability!]
+  description: String!
+  endsAt: timestamp!
+  freeLiveMinting: Boolean!
+  headerMediaId: String
+  id: String!
+  imageUrl: String
+  labelIds: [Int!]
+  location: String
+  mintPageUrl: String!
+  name: String!
+  partnerMediaId: String
+  projectIds: [Int!]
+  startsAt: timestamp!
+  status: EventStatus!
+  thumbnailMediaId: String
+}
+
+scalar EventAvailability
+
+"""
+Boolean expression to compare columns of type "EventAvailability". All fields are combined with logical 'AND'.
+"""
+input EventAvailability_array_comparison_exp {
+  """
+  is the array contained in the given array value
+  """
+  _contained_in: [EventAvailability!]
+
+  """
+  does the array contain the given value
+  """
+  _contains: [EventAvailability!]
+  _eq: [EventAvailability!]
+  _gt: [EventAvailability!]
+  _gte: [EventAvailability!]
+  _in: [[EventAvailability!]!]
+  _is_null: Boolean
+  _lt: [EventAvailability!]
+  _lte: [EventAvailability!]
+  _neq: [EventAvailability!]
+  _nin: [[EventAvailability!]!]
+}
+
+scalar EventStatus
+
+"""
+Boolean expression to compare columns of type "EventStatus". All fields are combined with logical 'AND'.
+"""
+input EventStatus_comparison_exp {
+  _eq: EventStatus
+  _gt: EventStatus
+  _gte: EventStatus
+  _in: [EventStatus!]
+  _is_null: Boolean
+  _lt: EventStatus
+  _lte: EventStatus
+  _neq: EventStatus
+  _nin: [EventStatus!]
+}
+
+"""
+Boolean expression to filter rows from the table "Event". All fields are combined with a logical 'AND'.
+"""
+input Event_bool_exp {
+  Featured: Featured_bool_exp
+  _and: [Event_bool_exp!]
+  _not: Event_bool_exp
+  _or: [Event_bool_exp!]
+  availabilities: EventAvailability_array_comparison_exp
+  description: String_comparison_exp
+  endsAt: timestamp_comparison_exp
+  freeLiveMinting: Boolean_comparison_exp
+  headerMediaId: String_comparison_exp
+  id: String_comparison_exp
+  imageUrl: String_comparison_exp
+  labelIds: Int_array_comparison_exp
+  location: String_comparison_exp
+  mintPageUrl: String_comparison_exp
+  name: String_comparison_exp
+  partnerMediaId: String_comparison_exp
+  projectIds: Int_array_comparison_exp
+  startsAt: timestamp_comparison_exp
+  status: EventStatus_comparison_exp
+  thumbnailMediaId: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "Event".
+"""
+input Event_order_by {
+  Featured: Featured_order_by
+  availabilities: order_by
+  description: order_by
+  endsAt: order_by
+  freeLiveMinting: order_by
+  headerMediaId: order_by
+  id: order_by
+  imageUrl: order_by
+  labelIds: order_by
+  location: order_by
+  mintPageUrl: order_by
+  name: order_by
+  partnerMediaId: order_by
+  projectIds: order_by
+  startsAt: order_by
+  status: order_by
+  thumbnailMediaId: order_by
+}
+
+"""
+select columns of table "Event"
+"""
+enum Event_select_column {
+  """
+  column name
+  """
+  availabilities
+
+  """
+  column name
+  """
+  description
+
+  """
+  column name
+  """
+  endsAt
+
+  """
+  column name
+  """
+  freeLiveMinting
+
+  """
+  column name
+  """
+  headerMediaId
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  imageUrl
+
+  """
+  column name
+  """
+  labelIds
+
+  """
+  column name
+  """
+  location
+
+  """
+  column name
+  """
+  mintPageUrl
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  partnerMediaId
+
+  """
+  column name
+  """
+  projectIds
+
+  """
+  column name
+  """
+  startsAt
+
+  """
+  column name
+  """
+  status
+
+  """
+  column name
+  """
+  thumbnailMediaId
+}
+
+"""
+Streaming cursor of the table "Event"
+"""
+input Event_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: Event_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input Event_stream_cursor_value_input {
+  availabilities: [EventAvailability!]
+  description: String
+  endsAt: timestamp
+  freeLiveMinting: Boolean
+  headerMediaId: String
+  id: String
+  imageUrl: String
+  labelIds: [Int!]
+  location: String
+  mintPageUrl: String
+  name: String
+  partnerMediaId: String
+  projectIds: [Int!]
+  startsAt: timestamp
+  status: EventStatus
+  thumbnailMediaId: String
+}
+
+"""
+columns and relationships of "Featured"
+"""
+type Featured {
+  """
+  An object relationship
+  """
+  Event: Event
+  eventId: String
+  id: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "Featured". All fields are combined with a logical 'AND'.
+"""
+input Featured_bool_exp {
+  Event: Event_bool_exp
+  _and: [Featured_bool_exp!]
+  _not: Featured_bool_exp
+  _or: [Featured_bool_exp!]
+  eventId: String_comparison_exp
+  id: Int_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "Featured".
+"""
+input Featured_order_by {
+  Event: Event_order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+select columns of table "Featured"
+"""
+enum Featured_select_column {
+  """
+  column name
+  """
+  eventId
+
+  """
+  column name
+  """
+  id
+}
+
+"""
+Streaming cursor of the table "Featured"
+"""
+input Featured_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: Featured_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input Featured_stream_cursor_value_input {
+  eventId: String
+  id: Int
+}
+
+"""
 Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'.
 """
 input Float_comparison_exp {
@@ -2380,6 +2691,8 @@ Initial value of the column from where the streaming should start
 input Whitelist_stream_cursor_value_input {
   merkleRoot: String
 }
+
+scalar _text
 
 """
 columns and relationships of "action"
@@ -4516,6 +4829,89 @@ input auction_variance_order_by {
   version: order_by
 }
 
+"""
+columns and relationships of "squid_processor_base.status"
+"""
+type base_indexer {
+  hash: String
+  height: Int!
+  id: Int!
+  nonce: Int
+}
+
+"""
+Boolean expression to filter rows from the table "squid_processor_base.status". All fields are combined with a logical 'AND'.
+"""
+input base_indexer_bool_exp {
+  _and: [base_indexer_bool_exp!]
+  _not: base_indexer_bool_exp
+  _or: [base_indexer_bool_exp!]
+  hash: String_comparison_exp
+  height: Int_comparison_exp
+  id: Int_comparison_exp
+  nonce: Int_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "squid_processor_base.status".
+"""
+input base_indexer_order_by {
+  hash: order_by
+  height: order_by
+  id: order_by
+  nonce: order_by
+}
+
+"""
+select columns of table "squid_processor_base.status"
+"""
+enum base_indexer_select_column {
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  height
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  nonce
+}
+
+"""
+Streaming cursor of the table "base_indexer"
+"""
+input base_indexer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: base_indexer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input base_indexer_stream_cursor_value_input {
+  hash: String
+  height: Int
+  id: Int
+  nonce: Int
+}
+
 scalar bigint
 
 """
@@ -5344,6 +5740,159 @@ enum cursor_ordering {
 }
 
 """
+columns and relationships of "eth_frame_data"
+"""
+type eth_frame_data {
+  frame_minter_data(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
+  id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "eth_frame_data". All fields are combined with a logical 'AND'.
+"""
+input eth_frame_data_bool_exp {
+  _and: [eth_frame_data_bool_exp!]
+  _not: eth_frame_data_bool_exp
+  _or: [eth_frame_data_bool_exp!]
+  frame_minter_data: jsonb_comparison_exp
+  id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "eth_frame_data".
+"""
+input eth_frame_data_order_by {
+  frame_minter_data: order_by
+  id: order_by
+}
+
+"""
+select columns of table "eth_frame_data"
+"""
+enum eth_frame_data_select_column {
+  """
+  column name
+  """
+  frame_minter_data
+
+  """
+  column name
+  """
+  id
+}
+
+"""
+Streaming cursor of the table "eth_frame_data"
+"""
+input eth_frame_data_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: eth_frame_data_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input eth_frame_data_stream_cursor_value_input {
+  frame_minter_data: jsonb
+  id: String
+}
+
+"""
+columns and relationships of "squid_processor.status"
+"""
+type eth_indexer {
+  hash: String
+  height: Int!
+  id: Int!
+  nonce: Int
+}
+
+"""
+Boolean expression to filter rows from the table "squid_processor.status". All fields are combined with a logical 'AND'.
+"""
+input eth_indexer_bool_exp {
+  _and: [eth_indexer_bool_exp!]
+  _not: eth_indexer_bool_exp
+  _or: [eth_indexer_bool_exp!]
+  hash: String_comparison_exp
+  height: Int_comparison_exp
+  id: Int_comparison_exp
+  nonce: Int_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "squid_processor.status".
+"""
+input eth_indexer_order_by {
+  hash: order_by
+  height: order_by
+  id: order_by
+  nonce: order_by
+}
+
+"""
+select columns of table "squid_processor.status"
+"""
+enum eth_indexer_select_column {
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  height
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  nonce
+}
+
+"""
+Streaming cursor of the table "eth_indexer"
+"""
+input eth_indexer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: eth_indexer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input eth_indexer_stream_cursor_value_input {
+  hash: String
+  height: Int
+  id: Int
+  nonce: Int
+}
+
+"""
 columns and relationships of "eth_minter_proceeds"
 """
 type eth_minter_proceeds {
@@ -5874,6 +6423,7 @@ type generative_token {
   generative_uri: String
   id: String!
   input_bytes_size: Int!
+  is_frame: Boolean
   iterations_count: numeric
   labels: [Int!]!
   lock_end: timestamptz!
@@ -6094,6 +6644,41 @@ type generative_token {
     """
     where: pricing_fixed_bool_exp
   ): [pricing_fixed!]!
+
+  """
+  A computed field, executes function "get_random_objkt"
+  """
+  random_objkt(
+    """
+    input parameters for computed field "random_objkt" defined on table "generative_token"
+    """
+    args: random_objkt_generative_token_args
+
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): [objkt!]
 
   """
   An array relationship
@@ -6342,6 +6927,7 @@ input generative_token_bool_exp {
   generative_uri: String_comparison_exp
   id: String_comparison_exp
   input_bytes_size: Int_comparison_exp
+  is_frame: Boolean_comparison_exp
   iterations_count: numeric_comparison_exp
   labels: Int_array_comparison_exp
   lock_end: timestamptz_comparison_exp
@@ -6488,6 +7074,7 @@ input generative_token_order_by {
   generative_uri: order_by
   id: order_by
   input_bytes_size: order_by
+  is_frame: order_by
   iterations_count: order_by
   labels: order_by
   lock_end: order_by
@@ -6586,6 +7173,11 @@ enum generative_token_select_column {
   column name
   """
   input_bytes_size
+
+  """
+  column name
+  """
+  is_frame
 
   """
   column name
@@ -6767,6 +7359,7 @@ input generative_token_stream_cursor_value_input {
   generative_uri: String
   id: String
   input_bytes_size: Int
+  is_frame: Boolean
   iterations_count: numeric
   labels: [Int!]
   lock_end: timestamptz
@@ -12231,6 +12824,41 @@ type onchain_query {
   auction_by_pk(id: Int!, version: Int!): auction
 
   """
+  fetch data from the table: "squid_processor_base.status"
+  """
+  base_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [base_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [base_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: base_indexer_bool_exp
+  ): [base_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor_base.status" using primary key columns
+  """
+  base_indexer_by_pk(id: Int!): base_indexer
+
+  """
   fetch data from the table: "codex"
   """
   codex(
@@ -12368,6 +12996,76 @@ type onchain_query {
   fetch data from the table: "collection_offer" using primary key columns
   """
   collection_offer_by_pk(id: String!, version: Int!): collection_offer
+
+  """
+  fetch data from the table: "eth_frame_data"
+  """
+  eth_frame_data(
+    """
+    distinct select on columns
+    """
+    distinct_on: [eth_frame_data_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [eth_frame_data_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: eth_frame_data_bool_exp
+  ): [eth_frame_data!]!
+
+  """
+  fetch data from the table: "eth_frame_data" using primary key columns
+  """
+  eth_frame_data_by_pk(id: String!): eth_frame_data
+
+  """
+  fetch data from the table: "squid_processor.status"
+  """
+  eth_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [eth_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [eth_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor.status" using primary key columns
+  """
+  eth_indexer_by_pk(id: Int!): eth_indexer
 
   """
   fetch data from the table: "eth_minter_proceeds"
@@ -13868,6 +14566,61 @@ type onchain_subscription {
   ): [auction!]!
 
   """
+  fetch data from the table: "squid_processor_base.status"
+  """
+  base_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [base_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [base_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: base_indexer_bool_exp
+  ): [base_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor_base.status" using primary key columns
+  """
+  base_indexer_by_pk(id: Int!): base_indexer
+
+  """
+  fetch data from the table in a streaming manner: "squid_processor_base.status"
+  """
+  base_indexer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [base_indexer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: base_indexer_bool_exp
+  ): [base_indexer!]!
+
+  """
   fetch data from the table: "codex"
   """
   codex(
@@ -14085,6 +14838,116 @@ type onchain_subscription {
     """
     where: collection_offer_bool_exp
   ): [collection_offer!]!
+
+  """
+  fetch data from the table: "eth_frame_data"
+  """
+  eth_frame_data(
+    """
+    distinct select on columns
+    """
+    distinct_on: [eth_frame_data_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [eth_frame_data_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: eth_frame_data_bool_exp
+  ): [eth_frame_data!]!
+
+  """
+  fetch data from the table: "eth_frame_data" using primary key columns
+  """
+  eth_frame_data_by_pk(id: String!): eth_frame_data
+
+  """
+  fetch data from the table in a streaming manner: "eth_frame_data"
+  """
+  eth_frame_data_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [eth_frame_data_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: eth_frame_data_bool_exp
+  ): [eth_frame_data!]!
+
+  """
+  fetch data from the table: "squid_processor.status"
+  """
+  eth_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [eth_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [eth_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor.status" using primary key columns
+  """
+  eth_indexer_by_pk(id: Int!): eth_indexer
+
+  """
+  fetch data from the table in a streaming manner: "squid_processor.status"
+  """
+  eth_indexer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [eth_indexer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
 
   """
   fetch data from the table: "eth_minter_proceeds"
@@ -16188,9 +17051,82 @@ input pricing_fixed_variance_order_by {
 }
 
 type query_root {
+  """
+  fetch data from the table: "Event"
+  """
+  Event(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Event_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Event_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Event_bool_exp
+  ): [Event!]!
+
+  """
+  fetch data from the table: "Event" using primary key columns
+  """
+  Event_by_pk(id: String!): Event
+
+  """
+  fetch data from the table: "Featured"
+  """
+  Featured(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Featured_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Featured_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Featured_bool_exp
+  ): [Featured!]!
+
+  """
+  fetch data from the table: "Featured" using primary key columns
+  """
+  Featured_by_pk(id: Int!): Featured
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+}
+
+input random_objkt_generative_token_args {
+  excluded_ids: _text
 }
 
 """
@@ -17404,8 +18340,134 @@ input split_variance_order_by {
 }
 
 type subscription_root {
+  """
+  fetch data from the table: "Event"
+  """
+  Event(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Event_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Event_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Event_bool_exp
+  ): [Event!]!
+
+  """
+  fetch data from the table: "Event" using primary key columns
+  """
+  Event_by_pk(id: String!): Event
+
+  """
+  fetch data from the table in a streaming manner: "Event"
+  """
+  Event_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [Event_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: Event_bool_exp
+  ): [Event!]!
+
+  """
+  fetch data from the table: "Featured"
+  """
+  Featured(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Featured_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Featured_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Featured_bool_exp
+  ): [Featured!]!
+
+  """
+  fetch data from the table: "Featured" using primary key columns
+  """
+  Featured_by_pk(id: Int!): Featured
+
+  """
+  fetch data from the table in a streaming manner: "Featured"
+  """
+  Featured_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [Featured_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: Featured_bool_exp
+  ): [Featured!]!
   offchain: offchain_subscription
   onchain: onchain_subscription
+}
+
+scalar timestamp
+
+"""
+Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'.
+"""
+input timestamp_comparison_exp {
+  _eq: timestamp
+  _gt: timestamp
+  _gte: timestamp
+  _in: [timestamp!]
+  _is_null: Boolean
+  _lt: timestamp
+  _lte: timestamp
+  _neq: timestamp
+  _nin: [timestamp!]
 }
 
 scalar timestamptz

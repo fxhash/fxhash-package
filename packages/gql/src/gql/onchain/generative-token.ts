@@ -18,3 +18,25 @@ export const Frag_GenerativeTokenPricing = graphql(`
     }
   }
 `)
+
+export const Qu_GetObjectsOfTokenAndWallets = graphql(`
+  query Qu_GetObjectsOfTokenAndWallets(
+    $_eq: String = ""
+    $_iregex: String = ""
+  ) {
+    onchain {
+      objkt(
+        where: {
+          generative_token: { id: { _eq: $_eq } }
+          minter_id: { _iregex: $_iregex }
+        }
+        order_by: { created_at: desc }
+      ) {
+        id
+        minter_id
+        slug
+        capture_media_id
+      }
+    }
+  }
+`)

@@ -1,5 +1,5 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { getSplitsClient } from "../../Splits"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { getSplitsClient } from "@/services/Splits.js"
 import { TransactionType, invariant } from "@fxhash/shared"
 
 export type TWithdrawFromSplitsEthV1OperationParams = {

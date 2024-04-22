@@ -7,6 +7,7 @@ export const Qu_GetTokenPricingsAndReserves = graphql(`
   query GetTokenPricingsAndReserves($id: String!) {
     onchain {
       generative_token_by_pk(id: $id) {
+        is_frame
         reserves {
           id
           method
