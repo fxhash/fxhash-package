@@ -3,7 +3,7 @@ import {
   ContractOperation,
   TransactionType,
 } from "@fxhash/shared"
-import { EthereumWalletManager } from "../Wallet"
+import { EthereumWalletManager } from "../Wallet.js"
 
 export abstract class EthereumContractOperation<
   Params,

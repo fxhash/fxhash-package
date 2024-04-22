@@ -30,26 +30,12 @@ import {
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
-import {
-  IndexerV2Config,
-  indexerV2ConfigDev,
-  indexerV2ConfigLocal,
-  indexerV2ConfigProd,
-} from "./config/indexer-v2"
-import {
-  ExtractBalancerConfig,
-  extractBalancerConfigDev,
-  extractBalancerConfigLocal,
-  extractBalancerConfigProd,
-} from "./config/extract-balancer"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
 export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
-
-export type { IndexerV2Config }
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -70,12 +56,7 @@ export interface IFxhashEnvConfig {
   fxhashSecondaryFee: number
   syndicateProjectId: string
   openTelemetryTarget: string
-  // service specific config
   algolia: AlgoliaConfig
-  extractBalancer: ExtractBalancerConfig
-  indexer: {
-    tez: IndexerV2Config
-  }
 }
 
 type TBlockchainContacts = {
@@ -218,12 +199,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "http://localhost:14268",
-        // service specific config
         algolia: algoliaConfigDev,
-        extractBalancer: extractBalancerConfigLocal,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-        },
       },
     },
     localDocker: {
@@ -245,12 +221,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "http://localhost:14268",
-        // service specific config
         algolia: algoliaConfigDev,
-        extractBalancer: extractBalancerConfigLocal,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-        },
       },
     },
     dev: {
@@ -272,12 +243,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
-        // service specific config
         algolia: algoliaConfigDev,
-        extractBalancer: extractBalancerConfigDev,
-        indexer: {
-          tez: indexerV2ConfigDev,
-        },
       },
     },
     prd: {
@@ -299,12 +265,7 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
-        // service specific config
         algolia: algoliaConfigProd,
-        extractBalancer: extractBalancerConfigProd,
-        indexer: {
-          tez: indexerV2ConfigProd,
-        },
       },
     },
   },

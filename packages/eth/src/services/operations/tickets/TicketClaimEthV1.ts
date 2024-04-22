@@ -1,10 +1,10 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { FX_TICKETS_ABI } from "@/abi/FxTicket"
-import { getCurrentChain } from "@/services/Wallet"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { FX_TICKETS_ABI } from "@/abi/FxTicket.js"
+import { getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
 export type TClaimTicketEthV1OperationParams = {
