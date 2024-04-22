@@ -65,7 +65,7 @@ export const fxhashDevApis: IFxhashApis = {
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsInternal:
-    "http://fxhash-dev-testnet-ipfs-cluster-api:.fxhash-dev-testnet.svc.cluster.local:9094",
+    "http://fxhash-dev-testnet-ipfs-cluster-api.fxhash-dev-testnet.svc.cluster.local:9094",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   ipfsGatewayInternal:
