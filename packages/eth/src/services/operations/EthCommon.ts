@@ -2,31 +2,26 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
-  PublicClient,
   TransactionReceipt,
-  getContract,
   ContractFunctionExecutionError,
   InsufficientFundsError as InsufficientFundsErrorViem,
   TransactionExecutionError,
-  Client,
   Chain,
 } from "viem"
-
-import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { ALLOCATION_BASE, MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
-import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
-import { getOpenChainError } from "@/services/Openchain"
+import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
-  FX_GEN_ART_721_ABI,
-  FX_ISSUER_FACTORY_ABI,
-  SPLITS_MAIN_ABI,
-} from "@/abi"
+  ALLOCATION_BASE,
+  MAX_UINT_64,
+  MerkleTreeWhitelist,
+} from "@/utils/index.js"
+import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet.js"
+import { getOpenChainError } from "@/services/Openchain.js"
+import { FX_GEN_ART_721_ABI, FX_ISSUER_FACTORY_ABI } from "@/abi/index.js"
 import {
   BlockchainType,
   InsufficientFundsError,
   TransactionRevertedError,
   UserRejectedError,
-  WalletManager,
   invariant,
 } from "@fxhash/shared"
 
@@ -98,7 +93,8 @@ export interface ReserveInfoArgs {
 export interface FixedPriceMintInfoArgs {
   type: MintTypes.FIXED_PRICE
   reserveInfo: ReserveInfoArgs
-  params: FixedPriceParams
+  params: FixedPriceParams | FarcasterFrameFixedPriceMintParams
+  isFrame: boolean
 }
 
 export interface DutchAuctionMintInfoArgs {
@@ -119,6 +115,11 @@ export interface BaseReserves {
 
 export interface FixedPriceParams extends BaseReserves {
   price: bigint
+}
+
+export interface FarcasterFrameFixedPriceMintParams {
+  price: bigint
+  maxAmountPerFid?: bigint
 }
 
 export interface DutchAuctionParams extends BaseReserves {

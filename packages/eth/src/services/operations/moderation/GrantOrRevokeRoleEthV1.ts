@@ -1,15 +1,15 @@
-import { EthereumContractOperation } from "@/services/operations/contractOperation"
+import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { encodeFunctionData } from "viem"
-import { FX_ROLE_REGISTRY_ABI } from "@/abi/FxRoleRegistry"
+import { FX_ROLE_REGISTRY_ABI } from "@/abi/FxRoleRegistry.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
-import { ETH_ROLES, ETH_ROLES_MAP } from "@/utils/roles"
+} from "@/services/operations/EthCommon.js"
+import { ETH_ROLES, ETH_ROLES_MAP } from "@/utils/roles.js"
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
-import { proposeSafeTransaction } from "@/services/Safe"
+import { proposeSafeTransaction } from "@/services/Safe.js"
 import { TransactionType } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 export type TGrantOrRevokeRoleEthV1OperationParams = {
   user: `0x${string}`

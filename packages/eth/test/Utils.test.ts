@@ -22,8 +22,8 @@ import {
   ReceiverEntry,
   prepareReceivers,
   revertReceiversFee,
-} from "@/services/operations/EthCommon"
-import { getExistingSplits } from "@/utils"
+} from "@/services/operations/EthCommon.js"
+import { getExistingSplits } from "@/utils/index.js"
 import { getSplitsClient } from "@/services/Splits"
 import { privateKeyToAccount } from "viem/accounts"
 import { foundry } from "viem/chains"
