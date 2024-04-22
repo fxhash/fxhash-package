@@ -1,9 +1,9 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
-import { prepareMintParams } from "@/utils"
-import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1"
-import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1"
-import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1.js"
+import { prepareMintParams } from "@/utils/index.js"
+import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
+import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
+import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
 import { TransactionType, invariant } from "@fxhash/shared"
 
 export type TMintEthV1OperationParams = {
@@ -24,13 +24,13 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
     undefined
 
   async prepare() {
-    const { pricing, indexesAndProofs, reserve } = await prepareMintParams(
-      this.params.token,
-      this.params.qty,
-      this.params.whitelist ? (this.params.to as `0x${string}`) : null
-    )
+    const { pricing, indexesAndProofs, reserve, isFixed } =
+      await prepareMintParams(
+        this.params.token,
+        this.params.qty,
+        this.params.whitelist ? (this.params.to as `0x${string}`) : null
+      )
 
-    const isFixed = pricing.__typename === "pricing_fixed"
     if (!this.params.whitelist) {
       if (isFixed) {
         this.mintOperation = new MintFixedPriceEthV1Operation(

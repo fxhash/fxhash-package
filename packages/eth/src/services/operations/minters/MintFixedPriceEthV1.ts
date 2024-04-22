@@ -1,12 +1,11 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
-import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 /**
  * The following type represents the parameters required for a mint operation in a fixed price Ethereum

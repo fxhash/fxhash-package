@@ -1,14 +1,14 @@
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
-import { EthereumContractOperation } from "../contractOperation"
-import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
   DutchAuctionMintInfoArgs,
   FixedPriceMintInfoArgs,
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
   TicketMintInfoArgs,
-} from "@/services/operations/EthCommon"
-import { processAndFormatMintInfos } from "@/utils/minters"
+} from "@/services/operations/EthCommon.js"
+import { processAndFormatMintInfos } from "@/utils/minters.js"
 import { TransactionType } from "@fxhash/shared"
 
 export type TCreateTicketEthV1OperationParams = {
