@@ -1,9 +1,9 @@
-import { PublicClient, bytesToHex, encodeFunctionData, hexToBytes } from "viem"
+import { PublicClient, bytesToHex, encodeFunctionData } from "viem"
 import {
   ONCHFS_CONTENT_STORE,
   ONCHFS_FILE_SYSTEM_ABI,
   getConfigForChain,
-} from ".."
+} from "../index.js"
 import { Inscription } from "onchfs"
 import { CallData } from "@0xsplits/splits-sdk"
 import { BlockchainType } from "@fxhash/shared"
@@ -50,9 +50,9 @@ export async function onchfsChunkExists(
 }
 
 export async function onchfsGetInodeAtPath(
-  client: PublicClient,
-  cid: string,
-  path: string
+  _client: PublicClient,
+  _cid: string,
+  _path: string
 ) {
   throw new Error("todo")
 }

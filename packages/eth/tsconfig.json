@@ -11,8 +11,8 @@
     },
     "strict": true,
     "useUnknownInCatchVariables": false,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "maxNodeModuleJsDepth": 10
+    // FIXME: can be removed when all packages are migrated to esm and @fxhash/base config uses those defaults
+    "module": "Node16",
+    "moduleResolution": "Node16"
   }
 }

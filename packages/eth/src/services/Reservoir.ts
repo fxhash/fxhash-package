@@ -1,5 +1,5 @@
 import { createClient } from "@reservoir0x/reservoir-sdk"
-import { getConfigForChain } from "./Wallet"
+import { getConfigForChain } from "./Wallet.js"
 import { BlockchainType } from "@fxhash/shared"
 import { URLSearchParams } from "url"
 
@@ -13,7 +13,8 @@ export const RESERVOIR_API_URLS: {
 }
 
 //API key used for interacting with Reservoir API
-export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY!
+if (!process.env.RESERVOIR_API_KEY) console.warn("missing RESERVOIR_API_KEY")
+export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
 
 //source used for interacting with Reservoir API and be able to easily filter on only our orders
 export const RESERVOIR_SOURCE = "fxhash.xyz"

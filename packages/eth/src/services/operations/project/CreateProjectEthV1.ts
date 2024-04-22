@@ -1,6 +1,6 @@
-import { EthereumContractOperation } from "../contractOperation"
+import { EthereumContractOperation } from "../contractOperation.js"
 import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
-import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory"
+import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory.js"
 
 import {
   DutchAuctionMintInfoArgs,
@@ -16,18 +16,17 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
   TicketMintInfoArgs,
-} from "@/services/operations/EthCommon"
-import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils"
-import { proposeSafeTransaction } from "@/services/Safe"
+} from "@/services/operations/EthCommon.js"
+import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils/index.js"
+import { proposeSafeTransaction } from "@/services/Safe.js"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
-import { getHashFromIPFSCID } from "@/utils/ipfs"
+import { getHashFromIPFSCID } from "@/utils/ipfs.js"
 import {
   encodeProjectFactoryArgs,
   encodeTicketFactoryArgs,
-} from "@/utils/factories"
-import { BlockchainType, TransactionType, invariant } from "@fxhash/shared"
-import { config } from "@fxhash/config"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+} from "@/utils/factories.js"
+import { TransactionType, invariant } from "@fxhash/shared"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 export type ScriptyHTMLTag = {
   name: string

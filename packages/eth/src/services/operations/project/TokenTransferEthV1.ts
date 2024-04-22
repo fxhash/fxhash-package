@@ -1,13 +1,12 @@
-import { EthereumContractOperation } from "@/services/operations/contractOperation"
-import { TransactionReceipt } from "viem"
-import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
+import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
+import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
-import { getCurrentChain } from "@/services/Wallet"
+import { getCurrentChain } from "@/services/Wallet.js"
 
 export type TTransferTokenEthV1OperationParams = {
   token: `0x${string}`

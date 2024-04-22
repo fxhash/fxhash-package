@@ -1,14 +1,14 @@
-import { EthereumContractOperation } from "@/services/operations/contractOperation"
+import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { encodeFunctionData, getAddress } from "viem"
-import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
+import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
-import { proposeSafeTransaction } from "@/services/Safe"
+} from "@/services/operations/EthCommon.js"
+import { proposeSafeTransaction } from "@/services/Safe.js"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { TransactionType } from "@fxhash/shared"
-import { getCurrentChain } from "@/services/Wallet"
+import { getCurrentChain } from "@/services/Wallet.js"
 
 export type TOwnerMintEthV1OperationParams = {
   token: `0x${string}`
