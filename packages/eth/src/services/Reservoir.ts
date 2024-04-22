@@ -29,7 +29,7 @@ export const RESERVOIR_ORDER_KIND = "seaport-v1.5"
 const headers = {
   accept: "*/*",
   "content-type": "application/json",
-  "x-api-key": RESERVOIR_API_KEY,
+  "x-api-key": RESERVOIR_API_KEY ? RESERVOIR_API_KEY : "",
 }
 
 //Defines the supported API methods
