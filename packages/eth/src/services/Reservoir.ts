@@ -54,12 +54,12 @@ export async function fetchReservoir<T>(
   method: API_METHODS,
   path: string,
   body: string | undefined = undefined,
-  queryParams: { [key: string]: string } = {}
+  queryParams: { [key: string]: any } = {}
 ): Promise<T> {
   try {
-    const reservoirUrl =
-      getConfigForChain(chain).apis?.reservoir +
-      new URLSearchParams(queryParams).toString()
+    const reservoirUrl = `${getConfigForChain(chain).apis?.reservoir}${path}?${new URLSearchParams(
+      queryParams
+    ).toString()}`
     const response = await fetch(`${reservoirUrl}${path}`, {
       method: method,
       body: body,
