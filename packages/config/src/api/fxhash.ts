@@ -10,8 +10,10 @@ export interface IFxhashApis {
   fileInternal: string
   fsEmulator: string
   extract: string
+  extractInternal: string
   media: string
   ethMetadata: string
+  ipfsInternal: string
   ipfsGateway: string
   ipfsGatewaySafe: string
   ipfsGatewayInternal: string
@@ -58,8 +60,12 @@ export const fxhashDevApis: IFxhashApis = {
     "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
+  extractInternal:
+    " http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
+  ipfsInternal:
+    "http://fxhash-dev-testnet-ipfs-cluster-api:.fxhash-dev-testnet.svc.cluster.local:9094",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
   ipfsGatewayInternal:
@@ -128,10 +134,14 @@ export const fxhashPrdApis: IFxhashApis = {
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
   fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
-  fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
+  fsEmulator: "https://fs-emulator.fxhash.xyz",
   extract: "https://extract.fxhash.xyz",
+  extractInternal:
+    "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
   media: "https://media.fxhash.xyz",
   ethMetadata: "https://media.fxhash.xyz/metadata/ethereum/",
+  ipfsInternal:
+    "http://fxhash-prd-ipfs-cluster-api.fxhash-prd.svc.cluster.local:9094",
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
   ipfsGatewayInternal:
