@@ -56,7 +56,6 @@ export interface IFxhashEnvConfig {
   fxhashSecondaryFee: number
   syndicateProjectId: string
   openTelemetryTarget: string
-  // service specific config
   algolia: AlgoliaConfig
 }
 
@@ -200,7 +199,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "http://localhost:14268",
-        // service specific config
         algolia: algoliaConfigDev,
       },
     },
@@ -223,7 +221,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "http://localhost:14268",
-        // service specific config
         algolia: algoliaConfigDev,
       },
     },
@@ -246,7 +243,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
-        // service specific config
         algolia: algoliaConfigDev,
       },
     },
@@ -269,7 +265,6 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
-        // service specific config
         algolia: algoliaConfigProd,
       },
     },
