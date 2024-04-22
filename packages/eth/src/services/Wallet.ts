@@ -39,7 +39,6 @@ import {
   FallbackProvider,
   JsonRpcProvider,
 } from "ethers"
-import { EthIndexerConfig } from "@fxhash/config"
 /* Temp remove until package is esm compatible
 import {
   fallback,
@@ -157,14 +156,6 @@ export const transports: Record<string, Transport> =
 */
 export function getConfigForChain(chain: BlockchainType): typeof config.eth {
   return chain === BlockchainType.ETHEREUM ? config.eth : config.base
-}
-
-export function getIndexerConfigForChain(
-  chain: BlockchainType
-): EthIndexerConfig {
-  return chain === BlockchainType.ETHEREUM
-    ? config.config.indexer.eth
-    : config.config.indexer.base
 }
 
 // the different operations which can be performed by the wallet

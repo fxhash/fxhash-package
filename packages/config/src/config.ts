@@ -30,31 +30,12 @@ import {
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
-import {
-  IndexerV2Config,
-  indexerV2ConfigDev,
-  indexerV2ConfigLocal,
-  indexerV2ConfigProd,
-} from "./config/indexer-v2"
-import {
-  EthIndexerConfig,
-  ethIndexerConfigDev,
-  ethIndexerConfigLocal,
-  ethIndexerConfigProd,
-} from "./config/eth-indexer"
-import {
-  baseIndexerConfigDev,
-  baseIndexerConfigLocal,
-  baseIndexerConfigProd,
-} from "./config/base-indexer"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
 export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
-
-export type { IndexerV2Config, EthIndexerConfig }
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -77,11 +58,6 @@ export interface IFxhashEnvConfig {
   openTelemetryTarget: string
   // service specific config
   algolia: AlgoliaConfig
-  indexer: {
-    tez: IndexerV2Config
-    eth: EthIndexerConfig
-    base: EthIndexerConfig
-  }
 }
 
 type TBlockchainContacts = {
@@ -226,11 +202,6 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-          eth: ethIndexerConfigLocal,
-          base: baseIndexerConfigLocal,
-        },
       },
     },
     localDocker: {
@@ -254,11 +225,6 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         // service specific config
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-          eth: ethIndexerConfigLocal,
-          base: baseIndexerConfigLocal,
-        },
       },
     },
     dev: {
@@ -282,11 +248,6 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigDev,
-          eth: ethIndexerConfigDev,
-          base: baseIndexerConfigDev,
-        },
       },
     },
     prd: {
@@ -310,11 +271,6 @@ export const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         // service specific config
         algolia: algoliaConfigProd,
-        indexer: {
-          tez: indexerV2ConfigProd,
-          eth: ethIndexerConfigProd,
-          base: baseIndexerConfigProd,
-        },
       },
     },
   },
