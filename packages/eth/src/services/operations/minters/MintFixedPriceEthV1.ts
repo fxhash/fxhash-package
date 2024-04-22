@@ -1,12 +1,11 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
-import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 /**
  * The following type represents the parameters required for a mint operation in a fixed price Ethereum
@@ -25,6 +24,7 @@ export type TMintFixedPriceEthV1OperationParams = {
   reserveId: number
   amount: bigint
   to: string | null
+  isFrame: boolean
 }
 
 /**
@@ -40,12 +40,14 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest = {
-      address: currentConfig.contracts.fixed_price_minter_v1,
+      address: this.params.isFrame
+        ? currentConfig.contracts.farcaster_frame_fixed_price_minter_v1
+        : currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buy",
       args: [
         this.params.token,
-        this.params.reserveId,
+        this.params.isFrame ? 0 : this.params.reserveId,
         this.params.amount,
         this.params.to,
       ],

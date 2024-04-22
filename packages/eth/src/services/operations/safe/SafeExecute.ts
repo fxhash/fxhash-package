@@ -1,5 +1,5 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { getSafeService } from "@/services/Safe"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { getSafeService } from "@/services/Safe.js"
 import { TransactionType, invariant } from "@fxhash/shared"
 
 /**

@@ -1,13 +1,13 @@
-import { EthereumContractOperation } from "../contractOperation"
+import { EthereumContractOperation } from "../contractOperation.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { type Inscription } from "onchfs"
-import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { ethOnchfsInscriptionCallData } from "@/utils"
+import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
+import { ethOnchfsInscriptionCallData } from "@/utils/index.js"
 import { TransactionType } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 export type TOnchfsWriteOperationParams = {
   inscriptions: Inscription[]

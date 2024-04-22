@@ -1,10 +1,10 @@
-import { getCurrentChain } from "@/services/Wallet"
-import { EthereumContractOperation } from "../contractOperation"
-import { TICKET_REDEEMER_ABI } from "@/abi/TicketRedeemer"
+import { getCurrentChain } from "@/services/Wallet.js"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { TICKET_REDEEMER_ABI } from "@/abi/TicketRedeemer.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { config } from "@fxhash/config"
 import { TransactionType } from "@fxhash/shared"
 

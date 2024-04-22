@@ -30,12 +30,6 @@ import {
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
-import {
-  IndexerV2Config,
-  indexerV2ConfigDev,
-  indexerV2ConfigLocal,
-  indexerV2ConfigProd,
-} from "./config/indexer-v2"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -57,14 +51,12 @@ export interface IFxhashEnvConfig {
   projectLockTime: number
   referrerShare: number
   cloudflareTurnstileSiteKey: string
+  cloudflareTurnstileSiteKeyV2: string
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   syndicateProjectId: string
-  // service specific config
+  openTelemetryTarget: string
   algolia: AlgoliaConfig
-  indexer: {
-    tez: IndexerV2Config
-  }
 }
 
 type TBlockchainContacts = {
@@ -197,6 +189,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -205,11 +198,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        // service specific config
+        openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-        },
       },
     },
     localDocker: {
@@ -221,6 +211,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -229,11 +220,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        // service specific config
+        openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-        },
       },
     },
     dev: {
@@ -245,6 +233,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -253,11 +242,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        // service specific config
+        openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigDev,
-        },
       },
     },
     prd: {
@@ -269,6 +255,7 @@ export const fxhashConfig: IFxhashConfig = {
         projectLockTime: 3600,
         referrerShare: 0,
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
+        cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-yE4Q6Wdz6SNb",
         /**
          * ! Beware ! Changing any of these 3 values will result in current
          * projects breaking.
@@ -277,11 +264,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        // service specific config
+        openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
-        indexer: {
-          tez: indexerV2ConfigProd,
-        },
       },
     },
   },
