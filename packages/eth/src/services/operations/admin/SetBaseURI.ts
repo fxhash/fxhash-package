@@ -1,15 +1,15 @@
-import { EthereumContractOperation } from "@/services/operations/contractOperation"
+import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { encodeFunctionData, getAddress } from "viem"
-import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721"
+import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
-import { proposeSafeTransaction } from "@/services/Safe"
-import { getHashFromIPFSCID } from "@/utils"
+import { proposeSafeTransaction } from "@/services/Safe.js"
+import { getHashFromIPFSCID } from "@/utils/index.js"
 import { TransactionType } from "@fxhash/shared"
-import { getCurrentChain } from "@/services/Wallet"
+import { getCurrentChain } from "@/services/Wallet.js"
 
 /**
  * The above type represents the parameters for setting the base URI for an Ethereum V1 operation.

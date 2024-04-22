@@ -1,14 +1,14 @@
-import { EthereumContractOperation } from "./contractOperation"
-import { encodeFunctionData, TransactionReceipt } from "viem"
+import { EthereumContractOperation } from "./contractOperation.js"
+import { encodeFunctionData } from "viem"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { config } from "@fxhash/config"
-import { MULTICALL3_ABI } from "@/abi/Multicall3"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi"
+import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
+import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/index.js"
 import { TransactionType } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "../Wallet"
+import { getConfigForChain, getCurrentChain } from "../Wallet.js"
 
 export type TRefundAllEthOperationParams = {
   token: string
