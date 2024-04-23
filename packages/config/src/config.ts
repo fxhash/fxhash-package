@@ -30,26 +30,12 @@ import {
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
-import {
-  IndexerV2Config,
-  indexerV2ConfigDev,
-  indexerV2ConfigLocal,
-  indexerV2ConfigProd,
-} from "./config/indexer-v2"
-import {
-  SeedAuthorityWorkerConfig,
-  seedAuthorityWorkerConfigDev,
-  seedAuthorityWorkerConfigLocal,
-  seedAuthorityWorkerConfigProd,
-} from "./config/seed-authority-worker"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
 export type TBlockchainNetwork = "testnet" | "mainnet"
 export type TEnv = "dev" | "prd" | "local" | "localDocker"
 export type TEnvName = "development" | "production" | "local" | "localDocker"
-
-export type { IndexerV2Config }
 
 export interface IFxhashNetworkConfig {
   network: string
@@ -69,15 +55,8 @@ export interface IFxhashEnvConfig {
   fxhashPrimaryFee: number
   fxhashSecondaryFee: number
   syndicateProjectId: string
-  awsS3Bucket: string
-  awsS3Region: string
   openTelemetryTarget: string
-  // service specific config
   algolia: AlgoliaConfig
-  indexer: {
-    tez: IndexerV2Config
-  }
-  seedAuthorityWorker: SeedAuthorityWorkerConfig
 }
 
 type TBlockchainContacts = {
@@ -219,15 +198,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
-        // service specific config
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-        },
-        seedAuthorityWorker: seedAuthorityWorkerConfigLocal,
       },
     },
     localDocker: {
@@ -248,15 +220,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
-        // service specific config
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigLocal,
-        },
-        seedAuthorityWorker: seedAuthorityWorkerConfigLocal,
       },
     },
     dev: {
@@ -277,15 +242,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
-        // service specific config
         algolia: algoliaConfigDev,
-        indexer: {
-          tez: indexerV2ConfigDev,
-        },
-        seedAuthorityWorker: seedAuthorityWorkerConfigDev,
       },
     },
     prd: {
@@ -306,15 +264,8 @@ export const fxhashConfig: IFxhashConfig = {
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
-        awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
-        awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
-        // service specific config
         algolia: algoliaConfigProd,
-        indexer: {
-          tez: indexerV2ConfigProd,
-        },
-        seedAuthorityWorker: seedAuthorityWorkerConfigProd,
       },
     },
   },

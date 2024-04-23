@@ -1,5 +1,5 @@
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree"
-import { ReserveListEntry } from "./minters"
+import { ReserveListEntry } from "./minters.js"
 import { gqlClient } from "@fxhash/gql-client"
 import {
   Mu_CreateWhitelist,

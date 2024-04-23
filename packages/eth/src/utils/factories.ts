@@ -1,5 +1,5 @@
 import { encodeAbiParameters } from "viem"
-import { InitInfo, MetadataInfo, MintInfo, ProjectInfo } from ".."
+import { InitInfo, MetadataInfo, MintInfo, ProjectInfo } from "../index.js"
 
 export function encodeCreateImmutableSplitsParametersArgs(
   accounts: `0x${string}`[],
