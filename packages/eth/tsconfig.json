@@ -9,9 +9,10 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    // FIXME: resolve type errors when removing the following lines
-    "strict": false,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false
+    "strict": true,
+    "useUnknownInCatchVariables": false,
+    // FIXME: can be removed when all packages are migrated to esm and @fxhash/base config uses those defaults
+    "module": "Node16",
+    "moduleResolution": "Node16"
   }
 }

@@ -1,11 +1,11 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 /**
  * The TMintDAMintPassEthV1OperationParams type represents the parameters required for a mint operation in a

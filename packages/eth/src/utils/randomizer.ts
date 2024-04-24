@@ -1,4 +1,4 @@
-import { FX_GEN_ART_721_ABI } from "@/abi"
+import { FX_GEN_ART_721_ABI } from "@/abi/index.js"
 import { Interface, type TransactionReceipt } from "ethers"
 import { Hash } from "viem"
 

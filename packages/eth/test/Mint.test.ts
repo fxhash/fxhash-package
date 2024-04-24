@@ -4,7 +4,7 @@ import {
   getAvailableIndexesAndProofsForUser,
   getPricingAndReserveFromParams,
   getWhitelistTree,
-} from "@/utils"
+} from "@/utils/index.js"
 import { GetTokenPricingsAndReservesQuery } from "@fxhash/gql"
 
 describe("Mint reserves nightmare - fixed price", () => {

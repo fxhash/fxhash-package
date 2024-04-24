@@ -1,6 +1,6 @@
 import { TransactionType } from "@fxhash/shared"
-import { EthereumContractOperation } from "../contractOperation"
-import { cancelOrder } from "../Marketplace"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { cancelOrder } from "../Marketplace.js"
 
 export type TCancelOrderEthV1OperationParams = {
   orderIds: string[]

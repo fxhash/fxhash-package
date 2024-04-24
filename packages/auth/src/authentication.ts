@@ -1,7 +1,9 @@
 import { char2Bytes } from "@taquito/utils"
 import { AuthToken } from "@/types/auth-token"
 import { AuthRole } from "@/types/roles"
-import { SignOptions, sign, verify } from "jsonwebtoken"
+import { SignOptions } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
+const { sign, verify } = jwt
 
 // local auth public, used to keep in-memory pointer of the key to be f4st
 let authPublic: string | null = null
@@ -108,7 +110,7 @@ const encodeSizePrefix = (payload: string): string => {
  * @param {string} payload - The payload to encode.
  * @return {string} - The encoded payload.
  */
-export function encodeTezosSignInPayload(payload: string): string {
+export function encodeTezosPayload(payload: string): string {
   const bytes = char2Bytes(payload)
   const sizePrefix = encodeSizePrefix(payload)
   return TEZOS_SIGNING_PREFIX + sizePrefix + bytes

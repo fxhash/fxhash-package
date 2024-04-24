@@ -13,8 +13,8 @@ const defaultClientOptions: ClientOptions = {
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
 
 type CreateHasuraClientOptions = Optional<
-  Omit<ClientOptions, "url">,
-  "exchanges"
+  ClientOptions,
+  "exchanges" | "url"
 > & {
   hasuraAdminSecret?: string
 }

@@ -19,6 +19,7 @@ export interface IBaseContracts {
   fxhashTeamSafeAddress: `0x${string}`
   signerSafe: `0x${string}`
   moderationSafe: `0x${string}`
+  farcaster_frame_fixed_price_minter_v1: `0x${string}`
 }
 
 /**
@@ -32,18 +33,18 @@ export interface IBaseContracts {
 export const baseTestnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
-  project_factory_v1: "0x6BfdA670A73f54463a670d57D57DAC1A5c940844",
-  mint_ticket_factory_v1: "0x8D100e257CC60eAb6E3D3c50294bC95Eb6a3dee8",
-  dutch_auction_minter_v1: "0x98040A3EaBf7582AA04d8c52528c17386B6eA67E",
-  fixed_price_minter_v1: "0x437AeDEC32794aB1E774D5A9a3Ad68F21095Ad4E",
-  ticket_redeemer_v1: "0xB223bBdB5d8b9f20E19811677AFc30975fC94219",
-  ipfs_renderer_v1: "0x031b8f5cB44B8Fee470c8Ec4734FCEeEef6dc0ef",
-  onchfs_renderer_v1: "0xC27b701e2990214F43a129f1638b3111C69Ca574",
-  randomizer_v1: "0x177e285fADEbfD1B001B974Ed716360eF672e8f8",
-  role_registry_v1: "0x04eE16C868931422231C82025485E0Fe66dE2f55",
-  contract_registry_v1: "0x1025c33Eb9A3B7e3A2D90f2F1dA120fAA88cF284",
-  gen_art_token_impl_v1: "0x4437652CA5A197238b5cdc5E2dB301E157939f00",
-  mint_ticket_impl_v1: "0x4756267c9B1Fe011cA828110F48F21E28b4eC451",
+  project_factory_v1: "0x60cFDE3aaf6E938535767794088cf15EaaC50019",
+  mint_ticket_factory_v1: "0x8A7e5eE0CeA42DBE1d2aAC4501262B0edC5B518B",
+  dutch_auction_minter_v1: "0xeb5Cee0eD6A47BE2A463A0C9e83dA5DE6149d375",
+  fixed_price_minter_v1: "0x29159d2DFbF93E991d39Dc080a5f8dcc5C90ebb8",
+  ticket_redeemer_v1: "0xFfbC4F51AB33E14380893213d7C969e0626c4C43",
+  ipfs_renderer_v1: "0x7657C31078d8bfB8d1BC127fC04dAd23B3f451ed",
+  onchfs_renderer_v1: "0xf23C64BA846557c24E6F5086376047b0CE70d1cC",
+  randomizer_v1: "0xCA6323f03B5113471BA3b7B2F4Ba0AA2D45aE257",
+  role_registry_v1: "0x179f5B8FE1c270D7fC1807355F3fd981A30e21A6",
+  contract_registry_v1: "0xd44B3b2Ee596613c1aFcF85c9b0E41A0ec8B79E2",
+  gen_art_token_impl_v1: "0x06976f5C039497d8a79Cc0dCE7A95B3E9748164A",
+  mint_ticket_impl_v1: "0xa71b5935366BA29332033217a9E83698acadfd2f",
   onchfs_file_system: "0x3fb48e03291b2490f939c961a1ad088437129f71",
   onchfs_content_store: "0x48AC7370df2d5982852172A4D857c29608AFa774",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
@@ -51,6 +52,8 @@ export const baseTestnetContracts: IBaseContracts = {
   fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  farcaster_frame_fixed_price_minter_v1:
+    "0xB0905f81167bD90ABD5a583E029D27DA77568084",
 }
 
 /**
@@ -79,4 +82,7 @@ export const baseMainnetContracts: IBaseContracts = {
   fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  // FIXME: Replace with mainnet address.
+  farcaster_frame_fixed_price_minter_v1:
+    "0x6e625892C739bFD960671Db5544E260757480725",
 }
