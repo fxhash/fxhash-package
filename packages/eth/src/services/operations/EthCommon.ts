@@ -2,31 +2,26 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
-  PublicClient,
   TransactionReceipt,
-  getContract,
   ContractFunctionExecutionError,
   InsufficientFundsError as InsufficientFundsErrorViem,
   TransactionExecutionError,
-  Client,
   Chain,
 } from "viem"
-
-import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory"
-import { ALLOCATION_BASE, MAX_UINT_64, MerkleTreeWhitelist } from "@/utils"
-import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet"
-import { getOpenChainError } from "@/services/Openchain"
+import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
-  FX_GEN_ART_721_ABI,
-  FX_ISSUER_FACTORY_ABI,
-  SPLITS_MAIN_ABI,
-} from "@/abi"
+  ALLOCATION_BASE,
+  MAX_UINT_64,
+  MerkleTreeWhitelist,
+} from "@/utils/index.js"
+import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet.js"
+import { getOpenChainError } from "@/services/Openchain.js"
+import { FX_GEN_ART_721_ABI, FX_ISSUER_FACTORY_ABI } from "@/abi/index.js"
 import {
   BlockchainType,
   InsufficientFundsError,
   TransactionRevertedError,
   UserRejectedError,
-  WalletManager,
   invariant,
 } from "@fxhash/shared"
 
@@ -98,7 +93,8 @@ export interface ReserveInfoArgs {
 export interface FixedPriceMintInfoArgs {
   type: MintTypes.FIXED_PRICE
   reserveInfo: ReserveInfoArgs
-  params: FixedPriceParams
+  params: FixedPriceParams | FarcasterFrameFixedPriceMintParams
+  isFrame: boolean
 }
 
 export interface DutchAuctionMintInfoArgs {
@@ -119,6 +115,11 @@ export interface BaseReserves {
 
 export interface FixedPriceParams extends BaseReserves {
   price: bigint
+}
+
+export interface FarcasterFrameFixedPriceMintParams {
+  price: bigint
+  maxAmountPerFid?: bigint
 }
 
 export interface DutchAuctionParams extends BaseReserves {
@@ -273,20 +274,17 @@ export async function predictFxContractAddress(
   const chainConfig =
     blockchainType === BlockchainType.ETHEREUM ? config.eth : config.base
   await walletManager.prepareSigner({ blockchainType: blockchainType })
-  const factory = getContract({
+  const address = await walletManager.publicClient.readContract({
     address:
       factoryType === "ticket"
         ? chainConfig.contracts.mint_ticket_factory_v1
         : chainConfig.contracts.project_factory_v1,
     abi:
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
-    walletClient: walletManager.walletClient as Client,
-    publicClient: walletManager.publicClient as Client,
+    functionName:
+      factoryType === "ticket" ? "getTicketAddress" : "getTokenAddress",
+    args: [nonceAddress],
   })
-  const address =
-    factoryType === "ticket"
-      ? await factory.read.getTicketAddress([nonceAddress])
-      : await factory.read.getTokenAddress([nonceAddress])
   return address as `0x${string}`
 }
 
@@ -445,10 +443,10 @@ export async function generateOnchainDataHash(
 ) {
   const currentConfig = getConfigForChain(chain)
   await walletManager.prepareSigner({ blockchainType: chain })
-  const genArt = getContract({
-    abi: FX_GEN_ART_721_ABI,
+  return await walletManager.publicClient.readContract({
     address: currentConfig.contracts.gen_art_token_impl_v1,
-    publicClient: walletManager.publicClient as Client,
+    abi: FX_GEN_ART_721_ABI,
+    functionName: "generateOnchainDataHash",
+    args: [bytes],
   })
-  return genArt.read.generateOnchainDataHash([bytes])
 }

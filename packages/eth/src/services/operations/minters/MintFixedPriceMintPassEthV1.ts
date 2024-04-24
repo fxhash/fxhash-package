@@ -1,10 +1,10 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter"
-import { getConfigForChain, getCurrentChain } from "@/services/Wallet"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
+import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
-} from "@/services/operations/EthCommon"
+} from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
 /**

@@ -1,8 +1,8 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { ReservoirAcceptOfferParams } from "@/services/reservoir/types"
-import { acceptOffer } from "../Marketplace"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { ReservoirAcceptOfferParams } from "@/services/reservoir/types.js"
+import { acceptOffer } from "../Marketplace.js"
 import { TransactionType, TransactionUnknownError } from "@fxhash/shared"
-import { extractReservoirError } from "@/utils"
+import { extractReservoirError } from "@/utils/index.js"
 
 export type TAcceptOfferEthV1OperationParams = {
   orders: { orderId: string; token: { token: string; tokenId: string } }[]

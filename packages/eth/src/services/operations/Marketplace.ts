@@ -3,7 +3,6 @@ import {
   decodeFunctionData,
   encodeFunctionData,
   TransactionExecutionError,
-  WalletClient,
 } from "viem"
 import {
   ReservoirAcceptOfferParams,
@@ -13,20 +12,22 @@ import {
   ReservoirExecuteListParams,
   ReservoirListingParams,
   ReservoirPlaceBidParams,
-} from "@/services/reservoir/types"
-import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api"
-import { RESERVOIR_ABI } from "@/abi/Reservoir"
-import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule"
-import { config } from "@fxhash/config"
+} from "@/services/reservoir/types.js"
+import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api.js"
+import { RESERVOIR_ABI } from "@/abi/Reservoir.js"
+import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule.js"
 import {
   EthereumWalletManager,
   getConfigForChain,
   getCurrentChain,
-} from "../Wallet"
+} from "../Wallet.js"
 import { BlockchainType, UserRejectedError, invariant } from "@fxhash/shared"
-import { RESERVOIR_API_URLS } from "../Reservoir"
+import { RESERVOIR_API_URLS } from "../Reservoir.js"
 
-export const stepHandler = (steps, path) => {}
+export const stepHandler = (
+  _steps: Execute["steps"],
+  _path: Execute["path"]
+) => {}
 /**
  * Wrapper function to handle API actions.
  * @template T - The type of the expected return value.
@@ -81,7 +82,7 @@ async function prepareClient(
  * @param {Execute} steps - The execution steps that may contain the "order-signature" step.
  * @dev: As we want to use our own Seaport zone, and it is not currently supported by Reservoir, we need to intercept and override the parameters
  */
-export function overrideSellStepsParameters(steps: Execute): void {
+export function overrideSellStepsParameters(_steps: Execute): void {
   // ! @dev we can't use our seaport zone for now, as it does not allow offchain cancellation
   // steps.steps
   //   .filter(step => step.id === "order-signature")
@@ -108,8 +109,8 @@ export function overrideSellStepsParameters(steps: Execute): void {
 
   let orderId: string | undefined = undefined
 
-  const hashCallBack = (steps, path) => {
-    const step = steps.find(step => step.id === "order-signature")
+  const hashCallBack = (steps: any) => {
+    const step = steps.find((step: any) => step.id === "order-signature")
     if (step && step.items.length > 0) {
       if (step.items[0].orderData && step.items[0].status === "complete") {
         orderId = step.items[0].orderData[0].orderId
@@ -172,8 +173,8 @@ export const placeBid = async (
   // Fetch and override steps
   const fetchedSteps = await getBidSteps(chain, bidStepsParams)
   overrideSellStepsParameters(fetchedSteps)
-  const hashCallBack = (steps, path) => {
-    const step = steps.find(step => step.id === "order-signature")
+  const hashCallBack = (steps: any) => {
+    const step = steps.find((step: any) => step.id === "order-signature")
     if (step && step.items.length > 0) {
       if (step.items[0].orderData && step.items[0].status === "complete") {
         orderId = step.items[0].orderData[0].orderId
@@ -221,8 +222,8 @@ export const buyToken = async (
   }
 
   let orderId: string | undefined = undefined
-  const hashCallBack = (steps, path) => {
-    const step = steps.find(step => step.id === "sale")
+  const hashCallBack = (steps: any) => {
+    const step = steps.find((step: any) => step.id === "sale")
     if (step && step.items.length > 0) {
       if (step.items[0].orderIds && step.items[0].status === "complete") {
         orderId = step.items[0].orderIds[0]
@@ -386,8 +387,8 @@ export const acceptOffer = async (
   await prepareClient(walletManager, chain)
 
   let orderId: string | undefined = undefined
-  const hashCallBack = (steps, path) => {
-    const step = steps.find(step => step.id === "sale")
+  const hashCallBack = (steps: any) => {
+    const step = steps.find((step: any) => step.id === "sale")
     if (step.items.length > 0) {
       if (step.items[0].orderIds && step.items[0].status === "complete") {
         orderId = step.items[0].orderIds[0]
@@ -423,7 +424,7 @@ export const cancelOrder = async (
 ): Promise<string> => {
   await prepareClient(walletManager, chain)
 
-  const hashCallBack = steps => {}
+  const hashCallBack = (_steps: Execute["steps"]) => {}
   const result = await handleAction(
     getClient().actions.cancelOrder({
       ids: orders,

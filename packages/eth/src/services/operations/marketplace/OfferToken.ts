@@ -1,7 +1,10 @@
-import { EthereumContractOperation } from "../contractOperation"
-import { ReservoirPlaceBidParams } from "@/services/reservoir/types"
-import { placeBid } from "../Marketplace"
-import { RESERVOIR_ORDERBOOK, RESERVOIR_ORDER_KIND } from "@/services/Reservoir"
+import { EthereumContractOperation } from "../contractOperation.js"
+import { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
+import { placeBid } from "../Marketplace.js"
+import {
+  RESERVOIR_ORDERBOOK,
+  RESERVOIR_ORDER_KIND,
+} from "@/services/Reservoir.js"
 import { TransactionType } from "@fxhash/shared"
 
 export type TMakeOfferEthV1OperationParams = {
