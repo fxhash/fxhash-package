@@ -263,7 +263,7 @@ export const fxhashConfig: IFxhashConfig = {
          */
         fxhashPrimaryFee: 1000,
         fxhashSecondaryFee: 2500,
-        syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        syndicateProjectId: "398ad73d-341c-4861-a038-f0ae1ca58e07",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
       },
