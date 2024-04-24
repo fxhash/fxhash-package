@@ -84,5 +84,5 @@ export const baseMainnetContracts: IBaseContracts = {
   moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
   // FIXME: Replace with mainnet address.
   farcaster_frame_fixed_price_minter_v1:
-    "0x83E692B7B977dF0A6BcEA35e6531d31c69572ee7",
+    "0x6e625892C739bFD960671Db5544E260757480725",
 }
