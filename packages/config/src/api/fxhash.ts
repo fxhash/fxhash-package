@@ -134,7 +134,7 @@ export const fxhashPrdApis: IFxhashApis = {
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
   fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
-  fsEmulator: "https://fs-emulator.fxhash.xyz",
+  fsEmulator: "https://fs-emulator.fxhash2.xyz",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
     "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
