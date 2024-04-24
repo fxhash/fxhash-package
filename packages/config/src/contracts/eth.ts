@@ -44,7 +44,7 @@ export const ethTestnetContracts: IEthContracts = {
   signerSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
   moderationSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
   farcaster_frame_fixed_price_minter_v1:
-    "0x83E692B7B977dF0A6BcEA35e6531d31c69572ee7",
+    "0xB0905f81167bD90ABD5a583E029D27DA77568084",
 }
 
 /**
@@ -74,5 +74,5 @@ export const ethMainnetContracts: IEthContracts = {
   signerSafe: "0xB456aF77dEB65065462BD1f0D9098413E6CA4200",
   moderationSafe: "0x99CDaECbe1be4B7232a4f2c79EF76D403886FE1E",
   farcaster_frame_fixed_price_minter_v1:
-    "0x83E692B7B977dF0A6BcEA35e6531d31c69572ee7",
+    "0x6e625892C739bFD960671Db5544E260757480725",
 }
