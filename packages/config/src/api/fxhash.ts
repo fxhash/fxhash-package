@@ -7,13 +7,18 @@ export interface IFxhashApis {
   hasura: string
   hasuraGql: string
   file: string
+  fileInternal: string
   fsEmulator: string
   extract: string
+  extractInternal: string
   media: string
   ethMetadata: string
+  ipfsInternal: string
   ipfsGateway: string
   ipfsGatewaySafe: string
+  ipfsGatewayInternal: string
   onchfsProxy: string
+  onchfsProxyInternal: string
   opensea: string
   authority: {
     api: string
@@ -51,13 +56,23 @@ export const fxhashDevApis: IFxhashApis = {
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
+  fileInternal:
+    "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
   fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
   extract: "https://extract.fxhash-dev.xyz",
+  extractInternal:
+    " http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
+  ipfsInternal:
+    "http://fxhash-dev-testnet-ipfs-cluster-api.fxhash-dev-testnet.svc.cluster.local:9094",
   ipfsGateway: "https://gateway.fxhash-dev.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash-dev2.xyz",
+  ipfsGatewayInternal:
+    "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
+  onchfsProxyInternal:
+    "http://fxhash-dev-testnet-onchfs-proxy.fxhash-dev-testnet.svc.cluster.local:4004",
   opensea: "https://testnets-api.opensea.io/api/v2/chain/goerli",
   authority: {
     api: "NONE",
@@ -99,6 +114,9 @@ export const fxhashLocalApis: IFxhashApis = {
   website: "http://localhost:3200",
   hasura: "http://localhost:8888",
   hasuraGql: "http://localhost:8888/v1/graphql",
+  fileInternal: fxhashDevApis.file,
+  ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
+  onchfsProxyInternal: fxhashDevApis.onchfsProxy,
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -115,13 +133,22 @@ export const fxhashPrdApis: IFxhashApis = {
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
-  fsEmulator: "https://fs-emulator.fxhash.xyz", // placeholder
+  fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
+  fsEmulator: "https://fs-emulator.fxhash.xyz",
   extract: "https://extract.fxhash.xyz",
+  extractInternal:
+    "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
   media: "https://media.fxhash.xyz",
   ethMetadata: "https://media.fxhash.xyz/metadata/ethereum/",
+  ipfsInternal:
+    "http://fxhash-prd-ipfs-cluster-api.fxhash-prd.svc.cluster.local:9094",
   ipfsGateway: "https://gateway.fxhash.xyz",
   ipfsGatewaySafe: "https://gateway.fxhash2.xyz",
+  ipfsGatewayInternal:
+    "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
+  onchfsProxyInternal:
+    "http://fxhash-prd-onchfs-proxy.fxhash-prd.svc.cluster.local:4004",
   opensea: "https://api.opensea.io/api/v2/chain/ethereum",
   authority: {
     api: "NONE",

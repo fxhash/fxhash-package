@@ -6,6 +6,7 @@ import {
   DEFAULT_CAPTURE_SETTINGS,
   fetchExtract,
   CaptureTriggerMode,
+  CaptureMode,
 } from "../../capture/index"
 import { urlWithHashAndParams } from "../../capture/url"
 import { getRandomFxhash, getRandomTezosAddress } from "../../capture/math"
@@ -85,6 +86,13 @@ export const commandCapture: CommandModule = {
       )
     }
 
+    if ((xArg || yArg) && selectorArg) {
+      logger.errorExit(
+        "Cannot specify viewport dimensions and a canvas selector at the same time. Please choose one or the other."
+      )
+    }
+    const mode = selectorArg ? CaptureMode.CANVAS : CaptureMode.VIEWPORT
+
     try {
       let zipPath = zipFileArg
       if (!isAbsolute(zipPath)) {
@@ -113,6 +121,7 @@ export const commandCapture: CommandModule = {
         async () =>
           await fetchExtract({
             ...DEFAULT_CAPTURE_SETTINGS,
+            mode,
             triggerMode: triggerArg,
             delay: delayArg,
             resX: Math.min(xArg, 2560),

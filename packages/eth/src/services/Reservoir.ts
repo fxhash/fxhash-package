@@ -1,8 +1,10 @@
 import { createClient } from "@reservoir0x/reservoir-sdk"
-import { chains, getConfigForChain } from "./Wallet"
+import { getConfigForChain } from "./Wallet.js"
 import { BlockchainType } from "@fxhash/shared"
 
-export const RESERVOIR_API_URLS = {
+export const RESERVOIR_API_URLS: {
+  [key: number]: string
+} = {
   1: "https://api.reservoir.tools/",
   11155111: "https://api-sepolia.reservoir.tools",
   8453: "https://api-base.reservoir.tools",
@@ -10,6 +12,7 @@ export const RESERVOIR_API_URLS = {
 }
 
 //API key used for interacting with Reservoir API
+if (!process.env.RESERVOIR_API_KEY) console.warn("missing RESERVOIR_API_KEY")
 export const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
 
 //source used for interacting with Reservoir API and be able to easily filter on only our orders
