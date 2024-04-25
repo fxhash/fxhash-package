@@ -1,7 +1,6 @@
 import { createClient } from "@reservoir0x/reservoir-sdk"
 import { getConfigForChain } from "./Wallet.js"
 import { BlockchainType } from "@fxhash/shared"
-import { URLSearchParams } from "url"
 
 export const RESERVOIR_API_URLS: {
   [key: number]: string
