@@ -48,10 +48,9 @@ export const baseTestnetContracts: IBaseContracts = {
   onchfs_file_system: "0x3fb48e03291b2490f939c961a1ad088437129f71",
   onchfs_content_store: "0x48AC7370df2d5982852172A4D857c29608AFa774",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
-  // !TODO: update those addresses
-  fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  fxhashTeamSafeAddress: "0x25416d553201835bd380811a3b4a3915eD29ec62",
+  signerSafe: "0x25416d553201835bd380811a3b4a3915eD29ec62",
+  moderationSafe: "0x25416d553201835bd380811a3b4a3915eD29ec62",
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
 }
