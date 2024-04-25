@@ -73,7 +73,7 @@ export const fxhashDevApis: IFxhashApis = {
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
   onchfsProxyInternal:
     "http://fxhash-dev-testnet-onchfs-proxy.fxhash-dev-testnet.svc.cluster.local:4004",
-  opensea: "https://testnets-api.opensea.io/api/v2/chain/goerli",
+  opensea: "https://testnets-api.opensea.io/api/v2/chain/sepolia",
   authority: {
     api: "NONE",
   },
