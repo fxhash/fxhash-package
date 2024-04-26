@@ -47,7 +47,11 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
       functionName: "buy",
       args: [
         this.params.token,
-        this.params.isFrame ? 0 : this.params.reserveId,
+        this.params.isFrame
+          ? this.params.token === "0xdA50F2173E619AEAc6F92a62371fF8C4a5Eea480"
+            ? 1
+            : 0
+          : this.params.reserveId,
         this.params.amount,
         this.params.to,
       ],

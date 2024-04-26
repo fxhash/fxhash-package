@@ -48,10 +48,9 @@ export const baseTestnetContracts: IBaseContracts = {
   onchfs_file_system: "0x3fb48e03291b2490f939c961a1ad088437129f71",
   onchfs_content_store: "0x48AC7370df2d5982852172A4D857c29608AFa774",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
-  // !TODO: update those addresses
-  fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  fxhashTeamSafeAddress: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
+  signerSafe: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
+  moderationSafe: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
 }
@@ -79,9 +78,9 @@ export const baseMainnetContracts: IBaseContracts = {
   onchfs_file_system: "0x2983008f292a43f208bba0275afd7e9b3d39af3b",
   onchfs_content_store: "0x070e5A608705aC4954eec054f9074eEe49bDcbfF",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
-  fxhashTeamSafeAddress: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  signerSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
-  moderationSafe: "0xd0f5a4bD9964056311fC97A38070D073443f3718",
+  fxhashTeamSafeAddress: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
+  signerSafe: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
+  moderationSafe: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
   // FIXME: Replace with mainnet address.
   farcaster_frame_fixed_price_minter_v1:
     "0x6e625892C739bFD960671Db5544E260757480725",
