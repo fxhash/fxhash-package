@@ -3,7 +3,7 @@ import { defineConfig, Options } from "tsup"
 export default defineConfig((options: Options) => ({
   entry: ["src/index.ts"],
   outDir: "dist",
-  format: "esm",
+  format: ["cjs", "esm"],
   splitting: true,
   sourcemap: true,
   clean: !options.watch,
