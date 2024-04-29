@@ -1,4 +1,9 @@
-import { decodeAbiParameters, encodeAbiParameters, encodePacked } from "viem"
+import {
+  PublicClient,
+  decodeAbiParameters,
+  encodeAbiParameters,
+  encodePacked,
+} from "viem"
 import {
   MerkleTreeWhitelist,
   getAvailableIndexesAndProofsForUser,
@@ -629,4 +634,19 @@ export const fetchTokenReserveId = async (
   )
   invariant(pricing, "No pricing found")
   return pricing.id.split("-")[1]
+}
+
+export async function getFirstValidReserve(
+  minter: `0x${string}`,
+  publicClient: PublicClient,
+  abi: unknown[],
+  token: `0x${string}`
+): Promise<bigint> {
+  const reserveId = await publicClient.readContract({
+    address: minter,
+    abi: abi,
+    functionName: "getFirstValidReserve",
+    args: [token],
+  })
+  return reserveId as bigint
 }

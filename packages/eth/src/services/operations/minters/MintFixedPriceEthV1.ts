@@ -6,6 +6,8 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
+import { getFirstValidReserve } from "@/utils/minters.js"
+import { FARCASTER_FRAME_FIXED_PRICE_MINTER } from "@/abi/FarcasterFrameFixedPriceMinter.js"
 
 /**
  * The following type represents the parameters required for a mint operation in a fixed price Ethereum
@@ -39,22 +41,21 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
+    const reserveId = this.params.isFrame
+      ? await getFirstValidReserve(
+          currentConfig.contracts.farcaster_frame_fixed_price_minter_v1,
+          this.manager.publicClient,
+          FARCASTER_FRAME_FIXED_PRICE_MINTER,
+          this.params.token as `0x${string}`
+        )
+      : this.params.reserveId
     const args: SimulateAndExecuteContractRequest = {
       address: this.params.isFrame
         ? currentConfig.contracts.farcaster_frame_fixed_price_minter_v1
         : currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buy",
-      args: [
-        this.params.token,
-        this.params.isFrame
-          ? this.params.token === "0xdA50F2173E619AEAc6F92a62371fF8C4a5Eea480"
-            ? 1
-            : 0
-          : this.params.reserveId,
-        this.params.amount,
-        this.params.to,
-      ],
+      args: [this.params.token, reserveId, this.params.amount, this.params.to],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
       chain: getCurrentChain(this.chain),
