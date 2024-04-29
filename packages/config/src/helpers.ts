@@ -14,7 +14,9 @@ export const isProd = (() => {
     process.env.NEXT_PUBLIC_FXHASH_ENV === "prd" ||
     process.env.NEXT_PUBLIC_FXHASH_ENV === "production" ||
     process.env.REACT_APP_FXHASH_ENV === "prd" ||
-    process.env.REACT_APP_FXHASH_ENV === "production"
+    process.env.REACT_APP_FXHASH_ENV === "production" ||
+    process.env.VITE_FXHASH_ENV === "prd" ||
+    process.env.VITE_APP_FXHASH_ENV === "production"
   )
 })()
 
@@ -24,7 +26,8 @@ export const isLocal = (() => {
   return (
     process.env.FXHASH_ENV === "local" ||
     process.env.NEXT_PUBLIC_FXHASH_ENV === "local" ||
-    process.env.REACT_APP_FXHASH_ENV === "local"
+    process.env.REACT_APP_FXHASH_ENV === "local" ||
+    process.env.VITE_FXHASH_ENV === "local"
   )
 })()
 
