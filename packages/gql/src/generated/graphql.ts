@@ -3683,11 +3683,18 @@ export type Collection_Offer = {
   id: Scalars['String']['output'];
   initial_amount: Scalars['numeric']['output'];
   is_inactive?: Maybe<Scalars['Boolean']['output']>;
+  metadata?: Maybe<Scalars['jsonb']['output']>;
   price: Scalars['numeric']['output'];
   token_id: Scalars['String']['output'];
   /** An object relationship */
   user: User;
   version: Scalars['Int']['output'];
+};
+
+
+/** columns and relationships of "collection_offer" */
+export type Collection_OfferMetadataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** order by aggregate values of table "collection_offer" */
@@ -3727,6 +3734,7 @@ export type Collection_Offer_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   initial_amount?: InputMaybe<Numeric_Comparison_Exp>;
   is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
@@ -3772,6 +3780,7 @@ export type Collection_Offer_Order_By = {
   id?: InputMaybe<Order_By>;
   initial_amount?: InputMaybe<Order_By>;
   is_inactive?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
@@ -3796,6 +3805,8 @@ export enum Collection_Offer_Select_Column {
   InitialAmount = 'initial_amount',
   /** column name */
   IsInactive = 'is_inactive',
+  /** column name */
+  Metadata = 'metadata',
   /** column name */
   Price = 'price',
   /** column name */
@@ -3846,6 +3857,7 @@ export type Collection_Offer_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   initial_amount?: InputMaybe<Scalars['numeric']['input']>;
   is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata?: InputMaybe<Scalars['jsonb']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   token_id?: InputMaybe<Scalars['String']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
@@ -5329,6 +5341,7 @@ export type Listing = {
   market_stat?: Maybe<Market_Stats>;
   /** An array relationship */
   market_stats_histories: Array<Market_Stats_History>;
+  metadata?: Maybe<Scalars['jsonb']['output']>;
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
@@ -5369,6 +5382,12 @@ export type ListingMarket_Stats_HistoriesArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Market_Stats_History_Order_By>>;
   where?: InputMaybe<Market_Stats_History_Bool_Exp>;
+};
+
+
+/** columns and relationships of "listing" */
+export type ListingMetadataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** order by aggregate values of table "listing" */
@@ -5416,6 +5435,7 @@ export type Listing_Bool_Exp = {
   marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid?: InputMaybe<Market_Stats_History_Bool_Exp>;
   market_stat?: InputMaybe<Market_Stats_Bool_Exp>;
   market_stats_histories?: InputMaybe<Market_Stats_History_Bool_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
@@ -5475,6 +5495,7 @@ export type Listing_Order_By = {
   marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid_aggregate?: InputMaybe<Market_Stats_History_Aggregate_Order_By>;
   market_stat?: InputMaybe<Market_Stats_Order_By>;
   market_stats_histories_aggregate?: InputMaybe<Market_Stats_History_Aggregate_Order_By>;
+  metadata?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
@@ -5504,6 +5525,8 @@ export enum Listing_Select_Column {
   IsInactive = 'is_inactive',
   /** column name */
   IssuerId = 'issuer_id',
+  /** column name */
+  Metadata = 'metadata',
   /** column name */
   ObjktId = 'objkt_id',
   /** column name */
@@ -5560,6 +5583,7 @@ export type Listing_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
   issuer_id?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['jsonb']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   royalties?: InputMaybe<Scalars['Int']['input']>;
@@ -8044,6 +8068,7 @@ export type Offer = {
   created_at: Scalars['timestamptz']['output'];
   id: Scalars['String']['output'];
   is_inactive?: Maybe<Scalars['Boolean']['output']>;
+  metadata?: Maybe<Scalars['jsonb']['output']>;
   /** An object relationship */
   objkt?: Maybe<Objkt>;
   objkt_id?: Maybe<Scalars['String']['output']>;
@@ -8051,6 +8076,12 @@ export type Offer = {
   /** An object relationship */
   user?: Maybe<User>;
   version: Scalars['Int']['output'];
+};
+
+
+/** columns and relationships of "offer" */
+export type OfferMetadataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** order by aggregate values of table "offer" */
@@ -8085,6 +8116,7 @@ export type Offer_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
   objkt_id?: InputMaybe<String_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
@@ -8124,6 +8156,7 @@ export type Offer_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   is_inactive?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
   objkt_id?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
@@ -8145,6 +8178,8 @@ export enum Offer_Select_Column {
   Id = 'id',
   /** column name */
   IsInactive = 'is_inactive',
+  /** column name */
+  Metadata = 'metadata',
   /** column name */
   ObjktId = 'objkt_id',
   /** column name */
@@ -8187,6 +8222,7 @@ export type Offer_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata?: InputMaybe<Scalars['jsonb']['input']>;
   objkt_id?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
