@@ -1,4 +1,4 @@
-import { FxHashApi, FxHashExecutionContext } from "../types"
+import { FxEmitData, FxHashApi, FxHashExecutionContext } from "../types"
 import {
   createFxRandom,
   mockTezosAddress,
@@ -11,8 +11,10 @@ import {
   deserializeParams,
   ParameterProcessors,
 } from "@fxhash/params/utils"
+import { FxParamType, FxParamValue, FxParamsRaw } from "@fxhash/params/types"
 
-export function createFxhashSdk(window, options): FxHashApi {
+export function createFxhashSdk(window: Window): FxHashApi {
+  console.log("hi")
   const { parent } = window
 
   const search = new URLSearchParams(window.location.search)
@@ -34,17 +36,18 @@ export function createFxhashSdk(window, options): FxHashApi {
   const searchParams = window.location.hash
   const initialInputBytes = searchParams?.replace("#0x", "")
 
-  const $fx = {
+  const $fx: FxHashApi = {
     _version: "4.0.1",
     _processors: ParameterProcessors,
     // where params def & features will be stored
     _params: undefined,
     _features: undefined,
     // where the parameter values are stored
+    _rawValues: {},
     _paramValues: {},
     _listeners: {},
     _receiveUpdateParams: async function (newRawValues, onDefault) {
-      const handlers = await this.propagateEvent("params:update", newRawValues)
+      const handlers = await this._propagateEvent("params:update", newRawValues)
       handlers.forEach(([optInDefault, onDone]) => {
         if (!(typeof optInDefault == "boolean" && !optInDefault)) {
           this._updateParams(newRawValues)
@@ -58,6 +61,7 @@ export function createFxhashSdk(window, options): FxHashApi {
       }
     },
     _updateParams: function (newRawValues) {
+      if (!this._params) throw new Error("Params not defined")
       const constrained = processParams(
         { ...this._rawValues, ...newRawValues },
         this._params,
@@ -74,32 +78,41 @@ export function createFxhashSdk(window, options): FxHashApi {
       this._updateInputBytes()
     },
     _updateInputBytes: function () {
+      if (!this._params) throw new Error("Params not defined")
       const bytes = serializeParams(this._rawValues, this._params)
       this.inputBytes = bytes
     },
     _emitParams: function (newRawValues) {
       const constrainedValues = Object.keys(newRawValues).reduce(
         (acc, paramId) => {
+          if (!this._params) throw new Error("Params not defined")
           acc[paramId] = processParam(
             paramId,
             newRawValues[paramId],
             this._params,
             "constrain"
-          )
+          ) as FxParamValue<FxParamType>
           return acc
         },
-        {}
+        {} as FxParamsRaw
       )
       this._receiveUpdateParams(constrainedValues, () => {
-        parent.postMessage(
-          {
-            id: "fxhash_emit:params:update",
-            data: {
-              params: constrainedValues,
-            },
-          },
-          "*"
-        )
+        return new Promise<void>((resolve, reject) => {
+          try {
+            parent.postMessage(
+              {
+                id: "fxhash_emit:params:update",
+                data: {
+                  params: constrainedValues,
+                },
+              },
+              "*"
+            )
+            resolve()
+          } catch (error) {
+            reject(error)
+          }
+        })
       })
     },
     hash: fxhash,
@@ -111,12 +124,13 @@ export function createFxhashSdk(window, options): FxHashApi {
       (search.get("fxcontext") as FxHashExecutionContext) || "standalone",
     preview: fxpreview,
     isPreview: isFxpreview,
+    inputBytes: undefined,
     params: function (definition) {
       this._params = definition.map(def => ({ ...def, version: this._version }))
       this._rawValues = deserializeParams(initialInputBytes, this._params, {
         withTransform: true,
         transformType: "constrain",
-      })
+      }) as FxParamsRaw
       this._paramValues = processParams(
         this._rawValues,
         this._params,
@@ -128,9 +142,11 @@ export function createFxhashSdk(window, options): FxHashApi {
       this._features = features
     },
     getFeature: function (id) {
-      return this._features[id]
+      if (!this._features) throw new Error(`Feature ${id} not defined`)
+      return this._features?.[id]
     },
     getFeatures: function () {
+      if (!this._features) throw new Error("Features not defined")
       return this._features
     },
     getParam: function (id) {
@@ -146,17 +162,20 @@ export function createFxhashSdk(window, options): FxHashApi {
       return this._rawValues
     },
     getRandomParam: function (id) {
+      if (!this._params) throw new Error("Params not defined")
       const definition = this._params.find(d => d.id === id)
+      if (!definition) throw new Error(`Param with id ${id} not found`)
       const processor = ParameterProcessors[definition.type]
-      return processor.random(definition)
+      return processor.random(definition as any)
     },
     getDefinitions: function () {
+      if (!this._params) throw new Error("Params not defined")
       return this._params
     },
     stringifyParams: function (params) {
       return JSON.stringify(
         params || this._rawValues,
-        (key, value) => {
+        (_, value) => {
           if (typeof value === "bigint") return value.toString()
           return value
         },
@@ -175,7 +194,7 @@ export function createFxhashSdk(window, options): FxHashApi {
         }
       }
     },
-    propagateEvent: async function (name, data) {
+    _propagateEvent: async function (name, data) {
       const results = []
       if (this._listeners?.[name]) {
         for (const [callback, onDone] of this._listeners[name]) {
