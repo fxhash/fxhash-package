@@ -641,11 +641,12 @@ export async function getFirstValidReserve(
   publicClient: PublicClient,
   abi: unknown[],
   token: `0x${string}`
-) {
-  return await publicClient.readContract({
+): Promise<bigint> {
+  const reserveId = await publicClient.readContract({
     address: minter,
     abi: abi,
     functionName: "getFirstValidReserve",
     args: [token],
   })
+  return reserveId as bigint
 }
