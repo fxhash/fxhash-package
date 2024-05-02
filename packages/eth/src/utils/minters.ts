@@ -276,6 +276,9 @@ export async function processAndFormatMintInfos(
       )
       if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
         if (argsMintInfo.isFrame) {
+          if (mintInfos.length > 1) {
+            throw Error("Only frame minter can be configured when using frames")
+          }
           const params =
             argsMintInfo.params as FarcasterFrameFixedPriceMintParams
 
