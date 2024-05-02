@@ -8,6 +8,7 @@ export interface IFxhashApis {
   hasuraGql: string
   file: string
   fileInternal: string
+  fsEmulator: string
   extract: string
   extractInternal: string
   media: string
@@ -57,6 +58,7 @@ export const fxhashDevApis: IFxhashApis = {
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
     "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
+  fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
     " http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
@@ -132,6 +134,7 @@ export const fxhashPrdApis: IFxhashApis = {
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
   fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
+  fsEmulator: "https://file-api.fxhash.xyz/fs",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
     "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
