@@ -17,7 +17,6 @@ export interface IFxhashApis {
   ipfsGatewaySafe: string
   ipfsGatewayInternal: string
   onchfsProxy: string
-  onchfsProxyInternal: string
   opensea: string
   authority: {
     api: string
@@ -69,8 +68,6 @@ export const fxhashDevApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
-  onchfsProxyInternal:
-    "http://fxhash-dev-testnet-onchfs-proxy.fxhash-dev-testnet.svc.cluster.local:4004",
   opensea: "https://testnets-api.opensea.io/api/v2/chain/sepolia",
   authority: {
     api: "NONE",
@@ -114,7 +111,6 @@ export const fxhashLocalApis: IFxhashApis = {
   hasuraGql: "http://localhost:8888/v1/graphql",
   fileInternal: fxhashDevApis.file,
   ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
-  onchfsProxyInternal: fxhashDevApis.onchfsProxy,
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -144,8 +140,6 @@ export const fxhashPrdApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
-  onchfsProxyInternal:
-    "http://fxhash-prd-onchfs-proxy.fxhash-prd.svc.cluster.local:4004",
   opensea: "https://api.opensea.io/api/v2/chain/ethereum",
   authority: {
     api: "NONE",
