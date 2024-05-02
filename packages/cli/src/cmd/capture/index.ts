@@ -111,7 +111,7 @@ export const commandCapture: CommandModule = {
       const formData = new FormData()
       formData.append("file", new Blob([buffer]))
 
-      const response = await fetch(`${devConfig.apis.file}/fs/upload`, {
+      const response = await fetch(`${devConfig.apis.fsEmulator}/upload`, {
         method: "POST",
         body: formData,
       })
