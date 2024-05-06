@@ -5452,6 +5452,12 @@ type collection_offer {
   id: String!
   initial_amount: numeric!
   is_inactive: Boolean
+  metadata(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
   price: numeric!
   token_id: String!
 
@@ -5505,6 +5511,7 @@ input collection_offer_bool_exp {
   id: String_comparison_exp
   initial_amount: numeric_comparison_exp
   is_inactive: Boolean_comparison_exp
+  metadata: jsonb_comparison_exp
   price: numeric_comparison_exp
   token_id: String_comparison_exp
   user: user_bool_exp
@@ -5556,6 +5563,7 @@ input collection_offer_order_by {
   id: order_by
   initial_amount: order_by
   is_inactive: order_by
+  metadata: order_by
   price: order_by
   token_id: order_by
   user: user_order_by
@@ -5605,6 +5613,11 @@ enum collection_offer_select_column {
   column name
   """
   is_inactive
+
+  """
+  column name
+  """
+  metadata
 
   """
   column name
@@ -5679,6 +5692,7 @@ input collection_offer_stream_cursor_value_input {
   id: String
   initial_amount: numeric
   is_inactive: Boolean
+  metadata: jsonb
   price: numeric
   token_id: String
   version: Int
@@ -8074,6 +8088,12 @@ type listing {
     """
     where: market_stats_history_bool_exp
   ): [market_stats_history!]!
+  metadata(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
 
   """
   An object relationship
@@ -8146,6 +8166,7 @@ input listing_bool_exp {
   marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid: market_stats_history_bool_exp
   market_stat: market_stats_bool_exp
   market_stats_histories: market_stats_history_bool_exp
+  metadata: jsonb_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
   price: numeric_comparison_exp
@@ -8211,6 +8232,7 @@ input listing_order_by {
   marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid_aggregate: market_stats_history_aggregate_order_by
   market_stat: market_stats_order_by
   market_stats_histories_aggregate: market_stats_history_aggregate_order_by
+  metadata: order_by
   objkt: objkt_order_by
   objkt_id: order_by
   price: order_by
@@ -8268,6 +8290,11 @@ enum listing_select_column {
   column name
   """
   issuer_id
+
+  """
+  column name
+  """
+  metadata
 
   """
   column name
@@ -8351,6 +8378,7 @@ input listing_stream_cursor_value_input {
   id: String
   is_inactive: Boolean
   issuer_id: String
+  metadata: jsonb
   objkt_id: String
   price: numeric
   royalties: Int
@@ -12295,6 +12323,12 @@ type offer {
   created_at: timestamptz!
   id: String!
   is_inactive: Boolean
+  metadata(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
 
   """
   An object relationship
@@ -12348,6 +12382,7 @@ input offer_bool_exp {
   created_at: timestamptz_comparison_exp
   id: String_comparison_exp
   is_inactive: Boolean_comparison_exp
+  metadata: jsonb_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
   price: numeric_comparison_exp
@@ -12393,6 +12428,7 @@ input offer_order_by {
   created_at: order_by
   id: order_by
   is_inactive: order_by
+  metadata: order_by
   objkt: objkt_order_by
   objkt_id: order_by
   price: order_by
@@ -12433,6 +12469,11 @@ enum offer_select_column {
   column name
   """
   is_inactive
+
+  """
+  column name
+  """
+  metadata
 
   """
   column name
@@ -12499,6 +12540,7 @@ input offer_stream_cursor_value_input {
   created_at: timestamptz
   id: String
   is_inactive: Boolean
+  metadata: jsonb
   objkt_id: String
   price: numeric
   version: Int
