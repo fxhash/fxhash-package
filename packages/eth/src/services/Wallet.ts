@@ -51,6 +51,7 @@ import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
   const { account, chain, transport } = client
+  if (!chain) return
   const network = {
     chainId: chain.id,
     name: chain.name,

@@ -645,7 +645,7 @@ export async function getFirstValidReserve(
   abi: unknown[],
   token: `0x${string}`
 ): Promise<bigint> {
-  if (token === "0xc632c4485Bc312a4247CCF7E75F18ca4e10437a3") return BigInt(1)
+  if (token === "0x914cf2d92b087C9C01a062111392163c3B35B60e") return BigInt(1)
   const reserveId = await publicClient.readContract({
     address: minter,
     abi: abi,
