@@ -32,21 +32,21 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@fxhash/shared": "workspace:*"
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/gql": "workspace:*"
   },
   "devDependencies": {
     "@fxhash/config": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/gql": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
     "vitest": "0.34.6"
   },
   "peerDependencies": {
-    "@fxhash/config": "workspace:^",
-    "@fxhash/gql-client": "workspace:^",
-    "@fxhash/gql": "workspace:^"
+    "@fxhash/config": "workspace:^"
   }
 }
