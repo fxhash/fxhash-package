@@ -12,11 +12,11 @@ import {
  * @throws {Error}
  * @example
  * ```ts
- * const { text, challenge } = await generateChallenge({
- *  chain: BlockchainType.ETHEREUM,
- *  address: "0x1234567890",
+ *  const { text, challenge } = await generateChallenge({
+ *    chain: BlockchainType.ETHEREUM,
+ *    address: "0x1234567890",
  *  })
- *  ```
+ * ```
  */
 
 type GenerateChallengeOptions = {
