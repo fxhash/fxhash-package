@@ -11,3 +11,12 @@ export const Mu_AuthGenerateChallenge = graphql(`
     }
   }
 `)
+
+export const Mu_Authenticate = graphql(`
+  mutation Authenticate($input: AuthenticationInput!) {
+    authenticate(input: $input) {
+      accessToken
+      refreshToken
+    }
+  }
+`)
