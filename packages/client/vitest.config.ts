@@ -9,6 +9,13 @@ export default defineConfig({
     exclude: ["dist", "node_modules"],
     alias: {
       "@": resolve(__dirname, "src"), // Adjust the path as needed
+      // dedupe @airgap/beacon-sdk
+      // I almost have no idea why it needs `cjs` but this is how it works
+      // taken from: https://github.com/ecadlabs/taquito/issues/882#issuecomment-999753605
+      "@airgap/beacon-sdk": resolve(
+        __dirname,
+        `./node_modules/@airgap/beacon-sdk/dist/cjs/index.js`
+      ),
     },
   },
 })

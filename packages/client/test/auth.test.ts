@@ -1,14 +1,19 @@
 import { generateChallenge, authenticate } from "../src/auth"
+import { TezosWalletManager } from "@fxhash/tez"
 
-describe("authentication user", () => {
+const PRIVATE_KEY =
+  "edskRdPsQQjdB6ejSiHQXRffUdLm5E3UqjeKe9z8hkcBTzcEouR8Fsc7wgKTua7cp2es19WaFX5tt8AjjjsCeiADwQoRj6RBoD"
+
+describe("authentication user", async () => {
   let _id: string
   let _text: string
-  let _signature: string
+
+  const walletManager = await TezosWalletManager.fromPrivateKey(PRIVATE_KEY)
 
   it("generate challenge", async () => {
     const { text, id } = await generateChallenge({
-      chain: "ETHEREUM",
-      address: "0x9bFF49BDfb8E41336d78E10Ef0A8e179D2E9fb86",
+      chain: "TEZOS",
+      address: walletManager.address,
     })
     expect(text).toBeDefined()
     expect(id).toBeDefined()
@@ -34,5 +39,17 @@ describe("authentication user", () => {
     } catch (e) {
       expect(e).toBeDefined()
     }
+  })
+  it("valid signature is valid", async () => {
+    const sig = await walletManager.signMessage(_text)
+    if (sig.isFailure()) {
+      return
+    }
+    console.log(sig.value.signature)
+    const res = await authenticate({
+      id: _id,
+      signature: sig.value.signature,
+    })
+    console.log("res", res)
   })
 })
