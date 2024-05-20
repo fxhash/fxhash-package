@@ -114,7 +114,8 @@ export class TezosWalletManager extends WalletManager {
       const payloadBytes = encodeTezosPayload(message)
       let signature = null
       if (isInMemorySigner(this.wallet)) {
-        signature = await this.wallet.sign(payloadBytes)
+        const res = await this.wallet.sign(payloadBytes)
+        signature = res.sbytes
       } else {
         const res = await this.wallet.client.requestSignPayload({
           signingType: SigningType.MICHELINE,
@@ -253,6 +254,51 @@ export class TezosWalletManager extends WalletManager {
     this.rpcNodes.push(out)
     console.log(`update RPC provider: ${this.rpcNodes[0]}`)
     this.tezosToolkit.setProvider({ rpc: this.rpcNodes[0] })
+  }
+
+  static async fromPrivateKey(
+    privateKey: string,
+    options: { tezosToolkit?: TezosToolkit; wallet?: InMemorySigner }
+  ) {
+    // init tezostoolkit
+    const tezosToolkit =
+      options.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
+    // init signer from private key
+    const wallet =
+      options.wallet || (await InMemorySigner.fromSecretKey(privateKey))
+    // get public key hash
+    const pkh = await wallet.publicKeyHash()
+    // set provider
+    tezosToolkit.setProvider({ signer: wallet })
+    return new TezosWalletManager({
+      address: pkh,
+      wallet,
+      tezosToolkit,
+    })
+  }
+
+  static async fromBeaconWallet(options?: {
+    wallet?: BeaconWallet
+    tezosToolkit?: TezosToolkit
+  }) {
+    // init tezostoolkit
+    const tezosToolkit =
+      options?.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
+    // init beacon wallet
+    const wallet =
+      options?.wallet || new BeaconWallet(DefaultBeaconWalletConfig)
+    console.log(wallet)
+    // request permission
+    await wallet.requestPermissions()
+    // get public key hash
+    const pkh = await wallet.getPKH()
+    // set provider
+    tezosToolkit.setWalletProvider(wallet)
+    return new TezosWalletManager({
+      address: pkh,
+      wallet,
+      tezosToolkit,
+    })
   }
 }
 
