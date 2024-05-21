@@ -72,8 +72,8 @@ type TBlockchainContacts = {
 type TBlockchainApis = {
   [B in TBlockchain]: {
     tez: ITezosApis
-    eth: IEthApis | null
-    base: IBaseApis | null
+    eth: IEthApis
+    base: IBaseApis
   }[B]
 }
 
