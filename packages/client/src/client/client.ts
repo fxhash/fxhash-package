@@ -17,6 +17,7 @@ function invariant(condition: unknown, message: string): asserts condition {
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
   tezosToolkit?: TezosToolkit
+  withBeaconWallet?: boolean
 }
 
 const defaultOptions: Partial<FxhashClientOptions> = {
@@ -44,9 +45,10 @@ export class FxhashClient extends EventEmitter<FxhashClientEvents> {
     super()
     const options = { ...defaultOptions, ..._options }
     this.gqlClient = options.gqlClient
-    this.tezosToolkit = options.tezosToolkit
+    this.tezosToolkit =
+      options.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
 
-    if (this.tezosToolkit) {
+    if (options.withBeaconWallet) {
       this.beaconWallet = new BeaconWallet(DefaultBeaconWalletConfig)
       this.beaconWallet.client.subscribeToEvent(
         BeaconEvent.ACTIVE_ACCOUNT_SET,
@@ -81,12 +83,13 @@ export class FxhashClient extends EventEmitter<FxhashClientEvents> {
   }
 
   /**
-   * Create a new FxhashClient instance. Specifically
+   * Factory method to create a new FxhashClient instance specifically for in the browser use.
    * @returns A promise that resolves with the new FxhashClient instance.
    */
   static async client(): Promise<FxhashClient> {
     return new FxhashClient({
       tezosToolkit: new TezosToolkit(config.tez.apis.rpcs[0]),
+      withBeaconWallet: true,
     })
   }
 
@@ -100,7 +103,9 @@ export class FxhashClient extends EventEmitter<FxhashClientEvents> {
   async connectTezosWallet(privateKey?: string): Promise<void> {
     try {
       this.isConnecting = true
+      invariant(this.tezosToolkit, "tezosToolkit is not set")
       if (!privateKey) {
+        invariant(this.beaconWallet, "beaconWallet is not set")
         this.tezosWalletManager = await TezosWalletManager.fromBeaconWallet({
           tezosToolkit: this.tezosToolkit,
           wallet: this.beaconWallet,
