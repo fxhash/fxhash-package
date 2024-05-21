@@ -14,6 +14,7 @@ import {
   BlockchainType,
   WalletConnectionErrorReason,
   WalletConnectionError,
+  invariant,
 } from "@fxhash/shared"
 import {
   Account,
@@ -28,6 +29,7 @@ import {
   createPublicClient,
   http,
   Client,
+  createWalletClient,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe from "@safe-global/protocol-kit"
@@ -39,6 +41,7 @@ import {
   FallbackProvider,
   JsonRpcProvider,
 } from "ethers"
+import { privateKeyToAccount } from "viem/accounts"
 /* Temp remove until package is esm compatible
 import {
   fallback,
@@ -49,9 +52,10 @@ import {
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 */
 
-export function clientToSigner(client: Client<Transport, Chain, Account>) {
+export function clientToSigner(
+  client: Client<Transport, Chain, Account>
+): JsonRpcSigner {
   const { account, chain, transport } = client
-  if (!chain) return
   const network = {
     chainId: chain.id,
     name: chain.name,
@@ -446,5 +450,24 @@ export class EthereumWalletManager extends WalletManager {
     //     transport: http(rpcUrls[0]),
     //   })
     //   this.walletClient = client
+  }
+
+  static async fromPrivateKey(privateKey: `0x${string}`) {
+    const chain = chains[BlockchainType.ETHEREUM]
+    const transport = http(config.eth.apis.rpcs[0])
+    const publicClient = createPublicClient({
+      chain,
+      transport,
+    })
+    const account = privateKeyToAccount(privateKey)
+    const walletClient = createWalletClient({ account, chain, transport })
+    invariant(walletClient, "walletClient is not set")
+
+    return new EthereumWalletManager({
+      publicClient,
+      walletClient,
+      address: account.address,
+      signer: clientToSigner(walletClient),
+    })
   }
 }
