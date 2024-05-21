@@ -281,7 +281,7 @@ export class TezosWalletManager extends WalletManager {
   ) {
     // init tezostoolkit
     const tezosToolkit =
-      options.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
+      options?.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
     // init signer from private key
     const wallet =
       privateKeyOrWallet instanceof InMemorySigner
