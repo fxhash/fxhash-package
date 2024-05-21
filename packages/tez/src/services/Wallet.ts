@@ -258,7 +258,7 @@ export class TezosWalletManager extends WalletManager {
 
   /**
    * Factory method to create a new TezosWalletManager instance from a private key.
-   * @param privateKey The private key of the wallet to connect to.
+   * @param privateKeyOrWallet The private key of the wallet to connect to or the InMemorySigner instance.
    * @param options The options to create the instance.
    *  - `tezosToolkit` The TezosToolkit instance to use.
    *  - `wallet` The InMemorySigner instance to use.
@@ -267,14 +267,26 @@ export class TezosWalletManager extends WalletManager {
 
   static async fromPrivateKey(
     privateKey: string,
-    options?: { tezosToolkit?: TezosToolkit; wallet?: InMemorySigner }
+    options?: { tezosToolkit?: TezosToolkit }
+  ): Promise<TezosWalletManager>
+
+  static async fromPrivateKey(
+    wallet: InMemorySigner,
+    options?: { tezosToolkit?: TezosToolkit }
+  ): Promise<TezosWalletManager>
+
+  static async fromPrivateKey(
+    privateKeyOrWallet: string | InMemorySigner,
+    options?: { tezosToolkit?: TezosToolkit }
   ) {
     // init tezostoolkit
     const tezosToolkit =
       options.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
     // init signer from private key
     const wallet =
-      options.wallet || (await InMemorySigner.fromSecretKey(privateKey))
+      privateKeyOrWallet instanceof InMemorySigner
+        ? privateKeyOrWallet
+        : await InMemorySigner.fromSecretKey(privateKeyOrWallet)
     // get public key hash
     const pkh = await wallet.publicKeyHash()
     // set provider
