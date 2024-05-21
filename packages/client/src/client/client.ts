@@ -86,11 +86,21 @@ export class FxhashClient extends EventEmitter<FxhashClientEvents> {
    * Factory method to create a new FxhashClient instance specifically for in the browser use.
    * @returns A promise that resolves with the new FxhashClient instance.
    */
+
   static async client(): Promise<FxhashClient> {
     return new FxhashClient({
       tezosToolkit: new TezosToolkit(config.tez.apis.rpcs[0]),
       withBeaconWallet: true,
     })
+  }
+
+  /**
+   * Factory method to create a new FxhashClient instance specifically for in the server use.
+   * @returns A promise that resolves with the new FxhashClient instance.
+   */
+
+  static async server(): Promise<FxhashClient> {
+    return new FxhashClient()
   }
 
   /**
@@ -121,6 +131,11 @@ export class FxhashClient extends EventEmitter<FxhashClientEvents> {
       this.emit("connectWallet", BlockchainType.TEZOS, this.tezosWalletManager)
     }
   }
+
+  /**
+   * Get the wallet managers by chain.
+   * @returns The wallet managers by chain.
+   */
 
   private get walletManagersByChain() {
     return {
