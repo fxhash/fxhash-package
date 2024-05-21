@@ -256,9 +256,18 @@ export class TezosWalletManager extends WalletManager {
     this.tezosToolkit.setProvider({ rpc: this.rpcNodes[0] })
   }
 
+  /**
+   * Factory method to create a new TezosWalletManager instance from a private key.
+   * @param privateKey The private key of the wallet to connect to.
+   * @param options The options to create the instance.
+   *  - `tezosToolkit` The TezosToolkit instance to use.
+   *  - `wallet` The InMemorySigner instance to use.
+   * @returns A promise that resolves with the new TezosWalletManager instance.
+   */
+
   static async fromPrivateKey(
     privateKey: string,
-    options: { tezosToolkit?: TezosToolkit; wallet?: InMemorySigner }
+    options?: { tezosToolkit?: TezosToolkit; wallet?: InMemorySigner }
   ) {
     // init tezostoolkit
     const tezosToolkit =
@@ -277,6 +286,14 @@ export class TezosWalletManager extends WalletManager {
     })
   }
 
+  /**
+   * Factory method to create a new TezosWalletManager instance from a BeaconWallet.
+   * @param options The options to create the instance.
+   *  - `wallet` The BeaconWallet instance to use.
+   *  - `tezosToolkit` The TezosToolkit instance to use.
+   * @returns A promise that resolves with the new TezosWalletManager instance.
+   */
+
   static async fromBeaconWallet(options?: {
     wallet?: BeaconWallet
     tezosToolkit?: TezosToolkit
@@ -287,7 +304,6 @@ export class TezosWalletManager extends WalletManager {
     // init beacon wallet
     const wallet =
       options?.wallet || new BeaconWallet(DefaultBeaconWalletConfig)
-    console.log(wallet)
     // request permission
     await wallet.requestPermissions()
     // get public key hash
