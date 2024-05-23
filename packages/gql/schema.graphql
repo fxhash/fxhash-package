@@ -403,6 +403,7 @@ input AccountsRoles_stream_cursor_value_input {
 
 input AuthenticationInput {
   id: String!
+  publicKey: String
   signature: String!
 }
 
@@ -5354,9 +5355,6 @@ type generative_token {
   lock_price_for_reserves: Boolean!
   locked_seconds: Int!
 
-  """An object relationship"""
-  market_stat: market_stats
-
   """An array relationship"""
   market_stats_histories(
     """distinct select on columns"""
@@ -5754,7 +5752,6 @@ input generative_token_bool_exp {
   lock_end: timestamptz_comparison_exp
   lock_price_for_reserves: Boolean_comparison_exp
   locked_seconds: Int_comparison_exp
-  market_stat: market_stats_bool_exp
   market_stats_histories: market_stats_history_bool_exp
   media_image: media_image_bool_exp
   metadata: json_comparison_exp
@@ -5973,7 +5970,6 @@ input generative_token_order_by {
   lock_end: order_by
   lock_price_for_reserves: order_by
   locked_seconds: order_by
-  market_stat: market_stats_order_by
   market_stats_histories_aggregate: market_stats_history_aggregate_order_by
   media_image: media_image_order_by
   metadata: order_by
@@ -7095,107 +7091,6 @@ input listing_variance_order_by {
 }
 
 """
-columns and relationships of "market_stats"
-"""
-type market_stats {
-  floor: numeric
-  floor_change7d: numeric
-  floor_change24: numeric
-  floor_change30d: numeric
-  from: timestamptz
-
-  """An object relationship"""
-  generative_token: generative_token!
-  highest_sold: numeric
-  listed: Int
-  lowest_sold: numeric
-  median: numeric
-  prim_volume: numeric
-  prim_volume_fiat: numeric
-  prim_volume_nb: Int
-  sec_volume: numeric
-  sec_volume7d: numeric
-  sec_volume24: numeric
-  sec_volume30d: numeric
-  sec_volume_fiat: numeric
-  sec_volume_fiat7d: numeric
-  sec_volume_fiat24: numeric
-  sec_volume_fiat30d: numeric
-  sec_volume_nb: Int
-  sec_volume_nb7d: Int
-  sec_volume_nb24: Int
-  sec_volume_nb30d: Int
-  to: timestamptz
-  token_id: String!
-  total_volume: numeric
-  total_volume7d: numeric
-  total_volume24: numeric
-  total_volume30d: numeric
-  total_volume_change7d: numeric
-  total_volume_change24: numeric
-  total_volume_change30d: numeric
-  total_volume_fiat: numeric
-  total_volume_fiat7d: numeric
-  total_volume_fiat24: numeric
-  total_volume_fiat30d: numeric
-  total_volume_nb: Int
-  total_volume_nb7d: Int
-  total_volume_nb24: Int
-  total_volume_nb30d: Int
-}
-
-"""
-Boolean expression to filter rows from the table "market_stats". All fields are combined with a logical 'AND'.
-"""
-input market_stats_bool_exp {
-  _and: [market_stats_bool_exp!]
-  _not: market_stats_bool_exp
-  _or: [market_stats_bool_exp!]
-  floor: numeric_comparison_exp
-  floor_change7d: numeric_comparison_exp
-  floor_change24: numeric_comparison_exp
-  floor_change30d: numeric_comparison_exp
-  from: timestamptz_comparison_exp
-  generative_token: generative_token_bool_exp
-  highest_sold: numeric_comparison_exp
-  listed: Int_comparison_exp
-  lowest_sold: numeric_comparison_exp
-  median: numeric_comparison_exp
-  prim_volume: numeric_comparison_exp
-  prim_volume_fiat: numeric_comparison_exp
-  prim_volume_nb: Int_comparison_exp
-  sec_volume: numeric_comparison_exp
-  sec_volume7d: numeric_comparison_exp
-  sec_volume24: numeric_comparison_exp
-  sec_volume30d: numeric_comparison_exp
-  sec_volume_fiat: numeric_comparison_exp
-  sec_volume_fiat7d: numeric_comparison_exp
-  sec_volume_fiat24: numeric_comparison_exp
-  sec_volume_fiat30d: numeric_comparison_exp
-  sec_volume_nb: Int_comparison_exp
-  sec_volume_nb7d: Int_comparison_exp
-  sec_volume_nb24: Int_comparison_exp
-  sec_volume_nb30d: Int_comparison_exp
-  to: timestamptz_comparison_exp
-  token_id: String_comparison_exp
-  total_volume: numeric_comparison_exp
-  total_volume7d: numeric_comparison_exp
-  total_volume24: numeric_comparison_exp
-  total_volume30d: numeric_comparison_exp
-  total_volume_change7d: numeric_comparison_exp
-  total_volume_change24: numeric_comparison_exp
-  total_volume_change30d: numeric_comparison_exp
-  total_volume_fiat: numeric_comparison_exp
-  total_volume_fiat7d: numeric_comparison_exp
-  total_volume_fiat24: numeric_comparison_exp
-  total_volume_fiat30d: numeric_comparison_exp
-  total_volume_nb: Int_comparison_exp
-  total_volume_nb7d: Int_comparison_exp
-  total_volume_nb24: Int_comparison_exp
-  total_volume_nb30d: Int_comparison_exp
-}
-
-"""
 columns and relationships of "market_stats_history"
 """
 type market_stats_history {
@@ -7596,236 +7491,6 @@ input market_stats_history_variance_order_by {
   total_volume: order_by
   total_volume_fiat: order_by
   total_volume_nb: order_by
-}
-
-"""Ordering options when selecting data from "market_stats"."""
-input market_stats_order_by {
-  floor: order_by
-  floor_change7d: order_by
-  floor_change24: order_by
-  floor_change30d: order_by
-  from: order_by
-  generative_token: generative_token_order_by
-  highest_sold: order_by
-  listed: order_by
-  lowest_sold: order_by
-  median: order_by
-  prim_volume: order_by
-  prim_volume_fiat: order_by
-  prim_volume_nb: order_by
-  sec_volume: order_by
-  sec_volume7d: order_by
-  sec_volume24: order_by
-  sec_volume30d: order_by
-  sec_volume_fiat: order_by
-  sec_volume_fiat7d: order_by
-  sec_volume_fiat24: order_by
-  sec_volume_fiat30d: order_by
-  sec_volume_nb: order_by
-  sec_volume_nb7d: order_by
-  sec_volume_nb24: order_by
-  sec_volume_nb30d: order_by
-  to: order_by
-  token_id: order_by
-  total_volume: order_by
-  total_volume7d: order_by
-  total_volume24: order_by
-  total_volume30d: order_by
-  total_volume_change7d: order_by
-  total_volume_change24: order_by
-  total_volume_change30d: order_by
-  total_volume_fiat: order_by
-  total_volume_fiat7d: order_by
-  total_volume_fiat24: order_by
-  total_volume_fiat30d: order_by
-  total_volume_nb: order_by
-  total_volume_nb7d: order_by
-  total_volume_nb24: order_by
-  total_volume_nb30d: order_by
-}
-
-"""
-select columns of table "market_stats"
-"""
-enum market_stats_select_column {
-  """column name"""
-  floor
-
-  """column name"""
-  floor_change7d
-
-  """column name"""
-  floor_change24
-
-  """column name"""
-  floor_change30d
-
-  """column name"""
-  from
-
-  """column name"""
-  highest_sold
-
-  """column name"""
-  listed
-
-  """column name"""
-  lowest_sold
-
-  """column name"""
-  median
-
-  """column name"""
-  prim_volume
-
-  """column name"""
-  prim_volume_fiat
-
-  """column name"""
-  prim_volume_nb
-
-  """column name"""
-  sec_volume
-
-  """column name"""
-  sec_volume7d
-
-  """column name"""
-  sec_volume24
-
-  """column name"""
-  sec_volume30d
-
-  """column name"""
-  sec_volume_fiat
-
-  """column name"""
-  sec_volume_fiat7d
-
-  """column name"""
-  sec_volume_fiat24
-
-  """column name"""
-  sec_volume_fiat30d
-
-  """column name"""
-  sec_volume_nb
-
-  """column name"""
-  sec_volume_nb7d
-
-  """column name"""
-  sec_volume_nb24
-
-  """column name"""
-  sec_volume_nb30d
-
-  """column name"""
-  to
-
-  """column name"""
-  token_id
-
-  """column name"""
-  total_volume
-
-  """column name"""
-  total_volume7d
-
-  """column name"""
-  total_volume24
-
-  """column name"""
-  total_volume30d
-
-  """column name"""
-  total_volume_change7d
-
-  """column name"""
-  total_volume_change24
-
-  """column name"""
-  total_volume_change30d
-
-  """column name"""
-  total_volume_fiat
-
-  """column name"""
-  total_volume_fiat7d
-
-  """column name"""
-  total_volume_fiat24
-
-  """column name"""
-  total_volume_fiat30d
-
-  """column name"""
-  total_volume_nb
-
-  """column name"""
-  total_volume_nb7d
-
-  """column name"""
-  total_volume_nb24
-
-  """column name"""
-  total_volume_nb30d
-}
-
-"""
-Streaming cursor of the table "market_stats"
-"""
-input market_stats_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: market_stats_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input market_stats_stream_cursor_value_input {
-  floor: numeric
-  floor_change7d: numeric
-  floor_change24: numeric
-  floor_change30d: numeric
-  from: timestamptz
-  highest_sold: numeric
-  listed: Int
-  lowest_sold: numeric
-  median: numeric
-  prim_volume: numeric
-  prim_volume_fiat: numeric
-  prim_volume_nb: Int
-  sec_volume: numeric
-  sec_volume7d: numeric
-  sec_volume24: numeric
-  sec_volume30d: numeric
-  sec_volume_fiat: numeric
-  sec_volume_fiat7d: numeric
-  sec_volume_fiat24: numeric
-  sec_volume_fiat30d: numeric
-  sec_volume_nb: Int
-  sec_volume_nb7d: Int
-  sec_volume_nb24: Int
-  sec_volume_nb30d: Int
-  to: timestamptz
-  token_id: String
-  total_volume: numeric
-  total_volume7d: numeric
-  total_volume24: numeric
-  total_volume30d: numeric
-  total_volume_change7d: numeric
-  total_volume_change24: numeric
-  total_volume_change30d: numeric
-  total_volume_fiat: numeric
-  total_volume_fiat7d: numeric
-  total_volume_fiat24: numeric
-  total_volume_fiat30d: numeric
-  total_volume_nb: Int
-  total_volume_nb7d: Int
-  total_volume_nb24: Int
-  total_volume_nb30d: Int
 }
 
 """
@@ -10872,29 +10537,6 @@ type onchain_query {
   listing_by_pk(id: String!, version: Int!): listing
 
   """
-  fetch data from the table: "market_stats"
-  """
-  market_stats(
-    """distinct select on columns"""
-    distinct_on: [market_stats_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [market_stats_order_by!]
-
-    """filter the rows returned"""
-    where: market_stats_bool_exp
-  ): [market_stats!]!
-
-  """fetch data from the table: "market_stats" using primary key columns"""
-  market_stats_by_pk(token_id: String!): market_stats
-
-  """
   fetch data from the table: "market_stats_history"
   """
   market_stats_history(
@@ -12322,29 +11964,6 @@ type onchain_subscription {
   ): [listing!]!
 
   """
-  fetch data from the table: "market_stats"
-  """
-  market_stats(
-    """distinct select on columns"""
-    distinct_on: [market_stats_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [market_stats_order_by!]
-
-    """filter the rows returned"""
-    where: market_stats_bool_exp
-  ): [market_stats!]!
-
-  """fetch data from the table: "market_stats" using primary key columns"""
-  market_stats_by_pk(token_id: String!): market_stats
-
-  """
   fetch data from the table: "market_stats_history"
   """
   market_stats_history(
@@ -12382,20 +12001,6 @@ type onchain_subscription {
     """filter the rows returned"""
     where: market_stats_history_bool_exp
   ): [market_stats_history!]!
-
-  """
-  fetch data from the table in a streaming manner: "market_stats"
-  """
-  market_stats_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [market_stats_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: market_stats_bool_exp
-  ): [market_stats!]!
 
   """
   fetch data from the table: "media_image"
