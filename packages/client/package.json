@@ -37,26 +37,18 @@
     "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
     "@fxhash/config": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
-    "@taquito/signer": "17.3.1",
-    "@taquito/taquito": "17.3.1",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
     "vitest": "0.34.6"
   },
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
     "@fxhash/config": "workspace:^",
     "@fxhash/eth": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
-    "@taquito/signer": "17.3.1",
-    "@taquito/taquito": "17.3.1"
+    "@fxhash/tez": "workspace:*"
   }
 }
