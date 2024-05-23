@@ -30,10 +30,15 @@ import {
   http,
   Client,
   createWalletClient,
+  PrivateKeyAccount,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
-import Safe from "@safe-global/protocol-kit"
-import { getSafeSDK } from "../services/Safe.js"
+import Safe, { EthersAdapter } from "@safe-global/protocol-kit"
+import {
+  getEthersAdapterForSafe,
+  getSafeSDK,
+  getWalletProvider,
+} from "../services/Safe.js"
 import { TEthereumContractOperation } from "./operations/index.js"
 import {
   BrowserProvider,
@@ -186,15 +191,17 @@ interface EthereumWalletManagerParams {
   walletClient: WalletClient<Transport, Chain, Account>
   publicClient: PublicClient<Transport, Chain>
   rpcNodes?: string[]
-  signer: JsonRpcSigner
+  signer: JsonRpcSigner | PrivateKeyAccount
+  ethersAdapterForSafe?: EthersAdapter
 }
 
 export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
   public walletClient: WalletClient<Transport, Chain, Account>
   public publicClient: PublicClient<Transport, Chain>
-  public signer: JsonRpcSigner
+  public signer: JsonRpcSigner | PrivateKeyAccount
   public safe: Safe.default | undefined
+  public ethersAdapterForSafe?: EthersAdapter
   private rpcNodes: string[]
 
   constructor(params: EthereumWalletManagerParams) {
@@ -203,6 +210,7 @@ export class EthereumWalletManager extends WalletManager {
     this.publicClient = params.publicClient
     this.rpcNodes = params.rpcNodes || config.eth.apis!.rpcs
     this.signer = params.signer
+    this.ethersAdapterForSafe = params.ethersAdapterForSafe
   }
 
   isConnected(): boolean {
@@ -218,12 +226,19 @@ export class EthereumWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const signature = await this.walletClient.signMessage({
-        message,
-        // ! TODO: to fix
-        // @ts-ignore
-        account: this.address as `0x${string}`,
-      })
+      let signature
+      if (this.ethersAdapterForSafe) {
+        signature = await (this.signer as PrivateKeyAccount).signMessage({
+          message,
+        })
+      } else {
+        signature = await this.walletClient.signMessage({
+          message,
+          // ! TODO: to fix
+          // @ts-ignore
+          account: this.address as `0x${string}`,
+        })
+      }
       return success(signature)
     } catch (error) {
       if (error instanceof UserRejectedRequestError) {
@@ -249,7 +264,15 @@ export class EthereumWalletManager extends WalletManager {
       return success(safeAddress)
     }
     try {
-      const safeSdk = await getSafeSDK(safeAddress, this.signer)
+      let safeSdk
+      if (this.ethersAdapterForSafe) {
+        safeSdk = await Safe.default.create({
+          ethAdapter: this.ethersAdapterForSafe,
+          safeAddress: safeAddress,
+        })
+      } else {
+        safeSdk = await getSafeSDK(safeAddress, this.signer as JsonRpcSigner)
+      }
       this.safe = safeSdk
       return success(safeAddress)
     } catch (error: any) {
@@ -462,12 +485,16 @@ export class EthereumWalletManager extends WalletManager {
     const account = privateKeyToAccount(privateKey)
     const walletClient = createWalletClient({ account, chain, transport })
     invariant(walletClient, "walletClient is not set")
-
     return new EthereumWalletManager({
       publicClient,
       walletClient,
       address: account.address,
-      signer: clientToSigner(walletClient),
+      signer: account,
+      ethersAdapterForSafe: getEthersAdapterForSafe(
+        getWalletProvider(privateKey, config.eth.apis.rpcs[0])
+      ),
+    })
+  }
     })
   }
 }
