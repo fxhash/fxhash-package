@@ -495,6 +495,4 @@ export class EthereumWalletManager extends WalletManager {
       ),
     })
   }
-    })
-  }
 }
