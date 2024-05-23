@@ -1,10 +1,10 @@
 import { gqlClient as defaultClient } from "@fxhash/gql-client"
 import { BlockchainType, invariant as _invariant } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
-import { EthereumWalletManager } from "@fxhash/eth"
-import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
 import { generateChallenge, authenticate } from "@/auth/index.js"
 import { EventEmitter, EventHandler } from "@/util/EventEmitter.js"
+import { EthereumWalletManager } from "@fxhash/eth"
+import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
 
 function invariant(condition: unknown, message: string): asserts condition {
   _invariant(condition, `FxhashClient: ${message}`)
