@@ -1,14 +1,10 @@
 import { gqlClient as defaultClient } from "@fxhash/gql-client"
 import { BlockchainType, invariant as _invariant } from "@fxhash/shared"
-import { DefaultBeaconWalletConfig, TezosWalletManager } from "@fxhash/tez"
-import { generateChallenge, authenticate } from "../auth/index.js"
-import { AuthenticationResult } from "@fxhash/gql"
-import { TezosToolkit } from "@taquito/taquito"
-import { config } from "@fxhash/config"
-import { BeaconWallet } from "@taquito/beacon-wallet"
-import { AccountInfo, BeaconEvent } from "@airgap/beacon-sdk"
+import { TezosWalletManager } from "@fxhash/tez"
+import { generateChallenge, authenticate } from "@/auth/index.js"
 import { EventEmitter, EventHandler } from "@/util/EventEmitter.js"
 import { EthereumWalletManager } from "@fxhash/eth"
+import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
 
 function invariant(condition: unknown, message: string): asserts condition {
   _invariant(condition, `FxhashClient: ${message}`)
@@ -16,8 +12,6 @@ function invariant(condition: unknown, message: string): asserts condition {
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
-  tezosToolkit?: TezosToolkit
-  withBeaconWallet?: boolean
 }
 
 const defaultOptions: Partial<FxhashClientOptions> = {
@@ -33,138 +27,67 @@ interface FxhashClientEvents {
   [key: string]: EventHandler<any>
 }
 
+type PendingChallenge = {
+  chain: BlockchainType
+  address: string
+  challengeId: string
+}
+
+type ValidAuthentication = {
+  chain: BlockchainType
+  address: string
+  accessToken: string
+  refreshToken: string
+}
+
 export class FxhashClient extends EventEmitter<FxhashClientEvents> {
   public gqlClient?: typeof defaultClient
-  public tezosToolkit?: TezosToolkit
-  public beaconWallet?: BeaconWallet
-  private authenticationResult?: AuthenticationResult
-  private tezosWalletManager?: TezosWalletManager
-  private isConnecting = false
+
+  private _pendingChallenges: PendingChallenge[] = []
+  private _authentications: ValidAuthentication[] = []
 
   constructor(_options?: FxhashClientOptions) {
     super()
     const options = { ...defaultOptions, ..._options }
     this.gqlClient = options.gqlClient
-    this.tezosToolkit =
-      options.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
-
-    if (options.withBeaconWallet) {
-      this.beaconWallet = new BeaconWallet(DefaultBeaconWalletConfig)
-      this.beaconWallet.client.subscribeToEvent(
-        BeaconEvent.ACTIVE_ACCOUNT_SET,
-        async (account?: AccountInfo) => {
-          if (this.isConnecting) return
-          if (
-            this.tezosWalletManager &&
-            this.tezosWalletManager?.address !== account?.address
-          ) {
-            await this.beaconWallet?.client.clearActiveAccount()
-            await this.beaconWallet?.client.disconnect()
-            return
-          }
-          if (account) {
-            invariant(this.beaconWallet, "beaconWallet is not set")
-            invariant(this.tezosToolkit, "tezosToolkit is not set")
-            this.tezosToolkit.setWalletProvider(this.beaconWallet)
-            this.tezosWalletManager = new TezosWalletManager({
-              wallet: this.beaconWallet,
-              tezosToolkit: this.tezosToolkit,
-              address: account.address,
-            })
-            this.emit(
-              "connectWallet",
-              BlockchainType.TEZOS,
-              this.tezosWalletManager
-            )
-          }
-        }
-      )
-    }
   }
 
-  /**
-   * Factory method to create a new FxhashClient instance specifically for in the browser use.
-   * @returns A promise that resolves with the new FxhashClient instance.
-   */
+  async generateChallenge(
+    chain: BlockchainType,
+    address: string
+  ): Promise<ChallengeResult> {
+    const res = await generateChallenge({ chain, address })
+    this._pendingChallenges.push({ chain, address, challengeId: res.id })
+    return res
+  }
 
-  static async client(): Promise<FxhashClient> {
-    return new FxhashClient({
-      tezosToolkit: new TezosToolkit(config.tez.apis.rpcs[0]),
-      withBeaconWallet: true,
+  async authenticate(
+    challengeId: string,
+    signature: string,
+    publicKey?: string
+  ): Promise<AuthenticationResult> {
+    const pendingChallenge = this._pendingChallenges.find(
+      c => c.challengeId === challengeId
+    )
+    invariant(pendingChallenge, "Challenge not found")
+    const res = await authenticate({ id: challengeId, signature, publicKey })
+    this._pendingChallenges = this._pendingChallenges.filter(
+      c => c.challengeId !== challengeId
+    )
+    this._authentications.push({
+      chain: pendingChallenge.chain,
+      address: pendingChallenge.address,
+      accessToken: res.accessToken,
+      refreshToken: res.refreshToken,
     })
+    return res
   }
 
-  /**
-   * Factory method to create a new FxhashClient instance specifically for in the server use.
-   * @returns A promise that resolves with the new FxhashClient instance.
-   */
-
-  static async server(): Promise<FxhashClient> {
-    return new FxhashClient()
+  get pendingChallenges(): ReadonlyArray<PendingChallenge> {
+    return this._pendingChallenges
   }
 
-  /**
-   * Connect to a Tezos wallet.
-   * @param privateKey The private key of the wallet to connect to.
-   * If not provided, the user will be prompted to connect to a wallet.
-   * @returns A promise that resolves when the wallet is connected.
-   */
-
-  async connectTezosWallet(privateKey?: string): Promise<void> {
-    try {
-      this.isConnecting = true
-      invariant(this.tezosToolkit, "tezosToolkit is not set")
-      if (!privateKey) {
-        invariant(this.beaconWallet, "beaconWallet is not set")
-        this.tezosWalletManager = await TezosWalletManager.fromBeaconWallet({
-          tezosToolkit: this.tezosToolkit,
-          wallet: this.beaconWallet,
-        })
-      } else {
-        this.tezosWalletManager = await TezosWalletManager.fromPrivateKey(
-          privateKey,
-          { tezosToolkit: this.tezosToolkit }
-        )
-      }
-    } finally {
-      this.isConnecting = false
-      this.emit("connectWallet", BlockchainType.TEZOS, this.tezosWalletManager)
-    }
-  }
-
-  /**
-   * Get the wallet managers by chain.
-   * @returns The wallet managers by chain.
-   */
-
-  private get walletManagersByChain() {
-    return {
-      [BlockchainType.TEZOS]: this.tezosWalletManager,
-      [BlockchainType.ETHEREUM]: undefined,
-      [BlockchainType.BASE]: undefined,
-    }
-  }
-
-  /**
-   * Authenticate with the server.
-   * @param chain The blockchain of the wallet to authenticate with.
-   * @returns A promise that resolves with the authentication result.
-   */
-
-  async authenticate(chain: BlockchainType): Promise<AuthenticationResult> {
-    const walletManager = this.walletManagersByChain[chain]
-    invariant(walletManager, `No wallet for chain ${chain} connected.`)
-    const address = walletManager.address
-    const challenge = await generateChallenge({
-      chain,
-      address,
-    })
-    const sig = await walletManager.signMessage(challenge.text)
-    invariant(sig.isSuccess(), "Failed to sign challenge.")
-    this.authenticationResult = await authenticate({
-      id: challenge.id,
-      signature: sig.value.signature,
-    })
-    return this.authenticationResult
+  get authentications(): ReadonlyArray<ValidAuthentication> {
+    return this._authentications
   }
 }

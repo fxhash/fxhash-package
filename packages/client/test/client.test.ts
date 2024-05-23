@@ -1,0 +1,96 @@
+import { FxhashClient } from "@/index.js"
+import { EthereumWalletManager } from "@fxhash/eth"
+import { BlockchainType } from "@fxhash/shared"
+import { TezosWalletManager } from "@fxhash/tez"
+
+describe("authenticate with client", async () => {
+  let _id: string
+  let _text: string
+
+  const ewm = await EthereumWalletManager.fromPrivateKey(
+    "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
+  )
+
+  const fxhashClient = new FxhashClient()
+
+  it("generate challenge for ETHEREUM", async () => {
+    const { text, id } = await fxhashClient.generateChallenge(
+      BlockchainType.ETHEREUM,
+      ewm.address
+    )
+    expect(text).toBeDefined()
+    expect(id).toBeDefined()
+    expect(fxhashClient.pendingChallenges.length).toBe(1)
+    _id = id
+    _text = text
+  })
+
+  it("invalid challenge id is not found", async () => {
+    try {
+      await fxhashClient.authenticate(
+        "afe7a262-4bef-4a15-8557-79b74e0fa99c",
+        "test"
+      )
+    } catch (e) {
+      expect(e).toBeDefined()
+    }
+  })
+  it("invalid signature is not valid", async () => {
+    try {
+      await fxhashClient.authenticate(_id, "test")
+    } catch (e) {
+      expect(e).toBeDefined()
+    }
+  })
+  it("Login with valid signature ETHEREUM", async () => {
+    const sig = await ewm.signMessage(_text)
+    if (sig.isFailure()) {
+      return
+    }
+    const { accessToken, refreshToken } = await fxhashClient.authenticate(
+      _id,
+      sig.value.signature
+    )
+    // we should have no challenges left
+    expect(fxhashClient.pendingChallenges.length).toBe(0)
+    // we should have one account authenticated (eth)
+    expect(fxhashClient.authentications.length).toBe(1)
+    expect(accessToken).toBeDefined()
+    expect(refreshToken).toBeDefined()
+  })
+
+  const twm = await TezosWalletManager.fromPrivateKey(
+    "edskRdPsQQjdB6ejSiHQXRffUdLm5E3UqjeKe9z8hkcBTzcEouR8Fsc7wgKTua7cp2es19WaFX5tt8AjjjsCeiADwQoRj6RBoD"
+  )
+
+  it("generate another challenge for TEZOS", async () => {
+    const { text, id } = await fxhashClient.generateChallenge(
+      BlockchainType.TEZOS,
+      twm.address
+    )
+    expect(text).toBeDefined()
+    expect(id).toBeDefined()
+    expect(fxhashClient.pendingChallenges.length).toBe(1)
+    _id = id
+    _text = text
+  })
+
+  it("Login with valid signature TEZOS", async () => {
+    const sig = await twm.signMessage(_text)
+    if (sig.isFailure()) {
+      return
+    }
+    const publicKey = await twm.getPublicKey()
+    const { accessToken, refreshToken } = await fxhashClient.authenticate(
+      _id,
+      sig.value.signature,
+      publicKey
+    )
+    // we should have no challenges left
+    expect(fxhashClient.pendingChallenges.length).toBe(0)
+    // we should have two accounts authenticated (eth + tez)
+    expect(fxhashClient.authentications.length).toBe(2)
+    expect(accessToken).toBeDefined()
+    expect(refreshToken).toBeDefined()
+  })
+})
