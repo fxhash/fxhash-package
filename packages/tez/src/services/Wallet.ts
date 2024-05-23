@@ -115,7 +115,7 @@ export class TezosWalletManager extends WalletManager {
       let signature = null
       if (isInMemorySigner(this.wallet)) {
         const res = await this.wallet.sign(payloadBytes)
-        signature = res.sbytes
+        signature = res.sig
       } else {
         const res = await this.wallet.client.requestSignPayload({
           signingType: SigningType.MICHELINE,
