@@ -4,6 +4,7 @@ import {
   AuthenticationResult,
   Mu_Authenticate,
 } from "@fxhash/gql"
+import { GraphQLError } from "@/util/Error.js"
 
 type AuthenticateOptions = {
   gqlClient: typeof defaultClient
@@ -37,10 +38,10 @@ export async function authenticate(
     input,
   })
   if (error) {
-    throw new Error(error.message)
+    throw new GraphQLError(error.message)
   }
   if (!data || !data.authenticate) {
-    throw new Error("Unexpected error")
+    throw new GraphQLError("Unexpected error")
   }
   return data.authenticate
 }
