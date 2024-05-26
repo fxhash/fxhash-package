@@ -4,3 +4,10 @@ export class GraphQLError extends Error {
     this.name = "GraphQLError"
   }
 }
+
+export class UnexpectedError extends Error {
+  constructor() {
+    super("Unexpected error")
+    this.name = "UnexpectedError"
+  }
+}

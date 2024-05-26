@@ -4,7 +4,7 @@ import {
   ChallengeResult,
   Mu_AuthGenerateChallenge,
 } from "@fxhash/gql"
-import { GraphQLError } from "@/util/Error.js"
+import { GraphQLError, UnexpectedError } from "@/util/Error.js"
 
 /**
  * Generate a challenge for the user
@@ -40,7 +40,7 @@ export async function generateChallenge(
     throw new GraphQLError(error.message)
   }
   if (!data || !data.generate_challenge) {
-    throw new GraphQLError("Unexpected error")
+    throw new UnexpectedError()
   }
   return data.generate_challenge
 }
