@@ -4,10 +4,7 @@ import {
   invariant as _invariant,
   JwtAccessTokenPayload,
 } from "@fxhash/shared"
-import { TezosWalletManager } from "@fxhash/tez"
 import { generateChallenge, authenticate } from "@/auth/index.js"
-import { EventEmitter, EventHandler } from "@/util/EventEmitter.js"
-import { EthereumWalletManager } from "@fxhash/eth"
 import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
 import { createStorage, Storage } from "unstorage"
 import { getBlockchainFromAddress } from "@fxhash/utils"
@@ -25,22 +22,12 @@ const defaultOptions: Required<
   storage: createStorage(),
 }
 
-interface FxhashClientEvents {
-  connectWallet: (
-    chain: BlockchainType,
-    manager: TezosWalletManager | EthereumWalletManager | undefined
-  ) => void
-  // index signature
-  [key: string]: EventHandler<any>
-}
-
-export class FxhashClient extends EventEmitter<FxhashClientEvents> {
+export class FxhashClient {
   public gqlClient: typeof defaultClient
 
   private storage: Storage
 
   constructor(_options?: FxhashClientOptions) {
-    super()
     const options = { ...defaultOptions, ..._options }
     this.gqlClient = options.gqlClient
     this.storage = options.storage
