@@ -2,7 +2,7 @@ import { gqlClient as defaultClient } from "@fxhash/gql-client"
 import {
   BlockchainType,
   invariant as _invariant,
-  JwtAuthPayload,
+  JwtAccessTokenPayload,
 } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
 import { generateChallenge, authenticate } from "@/auth/index.js"
