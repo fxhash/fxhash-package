@@ -1,7 +1,9 @@
 import { FxhashClient } from "@/index.js"
 import { EthereumWalletManager } from "@fxhash/eth"
+import { createGqlClient } from "@fxhash/gql-client"
 import { BlockchainType } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
+import { localConfig } from "../../config/dist/config.js"
 
 describe("authenticate with client", async () => {
   let _id: string
@@ -13,6 +15,12 @@ describe("authenticate with client", async () => {
 
   const fxhashClient = new FxhashClient()
 
+  /** Use this for testing against local hasura
+   * const fxhashClient = new FxhashClient({
+   *  gqlClient: createGqlClient({ url: localConfig.apis.hasuraGql }),
+   * })
+   */
+
   it("generate challenge for ETHEREUM", async () => {
     const { text, id } = await fxhashClient.generateChallenge(
       BlockchainType.ETHEREUM,
@@ -20,7 +28,6 @@ describe("authenticate with client", async () => {
     )
     expect(text).toBeDefined()
     expect(id).toBeDefined()
-    expect(fxhashClient.pendingChallenges.length).toBe(1)
     _id = id
     _text = text
   })
@@ -51,10 +58,6 @@ describe("authenticate with client", async () => {
       _id,
       sig.value.signature
     )
-    // we should have no challenges left
-    expect(fxhashClient.pendingChallenges.length).toBe(0)
-    // we should have one account authenticated (eth)
-    expect(fxhashClient.authentications.length).toBe(1)
     expect(accessToken).toBeDefined()
     expect(refreshToken).toBeDefined()
   })
@@ -70,7 +73,6 @@ describe("authenticate with client", async () => {
     )
     expect(text).toBeDefined()
     expect(id).toBeDefined()
-    expect(fxhashClient.pendingChallenges.length).toBe(1)
     _id = id
     _text = text
   })
@@ -86,10 +88,6 @@ describe("authenticate with client", async () => {
       sig.value.signature,
       publicKey
     )
-    // we should have no challenges left
-    expect(fxhashClient.pendingChallenges.length).toBe(0)
-    // we should have two accounts authenticated (eth + tez)
-    expect(fxhashClient.authentications.length).toBe(2)
     expect(accessToken).toBeDefined()
     expect(refreshToken).toBeDefined()
   })

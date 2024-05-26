@@ -1,21 +1,28 @@
 import { gqlClient as defaultClient } from "@fxhash/gql-client"
-import { BlockchainType, invariant as _invariant } from "@fxhash/shared"
+import {
+  BlockchainType,
+  invariant as _invariant,
+  JwtAuthPayload,
+} from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
 import { generateChallenge, authenticate } from "@/auth/index.js"
 import { EventEmitter, EventHandler } from "@/util/EventEmitter.js"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
-
-function invariant(condition: unknown, message: string): asserts condition {
-  _invariant(condition, `FxhashClient: ${message}`)
-}
+import { createStorage, Storage } from "unstorage"
+import { getBlockchainFromAddress } from "@fxhash/utils"
+import { jwtDecode } from "jwt-decode"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
+  storage?: Storage
 }
 
-const defaultOptions: Partial<FxhashClientOptions> = {
+const defaultOptions: Required<
+  Pick<FxhashClientOptions, "gqlClient" | "storage">
+> = {
   gqlClient: defaultClient,
+  storage: createStorage(),
 }
 
 interface FxhashClientEvents {
@@ -27,37 +34,27 @@ interface FxhashClientEvents {
   [key: string]: EventHandler<any>
 }
 
-type PendingChallenge = {
-  chain: BlockchainType
-  address: string
-  challengeId: string
-}
-
-type ValidAuthentication = {
-  chain: BlockchainType
-  address: string
-  accessToken: string
-  refreshToken: string
-}
-
 export class FxhashClient extends EventEmitter<FxhashClientEvents> {
-  public gqlClient?: typeof defaultClient
+  public gqlClient: typeof defaultClient
 
-  private _pendingChallenges: PendingChallenge[] = []
-  private _authentications: ValidAuthentication[] = []
+  private storage: Storage
 
   constructor(_options?: FxhashClientOptions) {
     super()
     const options = { ...defaultOptions, ..._options }
     this.gqlClient = options.gqlClient
+    this.storage = options.storage
   }
 
   async generateChallenge(
     chain: BlockchainType,
     address: string
   ): Promise<ChallengeResult> {
-    const res = await generateChallenge({ chain, address })
-    this._pendingChallenges.push({ chain, address, challengeId: res.id })
+    const res = await generateChallenge(
+      { chain, address },
+      { gqlClient: this.gqlClient }
+    )
+
     return res
   }
 
@@ -66,28 +63,19 @@ export class FxhashClient extends EventEmitter<FxhashClientEvents> {
     signature: string,
     publicKey?: string
   ): Promise<AuthenticationResult> {
-    const pendingChallenge = this._pendingChallenges.find(
-      c => c.challengeId === challengeId
+    const res = await authenticate(
+      { id: challengeId, signature, publicKey },
+      { gqlClient: this.gqlClient }
     )
-    invariant(pendingChallenge, "Challenge not found")
-    const res = await authenticate({ id: challengeId, signature, publicKey })
-    this._pendingChallenges = this._pendingChallenges.filter(
-      c => c.challengeId !== challengeId
-    )
-    this._authentications.push({
-      chain: pendingChallenge.chain,
-      address: pendingChallenge.address,
+
+    const { address, id } = jwtDecode<JwtAccessTokenPayload>(res.accessToken)
+    const chain = getBlockchainFromAddress(address)
+    await this.storage.setItem(`account:${id}`, {
+      chain,
+      address,
       accessToken: res.accessToken,
       refreshToken: res.refreshToken,
     })
     return res
-  }
-
-  get pendingChallenges(): ReadonlyArray<PendingChallenge> {
-    return this._pendingChallenges
-  }
-
-  get authentications(): ReadonlyArray<ValidAuthentication> {
-    return this._authentications
   }
 }

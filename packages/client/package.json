@@ -34,7 +34,10 @@
   "dependencies": {
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
-    "@fxhash/shared": "workspace:*"
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "0.0.2",
+    "jwt-decode": "4.0.0",
+    "unstorage": "1.10.2"
   },
   "devDependencies": {
     "@airgap/beacon-sdk": "4.2.2-beta.3",
