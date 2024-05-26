@@ -1,5 +1,4 @@
-import { StorageValue } from "unstorage"
-import { StorageDriver } from "./Storage.js"
+import { StorageDriver, StorageValue } from "./Storage.js"
 
 export class InMemoryStorageDriver implements StorageDriver {
   private store: Map<string, StorageValue>
