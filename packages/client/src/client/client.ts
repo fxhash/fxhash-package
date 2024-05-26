@@ -1,7 +1,7 @@
 import { gqlClient as defaultClient } from "@fxhash/gql-client"
+import { config } from "@fxhash/config"
 import { BlockchainType, JwtAccessTokenPayload } from "@fxhash/shared"
 import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
-import { getBlockchainFromAddress } from "@fxhash/utils"
 import { jwtDecode } from "jwt-decode"
 import { generateChallenge, authenticate } from "@/auth/index.js"
 import { Storage } from "@/util/Storage/Storage.js"
@@ -20,8 +20,10 @@ const defaultOptions: Required<
 
 export class FxhashClient {
   public gqlClient: typeof defaultClient
+  public accountKey = `fxhash.${config.config.envName}.account`
 
   private storage: Storage
+  public accessToken: string | null = null
 
   constructor(_options?: FxhashClientOptions) {
     const options = { ...defaultOptions, ..._options }
@@ -51,14 +53,15 @@ export class FxhashClient {
       { gqlClient: this.gqlClient }
     )
 
-    const { address, id } = jwtDecode<JwtAccessTokenPayload>(res.accessToken)
-    const chain = getBlockchainFromAddress(address)
-    this.storage.setItem(`account:${id}`, {
-      chain,
-      address,
-      accessToken: res.accessToken,
+    const { id } = jwtDecode<JwtAccessTokenPayload>(res.accessToken)
+    // We store the account in the storage with a static key
+    // This is used to retrieve the account in the future
+    // For security reasons, we don't store the access token
+    this.storage.setItem(this.accountKey, {
+      id,
       refreshToken: res.refreshToken,
     })
+    this.accessToken = res.accessToken
     return res
   }
 }
