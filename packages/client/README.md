@@ -7,5 +7,5 @@ Fxhash api client (nodejs/browser compatible).
 Installation
 
 ```sh
-pnpm add @fxhash/client @fxhash/config @fxhash/gql @fxhash/gql-client
+pnpm add @fxhash/client @fxhash/config
 ```
