@@ -5,19 +5,12 @@ import {
   Mu_Authenticate,
 } from "@fxhash/gql"
 import { GraphQLError, UnexpectedError } from "@/util/Error.js"
-
-type AuthenticateOptions = {
-  gqlClient: typeof defaultClient
-}
-
-const defaultOptions: AuthenticateOptions = {
-  gqlClient: defaultClient,
-}
+import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
 
 /**
  * Authenticate using the provided input
  * @param input {AuthenticationInput}
- * @param options {AuthenticateOptions}
+ * @param options {GqlOptions}
  * @returns {AuthenticationResult}
  * @throws If the authentication fails
  * @example
@@ -31,7 +24,7 @@ const defaultOptions: AuthenticateOptions = {
  */
 export async function authenticate(
   input: AuthenticationInput,
-  options: AuthenticateOptions = defaultOptions
+  options: GqlOptions = gqlDefaultOptions
 ): Promise<AuthenticationResult> {
   const { gqlClient } = options
   const { data, error } = await gqlClient.mutation(Mu_Authenticate, {

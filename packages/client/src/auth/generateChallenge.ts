@@ -5,11 +5,13 @@ import {
   Mu_AuthGenerateChallenge,
 } from "@fxhash/gql"
 import { GraphQLError, UnexpectedError } from "@/util/Error.js"
+import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
 
 /**
  * Generate a challenge for the user
- * @param {GenerateChallengeProps} props
- * @returns {GenerateChallengeResponse}
+ * @param input {ChallengeInput}
+ * @param props {GqlOptions}
+ * @returns {ChallengeResult}
  * @throws {Error}
  * @example
  * ```ts
@@ -20,17 +22,9 @@ import { GraphQLError, UnexpectedError } from "@/util/Error.js"
  * ```
  */
 
-type GenerateChallengeOptions = {
-  gqlClient: typeof defaultClient
-}
-
-const defaultOptions: GenerateChallengeOptions = {
-  gqlClient: defaultClient,
-}
-
 export async function generateChallenge(
   input: ChallengeInput,
-  options: GenerateChallengeOptions = defaultOptions
+  options: GqlOptions = gqlDefaultOptions
 ): Promise<ChallengeResult> {
   const { gqlClient } = options
   const { data, error } = await gqlClient.mutation(Mu_AuthGenerateChallenge, {
