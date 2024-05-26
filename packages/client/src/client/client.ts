@@ -1,14 +1,10 @@
 import { gqlClient as defaultClient } from "@fxhash/gql-client"
-import {
-  BlockchainType,
-  invariant as _invariant,
-  JwtAccessTokenPayload,
-} from "@fxhash/shared"
-import { generateChallenge, authenticate } from "@/auth/index.js"
+import { BlockchainType, JwtAccessTokenPayload } from "@fxhash/shared"
 import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
-import { createStorage, Storage } from "unstorage"
 import { getBlockchainFromAddress } from "@fxhash/utils"
 import { jwtDecode } from "jwt-decode"
+import { generateChallenge, authenticate } from "@/auth/index.js"
+import { Storage } from "@/util/Storage/Storage.js"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
@@ -19,7 +15,7 @@ const defaultOptions: Required<
   Pick<FxhashClientOptions, "gqlClient" | "storage">
 > = {
   gqlClient: defaultClient,
-  storage: createStorage(),
+  storage: new Storage(),
 }
 
 export class FxhashClient {
@@ -57,7 +53,7 @@ export class FxhashClient {
 
     const { address, id } = jwtDecode<JwtAccessTokenPayload>(res.accessToken)
     const chain = getBlockchainFromAddress(address)
-    await this.storage.setItem(`account:${id}`, {
+    this.storage.setItem(`account:${id}`, {
       chain,
       address,
       accessToken: res.accessToken,

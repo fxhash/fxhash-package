@@ -1,4 +1,3 @@
-import { gqlClient as defaultClient } from "@fxhash/gql-client"
 import {
   ChallengeInput,
   ChallengeResult,

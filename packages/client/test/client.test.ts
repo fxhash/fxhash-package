@@ -13,13 +13,14 @@ describe("authenticate with client", async () => {
     "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
   )
 
-  const fxhashClient = new FxhashClient()
-
-  /** Use this for testing against local hasura
+  /** Use this for testing against localhost
    * const fxhashClient = new FxhashClient({
    *  gqlClient: createGqlClient({ url: localConfig.apis.hasuraGql }),
    * })
    */
+  const fxhashClient = new FxhashClient({
+    gqlClient: createGqlClient({ url: localConfig.apis.hasuraGql }),
+  })
 
   it("generate challenge for ETHEREUM", async () => {
     const { text, id } = await fxhashClient.generateChallenge(

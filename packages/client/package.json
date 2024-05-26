@@ -36,11 +36,14 @@
     "@fxhash/gql-client": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/utils": "0.0.2",
-    "jwt-decode": "4.0.0",
-    "unstorage": "1.10.2"
+    "jwt-decode": "4.0.0"
   },
   "devDependencies": {
     "@airgap/beacon-sdk": "4.2.2-beta.3",
+    "@types/eslint": "8.44.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint": "8.45.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/eth": "workspace:*",
