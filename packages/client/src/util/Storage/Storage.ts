@@ -1,6 +1,6 @@
 import { InMemoryStorageDriver } from "./InMemoryDriver.js"
 
-type StorageValue = null | string | number | boolean | object
+export type StorageValue = null | string | number | boolean | object
 
 export interface StorageDriver {
   getItem(key: string): StorageValue
