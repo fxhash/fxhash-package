@@ -7,19 +7,15 @@ export class InMemoryStorageDriver implements StorageDriver {
     this.store = new Map<string, StorageValue>()
   }
 
-  getItem(key: string): StorageValue {
+  async getItem(key: string): Promise<StorageValue> {
     return this.store.get(key) ?? null
   }
 
-  setItem(key: string, value: StorageValue): void {
+  async setItem(key: string, value: StorageValue): Promise<void> {
     this.store.set(key, value)
   }
 
-  removeItem(key: string): void {
+  async removeItem(key: string): Promise<void> {
     this.store.delete(key)
-  }
-
-  clear(): void {
-    this.store.clear()
   }
 }

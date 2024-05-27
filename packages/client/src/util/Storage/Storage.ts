@@ -3,10 +3,9 @@ import { InMemoryStorageDriver } from "./InMemoryDriver.js"
 export type StorageValue = null | string | number | boolean | object
 
 export interface StorageDriver {
-  getItem(key: string): StorageValue
-  setItem(key: string, value: StorageValue): void
-  removeItem(key: string): void
-  clear(): void
+  getItem(key: string): Promise<StorageValue>
+  setItem(key: string, value: StorageValue): Promise<void>
+  removeItem(key: string): Promise<void>
 }
 
 export class Storage {
@@ -20,19 +19,15 @@ export class Storage {
     this.driver = driver
   }
 
-  getItem(key: string) {
+  async getItem(key: string): Promise<StorageValue> {
     return this.driver.getItem(key)
   }
 
-  setItem(key: string, value: StorageValue): void {
+  async setItem(key: string, value: StorageValue): Promise<void> {
     this.driver.setItem(key, value)
   }
 
-  removeItem(key: string): void {
+  async removeItem(key: string): Promise<void> {
     this.driver.removeItem(key)
-  }
-
-  clear(): void {
-    this.driver.clear()
   }
 }
