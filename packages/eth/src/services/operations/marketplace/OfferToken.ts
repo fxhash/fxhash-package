@@ -48,7 +48,7 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
-        automatedRoyalties: true,
+        automatedRoyalties: false,
       }
     })
     const transactionHash = await placeBid(args, this.manager, this.chain)

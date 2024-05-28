@@ -48,7 +48,7 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
-        automatedRoyalties: true,
+        automatedRoyalties: false,
         options: options,
       }
     })

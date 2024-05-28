@@ -6,6 +6,7 @@ import {
 } from "@/services/Reservoir.js"
 import { listToken } from "../Marketplace.js"
 import { TransactionType } from "@fxhash/shared"
+import { getProjectRoyalties } from "@/utils/royalties.js"
 
 export type TListTokenEthV1OperationParams = {
   orders: {
@@ -40,14 +41,17 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
           },
         }
       }
+
+      const royalties = getProjectRoyalties(order.token, this.chain)
       return {
         token: `${order.token}:${order.tokenId}`,
         weiPrice: order.price,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
-        automatedRoyalties: true,
+        automatedRoyalties: false,
         expirationTime: order.expiration ? order.expiration : undefined,
+        customRoyalties: [],
       }
     })
     const transactionHash = await listToken(args, this.manager, this.chain)
