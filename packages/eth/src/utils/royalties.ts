@@ -12,6 +12,11 @@ export type Royalties = {
   chain: string
 }
 
+export type BasisPointRoyalties = {
+  receiver: string
+  basis_points: number
+}
+
 export async function getProjectRoyalties(
   projectId: string,
   chain: BlockchainType
@@ -29,35 +34,37 @@ export async function getProjectRoyalties(
   return royalties.data?.onchain?.eth_secondary_splits
 }
 
-export async function processOverridenRoyalties(royalties: Royalties[]) {
+export function processOverridenRoyalties(
+  royalties: Royalties
+): BasisPointRoyalties[] {
   const addressToModify = "0x1"
-  const percentageToSubtract = 0.5
+  const percentageToSubtract = 50
+  const processedRoyalties: BasisPointRoyalties[] = []
 
-  const totalAllocationToSubtract = royalties.reduce((total, royalty) => {
-    if (royalty.receiver === addressToModify) {
-      const allocationToModify =
-        royalty.allocations[royalty.receivers.indexOf(addressToModify)]
-      const basisPoints = royalty.basis_points
-      const amountToSubtract =
-        (allocationToModify * basisPoints * percentageToSubtract) / 10000
-      royalty.allocations[royalty.receivers.indexOf(addressToModify)] -=
-        amountToSubtract
-      return total + amountToSubtract
-    }
-    return total
-  }, 0)
-
-  const remainingReceivers = royalties.filter(
-    royalty => royalty.receiver !== addressToModify
-  )
-
-  const allocationToDistribute =
-    totalAllocationToSubtract / remainingReceivers.length
-
-  remainingReceivers.forEach(royalty => {
-    const allocationIndex = royalty.receivers.indexOf(addressToModify)
-    royalty.allocations[allocationIndex] += allocationToDistribute
+  const fxhashIndex = royalties.receivers.indexOf(addressToModify)
+  const fxhashAllocation = royalties.allocations[fxhashIndex]
+  processedRoyalties.push({
+    receiver: addressToModify,
+    basis_points: fxhashAllocation - percentageToSubtract,
   })
+  const delta = Math.floor(
+    percentageToSubtract / (royalties.receivers.length - 1)
+  )
+  for (let i = 0; i < royalties.receivers.length; i++) {
+    if (i !== fxhashIndex) {
+      processedRoyalties.push({
+        receiver: royalties.receivers[i],
+        basis_points: royalties.allocations[i] + delta,
+      })
+    }
+  }
+  const total = processedRoyalties.reduce(
+    (acc, { basis_points }) => acc + basis_points,
+    0
+  )
+  if (total !== royalties.basis_points) {
+    processedRoyalties[1].basis_points = processedRoyalties[1].basis_points + 1
+  }
 
-  return royalties
+  return processedRoyalties
 }
