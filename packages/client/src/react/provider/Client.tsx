@@ -1,11 +1,13 @@
 "use client"
 // @ts-ignore - unused
 import React, { PropsWithChildren, createContext, useRef } from "react"
-import { FxhashClient } from "../client/index.js"
+import { FxhashClient } from "../../client/index.js"
 
-export const FxhashClientContext = createContext<{
+interface FxhashClientContext {
   fxhashClient: FxhashClient
-}>({
+}
+
+export const FxhashClientContext = createContext<FxhashClientContext>({
   fxhashClient: new FxhashClient(),
 })
 

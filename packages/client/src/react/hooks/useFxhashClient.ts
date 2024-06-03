@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { FxhashClientContext } from "../Provider.js"
+import { FxhashClientContext } from "../provider/Client.js"
 
 export function useFxhashClient() {
   return useContext(FxhashClientContext)

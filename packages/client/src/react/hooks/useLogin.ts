@@ -12,11 +12,9 @@ interface UseLoginHookOptions {
 }
 
 export function useLogin(options?: UseLoginHookOptions) {
+  const { tezosWalletManager, setTezosWalletManager } = useFxhashWallets()
   const [isConnecting, setIsConnecting] = useState(false)
   const [error, setError] = useState<Error | undefined>(undefined)
-  const [tezosWalletManager, setTezosWalletManager] = useState<
-    TezosWalletManager | undefined
-  >(undefined)
 
   const tezOptions = options?.[BlockchainType.TEZOS]
   const handleConnectTezosWallet = async () => {
