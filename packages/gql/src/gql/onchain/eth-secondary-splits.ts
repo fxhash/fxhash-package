@@ -4,16 +4,15 @@ import { graphql } from "@/generated"
  * ETH Primary splits
  */
 export const Qu_GetEthSecondarySplits = graphql(`
-  query GetEthSecondarySplits($where: eth_secondary_splits_bool_exp = {}) {
+  query GetEthSecondarySplits($id: String!) {
     onchain {
-      __typename
-      eth_secondary_splits {
-        id
-        receiver
-        receivers
+      eth_secondary_splits_by_pk(id: $id) {
         allocations
         basis_points
         chain
+        id
+        receiver
+        receivers
       }
     }
   }

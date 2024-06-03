@@ -6,7 +6,10 @@ import {
 } from "@/services/Reservoir.js"
 import { listToken } from "../Marketplace.js"
 import { TransactionType } from "@fxhash/shared"
-import { getProjectRoyalties } from "@/utils/royalties.js"
+import {
+  getProjectRoyalties,
+  processOverridenRoyalties,
+} from "@/utils/royalties.js"
 
 export type TListTokenEthV1OperationParams = {
   orders: {
@@ -25,7 +28,8 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
-    const args: ReservoirListingParams = this.params.orders.map(order => {
+    const args: ReservoirListingParams[] = []
+    for (const order of this.params.orders) {
       let options = {}
       if (order.orderIdToReplace) {
         options = {
@@ -41,9 +45,9 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
           },
         }
       }
-
-      const royalties = getProjectRoyalties(order.token, this.chain)
-      return {
+      const royalties = await getProjectRoyalties(order.token)
+      if (!royalties) throw new Error("Royalties not found")
+      args.push({
         token: `${order.token}:${order.tokenId}`,
         weiPrice: order.price,
         orderbook: RESERVOIR_ORDERBOOK,
@@ -51,9 +55,9 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
         options: options,
         automatedRoyalties: false,
         expirationTime: order.expiration ? order.expiration : undefined,
-        customRoyalties: [],
-      }
-    })
+        customRoyalties: processOverridenRoyalties(royalties, this.chain),
+      })
+    }
     const transactionHash = await listToken(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,

@@ -1,3 +1,4 @@
+import { config } from "@fxhash/config"
 import { Qu_GetEthSecondarySplits } from "@fxhash/gql"
 import gqlClient from "@fxhash/gql-client"
 import { BlockchainType } from "@fxhash/shared"
@@ -18,34 +19,34 @@ export type BasisPointRoyalties = {
 }
 
 export async function getProjectRoyalties(
-  projectId: string,
-  chain: BlockchainType
-): Promise<Royalties[] | undefined> {
+  projectId: string
+): Promise<Royalties | undefined> {
   const royalties = await gqlClient.query(Qu_GetEthSecondarySplits, {
-    where: {
-      id: {
-        _eq: projectId,
-      },
-      chain: {
-        _eq: chain === BlockchainType.ETHEREUM ? "ETHEREUM" : "BASE",
-      },
-    },
+    id: projectId,
   })
-  return royalties.data?.onchain?.eth_secondary_splits
+  return royalties.data?.onchain?.eth_secondary_splits_by_pk
 }
 
 export function processOverridenRoyalties(
-  royalties: Royalties
+  royalties: Royalties,
+  chain: BlockchainType
 ): BasisPointRoyalties[] {
-  const addressToModify = "0x1"
+  const addressToModify =
+    chain === BlockchainType.ETHEREUM
+      ? config.eth.config.ethFeeReceiver
+      : config.base.config.ethFeeReceiver
   const percentageToSubtract = 50
   const processedRoyalties: BasisPointRoyalties[] = []
 
   const fxhashIndex = royalties.receivers.indexOf(addressToModify)
+  if (fxhashIndex === -1) {
+    throw new Error("FXHASH fee receiver address not found in royalties")
+  }
   const fxhashAllocation = royalties.allocations[fxhashIndex]
   processedRoyalties.push({
     receiver: addressToModify,
-    basis_points: fxhashAllocation - percentageToSubtract,
+    basis_points:
+      fxhashAllocation / royalties.basis_points - percentageToSubtract,
   })
   const delta = Math.floor(
     percentageToSubtract / (royalties.receivers.length - 1)
@@ -54,7 +55,7 @@ export function processOverridenRoyalties(
     if (i !== fxhashIndex) {
       processedRoyalties.push({
         receiver: royalties.receivers[i],
-        basis_points: royalties.allocations[i] + delta,
+        basis_points: royalties.allocations[i] / royalties.basis_points + delta,
       })
     }
   }
