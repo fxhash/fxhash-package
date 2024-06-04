@@ -1,12 +1,12 @@
 import { useEffect } from "react"
 import { invariant } from "@fxhash/shared"
 import { AccountInfo, BeaconEvent } from "@airgap/beacon-sdk"
-import { TezosWalletsConfig } from "./Wallets.js"
 import { TezosWalletManager } from "@fxhash/tez"
 import { config as fxhashConfig } from "@fxhash/config"
-import { useWallets } from "../index.js"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { TezosToolkit } from "@taquito/taquito"
+import { TezosWalletsConfig } from "./Client.js"
+import { useClient } from "../index.js"
 
 interface TezosWalletProps {
   config: TezosWalletsConfig
@@ -14,7 +14,7 @@ interface TezosWalletProps {
 
 export function TezosWallet(props: TezosWalletProps) {
   const { config } = props
-  const { setTezosWalletManager } = useWallets()
+  const { setTezosWalletManager } = useClient()
 
   function createAccountSetHandler(
     wallet: BeaconWallet,

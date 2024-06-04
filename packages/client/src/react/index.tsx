@@ -1,6 +1,4 @@
 export * from "./provider/Client.js"
-export * from "./provider/Wallets.js"
 export * from "./hooks/useClient.js"
-export * from "./hooks/useWallets.js"
 export * from "./hooks/useEthereumWallet.js"
 export * from "./hooks/useTezosWallet.js"

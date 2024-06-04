@@ -1,6 +1,5 @@
 import { BlockchainType, invariant } from "@fxhash/shared"
 import { useClient } from "./useClient.js"
-import { useWallets } from "./useWallets.js"
 import { TezosWalletManager } from "@fxhash/tez"
 import { AuthenticationResult } from "@fxhash/gql"
 
@@ -10,8 +9,7 @@ export function useTezosWallet(): {
   authenticate: () => Promise<AuthenticationResult>
   connect: () => Promise<void>
 } {
-  const { client } = useClient()
-  const { tezosWalletManager, config } = useWallets()
+  const { client, tezosWalletManager, config } = useClient()
 
   async function authenticate() {
     invariant(tezosWalletManager, "Tezos wallet manager is not connected")

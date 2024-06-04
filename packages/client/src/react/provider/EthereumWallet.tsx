@@ -5,7 +5,7 @@ import {
   useWalletClient,
   usePublicClient,
 } from "wagmi"
-import { useWallets } from "../index.js"
+import { useClient } from "../index.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { useMemo } from "react"
 import { invariant } from "@fxhash/shared"
@@ -23,7 +23,7 @@ export function EthereumWallet() {
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const signer = useEthersSigner()
-  const { setEthereumWalletManager } = useWallets()
+  const { setEthereumWalletManager } = useClient()
 
   useAccountEffect({
     onConnect: async data => {
