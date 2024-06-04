@@ -1794,7 +1794,6 @@ input RefreshInput {
 input SetFarcasterHandleInput {
   id: String!
   message: String!
-  nonce: String!
   signature: String!
 }
 

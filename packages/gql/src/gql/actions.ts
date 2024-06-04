@@ -14,6 +14,7 @@ export const Mu_GenerateChallenge = graphql(`
   mutation GenerateChallenge($input: ChallengeInput!) {
     generate_challenge(input: $input) {
       id
+      text
     }
   }
 `)
