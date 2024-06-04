@@ -52,8 +52,16 @@ export interface IFxhashEnvConfig {
   referrerShare: number
   cloudflareTurnstileSiteKey: string
   cloudflareTurnstileSiteKeyV2: string
-  fxhashPrimaryFee: number
-  fxhashSecondaryFee: number
+  fxhashFees: {
+    tez: {
+      primary: number
+      secondary: number
+    }
+    eth: {
+      primary: number
+      secondary: number
+    }
+  }
   syndicateProjectId: string
   awsS3Bucket: string
   awsS3Region: string
@@ -197,8 +205,16 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
+        fxhashFees: {
+          eth: {
+            primary: 1000,
+            secondary: 2500,
+          },
+          tez: {
+            primary: 500,
+            secondary: 250,
+          },
+        },
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
         awsS3Region: "us-east-1",
@@ -221,8 +237,16 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
+        fxhashFees: {
+          eth: {
+            primary: 1000,
+            secondary: 2500,
+          },
+          tez: {
+            primary: 500,
+            secondary: 250,
+          },
+        },
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
         awsS3Region: "us-east-1",
@@ -245,8 +269,16 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
+        fxhashFees: {
+          eth: {
+            primary: 1000,
+            secondary: 2500,
+          },
+          tez: {
+            primary: 500,
+            secondary: 250,
+          },
+        },
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
         awsS3Region: "us-east-1",
@@ -269,8 +301,16 @@ export const fxhashConfig: IFxhashConfig = {
          * projects breaking.
          * https://github.com/fxhash/monorepo/issues/701
          */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
+        fxhashFees: {
+          eth: {
+            primary: 1000,
+            secondary: 2500,
+          },
+          tez: {
+            primary: 500,
+            secondary: 250,
+          },
+        },
         syndicateProjectId: "398ad73d-341c-4861-a038-f0ae1ca58e07",
         awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
         awsS3Region: "us-east-1",

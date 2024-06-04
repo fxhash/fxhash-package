@@ -141,8 +141,8 @@ export interface ConfigInfo {
  * static and instanciated at runtime from the config.
  */
 export const onchainConfig: ConfigInfo = {
-  secondaryFeeAllocation: config.config.fxhashSecondaryFee,
-  primaryFeeAllocation: config.config.fxhashPrimaryFee,
+  secondaryFeeAllocation: config.config.fxhashFees.eth.secondary,
+  primaryFeeAllocation: config.config.fxhashFees.eth.primary,
   lockTime: config.config.projectLockTime,
   referrerShare: BigInt(config.config.referrerShare),
   defaultMetadataURI: config.apis.ethMetadata,
