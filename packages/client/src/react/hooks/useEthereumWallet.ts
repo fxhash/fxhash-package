@@ -8,6 +8,7 @@ export function useEthereumWallet(): {
   ethereumWalletManager: EthereumWalletManager | null
   connected: boolean
   authenticate: () => Promise<AuthenticationResult>
+  connect: () => Promise<void>
 } {
   const { ethereumWalletManager } = useWallets()
   const { client } = useClient()
@@ -27,5 +28,8 @@ export function useEthereumWallet(): {
     ethereumWalletManager,
     connected: ethereumWalletManager !== null,
     authenticate,
+    connect: async () => {
+      console.log("use connectkit modal")
+    },
   }
 }
