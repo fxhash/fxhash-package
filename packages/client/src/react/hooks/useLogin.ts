@@ -3,6 +3,7 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { TezosToolkit } from "@taquito/taquito"
 import { BlockchainType } from "@fxhash/shared"
+import { useFxhashWallets } from "./useFxhashWallets.js"
 
 interface UseLoginHookOptions {
   [BlockchainType.TEZOS]?: {
