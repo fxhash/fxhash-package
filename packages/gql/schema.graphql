@@ -448,6 +448,14 @@ type ChallengeResult {
   text: String!
 }
 
+enum EWalletOperatorState {
+  AVAILABLE
+  EMPTY
+  INITIALIZING
+  PREPARING
+  WAITING_CONFIRMATION
+}
+
 """
 columns and relationships of "Event"
 """
@@ -734,12 +742,17 @@ input Int_comparison_exp {
   _nin: [Int!]
 }
 
+type MailTemplate {
+  id: String!
+  name: String!
+}
+
 """
 columns and relationships of "Media"
 """
 type Media {
   createdAt: timestamptz!
-  etag: String
+  etag: String!
   id: uuid!
   name: String!
 
@@ -1779,14 +1792,14 @@ input RefreshInput {
 }
 
 input SetFarcasterHandleInput {
-  accountId: String!
+  id: String!
   message: String!
   nonce: String!
   signature: String!
 }
 
 type SetFarcasterHandleResult {
-  handle: String
+  handle: String!
 }
 
 type SetWhitelistOutput {
@@ -1910,6 +1923,12 @@ type Wallet {
     """filter the rows returned"""
     where: user_bool_exp
   ): [user!]!
+}
+
+type WalletRpc {
+  active: Boolean!
+  available: Boolean!
+  url: String!
 }
 
 """
@@ -5572,7 +5591,7 @@ type generative_token {
     where: reserve_bool_exp
   ): [reserve!]!
   royalties: Int!
-  slug: String
+  slug: String!
 
   """An array relationship"""
   splits(
@@ -13479,9 +13498,12 @@ type query_root {
 
   """fetch data from the table: "Featured" using primary key columns"""
   Featured_by_pk(id: Int!): Featured
+  mailTemplates: [MailTemplate!]!
+  managedWalletState(publicKey: String!): EWalletOperatorState
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+  walletRpcs: [WalletRpc!]
 }
 
 input random_objkt_generative_token_args {

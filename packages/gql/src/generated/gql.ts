@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation CreateWhitelist($whitelist: jsonb!) {\n    set_whitelist(whitelist: $whitelist) {\n      merkleRoot\n      message\n      success\n    }\n  }\n": types.CreateWhitelistDocument,
+    "\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n    }\n  }\n": types.GenerateChallengeDocument,
     "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_BaseDetailsFragmentDoc,
     "\n  fragment Account_Wallets on Account {\n    wallets {\n      ...Wallet_BaseDetails\n    }\n    mainWallet {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_WalletsFragmentDoc,
     "\n  query GetAccounts($where: Account_bool_exp = {}) {\n    offchain {\n      Account(where: $where) {\n        ...Account_BaseDetails\n      }\n    }\n  }\n": types.GetAccountsDocument,
@@ -59,6 +60,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateWhitelist($whitelist: jsonb!) {\n    set_whitelist(whitelist: $whitelist) {\n      merkleRoot\n      message\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation CreateWhitelist($whitelist: jsonb!) {\n    set_whitelist(whitelist: $whitelist) {\n      merkleRoot\n      message\n      success\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
