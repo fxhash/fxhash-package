@@ -3,7 +3,7 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { TezosToolkit } from "@taquito/taquito"
 import { BlockchainType } from "@fxhash/shared"
-import { useFxhashWallets } from "./useFxhashWallets.js"
+import { useWallets } from "./useWallets.js"
 
 interface UseLoginHookOptions {
   [BlockchainType.TEZOS]?: {
@@ -12,8 +12,8 @@ interface UseLoginHookOptions {
   }
 }
 
-export function useLogin(options?: UseLoginHookOptions) {
-  const { tezosWalletManager, setTezosWalletManager } = useFxhashWallets()
+export function useTezosWallet(options?: UseLoginHookOptions) {
+  const { tezosWalletManager, setTezosWalletManager } = useWallets()
   const [isConnecting, setIsConnecting] = useState(false)
   const [error, setError] = useState<Error | undefined>(undefined)
 
