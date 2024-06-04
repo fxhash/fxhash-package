@@ -11,3 +11,10 @@ export class UnexpectedError extends Error {
     this.name = "UnexpectedError"
   }
 }
+
+export class SignMessageError extends Error {
+  constructor() {
+    super("Sign message error")
+    this.name = "SignMessageError"
+  }
+}
