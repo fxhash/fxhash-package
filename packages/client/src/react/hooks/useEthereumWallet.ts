@@ -1,48 +1,31 @@
-import {
-  Config,
-  useConnectorClient,
-  useAccountEffect,
-  useWalletClient,
-  usePublicClient,
-} from "wagmi"
+import { BlockchainType, invariant } from "@fxhash/shared"
 import { useWallets } from "./useWallets.js"
-import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
-import { useMemo } from "react"
-import { invariant } from "@fxhash/shared"
-import { config } from "@fxhash/config"
+import { useClient } from "./useClient.js"
+import { EthereumWalletManager } from "@fxhash/eth"
+import { AuthenticationResult } from "@fxhash/gql"
 
-/**
- * Hook to convert a viem Wallet Client to an ethers.js Signer.
- */
-function useEthersSigner({ chainId }: { chainId?: number } = {}) {
-  const { data: client } = useConnectorClient<Config>({ chainId })
-  return useMemo(() => (client ? clientToSigner(client) : undefined), [client])
-}
-
-export function useEthereumWallet() {
-  const { data: walletClient } = useWalletClient()
-  const publicClient = usePublicClient()
-  const signer = useEthersSigner()
-  const { setEthereumWalletManager } = useWallets()
-
-  useAccountEffect({
-    onConnect: async data => {
-      invariant(publicClient, "Public client not available")
-      invariant(walletClient, "Wallet client not available")
-      invariant(signer, "Signer not available")
-      invariant(data.address, "Address not available")
-
-      const ewm = new EthereumWalletManager({
-        walletClient,
-        publicClient,
-        rpcNodes: config.eth.apis.rpcs,
-        address: data.address,
-        signer,
-      })
-      setEthereumWalletManager(ewm)
-    },
-    onDisconnect: async () => {
-      setEthereumWalletManager(null)
-    },
-  })
+export function useEthereumWallet(): {
+  ethereumWalletManager: EthereumWalletManager | null
+  connected: boolean
+  authenticate: () => Promise<AuthenticationResult>
+} {
+  const { ethereumWalletManager } = useWallets()
+  const { client } = useClient()
+  async function authenticate() {
+    invariant(ethereumWalletManager, "Ethereum wallet manager is not connected")
+    const { text, id } = await client.generateChallenge(
+      BlockchainType.ETHEREUM,
+      ethereumWalletManager.address
+    )
+    const sig = await ethereumWalletManager.signMessage(text)
+    if (sig.isFailure()) {
+      throw new Error("Failed to sign message")
+    }
+    return client.authenticate(id, sig.value.signature)
+  }
+  return {
+    ethereumWalletManager,
+    connected: ethereumWalletManager !== null,
+    authenticate,
+  }
 }

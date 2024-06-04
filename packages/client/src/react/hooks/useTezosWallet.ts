@@ -1,42 +1,34 @@
-import { useState } from "react"
-import { TezosWalletManager } from "@fxhash/tez"
-import { BeaconWallet } from "@taquito/beacon-wallet"
-import { TezosToolkit } from "@taquito/taquito"
-import { BlockchainType } from "@fxhash/shared"
+import { BlockchainType, invariant } from "@fxhash/shared"
+import { useClient } from "./useClient.js"
 import { useWallets } from "./useWallets.js"
+import { TezosWalletManager } from "@fxhash/tez"
+import { AuthenticationResult } from "@fxhash/gql"
 
-interface UseLoginHookOptions {
-  [BlockchainType.TEZOS]?: {
-    tezosToolkit?: TezosToolkit
-    beaconWallet?: BeaconWallet
-  }
-}
+export function useTezosWallet(): {
+  tezosWalletManager: TezosWalletManager | null
+  connected: boolean
+  authenticate: () => Promise<AuthenticationResult>
+} {
+  const { client } = useClient()
+  const { tezosWalletManager } = useWallets()
 
-export function useTezosWallet(options?: UseLoginHookOptions) {
-  const { tezosWalletManager, setTezosWalletManager } = useWallets()
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [error, setError] = useState<Error | undefined>(undefined)
-
-  const tezOptions = options?.[BlockchainType.TEZOS]
-  const handleConnectTezosWallet = async () => {
-    try {
-      setIsConnecting(true)
-      const tezosWalletManager = await TezosWalletManager.fromBeaconWallet({
-        tezosToolkit: tezOptions?.tezosToolkit,
-        wallet: tezOptions?.beaconWallet,
-      })
-      setTezosWalletManager(tezosWalletManager)
-    } catch (e) {
-      setError(e as Error)
-    } finally {
-      setIsConnecting(false)
+  async function authenticate() {
+    invariant(tezosWalletManager, "Tezos wallet manager is not connected")
+    const { text, id } = await client.generateChallenge(
+      BlockchainType.TEZOS,
+      tezosWalletManager.address
+    )
+    const sig = await tezosWalletManager.signMessage(text)
+    if (sig.isFailure()) {
+      throw new Error("Failed to sign message")
     }
+    const publicKey = await tezosWalletManager.getPublicKey()
+    return client.authenticate(id, sig.value.signature, publicKey)
   }
 
   return {
-    isConnecting,
-    error,
-    handleConnectTezosWallet,
     tezosWalletManager,
+    connected: tezosWalletManager !== null,
+    authenticate,
   }
 }
