@@ -22,7 +22,10 @@ export function TezosWallet(props: TezosWalletProps) {
   ) {
     return async function handleAccountSet(account?: AccountInfo) {
       console.log("conntect tez", account)
-      if (!account) return
+      if (!account) {
+        setTezosWalletManager(null)
+        return
+      }
       tezosToolkit.setWalletProvider(config.beaconWallet)
 
       const twm = new TezosWalletManager({

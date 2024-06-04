@@ -57,7 +57,6 @@ export function ClientProvider(
     <ClientContext.Provider
       value={{
         client: client.current,
-
         tezosWalletManager,
         setTezosWalletManager,
         ethereumWalletManager,
