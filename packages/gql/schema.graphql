@@ -401,6 +401,11 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
+input AuthenticationInput {
+  id: String!
+  signature: String!
+}
+
 type AuthenticationResult {
   accessToken: String!
   refreshToken: String!
@@ -8564,6 +8569,7 @@ input moderation_reason_stream_cursor_value_input {
 
 """mutation root"""
 type mutation_root {
+  authenticate(input: AuthenticationInput!): AuthenticationResult
   generate_challenge(input: ChallengeInput!): ChallengeResult
   offchain: offchain_mutation_frontend
   refresh(input: RefreshInput!): AuthenticationResult
