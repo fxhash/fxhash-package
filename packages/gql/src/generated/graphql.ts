@@ -350,7 +350,6 @@ export type AccountsRoles_Stream_Cursor_Value_Input = {
 
 export type AuthenticationInput = {
   id: Scalars['String']['input'];
-  publicKey?: InputMaybe<Scalars['String']['input']>;
   signature: Scalars['String']['input'];
 };
 
@@ -396,6 +395,14 @@ export type ChallengeResult = {
   id: Scalars['String']['output'];
   text: Scalars['String']['output'];
 };
+
+export enum EWalletOperatorState {
+  Available = 'AVAILABLE',
+  Empty = 'EMPTY',
+  Initializing = 'INITIALIZING',
+  Preparing = 'PREPARING',
+  WaitingConfirmation = 'WAITING_CONFIRMATION'
+}
 
 /** columns and relationships of "Event" */
 export type Event = {
@@ -635,6 +642,12 @@ export type Int_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['Int']['input']>;
   _neq?: InputMaybe<Scalars['Int']['input']>;
   _nin?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type MailTemplate = {
+  __typename?: 'MailTemplate';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
 };
 
 /** columns and relationships of "Media" */
@@ -1470,6 +1483,17 @@ export type RefreshInput = {
   refreshToken: Scalars['String']['input'];
 };
 
+export type SetFarcasterHandleInput = {
+  id: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+  signature: Scalars['String']['input'];
+};
+
+export type SetFarcasterHandleResult = {
+  __typename?: 'SetFarcasterHandleResult';
+  handle: Scalars['String']['output'];
+};
+
 export type SetWhitelistOutput = {
   __typename?: 'SetWhitelistOutput';
   merkleRoot?: Maybe<Scalars['String']['output']>;
@@ -1559,6 +1583,13 @@ export type WalletWalletUserArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<User_Order_By>>;
   where?: InputMaybe<User_Bool_Exp>;
+};
+
+export type WalletRpc = {
+  __typename?: 'WalletRpc';
+  active: Scalars['Boolean']['output'];
+  available: Scalars['Boolean']['output'];
+  url: Scalars['String']['output'];
 };
 
 /** order by aggregate values of table "Wallet" */
@@ -5853,15 +5884,12 @@ export type Market_Stats = {
   floor_change7d?: Maybe<Scalars['numeric']['output']>;
   floor_change24?: Maybe<Scalars['numeric']['output']>;
   floor_change30d?: Maybe<Scalars['numeric']['output']>;
-  floor_fiat?: Maybe<Scalars['numeric']['output']>;
   from?: Maybe<Scalars['timestamptz']['output']>;
   /** An object relationship */
   generative_token: Generative_Token;
   highest_sold?: Maybe<Scalars['numeric']['output']>;
-  highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
   listed?: Maybe<Scalars['Int']['output']>;
   lowest_sold?: Maybe<Scalars['numeric']['output']>;
-  lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
   median?: Maybe<Scalars['numeric']['output']>;
   prim_volume?: Maybe<Scalars['numeric']['output']>;
   prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
@@ -5906,14 +5934,11 @@ export type Market_Stats_Bool_Exp = {
   floor_change7d?: InputMaybe<Numeric_Comparison_Exp>;
   floor_change24?: InputMaybe<Numeric_Comparison_Exp>;
   floor_change30d?: InputMaybe<Numeric_Comparison_Exp>;
-  floor_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   from?: InputMaybe<Timestamptz_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   highest_sold?: InputMaybe<Numeric_Comparison_Exp>;
-  highest_sold_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   listed?: InputMaybe<Int_Comparison_Exp>;
   lowest_sold?: InputMaybe<Numeric_Comparison_Exp>;
-  lowest_sold_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   median?: InputMaybe<Numeric_Comparison_Exp>;
   prim_volume?: InputMaybe<Numeric_Comparison_Exp>;
   prim_volume_fiat?: InputMaybe<Numeric_Comparison_Exp>;
@@ -6310,14 +6335,11 @@ export type Market_Stats_Order_By = {
   floor_change7d?: InputMaybe<Order_By>;
   floor_change24?: InputMaybe<Order_By>;
   floor_change30d?: InputMaybe<Order_By>;
-  floor_fiat?: InputMaybe<Order_By>;
   from?: InputMaybe<Order_By>;
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   highest_sold?: InputMaybe<Order_By>;
-  highest_sold_fiat?: InputMaybe<Order_By>;
   listed?: InputMaybe<Order_By>;
   lowest_sold?: InputMaybe<Order_By>;
-  lowest_sold_fiat?: InputMaybe<Order_By>;
   median?: InputMaybe<Order_By>;
   prim_volume?: InputMaybe<Order_By>;
   prim_volume_fiat?: InputMaybe<Order_By>;
@@ -6364,19 +6386,13 @@ export enum Market_Stats_Select_Column {
   /** column name */
   FloorChange30d = 'floor_change30d',
   /** column name */
-  FloorFiat = 'floor_fiat',
-  /** column name */
   From = 'from',
   /** column name */
   HighestSold = 'highest_sold',
   /** column name */
-  HighestSoldFiat = 'highest_sold_fiat',
-  /** column name */
   Listed = 'listed',
   /** column name */
   LowestSold = 'lowest_sold',
-  /** column name */
-  LowestSoldFiat = 'lowest_sold_fiat',
   /** column name */
   Median = 'median',
   /** column name */
@@ -6459,13 +6475,10 @@ export type Market_Stats_Stream_Cursor_Value_Input = {
   floor_change7d?: InputMaybe<Scalars['numeric']['input']>;
   floor_change24?: InputMaybe<Scalars['numeric']['input']>;
   floor_change30d?: InputMaybe<Scalars['numeric']['input']>;
-  floor_fiat?: InputMaybe<Scalars['numeric']['input']>;
   from?: InputMaybe<Scalars['timestamptz']['input']>;
   highest_sold?: InputMaybe<Scalars['numeric']['input']>;
-  highest_sold_fiat?: InputMaybe<Scalars['numeric']['input']>;
   listed?: InputMaybe<Scalars['Int']['input']>;
   lowest_sold?: InputMaybe<Scalars['numeric']['input']>;
-  lowest_sold_fiat?: InputMaybe<Scalars['numeric']['input']>;
   median?: InputMaybe<Scalars['numeric']['input']>;
   prim_volume?: InputMaybe<Scalars['numeric']['input']>;
   prim_volume_fiat?: InputMaybe<Scalars['numeric']['input']>;
@@ -7085,6 +7098,8 @@ export type Mutation_Root = {
   generate_challenge?: Maybe<ChallengeResult>;
   offchain?: Maybe<Offchain_Mutation_Frontend>;
   refresh?: Maybe<AuthenticationResult>;
+  /** given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile */
+  set_farcaster_handle?: Maybe<SetFarcasterHandleResult>;
   set_whitelist?: Maybe<SetWhitelistOutput>;
 };
 
@@ -7104,6 +7119,12 @@ export type Mutation_RootGenerate_ChallengeArgs = {
 /** mutation root */
 export type Mutation_RootRefreshArgs = {
   input: RefreshInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootSet_Farcaster_HandleArgs = {
+  input: SetFarcasterHandleInput;
 };
 
 
@@ -7155,7 +7176,7 @@ export type Objkt = {
   created_at: Scalars['timestamptz']['output'];
   display_uri?: Maybe<Scalars['bpchar']['output']>;
   duplicate?: Maybe<Scalars['Boolean']['output']>;
-  features?: Maybe<Scalars['jsonb']['output']>;
+  features?: Maybe<Scalars['json']['output']>;
   generation_hash?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   generative_token: Generative_Token;
@@ -7313,7 +7334,7 @@ export type Objkt_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   display_uri?: InputMaybe<Bpchar_Comparison_Exp>;
   duplicate?: InputMaybe<Boolean_Comparison_Exp>;
-  features?: InputMaybe<Jsonb_Comparison_Exp>;
+  features?: InputMaybe<Json_Comparison_Exp>;
   generation_hash?: InputMaybe<String_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   gentk_assign?: InputMaybe<Gentk_Assign_Bool_Exp>;
@@ -7523,7 +7544,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   display_uri?: InputMaybe<Scalars['bpchar']['input']>;
   duplicate?: InputMaybe<Scalars['Boolean']['input']>;
-  features?: InputMaybe<Scalars['jsonb']['input']>;
+  features?: InputMaybe<Scalars['json']['input']>;
   generation_hash?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
@@ -10795,9 +10816,12 @@ export type Query_Root = {
   Featured: Array<Featured>;
   /** fetch data from the table: "Featured" using primary key columns */
   Featured_by_pk?: Maybe<Featured>;
+  mailTemplates: Array<MailTemplate>;
+  managedWalletState?: Maybe<EWalletOperatorState>;
   mediaFullUrl: Scalars['String']['output'];
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
+  walletRpcs?: Maybe<Array<WalletRpc>>;
 };
 
 
@@ -10826,6 +10850,11 @@ export type Query_RootFeaturedArgs = {
 
 export type Query_RootFeatured_By_PkArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type Query_RootManagedWalletStateArgs = {
+  publicKey: Scalars['String']['input'];
 };
 
 
@@ -12667,6 +12696,13 @@ export type GetAccountWalletsQueryVariables = Exact<{
 
 export type GetAccountWalletsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } }> } | null };
 
+export type SetFarcasterHandleMutationVariables = Exact<{
+  input: SetFarcasterHandleInput;
+}>;
+
+
+export type SetFarcasterHandleMutation = { __typename?: 'mutation_root', set_farcaster_handle?: { __typename?: 'SetFarcasterHandleResult', handle: string } | null };
+
 export type Project_BaseDetailsFragment = { __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> };
 
 export type Project_UserSecretsFragment = { __typename?: 'Project', state: string };
@@ -12803,6 +12839,7 @@ export const GenerateChallengeDocument = {"kind":"Document","definitions":[{"kin
 export const AuthenticateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Authenticate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuthenticationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<AuthenticateMutation, AuthenticateMutationVariables>;
 export const GetAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountsQuery, GetAccountsQueryVariables>;
 export const GetAccountWalletsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccountWallets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_Wallets"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_Wallets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mainWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountWalletsQuery, GetAccountWalletsQueryVariables>;
+export const SetFarcasterHandleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SetFarcasterHandle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SetFarcasterHandleInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"set_farcaster_handle"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]} as unknown as DocumentNode<SetFarcasterHandleMutation, SetFarcasterHandleMutationVariables>;
 export const GetAllProjectsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllProjects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllProjectsQuery, GetAllProjectsQueryVariables>;
 export const GetAllProjectsAfterDateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllProjectsAfterDate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterDate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"timestamptz"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"releaseAt"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_gte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterDate"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllProjectsAfterDateQuery, GetAllProjectsAfterDateQueryVariables>;
 export const GetUserSubmissionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserSubmissions"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_UserSecrets"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_UserSecrets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]} as unknown as DocumentNode<GetUserSubmissionsQuery, GetUserSubmissionsQueryVariables>;
