@@ -22,6 +22,5 @@ export const tezosMainnetApis: ITezosApis = {
     "https://mainnet.smartpy.io",
     "https://mainnet.api.tez.ie",
     "https://teznode.letzbake.com",
-    "https://rpc.tzbeta.net",
   ],
 }

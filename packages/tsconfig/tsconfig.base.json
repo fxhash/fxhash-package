@@ -2,5 +2,8 @@
   "extends": [
     "@tsconfig/recommended/tsconfig.json",
     "./tsconfig.compiler.options.json"
-  ]
+  ],
+  "compilerOptions": {
+    "target": "ES2021"
+  }
 }

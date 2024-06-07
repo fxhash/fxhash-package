@@ -28,7 +28,7 @@ export const RESERVOIR_ORDER_KIND = "seaport-v1.5"
 const headers = {
   accept: "*/*",
   "content-type": "application/json",
-  "x-api-key": RESERVOIR_API_KEY,
+  "x-api-key": RESERVOIR_API_KEY ? RESERVOIR_API_KEY : "",
 }
 
 //Defines the supported API methods
@@ -52,15 +52,20 @@ export async function fetchReservoir<T>(
   chain: BlockchainType,
   method: API_METHODS,
   path: string,
-  body: string | undefined = undefined
+  body: string | undefined = undefined,
+  queryParams: { [key: string]: any } = {}
 ): Promise<T> {
   try {
-    const reservoirUrl = getConfigForChain(chain).apis?.reservoir
-    const response = await fetch(`${reservoirUrl}${path}`, {
-      method: method,
-      body: body,
-      headers: headers,
-    })
+    const params = new URLSearchParams(queryParams).toString()
+    const reservoirUrl = `${getConfigForChain(chain).apis?.reservoir}`
+    const response = await fetch(
+      `${reservoirUrl}${path}${params ? "?" + params : ""}`,
+      {
+        method: method,
+        body: body,
+        headers: headers,
+      }
+    )
     const data = await response.json()
     if (!response.ok) {
       throw new Error(
