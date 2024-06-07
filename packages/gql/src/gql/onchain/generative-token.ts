@@ -32,6 +32,7 @@ export const Qu_GenerativeTokenById = graphql(`
           }
           objkt {
             id
+            iteration
           }
           created_at
           issuer {
