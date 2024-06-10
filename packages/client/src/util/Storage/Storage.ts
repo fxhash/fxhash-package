@@ -24,7 +24,6 @@ export class Storage {
   }
 
   async setItem(key: string, value: StorageValue): Promise<void> {
-    console.log(key, value)
     this.driver.setItem(key, value)
   }
 
