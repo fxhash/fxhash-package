@@ -1,8 +1,7 @@
 import { GetSingleUserProfileResult } from "@/auth/profile.js"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useClient } from "./useClient.js"
-import { ClientContextEvent, WalletManagers, useLogin } from "../index.js"
-import { BlockchainType } from "@fxhash/shared"
+import { ClientContextEvent, useLogin } from "../index.js"
 
 interface UseProfileHookResult {
   profile: GetSingleUserProfileResult | null
@@ -10,7 +9,7 @@ interface UseProfileHookResult {
 }
 
 export function useProfile(): UseProfileHookResult {
-  const { client } = useClient()
+  const { client, isConnected } = useClient()
   const [profile, setProfile] = useState<GetSingleUserProfileResult | null>(
     null
   )
@@ -19,16 +18,10 @@ export function useProfile(): UseProfileHookResult {
       const profile = await client.getProfile()
       setProfile(profile)
     },
-    [ClientContextEvent.onDisconnect]: (
-      _,
-      data: { walletManagers: WalletManagers }
-    ) => {
-      // When there is no wallet connected we reset the profile
-      const hasWalletConnected =
-        data.walletManagers[BlockchainType.TEZOS] ||
-        data.walletManagers[BlockchainType.ETHEREUM]
-      if (!hasWalletConnected) setProfile(null)
-    },
   })
+  // When all wallets are disconnected, profile should be null
+  useEffect(() => {
+    if (profile && !isConnected) setProfile(null)
+  }, [isConnected, profile])
   return { profile, isAuthenticated: !!profile }
 }
