@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react"
 import { useClient } from "./useClient.js"
 import {
+  WalletManagers,
   ClientContextEvent,
   useEthereumWallet,
   useTezosWallet,
@@ -12,9 +13,13 @@ import { BlockchainType, PromiseResult } from "@fxhash/shared"
 interface UseLoginProps {
   onConnect?: (
     chain: BlockchainType,
-    manager: TezosWalletManager | EthereumWalletManager
+    manager: TezosWalletManager | EthereumWalletManager,
+    data: { walletManagers: WalletManagers }
   ) => void
-  onDisconnect?: (chain: BlockchainType) => void
+  onDisconnect?: (
+    chain: BlockchainType,
+    data: { walletManagers: WalletManagers }
+  ) => void
   onAuthenticate?: (chain: BlockchainType) => void
 }
 

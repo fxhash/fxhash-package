@@ -160,9 +160,11 @@ export function ClientProvider(
             emitEvent(ClientContextEvent.onConnect, chain, manager)
           }
         } else {
-          emitEvent(ClientContextEvent.onDisconnect, chain)
+          emitEvent(ClientContextEvent.onDisconnect, chain, {
+            walletManagers: next,
+          })
         }
-        // If we have no accessToken we need to authenticate
+        // If we receive a wallet but have no accessToken we need to authenticate
         // either from the refreshToken stored in the storage or by signing a message
         if (!client.current.accessToken && !!manager) {
           authenticate(chain, manager)
