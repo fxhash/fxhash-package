@@ -21,7 +21,6 @@ export function TezosWallet(props: TezosWalletProps) {
     tezosToolkit: TezosToolkit
   ) {
     return async function handleAccountSet(account?: AccountInfo) {
-      console.log("conntect tez", account)
       if (!account) {
         setWalletManager(BlockchainType.TEZOS, null)
         return
@@ -34,7 +33,6 @@ export function TezosWallet(props: TezosWalletProps) {
         rpcNodes: fxhashConfig.tez.apis.rpcs,
         address: account.address,
       })
-      console.log("conntect tez", twm)
       setWalletManager(BlockchainType.TEZOS, twm)
     }
   }

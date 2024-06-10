@@ -7,7 +7,7 @@ import {
 } from "wagmi"
 import { useClient } from "../index.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { BlockchainType, invariant } from "@fxhash/shared"
 import { config } from "@fxhash/config"
 
@@ -25,8 +25,8 @@ export function EthereumWallet() {
   const signer = useEthersSigner()
   const { setWalletManager } = useClient()
 
-  useAccountEffect({
-    onConnect: async data => {
+  const onConnect = useCallback(
+    async (data: { address: `0x${string}` }) => {
       invariant(publicClient, "Public client not available")
       invariant(walletClient, "Wallet client not available")
       invariant(signer, "Signer not available")
@@ -39,13 +39,17 @@ export function EthereumWallet() {
         address: data.address,
         signer,
       })
-      console.log("connect eth", ewm)
       setWalletManager(BlockchainType.ETHEREUM, ewm)
     },
-    onDisconnect: async () => {
-      console.log("disconnect eth")
-      setWalletManager(BlockchainType.ETHEREUM, null)
-    },
+    [setWalletManager, publicClient, walletClient, signer]
+  )
+  const onDisconnect = useCallback(async () => {
+    setWalletManager(BlockchainType.ETHEREUM, null)
+  }, [setWalletManager])
+
+  useAccountEffect({
+    onConnect,
+    onDisconnect,
   })
   return null
 }
