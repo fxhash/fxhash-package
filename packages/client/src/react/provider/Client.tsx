@@ -15,10 +15,12 @@ import { BeaconWallet } from "@taquito/beacon-wallet"
 import { EthereumWallet } from "./EthereumWallet.js"
 import { TezosWallet } from "./TezosWallet.js"
 import { TezosToolkit } from "@taquito/taquito"
+import { LocalStorageDriver, Storage } from "@/index.js"
 
 export enum ClientContextEvent {
   onConnect = "onConnect",
   onDisconnect = "onDisconnect",
+  onAuthenticate = "onAuthenticate",
 }
 
 export interface TezosWalletsConfig {
@@ -58,7 +60,7 @@ export interface ClientContext {
 }
 
 const defaultClientContext: ClientContext = {
-  client: new FxhashClient(),
+  client: new FxhashClient({ storage: new Storage(new LocalStorageDriver()) }),
   tezosWalletManager: null,
   ethereumWalletManager: null,
   setWalletManager: () => {},
@@ -81,7 +83,7 @@ export function ClientProvider(
   const [walletManagers, _setWalletManagers] = useState<WalletManagers>(
     defaultClientContext.walletManagers
   )
-  const client = useRef<FxhashClient>(new FxhashClient())
+  const client = useRef<FxhashClient>(defaultClientContext.client)
 
   const subscribers = useRef<{
     [key in ClientContextEvent]?: Array<(...args: any[]) => void>
@@ -94,8 +96,47 @@ export function ClientProvider(
     [subscribers]
   )
 
-  const twm = walletManagers[BlockchainType.TEZOS]
-  const ewm = walletManagers[BlockchainType.ETHEREUM]
+  async function authenticate(
+    chain: BlockchainType,
+    manager: TezosWalletManager | EthereumWalletManager
+  ) {
+    const account = await client.current.getAccountFromStorage()
+    let accessToken, refreshToken
+    if (account?.refreshToken) {
+      // TODO: Fetch new accessToken using refreshToken
+      emitEvent(ClientContextEvent.onAuthenticate, {
+        chain,
+        refreshToken: account.refreshToken,
+      })
+    } else {
+      const { text, id } = await client.current.generateChallenge(
+        chain,
+        manager.address
+      )
+      const sig = await manager.signMessage(text)
+      if (sig.isFailure()) {
+        return
+      }
+      let publicKey
+      if (chain === BlockchainType.TEZOS) {
+        publicKey = await (manager as TezosWalletManager).getPublicKey()
+      }
+      const res = await client.current.authenticate(
+        id,
+        sig.value.signature,
+        publicKey
+      )
+      accessToken = res.accessToken
+      refreshToken = res.refreshToken
+    }
+    const payload = {
+      chain,
+      accessToken,
+      refreshToken,
+    }
+    emitEvent(ClientContextEvent.onAuthenticate, payload)
+    return payload
+  }
 
   const setWalletManager = useCallback(
     (
@@ -108,11 +149,18 @@ export function ClientProvider(
         if (chain === BlockchainType.ETHEREUM) {
           next[BlockchainType.BASE] = next[BlockchainType.ETHEREUM]
         }
-        // TODO: Should we emit always or only when the manager changes from the existing one?
         if (manager) {
-          emitEvent(ClientContextEvent.onConnect, chain, manager)
+          // TODO: Should we emit always or only when the manager changes from the existing one?
+          if (manager !== walletManagers[chain]) {
+            emitEvent(ClientContextEvent.onConnect, chain, manager)
+          }
         } else {
           emitEvent(ClientContextEvent.onDisconnect, chain)
+        }
+        // If we have no accessToken we need to authenticate
+        // either from the refreshToken stored in the storage or by signing a message
+        if (!client.current.accessToken && !!manager) {
+          authenticate(chain, manager)
         }
         return next
       })
@@ -140,6 +188,9 @@ export function ClientProvider(
     },
     []
   )
+
+  const twm = walletManagers[BlockchainType.TEZOS]
+  const ewm = walletManagers[BlockchainType.ETHEREUM]
 
   return (
     <ClientContext.Provider

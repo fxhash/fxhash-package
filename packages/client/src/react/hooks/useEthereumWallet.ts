@@ -58,6 +58,7 @@ export function useEthereumWallet(): {
   function disconnect(): PromiseResult<void, Error> {
     return new Promise(resolve => {
       invariant(config.ETHEREUM, "Ethereum config not provided")
+      console.log(ethereumWalletManager)
       invariant(
         ethereumWalletManager,
         "Ethereum wallet manager is not connected"
@@ -66,6 +67,7 @@ export function useEthereumWallet(): {
       return resolve(success())
     })
   }
+
   return {
     ethereumWalletManager,
     connected: ethereumWalletManager !== null,

@@ -75,7 +75,7 @@ export function useTezosWallet(): {
             config.TEZOS.beaconWallet,
             "Tezos beacon wallet not provided"
           )
-          await config.TEZOS.beaconWallet.disconnect()
+          await config.TEZOS.beaconWallet.clearActiveAccount()
           resolve(success())
         } catch (e) {
           reject(e)

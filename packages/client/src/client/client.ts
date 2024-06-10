@@ -1,10 +1,15 @@
 import { gqlClient as defaultClient } from "@fxhash/gql-client"
 import { config } from "@fxhash/config"
-import { BlockchainType, JwtAccessTokenPayload } from "@fxhash/shared"
+import {
+  BlockchainType,
+  JwtAccessTokenPayload,
+  invariant,
+} from "@fxhash/shared"
 import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
 import { jwtDecode } from "jwt-decode"
 import { generateChallenge, authenticate } from "@/auth/index.js"
 import { Storage } from "@/util/Storage/Storage.js"
+import { getUserProfile } from "@/auth/profile.js"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
@@ -57,11 +62,26 @@ export class FxhashClient {
     // We store the account in the storage with a static key
     // This is used to retrieve the account in the future
     // For security reasons, we don't store the access token
-    this.storage.setItem(this.accountKey, {
+    await this.storage.setItem(this.accountKey, {
       id,
       refreshToken: res.refreshToken,
     })
     this.accessToken = res.accessToken
+    return res
+  }
+
+  async getAccountFromStorage(): Promise<{ id: string; refreshToken: string }> {
+    const account = (await this.storage.getItem(this.accountKey)) as any
+    return account
+  }
+
+  async getProfile() {
+    const account = await this.getAccountFromStorage()
+    invariant(account, "No account authenticated")
+    const res = await getUserProfile(
+      { id: { _eq: account.id } },
+      { gqlClient: this.gqlClient }
+    )
     return res
   }
 }

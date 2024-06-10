@@ -15,6 +15,7 @@ interface UseLoginProps {
     manager: TezosWalletManager | EthereumWalletManager
   ) => void
   onDisconnect?: (chain: BlockchainType) => void
+  onAuthenticate?: (chain: BlockchainType) => void
 }
 
 export function useLogin(props: UseLoginProps): {
@@ -44,24 +45,33 @@ export function useLogin(props: UseLoginProps): {
     }
   }, [props.onDisconnect])
 
+  useEffect(() => {
+    const { onAuthenticate } = props
+    if (!onAuthenticate) return
+    subscribe(ClientContextEvent.onAuthenticate, onAuthenticate)
+    return () => {
+      unsubscribe(ClientContextEvent.onAuthenticate, onAuthenticate)
+    }
+  }, [props.onAuthenticate])
+
   const isChainConnected = useCallback(
     (chain: BlockchainType) => !!walletManagers[chain],
-    []
+    [walletManagers]
   )
-  const connect = useCallback((chain: BlockchainType) => {
+  const connect = (chain: BlockchainType) => {
     if (chain === BlockchainType.ETHEREUM || chain === BlockchainType.BASE) {
       return connectEth()
     } else {
       return connectTez()
     }
-  }, [])
-  const disconnect = useCallback((chain: BlockchainType) => {
+  }
+  const disconnect = (chain: BlockchainType) => {
     if (chain === BlockchainType.ETHEREUM || chain === BlockchainType.BASE) {
       return disconnectEth()
     } else {
       return disconnectTez()
     }
-  }, [])
+  }
   return {
     isChainConnected,
     connect,

@@ -49,7 +49,7 @@ export function TezosWallet(props: TezosWalletProps) {
     beaconWallet.client
       .getActiveAccount()
       .then(createAccountSetHandler(beaconWallet, tezosToolkit))
-  }, [config])
+  }, [])
 
   return null
 }
