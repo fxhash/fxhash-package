@@ -43,6 +43,7 @@ export interface ClientContext {
   client: FxhashClient
   tezosWalletManager: TezosWalletManager | null
   ethereumWalletManager: EthereumWalletManager | null
+  isConnected: boolean
   setWalletManager: (
     chain: BlockchainType,
     manager: TezosWalletManager | EthereumWalletManager | null
@@ -60,6 +61,7 @@ export interface ClientContext {
 }
 
 const defaultClientContext: ClientContext = {
+  isConnected: false,
   client: new FxhashClient({ storage: new Storage(new LocalStorageDriver()) }),
   tezosWalletManager: null,
   ethereumWalletManager: null,
@@ -103,9 +105,14 @@ export function ClientProvider(
     const account = await client.current.getAccountFromStorage()
     let accessToken, refreshToken
     if (account?.refreshToken) {
-      const res = await client.current.refreshAccessToken()
-      accessToken = res.accessToken
-      refreshToken = res.refreshToken
+      try {
+        const res = await client.current.refreshAccessToken()
+        accessToken = res.accessToken
+        refreshToken = res.refreshToken
+      } catch (e) {
+        // TODO: Add retry
+        console.error(e)
+      }
     } else {
       const { text, id } = await client.current.generateChallenge(
         chain,
@@ -203,6 +210,7 @@ export function ClientProvider(
         config,
         subscribe,
         unsubscribe,
+        isConnected: !!twm || !!ewm,
       }}
     >
       <>
