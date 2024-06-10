@@ -6,6 +6,10 @@ import {
   RESERVOIR_ORDER_KIND,
 } from "@/services/Reservoir.js"
 import { TransactionType } from "@fxhash/shared"
+import {
+  getProjectRoyalties,
+  processOverridenRoyalties,
+} from "@/utils/royalties.js"
 
 export type TMakeOfferEthV1OperationParams = {
   orders: {
@@ -25,7 +29,8 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
-    const args: ReservoirPlaceBidParams = this.params.orders.map(order => {
+    const args: ReservoirPlaceBidParams = []
+    for (const order of this.params.orders) {
       let options = {}
       if (order.orderIdToReplace) {
         options = {
@@ -41,16 +46,20 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
           },
         }
       }
-      return {
+      const royalties = await getProjectRoyalties(order.token)
+      if (!royalties) throw new Error("Royalties not found")
+      args.push({
         token: `${order.token}:${order.tokenId}`,
         weiPrice: order.price,
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
-        automatedRoyalties: true,
-      }
-    })
+        automatedRoyalties: false,
+        customRoyalties: processOverridenRoyalties(royalties, this.chain),
+      })
+    }
+
     const transactionHash = await placeBid(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,

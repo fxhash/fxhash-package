@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation CreateWhitelist($whitelist: jsonb!) {\n    set_whitelist(whitelist: $whitelist) {\n      merkleRoot\n      message\n      success\n    }\n  }\n": types.CreateWhitelistDocument,
+    "\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n      text\n    }\n  }\n": types.GenerateChallengeDocument,
+    "\n  mutation Authenticate($input: AuthenticationInput!) {\n    authenticate(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.AuthenticateDocument,
     "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_BaseDetailsFragmentDoc,
     "\n  fragment Account_Wallets on Account {\n    wallets {\n      ...Wallet_BaseDetails\n    }\n    mainWallet {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_WalletsFragmentDoc,
     "\n  query GetAccounts($where: Account_bool_exp = {}) {\n    offchain {\n      Account(where: $where) {\n        ...Account_BaseDetails\n      }\n    }\n  }\n": types.GetAccountsDocument,
@@ -30,6 +32,7 @@ const documents = {
     "\n  query GetWhitelists($where: Whitelist_bool_exp = {}) {\n    offchain {\n      Whitelist(where: $where) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistsDocument,
     "\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistDocument,
     "\n  query GetEthPrimarySplits($where: eth_primary_splits_bool_exp = {}) {\n    onchain {\n      __typename\n      eth_primary_splits {\n        id\n        receiver\n        receivers\n        allocations\n        chain\n      }\n    }\n  }\n": types.GetEthPrimarySplitsDocument,
+    "\n  query GetEthSecondarySplits($id: String!) {\n    onchain {\n      eth_secondary_splits_by_pk(id: $id) {\n        allocations\n        basis_points\n        chain\n        id\n        receiver\n        receivers\n      }\n    }\n  }\n": types.GetEthSecondarySplitsDocument,
     "\n  query GetFrameData($id: String = \"\") {\n    onchain {\n      eth_frame_data_by_pk(id: $id) {\n        id\n        frame_minter_data\n      }\n    }\n  }\n": types.GetFrameDataDocument,
     "\n  fragment GenerativeToken_Pricing on generative_token {\n    pricing_fixeds {\n      price\n      opens_at\n    }\n    pricing_dutch_auctions {\n      levels\n      resting_price\n      final_price\n      decrement_duration\n      opens_at\n    }\n  }\n": types.GenerativeToken_PricingFragmentDoc,
     "\n  query Qu_GetObjectsOfTokenAndWallets(\n    $_eq: String = \"\"\n    $_iregex: String = \"\"\n  ) {\n    onchain {\n      objkt(\n        where: {\n          generative_token: { id: { _eq: $_eq } }\n          minter_id: { _iregex: $_iregex }\n        }\n        order_by: { created_at: desc }\n      ) {\n        id\n        minter_id\n        slug\n        capture_media_id\n      }\n    }\n  }\n": types.Qu_GetObjectsOfTokenAndWalletsDocument,
@@ -58,6 +61,14 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateWhitelist($whitelist: jsonb!) {\n    set_whitelist(whitelist: $whitelist) {\n      merkleRoot\n      message\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation CreateWhitelist($whitelist: jsonb!) {\n    set_whitelist(whitelist: $whitelist) {\n      merkleRoot\n      message\n      success\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n      text\n    }\n  }\n"): (typeof documents)["\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n      text\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation Authenticate($input: AuthenticationInput!) {\n    authenticate(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation Authenticate($input: AuthenticationInput!) {\n    authenticate(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -122,6 +133,10 @@ export function graphql(source: "\n  query GetWhitelist($merkleRoot: String = \"
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetEthPrimarySplits($where: eth_primary_splits_bool_exp = {}) {\n    onchain {\n      __typename\n      eth_primary_splits {\n        id\n        receiver\n        receivers\n        allocations\n        chain\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetEthPrimarySplits($where: eth_primary_splits_bool_exp = {}) {\n    onchain {\n      __typename\n      eth_primary_splits {\n        id\n        receiver\n        receivers\n        allocations\n        chain\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetEthSecondarySplits($id: String!) {\n    onchain {\n      eth_secondary_splits_by_pk(id: $id) {\n        allocations\n        basis_points\n        chain\n        id\n        receiver\n        receivers\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetEthSecondarySplits($id: String!) {\n    onchain {\n      eth_secondary_splits_by_pk(id: $id) {\n        allocations\n        basis_points\n        chain\n        id\n        receiver\n        receivers\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

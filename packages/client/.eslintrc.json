@@ -1,0 +1,6 @@
+{
+  "extends": ["@fxhash/eslint-config"],
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}

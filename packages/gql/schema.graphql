@@ -533,6 +533,17 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
+input AuthenticationInput {
+  id: String!
+  publicKey: String
+  signature: String!
+}
+
+type AuthenticationResult {
+  accessToken: String!
+  refreshToken: String!
+}
+
 scalar BlockchainNetwork
 
 """
@@ -563,6 +574,16 @@ input Boolean_comparison_exp {
   _lte: Boolean
   _neq: Boolean
   _nin: [Boolean!]
+}
+
+input ChallengeInput {
+  address: String!
+  chain: String!
+}
+
+type ChallengeResult {
+  id: String!
+  text: String!
 }
 
 """
@@ -874,21 +895,6 @@ Initial value of the column from where the streaming should start
 input Featured_stream_cursor_value_input {
   eventId: String
   id: Int
-}
-
-"""
-Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'.
-"""
-input Float_comparison_exp {
-  _eq: Float
-  _gt: Float
-  _gte: Float
-  _in: [Float!]
-  _is_null: Boolean
-  _lt: Float
-  _lte: Float
-  _neq: Float
-  _nin: [Float!]
 }
 
 """
@@ -2186,6 +2192,10 @@ input Project_updates {
   filter the rows which have to be updated
   """
   where: Project_bool_exp!
+}
+
+input RefreshInput {
+  refreshToken: String!
 }
 
 type SetWhitelistOutput {
@@ -5031,6 +5041,36 @@ type codex {
     """
     where: generative_token_bool_exp
   ): [generative_token!]!
+
+  """
+  An aggregate relationship
+  """
+  generative_tokens_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): generative_token_aggregate!
   id: String!
   locked: Boolean!
   token_version: generative_token_version!
@@ -5061,6 +5101,7 @@ input codex_bool_exp {
   _or: [codex_bool_exp!]
   author_id: String_comparison_exp
   generative_tokens: generative_token_bool_exp
+  generative_tokens_aggregate: generative_token_aggregate_bool_exp
   id: String_comparison_exp
   locked: Boolean_comparison_exp
   token_version: generative_token_version_comparison_exp
@@ -6784,7 +6825,7 @@ type generative_token {
     where: reserve_bool_exp
   ): [reserve!]!
   royalties: Int!
-  slug: String
+  slug: String!
 
   """
   An array relationship
@@ -6888,6 +6929,58 @@ type generative_token {
 }
 
 """
+aggregated selection of "generative_token"
+"""
+type generative_token_aggregate {
+  aggregate: generative_token_aggregate_fields
+  nodes: [generative_token!]!
+}
+
+input generative_token_aggregate_bool_exp {
+  bool_and: generative_token_aggregate_bool_exp_bool_and
+  bool_or: generative_token_aggregate_bool_exp_bool_or
+  count: generative_token_aggregate_bool_exp_count
+}
+
+input generative_token_aggregate_bool_exp_bool_and {
+  arguments: generative_token_select_column_generative_token_aggregate_bool_exp_bool_and_arguments_columns!
+  distinct: Boolean
+  filter: generative_token_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input generative_token_aggregate_bool_exp_bool_or {
+  arguments: generative_token_select_column_generative_token_aggregate_bool_exp_bool_or_arguments_columns!
+  distinct: Boolean
+  filter: generative_token_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input generative_token_aggregate_bool_exp_count {
+  arguments: [generative_token_select_column!]
+  distinct: Boolean
+  filter: generative_token_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "generative_token"
+"""
+type generative_token_aggregate_fields {
+  avg: generative_token_avg_fields
+  count(columns: [generative_token_select_column!], distinct: Boolean): Int!
+  max: generative_token_max_fields
+  min: generative_token_min_fields
+  stddev: generative_token_stddev_fields
+  stddev_pop: generative_token_stddev_pop_fields
+  stddev_samp: generative_token_stddev_samp_fields
+  sum: generative_token_sum_fields
+  var_pop: generative_token_var_pop_fields
+  var_samp: generative_token_var_samp_fields
+  variance: generative_token_variance_fields
+}
+
+"""
 order by aggregate values of table "generative_token"
 """
 input generative_token_aggregate_order_by {
@@ -6902,6 +6995,19 @@ input generative_token_aggregate_order_by {
   var_pop: generative_token_var_pop_order_by
   var_samp: generative_token_var_samp_order_by
   variance: generative_token_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type generative_token_avg_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
 }
 
 """
@@ -7000,6 +7106,45 @@ input generative_token_flag_enum_comparison_exp {
 }
 
 """
+aggregate max on columns
+"""
+type generative_token_max_fields {
+  author_id: String
+  balance: numeric
+  capture_media_id: bpchar
+
+  """
+  A computed field, executes function "token_chain_for_token"
+  """
+  chain: String
+  codex_id: String
+  created_at: timestamptz
+  display_uri: String
+  flag: generative_token_flag_enum
+  generative_uri: String
+  id: String
+  input_bytes_size: Int
+  iterations_count: numeric
+  labels: [Int!]
+  lock_end: timestamptz
+  locked_seconds: Int
+  metadata_uri: String
+  mint_opens_at: timestamptz
+  moderation_reason_id: String
+  name: String
+  open_editions_ends_at: timestamptz
+  original_supply: numeric
+  preview_input_bytes: String
+  royalties: Int
+  slug: String
+  supply: numeric
+  tags: [String!]
+  thumbnail_uri: String
+  updated_at: timestamptz
+  version: generative_token_version
+}
+
+"""
 order by max() on columns of table "generative_token"
 """
 input generative_token_max_order_by {
@@ -7031,6 +7176,45 @@ input generative_token_max_order_by {
   thumbnail_uri: order_by
   updated_at: order_by
   version: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type generative_token_min_fields {
+  author_id: String
+  balance: numeric
+  capture_media_id: bpchar
+
+  """
+  A computed field, executes function "token_chain_for_token"
+  """
+  chain: String
+  codex_id: String
+  created_at: timestamptz
+  display_uri: String
+  flag: generative_token_flag_enum
+  generative_uri: String
+  id: String
+  input_bytes_size: Int
+  iterations_count: numeric
+  labels: [Int!]
+  lock_end: timestamptz
+  locked_seconds: Int
+  metadata_uri: String
+  mint_opens_at: timestamptz
+  moderation_reason_id: String
+  name: String
+  open_editions_ends_at: timestamptz
+  original_supply: numeric
+  preview_input_bytes: String
+  royalties: Int
+  slug: String
+  supply: numeric
+  tags: [String!]
+  thumbnail_uri: String
+  updated_at: timestamptz
+  version: generative_token_version
 }
 
 """
@@ -7305,6 +7489,69 @@ enum generative_token_select_column {
 }
 
 """
+select "generative_token_aggregate_bool_exp_bool_and_arguments_columns" columns of table "generative_token"
+"""
+enum generative_token_select_column_generative_token_aggregate_bool_exp_bool_and_arguments_columns {
+  """
+  column name
+  """
+  enabled
+
+  """
+  column name
+  """
+  is_frame
+
+  """
+  column name
+  """
+  lock_price_for_reserves
+
+  """
+  column name
+  """
+  open_editions
+}
+
+"""
+select "generative_token_aggregate_bool_exp_bool_or_arguments_columns" columns of table "generative_token"
+"""
+enum generative_token_select_column_generative_token_aggregate_bool_exp_bool_or_arguments_columns {
+  """
+  column name
+  """
+  enabled
+
+  """
+  column name
+  """
+  is_frame
+
+  """
+  column name
+  """
+  lock_price_for_reserves
+
+  """
+  column name
+  """
+  open_editions
+}
+
+"""
+aggregate stddev on columns
+"""
+type generative_token_stddev_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
+}
+
+"""
 order by stddev() on columns of table "generative_token"
 """
 input generative_token_stddev_order_by {
@@ -7318,6 +7565,19 @@ input generative_token_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type generative_token_stddev_pop_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
+}
+
+"""
 order by stddev_pop() on columns of table "generative_token"
 """
 input generative_token_stddev_pop_order_by {
@@ -7328,6 +7588,19 @@ input generative_token_stddev_pop_order_by {
   original_supply: order_by
   royalties: order_by
   supply: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type generative_token_stddev_samp_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
 }
 
 """
@@ -7399,6 +7672,19 @@ input generative_token_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type generative_token_sum_fields {
+  balance: numeric
+  input_bytes_size: Int
+  iterations_count: numeric
+  locked_seconds: Int
+  original_supply: numeric
+  royalties: Int
+  supply: numeric
+}
+
+"""
 order by sum() on columns of table "generative_token"
 """
 input generative_token_sum_order_by {
@@ -7409,6 +7695,19 @@ input generative_token_sum_order_by {
   original_supply: order_by
   royalties: order_by
   supply: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type generative_token_var_pop_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
 }
 
 """
@@ -7425,6 +7724,19 @@ input generative_token_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type generative_token_var_samp_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
+}
+
+"""
 order by var_samp() on columns of table "generative_token"
 """
 input generative_token_var_samp_order_by {
@@ -7435,6 +7747,19 @@ input generative_token_var_samp_order_by {
   original_supply: order_by
   royalties: order_by
   supply: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type generative_token_variance_fields {
+  balance: Float
+  input_bytes_size: Float
+  iterations_count: Float
+  locked_seconds: Float
+  original_supply: Float
+  royalties: Float
+  supply: Float
 }
 
 """
@@ -7983,111 +8308,6 @@ type listing {
   id: String!
   is_inactive: Boolean
   issuer_id: String
-
-  """
-  An object relationship
-  """
-  marketStatByIdVersion: market_stats
-
-  """
-  An object relationship
-  """
-  marketStatByVersionId: market_stats
-
-  """
-  An array relationship
-  """
-  marketStatsHistoriesByFloorlistingversionFloorlistingid(
-    """
-    distinct select on columns
-    """
-    distinct_on: [market_stats_history_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [market_stats_history_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: market_stats_history_bool_exp
-  ): [market_stats_history!]!
-
-  """
-  An array relationship
-  """
-  marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid(
-    """
-    distinct select on columns
-    """
-    distinct_on: [market_stats_history_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [market_stats_history_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: market_stats_history_bool_exp
-  ): [market_stats_history!]!
-
-  """
-  An object relationship
-  """
-  market_stat: market_stats
-
-  """
-  An array relationship
-  """
-  market_stats_histories(
-    """
-    distinct select on columns
-    """
-    distinct_on: [market_stats_history_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [market_stats_history_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: market_stats_history_bool_exp
-  ): [market_stats_history!]!
   metadata(
     """
     JSON select path
@@ -8160,12 +8380,6 @@ input listing_bool_exp {
   id: String_comparison_exp
   is_inactive: Boolean_comparison_exp
   issuer_id: String_comparison_exp
-  marketStatByIdVersion: market_stats_bool_exp
-  marketStatByVersionId: market_stats_bool_exp
-  marketStatsHistoriesByFloorlistingversionFloorlistingid: market_stats_history_bool_exp
-  marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid: market_stats_history_bool_exp
-  market_stat: market_stats_bool_exp
-  market_stats_histories: market_stats_history_bool_exp
   metadata: jsonb_comparison_exp
   objkt: objkt_bool_exp
   objkt_id: String_comparison_exp
@@ -8226,12 +8440,6 @@ input listing_order_by {
   id: order_by
   is_inactive: order_by
   issuer_id: order_by
-  marketStatByIdVersion: market_stats_order_by
-  marketStatByVersionId: market_stats_order_by
-  marketStatsHistoriesByFloorlistingversionFloorlistingid_aggregate: market_stats_history_aggregate_order_by
-  marketStatsHistoriesByHighestsoldlistingversionHighestsoldlistingid_aggregate: market_stats_history_aggregate_order_by
-  market_stat: market_stats_order_by
-  market_stats_histories_aggregate: market_stats_history_aggregate_order_by
   metadata: order_by
   objkt: objkt_order_by
   objkt_id: order_by
@@ -8433,48 +8641,23 @@ input listing_variance_order_by {
 columns and relationships of "market_stats"
 """
 type market_stats {
-  average_sale_price: numeric
-  floor_listing_id: String
-  floor_listing_version: Int
+  floor: numeric
+  floor_change7d: numeric
+  floor_change24: numeric
+  floor_change30d: numeric
+  floor_fiat: numeric
   from: timestamptz
 
   """
   An object relationship
   """
   generative_token: generative_token!
-  highest_collection_offer: numeric
   highest_sold: numeric
-  highest_sold7d: numeric
-  highest_sold24: numeric
-  highest_sold30d: numeric
-  highest_sold_listing_id: String
-  highest_sold_listing_version: Int
+  highest_sold_fiat: numeric
   listed: Int
-
-  """
-  An object relationship
-  """
-  listing: listing
-
-  """
-  An object relationship
-  """
-  listingByFloorlistingversionFloorlistingid: listing
-
-  """
-  An object relationship
-  """
-  listingByLowestsoldlistingidLowestsoldlistingversion: listing
-  longest_average_held_in_seconds: bigint
   lowest_sold: numeric
-  lowest_sold7d: numeric
-  lowest_sold24: numeric
-  lowest_sold30d: numeric
-  lowest_sold_listing_id: String
-  lowest_sold_listing_version: Int
+  lowest_sold_fiat: numeric
   median: numeric
-  percent_listed: Float
-  percent_never_listed: Float
   prim_volume: numeric
   prim_volume_fiat: numeric
   prim_volume_nb: Int
@@ -8492,6 +8675,21 @@ type market_stats {
   sec_volume_nb30d: Int
   to: timestamptz
   token_id: String!
+  total_volume: numeric
+  total_volume7d: numeric
+  total_volume24: numeric
+  total_volume30d: numeric
+  total_volume_change7d: numeric
+  total_volume_change24: numeric
+  total_volume_change30d: numeric
+  total_volume_fiat: numeric
+  total_volume_fiat7d: numeric
+  total_volume_fiat24: numeric
+  total_volume_fiat30d: numeric
+  total_volume_nb: Int
+  total_volume_nb7d: Int
+  total_volume_nb24: Int
+  total_volume_nb30d: Int
 }
 
 """
@@ -8501,32 +8699,19 @@ input market_stats_bool_exp {
   _and: [market_stats_bool_exp!]
   _not: market_stats_bool_exp
   _or: [market_stats_bool_exp!]
-  average_sale_price: numeric_comparison_exp
-  floor_listing_id: String_comparison_exp
-  floor_listing_version: Int_comparison_exp
+  floor: numeric_comparison_exp
+  floor_change7d: numeric_comparison_exp
+  floor_change24: numeric_comparison_exp
+  floor_change30d: numeric_comparison_exp
+  floor_fiat: numeric_comparison_exp
   from: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
-  highest_collection_offer: numeric_comparison_exp
   highest_sold: numeric_comparison_exp
-  highest_sold7d: numeric_comparison_exp
-  highest_sold24: numeric_comparison_exp
-  highest_sold30d: numeric_comparison_exp
-  highest_sold_listing_id: String_comparison_exp
-  highest_sold_listing_version: Int_comparison_exp
+  highest_sold_fiat: numeric_comparison_exp
   listed: Int_comparison_exp
-  listing: listing_bool_exp
-  listingByFloorlistingversionFloorlistingid: listing_bool_exp
-  listingByLowestsoldlistingidLowestsoldlistingversion: listing_bool_exp
-  longest_average_held_in_seconds: bigint_comparison_exp
   lowest_sold: numeric_comparison_exp
-  lowest_sold7d: numeric_comparison_exp
-  lowest_sold24: numeric_comparison_exp
-  lowest_sold30d: numeric_comparison_exp
-  lowest_sold_listing_id: String_comparison_exp
-  lowest_sold_listing_version: Int_comparison_exp
+  lowest_sold_fiat: numeric_comparison_exp
   median: numeric_comparison_exp
-  percent_listed: Float_comparison_exp
-  percent_never_listed: Float_comparison_exp
   prim_volume: numeric_comparison_exp
   prim_volume_fiat: numeric_comparison_exp
   prim_volume_nb: Int_comparison_exp
@@ -8544,50 +8729,39 @@ input market_stats_bool_exp {
   sec_volume_nb30d: Int_comparison_exp
   to: timestamptz_comparison_exp
   token_id: String_comparison_exp
+  total_volume: numeric_comparison_exp
+  total_volume7d: numeric_comparison_exp
+  total_volume24: numeric_comparison_exp
+  total_volume30d: numeric_comparison_exp
+  total_volume_change7d: numeric_comparison_exp
+  total_volume_change24: numeric_comparison_exp
+  total_volume_change30d: numeric_comparison_exp
+  total_volume_fiat: numeric_comparison_exp
+  total_volume_fiat7d: numeric_comparison_exp
+  total_volume_fiat24: numeric_comparison_exp
+  total_volume_fiat30d: numeric_comparison_exp
+  total_volume_nb: Int_comparison_exp
+  total_volume_nb7d: Int_comparison_exp
+  total_volume_nb24: Int_comparison_exp
+  total_volume_nb30d: Int_comparison_exp
 }
 
 """
 columns and relationships of "market_stats_history"
 """
 type market_stats_history {
-  average_sale_price: numeric
   floor: numeric
-  floor_listing_id: String
-  floor_listing_version: Int
   from: timestamptz!
 
   """
   An object relationship
   """
   generative_token: generative_token!
-  highest_collection_offer: numeric
   highest_sold: numeric
-  highest_sold_listing_id: String
-  highest_sold_listing_version: Int
   id: Int!
   listed: Int
-
-  """
-  An object relationship
-  """
-  listing: listing
-
-  """
-  An object relationship
-  """
-  listingByFloorlistingversionFloorlistingid: listing
-
-  """
-  An object relationship
-  """
-  listingByHighestsoldlistingversionHighestsoldlistingid: listing
-  longest_average_held_in_seconds: bigint
   lowest_sold: numeric
-  lowest_sold_listing_id: String
-  lowest_sold_listing_version: Int
   median: numeric
-  percent_listed: Float
-  percent_never_listed: Float
   prim_volume: numeric
   prim_volume_fiat: numeric
   prim_volume_nb: Int
@@ -8596,6 +8770,9 @@ type market_stats_history {
   sec_volume_nb: Int
   to: timestamptz!
   token_id: String!
+  total_volume: numeric
+  total_volume_fiat: numeric
+  total_volume_nb: Int
 }
 
 """
@@ -8619,26 +8796,21 @@ input market_stats_history_aggregate_order_by {
 order by avg() on columns of table "market_stats_history"
 """
 input market_stats_history_avg_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
@@ -8648,28 +8820,14 @@ input market_stats_history_bool_exp {
   _and: [market_stats_history_bool_exp!]
   _not: market_stats_history_bool_exp
   _or: [market_stats_history_bool_exp!]
-  average_sale_price: numeric_comparison_exp
   floor: numeric_comparison_exp
-  floor_listing_id: String_comparison_exp
-  floor_listing_version: Int_comparison_exp
   from: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
-  highest_collection_offer: numeric_comparison_exp
   highest_sold: numeric_comparison_exp
-  highest_sold_listing_id: String_comparison_exp
-  highest_sold_listing_version: Int_comparison_exp
   id: Int_comparison_exp
   listed: Int_comparison_exp
-  listing: listing_bool_exp
-  listingByFloorlistingversionFloorlistingid: listing_bool_exp
-  listingByHighestsoldlistingversionHighestsoldlistingid: listing_bool_exp
-  longest_average_held_in_seconds: bigint_comparison_exp
   lowest_sold: numeric_comparison_exp
-  lowest_sold_listing_id: String_comparison_exp
-  lowest_sold_listing_version: Int_comparison_exp
   median: numeric_comparison_exp
-  percent_listed: Float_comparison_exp
-  percent_never_listed: Float_comparison_exp
   prim_volume: numeric_comparison_exp
   prim_volume_fiat: numeric_comparison_exp
   prim_volume_nb: Int_comparison_exp
@@ -8678,30 +8836,22 @@ input market_stats_history_bool_exp {
   sec_volume_nb: Int_comparison_exp
   to: timestamptz_comparison_exp
   token_id: String_comparison_exp
+  total_volume: numeric_comparison_exp
+  total_volume_fiat: numeric_comparison_exp
+  total_volume_nb: Int_comparison_exp
 }
 
 """
 order by max() on columns of table "market_stats_history"
 """
 input market_stats_history_max_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_id: order_by
-  floor_listing_version: order_by
   from: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_id: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_id: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
@@ -8710,30 +8860,22 @@ input market_stats_history_max_order_by {
   sec_volume_nb: order_by
   to: order_by
   token_id: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 order by min() on columns of table "market_stats_history"
 """
 input market_stats_history_min_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_id: order_by
-  floor_listing_version: order_by
   from: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_id: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_id: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
@@ -8742,34 +8884,23 @@ input market_stats_history_min_order_by {
   sec_volume_nb: order_by
   to: order_by
   token_id: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 Ordering options when selecting data from "market_stats_history".
 """
 input market_stats_history_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_id: order_by
-  floor_listing_version: order_by
   from: order_by
   generative_token: generative_token_order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_id: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  listing: listing_order_by
-  listingByFloorlistingversionFloorlistingid: listing_order_by
-  listingByHighestsoldlistingversionHighestsoldlistingid: listing_order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_id: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
@@ -8778,6 +8909,9 @@ input market_stats_history_order_by {
   sec_volume_nb: order_by
   to: order_by
   token_id: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
@@ -8787,22 +8921,7 @@ enum market_stats_history_select_column {
   """
   column name
   """
-  average_sale_price
-
-  """
-  column name
-  """
   floor
-
-  """
-  column name
-  """
-  floor_listing_id
-
-  """
-  column name
-  """
-  floor_listing_version
 
   """
   column name
@@ -8812,22 +8931,7 @@ enum market_stats_history_select_column {
   """
   column name
   """
-  highest_collection_offer
-
-  """
-  column name
-  """
   highest_sold
-
-  """
-  column name
-  """
-  highest_sold_listing_id
-
-  """
-  column name
-  """
-  highest_sold_listing_version
 
   """
   column name
@@ -8842,37 +8946,12 @@ enum market_stats_history_select_column {
   """
   column name
   """
-  longest_average_held_in_seconds
-
-  """
-  column name
-  """
   lowest_sold
 
   """
   column name
   """
-  lowest_sold_listing_id
-
-  """
-  column name
-  """
-  lowest_sold_listing_version
-
-  """
-  column name
-  """
   median
-
-  """
-  column name
-  """
-  percent_listed
-
-  """
-  column name
-  """
-  percent_never_listed
 
   """
   column name
@@ -8913,84 +8992,84 @@ enum market_stats_history_select_column {
   column name
   """
   token_id
+
+  """
+  column name
+  """
+  total_volume
+
+  """
+  column name
+  """
+  total_volume_fiat
+
+  """
+  column name
+  """
+  total_volume_nb
 }
 
 """
 order by stddev() on columns of table "market_stats_history"
 """
 input market_stats_history_stddev_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 order by stddev_pop() on columns of table "market_stats_history"
 """
 input market_stats_history_stddev_pop_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 order by stddev_samp() on columns of table "market_stats_history"
 """
 input market_stats_history_stddev_samp_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
@@ -9012,24 +9091,13 @@ input market_stats_history_stream_cursor_input {
 Initial value of the column from where the streaming should start
 """
 input market_stats_history_stream_cursor_value_input {
-  average_sale_price: numeric
   floor: numeric
-  floor_listing_id: String
-  floor_listing_version: Int
   from: timestamptz
-  highest_collection_offer: numeric
   highest_sold: numeric
-  highest_sold_listing_id: String
-  highest_sold_listing_version: Int
   id: Int
   listed: Int
-  longest_average_held_in_seconds: bigint
   lowest_sold: numeric
-  lowest_sold_listing_id: String
-  lowest_sold_listing_version: Int
   median: numeric
-  percent_listed: Float
-  percent_never_listed: Float
   prim_volume: numeric
   prim_volume_fiat: numeric
   prim_volume_nb: Int
@@ -9038,142 +9106,112 @@ input market_stats_history_stream_cursor_value_input {
   sec_volume_nb: Int
   to: timestamptz
   token_id: String
+  total_volume: numeric
+  total_volume_fiat: numeric
+  total_volume_nb: Int
 }
 
 """
 order by sum() on columns of table "market_stats_history"
 """
 input market_stats_history_sum_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 order by var_pop() on columns of table "market_stats_history"
 """
 input market_stats_history_var_pop_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 order by var_samp() on columns of table "market_stats_history"
 """
 input market_stats_history_var_samp_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 order by variance() on columns of table "market_stats_history"
 """
 input market_stats_history_variance_order_by {
-  average_sale_price: order_by
   floor: order_by
-  floor_listing_version: order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold_listing_version: order_by
   id: order_by
   listed: order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold_listing_version: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
   sec_volume: order_by
   sec_volume_fiat: order_by
   sec_volume_nb: order_by
+  total_volume: order_by
+  total_volume_fiat: order_by
+  total_volume_nb: order_by
 }
 
 """
 Ordering options when selecting data from "market_stats".
 """
 input market_stats_order_by {
-  average_sale_price: order_by
-  floor_listing_id: order_by
-  floor_listing_version: order_by
+  floor: order_by
+  floor_change7d: order_by
+  floor_change24: order_by
+  floor_change30d: order_by
+  floor_fiat: order_by
   from: order_by
   generative_token: generative_token_order_by
-  highest_collection_offer: order_by
   highest_sold: order_by
-  highest_sold7d: order_by
-  highest_sold24: order_by
-  highest_sold30d: order_by
-  highest_sold_listing_id: order_by
-  highest_sold_listing_version: order_by
+  highest_sold_fiat: order_by
   listed: order_by
-  listing: listing_order_by
-  listingByFloorlistingversionFloorlistingid: listing_order_by
-  listingByLowestsoldlistingidLowestsoldlistingversion: listing_order_by
-  longest_average_held_in_seconds: order_by
   lowest_sold: order_by
-  lowest_sold7d: order_by
-  lowest_sold24: order_by
-  lowest_sold30d: order_by
-  lowest_sold_listing_id: order_by
-  lowest_sold_listing_version: order_by
+  lowest_sold_fiat: order_by
   median: order_by
-  percent_listed: order_by
-  percent_never_listed: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
   prim_volume_nb: order_by
@@ -9191,6 +9229,21 @@ input market_stats_order_by {
   sec_volume_nb30d: order_by
   to: order_by
   token_id: order_by
+  total_volume: order_by
+  total_volume7d: order_by
+  total_volume24: order_by
+  total_volume30d: order_by
+  total_volume_change7d: order_by
+  total_volume_change24: order_by
+  total_volume_change30d: order_by
+  total_volume_fiat: order_by
+  total_volume_fiat7d: order_by
+  total_volume_fiat24: order_by
+  total_volume_fiat30d: order_by
+  total_volume_nb: order_by
+  total_volume_nb7d: order_by
+  total_volume_nb24: order_by
+  total_volume_nb30d: order_by
 }
 
 """
@@ -9200,17 +9253,27 @@ enum market_stats_select_column {
   """
   column name
   """
-  average_sale_price
+  floor
 
   """
   column name
   """
-  floor_listing_id
+  floor_change7d
 
   """
   column name
   """
-  floor_listing_version
+  floor_change24
+
+  """
+  column name
+  """
+  floor_change30d
+
+  """
+  column name
+  """
+  floor_fiat
 
   """
   column name
@@ -9220,37 +9283,12 @@ enum market_stats_select_column {
   """
   column name
   """
-  highest_collection_offer
-
-  """
-  column name
-  """
   highest_sold
 
   """
   column name
   """
-  highest_sold7d
-
-  """
-  column name
-  """
-  highest_sold24
-
-  """
-  column name
-  """
-  highest_sold30d
-
-  """
-  column name
-  """
-  highest_sold_listing_id
-
-  """
-  column name
-  """
-  highest_sold_listing_version
+  highest_sold_fiat
 
   """
   column name
@@ -9260,52 +9298,17 @@ enum market_stats_select_column {
   """
   column name
   """
-  longest_average_held_in_seconds
-
-  """
-  column name
-  """
   lowest_sold
 
   """
   column name
   """
-  lowest_sold7d
-
-  """
-  column name
-  """
-  lowest_sold24
-
-  """
-  column name
-  """
-  lowest_sold30d
-
-  """
-  column name
-  """
-  lowest_sold_listing_id
-
-  """
-  column name
-  """
-  lowest_sold_listing_version
+  lowest_sold_fiat
 
   """
   column name
   """
   median
-
-  """
-  column name
-  """
-  percent_listed
-
-  """
-  column name
-  """
-  percent_never_listed
 
   """
   column name
@@ -9391,6 +9394,81 @@ enum market_stats_select_column {
   column name
   """
   token_id
+
+  """
+  column name
+  """
+  total_volume
+
+  """
+  column name
+  """
+  total_volume7d
+
+  """
+  column name
+  """
+  total_volume24
+
+  """
+  column name
+  """
+  total_volume30d
+
+  """
+  column name
+  """
+  total_volume_change7d
+
+  """
+  column name
+  """
+  total_volume_change24
+
+  """
+  column name
+  """
+  total_volume_change30d
+
+  """
+  column name
+  """
+  total_volume_fiat
+
+  """
+  column name
+  """
+  total_volume_fiat7d
+
+  """
+  column name
+  """
+  total_volume_fiat24
+
+  """
+  column name
+  """
+  total_volume_fiat30d
+
+  """
+  column name
+  """
+  total_volume_nb
+
+  """
+  column name
+  """
+  total_volume_nb7d
+
+  """
+  column name
+  """
+  total_volume_nb24
+
+  """
+  column name
+  """
+  total_volume_nb30d
 }
 
 """
@@ -9412,28 +9490,18 @@ input market_stats_stream_cursor_input {
 Initial value of the column from where the streaming should start
 """
 input market_stats_stream_cursor_value_input {
-  average_sale_price: numeric
-  floor_listing_id: String
-  floor_listing_version: Int
+  floor: numeric
+  floor_change7d: numeric
+  floor_change24: numeric
+  floor_change30d: numeric
+  floor_fiat: numeric
   from: timestamptz
-  highest_collection_offer: numeric
   highest_sold: numeric
-  highest_sold7d: numeric
-  highest_sold24: numeric
-  highest_sold30d: numeric
-  highest_sold_listing_id: String
-  highest_sold_listing_version: Int
+  highest_sold_fiat: numeric
   listed: Int
-  longest_average_held_in_seconds: bigint
   lowest_sold: numeric
-  lowest_sold7d: numeric
-  lowest_sold24: numeric
-  lowest_sold30d: numeric
-  lowest_sold_listing_id: String
-  lowest_sold_listing_version: Int
+  lowest_sold_fiat: numeric
   median: numeric
-  percent_listed: Float
-  percent_never_listed: Float
   prim_volume: numeric
   prim_volume_fiat: numeric
   prim_volume_nb: Int
@@ -9451,6 +9519,21 @@ input market_stats_stream_cursor_value_input {
   sec_volume_nb30d: Int
   to: timestamptz
   token_id: String
+  total_volume: numeric
+  total_volume7d: numeric
+  total_volume24: numeric
+  total_volume30d: numeric
+  total_volume_change7d: numeric
+  total_volume_change24: numeric
+  total_volume_change30d: numeric
+  total_volume_fiat: numeric
+  total_volume_fiat7d: numeric
+  total_volume_fiat24: numeric
+  total_volume_fiat30d: numeric
+  total_volume_nb: Int
+  total_volume_nb7d: Int
+  total_volume_nb24: Int
+  total_volume_nb30d: Int
 }
 
 """
@@ -10169,6 +10252,36 @@ type moderation_reason {
     """
     where: generative_token_bool_exp
   ): [generative_token!]!
+
+  """
+  An aggregate relationship
+  """
+  generative_tokens_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): generative_token_aggregate!
   id: String!
   reason: String!
 
@@ -10242,6 +10355,7 @@ input moderation_reason_bool_exp {
   _or: [moderation_reason_bool_exp!]
   articles: article_bool_exp
   generative_tokens: generative_token_bool_exp
+  generative_tokens_aggregate: generative_token_aggregate_bool_exp
   id: String_comparison_exp
   reason: String_comparison_exp
   reports: report_bool_exp
@@ -10302,7 +10416,10 @@ input moderation_reason_stream_cursor_value_input {
 mutation root
 """
 type mutation_root {
+  authenticate(input: AuthenticationInput!): AuthenticationResult
+  generate_challenge(input: ChallengeInput!): ChallengeResult
   offchain: offchain_mutation_frontend
+  refresh(input: RefreshInput!): AuthenticationResult
   set_whitelist(whitelist: jsonb!): SetWhitelistOutput
 }
 
@@ -10421,7 +10538,7 @@ type objkt {
     JSON select path
     """
     path: String
-  ): json
+  ): jsonb
   generation_hash: String
 
   """
@@ -10663,7 +10780,7 @@ input objkt_bool_exp {
   created_at: timestamptz_comparison_exp
   display_uri: bpchar_comparison_exp
   duplicate: Boolean_comparison_exp
-  features: json_comparison_exp
+  features: jsonb_comparison_exp
   generation_hash: String_comparison_exp
   generative_token: generative_token_bool_exp
   gentk_assign: gentk_assign_bool_exp
@@ -10967,7 +11084,7 @@ input objkt_stream_cursor_value_input {
   created_at: timestamptz
   display_uri: bpchar
   duplicate: Boolean
-  features: json
+  features: jsonb
   generation_hash: String
   id: String
   input_bytes: String
@@ -13280,6 +13397,36 @@ type onchain_query {
   ): [generative_token!]!
 
   """
+  fetch aggregated fields from the table: "generative_token"
+  """
+  generative_token_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): generative_token_aggregate!
+
+  """
   fetch data from the table: "generative_token" using primary key columns
   """
   generative_token_by_pk(id: String!): generative_token
@@ -15240,6 +15387,36 @@ type onchain_subscription {
     """
     where: generative_token_bool_exp
   ): [generative_token!]!
+
+  """
+  fetch aggregated fields from the table: "generative_token"
+  """
+  generative_token_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): generative_token_aggregate!
 
   """
   fetch data from the table: "generative_token" using primary key columns
@@ -19152,6 +19329,36 @@ type user {
     """
     where: generative_token_bool_exp
   ): [generative_token!]!
+
+  """
+  An aggregate relationship
+  """
+  generative_tokens_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): generative_token_aggregate!
   id: String!
 
   """
@@ -19485,6 +19692,7 @@ input user_bool_exp {
   description: String_comparison_exp
   flag: user_flag_enum_comparison_exp
   generative_tokens: generative_token_bool_exp
+  generative_tokens_aggregate: generative_token_aggregate_bool_exp
   id: String_comparison_exp
   listings: listing_bool_exp
   listingsByAcceptedById: listing_bool_exp
