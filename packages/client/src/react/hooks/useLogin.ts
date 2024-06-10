@@ -1,9 +1,13 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { useClient } from "./useClient.js"
-import { ClientContextEvent } from "../index.js"
+import {
+  ClientContextEvent,
+  useEthereumWallet,
+  useTezosWallet,
+} from "../index.js"
 import { TezosWalletManager } from "@fxhash/tez"
 import { EthereumWalletManager } from "@fxhash/eth"
-import { BlockchainType } from "@fxhash/shared"
+import { BlockchainType, PromiseResult } from "@fxhash/shared"
 
 interface UseLoginProps {
   onConnect?: (
@@ -13,8 +17,14 @@ interface UseLoginProps {
   onDisconnect?: (chain: BlockchainType) => void
 }
 
-export function useLogin(props: UseLoginProps) {
-  const { subscribe, unsubscribe } = useClient()
+export function useLogin(props: UseLoginProps): {
+  isChainConnected: (chain: BlockchainType) => boolean
+  connect: (chain: BlockchainType) => PromiseResult<void, Error>
+  disconnect: (chain: BlockchainType) => PromiseResult<void, Error>
+} {
+  const { subscribe, unsubscribe, walletManagers } = useClient()
+  const { connect: connectEth, disconnect: disconnectEth } = useEthereumWallet()
+  const { connect: connectTez, disconnect: disconnectTez } = useTezosWallet()
 
   useEffect(() => {
     const { onConnect } = props
@@ -33,4 +43,28 @@ export function useLogin(props: UseLoginProps) {
       unsubscribe(ClientContextEvent.onDisconnect, onDisconnect)
     }
   }, [props.onDisconnect])
+
+  const isChainConnected = useCallback(
+    (chain: BlockchainType) => !!walletManagers[chain],
+    []
+  )
+  const connect = useCallback((chain: BlockchainType) => {
+    if (chain === BlockchainType.ETHEREUM || chain === BlockchainType.BASE) {
+      return connectEth()
+    } else {
+      return connectTez()
+    }
+  }, [])
+  const disconnect = useCallback((chain: BlockchainType) => {
+    if (chain === BlockchainType.ETHEREUM || chain === BlockchainType.BASE) {
+      return disconnectEth()
+    } else {
+      return disconnectTez()
+    }
+  }, [])
+  return {
+    isChainConnected,
+    connect,
+    disconnect,
+  }
 }
