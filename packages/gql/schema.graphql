@@ -586,6 +586,14 @@ type ChallengeResult {
   text: String!
 }
 
+enum EWalletOperatorState {
+  AVAILABLE
+  EMPTY
+  INITIALIZING
+  PREPARING
+  WAITING_CONFIRMATION
+}
+
 """
 columns and relationships of "Event"
 """
@@ -934,6 +942,11 @@ input Int_comparison_exp {
   _lte: Int
   _neq: Int
   _nin: [Int!]
+}
+
+type MailTemplate {
+  id: String!
+  name: String!
 }
 
 """
@@ -2198,6 +2211,16 @@ input RefreshInput {
   refreshToken: String!
 }
 
+input SetFarcasterHandleInput {
+  id: String!
+  message: String!
+  signature: String!
+}
+
+type SetFarcasterHandleResult {
+  handle: String!
+}
+
 type SetWhitelistOutput {
   merkleRoot: String
   message: String
@@ -2347,6 +2370,12 @@ type Wallet {
     """
     where: user_bool_exp
   ): [user!]!
+}
+
+type WalletRpc {
+  active: Boolean!
+  available: Boolean!
+  url: String!
 }
 
 """
@@ -8645,7 +8674,6 @@ type market_stats {
   floor_change7d: numeric
   floor_change24: numeric
   floor_change30d: numeric
-  floor_fiat: numeric
   from: timestamptz
 
   """
@@ -8653,10 +8681,8 @@ type market_stats {
   """
   generative_token: generative_token!
   highest_sold: numeric
-  highest_sold_fiat: numeric
   listed: Int
   lowest_sold: numeric
-  lowest_sold_fiat: numeric
   median: numeric
   prim_volume: numeric
   prim_volume_fiat: numeric
@@ -8703,14 +8729,11 @@ input market_stats_bool_exp {
   floor_change7d: numeric_comparison_exp
   floor_change24: numeric_comparison_exp
   floor_change30d: numeric_comparison_exp
-  floor_fiat: numeric_comparison_exp
   from: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
   highest_sold: numeric_comparison_exp
-  highest_sold_fiat: numeric_comparison_exp
   listed: Int_comparison_exp
   lowest_sold: numeric_comparison_exp
-  lowest_sold_fiat: numeric_comparison_exp
   median: numeric_comparison_exp
   prim_volume: numeric_comparison_exp
   prim_volume_fiat: numeric_comparison_exp
@@ -9203,14 +9226,11 @@ input market_stats_order_by {
   floor_change7d: order_by
   floor_change24: order_by
   floor_change30d: order_by
-  floor_fiat: order_by
   from: order_by
   generative_token: generative_token_order_by
   highest_sold: order_by
-  highest_sold_fiat: order_by
   listed: order_by
   lowest_sold: order_by
-  lowest_sold_fiat: order_by
   median: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
@@ -9273,11 +9293,6 @@ enum market_stats_select_column {
   """
   column name
   """
-  floor_fiat
-
-  """
-  column name
-  """
   from
 
   """
@@ -9288,22 +9303,12 @@ enum market_stats_select_column {
   """
   column name
   """
-  highest_sold_fiat
-
-  """
-  column name
-  """
   listed
 
   """
   column name
   """
   lowest_sold
-
-  """
-  column name
-  """
-  lowest_sold_fiat
 
   """
   column name
@@ -9494,13 +9499,10 @@ input market_stats_stream_cursor_value_input {
   floor_change7d: numeric
   floor_change24: numeric
   floor_change30d: numeric
-  floor_fiat: numeric
   from: timestamptz
   highest_sold: numeric
-  highest_sold_fiat: numeric
   listed: Int
   lowest_sold: numeric
-  lowest_sold_fiat: numeric
   median: numeric
   prim_volume: numeric
   prim_volume_fiat: numeric
@@ -10420,6 +10422,13 @@ type mutation_root {
   generate_challenge(input: ChallengeInput!): ChallengeResult
   offchain: offchain_mutation_frontend
   refresh(input: RefreshInput!): AuthenticationResult
+
+  """
+  given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile
+  """
+  set_farcaster_handle(
+    input: SetFarcasterHandleInput!
+  ): SetFarcasterHandleResult
   set_whitelist(whitelist: jsonb!): SetWhitelistOutput
 }
 
@@ -10538,7 +10547,7 @@ type objkt {
     JSON select path
     """
     path: String
-  ): jsonb
+  ): json
   generation_hash: String
 
   """
@@ -10780,7 +10789,7 @@ input objkt_bool_exp {
   created_at: timestamptz_comparison_exp
   display_uri: bpchar_comparison_exp
   duplicate: Boolean_comparison_exp
-  features: jsonb_comparison_exp
+  features: json_comparison_exp
   generation_hash: String_comparison_exp
   generative_token: generative_token_bool_exp
   gentk_assign: gentk_assign_bool_exp
@@ -11084,7 +11093,7 @@ input objkt_stream_cursor_value_input {
   created_at: timestamptz
   display_uri: bpchar
   duplicate: Boolean
-  features: jsonb
+  features: json
   generation_hash: String
   id: String
   input_bytes: String
@@ -17339,9 +17348,12 @@ type query_root {
   fetch data from the table: "Featured" using primary key columns
   """
   Featured_by_pk(id: Int!): Featured
+  mailTemplates: [MailTemplate!]!
+  managedWalletState(publicKey: String!): EWalletOperatorState
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+  walletRpcs: [WalletRpc!]
 }
 
 input random_objkt_generative_token_args {
