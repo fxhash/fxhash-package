@@ -7,7 +7,11 @@ import {
 } from "@fxhash/shared"
 import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
 import { jwtDecode } from "jwt-decode"
-import { generateChallenge, authenticate } from "@/auth/index.js"
+import {
+  generateChallenge,
+  authenticate,
+  refreshAccessToken,
+} from "@/auth/index.js"
 import { Storage } from "@/util/Storage/Storage.js"
 import { getUserProfile } from "@/auth/profile.js"
 
@@ -62,6 +66,21 @@ export class FxhashClient {
     // We store the account in the storage with a static key
     // This is used to retrieve the account in the future
     // For security reasons, we don't store the access token
+    await this.storage.setItem(this.accountKey, {
+      id,
+      refreshToken: res.refreshToken,
+    })
+    this.accessToken = res.accessToken
+    return res
+  }
+
+  async refreshAccessToken(): Promise<AuthenticationResult> {
+    const account = await this.getAccountFromStorage()
+    invariant(account, "No account authenticated")
+    const res = await refreshAccessToken(account.refreshToken, {
+      gqlClient: this.gqlClient,
+    })
+    const { id } = jwtDecode<JwtAccessTokenPayload>(res.accessToken)
     await this.storage.setItem(this.accountKey, {
       id,
       refreshToken: res.refreshToken,

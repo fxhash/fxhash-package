@@ -103,11 +103,9 @@ export function ClientProvider(
     const account = await client.current.getAccountFromStorage()
     let accessToken, refreshToken
     if (account?.refreshToken) {
-      // TODO: Fetch new accessToken using refreshToken
-      emitEvent(ClientContextEvent.onAuthenticate, {
-        chain,
-        refreshToken: account.refreshToken,
-      })
+      const res = await client.current.refreshAccessToken()
+      accessToken = res.accessToken
+      refreshToken = res.refreshToken
     } else {
       const { text, id } = await client.current.generateChallenge(
         chain,
