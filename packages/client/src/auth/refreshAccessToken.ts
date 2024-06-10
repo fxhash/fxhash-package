@@ -17,8 +17,8 @@ export async function refreshAccessToken(
   if (error) {
     throw new GraphQLError(error.message)
   }
-  if (!data || !data.authenticate) {
+  if (!data || !data.refresh) {
     throw new UnexpectedError()
   }
-  return data.authenticate
+  return data.refresh
 }

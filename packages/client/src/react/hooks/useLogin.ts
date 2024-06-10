@@ -22,8 +22,9 @@ export function useLogin(props: UseLoginProps): {
   isChainConnected: (chain: BlockchainType) => boolean
   connect: (chain: BlockchainType) => PromiseResult<void, Error>
   disconnect: (chain: BlockchainType) => PromiseResult<void, Error>
+  isConnected: boolean
 } {
-  const { subscribe, unsubscribe, walletManagers } = useClient()
+  const { subscribe, unsubscribe, walletManagers, isConnected } = useClient()
   const { connect: connectEth, disconnect: disconnectEth } = useEthereumWallet()
   const { connect: connectTez, disconnect: disconnectTez } = useTezosWallet()
 
@@ -76,5 +77,6 @@ export function useLogin(props: UseLoginProps): {
     isChainConnected,
     connect,
     disconnect,
+    isConnected,
   }
 }

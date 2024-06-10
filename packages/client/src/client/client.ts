@@ -77,9 +77,12 @@ export class FxhashClient {
   async refreshAccessToken(): Promise<AuthenticationResult> {
     const account = await this.getAccountFromStorage()
     invariant(account, "No account authenticated")
-    const res = await refreshAccessToken(account.refreshToken, {
-      gqlClient: this.gqlClient,
-    })
+    const res = await refreshAccessToken(
+      { refreshToken: account.refreshToken },
+      {
+        gqlClient: this.gqlClient,
+      }
+    )
     const { id } = jwtDecode<JwtAccessTokenPayload>(res.accessToken)
     await this.storage.setItem(this.accountKey, {
       id,
