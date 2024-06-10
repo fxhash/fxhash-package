@@ -8,7 +8,7 @@ import {
 import { useClient } from "../index.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { useMemo } from "react"
-import { invariant } from "@fxhash/shared"
+import { BlockchainType, invariant } from "@fxhash/shared"
 import { config } from "@fxhash/config"
 
 /**
@@ -23,7 +23,7 @@ export function EthereumWallet() {
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
   const signer = useEthersSigner()
-  const { setEthereumWalletManager } = useClient()
+  const { setWalletManager } = useClient()
 
   useAccountEffect({
     onConnect: async data => {
@@ -40,11 +40,11 @@ export function EthereumWallet() {
         signer,
       })
       console.log("connect eth", ewm)
-      setEthereumWalletManager(ewm)
+      setWalletManager(BlockchainType.ETHEREUM, ewm)
     },
     onDisconnect: async () => {
       console.log("disconnect eth")
-      setEthereumWalletManager(null)
+      setWalletManager(BlockchainType.ETHEREUM, null)
     },
   })
   return null

@@ -25,42 +25,75 @@ export interface WalletsProviderConfig {
   [BlockchainType.ETHEREUM]?: boolean
 }
 
+export type WalletManagers = {
+  [BlockchainType.TEZOS]: TezosWalletManager | null
+  [BlockchainType.ETHEREUM]: EthereumWalletManager | null
+  [BlockchainType.BASE]: EthereumWalletManager | null
+}
+
 export interface ClientContext {
   client: FxhashClient
   tezosWalletManager: TezosWalletManager | null
-  setTezosWalletManager: (manager: TezosWalletManager | null) => void
   ethereumWalletManager: EthereumWalletManager | null
-  setEthereumWalletManager: (manager: EthereumWalletManager | null) => void
+  setWalletManager: (
+    chain: BlockchainType,
+    manager: TezosWalletManager | EthereumWalletManager | null
+  ) => void
   config: WalletsProviderConfig
+  walletManagers: WalletManagers
 }
 
-export const ClientContext = createContext<ClientContext>({
+const defaultClientContext: ClientContext = {
   client: new FxhashClient(),
   tezosWalletManager: null,
-  setTezosWalletManager: () => {},
   ethereumWalletManager: null,
-  setEthereumWalletManager: () => {},
+  setWalletManager: () => {},
   config: {},
-})
+  walletManagers: {
+    [BlockchainType.TEZOS]: null,
+    [BlockchainType.ETHEREUM]: null,
+    [BlockchainType.BASE]: null,
+  },
+}
+
+export const ClientContext = createContext<ClientContext>(defaultClientContext)
 
 export function ClientProvider(
   props: PropsWithChildren<{ config: WalletsProviderConfig }>
 ) {
   const { children, config } = props
-  const [tezosWalletManager, setTezosWalletManager] =
-    useState<TezosWalletManager | null>(null)
-  const [ethereumWalletManager, setEthereumWalletManager] =
-    useState<EthereumWalletManager | null>(null)
+  const [walletManagers, _setWalletManagers] = useState<WalletManagers>(
+    defaultClientContext.walletManagers
+  )
   const client = useRef<FxhashClient>(new FxhashClient())
+
+  const twm = walletManagers[BlockchainType.TEZOS]
+  const ewm = walletManagers[BlockchainType.ETHEREUM]
+
+  function setWalletManager(
+    chain: BlockchainType,
+    manager: TezosWalletManager | EthereumWalletManager | null
+  ) {
+    _setWalletManagers(prev => {
+      const next = { ...prev, [chain]: manager }
+      // The same Ethereum wallet manager is used for both Ethereum and Base chains
+      if (chain === BlockchainType.ETHEREUM) {
+        next[BlockchainType.BASE] = next[BlockchainType.ETHEREUM]
+      }
+      return next
+    })
+  }
 
   return (
     <ClientContext.Provider
       value={{
         client: client.current,
-        tezosWalletManager,
-        setTezosWalletManager,
-        ethereumWalletManager,
-        setEthereumWalletManager,
+        walletManagers,
+        setWalletManager,
+        tezosWalletManager: twm ? (twm as unknown as TezosWalletManager) : null,
+        ethereumWalletManager: ewm
+          ? (ewm as unknown as EthereumWalletManager)
+          : null,
         config,
       }}
     >

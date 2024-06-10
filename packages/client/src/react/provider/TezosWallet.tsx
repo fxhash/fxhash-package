@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { invariant } from "@fxhash/shared"
+import { BlockchainType, invariant } from "@fxhash/shared"
 import { AccountInfo, BeaconEvent } from "@airgap/beacon-sdk"
 import { TezosWalletManager } from "@fxhash/tez"
 import { config as fxhashConfig } from "@fxhash/config"
@@ -14,7 +14,7 @@ interface TezosWalletProps {
 
 export function TezosWallet(props: TezosWalletProps) {
   const { config } = props
-  const { setTezosWalletManager } = useClient()
+  const { setWalletManager } = useClient()
 
   function createAccountSetHandler(
     wallet: BeaconWallet,
@@ -23,7 +23,7 @@ export function TezosWallet(props: TezosWalletProps) {
     return async function handleAccountSet(account?: AccountInfo) {
       console.log("conntect tez", account)
       if (!account) {
-        setTezosWalletManager(null)
+        setWalletManager(BlockchainType.TEZOS, null)
         return
       }
       tezosToolkit.setWalletProvider(config.beaconWallet)
@@ -35,7 +35,7 @@ export function TezosWallet(props: TezosWalletProps) {
         address: account.address,
       })
       console.log("conntect tez", twm)
-      setTezosWalletManager(twm)
+      setWalletManager(BlockchainType.TEZOS, twm)
     }
   }
 
