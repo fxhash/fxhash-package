@@ -70,3 +70,14 @@ export const Qu_GetAccountWallets = graphql(`
     }
   }
 `)
+
+/**
+ * Sets the farcaster handle for an account's profile.
+ */
+export const Mu_SetFarcasterHandle = graphql(`
+  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {
+    set_farcaster_handle(input: $input) {
+      handle
+    }
+  }
+`)
