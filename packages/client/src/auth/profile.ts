@@ -1,14 +1,14 @@
 import {
   Account_Bool_Exp,
-  GetAccountsQuery,
-  Qu_GetAccountsBaseDetails,
+  GetAccountWalletsQuery,
+  Qu_GetAccountWallets,
 } from "@fxhash/gql"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
 import { GraphQLError, UnexpectedError } from "@/index.js"
 
 // TODO: Is there a better soltuon for this?
 export type GetSingleUserProfileResult = NonNullable<
-  NonNullable<NonNullable<GetAccountsQuery["offchain"]>["Account"]>[0]
+  NonNullable<NonNullable<GetAccountWalletsQuery["offchain"]>["Account"]>[0]
 >
 
 export async function getUserProfile(
@@ -16,7 +16,7 @@ export async function getUserProfile(
   options: GqlOptions = gqlDefaultOptions
 ): Promise<GetSingleUserProfileResult> {
   const { gqlClient } = options
-  const { data, error } = await gqlClient.query(Qu_GetAccountsBaseDetails, {
+  const { data, error } = await gqlClient.query(Qu_GetAccountWallets, {
     where,
   })
   if (error) {
