@@ -30,6 +30,7 @@ export interface ITezosContracts {
   pricing_fixed: string
   pricing_fixed_v3: string
   randomizer: string
+  randomizer_v2: string
   token_moderation: string
   treasury: string
   user_moderation: string
@@ -69,6 +70,7 @@ export const tezosTestnetContracts: ITezosContracts = {
   pricing_fixed: "KT1PAsf9Zc9FGJA9iLE1Ab2vPkMDsh4hyZVi",
   pricing_fixed_v3: "KT1Mqyy5JPknNzNJtgF93SHpFHv4VcYrNZry",
   randomizer: "KT1QmdsrJWJgK3VXid8q7D4sPipVoc9jh12x",
+  randomizer_v2: "KT1Eow4nBY3B9EhWcX1aEXva67VkNFfP1Tq6",
   token_moderation: "KT1BHfPDMRp2q48ZkmmnK7TRzQRdFnp6XVKq",
   treasury: "KT1MbDbRhZPs5TzZEXkT142ePoccFHfohBoo",
   user_moderation: "KT1LmZjoitx2itnB1qCbHMrT3V64RbuSPf3a",
@@ -108,6 +110,7 @@ export const tezosMainnetContracts: ITezosContracts = {
   pricing_fixed: "KT1FHzHxuMaNLYG8LdniY45M6RCfkF3AoXFh",
   pricing_fixed_v3: "KT1V24J6FVuKPU3xy6gVF6wJ3zdRXBheQhaV",
   randomizer: "KT1XYgKrzBbzsckGvXTPgxFyN7KNZ9RPYVWf",
+  randomizer_v2: "KT1CfmepqJkfZwqLPFVMKFoYUS7dPPZHyCTo",
   token_moderation: "KT1HgVuzNWVvnX16fahbV2LrnpwifYKoFMRd",
   treasury: "KT1P2BXYb894MekrCcSrnidzQYPVqitLoVLc",
   user_moderation: "KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54",
