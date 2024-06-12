@@ -13,7 +13,7 @@ import {
   refreshAccessToken,
 } from "@/auth/index.js"
 import { Storage } from "@/util/Storage/Storage.js"
-import { getUserProfile } from "@/auth/profile.js"
+import { GetSingleUserProfileResult, getUserProfile } from "@/auth/profile.js"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
@@ -33,7 +33,7 @@ export class FxhashClient {
 
   private storage: Storage
   public accessToken: string | null = null
-
+  public profile: GetSingleUserProfileResult | null = null
   constructor(_options?: FxhashClientOptions) {
     const options = { ...defaultOptions, ..._options }
     this.gqlClient = options.gqlClient
@@ -104,6 +104,7 @@ export class FxhashClient {
       { id: { _eq: account.id } },
       { gqlClient: this.gqlClient }
     )
+    this.profile = res
     return res
   }
 }
