@@ -48,11 +48,11 @@ export function useEthereumWallet(): {
     })
   }
   function connect(): PromiseResult<void, Error> {
-    return new Promise(resolve => {
-      // TODO: Should this resolve in a success or throw?
-      console.log("use connectkit modal")
-      return resolve(success())
+    return new Promise(() => {
       invariant(config.wallets.ETHEREUM, "Ethereum config not provided")
+      throw new Error(
+        "@fxhash/client does not provide a generic wallet connection method. Instead it's listining for your wallet connection e.g. using connectkit."
+      )
     })
   }
   function disconnect(): PromiseResult<void, Error> {
