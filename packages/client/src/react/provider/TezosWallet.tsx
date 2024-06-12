@@ -3,10 +3,12 @@ import { BlockchainType, invariant } from "@fxhash/shared"
 import { AccountInfo, BeaconEvent } from "@airgap/beacon-sdk"
 import { TezosWalletManager } from "@fxhash/tez"
 import { config as fxhashConfig } from "@fxhash/config"
-import { BeaconWallet } from "@taquito/beacon-wallet"
-import { TezosToolkit } from "@taquito/taquito"
 import { TezosWalletsConfig } from "./Client.js"
 import { useClient } from "../index.js"
+import {
+  WalletDoesntBelongToUserError,
+  profileContainsAddress,
+} from "@/index.js"
 
 interface TezosWalletProps {
   config: TezosWalletsConfig
@@ -14,41 +16,54 @@ interface TezosWalletProps {
 
 export function TezosWallet(props: TezosWalletProps) {
   const { config } = props
-  const { setWalletManager } = useClient()
+  const { setWalletManager, client, setError, tezosWalletManager } = useClient()
 
-  function createAccountSetHandler(
-    wallet: BeaconWallet,
-    tezosToolkit: TezosToolkit
-  ) {
-    return async function handleAccountSet(account?: AccountInfo) {
-      if (!account) {
-        setWalletManager(BlockchainType.TEZOS, null)
+  const handleAccountSet = async (account?: AccountInfo) => {
+    // If the account is the same as the current one, we ignore the event
+    if (tezosWalletManager?.address === account?.address) return
+
+    const { tezosToolkit, beaconWallet: wallet } = config
+    invariant(tezosToolkit, "TezosToolkit is required")
+    invariant(wallet, "BeaconWallet is required")
+    setError(null)
+    if (!account) {
+      setWalletManager(BlockchainType.TEZOS, null)
+      return
+    }
+
+    // We have to verify that the wallet is part of the user profile
+    if (client.profile) {
+      const walletBelongsToAccount = profileContainsAddress(
+        client.profile,
+        account.address
+      )
+      // If wallet doesnt not belong to user, we clear the active account
+      if (!walletBelongsToAccount) {
+        wallet.clearActiveAccount()
+        setError(new WalletDoesntBelongToUserError(BlockchainType.TEZOS))
         return
       }
-      tezosToolkit.setWalletProvider(config.beaconWallet)
-
-      const twm = new TezosWalletManager({
-        wallet,
-        tezosToolkit,
-        rpcNodes: fxhashConfig.tez.apis.rpcs,
-        address: account.address,
-      })
-      setWalletManager(BlockchainType.TEZOS, twm)
     }
+
+    tezosToolkit.setWalletProvider(config.beaconWallet)
+    const twm = new TezosWalletManager({
+      wallet,
+      tezosToolkit,
+      rpcNodes: fxhashConfig.tez.apis.rpcs,
+      address: account.address,
+    })
+    setWalletManager(BlockchainType.TEZOS, twm)
   }
 
   useEffect(() => {
-    invariant(config.tezosToolkit, "TezosToolkit is required")
     invariant(config.beaconWallet, "BeaconWallet is required")
-    const { tezosToolkit, beaconWallet } = config
+    const { beaconWallet } = config
     beaconWallet.client.subscribeToEvent(
       BeaconEvent.ACTIVE_ACCOUNT_SET,
-      createAccountSetHandler(beaconWallet, tezosToolkit)
+      handleAccountSet
     )
     // We manually retrieve the active account on mount
-    beaconWallet.client
-      .getActiveAccount()
-      .then(createAccountSetHandler(beaconWallet, tezosToolkit))
+    beaconWallet.client.getActiveAccount().then(handleAccountSet)
   }, [])
 
   return null

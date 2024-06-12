@@ -23,7 +23,7 @@ interface UseLoginProps {
   onAuthenticate?: (chain: BlockchainType) => void
 }
 
-export function useLogin(props: UseLoginProps): {
+export function useLogin(props: UseLoginProps = {}): {
   isChainConnected: (chain: BlockchainType) => boolean
   connect: (chain: BlockchainType) => PromiseResult<void, Error>
   disconnect: (chain: BlockchainType) => PromiseResult<void, Error>

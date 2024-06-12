@@ -1,3 +1,5 @@
+import { BlockchainType } from "@fxhash/shared"
+
 export class GraphQLError extends Error {
   constructor(message: string) {
     super(message)
@@ -16,5 +18,14 @@ export class SignMessageError extends Error {
   constructor() {
     super("Sign message error")
     this.name = "SignMessageError"
+  }
+}
+
+export class WalletDoesntBelongToUserError extends Error {
+  chain: BlockchainType
+  constructor(chain: BlockchainType) {
+    super("Wallet doesn't belong to user")
+    this.name = "WalletDoesntBelongToUserError"
+    this.chain = chain
   }
 }

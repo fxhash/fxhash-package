@@ -15,7 +15,11 @@ import { BeaconWallet } from "@taquito/beacon-wallet"
 import { EthereumWallet } from "./EthereumWallet.js"
 import { TezosWallet } from "./TezosWallet.js"
 import { TezosToolkit } from "@taquito/taquito"
-import { LocalStorageDriver, Storage } from "@/index.js"
+import {
+  LocalStorageDriver,
+  Storage,
+  WalletDoesntBelongToUserError,
+} from "@/index.js"
 
 export enum ClientContextEvent {
   onConnect = "onConnect",
@@ -49,6 +53,8 @@ export type WalletManagers = {
   [BlockchainType.BASE]: EthereumWalletManager | null
 }
 
+export type ClientError = null | WalletDoesntBelongToUserError
+
 export interface ClientContext {
   client: FxhashClient
   tezosWalletManager: TezosWalletManager | null
@@ -68,6 +74,8 @@ export interface ClientContext {
     event: ClientContextEvent,
     callback: (...args: any[]) => void
   ) => void
+  error: ClientError
+  setError: (error: ClientError) => void
 }
 
 const defaultClientContext: ClientContext = {
@@ -84,6 +92,8 @@ const defaultClientContext: ClientContext = {
   },
   subscribe: () => {},
   unsubscribe: () => {},
+  error: null,
+  setError: () => {},
 }
 
 export const ClientContext = createContext<ClientContext>(defaultClientContext)
@@ -91,6 +101,7 @@ export const ClientContext = createContext<ClientContext>(defaultClientContext)
 export function ClientProvider(
   props: PropsWithChildren<{ config: ClientProviderConfig }>
 ) {
+  const [error, setError] = useState<ClientError>(null)
   const { children, config } = props
   const [walletManagers, _setWalletManagers] = useState<WalletManagers>(
     defaultClientContext.walletManagers
@@ -232,6 +243,8 @@ export function ClientProvider(
         subscribe,
         unsubscribe,
         isConnected,
+        error,
+        setError,
       }}
     >
       <>

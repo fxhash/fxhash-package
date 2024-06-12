@@ -27,3 +27,10 @@ export async function getUserProfile(
   }
   return data.offchain.Account[0]
 }
+
+export function profileContainsAddress(
+  profile: GetSingleUserProfileResult,
+  address: string | `0x${string}`
+) {
+  return profile.wallets.find(w => w.address === address)
+}
