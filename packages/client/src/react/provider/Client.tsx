@@ -28,9 +28,19 @@ export interface TezosWalletsConfig {
   beaconWallet?: BeaconWallet
 }
 
-export interface WalletsProviderConfig {
-  [BlockchainType.TEZOS]?: TezosWalletsConfig
-  [BlockchainType.ETHEREUM]?: boolean
+export type WalletsConfig =
+  | {
+      [BlockchainType.TEZOS]: TezosWalletsConfig
+      [BlockchainType.ETHEREUM]?: true
+    }
+  | {
+      [BlockchainType.TEZOS]?: TezosWalletsConfig
+      [BlockchainType.ETHEREUM]: true
+    }
+
+export interface ClientProviderConfig {
+  wallets: WalletsConfig
+  useAccessToken?: boolean
 }
 
 export type WalletManagers = {
@@ -48,7 +58,7 @@ export interface ClientContext {
     chain: BlockchainType,
     manager: TezosWalletManager | EthereumWalletManager | null
   ) => void
-  config: WalletsProviderConfig
+  config: ClientProviderConfig
   walletManagers: WalletManagers
   subscribe: (
     event: ClientContextEvent,
@@ -66,7 +76,7 @@ const defaultClientContext: ClientContext = {
   tezosWalletManager: null,
   ethereumWalletManager: null,
   setWalletManager: () => {},
-  config: {},
+  config: { wallets: { [BlockchainType.ETHEREUM]: true } },
   walletManagers: {
     [BlockchainType.TEZOS]: null,
     [BlockchainType.ETHEREUM]: null,
@@ -79,7 +89,7 @@ const defaultClientContext: ClientContext = {
 export const ClientContext = createContext<ClientContext>(defaultClientContext)
 
 export function ClientProvider(
-  props: PropsWithChildren<{ config: WalletsProviderConfig }>
+  props: PropsWithChildren<{ config: ClientProviderConfig }>
 ) {
   const { children, config } = props
   const [walletManagers, _setWalletManagers] = useState<WalletManagers>(
@@ -97,22 +107,30 @@ export function ClientProvider(
     },
     [subscribers]
   )
-
+  /*
+  async function refreshAccessToken() {
+    try {
+      const res = await client.current.refreshAccessToken()
+      return res
+    } catch (e) {
+      // TODO: Add retry
+      console.error(e)
+      throw e
+    }
+  }
+  */
   async function authenticate(
     chain: BlockchainType,
     manager: TezosWalletManager | EthereumWalletManager
   ) {
     const account = await client.current.getAccountFromStorage()
     let accessToken, refreshToken
-    if (account?.refreshToken) {
-      try {
-        const res = await client.current.refreshAccessToken()
-        accessToken = res.accessToken
-        refreshToken = res.refreshToken
-      } catch (e) {
-        // TODO: Add retry
-        console.error(e)
-      }
+    // If an account exists we need to verify it
+    if (account) {
+      // TODO: fetch myProfile to confirm valid sessions
+      // ✅ if success we are logged in all good
+      // ❌ if fail and useAccessToken we can try to refresh
+      // ❌ if fail and !useAccessToken we need to sign a message
     } else {
       const { text, id } = await client.current.generateChallenge(
         chain,
@@ -155,10 +173,7 @@ export function ClientProvider(
           next[BlockchainType.BASE] = next[BlockchainType.ETHEREUM]
         }
         if (manager) {
-          // TODO: Should we emit always or only when the manager changes from the existing one?
-          if (manager !== walletManagers[chain]) {
-            emitEvent(ClientContextEvent.onConnect, chain, manager)
-          }
+          emitEvent(ClientContextEvent.onConnect, chain, manager)
         } else {
           emitEvent(ClientContextEvent.onDisconnect, chain, {
             walletManagers: next,
@@ -168,6 +183,9 @@ export function ClientProvider(
         // either from the refreshToken stored in the storage or by signing a message
         if (!client.current.accessToken && !!manager) {
           authenticate(chain, manager)
+        }
+        if (!next[BlockchainType.TEZOS] && !next[BlockchainType.ETHEREUM]) {
+          //TODO: Logout
         }
         return next
       })
@@ -198,6 +216,7 @@ export function ClientProvider(
 
   const twm = walletManagers[BlockchainType.TEZOS]
   const ewm = walletManagers[BlockchainType.ETHEREUM]
+  const isConnected = !!twm || !!ewm
 
   return (
     <ClientContext.Provider
@@ -212,12 +231,12 @@ export function ClientProvider(
         config,
         subscribe,
         unsubscribe,
-        isConnected: !!twm || !!ewm,
+        isConnected,
       }}
     >
       <>
-        {config.ETHEREUM && <EthereumWallet />}
-        {config.TEZOS && <TezosWallet config={config.TEZOS} />}
+        {config.wallets.ETHEREUM && <EthereumWallet />}
+        {config.wallets.TEZOS && <TezosWallet config={config.wallets.TEZOS} />}
         {children}
       </>
     </ClientContext.Provider>

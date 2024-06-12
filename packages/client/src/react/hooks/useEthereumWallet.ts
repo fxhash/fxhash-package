@@ -49,16 +49,15 @@ export function useEthereumWallet(): {
   }
   function connect(): PromiseResult<void, Error> {
     return new Promise(resolve => {
-      invariant(config.ETHEREUM, "Ethereum config not provided")
       // TODO: Should this resolve in a success or throw?
       console.log("use connectkit modal")
       return resolve(success())
+      invariant(config.wallets.ETHEREUM, "Ethereum config not provided")
     })
   }
   function disconnect(): PromiseResult<void, Error> {
     return new Promise(resolve => {
-      invariant(config.ETHEREUM, "Ethereum config not provided")
-      console.log(ethereumWalletManager)
+      invariant(config.wallets.ETHEREUM, "Ethereum config not provided")
       invariant(
         ethereumWalletManager,
         "Ethereum wallet manager is not connected"

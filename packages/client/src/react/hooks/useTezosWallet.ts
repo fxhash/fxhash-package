@@ -51,12 +51,12 @@ export function useTezosWallet(): {
     return new Promise((resolve, reject) => {
       async function connect() {
         try {
-          invariant(config.TEZOS, "Tezos config not provided")
+          invariant(config.wallets.TEZOS, "Tezos config not provided")
           invariant(
-            config.TEZOS.beaconWallet,
+            config.wallets.TEZOS.beaconWallet,
             "Tezos beacon wallet not provided"
           )
-          await config.TEZOS.beaconWallet.requestPermissions()
+          await config.wallets.TEZOS.beaconWallet.requestPermissions()
           resolve(success())
         } catch (e) {
           reject(e)
@@ -70,12 +70,12 @@ export function useTezosWallet(): {
     return new Promise((resolve, reject) => {
       async function disconnect() {
         try {
-          invariant(config.TEZOS, "Tezos config not provided")
+          invariant(config.wallets.TEZOS, "Tezos config not provided")
           invariant(
-            config.TEZOS.beaconWallet,
+            config.wallets.TEZOS.beaconWallet,
             "Tezos beacon wallet not provided"
           )
-          await config.TEZOS.beaconWallet.clearActiveAccount()
+          await config.wallets.TEZOS.beaconWallet.clearActiveAccount()
           resolve(success())
         } catch (e) {
           reject(e)
