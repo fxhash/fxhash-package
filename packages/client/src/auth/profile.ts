@@ -16,9 +16,13 @@ export async function getUserProfile(
   options: GqlOptions = gqlDefaultOptions
 ): Promise<GetSingleUserProfileResult> {
   const { gqlClient } = options
-  const { data, error } = await gqlClient.query(Qu_GetAccountWallets, {
-    where,
-  })
+  const { data, error } = await gqlClient.query(
+    Qu_GetAccountWallets,
+    {
+      where,
+    },
+    { fetchOptions: { credentials: "include" } }
+  )
   if (error) {
     throw new GraphQLError(error.message)
   }
