@@ -1,11 +1,12 @@
 "use client"
-// @ts-ignore - unused
-import React, {
+import {
   PropsWithChildren,
   createContext,
   useState,
   useRef,
+  useEffect,
   useCallback,
+  useMemo,
 } from "react"
 import { FxhashClient } from "../../client/index.js"
 import { BlockchainType } from "@fxhash/shared"
@@ -44,7 +45,8 @@ export type WalletsConfig =
 
 export interface ClientProviderConfig {
   wallets: WalletsConfig
-  useAccessToken?: boolean
+  // TODO: Enable jwtAuth
+  jwtAuth?: false
 }
 
 export type WalletManagers = {
@@ -66,14 +68,6 @@ export interface ClientContext {
   ) => void
   config: ClientProviderConfig
   walletManagers: WalletManagers
-  subscribe: (
-    event: ClientContextEvent,
-    callback: (...args: any[]) => void
-  ) => void
-  unsubscribe: (
-    event: ClientContextEvent,
-    callback: (...args: any[]) => void
-  ) => void
   error: ClientError
   setError: (error: ClientError) => void
 }
@@ -90,8 +84,6 @@ const defaultClientContext: ClientContext = {
     [BlockchainType.ETHEREUM]: null,
     [BlockchainType.BASE]: null,
   },
-  subscribe: () => {},
-  unsubscribe: () => {},
   error: null,
   setError: () => {},
 }
@@ -108,140 +100,98 @@ export function ClientProvider(
   )
   const client = useRef<FxhashClient>(defaultClientContext.client)
 
-  const subscribers = useRef<{
-    [key in ClientContextEvent]?: Array<(...args: any[]) => void>
-  }>({})
-
-  const emitEvent = useCallback(
-    (event: ClientContextEvent, ...args: any[]) => {
-      ;(subscribers.current[event] || []).forEach(callback => callback(...args))
-    },
-    [subscribers]
-  )
-  /*
-  async function refreshAccessToken() {
-    try {
-      const res = await client.current.refreshAccessToken()
-      return res
-    } catch (e) {
-      // TODO: Add retry
-      console.error(e)
-      throw e
-    }
-  }
-  */
   async function authenticate(
     chain: BlockchainType,
     manager: TezosWalletManager | EthereumWalletManager
   ) {
-    const account = await client.current.getAccountFromStorage()
-    let accessToken, refreshToken
     // If an account exists we need to verify it
+    const account = await client.current.getAccountFromStorage()
     if (account) {
-      // TODO: fetch myProfile to confirm valid sessions
-      // ✅ if success we are logged in all good
-      // ❌ if fail and useAccessToken we can try to refresh
-      // ❌ if fail and !useAccessToken we need to sign a message
-    } else {
-      const { text, id } = await client.current.generateChallenge(
-        chain,
-        manager.address
-      )
-      const sig = await manager.signMessage(text)
-      if (sig.isFailure()) {
+      try {
+        // If we can get the profile we are authenticated
+        await client.current.getProfile()
         return
+      } catch (e) {
+        console.log("Error getting profile", e)
+        // If we are using jwtAuth we can try to refresh the token
+        if (config.jwtAuth) {
+          try {
+            await client.current.refreshAccessToken()
+            return
+          } catch (e) {
+            console.log("Error refreshing token", e)
+          }
+        }
       }
-      let publicKey
-      if (chain === BlockchainType.TEZOS) {
-        publicKey = await (manager as TezosWalletManager).getPublicKey()
-      }
-      const res = await client.current.authenticate(
-        id,
-        sig.value.signature,
-        publicKey
-      )
-      accessToken = res.accessToken
-      refreshToken = res.refreshToken
     }
-    const payload = {
+    // If we don't have a session, we need to sign the challenge and do the authentication
+    const { text, id } = await client.current.generateChallenge(
       chain,
-      accessToken,
-      refreshToken,
+      manager.address
+    )
+    const sig = await manager.signMessage(text)
+    if (sig.isFailure()) {
+      return
     }
-    emitEvent(ClientContextEvent.onAuthenticate, payload)
-    return payload
+    let publicKey
+    if (chain === BlockchainType.TEZOS) {
+      publicKey = await (manager as TezosWalletManager).getPublicKey()
+    }
+    await client.current.authenticate(id, sig.value.signature, publicKey)
+
+    return { chain }
   }
 
+  // We use chainsSigning to avoid multiple authentications at the same time
+  // This can happen because e.g. beacon wallet emits multiple events
+  const chainsSigning = useRef<BlockchainType[]>([])
+
   const setWalletManager = useCallback(
-    (
+    async (
       chain: BlockchainType,
       manager: TezosWalletManager | EthereumWalletManager | null
     ) => {
-      _setWalletManagers(prev => {
-        const next = { ...prev, [chain]: manager }
-        // The same Ethereum wallet manager is used for both ETHEREUM and BASE chains
-        if (chain === BlockchainType.ETHEREUM) {
-          next[BlockchainType.BASE] = next[BlockchainType.ETHEREUM]
-        }
-        if (manager) {
-          emitEvent(ClientContextEvent.onConnect, chain, manager)
-        } else {
-          emitEvent(ClientContextEvent.onDisconnect, chain, {
-            walletManagers: next,
-          })
-        }
-        // If we receive a wallet but have no accessToken we need to authenticate
-        // either from the refreshToken stored in the storage or by signing a message
-        if (!client.current.accessToken && !!manager) {
-          authenticate(chain, manager)
-        }
-        if (!next[BlockchainType.TEZOS] && !next[BlockchainType.ETHEREUM]) {
-          //TODO: Logout
-        }
-        return next
-      })
-    },
-    [emitEvent, _setWalletManagers]
-  )
-
-  const subscribe = useCallback(
-    (event: ClientContextEvent, callback: (...args: any[]) => void) => {
-      if (!subscribers.current[event]) {
-        subscribers.current[event] = []
+      // If we receive a wallet but the client is not authenticated we need to authenticate
+      // We prevent multiple authentications at the same time with chainsSigning
+      if (
+        !client.current.authenticated &&
+        !!manager &&
+        !chainsSigning.current.includes(chain)
+      ) {
+        chainsSigning.current.push(chain)
+        await authenticate(chain, manager)
+        chainsSigning.current = chainsSigning.current.filter(c => c !== chain)
       }
-      subscribers.current[event]?.push(callback)
+      _setWalletManagers(prev => ({ ...prev, [chain]: manager }))
     },
-    []
-  )
-
-  const unsubscribe = useCallback(
-    (event: ClientContextEvent, callback: (...args: any[]) => void) => {
-      if (subscribers.current[event]) {
-        subscribers.current[event] = subscribers.current[event]?.filter(
-          h => h !== callback
-        )
-      }
-    },
-    []
+    [_setWalletManagers, walletManagers]
   )
 
   const twm = walletManagers[BlockchainType.TEZOS]
   const ewm = walletManagers[BlockchainType.ETHEREUM]
-  const isConnected = !!twm || !!ewm
+
+  const isConnected = useMemo(() => !!twm || !!ewm, [twm, ewm])
+  const lastIsConnected = useRef(isConnected)
+
+  // When all walletmanagers are disconnected we logout
+  useEffect(() => {
+    if (lastIsConnected.current !== isConnected && !isConnected) {
+      client.current.logout()
+    }
+    lastIsConnected.current = isConnected
+  }, [isConnected, lastIsConnected.current])
 
   return (
     <ClientContext.Provider
       value={{
         client: client.current,
-        walletManagers,
+        walletManagers: { ...walletManagers, [BlockchainType.BASE]: ewm },
         setWalletManager,
         tezosWalletManager: twm ? (twm as unknown as TezosWalletManager) : null,
         ethereumWalletManager: ewm
           ? (ewm as unknown as EthereumWalletManager)
           : null,
         config,
-        subscribe,
-        unsubscribe,
         isConnected,
         error,
         setError,

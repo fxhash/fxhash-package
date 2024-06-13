@@ -11,9 +11,10 @@ import {
   generateChallenge,
   authenticate,
   refreshAccessToken,
+  logout,
 } from "@/auth/index.js"
 import { Storage } from "@/util/Storage/Storage.js"
-import { GetSingleUserProfileResult, getUserProfile } from "@/auth/profile.js"
+import { GetSingleUserProfileResult, getMyProfile } from "@/auth/profile.js"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
@@ -32,8 +33,10 @@ export class FxhashClient {
   public accountKey = `fxhash.${config.config.envName}.account`
 
   private storage: Storage
+  public authenticated = false
   public accessToken: string | null = null
   public profile: GetSingleUserProfileResult | null = null
+
   constructor(_options?: FxhashClientOptions) {
     const options = { ...defaultOptions, ..._options }
     this.gqlClient = options.gqlClient
@@ -48,7 +51,6 @@ export class FxhashClient {
       { chain, address },
       { gqlClient: this.gqlClient }
     )
-
     return res
   }
 
@@ -71,6 +73,7 @@ export class FxhashClient {
       refreshToken: res.refreshToken,
     })
     this.accessToken = res.accessToken
+    this.authenticated = true
     return res
   }
 
@@ -89,6 +92,7 @@ export class FxhashClient {
       refreshToken: res.refreshToken,
     })
     this.accessToken = res.accessToken
+    this.authenticated = true
     return res
   }
 
@@ -100,11 +104,21 @@ export class FxhashClient {
   async getProfile() {
     const account = await this.getAccountFromStorage()
     invariant(account, "No account authenticated")
-    const res = await getUserProfile(
-      { id: { _eq: account.id } },
-      { gqlClient: this.gqlClient }
-    )
+    const res = await getMyProfile({ gqlClient: this.gqlClient })
     this.profile = res
     return res
+  }
+
+  async logout() {
+    const account = await this.getAccountFromStorage()
+    invariant(account, "No account authenticated")
+    await logout(
+      { refreshToken: account.refreshToken },
+      { gqlClient: this.gqlClient }
+    )
+    await this.storage.removeItem(this.accountKey)
+    this.authenticated = false
+    this.accessToken = null
+    this.profile = null
   }
 }

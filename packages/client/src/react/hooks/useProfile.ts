@@ -1,7 +1,8 @@
 import { GetSingleUserProfileResult } from "@/auth/profile.js"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useClient } from "./useClient.js"
-import { ClientContextEvent, useLogin } from "../index.js"
+import { useConnect } from "./useConnect.js"
+import { useDisconnect } from "./useDisconnect.js"
 
 interface UseProfileHookResult {
   profile: GetSingleUserProfileResult | null
@@ -9,19 +10,19 @@ interface UseProfileHookResult {
 }
 
 export function useProfile(): UseProfileHookResult {
-  const { client, isConnected } = useClient()
+  const { isConnected, client } = useClient()
   const [profile, setProfile] = useState<GetSingleUserProfileResult | null>(
     null
   )
-  useLogin({
-    [ClientContextEvent.onAuthenticate]: async () => {
-      const profile = await client.getProfile()
-      setProfile(profile)
-    },
+  // When a wallet is connected we fetch the user profile
+  useConnect(async () => {
+    const profile = await client.getProfile()
+    setProfile(profile)
   })
+
   // When all wallets are disconnected, profile should be null
-  useEffect(() => {
+  useDisconnect(async () => {
     if (profile && !isConnected) setProfile(null)
-  }, [isConnected, profile])
+  })
   return { profile, isAuthenticated: !!profile }
 }

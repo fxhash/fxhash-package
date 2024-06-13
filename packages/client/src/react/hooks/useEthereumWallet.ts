@@ -51,7 +51,7 @@ export function useEthereumWallet(): {
     return new Promise(() => {
       invariant(config.wallets.ETHEREUM, "Ethereum config not provided")
       throw new Error(
-        "@fxhash/client does not provide a generic wallet connection method. Instead it's listining for your wallet connection e.g. using connectkit."
+        "@fxhash/client does not provide a generic wallet connection method. Instead it's listening for your wallet connection e.g. using connectkit."
       )
     })
   }

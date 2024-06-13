@@ -1,35 +1,34 @@
-import {
-  Account_Bool_Exp,
-  GetAccountWalletsQuery,
-  Qu_GetAccountWallets,
-} from "@fxhash/gql"
+import { GetMyAccountQuery, Qu_GetMyAccount } from "@fxhash/gql"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
 import { GraphQLError, UnexpectedError } from "@/index.js"
 
-// TODO: Is there a better soltuon for this?
 export type GetSingleUserProfileResult = NonNullable<
-  NonNullable<NonNullable<GetAccountWalletsQuery["offchain"]>["Account"]>[0]
+  NonNullable<
+    NonNullable<
+      NonNullable<NonNullable<GetMyAccountQuery["offchain"]>["UserAccount"]>[0]
+    >
+  >["account"]
 >
 
-export async function getUserProfile(
-  where: Account_Bool_Exp,
+export async function getMyProfile(
   options: GqlOptions = gqlDefaultOptions
 ): Promise<GetSingleUserProfileResult> {
   const { gqlClient } = options
   const { data, error } = await gqlClient.query(
-    Qu_GetAccountWallets,
+    Qu_GetMyAccount,
+    {},
     {
-      where,
-    },
-    { fetchOptions: { credentials: "include" } }
+      // TODO: When we use jwt auth we dont need to send credentials
+      fetchOptions: { credentials: "include" },
+    }
   )
   if (error) {
     throw new GraphQLError(error.message)
   }
-  if (!data || !data.offchain?.Account) {
+  if (!data || !data.offchain?.UserAccount[0]?.account) {
     throw new UnexpectedError()
   }
-  return data.offchain.Account[0]
+  return data.offchain.UserAccount[0].account
 }
 
 export function profileContainsAddress(
