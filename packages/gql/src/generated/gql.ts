@@ -17,6 +17,7 @@ const documents = {
     "\n  mutation GenerateChallenge($input: ChallengeInput!) {\n    generate_challenge(input: $input) {\n      id\n      text\n    }\n  }\n": types.GenerateChallengeDocument,
     "\n  mutation Authenticate($input: AuthenticationInput!) {\n    authenticate(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.AuthenticateDocument,
     "\n  mutation Refresh($input: RefreshInput!) {\n    refresh(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshDocument,
+    "\n  mutation Logout($input: LogoutInput!) {\n    logout(input: $input) {\n      success\n    }\n  }\n": types.LogoutDocument,
     "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_BaseDetailsFragmentDoc,
     "\n  fragment Account_Wallets on Account {\n    wallets {\n      ...Wallet_BaseDetails\n    }\n    mainWallet {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_WalletsFragmentDoc,
     "\n  query GetAccounts($where: Account_bool_exp = {}) {\n    offchain {\n      Account(where: $where) {\n        ...Account_BaseDetails\n      }\n    }\n  }\n": types.GetAccountsDocument,
@@ -75,6 +76,10 @@ export function graphql(source: "\n  mutation Authenticate($input: Authenticatio
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation Refresh($input: RefreshInput!) {\n    refresh(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation Refresh($input: RefreshInput!) {\n    refresh(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation Logout($input: LogoutInput!) {\n    logout(input: $input) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation Logout($input: LogoutInput!) {\n    logout(input: $input) {\n      success\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

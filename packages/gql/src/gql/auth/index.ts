@@ -29,3 +29,11 @@ export const Mu_RefreshToken = graphql(`
     }
   }
 `)
+
+export const Mu_Logout = graphql(`
+  mutation Logout($input: LogoutInput!) {
+    logout(input: $input) {
+      success
+    }
+  }
+`)
