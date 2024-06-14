@@ -29,3 +29,10 @@ export class WalletDoesntBelongToUserError extends Error {
     this.chain = chain
   }
 }
+
+export class ClientAuthenticationError extends Error {
+  constructor() {
+    super("Client authentication error")
+    this.name = "ClientAuthenticationError"
+  }
+}

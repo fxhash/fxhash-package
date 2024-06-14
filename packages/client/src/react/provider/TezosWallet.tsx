@@ -28,7 +28,9 @@ export function TezosWallet(props: TezosWalletProps) {
       invariant(wallet, "BeaconWallet is required")
       setError(null)
       if (!account) {
-        setWalletManager(BlockchainType.TEZOS, null)
+        setWalletManager(BlockchainType.TEZOS, null, () =>
+          wallet.clearActiveAccount()
+        )
         return
       }
 
@@ -53,7 +55,9 @@ export function TezosWallet(props: TezosWalletProps) {
         rpcNodes: fxhashConfig.tez.apis.rpcs,
         address: account.address,
       })
-      setWalletManager(BlockchainType.TEZOS, twm)
+      setWalletManager(BlockchainType.TEZOS, twm, () =>
+        wallet.clearActiveAccount()
+      )
     },
     [config, setWalletManager, client.profile, setError, tezosWalletManager]
   )

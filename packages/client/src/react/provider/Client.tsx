@@ -9,7 +9,7 @@ import {
   useMemo,
 } from "react"
 import { FxhashClient } from "../../client/index.js"
-import { BlockchainType } from "@fxhash/shared"
+import { BlockchainType, PromiseResult, failure, success } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { BeaconWallet } from "@taquito/beacon-wallet"
@@ -17,6 +17,7 @@ import { EthereumWallet } from "./EthereumWallet.js"
 import { TezosWallet } from "./TezosWallet.js"
 import { TezosToolkit } from "@taquito/taquito"
 import {
+  ClientAuthenticationError,
   LocalStorageDriver,
   Storage,
   WalletDoesntBelongToUserError,
@@ -64,7 +65,8 @@ export interface ClientContext {
   isConnected: boolean
   setWalletManager: (
     chain: BlockchainType,
-    manager: TezosWalletManager | EthereumWalletManager | null
+    manager: TezosWalletManager | EthereumWalletManager | null,
+    disconnect: () => void
   ) => void
   config: ClientProviderConfig
   walletManagers: WalletManagers
@@ -103,21 +105,21 @@ export function ClientProvider(
   async function authenticate(
     chain: BlockchainType,
     manager: TezosWalletManager | EthereumWalletManager
-  ) {
+  ): PromiseResult<boolean, ClientAuthenticationError> {
     // If an account exists we need to verify it
     const account = await client.current.getAccountFromStorage()
     if (account) {
       try {
         // If we can get the profile we are authenticated
         await client.current.getProfile()
-        return
+        return success(true)
       } catch (e) {
         console.log("Error getting profile", e)
         // If we are using jwtAuth we can try to refresh the token
         if (config.jwtAuth) {
           try {
             await client.current.refreshAccessToken()
-            return
+            return success(true)
           } catch (e) {
             console.log("Error refreshing token", e)
           }
@@ -131,7 +133,7 @@ export function ClientProvider(
     )
     const sig = await manager.signMessage(text)
     if (sig.isFailure()) {
-      return
+      return failure(new ClientAuthenticationError())
     }
     let publicKey
     if (chain === BlockchainType.TEZOS) {
@@ -139,7 +141,7 @@ export function ClientProvider(
     }
     await client.current.authenticate(id, sig.value.signature, publicKey)
 
-    return { chain }
+    return success(true)
   }
 
   // We use chainsSigning to avoid multiple authentications at the same time
@@ -149,18 +151,23 @@ export function ClientProvider(
   const setWalletManager = useCallback(
     async (
       chain: BlockchainType,
-      manager: TezosWalletManager | EthereumWalletManager | null
+      manager: TezosWalletManager | EthereumWalletManager | null,
+      disconnect: () => void
     ) => {
-      // If we receive a wallet but the client is not authenticated we need to authenticate
       // We prevent multiple authentications at the same time with chainsSigning
-      if (
-        !client.current.authenticated &&
-        !!manager &&
-        !chainsSigning.current.includes(chain)
-      ) {
+      if (chainsSigning.current.includes(chain)) return
+      // If we receive a wallet but the client is not authenticated we need to authenticate
+      if (!client.current.authenticated && !!manager) {
         chainsSigning.current.push(chain)
-        await authenticate(chain, manager)
+        const res = await authenticate(chain, manager)
         chainsSigning.current = chainsSigning.current.filter(c => c !== chain)
+        if (res.isFailure()) {
+          // TODO: We could change the implementation so we dont need to pass the disconnect function from the wallet providers
+          // We would have to check within the wallet provider if the user will need to sign and send the signature to the function instead
+          // This is just a minor improvement
+          disconnect()
+          return
+        }
       }
       _setWalletManagers(prev => ({ ...prev, [chain]: manager }))
     },

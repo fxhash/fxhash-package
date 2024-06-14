@@ -44,10 +44,14 @@ export function EthereumWallet() {
         address: data.address,
         signer,
       })
-      setWalletManager(BlockchainType.ETHEREUM, ewm)
+      setWalletManager(BlockchainType.ETHEREUM, ewm, () =>
+        disconnect(wagmiConfig)
+      )
     },
     onDisconnect: async () => {
-      setWalletManager(BlockchainType.ETHEREUM, null)
+      setWalletManager(BlockchainType.ETHEREUM, null, () =>
+        disconnect(wagmiConfig)
+      )
     },
   })
   return null
