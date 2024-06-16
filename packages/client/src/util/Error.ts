@@ -30,6 +30,15 @@ export class WalletDoesntBelongToUserError extends Error {
   }
 }
 
+export class WrongWalletActivatedError extends Error {
+  chain: BlockchainType
+  constructor(chain: BlockchainType) {
+    super("Activated Wallet does not belong to user.")
+    this.name = "MultipleWalletsActivatedError"
+    this.chain = chain
+  }
+}
+
 export class ClientAuthenticationError extends Error {
   constructor() {
     super("Client authentication error")

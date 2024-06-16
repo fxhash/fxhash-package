@@ -21,6 +21,7 @@ import {
   LocalStorageDriver,
   Storage,
   WalletDoesntBelongToUserError,
+  WrongWalletActivatedError,
 } from "@/index.js"
 
 export enum ClientContextEvent {
@@ -56,7 +57,10 @@ export type WalletManagers = {
   [BlockchainType.BASE]: EthereumWalletManager | null
 }
 
-export type ClientError = null | WalletDoesntBelongToUserError
+export type ClientError =
+  | null
+  | WalletDoesntBelongToUserError
+  | WrongWalletActivatedError
 
 export interface ClientContext {
   client: FxhashClient
