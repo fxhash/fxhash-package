@@ -23,6 +23,7 @@ import {
   WalletDoesntBelongToUserError,
   WrongWalletActivatedError,
 } from "@/index.js"
+import { isTezosWalletManager } from "@/util/types.js"
 
 export enum ClientContextEvent {
   onConnect = "onConnect",
@@ -140,8 +141,8 @@ export function ClientProvider(
       return failure(new ClientAuthenticationError())
     }
     let publicKey
-    if (chain === BlockchainType.TEZOS) {
-      publicKey = await (manager as TezosWalletManager).getPublicKey()
+    if (isTezosWalletManager(manager)) {
+      publicKey = await manager.getPublicKey()
     }
     await client.current.authenticate(id, sig.value.signature, publicKey)
 
