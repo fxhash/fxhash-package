@@ -48,8 +48,7 @@ export type WalletsConfig =
 
 export interface ClientProviderConfig {
   wallets: WalletsConfig
-  // TODO: Enable jwtAuth
-  jwtAuth?: false
+  auth: "cookie" | "jwt"
 }
 
 export type WalletManagers = {
@@ -85,7 +84,7 @@ const defaultClientContext: ClientContext = {
   tezosWalletManager: null,
   ethereumWalletManager: null,
   setWalletManager: () => {},
-  config: { wallets: { [BlockchainType.ETHEREUM]: true } },
+  config: { wallets: { [BlockchainType.ETHEREUM]: true }, auth: "cookie" },
   walletManagers: {
     [BlockchainType.TEZOS]: null,
     [BlockchainType.ETHEREUM]: null,
@@ -101,7 +100,8 @@ export function ClientProvider(
   props: PropsWithChildren<{ config: ClientProviderConfig }>
 ) {
   const [error, setError] = useState<ClientError>(null)
-  const { children, config } = props
+  const { children, config: userConfig } = props
+  const config = { ...defaultClientContext.config, ...userConfig }
   const [walletManagers, _setWalletManagers] = useState<WalletManagers>(
     defaultClientContext.walletManagers
   )
@@ -121,7 +121,7 @@ export function ClientProvider(
       } catch (e) {
         console.log("Error getting profile", e)
         // If we are using jwtAuth we can try to refresh the token
-        if (config.jwtAuth) {
+        if (config.auth === "jwt") {
           try {
             await client.current.refreshAccessToken()
             return success(true)
