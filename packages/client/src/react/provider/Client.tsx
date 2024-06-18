@@ -51,6 +51,11 @@ export interface ClientProviderConfig {
   auth: "cookie" | "jwt"
 }
 
+interface ClientProviderUserConfig {
+  wallets: WalletsConfig
+  auth?: "cookie" | "jwt"
+}
+
 export type WalletManagers = {
   [BlockchainType.TEZOS]: TezosWalletManager | null
   [BlockchainType.ETHEREUM]: EthereumWalletManager | null
@@ -97,7 +102,7 @@ const defaultClientContext: ClientContext = {
 export const ClientContext = createContext<ClientContext>(defaultClientContext)
 
 export function ClientProvider(
-  props: PropsWithChildren<{ config: ClientProviderConfig }>
+  props: PropsWithChildren<{ config: ClientProviderUserConfig }>
 ) {
   const [error, setError] = useState<ClientError>(null)
   const { children, config: userConfig } = props
