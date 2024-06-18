@@ -31,19 +31,6 @@ export function processOverridenRoyalties(
   royalties: Royalties,
   chain: BlockchainType
 ): BasisPointRoyalties[] {
-  royalties = {
-    allocations: [375000, 375000, 250000],
-    basis_points: 800,
-    chain: "ETHEREUM",
-    id: "0xBb47F0ED4A7E3BffcA75660dFa3B053FB7FcE78E",
-    receiver: "0x50360D2ee663B75faB10Be377889A7a6380800f4",
-    receivers: [
-      "0x19Cb46112F4f360b721a99504d8B07440500a701",
-      "0xdE089C6a499644C7bd721F18FcC1dAe532261022",
-      "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
-    ],
-  }
-
   const newFee = 50
   const totalRoyalties = royalties.basis_points
   const numReceivers = royalties.receivers.length
