@@ -15,11 +15,16 @@ export type TMintEthV1OperationParams = {
   isFrame: boolean
 }
 
+const MAX_RETRIES = 15 // 12 second block time + a few seconds for good measure
+const ONE_SECOND = 1000
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 /**
  * Mint an unique iteration of a Generative Token using the Fixed Priced minter
  * @dev contract interface: function buy(address _token, uint256 _mintId, uint256 _amount, address _to)
  */
 export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1OperationParams> {
+  private retries = 0
   private mintOperation: EthereumContractOperation<unknown> | undefined =
     undefined
 
@@ -96,9 +101,25 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
       }
     }
   }
+
   async call(): Promise<{ type: TransactionType; hash: string }> {
     invariant(this.mintOperation, "Mint operation not prepared")
-    return await this.mintOperation.call()
+    try {
+      return await this.mintOperation.call()
+    } catch (e: unknown) {
+      if (this.retries++ >= MAX_RETRIES) throw e
+      if (e instanceof Error && e.message.includes("NotStarted")) {
+        // retry in case the current block started before minting opened
+        await sleep(ONE_SECOND)
+        return this.call()
+      }
+      if (e instanceof Error && e.message.includes("InvalidPayment")) {
+        // retry in case the current block started before the DA tier changed
+        await sleep(ONE_SECOND)
+        return this.call()
+      }
+      throw e
+    }
   }
 
   success(): string {
