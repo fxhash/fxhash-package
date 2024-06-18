@@ -15,7 +15,7 @@ export type Royalties = {
 
 export type BasisPointRoyalties = {
   receiver: string
-  basis_points: number
+  basis_points: string
 }
 
 export async function getProjectRoyalties(
@@ -30,42 +30,56 @@ export async function getProjectRoyalties(
 export function processOverridenRoyalties(
   royalties: Royalties,
   chain: BlockchainType
-): BasisPointRoyalties[] {
+): string[] {
+  const newFee = 50
+  const totalRoyalties = royalties.basis_points
+  const numReceivers = royalties.receivers.length
+
   const addressToModify =
     chain === BlockchainType.ETHEREUM
       ? config.eth.config.ethFeeReceiver
       : config.base.config.ethFeeReceiver
-  const percentageToSubtract = 50
-  const processedRoyalties: BasisPointRoyalties[] = []
 
-  const fxhashIndex = royalties.receivers.indexOf(addressToModify)
-  if (fxhashIndex === -1) {
-    throw new Error("FXHASH fee receiver address not found in royalties")
-  }
-  const fxhashAllocation = royalties.allocations[fxhashIndex]
-  processedRoyalties.push({
-    receiver: addressToModify,
-    basis_points:
-      fxhashAllocation / royalties.basis_points - percentageToSubtract,
-  })
-  const delta = Math.floor(
-    percentageToSubtract / (royalties.receivers.length - 1)
-  )
-  for (let i = 0; i < royalties.receivers.length; i++) {
-    if (i !== fxhashIndex) {
-      processedRoyalties.push({
-        receiver: royalties.receivers[i],
-        basis_points: royalties.allocations[i] / royalties.basis_points + delta,
-      })
+  const totalShares: number[] = []
+  let fxhashIndex: number | undefined
+
+  // Calculate initial shares for each person
+  for (let i = 0; i < numReceivers; i++) {
+    const allocationBasisPoints = royalties.allocations[i]
+    const totalShare = (totalRoyalties * allocationBasisPoints) / 1000000
+    totalShares.push(totalShare)
+    if (royalties.receivers[i] === addressToModify) {
+      fxhashIndex = i
     }
   }
-  const total = processedRoyalties.reduce(
-    (acc, { basis_points }) => acc + basis_points,
-    0
-  )
-  if (total !== royalties.basis_points) {
-    processedRoyalties[1].basis_points = processedRoyalties[1].basis_points + 1
+
+  if (fxhashIndex === undefined) {
+    throw new Error("fxhash receiver not found")
   }
 
+  const additionalAmountForReceivers = Math.floor(newFee / (numReceivers - 1))
+  const rounding = newFee % (numReceivers - 1)
+  // Calculate new shares for each person
+  for (let i = 0; i < numReceivers; i++) {
+    if (i !== fxhashIndex) {
+      totalShares[i] += additionalAmountForReceivers
+    } else {
+      totalShares[i] -= newFee
+    }
+  }
+
+  if (rounding) {
+    const firstNonFxIndex = royalties.receivers.findIndex(
+      receiver => receiver !== addressToModify
+    )
+    totalShares[firstNonFxIndex] += rounding
+  }
+
+  const processedRoyalties: string[] = []
+  for (let i = 0; i < numReceivers; i++) {
+    const receiver = royalties.receivers[i]
+    const basisPoints = totalShares[i]
+    processedRoyalties.push(`${receiver}:${basisPoints}`)
+  }
   return processedRoyalties
 }
