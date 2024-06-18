@@ -15,7 +15,7 @@ export type Royalties = {
 
 export type BasisPointRoyalties = {
   receiver: string
-  basis_points: number
+  basis_points: string
 }
 
 export async function getProjectRoyalties(
@@ -30,7 +30,7 @@ export async function getProjectRoyalties(
 export function processOverridenRoyalties(
   royalties: Royalties,
   chain: BlockchainType
-): BasisPointRoyalties[] {
+): string[] {
   const newFee = 50
   const totalRoyalties = royalties.basis_points
   const numReceivers = royalties.receivers.length
@@ -57,8 +57,8 @@ export function processOverridenRoyalties(
     throw new Error("fxhash receiver not found")
   }
 
-  const additionalAmountForReceivers = newFee / (numReceivers - 1)
-
+  const additionalAmountForReceivers = Math.floor(newFee / (numReceivers - 1))
+  const rounding = newFee % (numReceivers - 1)
   // Calculate new shares for each person
   for (let i = 0; i < numReceivers; i++) {
     if (i !== fxhashIndex) {
@@ -67,29 +67,19 @@ export function processOverridenRoyalties(
       totalShares[i] -= newFee
     }
   }
+  debugger
+  if (rounding) {
+    const firstNonFxIndex = royalties.receivers.findIndex(
+      receiver => receiver !== addressToModify
+    )
+    totalShares[firstNonFxIndex] += rounding
+  }
 
-  const newBasisPointRoyalties: BasisPointRoyalties[] = []
-  let total = 0
+  const processedRoyalties: string[] = []
   for (let i = 0; i < numReceivers; i++) {
-    const newBasisPoints = Math.round(
-      (totalShares[i] / totalRoyalties) * 1000000
-    )
-    total += newBasisPoints
-    newBasisPointRoyalties.push({
-      receiver: royalties.receivers[i],
-      basis_points: newBasisPoints,
-    })
+    const receiver = royalties.receivers[i]
+    const basisPoints = totalShares[i]
+    processedRoyalties.push(`${receiver}:${basisPoints}`)
   }
-
-  if (total <= 1000000 && 1000000 - total < 1000) {
-    const firstNonFxIndex = newBasisPointRoyalties.findIndex(
-      royalty => royalty.receiver !== addressToModify
-    )
-    newBasisPointRoyalties[firstNonFxIndex].basis_points += 1000000 - total
-  } else {
-    throw new Error(
-      "Error, could not re-process royalties, total basis points is not equal to 100%"
-    )
-  }
-  return newBasisPointRoyalties
+  return processedRoyalties
 }
