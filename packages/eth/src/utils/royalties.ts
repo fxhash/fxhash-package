@@ -67,7 +67,7 @@ export function processOverridenRoyalties(
       totalShares[i] -= newFee
     }
   }
-  debugger
+
   if (rounding) {
     const firstNonFxIndex = royalties.receivers.findIndex(
       receiver => receiver !== addressToModify
