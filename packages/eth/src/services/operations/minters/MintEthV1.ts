@@ -51,7 +51,6 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
           this.chain
         )
       } else {
-        console.log("here!")
         this.mintOperation = new MintDAEthV1Operation(
           this.manager,
           {
