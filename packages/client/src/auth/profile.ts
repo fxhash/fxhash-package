@@ -14,14 +14,7 @@ export async function getMyProfile(
   options: GqlOptions = gqlDefaultOptions
 ): Promise<GetSingleUserProfileResult> {
   const { gqlClient } = options
-  const { data, error } = await gqlClient.query(
-    Qu_GetMyAccount,
-    {},
-    {
-      // TODO: When we use jwt auth we dont need to send credentials
-      fetchOptions: { credentials: "include" },
-    }
-  )
+  const { data, error } = await gqlClient.query(Qu_GetMyAccount, {})
   if (error) {
     throw new GraphQLError(error.message)
   }

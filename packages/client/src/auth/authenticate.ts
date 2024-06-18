@@ -26,13 +26,9 @@ export async function authenticate(
   options: GqlOptions = gqlDefaultOptions
 ): Promise<AuthenticationResult> {
   const { gqlClient } = options
-  const { data, error } = await gqlClient.mutation(
-    Mu_Authenticate,
-    {
-      input,
-    },
-    { fetchOptions: { credentials: "include" } }
-  )
+  const { data, error } = await gqlClient.mutation(Mu_Authenticate, {
+    input,
+  })
   if (error) {
     throw new GraphQLError(error.message)
   }

@@ -7,13 +7,9 @@ export async function logout(
   options: GqlOptions = gqlDefaultOptions
 ): Promise<LogoutResult | undefined | null> {
   const { gqlClient } = options
-  const { data, error } = await gqlClient.mutation(
-    Mu_Logout,
-    {
-      input,
-    },
-    { fetchOptions: { credentials: "include" } }
-  )
+  const { data, error } = await gqlClient.mutation(Mu_Logout, {
+    input,
+  })
   if (error) {
     throw new GraphQLError(error.message)
   }
