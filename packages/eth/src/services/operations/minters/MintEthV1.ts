@@ -31,6 +31,9 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         this.params.whitelist ? (this.params.to as `0x${string}`) : null
       )
 
+    if (pricing.opens_at && pricing.opens_at > new Date().toISOString())
+      throw new Error("Minting is not yet open")
+
     if (!this.params.whitelist) {
       if (isFixed) {
         this.mintOperation = new MintFixedPriceEthV1Operation(
