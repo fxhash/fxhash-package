@@ -80,7 +80,8 @@ export function processOverridenRoyalties(
       basis_points: newBasisPoints,
     })
   }
-  if (total < 1000000 && 1000000 - total < 1000) {
+
+  if (total <= 1000000 && 1000000 - total < 1000) {
     const firstNonFxIndex = newBasisPointRoyalties.findIndex(
       royalty => royalty.receiver !== addressToModify
     )
@@ -90,6 +91,5 @@ export function processOverridenRoyalties(
       "Error, could not re-process royalties, total basis points is not equal to 100%"
     )
   }
-
   return newBasisPointRoyalties
 }
