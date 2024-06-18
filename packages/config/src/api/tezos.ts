@@ -1,11 +1,13 @@
 export interface ITezosApis {
   tzktWebsite: string
   tzkt: string
+  tzktPro: string
   rpcs: string[]
 }
 
 export const tezosTestnetApis: ITezosApis = {
   tzkt: "https://api.ghostnet.tzkt.io/v1/",
+  tzktPro: "https://api.ghostnet.tzkt.io/v1/",
   tzktWebsite: "https://ghostnet.tzkt.io/",
   rpcs: [
     "https://ghostnet.ecadinfra.com",
@@ -16,6 +18,7 @@ export const tezosTestnetApis: ITezosApis = {
 
 export const tezosMainnetApis: ITezosApis = {
   tzkt: "https://api.tzkt.io/v1/",
+  tzktPro: "https://pro.tzkt.io/v1/",
   tzktWebsite: "https://tzkt.io/",
   rpcs: [
     "https://rpc1.fxhash.xyz",
