@@ -82,16 +82,27 @@ export function processOverridenRoyalties(
   }
 
   const newBasisPointRoyalties: BasisPointRoyalties[] = []
+  let total = 0
   for (let i = 0; i < numReceivers; i++) {
     const newBasisPoints = Math.round(
       (totalShares[i] / totalRoyalties) * 1000000
     )
+    total += newBasisPoints
     newBasisPointRoyalties.push({
       receiver: royalties.receivers[i],
       basis_points: newBasisPoints,
     })
   }
-  debugger
+  if (total < 1000000 && 1000000 - total < 1000) {
+    const firstNonFxIndex = newBasisPointRoyalties.findIndex(
+      royalty => royalty.receiver !== addressToModify
+    )
+    newBasisPointRoyalties[firstNonFxIndex].basis_points += 1000000 - total
+  } else {
+    throw new Error(
+      "Error, could not re-process royalties, total basis points is not equal to 100%"
+    )
+  }
 
   return newBasisPointRoyalties
 }
