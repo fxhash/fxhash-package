@@ -96,7 +96,9 @@ export class FxhashClient {
     return res
   }
 
-  async getAccountFromStorage(): Promise<{ id: string; refreshToken: string }> {
+  async getAccountFromStorage(): Promise<
+    { id: string; refreshToken: string } | undefined
+  > {
     const account = (await this.storage.getItem(this.accountKey)) as any
     return account
   }
