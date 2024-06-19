@@ -51,7 +51,7 @@ export interface ClientProviderConfig {
   auth: "cookie" | "jwt"
 }
 
-interface ClientProviderUserConfig {
+export interface ClientProviderUserConfig {
   wallets: WalletsConfig
   auth?: "cookie" | "jwt"
 }
