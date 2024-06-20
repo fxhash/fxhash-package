@@ -2780,6 +2780,11 @@ type action {
   """
   redeemable: redeemable
   redeemable_address: String
+
+  """
+  An object relationship
+  """
+  target: user
   target_id: String
   ticket_id: String
   token_id: String
@@ -2843,6 +2848,7 @@ input action_bool_exp {
   op_hash: String_comparison_exp
   redeemable: redeemable_bool_exp
   redeemable_address: String_comparison_exp
+  target: user_bool_exp
   target_id: String_comparison_exp
   ticket_id: String_comparison_exp
   token_id: String_comparison_exp
@@ -2906,6 +2912,7 @@ input action_order_by {
   op_hash: order_by
   redeemable: redeemable_order_by
   redeemable_address: order_by
+  target: user_order_by
   target_id: order_by
   ticket_id: order_by
   token_id: order_by
@@ -16877,7 +16884,7 @@ type pricing_dutch_auction {
   id: String!
   levels: [numeric!]!
   opens_at: timestamptz
-  refundable: Boolean
+  refundable: Boolean!
   resting_price: String!
   token_id: String
 }
