@@ -102,7 +102,7 @@ const defaultClientContext: ClientContext = {
 export const ClientContext = createContext<ClientContext>(defaultClientContext)
 
 export function ClientProvider(
-  props: PropsWithChildren<{ config: ClientProviderUserConfig }>
+  props: PropsWithChildren<{ config?: ClientProviderUserConfig }>
 ) {
   const [error, setError] = useState<ClientError>(null)
   const { children, config: userConfig } = props
