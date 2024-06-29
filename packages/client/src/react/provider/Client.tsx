@@ -136,6 +136,14 @@ export function ClientProvider(
         }
       }
     }
+
+    /**
+     * @review
+     * Should we automatically request a signature from the wallet here ?
+     * It feels like a bad UX pattern to open fxhash.xyz and get a wallet
+     * prompt right away ?
+     */
+
     // If we don't have a session, we need to sign the challenge and do the authentication
     const { text, id } = await client.current.generateChallenge(
       chain,
@@ -143,6 +151,10 @@ export function ClientProvider(
     )
     const sig = await manager.signMessage(text)
     if (sig.isFailure()) {
+      /**
+       * @review
+       * This error is too generic, should be more specified
+       */
       return failure(new ClientAuthenticationError())
     }
     let publicKey

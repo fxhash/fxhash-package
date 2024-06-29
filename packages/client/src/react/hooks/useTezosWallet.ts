@@ -68,6 +68,10 @@ export function useTezosWallet(): {
 
   function disconnect(): PromiseResult<void, Error> {
     return new Promise((resolve, reject) => {
+      /**
+       * @review
+       * why is the logic encapsulted in a fn ?
+       */
       async function disconnect() {
         try {
           invariant(config.wallets.TEZOS, "Tezos config not provided")

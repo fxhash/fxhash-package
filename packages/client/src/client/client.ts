@@ -34,6 +34,13 @@ export class FxhashClient {
 
   private storage: Storage
   public authenticated = false
+  /**
+   * @review
+   * For seperation of concerns, the fxhash client shouldn't directly store
+   * the access token, as it's depending on the configuration. The
+   * authentication with cookie vs with jwt should be abstracted in isolation,
+   * this class should be dumb in that regard.
+   */
   public accessToken: string | null = null
   public profile: GetSingleUserProfileResult | null = null
 
