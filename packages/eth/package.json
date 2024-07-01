@@ -24,7 +24,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@0xsplits/splits-sdk": "3.2.4",
+    "@0xsplits/splits-sdk": "4.0.3",
     "@fxhash/shared": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",

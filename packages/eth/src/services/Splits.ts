@@ -2,6 +2,7 @@ import { SplitsClient } from "@0xsplits/splits-sdk"
 import { BlockchainType } from "@fxhash/shared"
 import { Account, Chain, PublicClient, Transport, WalletClient } from "viem"
 import { getChainIdForChain } from "./Wallet.js"
+import { config } from "@fxhash/config"
 
 export const SPLITS_ETHER_TOKEN = "0x0000000000000000000000000000000000000000"
 
@@ -18,5 +19,8 @@ export function getSplitsClient(
     // viem wallet client (optional, required if using any contract write functions. must have an account already attached)
     // @ts-ignore Upgrade split sdk to v4 once published
     walletClient: walletClient,
+    apiConfig: {
+      apiKey: config.config.splitsApiKey,
+    },
   })
 }

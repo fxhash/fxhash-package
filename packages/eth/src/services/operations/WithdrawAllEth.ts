@@ -40,6 +40,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
+    const chainId = getCurrentChain(this.chain).id
     //First we need to fetch the proceeds for the address
     const proceeds = await gqlClient.query(Qu_GetEthMinterProceeds, {
       where: {
@@ -110,13 +111,16 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
 
     //we fetch all the splits related to the user
     //we get the current user splits having money
-    const userSplits = await splitsClient.getUserEarningsByContract({
-      userAddress: this.params.address,
-    })
+    const userSplits = await splitsClient.dataClient?.getUserEarningsByContract(
+      {
+        userAddress: this.params.address,
+        chainId: chainId,
+      }
+    )
 
     //we transform the list of splits into a list of split addresses
     const filteredUserSplits = splitsWithEarnings.concat(
-      Object.keys(userSplits.activeBalances)
+      Object.keys(userSplits?.activeBalances || {})
     )
 
     //we remove duplicates
@@ -125,7 +129,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //before withdrawing, we first need to distribute the funds
     const distributeCalls = await Promise.all(
       [...splitSet].map(async split => {
-        return await splitsClient.callData.distributeToken({
+        return await splitsClient.splitV1!.callData.distributeToken({
           splitAddress: split,
           token: SPLITS_ETHER_TOKEN,
         })
@@ -136,17 +140,22 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //now that this is done we can finally withdraw them
     for (const split of splitsWithEarnings) {
       //we fetch the splits recipient
-      const { recipients } = await splitsClient.getSplitMetadata({
+      const splitMetadata = await splitsClient.dataClient?.getSplitMetadata({
+        chainId: chainId,
         splitAddress: split,
       })
+      if (!splitMetadata) {
+        throw new Error("Split metadata not found")
+      }
+
       //format the list to be easily usable
-      const recipientAddresses = recipients.map(
+      const recipientAddresses = splitMetadata.recipients.map(
         recipient => recipient.recipient.address
       )
       //now we prepare the withdraw calls
       const withdrawCalls = await Promise.all(
         recipientAddresses.map(async address => {
-          return await splitsClient.callData.withdrawFunds({
+          return await splitsClient.splitV1!.callData.withdrawFunds({
             address: address,
             tokens: [SPLITS_ETHER_TOKEN],
           })
