@@ -2,5 +2,8 @@
   "extends": ["@fxhash/eslint-config"],
   "parserOptions": {
     "sourceType": "module"
+  },
+  "rules": {
+    "@typescript-eslint/no-empty-function": "warn"
   }
 }

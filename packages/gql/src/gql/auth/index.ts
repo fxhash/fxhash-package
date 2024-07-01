@@ -20,3 +20,20 @@ export const Mu_Authenticate = graphql(`
     }
   }
 `)
+
+export const Mu_RefreshToken = graphql(`
+  mutation Refresh($input: RefreshInput!) {
+    refresh(input: $input) {
+      accessToken
+      refreshToken
+    }
+  }
+`)
+
+export const Mu_Logout = graphql(`
+  mutation Logout($input: LogoutInput!) {
+    logout(input: $input) {
+      success
+    }
+  }
+`)

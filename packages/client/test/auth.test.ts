@@ -3,10 +3,6 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { BlockchainType } from "@fxhash/shared"
 import { generateChallenge, authenticate } from "../src/auth/index.js"
 
-const SIGN_IN_MESSAGE = "Signed Message: sign in to fxhash.xyz"
-const FXHASH_TERMS_OF_SERVICE =
-  "Agree to terms: https://www.fxhash.xyz/doc/legal/terms.pdf"
-
 describe("make sure that", async () => {
   const wm = await EthereumWalletManager.fromPrivateKey(
     "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
@@ -87,7 +83,7 @@ describe("TEZOS: authentication user", async () => {
     _text = text
   })
   it("valid signature is valid", async () => {
-    let message = `Tezos (${wm.address})`
+    const message = `Tezos (${wm.address})`
     const sig = await wm.signMessage(_text)
     if (sig.isFailure()) {
       return
