@@ -1,21 +1,62 @@
-import { useAccountEffect, usePublicClient, useConfig, useAccount } from "wagmi"
+import { useAccountEffect, usePublicClient, WagmiContext } from "wagmi"
 import { useClient } from "../index.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { BlockchainType, invariant } from "@fxhash/shared"
 import { config } from "@fxhash/config"
-import { disconnect, getConnectorClient, getWalletClient } from "wagmi/actions"
+import {
+  disconnect,
+  getConnectorClient,
+  getWalletClient,
+  watchAccount,
+} from "wagmi/actions"
+import { createConfig, http, getAccount } from "@wagmi/core"
+import { sepolia, baseSepolia } from "@wagmi/core/chains"
 import {
   WalletDoesntBelongToUserError,
   WrongWalletActivatedError,
   profileContainsAddress,
 } from "@/index.js"
-import { useEffect } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
+
+const defaultWagmiConfig = createConfig({
+  chains: [sepolia, baseSepolia],
+  transports: {
+    [sepolia.id]: http(),
+    [baseSepolia.id]: http(),
+  },
+})
 
 export function EthereumWallet() {
-  const wagmiConfig = useConfig()
+  /**
+   * As we are using WAGMI, there can be 2 cases:
+   * - wagmi is already being used, and we can grab it from the context
+   * - wagmi isn't being used, so we instanciate a config
+   */
+  const wagmiCtx = useContext(WagmiContext)
+  const wagmiConfig = useMemo(() => {
+    return wagmiCtx ?? defaultWagmiConfig
+  }, [wagmiCtx]) as any
+
   const publicClient = usePublicClient()
-  const account = useAccount()
   const { setWalletManager, client, setError, error } = useClient()
+
+  const [account, setAccount] = useState<any>(getAccount(wagmiConfig))
+
+  useEffect(() => {
+    const unwatchAccount = watchAccount(wagmiConfig as any, {
+      onChange: (acc, prev) => {
+        if (acc.address !== prev.address) {
+          setAccount(acc)
+        }
+      },
+    })
+
+    return () => {
+      unwatchAccount()
+    }
+  }, [])
+
+  console.log({ account })
 
   // Check if the wallet activated is part of the user profile
   // If not we set an error
@@ -54,7 +95,7 @@ export function EthereumWallet() {
       invariant(data.address, "Address not available")
 
       const ewm = new EthereumWalletManager({
-        walletClient,
+        walletClient: walletClient as unknown as any,
         publicClient,
         rpcNodes: config.eth.apis.rpcs,
         address: data.address,
