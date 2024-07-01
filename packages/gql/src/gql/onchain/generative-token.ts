@@ -19,6 +19,56 @@ export const Frag_GenerativeTokenPricing = graphql(`
   }
 `)
 
+export const Qu_GenerativeTokenById = graphql(`
+  query Qu_GenerativeTokenById($id: String!) {
+    onchain {
+      generative_token_by_pk(id: $id) {
+        id
+        actions {
+          id
+          chain
+          generative_token {
+            id
+          }
+          objkt {
+            id
+            iteration
+          }
+          created_at
+          issuer {
+            id
+            wallet {
+              account {
+                id
+                profile {
+                  picture
+                }
+                username
+              }
+            }
+          }
+          target {
+            id
+            wallet {
+              account {
+                id
+                profile {
+                  picture
+                }
+                username
+              }
+            }
+          }
+          metadata
+          numeric_value
+          op_hash
+          type
+        }
+      }
+    }
+  }
+`)
+
 export const Qu_GetObjectsOfTokenAndWallets = graphql(`
   query Qu_GetObjectsOfTokenAndWallets(
     $_eq: String = ""

@@ -1,0 +1,15 @@
+{
+  "extends": "@fxhash/tsconfig/react",
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "dist",
+    // FIXME: can be removed when all packages are migrated to esm and @fxhash/base config uses those defaults
+    "module": "Node16",
+    "moduleResolution": "Node16"
+  }
+}
