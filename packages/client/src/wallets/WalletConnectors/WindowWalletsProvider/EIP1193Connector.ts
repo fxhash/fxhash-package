@@ -10,6 +10,14 @@ import {
 import { baseSepolia, sepolia } from "@wagmi/core/chains"
 import { IEvmWalletConnector } from "../interfaces.js"
 import { createPublicClient, createWalletClient } from "viem"
+import { TypedEventTarget } from "@/util/TypedEventTarget.js"
+import {
+  WindowWalletChanged,
+  WindowWalletConnected,
+  WindowWalletDisconnected,
+  WindowWalletEventsMap,
+} from "./events.js"
+import { invariant } from "@fxhash/shared"
 
 /**
  * A default generic config for WAGMI. Consumers should pass their own config
@@ -48,20 +56,28 @@ const defaultWagmiConfig = createConfig({
  * application starts so that it can listen to the first events emitted by
  * Connectors, and have its internal state in-sync.
  */
-export class EIP1193Connector implements IEvmWalletConnector {
+export class EIP1193Connector
+  extends TypedEventTarget<WindowWalletEventsMap>
+  implements IEvmWalletConnector
+{
   private _unwatchAccount: WatchAccountReturnType | null = null
   private _wagmiConfig: Config
+  private _initialized: boolean = false
 
   constructor(wagmiConfig?: Config) {
+    super()
     this._wagmiConfig = wagmiConfig ?? defaultWagmiConfig
   }
 
   public async init(wagmiConfigOverride?: Config) {
+    invariant(!this._initialized, "EIP1193Connector already initialized")
+
     if (wagmiConfigOverride) this._wagmiConfig = wagmiConfigOverride
     this._unwatchAccount = watchAccount(this._wagmiConfig, {
       onChange: this._handleAccountChange,
     })
     this._handleAccountChange(getAccount(this._wagmiConfig))
+    this._initialized = true
   }
 
   public release() {
@@ -80,7 +96,33 @@ export class EIP1193Connector implements IEvmWalletConnector {
     account: GetAccountReturnType,
     prevAccount?: GetAccountReturnType
   ) => {
-    console.log("handle account change")
-    console.log({ account, prevAccount })
+    if (!prevAccount) {
+      // if no account, nothing to process
+      if (!account.isConnected) return
+
+      // there is an account, let's emit
+      this.dispatchTypedEvent("connected", new WindowWalletConnected())
+      this._accountChangedEvent(account)
+      return
+    }
+    // if there was already an account
+    else {
+      // deconnection detected
+      if (!account.isConnected) {
+        this.dispatchTypedEvent("disconnected", new WindowWalletDisconnected())
+        this._accountChangedEvent(account)
+        return
+      }
+
+      // a change of account
+      if (account.address !== prevAccount.address) {
+        this._accountChangedEvent(account)
+        return
+      }
+    }
+  }
+
+  private _accountChangedEvent = async (account: GetAccountReturnType) => {
+    this.dispatchTypedEvent("changed", new WindowWalletChanged())
   }
 }

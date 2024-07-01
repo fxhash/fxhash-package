@@ -1,9 +1,7 @@
 import { BlockchainType } from "@fxhash/shared"
-import {
-  WalletsConnectorChainUnavailable,
-  WalletsConnectorNoSupportForChain,
-} from "./errors.js"
 import { type PublicClient, type WalletClient } from "viem"
+import { WalletsConnectorEventTarget } from "./events.js"
+import { type SetProviderOptions } from "@taquito/taquito"
 
 export type MapChainToWalletConnector<Chain extends BlockchainType> = {
   [K in BlockchainType]: {
@@ -23,7 +21,7 @@ export type MapChainToWalletConnector<Chain extends BlockchainType> = {
  * connector can properly synchronize their internal state before they can used
  * the client.
  */
-export interface IWalletsConnector {
+export interface IWalletsConnector extends WalletsConnectorEventTarget {
   /**
    * In the client lifecycle, all the provided WalletsConnector are initialized
    * when the application starts. This can be used to instanciate/initialize
@@ -46,19 +44,32 @@ export interface IWalletsConnector {
    *
    * @returns A Wallet Connector associated with the given blockchain
    *
-   * @throws {WalletsConnectorNoSupportForChain
-   *         | WalletsConnectorChainUnavailable}
+   * @throws {import("./errors.js").WalletsConnectorNoSupportForChain
+   *        | import("./errors.js").WalletsConnectorChainUnavailable}
    */
   getWalletConnector: <Chain extends BlockchainType>(
     chain: Chain
   ) => MapChainToWalletConnector<Chain>
 }
 
+/**
+ */
 export interface IEvmWalletConnector {
+  /**
+   * @returns 2 viem clients: the Public and the Wallet one.
+   */
   getViemClients: () => Promise<{
     public: PublicClient
     wallet: WalletClient
   }>
 }
 
-export interface ITezosWalletConnector {}
+/**
+ */
+export interface ITezosWalletConnector {
+  /**
+   * @returns Taquito provider options which can be set on the taquito tezos
+   * toolkit instance to interact with the wallet.
+   */
+  getTaquitoProvider: () => SetProviderOptions
+}

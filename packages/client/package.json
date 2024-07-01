@@ -49,6 +49,7 @@
     "@fxhash/eth": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@taquito/beacon-wallet": "19.2.1-beta.1",
     "@taquito/signer": "17.3.1",
     "@taquito/taquito": "17.3.1",

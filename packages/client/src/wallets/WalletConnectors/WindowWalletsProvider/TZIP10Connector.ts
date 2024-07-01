@@ -1,12 +1,15 @@
 import { DefaultBeaconWalletConfig } from "@fxhash/tez"
 import { ITezosWalletConnector } from "../interfaces.js"
 import {
-  getDAppClientInstance,
-  type DAppClient,
   type DAppClientOptions,
   type AccountInfo,
   BeaconEvent,
 } from "@airgap/beacon-sdk"
+import { TypedEventTarget } from "@/util/TypedEventTarget.js"
+import { WindowWalletChanged, WindowWalletEventsMap } from "./events.js"
+import { SetProviderOptions } from "@taquito/taquito"
+import { BeaconWallet } from "@taquito/beacon-wallet"
+import { invariant } from "@fxhash/shared"
 
 /**
  * @author fxhash
@@ -23,25 +26,48 @@ import {
  *    implementation
  *  - expose a signer which can be used by a taquito instance to sign operations
  */
-export class TZIP10Connector implements ITezosWalletConnector {
-  private _beaconClient: DAppClient | null = null
+export class TZIP10Connector
+  extends TypedEventTarget<WindowWalletEventsMap>
+  implements ITezosWalletConnector
+{
+  private _beaconWallet: BeaconWallet | null = null
   private _beaconConfig: DAppClientOptions
 
   constructor(beaconConfig?: DAppClientOptions) {
+    super()
     this._beaconConfig = beaconConfig ?? DefaultBeaconWalletConfig
   }
 
   public async init(beaconConfigOverride?: DAppClientOptions) {
     if (beaconConfigOverride) this._beaconConfig = beaconConfigOverride
-    this._beaconClient = getDAppClientInstance(this._beaconConfig)
-    this._beaconClient.subscribeToEvent(
+
+    /**
+     * Note: BeaconWallet uses getDAppClientInstance() under the hood, ensuring
+     * there's only a single Beacon Wallet instance in all times.
+     */
+    this._beaconWallet = new BeaconWallet(this._beaconConfig)
+
+    this._beaconWallet.client.subscribeToEvent(
       BeaconEvent.ACTIVE_ACCOUNT_SET,
       this._handleAccountSet
     )
-    await this._beaconClient.getActiveAccount().then(this._handleAccountSet)
+    await this._beaconWallet.client
+      .getActiveAccount()
+      .then(this._handleAccountSet)
   }
 
-  private _handleAccountSet = (account?: AccountInfo) => {}
+  private _handleAccountSet = (account?: AccountInfo) => {
+    // todo: do something internally with account here
+    console.log({ account })
 
-  public async getSigner() {}
+    this.dispatchTypedEvent("changed", new WindowWalletChanged())
+  }
+
+  public getTaquitoProvider(): SetProviderOptions {
+    invariant(this._beaconWallet, "Beacon Wallet not instanciated")
+
+    return {
+      wallet: this._beaconWallet,
+    }
+  }
 }
