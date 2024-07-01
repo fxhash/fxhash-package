@@ -3,6 +3,7 @@ import {
   GetAccountReturnType,
   WatchAccountReturnType,
   createConfig,
+  getAccount,
   http,
   watchAccount,
 } from "@wagmi/core"
@@ -60,6 +61,7 @@ export class EIP1193Connector implements IEvmWalletConnector {
     this._unwatchAccount = watchAccount(this._wagmiConfig, {
       onChange: this._handleAccountChange,
     })
+    this._handleAccountChange(getAccount(this._wagmiConfig))
   }
 
   public release() {
@@ -76,7 +78,7 @@ export class EIP1193Connector implements IEvmWalletConnector {
 
   private _handleAccountChange = async (
     account: GetAccountReturnType,
-    prevAccount: GetAccountReturnType
+    prevAccount?: GetAccountReturnType
   ) => {
     console.log("handle account change")
     console.log({ account, prevAccount })

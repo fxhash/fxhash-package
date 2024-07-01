@@ -3,6 +3,7 @@ import { ITezosWalletConnector } from "../interfaces.js"
 import {
   getDAppClientInstance,
   type DAppClient,
+  type DAppClientOptions,
   type AccountInfo,
   BeaconEvent,
 } from "@airgap/beacon-sdk"
@@ -17,18 +18,27 @@ import {
  * features to interact with the wallet in the page javascript window context.
  *
  * This WalletConnector is designed to:
- * -
+ *  - query initial wallet state at startup
+ *  - subscribe to tzip10 events to get wallet state using Beacon wallet
+ *    implementation
+ *  - expose a signer which can be used by a taquito instance to sign operations
  */
 export class TZIP10Connector implements ITezosWalletConnector {
-  private beaconClient: DAppClient | null = null
+  private _beaconClient: DAppClient | null = null
+  private _beaconConfig: DAppClientOptions
 
-  public async init() {
-    this.beaconClient = getDAppClientInstance(DefaultBeaconWalletConfig)
-    this.beaconClient.subscribeToEvent(
+  constructor(beaconConfig?: DAppClientOptions) {
+    this._beaconConfig = beaconConfig ?? DefaultBeaconWalletConfig
+  }
+
+  public async init(beaconConfigOverride?: DAppClientOptions) {
+    if (beaconConfigOverride) this._beaconConfig = beaconConfigOverride
+    this._beaconClient = getDAppClientInstance(this._beaconConfig)
+    this._beaconClient.subscribeToEvent(
       BeaconEvent.ACTIVE_ACCOUNT_SET,
       this._handleAccountSet
     )
-    await this.beaconClient.getActiveAccount().then(this._handleAccountSet)
+    await this._beaconClient.getActiveAccount().then(this._handleAccountSet)
   }
 
   private _handleAccountSet = (account?: AccountInfo) => {}
