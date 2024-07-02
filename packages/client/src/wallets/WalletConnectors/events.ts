@@ -33,7 +33,7 @@ export abstract class ChainScopedEvent extends Event {
   }
 }
 
-type WalletChangedEventDataTypemap = {
+type WConn_WalletChangedEventDataTypemap = {
   [E in BlockchainEnv]: {
     [BlockchainEnv.EVM]: {
       account: GetAccountReturnType
@@ -49,21 +49,16 @@ type WalletChangedEventDataTypemap = {
  * event doesn't mean the Wallets Connector is fully ready, as some other chain
  * environments may not be ready then.
  */
-export class WalletChangedEvent<
+export class WConn_WalletChangedEvent<
   Env extends BlockchainEnv = BlockchainEnv,
 > extends ChainScopedEvent {
-  data: WalletChangedEventDataTypemap[Env]
-
-  constructor(chainEnv: Env, data: WalletChangedEventDataTypemap[Env]) {
+  constructor(
+    chainEnv: Env,
+    public data: WConn_WalletChangedEventDataTypemap[Env]
+  ) {
     super("wallet-changed", chainEnv)
-    this.data = data
   }
 }
-
-/**
- * Emitted when a wallet from a blockchain environment is disconnected.
- */
-export class WalletDisconnectedEvent extends ChainScopedEvent {}
 
 /**
  * Emitted when the Wallets Connector has performed all the initialisation
@@ -71,15 +66,15 @@ export class WalletDisconnectedEvent extends ChainScopedEvent {}
  * when the internal state is properly synced and consumers can assume values
  * they will get imperatively from the Wallets Connector are synced.
  */
-export class WalletsConnectorReady extends Event {
+export class WConn_WalletsConnectorReady extends Event {
   constructor() {
     super("ready")
   }
 }
 
 export type WalletsConnectorEventsMap = {
-  "wallet-changed": WalletChangedEvent
-  ready: WalletsConnectorReady
+  "wallet-changed": WConn_WalletChangedEvent
+  ready: WConn_WalletsConnectorReady
 }
 
 export class WalletsConnectorEventTarget extends TypedEventTarget<WalletsConnectorEventsMap> {}

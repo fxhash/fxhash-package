@@ -5,8 +5,6 @@
  * used internally by the WindowWalletsConnector.
  */
 
-import { WalletClient } from "viem"
-import { IEvmWalletConnectorClients } from "../interfaces.js"
 import { GetAccountReturnType } from "@wagmi/core"
 import { type AccountInfo } from "@airgap/beacon-sdk"
 

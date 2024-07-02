@@ -6,17 +6,11 @@ import { IWalletsConnector, MapChainToWalletConnector } from "../interfaces.js"
 import { TZIP10Connector } from "./TZIP10Connector.js"
 import {
   BlockchainEnv,
-  WalletChangedEvent,
+  WConn_WalletChangedEvent,
   WalletsConnectorEventTarget,
-  WalletsConnectorEventsMap,
-  WalletsConnectorReady,
+  WConn_WalletsConnectorReady,
 } from "../events.js"
-import {
-  EvmWindowWalletChanged,
-  TezWindowWalletChanged,
-  WindowWalletChanged,
-} from "./events.js"
-import { TypedEventTarget } from "@/util/TypedEventTarget.js"
+import { EvmWindowWalletChanged, TezWindowWalletChanged } from "./events.js"
 
 /**
  * @author fxhash
@@ -34,10 +28,11 @@ import { TypedEventTarget } from "@/util/TypedEventTarget.js"
  *
  * This implementation is unopiniated, any wallet library of choice can be used
  * by API consumers on the rest of the app, this module will naturally expose
- * the wallets being used by the app.
+ * the wallets being used by the app as they plug to blockchain-respective
+ * window wallet specification.
  */
 export class WindowWalletsConnector
-  extends TypedEventTarget<WalletsConnectorEventsMap>
+  extends WalletsConnectorEventTarget
   implements IWalletsConnector
 {
   private _tez: TZIP10Connector
@@ -57,7 +52,7 @@ export class WindowWalletsConnector
     // attach listeners, then init
     this._attachListeners()
     await Promise.all([this._tez, this._evm].map(connector => connector.init()))
-    this.dispatchTypedEvent("ready", new WalletsConnectorReady())
+    this.dispatchTypedEvent("ready", new WConn_WalletsConnectorReady())
     this._initialized = true
   }
 
@@ -65,22 +60,18 @@ export class WindowWalletsConnector
     invariant(!this._initialized, "WindowWalletsConnector already initialized")
 
     const onEvmChanged = (evt: EvmWindowWalletChanged) => {
-      console.log("window evm wallet changed")
-      console.log({ data: evt.data })
       this.dispatchTypedEvent(
         "wallet-changed",
-        new WalletChangedEvent(BlockchainEnv.EVM, {
+        new WConn_WalletChangedEvent(BlockchainEnv.EVM, {
           account: evt.data.account,
         })
       )
     }
 
     const onTezChanged = (evt: TezWindowWalletChanged) => {
-      console.log("window tez wallet changed")
-      console.log({ evt })
       this.dispatchTypedEvent(
         "wallet-changed",
-        new WalletChangedEvent(BlockchainEnv.TEZOS, {
+        new WConn_WalletChangedEvent(BlockchainEnv.TEZOS, {
           account: evt.data.account,
         })
       )

@@ -3,7 +3,7 @@ import { IWalletsConnector } from "./WalletConnectors/interfaces.js"
 import {
   BlockchainEnv,
   BlockchainEnvs,
-  WalletChangedEvent,
+  WConn_WalletChangedEvent,
 } from "./WalletConnectors/events.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config } from "@fxhash/config"
@@ -11,6 +11,7 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { TezosToolkit } from "@taquito/taquito"
 import { InMemorySigner } from "@taquito/signer"
 import { BeaconWallet } from "@taquito/beacon-wallet"
+import { WalletChangedEvent, WalletOrchestratorEventTarget } from "./events.js"
 
 /**
  * should:
@@ -215,7 +216,7 @@ export interface IWalletsOrchestratorParams {
  * The orchestrator accepts an array of Wallet Connectors, allowing for any kind
  * of wallet solution to be implemented.
  */
-export class WalletsOrchestrator {
+export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
   public connectors: IWalletsConnector[]
 
   /**
@@ -233,6 +234,7 @@ export class WalletsOrchestrator {
     connectors,
     walletOverrideStrategy = ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED,
   }: IWalletsOrchestratorParams) {
+    super()
     this.connectors = connectors
     // 1 manager map / connector
     this._managersMap = connectors.map(_ => ({
@@ -257,7 +259,7 @@ export class WalletsOrchestrator {
     for (let i = 0; i < this.connectors.length; i++) {
       const connector = this.connectors[i]
 
-      const onChanged = async (evt: WalletChangedEvent) => {
+      const onChanged = async (evt: WConn_WalletChangedEvent) => {
         let incomingManager: TWalletManagerWithConnector<BlockchainEnv> | null =
           null
 
@@ -327,7 +329,7 @@ export class WalletsOrchestrator {
              * shouldn't `(evt as WalletChangedEvent<BlockchainEnv.TEZOS>)`
              * when doinf `evt.chainEnv === "TEZOS"`
              */
-            address: (evt as WalletChangedEvent<BlockchainEnv.TEZOS>).data
+            address: (evt as WConn_WalletChangedEvent<BlockchainEnv.TEZOS>).data
               .account!.address,
           })
 
@@ -354,11 +356,19 @@ export class WalletsOrchestrator {
             incomingManager,
           })
 
+          // if manager has changed, broadcast the new manager
           if (
-            this._activeManagers[BlockchainEnv.EVM]?.manager !==
-            newActiveManagers[BlockchainEnv.EVM]?.manager
+            this._activeManagers[evt.chainEnv]?.manager !==
+            newActiveManagers[evt.chainEnv]?.manager
           ) {
-            // todo: broadcast update event
+            this.dispatchTypedEvent(
+              "wallet-changed",
+              // @ts-expect-error
+              // gives up type safety here in favor of type safety for consumers
+              new WalletChangedEvent(evt.chainEnv, {
+                manager: newActiveManagers[evt.chainEnv]?.manager || null,
+              })
+            )
           }
 
           this._activeManagers = newActiveManagers
@@ -372,7 +382,7 @@ export class WalletsOrchestrator {
     }
   }
 
-  public getManager<E extends BlockchainEnv>(
+  public getActiveManager<E extends BlockchainEnv>(
     env: E
   ): BlockchainEnvToWalletManagerMap[E] | null {
     return this._activeManagers[env]?.manager || null
