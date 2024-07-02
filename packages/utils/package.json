@@ -4,6 +4,7 @@
   "version": "0.0.2",
   "author": "fxhash",
   "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"

@@ -18,7 +18,7 @@ export function useEthereumWallet(): {
   disconnect: () => PromiseResult<void, Error>
 } {
   const { client, ethereumWalletManager, config } = useClient()
-  const { disconnect: _disconnect } = useDisconnect()
+  // const { disconnect: _disconnect } = useDisconnect()
 
   function authenticate(): PromiseResult<
     AuthenticationResult,
@@ -62,7 +62,7 @@ export function useEthereumWallet(): {
         ethereumWalletManager,
         "Ethereum wallet manager is not connected"
       )
-      _disconnect()
+      // _disconnect()
       return resolve(success())
     })
   }

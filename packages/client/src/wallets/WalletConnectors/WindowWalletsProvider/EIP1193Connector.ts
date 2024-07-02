@@ -4,20 +4,33 @@ import {
   WatchAccountReturnType,
   createConfig,
   getAccount,
+  getConnectorClient,
+  getPublicClient,
+  getWalletClient,
   http,
   watchAccount,
 } from "@wagmi/core"
 import { baseSepolia, sepolia } from "@wagmi/core/chains"
-import { IEvmWalletConnector } from "../interfaces.js"
-import { createPublicClient, createWalletClient } from "viem"
+import {
+  IEvmWalletConnector,
+  IEvmWalletConnectorClients,
+} from "../interfaces.js"
+import {
+  PublicClient,
+  WalletClient,
+  createPublicClient,
+  createWalletClient,
+} from "viem"
 import { TypedEventTarget } from "@/util/TypedEventTarget.js"
 import {
+  EvmWindowWalletChanged,
+  EvmWindowWalletEventsMap,
   WindowWalletChanged,
   WindowWalletConnected,
   WindowWalletDisconnected,
-  WindowWalletEventsMap,
 } from "./events.js"
-import { invariant } from "@fxhash/shared"
+import { BlockchainType, failure, invariant, success } from "@fxhash/shared"
+import { BlockchainNotSupported, EvmClientsNotAvailable } from "../errors.js"
 
 /**
  * A default generic config for WAGMI. Consumers should pass their own config
@@ -31,6 +44,11 @@ const defaultWagmiConfig = createConfig({
     [baseSepolia.id]: http(),
   },
 })
+
+const chainDefinitions = {
+  [BlockchainType.BASE]: baseSepolia,
+  [BlockchainType.ETHEREUM]: sepolia,
+}
 
 /**
  * @author fxhash
@@ -57,12 +75,13 @@ const defaultWagmiConfig = createConfig({
  * Connectors, and have its internal state in-sync.
  */
 export class EIP1193Connector
-  extends TypedEventTarget<WindowWalletEventsMap>
+  extends TypedEventTarget<EvmWindowWalletEventsMap>
   implements IEvmWalletConnector
 {
   private _unwatchAccount: WatchAccountReturnType | null = null
   private _wagmiConfig: Config
   private _initialized: boolean = false
+  private _connectedAccount: GetAccountReturnType | null = null
 
   constructor(wagmiConfig?: Config) {
     super()
@@ -84,12 +103,36 @@ export class EIP1193Connector
     this._unwatchAccount?.()
   }
 
-  public async getViemClients() {
-    // todo: properly create the viem clients
-    return {
-      public: createPublicClient("" as any),
-      wallet: createWalletClient("" as any),
+  public async getClients(chain: BlockchainType) {
+    if (chain === BlockchainType.TEZOS) {
+      return failure(new BlockchainNotSupported(chain))
     }
+    if (!this._connectedAccount?.address) {
+      return failure(new EvmClientsNotAvailable())
+    } else {
+      const walletClient = await getWalletClient(this._wagmiConfig, {
+        chainId: chainDefinitions[chain].id,
+      })
+      const publicClient = getPublicClient(this._wagmiConfig, {
+        chainId: chainDefinitions[chain].id,
+      })
+
+      if (!walletClient || !publicClient) {
+        throw new Error("TODO error handling — undefined wallet/public client")
+      }
+
+      return success({
+        public: publicClient,
+        wallet: walletClient,
+      })
+    }
+  }
+
+  public getAccount() {
+    if (this._connectedAccount && this._connectedAccount.address) {
+      return this._connectedAccount as any
+    }
+    return null
   }
 
   private _handleAccountChange = async (
@@ -123,6 +166,12 @@ export class EIP1193Connector
   }
 
   private _accountChangedEvent = async (account: GetAccountReturnType) => {
-    this.dispatchTypedEvent("changed", new WindowWalletChanged())
+    this._connectedAccount = account
+    this.dispatchTypedEvent(
+      "changed",
+      new EvmWindowWalletChanged({
+        account,
+      })
+    )
   }
 }

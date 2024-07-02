@@ -1,7 +1,16 @@
-import { BlockchainType } from "@fxhash/shared"
-import { type PublicClient, type WalletClient } from "viem"
+import { BlockchainType, PromiseResult, Result } from "@fxhash/shared"
+import {
+  Transport,
+  type PublicClient,
+  type WalletClient,
+  Chain,
+  Account,
+  Address,
+} from "viem"
 import { WalletsConnectorEventTarget } from "./events.js"
-import { type SetProviderOptions } from "@taquito/taquito"
+import { BlockchainNotSupported, EvmClientsNotAvailable } from "./errors.js"
+import { type BeaconWallet } from "@taquito/beacon-wallet"
+import { type Signer } from "@taquito/taquito"
 
 export type MapChainToWalletConnector<Chain extends BlockchainType> = {
   [K in BlockchainType]: {
@@ -53,23 +62,42 @@ export interface IWalletsConnector extends WalletsConnectorEventTarget {
 }
 
 /**
+ * Some view clients ready for interactions.
  */
-export interface IEvmWalletConnector {
-  /**
-   * @returns 2 viem clients: the Public and the Wallet one.
-   */
-  getViemClients: () => Promise<{
-    public: PublicClient
-    wallet: WalletClient
-  }>
+export interface IEvmWalletConnectorClients {
+  wallet: WalletClient<Transport, Chain, Account>
+  public: PublicClient<Transport, Chain>
 }
 
 /**
+ * Interfaces which must be implemented by Wallet Connectors for supporting
+ * our stack on EVM.
+ */
+export interface IEvmWalletConnector {
+  /**
+   * @returns A promise which resolves with an object of the wallet clients
+   * ready for interactions, or rejects if no such clients are avaiable.
+   */
+  getClients: (
+    chain: BlockchainType
+  ) => PromiseResult<
+    IEvmWalletConnectorClients,
+    EvmClientsNotAvailable | BlockchainNotSupported
+  >
+
+  getAccount: () => {
+    address: Address
+  } | null
+}
+
+/**
+ * Interfaces which must be implemented by Wallet Connectors for supporting
+ * our stack on Tezos.
  */
 export interface ITezosWalletConnector {
   /**
-   * @returns Taquito provider options which can be set on the taquito tezos
-   * toolkit instance to interact with the wallet.
+   * @returns Either a Beacon Wallet instance or an arbitrary signer. Both are
+   * compatible with the rest of the stack.
    */
-  getTaquitoProvider: () => SetProviderOptions
+  getWallet: () => BeaconWallet | Signer
 }

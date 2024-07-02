@@ -6,7 +6,7 @@ import {
   BeaconEvent,
 } from "@airgap/beacon-sdk"
 import { TypedEventTarget } from "@/util/TypedEventTarget.js"
-import { WindowWalletChanged, WindowWalletEventsMap } from "./events.js"
+import { TezWindowWalletEventsMap, TezWindowWalletChanged } from "./events.js"
 import { SetProviderOptions } from "@taquito/taquito"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { invariant } from "@fxhash/shared"
@@ -27,7 +27,7 @@ import { invariant } from "@fxhash/shared"
  *  - expose a signer which can be used by a taquito instance to sign operations
  */
 export class TZIP10Connector
-  extends TypedEventTarget<WindowWalletEventsMap>
+  extends TypedEventTarget<TezWindowWalletEventsMap>
   implements ITezosWalletConnector
 {
   private _beaconWallet: BeaconWallet | null = null
@@ -57,17 +57,16 @@ export class TZIP10Connector
   }
 
   private _handleAccountSet = (account?: AccountInfo) => {
-    // todo: do something internally with account here
-    console.log({ account })
-
-    this.dispatchTypedEvent("changed", new WindowWalletChanged())
+    this.dispatchTypedEvent(
+      "changed",
+      new TezWindowWalletChanged({
+        account,
+      })
+    )
   }
 
-  public getTaquitoProvider(): SetProviderOptions {
+  public getWallet(): BeaconWallet {
     invariant(this._beaconWallet, "Beacon Wallet not instanciated")
-
-    return {
-      wallet: this._beaconWallet,
-    }
+    return this._beaconWallet
   }
 }

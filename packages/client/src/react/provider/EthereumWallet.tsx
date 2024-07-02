@@ -18,6 +18,7 @@ import {
   profileContainsAddress,
 } from "@/index.js"
 import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import { WalletsOrchestrator } from "@/wallets/WalletOrchestrator.js"
 
 const defaultWagmiConfig = createConfig({
   chains: [sepolia, baseSepolia],
@@ -38,10 +39,12 @@ export function EthereumWallet() {
     return wagmiCtx ?? defaultWagmiConfig
   }, [wagmiCtx]) as any
 
-  const publicClient = usePublicClient()
-  const { setWalletManager, client, setError, error } = useClient()
+  console.log({ wagmiCtx })
 
-  const [account, setAccount] = useState<any>(getAccount(wagmiConfig))
+  // const publicClient = usePublicClient()
+  // const { setWalletManager, client, setError, error } = useClient()
+
+  // const [account, setAccount] = useState<any>(getAccount(wagmiConfig))
 
   const once = useRef(false)
   useEffect(() => {
@@ -49,15 +52,20 @@ export function EthereumWallet() {
     once.current = true
     //
     ;(async () => {
-      const connector = new WindowWalletsConnector({
-        evm: {
-          wagmiConfig,
-        },
+      const wallets = new WalletsOrchestrator({
+        connectors: [
+          new WindowWalletsConnector({
+            evm: {
+              wagmiConfig,
+            },
+          }),
+        ],
       })
-      await connector.init()
+
+      await wallets.init()
 
       return () => {
-        connector.release()
+        wallets.release()
       }
     })()
   }, [])

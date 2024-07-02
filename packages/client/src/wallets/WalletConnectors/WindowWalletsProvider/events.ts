@@ -5,6 +5,11 @@
  * used internally by the WindowWalletsConnector.
  */
 
+import { WalletClient } from "viem"
+import { IEvmWalletConnectorClients } from "../interfaces.js"
+import { GetAccountReturnType } from "@wagmi/core"
+import { type AccountInfo } from "@airgap/beacon-sdk"
+
 /**
  * Emitted when a wallet is connected (as a result of an initial connexion
  * or as a change of wallet).
@@ -30,6 +35,35 @@ export class WindowWalletChanged extends Event {
   }
 }
 
+export class EventData<Data = any> extends Event {
+  public data: Data
+
+  constructor(type: string, data: Data) {
+    super(type)
+    this.data = data
+  }
+}
+
+export interface EvmWindowWalletChangedData {
+  account: GetAccountReturnType
+}
+
+export class EvmWindowWalletChanged extends EventData<EvmWindowWalletChangedData> {
+  constructor(data: EvmWindowWalletChangedData) {
+    super("changed", data)
+  }
+}
+
+export interface TezWindowWalletChangedData {
+  account?: AccountInfo
+}
+
+export class TezWindowWalletChanged extends EventData<TezWindowWalletChangedData> {
+  constructor(data: TezWindowWalletChangedData) {
+    super("changed", data)
+  }
+}
+
 /**
  * Emitted when a connector is ready.
  */
@@ -39,9 +73,14 @@ export class WindowWalletConnectorReady extends Event {
   }
 }
 
-export type WindowWalletEventsMap = {
+export type TezWindowWalletEventsMap = {
   connected: WindowWalletConnected
   disconnected: WindowWalletDisconnected
-  changed: WindowWalletChanged
-  ready: WindowWalletConnectorReady
+  changed: TezWindowWalletChanged
+}
+
+export type EvmWindowWalletEventsMap = {
+  connected: WindowWalletConnected
+  disconnected: WindowWalletDisconnected
+  changed: EvmWindowWalletChanged
 }

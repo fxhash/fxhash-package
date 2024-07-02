@@ -51,3 +51,27 @@ export class WalletsConnectorChainUnavailable extends Error {
     this.name = "WalletsConnectorChainUnavailable"
   }
 }
+
+/**
+ * Is thrown when evm clients are requested on a connector, but such clients
+ * are unavailable. Instead of returning null, this error was thrown because
+ * applications should not directly request clients outside of when they are
+ * available.
+ */
+export class EvmClientsNotAvailable extends Error {
+  constructor() {
+    super(`The EVM public/wallet clients are currently unavailable.`)
+    this.name = "EvmClientsNotAvailable"
+  }
+}
+
+/**
+ * Is thrown whenever a request for a module supporting multiple blockchains is
+ * made, but such module doesn't provide support for the request chain.
+ */
+export class BlockchainNotSupported extends Error {
+  constructor(chain: BlockchainType) {
+    super(`The blockchain ${chain} isn't supported by this module.`)
+    this.name = "BlockchainNotSupported"
+  }
+}

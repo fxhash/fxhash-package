@@ -11,11 +11,15 @@
  */
 
 import { TypedEventTarget } from "@/util/TypedEventTarget.js"
+import { GetAccountReturnType } from "@wagmi/core"
+import { AccountInfo } from "@airgap/beacon-sdk"
 
-enum BlockchainEnv {
+export enum BlockchainEnv {
   EVM = "EVM",
   TEZOS = "TEZOS",
 }
+
+export const BlockchainEnvs = Object.values(BlockchainEnv)
 
 /**
  * An abstract Event which is scope to a particular Blockchain Environment.
@@ -23,10 +27,21 @@ enum BlockchainEnv {
 export abstract class ChainScopedEvent extends Event {
   chainEnv: BlockchainEnv
 
-  constructor(chainEnv: BlockchainEnv) {
-    super("")
+  constructor(name: string, chainEnv: BlockchainEnv) {
+    super(name)
     this.chainEnv = chainEnv
   }
+}
+
+type WalletChangedEventDataTypemap = {
+  [E in BlockchainEnv]: {
+    [BlockchainEnv.EVM]: {
+      account: GetAccountReturnType
+    }
+    [BlockchainEnv.TEZOS]: {
+      account?: AccountInfo
+    }
+  }[E]
 }
 
 /**
@@ -34,11 +49,13 @@ export abstract class ChainScopedEvent extends Event {
  * event doesn't mean the Wallets Connector is fully ready, as some other chain
  * environments may not be ready then.
  */
-export class WalletConnectedEvent extends ChainScopedEvent {
-  data: any
+export class WalletChangedEvent<
+  Env extends BlockchainEnv = BlockchainEnv,
+> extends ChainScopedEvent {
+  data: WalletChangedEventDataTypemap[Env]
 
-  constructor(chainEnv: BlockchainEnv, data: any) {
-    super(chainEnv)
+  constructor(chainEnv: Env, data: WalletChangedEventDataTypemap[Env]) {
+    super("wallet-changed", chainEnv)
     this.data = data
   }
 }
@@ -54,11 +71,14 @@ export class WalletDisconnectedEvent extends ChainScopedEvent {}
  * when the internal state is properly synced and consumers can assume values
  * they will get imperatively from the Wallets Connector are synced.
  */
-export class WalletsConnectorReady extends Event {}
+export class WalletsConnectorReady extends Event {
+  constructor() {
+    super("ready")
+  }
+}
 
-type WalletsConnectorEventsMap = {
-  connect: WalletConnectedEvent
-  disconnect: WalletDisconnectedEvent
+export type WalletsConnectorEventsMap = {
+  "wallet-changed": WalletChangedEvent
   ready: WalletsConnectorReady
 }
 

@@ -4,12 +4,19 @@ import { BlockchainType, invariant } from "@fxhash/shared"
 import { EIP1193Connector } from "./EIP1193Connector.js"
 import { IWalletsConnector, MapChainToWalletConnector } from "../interfaces.js"
 import { TZIP10Connector } from "./TZIP10Connector.js"
-import { WalletConnectedEvent, WalletsConnectorEventTarget } from "../events.js"
 import {
+  BlockchainEnv,
+  WalletChangedEvent,
+  WalletsConnectorEventTarget,
+  WalletsConnectorEventsMap,
+  WalletsConnectorReady,
+} from "../events.js"
+import {
+  EvmWindowWalletChanged,
+  TezWindowWalletChanged,
   WindowWalletChanged,
-  WindowWalletConnected,
-  WindowWalletDisconnected,
 } from "./events.js"
+import { TypedEventTarget } from "@/util/TypedEventTarget.js"
 
 /**
  * @author fxhash
@@ -30,7 +37,7 @@ import {
  * the wallets being used by the app.
  */
 export class WindowWalletsConnector
-  extends WalletsConnectorEventTarget
+  extends TypedEventTarget<WalletsConnectorEventsMap>
   implements IWalletsConnector
 {
   private _tez: TZIP10Connector
@@ -50,26 +57,33 @@ export class WindowWalletsConnector
     // attach listeners, then init
     this._attachListeners()
     await Promise.all([this._tez, this._evm].map(connector => connector.init()))
+    this.dispatchTypedEvent("ready", new WalletsConnectorReady())
     this._initialized = true
   }
 
-  private _attachListeners() {
+  private _attachListeners = () => {
     invariant(!this._initialized, "WindowWalletsConnector already initialized")
 
-    const onEvmChanged = (evt: WindowWalletChanged) => {
+    const onEvmChanged = (evt: EvmWindowWalletChanged) => {
       console.log("window evm wallet changed")
-      console.log({ evt })
-      // todo:
-      // - new wallet managers here / update existing ones ?
-      // - emit wallet manager changed
+      console.log({ data: evt.data })
+      this.dispatchTypedEvent(
+        "wallet-changed",
+        new WalletChangedEvent(BlockchainEnv.EVM, {
+          account: evt.data.account,
+        })
+      )
     }
 
-    const onTezChanged = (evt: WindowWalletChanged) => {
+    const onTezChanged = (evt: TezWindowWalletChanged) => {
       console.log("window tez wallet changed")
       console.log({ evt })
-      // todo:
-      // - new wallet managers here / update existing ones ?
-      // - emit wallet manager changed
+      this.dispatchTypedEvent(
+        "wallet-changed",
+        new WalletChangedEvent(BlockchainEnv.TEZOS, {
+          account: evt.data.account,
+        })
+      )
     }
 
     this._evm.addEventListener("changed", onEvmChanged)
@@ -109,6 +123,7 @@ export class WindowWalletsConnector
   public release() {
     this._evm.release()
     this._cleanup.forEach(fn => fn())
+    this._cleanup = []
   }
 }
 

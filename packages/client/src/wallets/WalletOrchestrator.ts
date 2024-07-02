@@ -1,0 +1,389 @@
+import { BlockchainType, WalletManager, invariant } from "@fxhash/shared"
+import { IWalletsConnector } from "./WalletConnectors/interfaces.js"
+import {
+  BlockchainEnv,
+  BlockchainEnvs,
+  WalletChangedEvent,
+} from "./WalletConnectors/events.js"
+import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
+import { config } from "@fxhash/config"
+import { TezosWalletManager } from "@fxhash/tez"
+import { TezosToolkit } from "@taquito/taquito"
+import { InMemorySigner } from "@taquito/signer"
+import { BeaconWallet } from "@taquito/beacon-wallet"
+
+/**
+ * should:
+ * - handle all provided connectors (store, initialize)
+ * - expose high-level events to the user
+ */
+
+type BlockchainEnvToWalletManagerMap = {
+  [Env in BlockchainEnv]: {
+    [BlockchainEnv.EVM]: EthereumWalletManager
+    [BlockchainEnv.TEZOS]: TezosWalletManager
+  }[Env]
+}
+
+type TManagersMap = {
+  [Env in BlockchainEnv]: BlockchainEnvToWalletManagerMap[Env] | null
+}
+
+type TWalletManagerWithConnector<Env extends BlockchainEnv = BlockchainEnv> = {
+  env: Env
+  connector: IWalletsConnector
+  manager: BlockchainEnvToWalletManagerMap[Env]
+}
+
+type TActiveManagersMap = {
+  [Env in BlockchainEnv]: TWalletManagerWithConnector<Env> | null
+}
+
+/**
+ * Because multiple connectors can expose a wallet ready for business, there
+ * needs to be a strategy in-place for what happens when a wallet connector
+ * exposes a new wallet but one is already exposed for the same Blockchain
+ * Environment.
+ */
+export enum ConnectorOverrideStrategy {
+  /**
+   * @default
+   * If a connector exposes an active wallet, then only the same connector can
+   * provide a new wallet. If an active wallet has been exposed by a connector,
+   * the only way for another connector to expose a wallet is for the first one
+   * to release all its active wallets.
+   * This is the only setting which prevents having multiple connectors exposing
+   * wallets on different blockchain environments.
+   */
+  SINGLE_CONNECTOR_ALLOWED = "SINGLE_CONNECTOR_ALLOWED",
+
+  /**
+   * The order in which the connectors are passed in the constructor will be
+   * used to define which connector prevails. For instance, if the following
+   * connectors are passed: [Window, Custodial], if the Window Connector
+   * exposes a wallet while one was exposed by the Custodial Connector, the
+   * Window one will override the Custodial one.
+   */
+  ORDER_OF_CONNECTORS = "ORDER_OF_CONNECTORS",
+
+  /**
+   * The first wallet ready cannot be override.
+   */
+  FIRST_READY_PREVAILS = "FIRST_READY_PREVAILS",
+
+  /**
+   * The last wallet ready always overrides the previous one.
+   */
+  LAST_READY_PREVAILS = "LAST_READY_PREVAILS",
+
+  /**
+   * Application must provide a function which resolves which wallet will be
+   * active when a new wallet becomes available, from any connector.
+   * TODO: implement support for this
+   */
+  // CUSTOM_FUNCTION = "CUSTOM_FUNCTION",
+}
+
+/**
+ * When a new wallet is made available by a connector, this function determines
+ * whether such wallet should override the existing ones.
+ *
+ * @note An override function is only called when there is already any active
+ * wallet manager.
+ *
+ * @returns The updated active managers. A change event will be emitted if any
+ * WalletManager instance has changed in the active managers object.
+ */
+type WalletOverrideResolver = (options: {
+  /**
+   * The incoming manager, with its blockchain env & source connector.
+   */
+  incomingManager: TWalletManagerWithConnector
+  /**
+   * A map of the managers currently active.
+   */
+  activeManagers: Readonly<TActiveManagersMap>
+  /**
+   * The current managers map (one / connector). Note: Wallet Managers are
+   * always instanciated and updated before this is called, so this will be
+   * up-to-date.
+   */
+  managers: TManagersMap[]
+  /**
+   * The array of collectors, provided in the same order they were passed to the
+   * orchestrator.
+   */
+  connectors: IWalletsConnector[]
+}) => TActiveManagersMap
+
+const walletOverrideMap: Record<
+  ConnectorOverrideStrategy,
+  WalletOverrideResolver
+> = {
+  [ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED]: ({
+    incomingManager,
+    activeManagers,
+  }) => {
+    // get any of the active managers (since there's only going to be a single
+    // type of connector allowed, we can grab any)
+    const anyActive = activeManagers.EVM || activeManagers.TEZOS
+    if (!anyActive || anyActive.connector === incomingManager.connector) {
+      return {
+        ...activeManagers,
+        [incomingManager.env]: incomingManager,
+      }
+    }
+    return activeManagers
+  },
+
+  [ConnectorOverrideStrategy.ORDER_OF_CONNECTORS]: ({
+    connectors,
+    managers,
+  }) => {
+    const newActive: TActiveManagersMap = {
+      [BlockchainEnv.EVM]: null,
+      [BlockchainEnv.TEZOS]: null,
+    }
+    // loop in order of the connectors & populate the active managers
+    for (let i = 0; i < connectors.length; i++) {
+      const manager = managers[i]
+      for (const env of BlockchainEnvs) {
+        if (newActive[env]) continue
+        if (manager[env]) {
+          // @ts-ignore
+          newActive[env] = {
+            env: env,
+            connector: connectors[i],
+            manager: manager[env]!,
+          }
+        }
+      }
+    }
+    return newActive
+  },
+
+  [ConnectorOverrideStrategy.FIRST_READY_PREVAILS]: ({
+    incomingManager,
+    activeManagers,
+  }) => {
+    const newActive = {
+      ...activeManagers,
+    }
+    // update active manager only if there isn't one or if it cames from the
+    // same connector
+    const currentConnector = activeManagers[incomingManager.env]?.connector
+    if (!currentConnector || currentConnector === incomingManager.connector) {
+      // @ts-ignore
+      newActive[incomingManager.env] = incomingManager
+    }
+    return newActive
+  },
+
+  [ConnectorOverrideStrategy.LAST_READY_PREVAILS]: ({
+    incomingManager,
+    activeManagers,
+  }) => {
+    return {
+      ...activeManagers,
+      [incomingManager.env]: incomingManager,
+    }
+  },
+}
+
+export interface IWalletsOrchestratorParams {
+  /**
+   * An array of all the Wallet Connector instances which should be handlded by
+   * the Orchestrator. The order in which they are provided only matters if
+   * the wallet override strategy is
+   * `ConnectorOverrideStrategy.ORDER_OF_CONNECTORS`
+   */
+  connectors: IWalletsConnector[]
+
+  /**
+   * Defines how the orchestrator should handle wallets coming from multiple
+   * connectors at once.
+   * @default ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED
+   */
+  walletOverrideStrategy?: ConnectorOverrideStrategy
+}
+
+/**
+ * Orchestrates wallet lifecycles and emits events when wallets changes state.
+ * Handles exposing Wallet Managers instances using the underlying connectors
+ * as a provider source for such wallets.
+ *
+ * The orchestrator accepts an array of Wallet Connectors, allowing for any kind
+ * of wallet solution to be implemented.
+ */
+export class WalletsOrchestrator {
+  public connectors: IWalletsConnector[]
+
+  /**
+   * An array of Wallet Managers map; one for each connector available.
+   */
+  private _managersMap: TManagersMap[]
+  private _activeManagers: TActiveManagersMap = {
+    [BlockchainEnv.EVM]: null,
+    [BlockchainEnv.TEZOS]: null,
+  }
+  private _cleanup: (() => void)[] = []
+  private _walletOverrideStrategy: ConnectorOverrideStrategy
+
+  constructor({
+    connectors,
+    walletOverrideStrategy = ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED,
+  }: IWalletsOrchestratorParams) {
+    this.connectors = connectors
+    // 1 manager map / connector
+    this._managersMap = connectors.map(_ => ({
+      [BlockchainEnv.EVM]: null,
+      [BlockchainEnv.TEZOS]: null,
+    }))
+    this._walletOverrideStrategy = walletOverrideStrategy
+  }
+
+  init() {
+    console.log("WALLETS ORCHESTRATOR !!!!!!")
+    console.log(this.connectors)
+
+    this._attachListeners()
+
+    // todo: maybe not Promise.all but allSettled ?
+    return Promise.all(this.connectors.map(connector => connector.init()))
+  }
+
+  private _attachListeners() {
+    // attach event listeners on all the connectors
+    for (let i = 0; i < this.connectors.length; i++) {
+      const connector = this.connectors[i]
+
+      const onChanged = async (evt: WalletChangedEvent) => {
+        let incomingManager: TWalletManagerWithConnector<BlockchainEnv> | null =
+          null
+
+        if (evt.chainEnv === BlockchainEnv.EVM) {
+          if (!evt.data.account?.address) {
+            /**
+             * Todo; handle when no account
+             * - how is activeManagers cleared ?
+             * - how is connector managers cleared ?
+             * - what do we emit to the app ?
+             */
+            return
+          }
+
+          console.log("___ EVM wallet changed !")
+          const evmConnector = connector.getWalletConnector(
+            BlockchainType.ETHEREUM
+          )
+          const _clients = await evmConnector.getClients(
+            BlockchainType.ETHEREUM
+          )
+          const account = evmConnector.getAccount()
+          if (_clients.isSuccess() && account) {
+            const clients = _clients.unwrap()
+            const signer = clientToSigner(clients.wallet)
+
+            const ewm = new EthereumWalletManager({
+              walletClient: clients.wallet,
+              publicClient: clients.public,
+              rpcNodes: config.eth.apis.rpcs,
+              address: account.address,
+              signer,
+            })
+
+            // update connector active manager
+            this._managersMap[i][BlockchainEnv.EVM] = ewm
+
+            incomingManager = {
+              env: BlockchainEnv.EVM,
+              connector: connector,
+              manager: ewm,
+            }
+          }
+        }
+
+        if (evt.chainEnv === BlockchainEnv.TEZOS) {
+          if (!evt.data.account) {
+            /**
+             * Todo; handle when no account
+             * - how is activeManagers cleared ?
+             * - how is connector managers cleared ?
+             * - what do we emit to the app ?
+             */
+            return
+          }
+
+          const tezConnector = connector.getWalletConnector(
+            BlockchainType.TEZOS
+          )
+
+          const twm = new TezosWalletManager({
+            wallet: tezConnector.getWallet(),
+            /**
+             * todo
+             * for some reason type isn't narrowed down here, so need to find
+             * a better TS implementation of ChainScopedEvents
+             * shouldn't `(evt as WalletChangedEvent<BlockchainEnv.TEZOS>)`
+             * when doinf `evt.chainEnv === "TEZOS"`
+             */
+            address: (evt as WalletChangedEvent<BlockchainEnv.TEZOS>).data
+              .account!.address,
+          })
+
+          console.log(twm)
+
+          // update connector active manager
+          this._managersMap[i][BlockchainEnv.TEZOS] = twm
+          incomingManager = {
+            env: BlockchainEnv.TEZOS,
+            connector: connector,
+            manager: twm,
+          }
+        }
+
+        // once incomingManager is created, update internal state
+        // get the new active managers based on the strategy
+        if (incomingManager) {
+          const newActiveManagers = walletOverrideMap[
+            this._walletOverrideStrategy
+          ]({
+            activeManagers: this._activeManagers,
+            managers: this._managersMap,
+            connectors: this.connectors,
+            incomingManager,
+          })
+
+          if (
+            this._activeManagers[BlockchainEnv.EVM]?.manager !==
+            newActiveManagers[BlockchainEnv.EVM]?.manager
+          ) {
+            // todo: broadcast update event
+          }
+
+          this._activeManagers = newActiveManagers
+        }
+      }
+
+      connector.addEventListener("wallet-changed", onChanged)
+      this._toClean(() => {
+        connector.removeEventListener("wallet-changed", onChanged)
+      })
+    }
+  }
+
+  public getManager<E extends BlockchainEnv>(
+    env: E
+  ): BlockchainEnvToWalletManagerMap[E] | null {
+    return this._activeManagers[env]?.manager || null
+  }
+
+  private _toClean(fn: () => void) {
+    this._cleanup.push(fn)
+  }
+
+  public release() {
+    this._cleanup.forEach(fn => fn())
+    this._cleanup = []
+  }
+}
