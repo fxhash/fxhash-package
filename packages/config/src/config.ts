@@ -48,6 +48,7 @@ export interface IFxhashEnvConfig {
   envName: TEnvName
   gtMinPrice: string
   walletConnectId: string
+  splitsApiKey: string
   projectLockTime: number
   referrerShare: number
   cloudflareTurnstileSiteKey: string
@@ -190,6 +191,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
@@ -214,6 +216,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
@@ -238,6 +241,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
         /**
@@ -262,6 +266,7 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-yE4Q6Wdz6SNb",
         /**
