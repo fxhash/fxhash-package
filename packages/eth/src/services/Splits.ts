@@ -14,10 +14,8 @@ export function getSplitsClient(
   return new SplitsClient({
     chainId: getChainIdForChain(chain),
     // viem public client (optional, required if using any of the contract functions)
-    // @ts-ignore Upgrade split sdk to v4 once published
     publicClient: publicClient,
     // viem wallet client (optional, required if using any contract write functions. must have an account already attached)
-    // @ts-ignore Upgrade split sdk to v4 once published
     walletClient: walletClient,
     apiConfig: {
       apiKey: config.config.splitsApiKey,
