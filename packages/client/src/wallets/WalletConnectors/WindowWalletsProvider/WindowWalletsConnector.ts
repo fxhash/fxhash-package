@@ -10,7 +10,6 @@ import {
   WalletsConnectorEventTarget,
   WConn_WalletsConnectorReady,
 } from "../events.js"
-import { EvmWindowWalletChanged, TezWindowWalletChanged } from "./events.js"
 
 /**
  * @author fxhash
@@ -42,49 +41,37 @@ export class WindowWalletsConnector
 
   constructor(config: IWindowWalletsConnectorConfig) {
     super()
-    this._tez = new TZIP10Connector(config?.tezos?.beaconConfig)
-    this._evm = new EIP1193Connector(config?.evm?.wagmiConfig)
+    this._tez = new TZIP10Connector({
+      beaconConfig: config?.tezos?.beaconConfig,
+      onAccountChange: account => {
+        this.dispatchTypedEvent(
+          "wallet-changed",
+          new WConn_WalletChangedEvent(BlockchainEnv.TEZOS, {
+            account,
+          })
+        )
+      },
+    })
+    this._evm = new EIP1193Connector({
+      wagmiConfig: config?.evm?.wagmiConfig,
+      onAccountChange: account => {
+        this.dispatchTypedEvent(
+          "wallet-changed",
+          new WConn_WalletChangedEvent(BlockchainEnv.EVM, {
+            account,
+          })
+        )
+      },
+    })
   }
 
   public async init() {
     invariant(!this._initialized, "WindowWalletsConnector already initialized")
 
     // attach listeners, then init
-    this._attachListeners()
     await Promise.all([this._tez, this._evm].map(connector => connector.init()))
     this.dispatchTypedEvent("ready", new WConn_WalletsConnectorReady())
     this._initialized = true
-  }
-
-  private _attachListeners = () => {
-    invariant(!this._initialized, "WindowWalletsConnector already initialized")
-
-    const onEvmChanged = (evt: EvmWindowWalletChanged) => {
-      this.dispatchTypedEvent(
-        "wallet-changed",
-        new WConn_WalletChangedEvent(BlockchainEnv.EVM, {
-          account: evt.data.account,
-        })
-      )
-    }
-
-    const onTezChanged = (evt: TezWindowWalletChanged) => {
-      this.dispatchTypedEvent(
-        "wallet-changed",
-        new WConn_WalletChangedEvent(BlockchainEnv.TEZOS, {
-          account: evt.data.account,
-        })
-      )
-    }
-
-    this._evm.addEventListener("changed", onEvmChanged)
-    this._tez.addEventListener("changed", onTezChanged)
-
-    // will be cleaned upon release
-    this._cleanup.push(() => {
-      this._evm.removeEventListener("changed", onEvmChanged)
-      this._tez.removeEventListener("changed", onTezChanged)
-    })
   }
 
   public supportsChain(chain: BlockchainType) {

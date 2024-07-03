@@ -5,11 +5,15 @@ import {
   type AccountInfo,
   BeaconEvent,
 } from "@airgap/beacon-sdk"
-import { TypedEventTarget } from "@/util/TypedEventTarget.js"
-import { TezWindowWalletEventsMap, TezWindowWalletChanged } from "./events.js"
-import { SetProviderOptions } from "@taquito/taquito"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { invariant } from "@fxhash/shared"
+
+type AccountChangeHandler = (account?: AccountInfo) => void
+
+type TZIP10ConnectorParams = {
+  beaconConfig?: DAppClientOptions
+  onAccountChange: AccountChangeHandler
+}
 
 /**
  * @author fxhash
@@ -26,16 +30,14 @@ import { invariant } from "@fxhash/shared"
  *    implementation
  *  - expose a signer which can be used by a taquito instance to sign operations
  */
-export class TZIP10Connector
-  extends TypedEventTarget<TezWindowWalletEventsMap>
-  implements ITezosWalletConnector
-{
+export class TZIP10Connector implements ITezosWalletConnector {
   private _beaconWallet: BeaconWallet | null = null
   private _beaconConfig: DAppClientOptions
+  private _onAccountChange: AccountChangeHandler
 
-  constructor(beaconConfig?: DAppClientOptions) {
-    super()
+  constructor({ beaconConfig, onAccountChange }: TZIP10ConnectorParams) {
     this._beaconConfig = beaconConfig ?? DefaultBeaconWalletConfig
+    this._onAccountChange = onAccountChange
   }
 
   public async init(beaconConfigOverride?: DAppClientOptions) {
@@ -57,12 +59,7 @@ export class TZIP10Connector
   }
 
   private _handleAccountSet = (account?: AccountInfo) => {
-    this.dispatchTypedEvent(
-      "changed",
-      new TezWindowWalletChanged({
-        account,
-      })
-    )
+    this._onAccountChange(account)
   }
 
   public getWallet(): BeaconWallet {

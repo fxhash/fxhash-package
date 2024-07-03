@@ -4,31 +4,13 @@ import {
   WatchAccountReturnType,
   createConfig,
   getAccount,
-  getConnectorClient,
   getPublicClient,
   getWalletClient,
   http,
   watchAccount,
 } from "@wagmi/core"
 import { baseSepolia, sepolia } from "@wagmi/core/chains"
-import {
-  IEvmWalletConnector,
-  IEvmWalletConnectorClients,
-} from "../interfaces.js"
-import {
-  PublicClient,
-  WalletClient,
-  createPublicClient,
-  createWalletClient,
-} from "viem"
-import { TypedEventTarget } from "@/util/TypedEventTarget.js"
-import {
-  EvmWindowWalletChanged,
-  EvmWindowWalletEventsMap,
-  WindowWalletChanged,
-  WindowWalletConnected,
-  WindowWalletDisconnected,
-} from "./events.js"
+import { IEvmWalletConnector } from "../interfaces.js"
 import { BlockchainType, failure, invariant, success } from "@fxhash/shared"
 import { BlockchainNotSupported, EvmClientsNotAvailable } from "../errors.js"
 
@@ -48,6 +30,13 @@ const defaultWagmiConfig = createConfig({
 const chainDefinitions = {
   [BlockchainType.BASE]: baseSepolia,
   [BlockchainType.ETHEREUM]: sepolia,
+}
+
+type AccountChangeHandler = (account: GetAccountReturnType) => void
+
+type EIP1193ConnectorParams = {
+  wagmiConfig?: Config
+  onAccountChange: AccountChangeHandler
 }
 
 /**
@@ -74,18 +63,16 @@ const chainDefinitions = {
  * application starts so that it can listen to the first events emitted by
  * Connectors, and have its internal state in-sync.
  */
-export class EIP1193Connector
-  extends TypedEventTarget<EvmWindowWalletEventsMap>
-  implements IEvmWalletConnector
-{
+export class EIP1193Connector implements IEvmWalletConnector {
   private _unwatchAccount: WatchAccountReturnType | null = null
   private _wagmiConfig: Config
   private _initialized: boolean = false
   private _connectedAccount: GetAccountReturnType | null = null
+  private _onAccountChange: AccountChangeHandler
 
-  constructor(wagmiConfig?: Config) {
-    super()
+  constructor({ wagmiConfig, onAccountChange }: EIP1193ConnectorParams) {
     this._wagmiConfig = wagmiConfig ?? defaultWagmiConfig
+    this._onAccountChange = onAccountChange
   }
 
   public async init(wagmiConfigOverride?: Config) {
@@ -142,36 +129,17 @@ export class EIP1193Connector
     if (!prevAccount) {
       // if no account, nothing to process
       if (!account.isConnected) return
-
-      // there is an account, let's emit
-      this.dispatchTypedEvent("connected", new WindowWalletConnected())
-      this._accountChangedEvent(account)
-      return
-    }
-    // if there was already an account
-    else {
-      // deconnection detected
-      if (!account.isConnected) {
-        this.dispatchTypedEvent("disconnected", new WindowWalletDisconnected())
-        this._accountChangedEvent(account)
-        return
-      }
-
+      return this._accountChangedEvent(account)
+    } else {
       // a change of account
       if (account.address !== prevAccount.address) {
-        this._accountChangedEvent(account)
-        return
+        return this._accountChangedEvent(account)
       }
     }
   }
 
   private _accountChangedEvent = async (account: GetAccountReturnType) => {
     this._connectedAccount = account
-    this.dispatchTypedEvent(
-      "changed",
-      new EvmWindowWalletChanged({
-        account,
-      })
-    )
+    this._onAccountChange(account)
   }
 }
