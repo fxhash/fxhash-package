@@ -22,7 +22,7 @@ export class WithdrawFromSplitsEthV1Operation extends EthereumContractOperation<
       this.chain,
       this.manager.publicClient,
       this.manager.walletClient
-    ).batchDistributeAndWithdrawForAll(args)
+    ).splitV1!.batchDistributeAndWithdrawForAll(args)
     invariant(
       event.events.length > 0 && event.events[0].transactionHash,
       "Could not fetch withdraw event hash from splits batchDistributeAndWithdrawForAll operation"
