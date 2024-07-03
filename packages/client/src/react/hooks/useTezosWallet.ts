@@ -24,24 +24,9 @@ export function useTezosWallet(): {
   > {
     return new Promise((resolve, reject) => {
       async function auth() {
-        try {
-          invariant(tezosWalletManager, "Tezos wallet manager is not connected")
-          const { text, id } = await client.generateChallenge(
-            BlockchainType.TEZOS,
-            tezosWalletManager.address
-          )
-          const sig = await tezosWalletManager.signMessage(text)
-          if (sig.isFailure()) throw new SignMessageError()
-          const publicKey = await tezosWalletManager.getPublicKey()
-          const res = await client.authenticate(
-            id,
-            sig.value.signature,
-            publicKey
-          )
-          resolve(success(res))
-        } catch (e) {
-          reject(e)
-        }
+        /**
+         * TODO
+         */
       }
       auth()
     })

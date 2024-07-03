@@ -45,3 +45,12 @@ export class ClientAuthenticationError extends Error {
     this.name = "ClientAuthenticationError"
   }
 }
+
+export class CouldNotRecoverAuthentication extends Error {
+  constructor() {
+    super(
+      "Could not recover the authentication state from the storage. An account was found but some data was missing."
+    )
+    this.name = "CouldNotRecoverAuthentication"
+  }
+}

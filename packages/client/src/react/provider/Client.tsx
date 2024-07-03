@@ -24,6 +24,7 @@ import {
   WrongWalletActivatedError,
 } from "@/index.js"
 import { isTezosWalletManager } from "@/util/types.js"
+import { config as fxConfig } from "@fxhash/config"
 
 export enum ClientContextEvent {
   onConnect = "onConnect",
@@ -112,63 +113,13 @@ export function ClientProvider(
   )
   const client = useRef<FxhashClient>(defaultClientContext.client)
 
-  async function authenticate(
-    chain: BlockchainType,
-    manager: TezosWalletManager | EthereumWalletManager
-  ): PromiseResult<boolean, ClientAuthenticationError> {
-    // If an account exists we need to verify it
-    const account = await client.current.getAccountFromStorage()
-    if (account) {
-      try {
-        // If we can get the profile we are authenticated
-        await client.current.getProfile()
-        return success(true)
-      } catch (e) {
-        console.log("Error getting profile", e)
-        // If we are using jwtAuth we can try to refresh the token
-        if (config.auth === "jwt") {
-          try {
-            await client.current.refreshAccessToken()
-            return success(true)
-          } catch (e) {
-            console.log("Error refreshing token", e)
-          }
-        }
-      }
-    }
-
-    /**
-     * @review
-     * Should we automatically request a signature from the wallet here ?
-     * It feels like a bad UX pattern to open fxhash.xyz and get a wallet
-     * prompt right away ?
-     */
-
-    // If we don't have a session, we need to sign the challenge and do the authentication
-    const { text, id } = await client.current.generateChallenge(
-      chain,
-      manager.address
-    )
-    const sig = await manager.signMessage(text)
-    if (sig.isFailure()) {
-      /**
-       * @review
-       * This error is too generic, should be more specified
-       */
-      return failure(new ClientAuthenticationError())
-    }
-    let publicKey
-    if (isTezosWalletManager(manager)) {
-      publicKey = await manager.getPublicKey()
-    }
-    await client.current.authenticate(id, sig.value.signature, publicKey)
-
-    return success(true)
-  }
+  useEffect(() => {
+    if (!client.current.initialized) client.current.init()
+  }, [])
 
   // We use chainsSigning to avoid multiple authentications at the same time
   // This can happen because e.g. beacon wallet emits multiple events
-  const chainsSigning = useRef<BlockchainType[]>([])
+  // const chainsSigning = useRef<BlockchainType[]>([])
 
   const setWalletManager = useCallback(
     async (
@@ -176,21 +127,21 @@ export function ClientProvider(
       manager: TezosWalletManager | EthereumWalletManager | null,
       disconnect: () => void
     ) => {
-      // We prevent multiple authentications at the same time with chainsSigning
-      if (chainsSigning.current.includes(chain)) return
-      // If we receive a wallet but the client is not authenticated we need to authenticate
-      if (!client.current.authenticated && !!manager) {
-        chainsSigning.current.push(chain)
-        const res = await authenticate(chain, manager)
-        chainsSigning.current = chainsSigning.current.filter(c => c !== chain)
-        if (res.isFailure()) {
-          // TODO: We could change the implementation so we dont need to pass the disconnect function from the wallet providers
-          // We would have to check within the wallet provider if the user will need to sign and send the signature to the function instead
-          // This is just a minor improvement
-          disconnect()
-          return
-        }
-      }
+      // // We prevent multiple authentications at the same time with chainsSigning
+      // if (chainsSigning.current.includes(chain)) return
+      // // If we receive a wallet but the client is not authenticated we need to authenticate
+      // if (!client.current.authenticated && !!manager) {
+      //   chainsSigning.current.push(chain)
+      //   const res = await authenticate(chain, manager)
+      //   chainsSigning.current = chainsSigning.current.filter(c => c !== chain)
+      //   if (res.isFailure()) {
+      //     // TODO: We could change the implementation so we dont need to pass the disconnect function from the wallet providers
+      //     // We would have to check within the wallet provider if the user will need to sign and send the signature to the function instead
+      //     // This is just a minor improvement
+      //     disconnect()
+      //     return
+      //   }
+      // }
       _setWalletManagers(prev => ({ ...prev, [chain]: manager }))
     },
     [_setWalletManagers, walletManagers]
@@ -203,12 +154,12 @@ export function ClientProvider(
   const lastIsConnected = useRef(isConnected)
 
   // When all walletmanagers are disconnected we logout
-  useEffect(() => {
-    if (lastIsConnected.current !== isConnected && !isConnected) {
-      client.current.logout()
-    }
-    lastIsConnected.current = isConnected
-  }, [isConnected, lastIsConnected.current])
+  // useEffect(() => {
+  //   if (lastIsConnected.current !== isConnected && !isConnected) {
+  //     client.current.logout()
+  //   }
+  //   lastIsConnected.current = isConnected
+  // }, [isConnected, lastIsConnected.current])
 
   return (
     <ClientContext.Provider

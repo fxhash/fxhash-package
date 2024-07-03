@@ -71,3 +71,8 @@ export const gqlClient = createGqlClient({
   hasuraAdminSecret: process.env.HASURA_ADMIN_SECRET,
 })
 export default gqlClient
+
+/**
+ * Export utility types from `@urql/core`
+ */
+export { type Client } from "@urql/core"

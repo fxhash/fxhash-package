@@ -9,6 +9,7 @@ import { EthereumWalletManager } from "@fxhash/eth"
 import { AuthenticationResult } from "@fxhash/gql"
 import { SignMessageError } from "@/index.js"
 import { useDisconnect } from "wagmi"
+import { BlockchainEnv } from "@/wallets/WalletConnectors/events.js"
 
 export function useEthereumWallet(): {
   ethereumWalletManager: EthereumWalletManager | null
@@ -26,23 +27,9 @@ export function useEthereumWallet(): {
   > {
     return new Promise((resolve, reject) => {
       async function auth() {
-        try {
-          invariant(
-            ethereumWalletManager,
-            "Ethereum wallet manager is not connected"
-          )
-          const { text, id } = await client.generateChallenge(
-            BlockchainType.ETHEREUM,
-            ethereumWalletManager.address
-          )
-          const sig = await ethereumWalletManager.signMessage(text)
-          if (sig.isFailure()) throw new SignMessageError()
-          const res = await client.authenticate(id, sig.value.signature)
-
-          resolve(success(res))
-        } catch (e) {
-          reject(e)
-        }
+        /**
+         * TODO
+         */
       }
       auth()
     })
