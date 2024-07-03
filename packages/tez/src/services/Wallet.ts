@@ -44,7 +44,10 @@ export const DefaultBeaconWalletConfig: DAppClientOptions = {
 export function isBeacon(
   wallet: BeaconWallet | Signer
 ): wallet is BeaconWallet {
-  return wallet instanceof BeaconWallet
+  return (
+    !!(wallet as BeaconWallet).client &&
+    wallet.constructor.name === "BeaconWallet"
+  )
 }
 
 interface TezosWalletManagerParams {
