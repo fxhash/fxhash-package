@@ -1,11 +1,11 @@
-import { IAuthenticationStrategy } from "./interfaces.js"
+import { ICredentialsStrategy } from "./_interfaces.js"
 
 /**
  * Cookie authentication doesn't really need any kind of processing as cookies
  * are automatically injected by browsers in the request, and are automatically
  * refreshed by the backend.
  */
-export const CookieAuthenticationStrategy: IAuthenticationStrategy<{}> = {
+export const CookieCredentialsStrategy: ICredentialsStrategy<{}> = {
   // by default, recovery is successful — only a request can tell if it worked
   recover: async () => true,
   getStoredAuthentication: () => ({}),
@@ -13,4 +13,5 @@ export const CookieAuthenticationStrategy: IAuthenticationStrategy<{}> = {
   // no way to refresh the cookie authentication, just return false (failure)
   refreshAuthentication: async () => false,
   getLogoutPayload: () => ({}),
+  clear: async () => {},
 }

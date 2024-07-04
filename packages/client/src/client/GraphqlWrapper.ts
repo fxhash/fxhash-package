@@ -25,6 +25,12 @@ export interface IGraphqlWrapper {
    * @param headers Headers to set/replace
    */
   updateRequestHeaders: (headers: Record<string, string>) => void
+
+  /**
+   * Remove a header from the list of headers.
+   * @param header header name
+   */
+  removeRequestHeader: (header: string) => void
 }
 
 /**
@@ -69,5 +75,9 @@ export class GraphqlWrapper implements IGraphqlWrapper {
       ...this._headers,
       ...headers,
     }
+  }
+
+  public removeRequestHeader(key: string) {
+    delete this._headers[key]
   }
 }

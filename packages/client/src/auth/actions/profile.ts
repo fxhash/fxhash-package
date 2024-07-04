@@ -2,7 +2,7 @@ import { GetMyAccountQuery, Qu_GetMyAccount } from "@fxhash/gql"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
 import { GraphQLError, UnexpectedError } from "@/index.js"
 
-export type GetSingleUserProfileResult = NonNullable<
+export type GetSingleUserAccountResult = NonNullable<
   NonNullable<
     NonNullable<
       NonNullable<NonNullable<GetMyAccountQuery["offchain"]>["UserAccount"]>[0]
@@ -12,7 +12,7 @@ export type GetSingleUserProfileResult = NonNullable<
 
 export async function getMyProfile(
   options: GqlOptions = gqlDefaultOptions
-): Promise<GetSingleUserProfileResult> {
+): Promise<GetSingleUserAccountResult> {
   const { gqlClient } = options
   const { data, error } = await gqlClient.query(Qu_GetMyAccount, {})
   if (error) {
@@ -25,7 +25,7 @@ export async function getMyProfile(
 }
 
 export function profileContainsAddress(
-  profile: GetSingleUserProfileResult,
+  profile: GetSingleUserAccountResult,
   address: string | `0x${string}`
 ) {
   return profile.wallets.find(w => w.address === address)

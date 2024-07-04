@@ -1,17 +1,19 @@
 import { JwtAccessTokenPayload, invariant } from "@fxhash/shared"
-import { IAuthenticationStrategy } from "./interfaces.js"
+import { ICredentialsStrategy } from "./_interfaces.js"
 import { refreshAccessToken } from "../index.js"
 import { jwtDecode } from "jwt-decode"
 import { Authenticator } from "../Authenticator.js"
+
+export type JWTCredentials = {
+  accessToken: string
+  refreshToken: string
+}
 
 /**
  * JWT Authentication requires storing the refresh token in the storage, as well
  * as including a Bearer token on every request.
  */
-export const JWTAuthenticationStrategy: IAuthenticationStrategy<{
-  accessToken: string
-  refreshToken: string
-}> = {
+export const JWTCredentialsStrategy: ICredentialsStrategy<JWTCredentials> = {
   async recover(data, authenticator) {
     if (!data?.refreshToken || !data?.accessToken) return false
     this.onSuccess(data, authenticator.gql)
@@ -36,8 +38,8 @@ export const JWTAuthenticationStrategy: IAuthenticationStrategy<{
     try {
       const account = await authenticator.getAccountFromStorage()
       invariant(account, "No account authenticated")
-      invariant(account.authentication.refreshToken, "No refresh token")
-      const { refreshToken } = account.authentication
+      invariant(account.credentials.refreshToken, "No refresh token")
+      const { refreshToken } = account.credentials
 
       const credentials = await refreshAccessToken(
         { refreshToken },
@@ -46,17 +48,15 @@ export const JWTAuthenticationStrategy: IAuthenticationStrategy<{
 
       const { id } = jwtDecode<JwtAccessTokenPayload>(credentials.accessToken)
 
-      await authenticator.storage.setItem(Authenticator.accountKey, {
+      await authenticator.storage.setItem(Authenticator.accountStorageKey, {
         id,
         authentication: this.getStoredAuthentication(
           credentials.accessToken,
           credentials.refreshToken
         ),
       })
-      authenticator.authenticated = true
-
+      await authenticator.syncAccount()
       this.onSuccess(credentials, authenticator.gql)
-      await authenticator.getProfile()
 
       return true
     } catch (err: any) {
@@ -69,4 +69,8 @@ export const JWTAuthenticationStrategy: IAuthenticationStrategy<{
   getLogoutPayload: data => ({
     refreshToken: data.refreshToken,
   }),
+
+  clear: async authenticator => {
+    authenticator.gql.removeRequestHeader("authorization")
+  },
 }

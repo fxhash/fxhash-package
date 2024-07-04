@@ -2,23 +2,23 @@ import { AuthenticationResult, LogoutInput } from "@fxhash/gql"
 import { Authenticator } from "../Authenticator.js"
 import { IGraphqlWrapper } from "@/client/GraphqlWrapper.js"
 
-export enum AuthenticationStrategy {
+export enum CredentialsStrategy {
   JWT = "JWT",
   COOKIE = "COOKIE",
 }
 
 /**
- * An AuthenticationStrategy implements a set of utilities/hooks for tuning up
+ * An CredentialsStrategy implements a set of utilities/hooks for tuning up
  * the authentication flow of the Authenticator based on various requirements.
  */
-export interface IAuthenticationStrategy<
-  AuthData extends Record<string, {}> = Record<string, {}>,
+export interface ICredentialsStrategy<
+  Credentials extends Record<string, {}> = Record<string, {}>,
 > {
   /**
    * Perform any
    */
   recover: (
-    authData: AuthData,
+    authData: Credentials,
     authenticator: Authenticator
   ) => Promise<boolean>
 
@@ -30,14 +30,14 @@ export interface IAuthenticationStrategy<
   getStoredAuthentication: (
     accessToken: string,
     refreshToken: string
-  ) => AuthData
+  ) => Credentials
 
   /**
    * Will be called upon logout request to craft the payload which will be sent
    * to the backend. Based on the Authentication Strategy we may want to
    * provide different inputs to the backend.
    */
-  getLogoutPayload: (data: AuthData) => LogoutInput
+  getLogoutPayload: (data: Credentials) => LogoutInput
 
   /**
    * This function will be called once when authentication fails although it
@@ -52,4 +52,9 @@ export interface IAuthenticationStrategy<
    * work properly.
    */
   onSuccess: (credentials: AuthenticationResult, gql: IGraphqlWrapper) => void
+
+  /**
+   * Will be called when all the credentials should be cleared.
+   */
+  clear: (authenticator: Authenticator) => Promise<void>
 }

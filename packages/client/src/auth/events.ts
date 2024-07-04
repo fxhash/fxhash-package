@@ -1,7 +1,12 @@
 import { TypedEventTarget } from "@fxhash/utils"
+import { GetSingleUserAccountResult } from "./index.js"
+
+export interface AccountUpdatedEventData {
+  account: GetSingleUserAccountResult | null
+}
 
 export class AccountUpdatedEvent extends Event {
-  constructor() {
+  constructor(public data: AccountUpdatedEventData) {
     super("account-updated")
   }
 }

@@ -3,12 +3,12 @@ import { invariant } from "@fxhash/shared"
 import { Storage } from "@/util/Storage/Storage.js"
 import { GraphqlWrapper, IGraphqlWrapper } from "./GraphqlWrapper.js"
 import { Authenticator } from "@/auth/Authenticator.js"
-import { AuthenticationStrategy } from "@/auth/strategies/interfaces.js"
+import { CredentialsStrategy } from "@/auth/credentials/_interfaces.js"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
   storage?: Storage
-  authStrategy?: AuthenticationStrategy
+  authStrategy?: CredentialsStrategy
 }
 
 const defaultOptions: Required<
@@ -16,7 +16,7 @@ const defaultOptions: Required<
 > = {
   gqlClient: defaultClient,
   storage: new Storage(),
-  authStrategy: AuthenticationStrategy.COOKIE,
+  authStrategy: CredentialsStrategy.COOKIE,
 }
 
 export class FxhashClient {
@@ -32,7 +32,7 @@ export class FxhashClient {
     this.auth = new Authenticator({
       gqlWrapper: this.gql,
       storage: this.storage,
-      authStrategy: options.authStrategy,
+      credentialsStrategy: options.authStrategy,
     })
   }
 
