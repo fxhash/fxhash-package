@@ -70,3 +70,27 @@ export const Qu_GetAccountWallets = graphql(`
     }
   }
 `)
+
+export const Qu_GetMyAccount = graphql(`
+  query GetMyAccount {
+    offchain {
+      UserAccount {
+        account {
+          ...Account_BaseDetails
+          ...Account_Wallets
+        }
+      }
+    }
+  }
+`)
+
+/**
+ * Sets the farcaster handle for an account's profile.
+ */
+export const Mu_SetFarcasterHandle = graphql(`
+  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {
+    set_farcaster_handle(input: $input) {
+      handle
+    }
+  }
+`)
