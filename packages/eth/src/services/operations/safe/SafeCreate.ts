@@ -1,8 +1,9 @@
-import Safe from "@safe-global/protocol-kit"
+import Safe, { SafeFactory } from "@safe-global/protocol-kit"
 import { SafeAccountConfig } from "@safe-global/protocol-kit"
 import { EthereumContractOperation } from "../contractOperation.js"
 import { getSafeFactory } from "@/services/Safe.js"
 import { TransactionType } from "@fxhash/shared"
+import { JsonRpcSigner } from "ethers"
 
 /**
  * The above type represents the parameters required to create a safe multisig Ethereum V1 operation.
@@ -23,8 +24,15 @@ export class CreateSafeMultisigEthV1Operation extends EthereumContractOperation<
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
+    let safeFactory
+    if (this.manager.ethersAdapterForSafe) {
+      safeFactory = await SafeFactory.create({
+        ethAdapter: this.manager.ethersAdapterForSafe,
+      })
+    } else {
+      safeFactory = await getSafeFactory(this.manager.signer as JsonRpcSigner)
+    }
     // We use params as the user is not yet connected to a Safe
-    const safeFactory = await getSafeFactory(this.manager.signer)
 
     const safeAccountConfig: SafeAccountConfig = {
       owners: this.params.owners,

@@ -7,6 +7,7 @@ const defaultClientOptions: ClientOptions = {
   exchanges: [fetchExchange],
   fetchOptions: {
     headers: {},
+    credentials: "include",
   },
 }
 

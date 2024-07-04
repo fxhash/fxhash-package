@@ -9,7 +9,7 @@ export interface IBaseApis {
 export const baseTestnetApis: IBaseApis = {
   rpcs: ["https://sepolia.base.org"],
   reservoir: "https://api-base-sepolia.reservoir.tools",
-  safe: "https://safe-transaction-base-testnet.safe.global/",
+  safe: "https://safe-transaction-base-sepolia.safe.global/",
   splits: "https://api.splits.org",
   whitelist: "http://localhost:9999/whitelist/new",
 }

@@ -32,7 +32,7 @@ export interface Objkt {
   royaltiesSplit: Split[]
   activeListing?: Listing | null
   offers?: Offer[]
-  actions: Action[]
+  actions?: Action[]
   createdAt: string
   updatedAt: string
   assignedAt: string | null

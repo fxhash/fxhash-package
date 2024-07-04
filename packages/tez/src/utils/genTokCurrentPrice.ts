@@ -2,7 +2,7 @@ import { clamp } from "./math"
 import { GenerativeToken } from "@fxhash/shared"
 
 const differenceInSeconds = (d1: Date, d2: Date) => {
-  const diffInMilliseconds = d2.getTime() - d1.getTime()
+  const diffInMilliseconds = d1.getTime() - d2.getTime()
   return Math.floor(diffInMilliseconds / 1000)
 }
 
