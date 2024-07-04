@@ -1,22 +1,9 @@
-import { createGqlClient, gqlClient as defaultClient } from "@fxhash/gql-client"
-import { config } from "@fxhash/config"
-import {
-  BlockchainType,
-  JwtAccessTokenPayload,
-  invariant,
-} from "@fxhash/shared"
-import { AuthenticationResult, ChallengeResult } from "@fxhash/gql"
-import { jwtDecode } from "jwt-decode"
-import {
-  generateChallenge,
-  authenticate,
-  refreshAccessToken,
-  logout,
-} from "@/auth/index.js"
+import { gqlClient as defaultClient } from "@fxhash/gql-client"
+import { invariant } from "@fxhash/shared"
 import { Storage } from "@/util/Storage/Storage.js"
-import { GetSingleUserProfileResult, getMyProfile } from "@/auth/profile.js"
 import { GraphqlWrapper, IGraphqlWrapper } from "./GraphqlWrapper.js"
-import { AuthenticationStrategy, Authenticator } from "./authenticator.js"
+import { Authenticator } from "@/auth/Authenticator.js"
+import { AuthenticationStrategy } from "@/auth/strategies/interfaces.js"
 
 type FxhashClientOptions = {
   gqlClient?: typeof defaultClient
@@ -55,8 +42,3 @@ export class FxhashClient {
     await this.auth.init()
   }
 }
-
-/**
- * TODO
- * now Authenticator should be used from within the rest of the stack
- */

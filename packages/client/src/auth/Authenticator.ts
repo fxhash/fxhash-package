@@ -21,13 +21,14 @@ import { type TezosWalletManager } from "@fxhash/tez"
 import { AuthenticationResult, LogoutInput } from "@fxhash/gql"
 import { jwtDecode } from "jwt-decode"
 import { Storage } from "@/util/Storage/Storage.js"
-import { IGraphqlWrapper } from "./GraphqlWrapper.js"
 import { config } from "@fxhash/config"
-
-export enum AuthenticationStrategy {
-  JWT = "JWT",
-  COOKIE = "COOKIE",
-}
+import {
+  AuthenticationStrategy,
+  IAuthenticationStrategy,
+} from "./strategies/interfaces.js"
+import { IGraphqlWrapper } from "@/client/GraphqlWrapper.js"
+import { authStrategiesMap } from "./strategies/collection.js"
+import { AuthenticatorEventTarget } from "./events.js"
 
 export type AuthenticatorOptions = {
   gqlWrapper: IGraphqlWrapper
@@ -35,7 +36,7 @@ export type AuthenticatorOptions = {
   authStrategy: AuthenticationStrategy
 }
 
-export class Authenticator {
+export class Authenticator extends AuthenticatorEventTarget {
   public static accountKey = `fxhash.${config.config.envName}.account`
   public gql: IGraphqlWrapper
   public storage: Storage
@@ -44,7 +45,12 @@ export class Authenticator {
   public profile: GetSingleUserProfileResult | null = null
   private _initialized = false
 
-  constructor({ gqlWrapper, storage, authStrategy }: AuthenticatorOptions) {
+  constructor({
+    gqlWrapper,
+    storage,
+    authStrategy = AuthenticationStrategy.JWT,
+  }: AuthenticatorOptions) {
+    super()
     this.gql = gqlWrapper
     this.storage = storage
     this.authStrategy = authStrategiesMap[authStrategy]
@@ -169,6 +175,9 @@ export class Authenticator {
     return res
   }
 
+  /**
+   * Cleanup of the storage & properties of the authentication state
+   */
   private async cleanup() {
     await this.storage.removeItem(Authenticator.accountKey)
     this.authenticated = false
@@ -184,144 +193,6 @@ export class Authenticator {
     })
     this.cleanup()
   }
-}
-
-/**
- * responsible for:
- * - adding config to the GqlClient
- * -
- */
-interface IAuthenticationStrategy<
-  AuthData extends Record<string, {}> = Record<string, {}>,
-> {
-  /**
-   * Perform any
-   */
-  recover: (
-    authData: AuthData,
-    authenticator: Authenticator
-  ) => Promise<boolean>
-
-  /**
-   * Returns a seriazable object which should be stored for further retrieval
-   * as required to reconstruct the authentication state of the user without
-   * having to go through the whole authentication process again.
-   */
-  getStoredAuthentication: (
-    accessToken: string,
-    refreshToken: string
-  ) => AuthData
-
-  /**
-   * Will be called upon logout request to craft the payload which will be sent
-   * to the backend. Based on the Authentication Strategy we may want to
-   * provide different inputs to the backend.
-   */
-  getLogoutPayload: (data: AuthData) => LogoutInput
-
-  /**
-   * This function will be called once when authentication fails although it
-   * shouldn't, as maybe some credentials need some refreshing.
-   * @returns TRUE if refresh is a success, FALSE otherwise
-   */
-  refreshAuthentication: (authenticator: Authenticator) => Promise<boolean>
-
-  /**
-   * This hook will be called after the authentication has succeeded and can
-   * perform various operations required for the authentication strategy to
-   * work properly.
-   */
-  onSuccess: (credentials: AuthenticationResult, gql: IGraphqlWrapper) => void
-}
-
-/**
- * JWT Authentication requires storing the refresh token in the storage, as well
- * as including a Bearer token on every request.
- */
-const JWTAuthenticationStrategy: IAuthenticationStrategy<{
-  accessToken: string
-  refreshToken: string
-}> = {
-  async recover(data, authenticator) {
-    if (!data?.refreshToken || !data?.accessToken) return false
-    this.onSuccess(data, authenticator.gql)
-    return true
-  },
-
-  getStoredAuthentication: (accessToken, refreshToken) => {
-    // both tokens need to be stored
-    return {
-      accessToken,
-      refreshToken,
-    }
-  },
-
-  onSuccess: (credentials, gql) => {
-    gql.updateRequestHeaders({
-      authorization: `Bearer: ${credentials.accessToken}`,
-    })
-  },
-
-  async refreshAuthentication(authenticator) {
-    try {
-      const account = await authenticator.getAccountFromStorage()
-      invariant(account, "No account authenticated")
-      invariant(account.authentication.refreshToken, "No refresh token")
-      const { refreshToken } = account.authentication
-
-      const credentials = await refreshAccessToken(
-        { refreshToken },
-        { gqlClient: authenticator.gql.client() }
-      )
-
-      const { id } = jwtDecode<JwtAccessTokenPayload>(credentials.accessToken)
-
-      await authenticator.storage.setItem(Authenticator.accountKey, {
-        id,
-        authentication: this.getStoredAuthentication(
-          credentials.accessToken,
-          credentials.refreshToken
-        ),
-      })
-      authenticator.authenticated = true
-
-      this.onSuccess(credentials, authenticator.gql)
-      await authenticator.getProfile()
-
-      return true
-    } catch (err: any) {
-      console.error("Refresh authentication failed")
-      console.log(err)
-      return false
-    }
-  },
-
-  getLogoutPayload: data => ({
-    refreshToken: data.refreshToken,
-  }),
-}
-
-/**
- * Cookie authentication doesn't really need any kind of processing as cookies
- * are automatically injected by browsers in the request, and are automatically
- * refreshed by the backend.
- */
-const CookieAuthenticationStrategy: IAuthenticationStrategy<{}> = {
-  // by default, recovery is successful — only a request can tell if it worked
-  recover: async () => true,
-  getStoredAuthentication: () => ({}),
-  onSuccess: () => {},
-  // no way to refresh the cookie authentication, just return false (failure)
-  refreshAuthentication: async () => false,
-  getLogoutPayload: () => ({}),
-}
-
-const authStrategiesMap: Record<
-  AuthenticationStrategy,
-  IAuthenticationStrategy<any>
-> = {
-  [AuthenticationStrategy.JWT]: JWTAuthenticationStrategy,
-  [AuthenticationStrategy.COOKIE]: CookieAuthenticationStrategy,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
