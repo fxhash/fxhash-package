@@ -46,30 +46,6 @@ export function EthereumWallet() {
 
   // const [account, setAccount] = useState<any>(getAccount(wagmiConfig))
 
-  const once = useRef(false)
-  useEffect(() => {
-    if (once.current) return
-    once.current = true
-    //
-    ;(async () => {
-      const wallets = new WalletsOrchestrator({
-        connectors: [
-          new WindowWalletsConnector({
-            evm: {
-              wagmiConfig,
-            },
-          }),
-        ],
-      })
-
-      await wallets.init()
-
-      return () => {
-        wallets.release()
-      }
-    })()
-  }, [])
-
   // useEffect(() => {
   //   console.log("initial fetch")
   //   console.log({ wagmiConfig })

@@ -1,5 +1,5 @@
-import { BlockchainType, WalletManager, invariant } from "@fxhash/shared"
-import { IWalletsConnector } from "./WalletConnectors/interfaces.js"
+import { BlockchainType } from "@fxhash/shared"
+import { IWalletsConnector } from "./WalletConnectors/_interfaces.js"
 import {
   BlockchainEnv,
   BlockchainEnvs,
@@ -8,9 +8,6 @@ import {
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config } from "@fxhash/config"
 import { TezosWalletManager } from "@fxhash/tez"
-import { TezosToolkit } from "@taquito/taquito"
-import { InMemorySigner } from "@taquito/signer"
-import { BeaconWallet } from "@taquito/beacon-wallet"
 import { WalletChangedEvent, WalletOrchestratorEventTarget } from "./events.js"
 
 /**
@@ -36,7 +33,7 @@ type TWalletManagerWithConnector<Env extends BlockchainEnv = BlockchainEnv> = {
   manager: BlockchainEnvToWalletManagerMap[Env]
 }
 
-type TActiveManagersMap = {
+export type TActiveManagersMap = {
   [Env in BlockchainEnv]: TWalletManagerWithConnector<Env> | null
 }
 
@@ -245,11 +242,7 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
   }
 
   init() {
-    console.log("WALLETS ORCHESTRATOR !!!!!!")
-    console.log(this.connectors)
-
     this._attachListeners()
-
     // todo: maybe not Promise.all but allSettled ?
     return Promise.all(this.connectors.map(connector => connector.init()))
   }
@@ -274,7 +267,6 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
             return
           }
 
-          console.log("___ EVM wallet changed !")
           const evmConnector = connector.getWalletConnector(
             BlockchainType.ETHEREUM
           )
@@ -333,10 +325,9 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
               .account!.address,
           })
 
-          console.log(twm)
-
           // update connector active manager
           this._managersMap[i][BlockchainEnv.TEZOS] = twm
+
           incomingManager = {
             env: BlockchainEnv.TEZOS,
             connector: connector,
@@ -361,6 +352,7 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
             this._activeManagers[evt.chainEnv]?.manager !==
             newActiveManagers[evt.chainEnv]?.manager
           ) {
+            this._activeManagers = newActiveManagers
             this.dispatchTypedEvent(
               "wallet-changed",
               // @ts-expect-error
@@ -369,9 +361,9 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
                 manager: newActiveManagers[evt.chainEnv]?.manager || null,
               })
             )
+          } else {
+            this._activeManagers = newActiveManagers
           }
-
-          this._activeManagers = newActiveManagers
         }
       }
 
@@ -386,6 +378,10 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
     env: E
   ): BlockchainEnvToWalletManagerMap[E] | null {
     return this._activeManagers[env]?.manager || null
+  }
+
+  public getActiveManagers() {
+    return this._activeManagers
   }
 
   private _toClean(fn: () => void) {

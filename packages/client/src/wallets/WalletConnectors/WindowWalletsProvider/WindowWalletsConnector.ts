@@ -2,7 +2,7 @@ import { type DAppClientOptions } from "@airgap/beacon-sdk"
 import { type Config } from "@wagmi/core"
 import { BlockchainType, invariant } from "@fxhash/shared"
 import { EIP1193Connector } from "./EIP1193Connector.js"
-import { IWalletsConnector, MapChainToWalletConnector } from "../interfaces.js"
+import { IWalletsConnector, MapChainToWalletConnector } from "../_interfaces.js"
 import { TZIP10Connector } from "./TZIP10Connector.js"
 import {
   BlockchainEnv,

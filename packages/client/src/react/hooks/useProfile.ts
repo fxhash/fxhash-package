@@ -16,8 +16,8 @@ export function useProfile(): UseProfileHookResult {
   )
   // When a wallet is connected we fetch the user profile
   useConnect(async () => {
-    const profile = await client.auth.getProfile()
-    setProfile(profile)
+    // const profile = await client.auth.getProfile()
+    // setProfile(profile)
   })
 
   // When all wallets are disconnected, profile should be null

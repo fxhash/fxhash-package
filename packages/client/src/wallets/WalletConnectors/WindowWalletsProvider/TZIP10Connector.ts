@@ -1,5 +1,5 @@
 import { DefaultBeaconWalletConfig } from "@fxhash/tez"
-import { ITezosWalletConnector } from "../interfaces.js"
+import { ITezosWalletConnector } from "../_interfaces.js"
 import {
   type DAppClientOptions,
   type AccountInfo,

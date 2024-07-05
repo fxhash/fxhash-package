@@ -10,7 +10,7 @@ import {
   watchAccount,
 } from "@wagmi/core"
 import { baseSepolia, sepolia } from "@wagmi/core/chains"
-import { IEvmWalletConnector } from "../interfaces.js"
+import { IEvmWalletConnector } from "../_interfaces.js"
 import { BlockchainType, failure, invariant, success } from "@fxhash/shared"
 import { BlockchainNotSupported, EvmClientsNotAvailable } from "../errors.js"
 
@@ -75,6 +75,11 @@ export class EIP1193Connector implements IEvmWalletConnector {
     this._onAccountChange = onAccountChange
   }
 
+  /**
+   * Initialize the connector.
+   * @param wagmiConfigOverride WAGMI config to override the config provided
+   * at instanciation.
+   */
   public async init(wagmiConfigOverride?: Config) {
     invariant(!this._initialized, "EIP1193Connector already initialized")
 

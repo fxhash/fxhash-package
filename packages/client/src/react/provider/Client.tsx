@@ -7,6 +7,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useContext,
 } from "react"
 import { FxhashClient } from "../../client/index.js"
 import { BlockchainType, PromiseResult, failure, success } from "@fxhash/shared"
@@ -21,10 +22,16 @@ import {
   LocalStorageDriver,
   Storage,
   WalletDoesntBelongToUserError,
+  WalletsOrchestrator,
+  WindowWalletsConnector,
   WrongWalletActivatedError,
 } from "@/index.js"
 import { isTezosWalletManager } from "@/util/types.js"
 import { config as fxConfig } from "@fxhash/config"
+import { WagmiContext } from "wagmi"
+import { createConfig, http, Config } from "@wagmi/core"
+import { baseSepolia, sepolia } from "viem/chains"
+import { UserReconciliation } from "@/user-reconciliation/index.js"
 
 export enum ClientContextEvent {
   onConnect = "onConnect",
@@ -49,11 +56,13 @@ export type WalletsConfig =
 
 export interface ClientProviderConfig {
   wallets: WalletsConfig
+  wagmiConfig: Config
   auth: "cookie" | "jwt"
 }
 
 export interface ClientProviderUserConfig {
   wallets: WalletsConfig
+  wagmiConfig: Config
   auth?: "cookie" | "jwt"
 }
 
@@ -84,13 +93,25 @@ export interface ClientContext {
   setError: (error: ClientError) => void
 }
 
+const defaultWagmiConfig = createConfig({
+  chains: [sepolia, baseSepolia],
+  transports: {
+    [sepolia.id]: http(),
+    [baseSepolia.id]: http(),
+  },
+})
+
 const defaultClientContext: ClientContext = {
   isConnected: false,
   client: new FxhashClient({ storage: new Storage(new LocalStorageDriver()) }),
   tezosWalletManager: null,
   ethereumWalletManager: null,
   setWalletManager: () => {},
-  config: { wallets: { [BlockchainType.ETHEREUM]: true }, auth: "cookie" },
+  config: {
+    wallets: { [BlockchainType.ETHEREUM]: true },
+    auth: "cookie",
+    wagmiConfig: defaultWagmiConfig,
+  },
   walletManagers: {
     [BlockchainType.TEZOS]: null,
     [BlockchainType.ETHEREUM]: null,
@@ -113,8 +134,42 @@ export function ClientProvider(
   )
   const client = useRef<FxhashClient>(defaultClientContext.client)
 
+  // const wagmiCtx = useContext(WagmiContext)
+  // const wagmiConfig = useMemo(() => {
+  //   return wagmiCtx ?? defaultWagmiConfig
+  // }, [wagmiCtx]) as any
+
+  const once = useRef(false)
   useEffect(() => {
-    if (!client.current.initialized) client.current.init()
+    if (once.current) return
+    once.current = true
+    //
+    ;(async () => {
+      const wallets = new WalletsOrchestrator({
+        connectors: [
+          new WindowWalletsConnector({
+            evm: {
+              wagmiConfig: config.wagmiConfig,
+            },
+          }),
+        ],
+      })
+
+      const reconciliation = new UserReconciliation({
+        authenticator: client.current.auth,
+        wallets: wallets,
+      })
+
+      await client.current.init()
+      await wallets.init()
+      await reconciliation.init()
+
+      console.log({ client, wallets, reconciliation })
+
+      return () => {
+        wallets.release()
+      }
+    })()
   }, [])
 
   // We use chainsSigning to avoid multiple authentications at the same time
