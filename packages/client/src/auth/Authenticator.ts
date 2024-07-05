@@ -6,7 +6,7 @@ import {
   getMyProfile,
   logout,
 } from "@/index.js"
-import { BlockchainEnv } from "@/wallets/WalletConnectors/events.js"
+import { BlockchainEnv } from "@/wallets/connectors/events.js"
 import { type EthereumWalletManager } from "@fxhash/eth"
 import {
   BlockchainType,

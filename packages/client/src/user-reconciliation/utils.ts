@@ -6,7 +6,7 @@ import {
   WalletConnectedButNoAccountAuthenticatedError,
   WalletDoesntBelongAccountError,
 } from "./errors.js"
-import { BlockchainEnvs } from "@/wallets/WalletConnectors/events.js"
+import { BlockchainEnvs } from "@/wallets/connectors/events.js"
 
 /**
  * Given an Account and some Wallet Managers, returns a failure with an error

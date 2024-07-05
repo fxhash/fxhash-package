@@ -9,7 +9,7 @@ import {
 import {
   EvmPrivateKeyConnector,
   EvmPrivateKeyConnectorOptions,
-} from "./EVMPrivateKeyConnector.js"
+} from "./EvmPrivateKeyConnector.js"
 import {
   TezosPrivateKeyConnector,
   TezosPrivateKeyConnectorOptions,

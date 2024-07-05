@@ -1,2 +1,2 @@
-export * from "./WalletConnectors/_index.js"
+export * from "./connectors/_index.js"
 export * from "./WalletOrchestrator.js"

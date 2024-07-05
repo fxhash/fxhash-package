@@ -9,7 +9,7 @@ import { EthereumWalletManager } from "@fxhash/eth"
 import { AuthenticationResult } from "@fxhash/gql"
 import { SignMessageError } from "@/index.js"
 import { useDisconnect } from "wagmi"
-import { BlockchainEnv } from "@/wallets/WalletConnectors/events.js"
+import { BlockchainEnv } from "@/wallets/connectors/events.js"
 
 export function useEthereumWallet(): {
   ethereumWalletManager: EthereumWalletManager | null

@@ -1,10 +1,10 @@
 import { BlockchainType } from "@fxhash/shared"
-import { IWalletsConnector } from "./WalletConnectors/_interfaces.js"
+import { IWalletsConnector } from "./connectors/_interfaces.js"
 import {
   BlockchainEnv,
   BlockchainEnvs,
   WConn_WalletChangedEvent,
-} from "./WalletConnectors/events.js"
+} from "./connectors/events.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config } from "@fxhash/config"
 import { TezosWalletManager } from "@fxhash/tez"

@@ -1,5 +1,5 @@
 import { TezosWalletManager } from "@fxhash/tez"
-import { BlockchainEnv, ChainScopedEvent } from "./WalletConnectors/events.js"
+import { BlockchainEnv, ChainScopedEvent } from "./connectors/events.js"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { TypedEventTarget } from "@/util/TypedEventTarget.js"
 
