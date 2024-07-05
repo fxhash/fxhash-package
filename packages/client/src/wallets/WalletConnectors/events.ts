@@ -11,8 +11,8 @@
  */
 
 import { TypedEventTarget } from "@/util/TypedEventTarget.js"
-import { GetAccountReturnType } from "@wagmi/core"
 import { AccountInfo } from "@airgap/beacon-sdk"
+import { Address } from "viem"
 
 export enum BlockchainEnv {
   EVM = "EVM",
@@ -33,13 +33,27 @@ export abstract class ChainScopedEvent extends Event {
   }
 }
 
+/**
+ * todo add comment
+ */
+export interface IEvmAccountDetails {
+  address?: Address
+}
+
+/**
+ * todo add comment
+ */
+export interface ITezosAccountDetails {
+  address?: string
+}
+
 type WConn_WalletChangedEventDataTypemap = {
   [E in BlockchainEnv]: {
     [BlockchainEnv.EVM]: {
-      account: GetAccountReturnType
+      account: IEvmAccountDetails | null
     }
     [BlockchainEnv.TEZOS]: {
-      account?: AccountInfo
+      account: ITezosAccountDetails | null
     }
   }[E]
 }

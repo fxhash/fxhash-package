@@ -27,7 +27,7 @@ const defaultWagmiConfig = createConfig({
   },
 })
 
-const chainDefinitions = {
+export const chainDefinitions = {
   [BlockchainType.BASE]: baseSepolia,
   [BlockchainType.ETHEREUM]: sepolia,
 }

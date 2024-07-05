@@ -1,5 +1,0 @@
-export * from "./WindowWalletsProvider/WindowWalletsConnector.js"
-export * from "./WindowWalletsProvider/EIP1193Connector.js"
-export * from "./WindowWalletsProvider/TZIP10Connector.js"
-export * from "./errors.js"
-export * from "./_interfaces.js"

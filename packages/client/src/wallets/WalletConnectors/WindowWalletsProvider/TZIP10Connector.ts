@@ -7,8 +7,9 @@ import {
 } from "@airgap/beacon-sdk"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { invariant } from "@fxhash/shared"
+import { ITezosAccountDetails } from "../events.js"
 
-type AccountChangeHandler = (account?: AccountInfo) => void
+type AccountChangeHandler = (account?: ITezosAccountDetails) => void
 
 type TZIP10ConnectorParams = {
   beaconConfig?: DAppClientOptions

@@ -47,7 +47,7 @@ export class WindowWalletsConnector
         this.dispatchTypedEvent(
           "wallet-changed",
           new WConn_WalletChangedEvent(BlockchainEnv.TEZOS, {
-            account,
+            account: account || null,
           })
         )
       },
@@ -58,7 +58,7 @@ export class WindowWalletsConnector
         this.dispatchTypedEvent(
           "wallet-changed",
           new WConn_WalletChangedEvent(BlockchainEnv.EVM, {
-            account,
+            account: account || null,
           })
         )
       },
