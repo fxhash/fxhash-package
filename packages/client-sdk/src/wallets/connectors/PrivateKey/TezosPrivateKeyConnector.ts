@@ -63,4 +63,8 @@ export class TezosPrivateKeyConnector implements ITezosWalletConnector {
       })
     }
   }
+
+  public async disconnect() {
+    this.updatePrivateKey(null)
+  }
 }

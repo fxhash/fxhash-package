@@ -92,4 +92,8 @@ export class EvmPrivateKeyConnector implements IEvmWalletConnector {
       this._onAccountChange?.(this._account)
     }
   }
+
+  public async disconnect() {
+    this.updatePrivateKey(null)
+  }
 }

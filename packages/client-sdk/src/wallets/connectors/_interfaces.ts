@@ -62,6 +62,11 @@ export interface IWalletsConnector extends WalletsConnectorEventEmitter {
   getWalletConnector: <Chain extends BlockchainType>(
     chain: Chain
   ) => MapChainToWalletConnector<Chain>
+
+  /**
+   * Disconnect all the wallets currently connected.
+   */
+  disconnectAll: () => Promise<void>
 }
 
 /**
@@ -72,11 +77,18 @@ export interface IEvmWalletConnectorClients {
   public: PublicClient<Transport, Chain>
 }
 
+export interface IBaseWalletConnector {
+  /**
+   * Attempts to disconnect the wallet.
+   */
+  disconnect: () => Promise<void>
+}
+
 /**
  * Interfaces which must be implemented by Wallet Connectors for supporting
  * our stack on EVM.
  */
-export interface IEvmWalletConnector {
+export interface IEvmWalletConnector extends IBaseWalletConnector {
   /**
    * @returns A promise which resolves with an object of the wallet clients
    * ready for interactions, or rejects if no such clients are avaiable.
@@ -97,7 +109,7 @@ export interface IEvmWalletConnector {
  * Interfaces which must be implemented by Wallet Connectors for supporting
  * our stack on Tezos.
  */
-export interface ITezosWalletConnector {
+export interface ITezosWalletConnector extends IBaseWalletConnector {
   /**
    * @returns Either a Beacon Wallet instance or an arbitrary signer. Both are
    * compatible with the rest of the stack.

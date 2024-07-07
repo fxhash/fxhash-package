@@ -11,10 +11,11 @@ import {
   IWalletsOrchestratorParams,
   Storage,
   UserReconciliation,
+  WalletConnectedButNoAccountAuthenticatedError,
   WalletsOrchestrator,
 } from "@fxhash/client-sdk"
-import { invariant } from "@fxhash/shared"
 import { ClientBasicEventTarget } from "./events.js"
+import { intialization } from "@fxhash/utils"
 
 export type FxhashClientBasicOptions = {
   /**
@@ -58,7 +59,7 @@ const defaultOptions: Required<Omit<FxhashClientBasicOptions, never>> = {
  * side-effects.
  */
 export class FxhashClientBasic extends ClientBasicEventTarget {
-  private _initialized = false
+  private _init = intialization()
   private _gql: IGraphqlWrapper
   private _storage: Storage
   private _auth: Authenticator
@@ -103,72 +104,126 @@ export class FxhashClientBasic extends ClientBasicEventTarget {
   }
 
   async init() {
-    invariant(!this._initialized, "Can only initialize once")
-    this._initialized = true
+    this._init.start()
 
-    await Promise.all([
-      this._auth.init(),
-      this._wallets.init(),
-      this._reconciliation.init(),
-    ])
+    /**
+     * @dev The order in which the modules are initialized is very important
+     * here. A few considerations:
+     * - Authenticator & WalletsOrchestrator may take a while to initialize, so
+     *   it's best to init them in parallel
+     * - UserReconciliation only emits events when reconciliating the state
+     * - This client is plugged to the UserReconciliation module to execute
+     *   its flow
+     * - When initializing UserReconciliation, it only sets up event listeners,
+     *   but doesn't do any state reconciliation. Clients are expected to
+     *   implement that.
+     */
 
-    // if there is a discrepancy in the initial state, reset everything
+    await Promise.all([this._auth.init(), this._wallets.init()])
+    await this._reconciliation.init()
+
+    // during initialisation we want a custom behaviour to reconciliate the
+    // state, as if there are any discrepancy we want to reset all the states
     const reconciliation = this._reconciliation.reconciliationState()
-    console.log("initial reconciliation")
-    console.log({ reconciliation })
 
-    console.log({
-      account: this._auth.account,
-      activeManagers: this._wallets.getActiveManagers(),
-    })
+    if (reconciliation.isFailure()) {
+      // todo ? remove logs here ?
+      console.log(
+        `The wallets/account are in an incoherent state, the following error was emitted after initialization:`
+      )
+      console.log(reconciliation.error)
+      console.log(
+        `Wallets/Account will be cleared as a coherent cannot be recovered at this stage.`
+      )
 
-    // note: important to attach listeners before initializing, otherwise some
-    // events may be lost as the init() may emit events
+      await Promise.allSettled([
+        this.auth.logout(),
+        this.wallets.disonnectAll(),
+      ])
+    }
+
+    // broadcast — it's always a valid user change here, either no user or
+    // a user ready to do stuff
+    this.emit("valid-user-changed")
+
+    // now attach listeners for automatically plug into the flows
     this._attachListeners()
   }
-
   /**
    * Forward events from the different components so that they are emitted
    * directly by this instance.
    */
   private _attachListeners() {
+    // todo: listen to user-reconciliation-errors to trigger appropriate side
+    // effects
+
+    const clear1 = this._reconciliation.on(
+      "user-reconciliation-error",
+      async err => {
+        // if a wallet was connected, but there is no account we can attempt a
+        // signing process with said wallet
+        if (err instanceof WalletConnectedButNoAccountAuthenticatedError) {
+          console.log("attemp sign in with wallet")
+          const managers = this.wallets.managers
+          const anyManager = managers.EVM || managers.TEZOS
+          if (!anyManager) {
+            throw Error(
+              `something weird with the implementation, shouldn't reach this`
+            )
+          }
+          const result = await this.auth.authenticate(anyManager.manager)
+
+          // in case of failure, we reset the
+          if (result.isFailure()) {
+            // todo: should we provide a way to get feedback here ?
+            await this.reset()
+          }
+          // otherwise events will be automatically broadcasted
+          return
+        }
+
+        // otherwise forward the error to be handlded by applications
+        // todo ? should we enforce some reconciliation here ??
+        this.emit("user-reconciliation-error", err)
+      }
+    )
+
     this._toClean.push(
-      ...[
-        this._reconciliation.pipe("user-reconciliation-error", this),
-        this._reconciliation.pipe("valid-user-changed", this),
-        this._wallets.pipe("wallet-changed", this),
-        this._auth.pipe("account-updated", this),
-      ]
+      clear1,
+      this._reconciliation.pipe("valid-user-changed", this),
+      this._wallets.pipe("wallet-changed", this),
+      this._auth.pipe("account-updated", this)
     )
   }
 
+  /**
+   * Resets modules to a blank state.
+   * - auth: Authentication is cleared, logout (if any account) is performed
+   * - wallets: all wallets are disconnected
+   * An object can be passed to define which modules should be reset
+   */
+  public async reset(
+    {
+      auth = true,
+      wallets = true,
+    }: {
+      auth: boolean
+      wallets: boolean
+    } = {
+      auth: true,
+      wallets: true,
+    }
+  ) {
+    const promises: Promise<void>[] = []
+    if (auth) promises.push(this.auth.logout())
+    if (wallets) promises.push(this.wallets.disonnectAll())
+    await Promise.all(promises)
+  }
+
   public release() {
+    this._wallets.release()
+    this._reconciliation.release()
     this._toClean.forEach(f => f())
     this._toClean.length = 0
   }
 }
-
-/**
- * Current problems:
- * - how to perform a full authentication flow ?
- *   right now when a wallet is connected, a Reconciliation error is emitted
- *   but that's it
- * - there are 2 slightly different wallet changed events:
- *   - the user connects/changes manually the wallet
- *   - wallet is detected at startup
- *   Can we detect these 2 cases using what's already there ? If not, what
- *   should be changed (minimally) for it to be possible ?
- *
- * Solution ?
- * - initialize all the modules
- * - run the reconciliation module
- *   -> here we get the initial state
- * - attach the event forwardding
- *
- * - on wallet changed
- *   - reconciliation will run automatically
- * - in listeners previously set up, hook on User Reconciliation error
- *   WalletConnectedButNoAccountAuthenticatedError, if such error is thrown
- *   it means a user tries to authenticate ? so we run the rest of the
- *   authentication flow ?
- */

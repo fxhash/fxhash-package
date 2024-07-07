@@ -101,4 +101,8 @@ export class PrivateKeyWalletsConnector
     const connector = chainEnv === BlockchainEnv.EVM ? this._evm : this._tez
     connector.updatePrivateKey(privateKey as any)
   }
+
+  public async disconnectAll() {
+    await Promise.all([this._evm.disconnect(), this._tez.disconnect()])
+  }
 }

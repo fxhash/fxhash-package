@@ -8,6 +8,7 @@ import {
   getWalletClient,
   http,
   watchAccount,
+  disconnect,
 } from "@wagmi/core"
 import { baseSepolia, sepolia } from "@wagmi/core/chains"
 import { IEvmWalletConnector } from "../_interfaces.js"
@@ -146,5 +147,9 @@ export class EIP1193Connector implements IEvmWalletConnector {
   private _accountChangedEvent = (account: GetAccountReturnType) => {
     this._connectedAccount = account
     return this._onAccountChange(account)
+  }
+
+  public async disconnect() {
+    return disconnect(this._wagmiConfig)
   }
 }

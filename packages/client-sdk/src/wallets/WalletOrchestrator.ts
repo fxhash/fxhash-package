@@ -1,4 +1,9 @@
-import { BlockchainEnv, BlockchainEnvs, BlockchainType } from "@fxhash/shared"
+import {
+  BlockchainEnv,
+  BlockchainEnvs,
+  BlockchainType,
+  invariant,
+} from "@fxhash/shared"
 import { IWalletsConnector } from "./connectors/_interfaces.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config } from "@fxhash/config"
@@ -8,6 +13,7 @@ import {
   WalletsConnectorEventEmitter,
 } from "./connectors/events.js"
 import { WalletOrchestratorEventEmitter } from "./events.js"
+import { intialization } from "@fxhash/utils"
 
 /**
  * should:
@@ -225,6 +231,7 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
   }
   private _cleanup: (() => void)[] = []
   private _walletOverrideStrategy: ConnectorOverrideStrategy
+  private _init = intialization()
 
   constructor({
     connectors,
@@ -240,9 +247,22 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
     this._walletOverrideStrategy = walletOverrideStrategy
   }
 
-  init() {
+  get initialized() {
+    return this._init.finished
+  }
+
+  /**
+   * Proxy convenience for `getActiveManagers()`
+   */
+  get managers() {
+    return this.getActiveManagers()
+  }
+
+  async init() {
+    this._init.start()
     this._attachListeners()
-    return Promise.all(this.connectors.map(connector => connector.init()))
+    await Promise.all(this.connectors.map(connector => connector.init()))
+    this._init.finish()
   }
 
   private _attachListeners() {
@@ -354,7 +374,7 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
         }
       }
 
-      this._toClean(connector.on("wallet-changed", onChanged))
+      this._cleanup.push(connector.on("wallet-changed", onChanged))
     }
   }
 
@@ -368,8 +388,10 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
     return this._activeManagers
   }
 
-  private _toClean(fn: () => void) {
-    this._cleanup.push(fn)
+  public async disonnectAll() {
+    await Promise.all(
+      this.connectors.map(connector => connector.disconnectAll())
+    )
   }
 
   public release() {

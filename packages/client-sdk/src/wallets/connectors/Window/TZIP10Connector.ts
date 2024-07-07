@@ -66,4 +66,8 @@ export class TZIP10Connector implements ITezosWalletConnector {
     invariant(this._beaconWallet, "Beacon Wallet not instanciated")
     return this._beaconWallet
   }
+
+  public async disconnect() {
+    return this._beaconWallet?.disconnect()
+  }
 }

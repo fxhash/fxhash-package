@@ -2,6 +2,8 @@ import { type WalletsOrchestrator } from "@/wallets/index.js"
 import { type Authenticator } from "@/auth/index.js"
 import { reconciliationState } from "./utils.js"
 import { UserReconciliationEventEmitter } from "./events.js"
+import { invariant } from "@fxhash/shared"
+import { intialization } from "@fxhash/utils"
 
 export type UserReconciliationParams = {
   authenticator: Authenticator
@@ -20,6 +22,7 @@ export class UserReconciliation extends UserReconciliationEventEmitter {
   public wallets: WalletsOrchestrator
 
   private _cleanup: (() => void)[] = []
+  private _init = intialization()
 
   constructor({ authenticator, wallets }: UserReconciliationParams) {
     super()
@@ -28,17 +31,31 @@ export class UserReconciliation extends UserReconciliationEventEmitter {
   }
 
   public async init() {
-    this.authenticator.on("account-updated", this._reconciliate)
-    this.wallets.on("wallet-changed", this._reconciliate)
+    // This module expects the Authenticator & Wallet Orchestrator to be fully
+    // initialized before it's initialized. This is to enforce a certain flow
+    // for api consumers
 
-    this._cleanup.push(() => {
-      this.authenticator.off("account-updated", this._reconciliate)
-      this.wallets.off("wallet-changed", this._reconciliate)
-    })
+    invariant(
+      this.authenticator.initialized,
+      `Authenticator must be initialized when the UserReconciliation is initialized, to ensure the initial state is ready when the first reconciliation happens.`
+    )
+    invariant(
+      this.wallets.initialized,
+      `WalletsOrchestrator must be initialized when the UserReconciliation is initialized, to ensure the initial state is ready when the first reconciliation happens.`
+    )
+
+    this._init.start()
+    this._cleanup.push(
+      this.authenticator.on("account-updated", this._reconciliate),
+      this.wallets.on("wallet-changed", this._reconciliate)
+    )
+    this._init.finish()
   }
 
   private _reconciliate = () => {
+    console.log("_reconciliate")
     const reconciliation = this.reconciliationState()
+    console.log({ reconciliation })
     if (reconciliation.isSuccess()) {
       this.emit("valid-user-changed")
     } else {

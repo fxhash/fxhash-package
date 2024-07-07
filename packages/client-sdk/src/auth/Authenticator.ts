@@ -29,6 +29,7 @@ import {
   logout,
 } from "./index.js"
 import { SignMessageError } from "@/util/Error.js"
+import { intialization } from "@fxhash/utils"
 
 /**
  * TODOS
@@ -96,7 +97,7 @@ export class Authenticator extends AuthenticatorEventEmitter {
   private _gql: IGraphqlWrapper
   private _storage: Storage
   private _credStrat: ICredentialsStrategy
-  private _initialized = false
+  private _init = intialization()
 
   constructor({
     gqlWrapper,
@@ -139,6 +140,13 @@ export class Authenticator extends AuthenticatorEventEmitter {
   }
 
   /**
+   * Whether this module has been initialized or not.
+   */
+  get initialized() {
+    return this._init.finished
+  }
+
+  /**
    * Updates the account property of this class in-memory and broadcast an
    * AccountUpdatedEvent. Also updated the authenticated boolean based on the
    * state of the account value.
@@ -160,10 +168,11 @@ export class Authenticator extends AuthenticatorEventEmitter {
    * regards to the authentication.
    */
   public async init() {
-    invariant(!this._initialized, "Can only initialize once")
-    this._initialized = true
+    this._init.start()
+    console.log("init start")
 
     const account = await this.getAccountFromStorage()
+    console.log({ accountInStorage: account })
 
     /**
      * TODO
@@ -178,8 +187,10 @@ export class Authenticator extends AuthenticatorEventEmitter {
           account.credentials,
           this
         )
+        console.log({ recovered })
         if (!recovered) {
           await this.cleanup()
+          this._init.finish()
           return
         }
         // If we can get the profile we are authenticated
@@ -191,10 +202,13 @@ export class Authenticator extends AuthenticatorEventEmitter {
         // if (refreshSuccess) return
       }
     }
+
+    console.log("inti end")
+    this._init.finish()
   }
 
   private async _generateChallenge(chain: BlockchainType, address: string) {
-    invariant(this._initialized, "Not initialized")
+    this._init.assertFinished()
     return generateChallenge(
       { chain, address },
       { gqlClient: this.gql.client() }
@@ -206,7 +220,7 @@ export class Authenticator extends AuthenticatorEventEmitter {
     signature: string,
     publicKey?: string
   ): Promise<AuthenticationResult> {
-    invariant(this._initialized, "Not initialized")
+    this._init.assertFinished()
     return authenticate(
       { id: challengeId, signature, publicKey },
       { gqlClient: this.gql.client() }
@@ -231,7 +245,7 @@ export class Authenticator extends AuthenticatorEventEmitter {
   public async authenticate(
     manager: TezosWalletManager | EthereumWalletManager
   ): PromiseResult<GetSingleUserAccountResult, SignMessageError> {
-    invariant(this._initialized, "Not initialized")
+    this._init.assertFinished()
 
     // derive blockchain env from WalletManager instance
     let env: BlockchainEnv | null = null
@@ -289,7 +303,6 @@ export class Authenticator extends AuthenticatorEventEmitter {
   }
 
   public async getAccountFromStorage(): Promise<StoredAccount | null> {
-    invariant(this._initialized, "Not initialized")
     const account = await this.storage.getItem(Authenticator.accountStorageKey)
     if (!account) return null
     // return account if data is valid
@@ -309,7 +322,6 @@ export class Authenticator extends AuthenticatorEventEmitter {
    * @returns Authenticated account (or null if none)
    */
   public async syncAccount() {
-    invariant(this._initialized, "Not initialized")
     const account = await this.getAccountFromStorage()
     invariant(account, "No account authenticated")
     const res = await getMyProfile({ gqlClient: this.gql.client() })
@@ -331,7 +343,7 @@ export class Authenticator extends AuthenticatorEventEmitter {
    * state to forget authentication.
    */
   async logout() {
-    invariant(this._initialized, "Not initialized")
+    this._init.assertFinished()
     const account = await this.getAccountFromStorage()
     invariant(account, "No account authenticated")
     await logout(this._credStrat.getLogoutPayload(account.credentials), {

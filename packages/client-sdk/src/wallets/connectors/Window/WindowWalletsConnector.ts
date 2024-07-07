@@ -87,6 +87,10 @@ export class WindowWalletsConnector
     throw null
   }
 
+  public async disconnectAll() {
+    await Promise.all([this._evm.disconnect(), this._tez.disconnect()])
+  }
+
   public release() {
     this._evm.release()
     this._cleanup.forEach(fn => fn())

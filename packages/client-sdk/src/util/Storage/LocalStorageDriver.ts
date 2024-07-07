@@ -3,12 +3,12 @@ import { StorageDriver, StorageValue } from "./Storage.js"
 export class LocalStorageDriver implements StorageDriver {
   private base: string
 
-  constructor(base = "FXHASH_CLIENT") {
+  constructor(base = "fxhash.client") {
     this.base = base
   }
 
   private getKey(key: string): string {
-    return `${this.base}${key}`
+    return `${this.base}:${key}`
   }
 
   async getItem(key: string): Promise<StorageValue> {

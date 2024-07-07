@@ -1,4 +1,5 @@
 import { InMemoryStorageDriver } from "./InMemoryDriver.js"
+import { LocalStorageDriver } from "./LocalStorageDriver.js"
 
 export type StorageValue = null | string | number | boolean | object
 
@@ -8,10 +9,16 @@ export interface StorageDriver {
   removeItem(key: string): Promise<void>
 }
 
+// if localStorage is available, use driver, otherwise use InMemory
+const newDefaultStorageDriver = () =>
+  typeof window !== undefined && window.localStorage
+    ? new LocalStorageDriver()
+    : new InMemoryStorageDriver()
+
 export class Storage {
   private driver: StorageDriver
 
-  constructor(driver: StorageDriver = new InMemoryStorageDriver()) {
+  constructor(driver: StorageDriver = newDefaultStorageDriver()) {
     this.driver = driver
   }
 
