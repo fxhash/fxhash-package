@@ -275,6 +275,8 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
           null
 
         if (evt.env === BlockchainEnv.EVM) {
+          console.log("orchestrator onChange")
+          console.log({ evt })
           if (!evt.account?.address) {
             /**
              * Todo; handle when no account
@@ -288,10 +290,17 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
           const evmConnector = connector.getWalletConnector(
             BlockchainType.ETHEREUM
           )
-          const _clients = await evmConnector.getClients(
-            BlockchainType.ETHEREUM
-          )
+          console.log({ evmConnector })
+          let _clients: any
+          try {
+            _clients = await evmConnector.getClients(BlockchainType.ETHEREUM)
+          } catch (err) {
+            console.log("error:")
+            console.log(err)
+          }
+          console.log({ _clients })
           const account = evmConnector.getAccount()
+          console.log({ account })
           if (_clients.isSuccess() && account) {
             const clients = _clients.unwrap()
             const signer = clientToSigner(clients.wallet)
@@ -345,6 +354,8 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
           }
         }
 
+        console.log({ incomingManager })
+
         // once incomingManager is created, update internal state
         // get the new active managers based on the strategy
         if (incomingManager) {
@@ -356,6 +367,8 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
             connectors: this.connectors,
             incomingManager,
           })
+
+          console.log({ newActiveManagers })
 
           // if manager has changed, broadcast the new manager
           if (
