@@ -1,4 +1,4 @@
-import { BlockchainEnv } from "@/wallets/connectors/events.js"
+import { BlockchainEnv, chainEnvToChainMap } from "@fxhash/shared"
 import { type EthereumWalletManager } from "@fxhash/eth"
 import {
   BlockchainType,
@@ -19,9 +19,9 @@ import {
   credentialsStratMap,
 } from "./credentials/index.js"
 import { IGraphqlWrapper } from "@/util/GraphqlWrapper.js"
-import { AccountUpdatedEvent, AuthenticatorEventTarget } from "./events.js"
 import { isEthereumWalletManager, isTezosWalletManager } from "@/util/types.js"
 import {
+  AuthenticatorEventEmitter,
   GetSingleUserAccountResult,
   authenticate,
   generateChallenge,
@@ -86,7 +86,7 @@ type StoredAccount<
  * credential strategies are available on all applications/platforms (notably
  * Cookies, because of 3rd party cookies sunset on chrome).
  */
-export class Authenticator extends AuthenticatorEventTarget {
+export class Authenticator extends AuthenticatorEventEmitter {
   /**
    * The key which will be used to store the account data.
    */
@@ -149,10 +149,7 @@ export class Authenticator extends AuthenticatorEventTarget {
 
     // everytime the account is updated, emit event.
     if (prev !== account || prev?.id !== account?.id) {
-      this.dispatchTypedEvent(
-        "account-updated",
-        new AccountUpdatedEvent({ account })
-      )
+      this.emit("account-updated", { account })
     }
   }
 
@@ -359,34 +356,4 @@ type ChainEnvToWalletManagerTypemap = {
     [BlockchainEnv.TEZOS]: TezosWalletManager
     [BlockchainEnv.EVM]: EthereumWalletManager
   }[E]
-}
-
-type ChainToChainEnvTypemap = {
-  [T in BlockchainType]: {
-    [BlockchainType.BASE]: BlockchainEnv.EVM
-    [BlockchainType.ETHEREUM]: BlockchainEnv.EVM
-    [BlockchainType.TEZOS]: BlockchainEnv.TEZOS
-  }[T]
-}
-
-const chainToChainEnvMap: {
-  [K in BlockchainType]: ChainToChainEnvTypemap[K]
-} = {
-  [BlockchainType.BASE]: BlockchainEnv.EVM,
-  [BlockchainType.ETHEREUM]: BlockchainEnv.EVM,
-  [BlockchainType.TEZOS]: BlockchainEnv.TEZOS,
-}
-
-type ChainEnvToChainTypemap = {
-  [E in BlockchainEnv]: {
-    [BlockchainEnv.EVM]: BlockchainType.ETHEREUM
-    [BlockchainEnv.TEZOS]: BlockchainType.TEZOS
-  }[E]
-}
-
-const chainEnvToChainMap: {
-  [E in BlockchainEnv]: ChainEnvToChainTypemap[E]
-} = {
-  [BlockchainEnv.EVM]: BlockchainType.ETHEREUM,
-  [BlockchainEnv.TEZOS]: BlockchainType.TEZOS,
 }

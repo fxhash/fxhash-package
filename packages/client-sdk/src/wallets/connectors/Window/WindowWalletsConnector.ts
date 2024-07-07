@@ -1,15 +1,10 @@
 import { type DAppClientOptions } from "@airgap/beacon-sdk"
 import { type Config } from "@wagmi/core"
-import { BlockchainType, invariant } from "@fxhash/shared"
+import { BlockchainEnv, BlockchainType, invariant } from "@fxhash/shared"
 import { EIP1193Connector } from "./EIP1193Connector.js"
 import { IWalletsConnector, MapChainToWalletConnector } from "../_interfaces.js"
 import { TZIP10Connector } from "./TZIP10Connector.js"
-import {
-  BlockchainEnv,
-  WConn_WalletChangedEvent,
-  WalletsConnectorEventTarget,
-  WConn_WalletsConnectorReady,
-} from "../events.js"
+import { WalletsConnectorEventEmitter } from "../events.js"
 
 /**
  * @author fxhash
@@ -31,7 +26,7 @@ import {
  * window wallet specification.
  */
 export class WindowWalletsConnector
-  extends WalletsConnectorEventTarget
+  extends WalletsConnectorEventEmitter
   implements IWalletsConnector
 {
   private _tez: TZIP10Connector
@@ -43,25 +38,19 @@ export class WindowWalletsConnector
     super()
     this._tez = new TZIP10Connector({
       beaconConfig: config?.tezos?.beaconConfig,
-      onAccountChange: account => {
-        this.dispatchTypedEvent(
-          "wallet-changed",
-          new WConn_WalletChangedEvent(BlockchainEnv.TEZOS, {
-            account: account || null,
-          })
-        )
-      },
+      onAccountChange: account =>
+        this.emit("wallet-changed", {
+          env: BlockchainEnv.TEZOS,
+          account: account || null,
+        }),
     })
     this._evm = new EIP1193Connector({
       wagmiConfig: config?.evm?.wagmiConfig,
-      onAccountChange: account => {
-        this.dispatchTypedEvent(
-          "wallet-changed",
-          new WConn_WalletChangedEvent(BlockchainEnv.EVM, {
-            account: account?.address ? (account as any) : null,
-          })
-        )
-      },
+      onAccountChange: account =>
+        this.emit("wallet-changed", {
+          env: BlockchainEnv.EVM,
+          account: account?.address ? (account as any) : null,
+        }),
     })
   }
 
@@ -70,7 +59,7 @@ export class WindowWalletsConnector
 
     // attach listeners, then init
     await Promise.all([this._tez, this._evm].map(connector => connector.init()))
-    this.dispatchTypedEvent("ready", new WConn_WalletsConnectorReady())
+    this.emit("ready")
     this._initialized = true
   }
 

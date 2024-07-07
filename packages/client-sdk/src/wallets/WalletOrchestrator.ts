@@ -1,14 +1,13 @@
-import { BlockchainType } from "@fxhash/shared"
+import { BlockchainEnv, BlockchainEnvs, BlockchainType } from "@fxhash/shared"
 import { IWalletsConnector } from "./connectors/_interfaces.js"
-import {
-  BlockchainEnv,
-  BlockchainEnvs,
-  WConn_WalletChangedEvent,
-} from "./connectors/events.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config } from "@fxhash/config"
 import { TezosWalletManager } from "@fxhash/tez"
-import { WalletChangedEvent, WalletOrchestratorEventTarget } from "./events.js"
+import {
+  WConn_WalletChangedEvent,
+  WalletsConnectorEventEmitter,
+} from "./connectors/events.js"
+import { WalletOrchestratorEventEmitter } from "./events.js"
 
 /**
  * should:
@@ -213,7 +212,7 @@ export interface IWalletsOrchestratorParams {
  * The orchestrator accepts an array of Wallet Connectors, allowing for any kind
  * of wallet solution to be implemented.
  */
-export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
+export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
   public connectors: IWalletsConnector[]
 
   /**
@@ -243,7 +242,6 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
 
   init() {
     this._attachListeners()
-    // todo: maybe not Promise.all but allSettled ?
     return Promise.all(this.connectors.map(connector => connector.init()))
   }
 
@@ -256,8 +254,8 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
         let incomingManager: TWalletManagerWithConnector<BlockchainEnv> | null =
           null
 
-        if (evt.chainEnv === BlockchainEnv.EVM) {
-          if (!evt.data.account?.address) {
+        if (evt.env === BlockchainEnv.EVM) {
+          if (!evt.account?.address) {
             /**
              * Todo; handle when no account
              * - how is activeManagers cleared ?
@@ -297,8 +295,8 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
           }
         }
 
-        if (evt.chainEnv === BlockchainEnv.TEZOS) {
-          if (!evt.data.account) {
+        if (evt.env === BlockchainEnv.TEZOS) {
+          if (!evt.account) {
             /**
              * Todo; handle when no account
              * - how is activeManagers cleared ?
@@ -314,15 +312,7 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
 
           const twm = new TezosWalletManager({
             wallet: tezConnector.getWallet(),
-            /**
-             * todo
-             * for some reason type isn't narrowed down here, so need to find
-             * a better TS implementation of ChainScopedEvents
-             * shouldn't `(evt as WalletChangedEvent<BlockchainEnv.TEZOS>)`
-             * when doinf `evt.chainEnv === "TEZOS"`
-             */
-            address: (evt as WConn_WalletChangedEvent<BlockchainEnv.TEZOS>).data
-              .account!.address,
+            address: evt.account!.address,
           })
 
           // update connector active manager
@@ -349,28 +339,22 @@ export class WalletsOrchestrator extends WalletOrchestratorEventTarget {
 
           // if manager has changed, broadcast the new manager
           if (
-            this._activeManagers[evt.chainEnv]?.manager !==
-            newActiveManagers[evt.chainEnv]?.manager
+            this._activeManagers[evt.env]?.manager !==
+            newActiveManagers[evt.env]?.manager
           ) {
             this._activeManagers = newActiveManagers
-            this.dispatchTypedEvent(
-              "wallet-changed",
-              // @ts-expect-error
-              // gives up type safety here in favor of type safety for consumers
-              new WalletChangedEvent(evt.chainEnv, {
-                manager: newActiveManagers[evt.chainEnv]?.manager || null,
-              })
-            )
+            // @ts-expect-error
+            await this.emit("wallet-changed", {
+              env: evt.env,
+              manager: newActiveManagers[evt.env]?.manager || null,
+            })
           } else {
             this._activeManagers = newActiveManagers
           }
         }
       }
 
-      connector.addEventListener("wallet-changed", onChanged)
-      this._toClean(() => {
-        connector.removeEventListener("wallet-changed", onChanged)
-      })
+      this._toClean(connector.on("wallet-changed", onChanged))
     }
   }
 

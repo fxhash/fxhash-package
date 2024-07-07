@@ -1,12 +1,7 @@
 import { type WalletsOrchestrator } from "@/wallets/index.js"
 import { type Authenticator } from "@/auth/index.js"
 import { reconciliationState } from "./utils.js"
-import { TypedEventTarget } from "@fxhash/utils"
-import {
-  UserReconciliationErrorEvent,
-  UserReconciliationEventsTypemap,
-  ValidUserChanged,
-} from "./events.js"
+import { UserReconciliationEventEmitter } from "./events.js"
 
 export type UserReconciliationParams = {
   authenticator: Authenticator
@@ -20,7 +15,7 @@ export type UserReconciliationParams = {
  * Orchestrator events and emits success/error events based on the
  * reconciliation between these 2 states.
  */
-export class UserReconciliation extends TypedEventTarget<UserReconciliationEventsTypemap> {
+export class UserReconciliation extends UserReconciliationEventEmitter {
   public authenticator: Authenticator
   public wallets: WalletsOrchestrator
 
@@ -33,30 +28,28 @@ export class UserReconciliation extends TypedEventTarget<UserReconciliationEvent
   }
 
   public async init() {
-    this.authenticator.addEventListener("account-updated", this._reconciliate)
-    this.wallets.addEventListener("wallet-changed", this._reconciliate)
+    this.authenticator.on("account-updated", this._reconciliate)
+    this.wallets.on("wallet-changed", this._reconciliate)
 
     this._cleanup.push(() => {
-      this.authenticator.removeEventListener(
-        "account-updated",
-        this._reconciliate
-      )
-      this.wallets.removeEventListener("wallet-changed", this._reconciliate)
+      this.authenticator.off("account-updated", this._reconciliate)
+      this.wallets.off("wallet-changed", this._reconciliate)
     })
   }
 
   private _reconciliate = () => {
+    const reconciliation = this.reconciliationState()
+    if (reconciliation.isSuccess()) {
+      this.emit("valid-user-changed")
+    } else {
+      this.emit("user-reconciliation-error", reconciliation.error)
+    }
+  }
+
+  public reconciliationState() {
     const account = this.authenticator.account
     const activeManagers = this.wallets.getActiveManagers()
-    const reconciliation = reconciliationState(account, activeManagers)
-    if (reconciliation.isSuccess()) {
-      this.dispatchTypedEvent("valid-user-changed", new ValidUserChanged())
-    } else {
-      this.dispatchTypedEvent(
-        "user-reconciliation-error",
-        new UserReconciliationErrorEvent(reconciliation.error)
-      )
-    }
+    return reconciliationState(account, activeManagers)
   }
 
   public release() {

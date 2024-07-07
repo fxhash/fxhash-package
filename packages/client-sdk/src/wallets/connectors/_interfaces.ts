@@ -12,10 +12,10 @@ import {
   Account,
   Address,
 } from "viem"
-import { WalletsConnectorEventTarget } from "./events.js"
 import { BlockchainNotSupported, EvmClientsNotAvailable } from "./errors.js"
 import { type BeaconWallet } from "@taquito/beacon-wallet"
 import { type Signer } from "@taquito/taquito"
+import { WalletsConnectorEventEmitter } from "./events.js"
 
 export type MapChainToWalletConnector<Chain extends BlockchainType> = {
   [K in BlockchainType]: {
@@ -33,7 +33,7 @@ export type MapChainToWalletConnector<Chain extends BlockchainType> = {
  * connector can properly synchronize their internal state before they can used
  * the client.
  */
-export interface IWalletsConnector extends WalletsConnectorEventTarget {
+export interface IWalletsConnector extends WalletsConnectorEventEmitter {
   /**
    * In the client lifecycle, all the provided WalletsConnector are initialized
    * when the application starts. This can be used to instanciate/initialize

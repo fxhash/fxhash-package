@@ -1,11 +1,10 @@
-import { Result, failure, success } from "@fxhash/shared"
+import { BlockchainEnvs, Result, failure, success } from "@fxhash/shared"
 import {
   AccountAuthenticatedButNoWalletConnectedError,
   UserReconciliationError,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletDoesntBelongAccountError,
 } from "./errors.js"
-import { BlockchainEnvs } from "@/wallets/connectors/events.js"
 import { TActiveManagersMap } from "@/wallets/WalletOrchestrator.js"
 import { GetSingleUserAccountResult } from "@/auth/index.js"
 

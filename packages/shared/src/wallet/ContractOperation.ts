@@ -1,5 +1,20 @@
 import { WalletManager } from "./WalletManager"
 
+/**
+ * A Blockchain Environment is based on the classification of the "blockchain
+ * engine".
+ * TODO: should decide between BlockchainEnv & BlockchainNetwork and harmonize
+ */
+export enum BlockchainEnv {
+  EVM = "EVM",
+  TEZOS = "TEZOS",
+}
+
+/**
+ * An array of all the `BlockchainEnv` enum values.
+ */
+export const BlockchainEnvs = Object.values(BlockchainEnv)
+
 export enum BlockchainNetwork {
   TEZOS = "TEZOS",
   ETHEREUM = "ETHEREUM",
@@ -14,6 +29,36 @@ export enum BlockchainType {
   ETHEREUM = "ETHEREUM",
   TEZOS = "TEZOS",
   BASE = "BASE",
+}
+
+export type ChainToChainEnvTypemap = {
+  [T in BlockchainType]: {
+    [BlockchainType.BASE]: BlockchainEnv.EVM
+    [BlockchainType.ETHEREUM]: BlockchainEnv.EVM
+    [BlockchainType.TEZOS]: BlockchainEnv.TEZOS
+  }[T]
+}
+
+export const chainToChainEnvMap: {
+  [K in BlockchainType]: ChainToChainEnvTypemap[K]
+} = {
+  [BlockchainType.BASE]: BlockchainEnv.EVM,
+  [BlockchainType.ETHEREUM]: BlockchainEnv.EVM,
+  [BlockchainType.TEZOS]: BlockchainEnv.TEZOS,
+}
+
+export type ChainEnvToChainTypemap = {
+  [E in BlockchainEnv]: {
+    [BlockchainEnv.EVM]: BlockchainType.ETHEREUM
+    [BlockchainEnv.TEZOS]: BlockchainType.TEZOS
+  }[E]
+}
+
+export const chainEnvToChainMap: {
+  [E in BlockchainEnv]: ChainEnvToChainTypemap[E]
+} = {
+  [BlockchainEnv.EVM]: BlockchainType.ETHEREUM,
+  [BlockchainEnv.TEZOS]: BlockchainType.TEZOS,
 }
 
 /**

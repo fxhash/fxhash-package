@@ -12,22 +12,9 @@
  * usage by API consumers.
  */
 
-import { TypedEventTarget } from "@/util/TypedEventTarget.js"
+import { BlockchainEnv } from "@fxhash/shared"
 import { Address } from "viem"
-
-/**
- * A Blockchain Environment is based on the classification of the "blockchain
- * engine".
- */
-export enum BlockchainEnv {
-  EVM = "EVM",
-  TEZOS = "TEZOS",
-}
-
-/**
- * An array of all the `BlockchainEnv` enum values.
- */
-export const BlockchainEnvs = Object.values(BlockchainEnv)
+import { EventEmitter } from "@fxhash/utils"
 
 /**
  * An abstract Event which is scope to a particular Blockchain Environment.
@@ -55,48 +42,19 @@ export interface ITezosAccountDetails {
   address: string
 }
 
-type WConn_WalletChangedEventDataTypemap = {
-  [E in BlockchainEnv]: {
-    [BlockchainEnv.EVM]: {
+export type WConn_WalletChangedEvent =
+  | {
+      env: BlockchainEnv.EVM
       account: IEvmAccountDetails | null
     }
-    [BlockchainEnv.TEZOS]: {
+  | {
+      env: BlockchainEnv.TEZOS
       account: ITezosAccountDetails | null
     }
-  }[E]
-}
-
-/**
- * Event Emitted when a wallet from a blockchain environment is connected. This
- * event doesn't mean the Wallets Connector is fully ready, as some other chain
- * environments may not be ready then.
- */
-export class WConn_WalletChangedEvent<
-  Env extends BlockchainEnv = BlockchainEnv,
-> extends ChainScopedEvent {
-  constructor(
-    chainEnv: Env,
-    public data: WConn_WalletChangedEventDataTypemap[Env]
-  ) {
-    super("wallet-changed", chainEnv)
-  }
-}
-
-/**
- * Emitted when the Wallets Connector has performed all the initialisation
- * checks and is fully ready to receive commands. This event is also emitted
- * when the internal state is properly synced and consumers can assume values
- * they will get imperatively from the Wallets Connector are synced.
- */
-export class WConn_WalletsConnectorReady extends Event {
-  constructor() {
-    super("ready")
-  }
-}
 
 export type WalletsConnectorEventsMap = {
   "wallet-changed": WConn_WalletChangedEvent
-  ready: WConn_WalletsConnectorReady
+  ready: undefined
 }
 
-export class WalletsConnectorEventTarget extends TypedEventTarget<WalletsConnectorEventsMap> {}
+export class WalletsConnectorEventEmitter extends EventEmitter<WalletsConnectorEventsMap> {}

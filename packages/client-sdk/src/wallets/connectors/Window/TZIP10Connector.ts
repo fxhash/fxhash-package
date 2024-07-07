@@ -9,7 +9,7 @@ import { BeaconWallet } from "@taquito/beacon-wallet"
 import { invariant } from "@fxhash/shared"
 import { ITezosAccountDetails } from "../events.js"
 
-type AccountChangeHandler = (account?: ITezosAccountDetails) => void
+type AccountChangeHandler = (account?: ITezosAccountDetails) => Promise<void>
 
 type TZIP10ConnectorParams = {
   beaconConfig?: DAppClientOptions
@@ -54,13 +54,12 @@ export class TZIP10Connector implements ITezosWalletConnector {
       BeaconEvent.ACTIVE_ACCOUNT_SET,
       this._handleAccountSet
     )
-    await this._beaconWallet.client
-      .getActiveAccount()
-      .then(this._handleAccountSet)
+    const activeAccount = await this._beaconWallet.client.getActiveAccount()
+    await this._handleAccountSet(activeAccount)
   }
 
   private _handleAccountSet = (account?: AccountInfo) => {
-    this._onAccountChange(account)
+    return this._onAccountChange(account)
   }
 
   public getWallet(): BeaconWallet {

@@ -32,7 +32,7 @@ export const chainDefinitions = {
   [BlockchainType.ETHEREUM]: sepolia,
 }
 
-type AccountChangeHandler = (account: GetAccountReturnType) => void
+type AccountChangeHandler = (account: GetAccountReturnType) => Promise<void>
 
 type EIP1193ConnectorParams = {
   wagmiConfig?: Config
@@ -82,12 +82,12 @@ export class EIP1193Connector implements IEvmWalletConnector {
    */
   public async init(wagmiConfigOverride?: Config) {
     invariant(!this._initialized, "EIP1193Connector already initialized")
-
     if (wagmiConfigOverride) this._wagmiConfig = wagmiConfigOverride
+
     this._unwatchAccount = watchAccount(this._wagmiConfig, {
       onChange: this._handleAccountChange,
     })
-    this._handleAccountChange(getAccount(this._wagmiConfig))
+    await this._handleAccountChange(getAccount(this._wagmiConfig))
     this._initialized = true
   }
 
@@ -143,8 +143,8 @@ export class EIP1193Connector implements IEvmWalletConnector {
     }
   }
 
-  private _accountChangedEvent = async (account: GetAccountReturnType) => {
+  private _accountChangedEvent = (account: GetAccountReturnType) => {
     this._connectedAccount = account
-    this._onAccountChange(account)
+    return this._onAccountChange(account)
   }
 }

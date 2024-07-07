@@ -1,34 +1,20 @@
 import { TezosWalletManager } from "@fxhash/tez"
-import { BlockchainEnv, ChainScopedEvent } from "./connectors/events.js"
 import { EthereumWalletManager } from "@fxhash/eth"
-import { TypedEventTarget } from "@/util/TypedEventTarget.js"
+import { BlockchainEnv } from "@fxhash/shared"
+import { EventEmitter } from "@fxhash/utils"
 
-type WalletChangedEventTypemap = {
-  [E in BlockchainEnv]: {
-    [BlockchainEnv.EVM]: {
+export type WalletChangedEvent =
+  | {
+      env: BlockchainEnv.EVM
       manager: EthereumWalletManager | null
     }
-    [BlockchainEnv.TEZOS]: {
+  | {
+      env: BlockchainEnv.TEZOS
       manager: TezosWalletManager | null
     }
-  }[E]
+
+export type WalletOrchestratorEventsTypemap = {
+  "wallet-changed": WalletChangedEvent
 }
 
-export class WalletChangedEvent<
-  E extends BlockchainEnv,
-> extends ChainScopedEvent {
-  constructor(
-    public env: E,
-    public data: WalletChangedEventTypemap[E]
-  ) {
-    super("wallet-changed", env)
-  }
-}
-
-type WalletOrchestratorEventsTypemap = {
-  "wallet-changed":
-    | WalletChangedEvent<BlockchainEnv.EVM>
-    | WalletChangedEvent<BlockchainEnv.TEZOS>
-}
-
-export class WalletOrchestratorEventTarget extends TypedEventTarget<WalletOrchestratorEventsTypemap> {}
+export class WalletOrchestratorEventEmitter extends EventEmitter<WalletOrchestratorEventsTypemap> {}

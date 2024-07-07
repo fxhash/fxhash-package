@@ -2,14 +2,8 @@
  * @author fxhash <dev@fxhash.xyz>
  */
 
-import { BlockchainType } from "@fxhash/shared"
+import { BlockchainEnv, BlockchainType } from "@fxhash/shared"
 import { IWalletsConnector, MapChainToWalletConnector } from "../_interfaces.js"
-import {
-  BlockchainEnv,
-  WConn_WalletChangedEvent,
-  WConn_WalletsConnectorReady,
-  WalletsConnectorEventTarget,
-} from "../events.js"
 import {
   EvmPrivateKeyConnector,
   EvmPrivateKeyConnectorOptions,
@@ -18,6 +12,7 @@ import {
   TezosPrivateKeyConnector,
   TezosPrivateKeyConnectorOptions,
 } from "./TezosPrivateKeyConnector.js"
+import { WalletsConnectorEventEmitter } from "../events.js"
 
 export type PrivateKeyWalletsConnectorOptions = {
   [E in BlockchainEnv]: {
@@ -33,7 +28,7 @@ export type PrivateKeyWalletsConnectorOptions = {
  * infos: <https://github.com/ecadlabs/taquito/issues/1764>
  */
 export class PrivateKeyWalletsConnector
-  extends WalletsConnectorEventTarget
+  extends WalletsConnectorEventEmitter
   implements IWalletsConnector
 {
   private _tez: TezosPrivateKeyConnector
@@ -42,23 +37,23 @@ export class PrivateKeyWalletsConnector
   constructor(options: PrivateKeyWalletsConnectorOptions) {
     super()
     this._tez = new TezosPrivateKeyConnector(options.TEZOS, account => {
-      this.dispatchTypedEvent(
-        "wallet-changed",
-        new WConn_WalletChangedEvent(BlockchainEnv.TEZOS, { account })
-      )
+      this.emit("wallet-changed", {
+        env: BlockchainEnv.TEZOS,
+        account,
+      })
     })
     this._evm = new EvmPrivateKeyConnector(options.EVM, account => {
-      this.dispatchTypedEvent(
-        "wallet-changed",
-        new WConn_WalletChangedEvent(BlockchainEnv.EVM, { account })
-      )
+      this.emit("wallet-changed", {
+        env: BlockchainEnv.EVM,
+        account,
+      })
     })
   }
 
   public async init() {
     this._tez.init()
     this._evm.init()
-    this.dispatchTypedEvent("ready", new WConn_WalletsConnectorReady())
+    this.emit("ready")
   }
 
   public supportsChain(chain: BlockchainType) {
