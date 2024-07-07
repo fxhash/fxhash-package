@@ -14,6 +14,7 @@ import { baseSepolia, sepolia } from "@wagmi/core/chains"
 import { IEvmWalletConnector } from "../_interfaces.js"
 import { BlockchainType, failure, invariant, success } from "@fxhash/shared"
 import { BlockchainNotSupported, EvmClientsNotAvailable } from "../errors.js"
+import { sleep } from "@fxhash/utils"
 
 /**
  * A default generic config for WAGMI. Consumers should pass their own config
@@ -85,6 +86,9 @@ export class EIP1193Connector implements IEvmWalletConnector {
     invariant(!this._initialized, "EIP1193Connector already initialized")
     if (wagmiConfigOverride) this._wagmiConfig = wagmiConfigOverride
 
+    console.log({ wagmiConfig: this._wagmiConfig })
+    console.log({ ...getAccount(this._wagmiConfig) })
+
     this._unwatchAccount = watchAccount(this._wagmiConfig, {
       onChange: this._handleAccountChange,
     })
@@ -103,6 +107,29 @@ export class EIP1193Connector implements IEvmWalletConnector {
     if (!this._connectedAccount?.address) {
       return failure(new EvmClientsNotAvailable())
     } else {
+      /**
+       * @dev Here is a little hack to get some kind of "on('walletReady')"
+       * behaviour. `getWalletClient` internally calls
+       * state.connections.get(state.current) to get the connector instance,
+       * however it takes some small amount of time for the full connector
+       * to be ready. One way to test this is to check for the `getChainId`
+       * function to be available. Once it is, then we can move forward in the
+       * process.
+       * **Warning**: these APIs are marked as "internal" and are not part of
+       * the versionned API, so there might be undocumented breaking changes
+       * here.
+       */
+      {
+        for (let i = 0; i < 20; i++) {
+          if (!this._wagmiConfig.state.current!) break // shoudn't happen
+          const connection = this._wagmiConfig.state.connections.get(
+            this._wagmiConfig.state.current!
+          )
+          if (connection && (connection.connector as any).getChainId) break
+          await sleep(100)
+        }
+      }
+
       const walletClient = await getWalletClient(this._wagmiConfig, {
         chainId: chainDefinitions[chain].id,
       })
