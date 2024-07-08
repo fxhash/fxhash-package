@@ -68,6 +68,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             reserveId: Number(pricing.id.split("-")[1]),
             amount: this.params.qty,
             price: this.params.price,
+            version: this.params.version,
           },
           this.chain
         )
@@ -102,6 +103,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             reserveId: reserve.data.reserveId,
             amount: this.params.qty,
             price: this.params.price,
+            version: this.params.version,
           },
           this.chain
         )

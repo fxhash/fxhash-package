@@ -1,4 +1,3 @@
-import { FARCASTER_FRAME_FIXED_PRICE_MINTER } from "@/abi/FarcasterFrameFixedPriceMinter.js"
 import { FIXED_PRICE_MINTER_V2_ABI } from "@/abi/FixedPriceMinterV2.js"
 import { EthereumContractOperation } from "../contractOperation.js"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"

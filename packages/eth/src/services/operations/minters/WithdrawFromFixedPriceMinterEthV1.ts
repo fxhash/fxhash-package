@@ -7,7 +7,6 @@ import {
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
-import { as } from "vitest/dist/reporters-5f784f42.js"
 
 export type TWithdrawFromFixedPriceMinterEthV1OperationParams = {
   token: string
