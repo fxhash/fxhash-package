@@ -8,6 +8,7 @@ export interface IFxhashApis {
   hasuraGql: string
   file: string
   fileInternal: string
+  walletInternal: string
   fsEmulator: string
   extract: string
   extractInternal: string
@@ -57,10 +58,11 @@ export const fxhashDevApis: IFxhashApis = {
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
     "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
+  walletInternal: "tbd",
   fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
-    " http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
+    "http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsInternal:
@@ -113,6 +115,7 @@ export const fxhashLocalApis: IFxhashApis = {
   hasuraGql: "http://localhost:8888/v1/graphql",
   fileInternal: fxhashDevApis.file,
   ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
+  walletInternal: "tbd",
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -130,6 +133,7 @@ export const fxhashPrdApis: IFxhashApis = {
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
   fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
+  walletInternal: "tbd",
   fsEmulator: "https://file-api.fxhash.xyz/fs",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
