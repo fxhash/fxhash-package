@@ -1,3 +1,4 @@
+import { DUTCH_AUCTION_MINTER_V2_ABI } from "@/abi/DutchAuctionMinterV2.js"
 import { EthereumContractOperation } from "../contractOperation.js"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
@@ -20,9 +21,12 @@ export class WithdrawFromDutchAuctionMinterEthV1Operation extends EthereumContra
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
+    const isV2 =
+      this.params.minter === currentConfig.contracts.dutch_auction_minter_v2
+    const abi = isV2 ? DUTCH_AUCTION_MINTER_V2_ABI : DUTCH_AUCTION_MINTER_ABI
     const args: SimulateAndExecuteContractRequest = {
-      address: currentConfig.contracts.dutch_auction_minter_v1,
-      abi: DUTCH_AUCTION_MINTER_ABI,
+      address: this.params.minter as `0x${string}`,
+      abi: abi,
       functionName: "withdraw",
       args: [this.params.token, this.params.reserveId],
       account: this.manager.address as `0x${string}`,

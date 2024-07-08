@@ -4,7 +4,11 @@ import { prepareMintParams } from "@/utils/index.js"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
-import { TransactionType, invariant } from "@fxhash/shared"
+import {
+  GenerativeTokenVersion,
+  TransactionType,
+  invariant,
+} from "@fxhash/shared"
 
 export type TMintEthV1OperationParams = {
   token: `0x${string}`
@@ -13,6 +17,7 @@ export type TMintEthV1OperationParams = {
   whitelist: boolean
   price: bigint
   isFrame: boolean
+  version: GenerativeTokenVersion
 }
 
 const MAX_RETRIES = 15 // 12 second block time + a few seconds for good measure
@@ -50,6 +55,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             price: this.params.price,
             amount: this.params.qty,
             isFrame: this.params.isFrame,
+            version: this.params.version,
           },
           this.chain
         )
@@ -81,6 +87,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             reserveId: reserve.data.reserveId,
             price: this.params.price,
             amount: this.params.qty,
+            version: this.params.version,
           },
           this.chain
         )

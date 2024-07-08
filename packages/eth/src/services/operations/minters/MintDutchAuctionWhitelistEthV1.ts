@@ -1,3 +1,4 @@
+import { DUTCH_AUCTION_MINTER_V2_ABI } from "@/abi/DutchAuctionMinterV2.js"
 import { EthereumContractOperation } from "../contractOperation.js"
 import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
@@ -5,7 +6,7 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
-import { TransactionType } from "@fxhash/shared"
+import { GenerativeTokenVersion, TransactionType } from "@fxhash/shared"
 
 /**
  * The above type represents the parameters required for a MintDutchAuctionWhitelistEthV1 operation in
@@ -26,6 +27,7 @@ export type TMintDutchAuctionWhitelistEthV1OperationParams = {
   index: number[]
   proof: string[][]
   to: string | null
+  version: GenerativeTokenVersion
 }
 
 /* The MintDutchAutionWhitelistEthV1Operation class is responsible for minting a fixed price token with
@@ -38,9 +40,16 @@ export class MintDutchAutionWhitelistEthV1Operation extends EthereumContractOper
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
+    const isV2 =
+      this.params.version === GenerativeTokenVersion.ETH_V2 ||
+      this.params.version === GenerativeTokenVersion.BASE_V2
+    const abi = isV2 ? DUTCH_AUCTION_MINTER_V2_ABI : DUTCH_AUCTION_MINTER_ABI
+    const minter = isV2
+      ? currentConfig.contracts.dutch_auction_minter_v2
+      : currentConfig.contracts.dutch_auction_minter_v1
     const args: SimulateAndExecuteContractRequest = {
-      address: currentConfig.contracts.dutch_auction_minter_v1,
-      abi: DUTCH_AUCTION_MINTER_ABI,
+      address: minter,
+      abi: abi,
       functionName: "buyAllowlist",
       args: [
         this.params.token,
