@@ -13,6 +13,9 @@ export interface IEthContracts {
   contract_registry_v1: `0x${string}`
   gen_art_token_impl_v1: `0x${string}`
   mint_ticket_impl_v1: `0x${string}`
+  fee_manager_v1: `0x${string}`
+  fixed_price_minter_v2: `0x${string}`
+  dutch_auction_minter_v2: `0x${string}`
   onchfs_file_system: `0x${string}`
   onchfs_content_store: `0x${string}`
   seaport: `0x${string}`
@@ -37,6 +40,9 @@ export const ethTestnetContracts: IEthContracts = {
   contract_registry_v1: "0xb7CFDcDb2c6a1D05D7b85FB4ae7B7bccd028010F",
   gen_art_token_impl_v1: "0x1feeb359e96E6Dd6F19F1FC98e8FffDdf5AeaD58",
   mint_ticket_impl_v1: "0x0303e3a5be6e9Fa21E72cE446a402a6AEec13c60",
+  fee_manager_v1: "0xa57AeE7E32807aF1e365A127126970BB9167805a",
+  fixed_price_minter_v2: "0x261BA0b19A5B1d87B4cE4B609ad94018CdA81434",
+  dutch_auction_minter_v2: "0x670B84C259Bb8525243973CCfe0C0490dDbF97F2",
   onchfs_file_system: "0x4f555d39e89f6d768f75831d610b3940fa94c6b1",
   onchfs_content_store: "0x070e5A608705aC4954eec054f9074eEe49bDcbfF",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
@@ -67,6 +73,9 @@ export const ethMainnetContracts: IEthContracts = {
   contract_registry_v1: "0x4DAc308c686D747A804B7E95db606695a529A750",
   gen_art_token_impl_v1: "0x429AC1aA66220573Da6928bcce7384fe50e1284f",
   mint_ticket_impl_v1: "0xc2743B0B901eDAA8ccd1A09914449A797e1079F1",
+  fee_manager_v1: "0xtodo",
+  fixed_price_minter_v2: "0xtodo",
+  dutch_auction_minter_v2: "0xtodo",
   onchfs_file_system: "0x9e0f2864c6f125bbf599df6ca6e6c3774c5b2e04",
   onchfs_content_store: "0xC6806fd75745bB5F5B32ADa19963898155f9DB91",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
