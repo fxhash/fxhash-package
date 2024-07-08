@@ -8,6 +8,7 @@ import {
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { invariant } from "@fxhash/shared"
 import { ITezosAccountDetails } from "../events.js"
+import { IWindowWalletConnector } from "./_interfaces.js"
 
 type AccountChangeHandler = (account?: ITezosAccountDetails) => Promise<void>
 
@@ -31,7 +32,9 @@ type TZIP10ConnectorParams = {
  *    implementation
  *  - expose a signer which can be used by a taquito instance to sign operations
  */
-export class TZIP10Connector implements ITezosWalletConnector {
+export class TZIP10Connector
+  implements ITezosWalletConnector, IWindowWalletConnector
+{
   private _beaconWallet: BeaconWallet | null = null
   private _beaconConfig: DAppClientOptions
   private _onAccountChange: AccountChangeHandler
@@ -56,6 +59,12 @@ export class TZIP10Connector implements ITezosWalletConnector {
     )
     const activeAccount = await this._beaconWallet.client.getActiveAccount()
     await this._handleAccountSet(activeAccount)
+  }
+
+  public release() {}
+
+  public requestConnection() {
+    this._beaconWallet?.requestPermissions()
   }
 
   private _handleAccountSet = (account?: AccountInfo) => {

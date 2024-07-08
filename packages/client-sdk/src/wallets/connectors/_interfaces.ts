@@ -3,7 +3,7 @@
  * @license MIT
  */
 
-import { BlockchainType, PromiseResult, Result } from "@fxhash/shared"
+import { BlockchainEnv, BlockchainType, PromiseResult } from "@fxhash/shared"
 import {
   Transport,
   type PublicClient,
@@ -12,18 +12,21 @@ import {
   Account,
   Address,
 } from "viem"
-import { BlockchainNotSupported, EvmClientsNotAvailable } from "./errors.js"
+import {
+  BlockchainNotSupported,
+  EvmClientsNotAvailable,
+  EvmWagmiClientGenerationError,
+} from "./errors.js"
 import { type BeaconWallet } from "@taquito/beacon-wallet"
 import { type Signer } from "@taquito/taquito"
 import { WalletsConnectorEventEmitter } from "./events.js"
 
-export type MapChainToWalletConnector<Chain extends BlockchainType> = {
-  [K in BlockchainType]: {
-    [BlockchainType.BASE]: IEvmWalletConnector
-    [BlockchainType.ETHEREUM]: IEvmWalletConnector
-    [BlockchainType.TEZOS]: ITezosWalletConnector
+export type MapEnvToWalletConnector<Env extends BlockchainEnv> = {
+  [K in BlockchainEnv]: {
+    [BlockchainEnv.EVM]: IEvmWalletConnector
+    [BlockchainEnv.TEZOS]: ITezosWalletConnector
   }[K]
-}[Chain]
+}[Env]
 
 /**
  * A fxhash WalletsConnector can be used to expose any kind of wallet interface
@@ -59,9 +62,17 @@ export interface IWalletsConnector extends WalletsConnectorEventEmitter {
    * @throws {import("./errors.js").WalletsConnectorNoSupportForChain
    *        | import("./errors.js").WalletsConnectorChainUnavailable}
    */
-  getWalletConnector: <Chain extends BlockchainType>(
-    chain: Chain
-  ) => MapChainToWalletConnector<Chain>
+  getWalletConnector: <Env extends BlockchainEnv>(
+    env: Env
+  ) => MapEnvToWalletConnector<Env> | null
+
+  /**
+   * @returns A list of every environment-specific active connectors. Depending
+   * on the Wallet Connector being used, `active` can refer to slightly
+   * different states, but in general can be described as "which can receive
+   * a wallet connection"
+   */
+  getActiveConnectors: () => IBaseWalletConnector[]
 
   /**
    * Disconnect all the wallets currently connected.
@@ -78,6 +89,14 @@ export interface IEvmWalletConnectorClients {
 }
 
 export interface IBaseWalletConnector {
+  /**
+   * Initialize the connector.
+   */
+  init: () => Promise<void>
+  /**
+   * Release events/memory usage.
+   */
+  release: () => void
   /**
    * Attempts to disconnect the wallet.
    */
@@ -97,7 +116,9 @@ export interface IEvmWalletConnector extends IBaseWalletConnector {
     chain: BlockchainType
   ) => PromiseResult<
     IEvmWalletConnectorClients,
-    EvmClientsNotAvailable | BlockchainNotSupported
+    | EvmClientsNotAvailable
+    | BlockchainNotSupported
+    | EvmWagmiClientGenerationError
   >
 
   getAccount: () => {

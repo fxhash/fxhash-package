@@ -2,8 +2,12 @@
  * @author fxhash <dev@fxhash.xyz>
  */
 
-import { BlockchainEnv, BlockchainType } from "@fxhash/shared"
-import { IWalletsConnector, MapChainToWalletConnector } from "../_interfaces.js"
+import { BlockchainEnv, BlockchainEnvs, BlockchainType } from "@fxhash/shared"
+import {
+  IBaseWalletConnector,
+  IWalletsConnector,
+  MapEnvToWalletConnector,
+} from "../_interfaces.js"
 import {
   EvmPrivateKeyConnector,
   EvmPrivateKeyConnectorOptions,
@@ -16,8 +20,8 @@ import { WalletsConnectorEventEmitter } from "../events.js"
 
 export type PrivateKeyWalletsConnectorOptions = {
   [E in BlockchainEnv]: {
-    [BlockchainEnv.EVM]: EvmPrivateKeyConnectorOptions
-    [BlockchainEnv.TEZOS]: TezosPrivateKeyConnectorOptions
+    [BlockchainEnv.EVM]?: EvmPrivateKeyConnectorOptions
+    [BlockchainEnv.TEZOS]?: TezosPrivateKeyConnectorOptions
   }[E]
 }
 
@@ -31,28 +35,39 @@ export class PrivateKeyWalletsConnector
   extends WalletsConnectorEventEmitter
   implements IWalletsConnector
 {
-  private _tez: TezosPrivateKeyConnector
-  private _evm: EvmPrivateKeyConnector
+  private _connectors: {
+    [BlockchainEnv.EVM]: EvmPrivateKeyConnector
+    [BlockchainEnv.TEZOS]: TezosPrivateKeyConnector
+  }
 
   constructor(options: PrivateKeyWalletsConnectorOptions) {
     super()
-    this._tez = new TezosPrivateKeyConnector(options.TEZOS, account => {
-      this.emit("wallet-changed", {
-        env: BlockchainEnv.TEZOS,
-        account,
-      })
-    })
-    this._evm = new EvmPrivateKeyConnector(options.EVM, account => {
-      this.emit("wallet-changed", {
-        env: BlockchainEnv.EVM,
-        account,
-      })
-    })
+    this._connectors = {
+      [BlockchainEnv.EVM]: new EvmPrivateKeyConnector(
+        options.EVM || {},
+        account => {
+          this.emit("wallet-changed", {
+            env: BlockchainEnv.EVM,
+            account,
+          })
+        }
+      ),
+      [BlockchainEnv.TEZOS]: new TezosPrivateKeyConnector(
+        options.TEZOS || {},
+        account => {
+          this.emit("wallet-changed", {
+            env: BlockchainEnv.TEZOS,
+            account,
+          })
+        }
+      ),
+    }
   }
 
   public async init() {
-    this._tez.init()
-    this._evm.init()
+    BlockchainEnvs.map(env => this._connectors[env]).forEach(conn =>
+      conn.init()
+    )
     this.emit("ready")
   }
 
@@ -68,19 +83,14 @@ export class PrivateKeyWalletsConnector
     )
   }
 
-  public getWalletConnector<Chain extends BlockchainType>(
-    chain: Chain
-  ): MapChainToWalletConnector<Chain> {
-    switch (chain) {
-      case BlockchainType.BASE:
-      case BlockchainType.ETHEREUM:
-        return this._evm as any
-      case BlockchainType.TEZOS:
-        return this._tez as any
-    }
+  public getWalletConnector<Env extends BlockchainEnv>(
+    env: BlockchainEnv
+  ): MapEnvToWalletConnector<Env> {
+    return this._connectors[env] as any
+  }
 
-    // for TS to oblige
-    throw null
+  public getActiveConnectors(): IBaseWalletConnector[] {
+    return BlockchainEnvs.map(env => this._connectors[env])
   }
 
   /**
@@ -94,15 +104,12 @@ export class PrivateKeyWalletsConnector
    * updated.
    * @param privateKey The private key as a string
    */
-  public updatePrivateKey<E extends BlockchainEnv>(
-    chainEnv: BlockchainEnv,
-    privateKey: PrivateKeyWalletsConnectorOptions[E]["privateKey"]
-  ) {
-    const connector = chainEnv === BlockchainEnv.EVM ? this._evm : this._tez
+  public updatePrivateKey(chainEnv: BlockchainEnv, privateKey: string) {
+    const connector = this._connectors[chainEnv]
     connector.updatePrivateKey(privateKey as any)
   }
 
   public async disconnectAll() {
-    await Promise.all([this._evm.disconnect(), this._tez.disconnect()])
+    await Promise.all(this.getActiveConnectors().map(conn => conn.disconnect()))
   }
 }

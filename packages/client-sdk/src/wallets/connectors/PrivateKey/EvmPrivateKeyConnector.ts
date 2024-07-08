@@ -36,9 +36,11 @@ export class EvmPrivateKeyConnector implements IEvmWalletConnector {
     this._onAccountChange = onAccountChange
   }
 
-  public init() {
+  public async init() {
     this._onAccountChange?.(this._account)
   }
+
+  public release() {}
 
   public async getClients(blockchain: BlockchainType) {
     if (blockchain === BlockchainType.TEZOS) {

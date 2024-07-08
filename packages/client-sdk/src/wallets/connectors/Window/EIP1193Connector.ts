@@ -8,13 +8,27 @@ import {
   getWalletClient,
   http,
   watchAccount,
+  connect,
   disconnect,
+  injected,
 } from "@wagmi/core"
-import { baseSepolia, sepolia } from "@wagmi/core/chains"
+import { mainnet, base, baseSepolia, sepolia } from "@wagmi/core/chains"
 import { IEvmWalletConnector } from "../_interfaces.js"
 import { BlockchainType, failure, invariant, success } from "@fxhash/shared"
-import { BlockchainNotSupported, EvmClientsNotAvailable } from "../errors.js"
+import {
+  BlockchainNotSupported,
+  EvmClientsNotAvailable,
+  EvmWagmiClientGenerationError,
+} from "../errors.js"
 import { sleep } from "@fxhash/utils"
+import { IWindowWalletConnector } from "./_interfaces.js"
+import { config as fxConfig } from "@fxhash/config"
+import { walletConnect } from "@wagmi/connectors"
+
+const allowedChains =
+  fxConfig.config.envName === "production"
+    ? ([mainnet, base] as const)
+    : ([sepolia, baseSepolia] as const)
 
 /**
  * A default generic config for WAGMI. Consumers should pass their own config
@@ -22,11 +36,10 @@ import { sleep } from "@fxhash/utils"
  * their app.
  */
 const defaultWagmiConfig = createConfig({
-  chains: [sepolia, baseSepolia],
-  transports: {
-    [sepolia.id]: http(),
-    [baseSepolia.id]: http(),
-  },
+  chains: allowedChains,
+  transports: Object.fromEntries(
+    allowedChains.map(chain => [chain.id, http()])
+  ) as any,
 })
 
 export const chainDefinitions = {
@@ -65,7 +78,9 @@ type EIP1193ConnectorParams = {
  * application starts so that it can listen to the first events emitted by
  * Connectors, and have its internal state in-sync.
  */
-export class EIP1193Connector implements IEvmWalletConnector {
+export class EIP1193Connector
+  implements IEvmWalletConnector, IWindowWalletConnector
+{
   private _unwatchAccount: WatchAccountReturnType | null = null
   private _wagmiConfig: Config
   private _initialized: boolean = false
@@ -86,9 +101,6 @@ export class EIP1193Connector implements IEvmWalletConnector {
     invariant(!this._initialized, "EIP1193Connector already initialized")
     if (wagmiConfigOverride) this._wagmiConfig = wagmiConfigOverride
 
-    console.log({ wagmiConfig: this._wagmiConfig })
-    console.log({ ...getAccount(this._wagmiConfig) })
-
     this._unwatchAccount = watchAccount(this._wagmiConfig, {
       onChange: this._handleAccountChange,
     })
@@ -98,6 +110,10 @@ export class EIP1193Connector implements IEvmWalletConnector {
 
   public release() {
     this._unwatchAccount?.()
+  }
+
+  public requestConnection() {
+    connect(this._wagmiConfig, { connector: injected() })
   }
 
   public async getClients(chain: BlockchainType) {
@@ -136,9 +152,8 @@ export class EIP1193Connector implements IEvmWalletConnector {
       const publicClient = getPublicClient(this._wagmiConfig, {
         chainId: chainDefinitions[chain].id,
       })
-
       if (!walletClient || !publicClient) {
-        throw new Error("TODO error handling — undefined wallet/public client")
+        throw failure(new EvmWagmiClientGenerationError())
       }
 
       return success({
@@ -172,6 +187,8 @@ export class EIP1193Connector implements IEvmWalletConnector {
   }
 
   private _accountChangedEvent = (account: GetAccountReturnType) => {
+    console.log("_accountChangedEvent")
+    console.log({ account })
     this._connectedAccount = account
     return this._onAccountChange(account)
   }

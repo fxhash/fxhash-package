@@ -24,9 +24,11 @@ export class TezosPrivateKeyConnector implements ITezosWalletConnector {
     this._onChange = onChange
   }
 
-  init() {
+  public async init() {
     this._emitOnChange()
   }
+
+  public release() {}
 
   getWallet() {
     if (!this._signer) {

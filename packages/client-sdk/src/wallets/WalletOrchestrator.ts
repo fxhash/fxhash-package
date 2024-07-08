@@ -286,9 +286,8 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
           } as TWalletManagerWithConnector<BlockchainEnv.EVM>
 
           if (evt.account?.address) {
-            const evmConnector = connector.getWalletConnector(
-              BlockchainType.ETHEREUM
-            )
+            const evmConnector = connector.getWalletConnector(BlockchainEnv.EVM)
+            invariant(evmConnector, "should not be null")
             const _clients = await evmConnector.getClients(
               BlockchainType.ETHEREUM
             )
@@ -322,8 +321,9 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
 
           if (evt.account) {
             const tezConnector = connector.getWalletConnector(
-              BlockchainType.TEZOS
+              BlockchainEnv.TEZOS
             )
+            invariant(tezConnector, "should not be null")
             incomingManager.manager = new TezosWalletManager({
               wallet: tezConnector.getWallet(),
               address: evt.account!.address,

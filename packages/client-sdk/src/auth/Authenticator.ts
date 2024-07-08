@@ -302,6 +302,12 @@ export class Authenticator extends AuthenticatorEventEmitter {
     return success(account)
   }
 
+  /**
+   * Read the Storage to retrieve an account potentially stored there, and
+   * return it. This function ensures the returned payload is in the right
+   * format, otherwise it resets the storage account key.
+   * @returns Account stored in storage solution, or null if none
+   */
   public async getAccountFromStorage(): Promise<StoredAccount | null> {
     const account = await this.storage.getItem(Authenticator.accountStorageKey)
     if (!account) return null

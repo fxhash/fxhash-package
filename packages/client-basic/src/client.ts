@@ -13,6 +13,7 @@ import {
   UserReconciliation,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletsOrchestrator,
+  getAnyActiveManager,
 } from "@fxhash/client-sdk"
 import { ClientBasicEventTarget } from "./events.js"
 import { intialization } from "@fxhash/utils"
@@ -149,29 +150,34 @@ export class FxhashClientBasic extends ClientBasicEventTarget {
     // now attach listeners for automatically plug into the flows
     this._attachListeners()
   }
+
   /**
    * Forward events from the different components so that they are emitted
    * directly by this instance.
    */
   private _attachListeners() {
-    // todo: listen to user-reconciliation-errors to trigger appropriate side
-    // effects
-
-    const clear1 = this._reconciliation.on(
-      "user-reconciliation-error",
-      async err => {
+    this._toClean.push(
+      /**
+       * Hook on user reconciliation error, with 2 cases:
+       * - if error is WalletConnectedButNoAccountAuthenticatedError: a user
+       *   just connected their wallet, we trigger an authentication flow
+       *   (signing an operation, etc...)
+       * - if other error, forward the error so that it can be treated by
+       *   applications
+       */
+      this._reconciliation.on("user-reconciliation-error", async err => {
         // if a wallet was connected, but there is no account we can attempt a
         // signing process with said wallet
         if (err instanceof WalletConnectedButNoAccountAuthenticatedError) {
           console.log("attemp sign in with wallet")
           const managers = this.wallets.managers
-          const anyManager = managers.EVM || managers.TEZOS
+          const anyManager = getAnyActiveManager(managers)
           if (!anyManager) {
             throw Error(
               `something weird with the implementation, shouldn't reach this`
             )
           }
-          const result = await this.auth.authenticate(anyManager.manager)
+          const result = await this.auth.authenticate(anyManager)
 
           // in case of failure, we reset the
           if (result.isFailure()) {
@@ -185,11 +191,7 @@ export class FxhashClientBasic extends ClientBasicEventTarget {
         // otherwise forward the error to be handlded by applications
         // todo ? should we enforce some reconciliation here ??
         this.emit("user-reconciliation-error", err)
-      }
-    )
-
-    this._toClean.push(
-      clear1,
+      }),
       this._reconciliation.pipe("valid-user-changed", this),
       this._wallets.pipe("wallet-changed", this),
       this._auth.pipe("account-updated", this)

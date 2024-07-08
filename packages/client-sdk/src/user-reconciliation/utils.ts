@@ -7,6 +7,7 @@ import {
 } from "./errors.js"
 import { TActiveManagersMap } from "@/wallets/WalletOrchestrator.js"
 import { GetSingleUserAccountResult } from "@/auth/index.js"
+import { getAnyActiveManager } from "@/index.js"
 
 /**
  * Given an Account and some Wallet Managers, returns a failure with an error
@@ -20,9 +21,7 @@ export function reconciliationState(
   managers: TActiveManagersMap
 ): Result<true, UserReconciliationError> {
   // any of the active wallet managers
-  const anyActiveManager = [managers.EVM, managers.TEZOS]
-    .map(man => man?.manager || null)
-    .reduce((prev, curr) => prev || curr, null)
+  const anyActiveManager = getAnyActiveManager(managers)
   const noWalletConnected = !anyActiveManager
 
   if (!account) {

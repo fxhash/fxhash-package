@@ -67,6 +67,16 @@ export class EvmClientsNotAvailable extends Error {
 }
 
 /**
+ * Is thrown when an attempt at generating EVM clients did not succeed.
+ */
+export class EvmWagmiClientGenerationError extends Error {
+  name = "EvmWagmiClientGenerationError"
+  constructor() {
+    super(`Could not generate a public/wallet client using wagmi.`)
+  }
+}
+
+/**
  * Is thrown whenever a request for a module supporting multiple blockchains is
  * made, but such module doesn't provide support for the request chain.
  */
