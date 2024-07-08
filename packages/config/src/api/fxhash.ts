@@ -35,7 +35,6 @@ export interface IFxhashApis {
   }
   dashboard: {
     backend: string
-    aggregator: string
   }
   events: {
     liveBackend: string
@@ -91,7 +90,6 @@ export const fxhashDevApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://live-minting.fxhash-dev.xyz",
-    aggregator: "_NONE",
   },
   events: {
     liveBackend: "_NONE",
@@ -165,7 +163,6 @@ export const fxhashPrdApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://events.fxhash.xyz",
-    aggregator: "NONE",
   },
   events: {
     liveBackend: "_NONE",
