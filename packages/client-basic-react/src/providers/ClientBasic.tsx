@@ -60,23 +60,17 @@ export function FxhashClientBasicProvider({
     once.current = true
 
     const client = new FxhashClientBasic(config)
-
     const listenersOff = [
       client.on("user-reconciliation-error", err => {
         set("userError", err)
       }),
       client.on("valid-user-changed", () => {
+        set("userError", null)
         set("account", client.auth.account)
         set("managers", client.wallets.managers)
       }),
     ]
-
-    setTimeout(() => {
-      client.init()
-    }, 0)
-
-    console.log({ client })
-
+    client.init()
     set("client", client)
 
     // todo: in prod we shoudl return, but in dev this runs only once cause

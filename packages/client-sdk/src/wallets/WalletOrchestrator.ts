@@ -35,7 +35,8 @@ type TManagersMap = {
 type TWalletManagerWithConnector<Env extends BlockchainEnv = BlockchainEnv> = {
   env: Env
   connector: IWalletsConnector
-  manager: BlockchainEnvToWalletManagerMap[Env]
+  manager: BlockchainEnvToWalletManagerMap[Env] | null
+  createdAt: number
 }
 
 export type TActiveManagersMap = {
@@ -48,7 +49,7 @@ export type TActiveManagersMap = {
  * exposes a new wallet but one is already exposed for the same Blockchain
  * Environment.
  */
-export enum ConnectorOverrideStrategy {
+export enum ConnectorSelectionStrategy {
   /**
    * @default
    * If a connector exposes an active wallet, then only the same connector can
@@ -120,10 +121,10 @@ type WalletOverrideResolver = (options: {
 }) => TActiveManagersMap
 
 const walletOverrideMap: Record<
-  ConnectorOverrideStrategy,
+  ConnectorSelectionStrategy,
   WalletOverrideResolver
 > = {
-  [ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED]: ({
+  [ConnectorSelectionStrategy.SINGLE_CONNECTOR_ALLOWED]: ({
     incomingManager,
     activeManagers,
   }) => {
@@ -139,7 +140,7 @@ const walletOverrideMap: Record<
     return activeManagers
   },
 
-  [ConnectorOverrideStrategy.ORDER_OF_CONNECTORS]: ({
+  [ConnectorSelectionStrategy.ORDER_OF_CONNECTORS]: ({
     connectors,
     managers,
   }) => {
@@ -165,10 +166,11 @@ const walletOverrideMap: Record<
     return newActive
   },
 
-  [ConnectorOverrideStrategy.FIRST_READY_PREVAILS]: ({
+  [ConnectorSelectionStrategy.FIRST_READY_PREVAILS]: ({
     incomingManager,
     activeManagers,
   }) => {
+    // todo: what if incomingManager is null
     const newActive = {
       ...activeManagers,
     }
@@ -182,10 +184,11 @@ const walletOverrideMap: Record<
     return newActive
   },
 
-  [ConnectorOverrideStrategy.LAST_READY_PREVAILS]: ({
+  [ConnectorSelectionStrategy.LAST_READY_PREVAILS]: ({
     incomingManager,
     activeManagers,
   }) => {
+    // todo: what if incomingManager is null
     return {
       ...activeManagers,
       [incomingManager.env]: incomingManager,
@@ -198,16 +201,16 @@ export interface IWalletsOrchestratorParams {
    * An array of all the Wallet Connector instances which should be handlded by
    * the Orchestrator. The order in which they are provided only matters if
    * the wallet override strategy is
-   * `ConnectorOverrideStrategy.ORDER_OF_CONNECTORS`
+   * `ConnectorSelectionStrategy.ORDER_OF_CONNECTORS`
    */
   connectors: IWalletsConnector[]
 
   /**
    * Defines how the orchestrator should handle wallets coming from multiple
    * connectors at once.
-   * @default ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED
+   * @default ConnectorSelectionStrategy.SINGLE_CONNECTOR_ALLOWED
    */
-  walletOverrideStrategy?: ConnectorOverrideStrategy
+  walletOverrideStrategy?: ConnectorSelectionStrategy
 }
 
 /**
@@ -230,12 +233,12 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
     [BlockchainEnv.TEZOS]: null,
   }
   private _cleanup: (() => void)[] = []
-  private _walletOverrideStrategy: ConnectorOverrideStrategy
+  private _walletOverrideStrategy: ConnectorSelectionStrategy
   private _init = intialization()
 
   constructor({
     connectors,
-    walletOverrideStrategy = ConnectorOverrideStrategy.SINGLE_CONNECTOR_ALLOWED,
+    walletOverrideStrategy = ConnectorSelectionStrategy.SINGLE_CONNECTOR_ALLOWED,
   }: IWalletsOrchestratorParams) {
     super()
     this.connectors = connectors
@@ -275,86 +278,62 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
           null
 
         if (evt.env === BlockchainEnv.EVM) {
-          console.log("orchestrator onChange")
-          console.log({ evt })
-          if (!evt.account?.address) {
-            /**
-             * Todo; handle when no account
-             * - how is activeManagers cleared ?
-             * - how is connector managers cleared ?
-             * - what do we emit to the app ?
-             */
-            return
-          }
+          incomingManager = {
+            env: BlockchainEnv.EVM,
+            connector: connector,
+            manager: null,
+            createdAt: performance.now(),
+          } as TWalletManagerWithConnector<BlockchainEnv.EVM>
 
-          const evmConnector = connector.getWalletConnector(
-            BlockchainType.ETHEREUM
-          )
-          console.log({ evmConnector })
-          let _clients: any
-          try {
-            _clients = await evmConnector.getClients(BlockchainType.ETHEREUM)
-          } catch (err) {
-            console.log("error:")
-            console.log(err)
-          }
-          console.log({ _clients })
-          const account = evmConnector.getAccount()
-          console.log({ account })
-          if (_clients.isSuccess() && account) {
-            const clients = _clients.unwrap()
-            const signer = clientToSigner(clients.wallet)
+          if (evt.account?.address) {
+            const evmConnector = connector.getWalletConnector(
+              BlockchainType.ETHEREUM
+            )
+            const _clients = await evmConnector.getClients(
+              BlockchainType.ETHEREUM
+            )
+            const account = evmConnector.getAccount()
 
-            const ewm = new EthereumWalletManager({
-              walletClient: clients.wallet,
-              publicClient: clients.public,
-              rpcNodes: config.eth.apis.rpcs,
-              address: account.address,
-              signer,
-            })
-
-            // update connector active manager
-            this._managersMap[i][BlockchainEnv.EVM] = ewm
-
-            incomingManager = {
-              env: BlockchainEnv.EVM,
-              connector: connector,
-              manager: ewm,
+            if (_clients.isSuccess() && account) {
+              const clients = _clients.unwrap()
+              const signer = clientToSigner(clients.wallet)
+              const ewm = new EthereumWalletManager({
+                walletClient: clients.wallet,
+                publicClient: clients.public,
+                rpcNodes: config.eth.apis.rpcs,
+                address: account.address,
+                signer,
+              })
+              incomingManager.manager = ewm
             }
           }
+
+          this._managersMap[i][BlockchainEnv.EVM] =
+            incomingManager.manager as EthereumWalletManager
         }
 
         if (evt.env === BlockchainEnv.TEZOS) {
-          if (!evt.account) {
-            /**
-             * Todo; handle when no account
-             * - how is activeManagers cleared ?
-             * - how is connector managers cleared ?
-             * - what do we emit to the app ?
-             */
-            return
-          }
-
-          const tezConnector = connector.getWalletConnector(
-            BlockchainType.TEZOS
-          )
-
-          const twm = new TezosWalletManager({
-            wallet: tezConnector.getWallet(),
-            address: evt.account!.address,
-          })
-
-          // update connector active manager
-          this._managersMap[i][BlockchainEnv.TEZOS] = twm
-
           incomingManager = {
             env: BlockchainEnv.TEZOS,
             connector: connector,
-            manager: twm,
+            manager: null,
+            createdAt: performance.now(),
           }
-        }
 
-        console.log({ incomingManager })
+          if (evt.account) {
+            const tezConnector = connector.getWalletConnector(
+              BlockchainType.TEZOS
+            )
+            incomingManager.manager = new TezosWalletManager({
+              wallet: tezConnector.getWallet(),
+              address: evt.account!.address,
+            })
+          }
+
+          // update connector active manager
+          this._managersMap[i][BlockchainEnv.TEZOS] =
+            incomingManager.manager as TezosWalletManager
+        }
 
         // once incomingManager is created, update internal state
         // get the new active managers based on the strategy
@@ -367,8 +346,6 @@ export class WalletsOrchestrator extends WalletOrchestratorEventEmitter {
             connectors: this.connectors,
             incomingManager,
           })
-
-          console.log({ newActiveManagers })
 
           // if manager has changed, broadcast the new manager
           if (

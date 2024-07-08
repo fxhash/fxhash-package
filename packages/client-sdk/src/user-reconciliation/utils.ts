@@ -20,7 +20,9 @@ export function reconciliationState(
   managers: TActiveManagersMap
 ): Result<true, UserReconciliationError> {
   // any of the active wallet managers
-  const anyActiveManager = managers.EVM || managers.TEZOS
+  const anyActiveManager = [managers.EVM, managers.TEZOS]
+    .map(man => man?.manager || null)
+    .reduce((prev, curr) => prev || curr, null)
   const noWalletConnected = !anyActiveManager
 
   if (!account) {
@@ -28,9 +30,7 @@ export function reconciliationState(
       return success(true)
     }
     return failure(
-      new WalletConnectedButNoAccountAuthenticatedError(
-        anyActiveManager.manager
-      )
+      new WalletConnectedButNoAccountAuthenticatedError(anyActiveManager)
     )
   }
 
