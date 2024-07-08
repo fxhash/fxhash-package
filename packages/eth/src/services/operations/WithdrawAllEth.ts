@@ -21,6 +21,8 @@ import {
 } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "../Wallet.js"
 import gqlClient from "@fxhash/gql-client"
+import { DUTCH_AUCTION_MINTER_V2_ABI } from "@/abi/DutchAuctionMinterV2.js"
+import { FIXED_PRICE_MINTER_V2_ABI } from "@/abi/FixedPriceMinterV2.js"
 
 export type TWithdrawAllEthV1OperationParams = {
   address: string
@@ -71,10 +73,22 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     for (const minterProceeds of withdrawableProceeds) {
       const isDutchAuction =
         minterProceeds.minter_address ===
-        currentConfig.contracts.dutch_auction_minter_v1
+          currentConfig.contracts.dutch_auction_minter_v1 ||
+        minterProceeds.minter_address ===
+          currentConfig.contracts.dutch_auction_minter_v2
+      const isV2 =
+        minterProceeds.minter_address ===
+          currentConfig.contracts.dutch_auction_minter_v2 ||
+        minterProceeds.minter_address ===
+          currentConfig.contracts.fixed_price_minter_v2
       const abi = isDutchAuction
-        ? DUTCH_AUCTION_MINTER_ABI
-        : FIXED_PRICE_MINTER_ABI
+        ? isV2
+          ? DUTCH_AUCTION_MINTER_V2_ABI
+          : DUTCH_AUCTION_MINTER_ABI
+        : isV2
+          ? FIXED_PRICE_MINTER_V2_ABI
+          : FIXED_PRICE_MINTER_ABI
+
       const args = isDutchAuction
         ? [minterProceeds.token_address, minterProceeds.reserve_id]
         : [minterProceeds.token_address]
