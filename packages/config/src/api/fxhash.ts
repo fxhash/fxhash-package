@@ -35,7 +35,6 @@ export interface IFxhashApis {
   }
   dashboard: {
     backend: string
-    aggregator: string
   }
   events: {
     liveBackend: string
@@ -56,7 +55,7 @@ export const fxhashDevApis: IFxhashApis = {
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
-    "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
+    "http://fxhash-multichain-dev-testnet-file-api.fxhash-multichain-dev-testnet.svc.cluster.local:4004",
   fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
@@ -91,7 +90,6 @@ export const fxhashDevApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://live-minting.fxhash-dev.xyz",
-    aggregator: "_NONE",
   },
   events: {
     liveBackend: "_NONE",
@@ -129,7 +127,8 @@ export const fxhashPrdApis: IFxhashApis = {
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
-  fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
+  fileInternal:
+    "http://fxhash-multichain-prd-file-api.fxhash-multichain-prd.svc.cluster.local:4004",
   fsEmulator: "https://file-api.fxhash.xyz/fs",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
@@ -164,7 +163,6 @@ export const fxhashPrdApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://events.fxhash.xyz",
-    aggregator: "NONE",
   },
   events: {
     liveBackend: "_NONE",
