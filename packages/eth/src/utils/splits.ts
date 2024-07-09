@@ -1,3 +1,4 @@
+import { getCurrentChain } from "@/services/Wallet.js"
 import { ReceiverEntry, prepareReceivers } from "@/services/operations/index.js"
 import { Split, SplitsClient } from "@0xsplits/splits-sdk"
 import { BlockchainType } from "@fxhash/shared"
@@ -50,7 +51,8 @@ export async function getExistingSplits(
     "primary"
   )
 
-  const userSplits = await splitsClient.getRelatedSplits({
+  const userSplits = await splitsClient.dataClient!.getRelatedSplits({
+    chainId: getCurrentChain(chain).id,
     address: user,
   })
 
