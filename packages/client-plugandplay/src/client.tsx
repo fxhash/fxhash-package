@@ -37,7 +37,7 @@ type ClientPlugnPlayOptions = {
    *
    * @default true
    */
-  useConnectKit?: boolean
+  manageConnectKit?: boolean
 }
 
 const defaultOptions: NonNullableFields<ClientPlugnPlayOptions> = {
@@ -45,7 +45,7 @@ const defaultOptions: NonNullableFields<ClientPlugnPlayOptions> = {
     evm: true,
     tezos: true,
   },
-  useConnectKit: true,
+  manageConnectKit: true,
 }
 
 const chains =
@@ -112,7 +112,7 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
   private _windowConnector: WindowWalletsConnector
   private _openConnectKitModal: (() => void) | null = null
   private _wagmiConfig: Config
-  private _useConnectKit: boolean
+  private _manageConnectKit: boolean
   private _cleanup: (() => void)[] = []
 
   constructor(options: ClientPlugnPlayOptions) {
@@ -146,7 +146,7 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
       },
     })
 
-    this._useConnectKit = _options.useConnectKit || false
+    this._manageConnectKit = _options.manageConnectKit || false
   }
 
   public get gql(): IGraphqlWrapper {
@@ -171,7 +171,7 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
     // if the application didn't provide a way to request an EVM connection,
     // then the PlugNPlay client will instanciate ConnectKit to provide a
     // connection modal for requestion connection.
-    if (this._useConnectKit) {
+    if (this._manageConnectKit) {
       await this._initConnectKit()
     }
 
@@ -234,13 +234,31 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
    */
   public requestConnection(env: BlockchainEnv) {
     // on EVM we use connectKit so bypass call to the connector here
-    if (env === BlockchainEnv.EVM && this._useConnectKit) {
+    if (env === BlockchainEnv.EVM && this._manageConnectKit) {
       this._openConnectKitModal?.()
       return
     }
-
     // otherwise we use the native requestConnection from our SDK
     this._windowConnector.requestConnection(env)
+  }
+
+  /**
+   * Request the wallet on the given env to disconnect.
+   */
+  public requestDisconnection(env: BlockchainEnv) {
+    return this._windowConnector.disconnect(env)
+  }
+
+  /**
+   * Logout from the account (remove JWT from storage / clear cookie http req)
+   * and disconnect all the wallets.
+   * This is the preferred way of doing a complete disconnect.
+   */
+  public logout() {
+    return this._clientBasic.reset({
+      auth: true,
+      wallets: true,
+    })
   }
 
   public release() {

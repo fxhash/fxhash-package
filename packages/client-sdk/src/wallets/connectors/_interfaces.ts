@@ -75,6 +75,11 @@ export interface IWalletsConnector extends WalletsConnectorEventEmitter {
   getActiveConnectors: () => IBaseWalletConnector[]
 
   /**
+   * Disconnect wallet on a given environment.
+   */
+  disconnect: (env: BlockchainEnv) => Promise<void>
+
+  /**
    * Disconnect all the wallets currently connected.
    */
   disconnectAll: () => Promise<void>

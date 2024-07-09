@@ -110,6 +110,10 @@ export class WindowWalletsConnector
     this._connectors[env]?.requestConnection()
   }
 
+  public async disconnect(env: BlockchainEnv) {
+    return this.getWalletConnector(env)?.disconnect()
+  }
+
   public async disconnectAll() {
     await Promise.all(this.getActiveConnectors().map(conn => conn.disconnect()))
   }
