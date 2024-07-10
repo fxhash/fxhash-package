@@ -5,15 +5,17 @@
 
 import { FxhashClientBasic } from "@fxhash/client-basic"
 import { NonNullableFields, intialization } from "@fxhash/utils"
+import { isBrowser } from "@fxhash/utils-browser"
 import {
   type Authenticator,
   type IGraphqlWrapper,
   type IWindowWalletsConnectorConfig,
-  WindowWalletsConnector,
   type GetSingleUserAccountResult,
   type WalletsOrchestrator,
+  SocialWalletsConnector,
+  WindowWalletsConnector,
 } from "@fxhash/client-sdk"
-import { BlockchainEnv } from "@fxhash/shared"
+import { BlockchainEnv, invariant } from "@fxhash/shared"
 import { config as fxConfig } from "@fxhash/config"
 import { base, baseSepolia, mainnet, sepolia } from "viem/chains"
 import { getDefaultConfig, ConnectKitProvider, useModal } from "connectkit"
@@ -110,6 +112,7 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
   private _init = intialization()
   private _clientBasic: FxhashClientBasic
   private _windowConnector: WindowWalletsConnector
+  private _socialConnector: SocialWalletsConnector
   private _openConnectKitModal: (() => void) | null = null
   private _wagmiConfig: Config
   private _manageConnectKit: boolean
@@ -117,6 +120,11 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
 
   constructor(options: ClientPlugnPlayOptions) {
     super()
+
+    invariant(
+      isBrowser(),
+      "fxhash ClientPlugnPlay can only be instanciated in a browser context."
+    )
 
     const _options: ClientPlugnPlayOptions = {
       ...defaultOptions,
@@ -140,9 +148,12 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
         tezos: true,
       }
     )
+
+    this._socialConnector = new SocialWalletsConnector()
+
     this._clientBasic = new FxhashClientBasic({
       wallets: {
-        connectors: [this._windowConnector],
+        connectors: [this._windowConnector, this._socialConnector],
       },
     })
 
@@ -181,7 +192,7 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
        * in here. We don't want to exposes such errors to the consumers as their
        * resolution might be a bit challenging not knowing our stack.
        */
-      this._clientBasic.on("user-reconciliation-error", err => {
+      this._clientBasic.on("user-reconciliation-error", () => {
         // todo: handle error
       }),
       // forward other events
@@ -263,5 +274,9 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
 
   public release() {
     this._cleanup.forEach(fn => fn())
+  }
+
+  public loginOAuth(options: any) {
+    this._socialConnector.login(options)
   }
 }

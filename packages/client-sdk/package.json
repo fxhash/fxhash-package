@@ -39,6 +39,7 @@
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
     "@wagmi/connectors": "5.0.20",
     "@wagmi/core": "2.11.5",
     "jwt-decode": "4.0.0"

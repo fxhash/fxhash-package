@@ -14,6 +14,9 @@
  * if they are it is eventually known).
  */
 
+import { PromiseResult, failure, success } from "@fxhash/shared"
+import { IframeBDError, IframeRequestTimeout } from "./errors"
+
 /**
  * Potential improvements
  *  * add mechanism to track connectivity errors
@@ -98,6 +101,16 @@ type OtherDir<Dir extends Direction> = Dir extends "host->frame"
   : "host->frame"
 type _Key<T extends { [k: string]: any }> = Extract<keyof T, string>
 
+type SendRequestOptions<T extends TMessage, K extends _Key<T>> = {
+  type: RequestType<K>
+  body?: T[K]["req"]
+  /**
+   * The number of ms after which the request fails with a Timeout error. If
+   * undefined, will never timeout.
+   */
+  timeout?: number
+}
+
 /**
  * Shared implementation between the Host and the Frame
  */
@@ -165,17 +178,30 @@ abstract class IframeBDCommShared<
     })
   }
 
-  public async sendRequest<K extends _Key<MessageTypes[Dir]>>(
-    type: RequestType<K>,
-    body?: MessageTypes[Dir][K]["req"]
-  ): Promise<MessageTypes[Dir][K]["res"]> {
+  public async sendRequest<K extends _Key<MessageTypes[Dir]>>({
+    type,
+    body,
+    timeout,
+  }: SendRequestOptions<MessageTypes[Dir], K>): PromiseResult<
+    MessageTypes[Dir][K]["res"],
+    IframeRequestTimeout
+  > {
     return new Promise(resolve => {
       const requestID = randomRequestID()
+
+      let timeoutID: number
+      if (timeout) {
+        timeoutID = setTimeout(
+          () => resolve(failure(new IframeRequestTimeout())),
+          timeout
+        )
+      }
 
       // by adding a listener to the awaiting requests, it will resolve once a
       // response for this request is received
       this.awaitingRequests[requestID] = (data: any) => {
-        resolve(data)
+        typeof timeoutID !== "undefined" && clearTimeout(timeout)
+        resolve(success(data))
       }
 
       this._sendPayload({
@@ -240,7 +266,9 @@ export abstract class IframeBDCommHost<
     return origin(event.origin) === origin(this.url)
   }
 
-  public async init(iframe: HTMLIFrameElement) {
+  public async init(
+    iframe: HTMLIFrameElement
+  ): PromiseResult<void, IframeBDError> {
     super._init()
 
     this.iframe = iframe
@@ -249,8 +277,14 @@ export abstract class IframeBDCommHost<
     // part of the protocol involves sending a "connect" payload to
     // propertly estalish the connection, otherwise the protocol shouldn't let
     // messages go through
-    await this.sendRequest("__handshake")
+    const result = await this.sendRequest({
+      type: "__handshake",
+    })
+    if (result.isFailure()) {
+      return result
+    }
     this.connected = true
+    return success()
   }
 
   protected _postMessage(message: any): void {

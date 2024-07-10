@@ -8,14 +8,11 @@ import {
   IWalletsConnector,
   MapEnvToWalletConnector,
 } from "../_interfaces.js"
-import {
-  EvmPrivateKeyConnector,
-  EvmPrivateKeyConnectorOptions,
-} from "./EvmPrivateKeyConnector.js"
+import { EvmPrivateKeyConnector, EvmPrivateKeyConnectorOptions } from "./EVM.js"
 import {
   TezosPrivateKeyConnector,
   TezosPrivateKeyConnectorOptions,
-} from "./TezosPrivateKeyConnector.js"
+} from "./Tezos.js"
 import { WalletsConnectorEventEmitter } from "../events.js"
 
 export type PrivateKeyWalletsConnectorOptions = {
@@ -84,7 +81,7 @@ export class PrivateKeyWalletsConnector
   }
 
   public getWalletConnector<Env extends BlockchainEnv>(
-    env: BlockchainEnv
+    env: Env
   ): MapEnvToWalletConnector<Env> {
     return this._connectors[env] as any
   }
