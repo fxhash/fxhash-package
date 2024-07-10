@@ -29,7 +29,11 @@ import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import { BlockchainType, invariant } from "@fxhash/shared"
+import {
+  BlockchainType,
+  GenerativeTokenVersion,
+  invariant,
+} from "@fxhash/shared"
 import { config } from "@fxhash/config"
 import { EthereumWalletManager } from "@/services/Wallet.js"
 import { IEthContracts } from "@fxhash/config"
@@ -265,10 +269,14 @@ export async function processAndFormatMintInfos(
     | TicketMintInfoArgs
   )[],
   manager: EthereumWalletManager,
-  chain: BlockchainType
+  chain: BlockchainType,
+  version: GenerativeTokenVersion
 ): Promise<MintInfo[]> {
   const currentConfig =
     chain === BlockchainType.ETHEREUM ? config.eth : config.base
+  const isV2 =
+    version === GenerativeTokenVersion.ETH_V2 ||
+    version === GenerativeTokenVersion.BASE_V2
   return await Promise.all(
     mintInfos.map(async argsMintInfo => {
       const reserveInfo: ReserveInfo = defineReserveInfo(
@@ -282,9 +290,12 @@ export async function processAndFormatMintInfos(
           const params =
             argsMintInfo.params as FarcasterFrameFixedPriceMintParams
 
+          const minter = isV2
+            ? (currentConfig.contracts as IEthContracts).fixed_price_minter_v2
+            : (currentConfig.contracts as IEthContracts)
+                .farcaster_frame_fixed_price_minter_v1
           const mintInfo: MintInfo = {
-            minter: (currentConfig.contracts as IEthContracts)
-              .farcaster_frame_fixed_price_minter_v1,
+            minter: minter,
             reserveInfo: reserveInfo,
             params: encodeAbiParameters(
               [
@@ -304,9 +315,12 @@ export async function processAndFormatMintInfos(
 
           return mintInfo
         } else {
+          const minter = isV2
+            ? (currentConfig.contracts as IEthContracts).fixed_price_minter_v2
+            : (currentConfig.contracts as IEthContracts).fixed_price_minter_v1
           const params = argsMintInfo.params as FixedPriceParams
           const mintInfo: MintInfo = {
-            minter: currentConfig.contracts.fixed_price_minter_v1,
+            minter: minter,
             reserveInfo: reserveInfo,
             params: getFixedPriceMinterEncodedParams(
               argsMintInfo.params.price,
@@ -319,8 +333,11 @@ export async function processAndFormatMintInfos(
           return mintInfo
         }
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
+        const minter = isV2
+          ? (currentConfig.contracts as IEthContracts).dutch_auction_minter_v2
+          : (currentConfig.contracts as IEthContracts).dutch_auction_minter_v1
         const mintInfo: MintInfo = {
-          minter: currentConfig.contracts.dutch_auction_minter_v1,
+          minter: minter,
           reserveInfo: reserveInfo,
           params: getDutchAuctionMinterEncodedParams(
             argsMintInfo.params.prices,

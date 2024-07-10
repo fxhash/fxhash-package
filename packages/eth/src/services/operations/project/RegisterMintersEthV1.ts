@@ -12,7 +12,7 @@ import {
 import { proposeSafeTransaction } from "@/services/Safe.js"
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { processAndFormatMintInfos } from "@/utils/minters.js"
-import { TransactionType } from "@fxhash/shared"
+import { GenerativeTokenVersion, TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 
 export type TRegisterMintersEthV1OperationParams = {
@@ -24,6 +24,7 @@ export type TRegisterMintersEthV1OperationParams = {
   )[]
   isTicket: boolean
   collabAddress?: string
+  version: GenerativeTokenVersion
 }
 
 /**
@@ -37,7 +38,8 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
     const payloadArgs = await processAndFormatMintInfos(
       this.params.mintInfo,
       this.manager,
-      this.chain
+      this.chain,
+      this.params.version
     )
     if (this.params.collabAddress) {
       await this.manager.connectSafe(this.params.collabAddress)
