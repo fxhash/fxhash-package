@@ -4,18 +4,21 @@
  */
 
 import { FxhashClientBasic } from "@fxhash/client-basic"
-import { NonNullableFields, intialization } from "@fxhash/utils"
+import { NonNullableFields, cleanup, intialization } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
-  type Authenticator,
   type IGraphqlWrapper,
-  type IWindowWalletsConnectorConfig,
   type GetSingleUserAccountResult,
-  type WalletsOrchestrator,
-  SocialWalletsConnector,
-  WindowWalletsConnector,
+  IUserSource,
+  windowWallets,
+  authWallets,
+  GraphqlWrapper,
+  Storage,
+  jwtCredentials,
+  walletsAndAccount,
+  UserSourceEventEmitter,
 } from "@fxhash/client-sdk"
-import { BlockchainEnv, invariant } from "@fxhash/shared"
+import { BlockchainEnv, BlockchainNetwork, invariant } from "@fxhash/shared"
 import { config as fxConfig } from "@fxhash/config"
 import { base, baseSepolia, mainnet, sepolia } from "viem/chains"
 import { getDefaultConfig, ConnectKitProvider, useModal } from "connectkit"
@@ -24,31 +27,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { ClientPlugnPlayEventEmitter } from "./events.js"
-
-type ClientPlugnPlayOptions = {
-  wallets?: IWindowWalletsConnectorConfig
-
-  /**
-   * Whether the PlugnPlay client should use `ConnectKit`. `ConnectKit` provides
-   * an inituitive and flexible UI for connecting a wallet on EVM chains, it is
-   * used by default by client. If for some reason you would like to opt out of
-   * it, this is the option for you.
-   *
-   * **Warning**: setting this value to `false` implies that you have to provide
-   * some solution for connecting an EVM wallet youself.
-   *
-   * @default true
-   */
-  manageConnectKit?: boolean
-}
-
-const defaultOptions: NonNullableFields<ClientPlugnPlayOptions> = {
-  wallets: {
-    evm: true,
-    tezos: true,
-  },
-  manageConnectKit: true,
-}
+import { DefaultBeaconWalletConfig } from "@fxhash/tez"
 
 const chains =
   fxConfig.config.envName === "production"
@@ -99,8 +78,6 @@ export const fxCreateWagmiConfig = ({
     })
   ) as Config
 }
-
-const queryClient = new QueryClient()
 
 /**
  * The fxhash ClientPlugNPlay provides a fully-featured and opiniated wallets &
@@ -160,49 +137,61 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
     this._manageConnectKit = _options.manageConnectKit || false
   }
 
-  public get gql(): IGraphqlWrapper {
-    return this._clientBasic.gql
+  public loginOAuth(options: any) {
+    this._socialConnector.login(options)
   }
+}
 
-  public get auth(): Authenticator {
-    return this._clientBasic.auth
-  }
+type Options = {
+  /**
+   * Whether the PlugnPlay client should use `ConnectKit`. `ConnectKit` provides
+   * an inituitive and flexible UI for connecting a wallet on EVM chains, it is
+   * used by default by client. If for some reason you would like to opt out of
+   * it, this is the option for you.
+   *
+   * **Warning**: setting this value to `false` implies that you have to provide
+   * some solution for connecting an EVM wallet youself.
+   *
+   * @default true
+   */
+  manageConnectKit?: boolean
+}
 
-  public get account(): GetSingleUserAccountResult | null {
-    return this.auth.account
-  }
+export function clientPlugnPlay({ manageConnectKit = true }: Options) {
+  invariant(
+    isBrowser(),
+    "fxhash Client PlugnPlay can only be instanciated in a browser context."
+  )
 
-  public get wallets(): WalletsOrchestrator {
-    return this._clientBasic.wallets
-  }
+  const init = intialization()
+  const clean = cleanup()
+  const emitter = new UserSourceEventEmitter()
 
-  async init() {
-    this._init.start()
+  const _wagmiConfig = fxCreateWagmiConfig({
+    projectId,
+    metadata: defaultEvmConfigMetadata,
+  }) as any
+  let _openConnectKitModal: (() => void) | null = null
 
-    // if the application didn't provide a way to request an EVM connection,
-    // then the PlugNPlay client will instanciate ConnectKit to provide a
-    // connection modal for requestion connection.
-    if (this._manageConnectKit) {
-      await this._initConnectKit()
-    }
+  const queryClient = new QueryClient()
+  const gql = new GraphqlWrapper()
 
-    this._cleanup.push(
-      /**
-       * Hook on the `user-reconciliation-error` to handle side-effect manually
-       * in here. We don't want to exposes such errors to the consumers as their
-       * resolution might be a bit challenging not knowing our stack.
-       */
-      this._clientBasic.on("user-reconciliation-error", () => {
-        // todo: handle error
-      }),
-      // forward other events
-      this._clientBasic.pipe("valid-user-changed", this),
-      this._clientBasic.pipe("wallet-changed", this)
-    )
+  // handles window object wallets (eip1933 & tzip10)
+  const _windowWallets = windowWallets({
+    evm: _wagmiConfig,
+    tezos: DefaultBeaconWalletConfig,
+  })
 
-    await this._clientBasic.init()
-    this._init.finish()
-  }
+  const _accountSource = authWallets({
+    gqlWrapper: gql,
+    storage: new Storage(),
+    credentialsDriver: jwtCredentials(gql) as any,
+  })
+
+  const source = walletsAndAccount({
+    wallets: _windowWallets,
+    account: _accountSource,
+  })
 
   /**
    * ConnectKit is a great interface for handling wallet connections, however
@@ -217,16 +206,16 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
    * Portals
    * <https://github.com/family/connectkit/blob/3db9c7538eadf29ad266c0fe4819b9bc15c42f05/packages/connectkit/src/components/Common/Modal/index.tsx#L640>
    */
-  private _initConnectKit() {
+  const _initConnectKit = () => {
     return new Promise<void>(resolve => {
       // wraps ConnectKit useModal().setOpen() to expose to this class context
       const ConnectKitDriver = () => {
-        this._openConnectKitModal = useModal().setOpen.bind(null, true)
+        _openConnectKitModal = useModal().setOpen.bind(null, true)
         useEffect(() => resolve(), [])
         return null
       }
       createRoot(document.createElement("div")).render(
-        <WagmiProvider config={this._wagmiConfig}>
+        <WagmiProvider config={_wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             <ConnectKitProvider>
               <ConnectKitDriver />
@@ -237,46 +226,51 @@ export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
     })
   }
 
-  /**
-   * Requests a wallet connection on the given blockchain environment. For
-   * Tezos, Beacon Wallet will be used under the hood and for EVM, ConnectKit
-   * will be used.
-   * @param env Blockchain environment for which connection should be made
-   */
-  public requestConnection(env: BlockchainEnv) {
-    // on EVM we use connectKit so bypass call to the connector here
-    if (env === BlockchainEnv.EVM && this._manageConnectKit) {
-      this._openConnectKitModal?.()
+  function requestConnection(network: BlockchainNetwork) {
+    // on EVM use connectKit, need to bypass call to wallets source
+    if (network === BlockchainNetwork.ETHEREUM && manageConnectKit) {
+      _openConnectKitModal?.()
       return
     }
-    // otherwise we use the native requestConnection from our SDK
-    this._windowConnector.requestConnection(env)
+    // otherwise use native requestConnection from SDK
+    _windowWallets.requestConnection(network)
   }
 
-  /**
-   * Request the wallet on the given env to disconnect.
-   */
-  public requestDisconnection(env: BlockchainEnv) {
-    return this._windowConnector.disconnect(env)
-  }
+  return {
+    source,
+    emitter,
+    requestConnection,
 
-  /**
-   * Logout from the account (remove JWT from storage / clear cookie http req)
-   * and disconnect all the wallets.
-   * This is the preferred way of doing a complete disconnect.
-   */
-  public logout() {
-    return this._clientBasic.reset({
-      auth: true,
-      wallets: true,
-    })
-  }
+    async init() {
+      init.start()
+      await _initConnectKit()
+      clean.add(
+        source.emitter.pipe("account-changed", emitter),
+        source.emitter.pipe("wallets-changed", emitter),
+        source.emitter.pipe("user-changed", emitter),
+        source.emitter.on("error", err => {
+          // todo: handle error here
+          console.log(err)
+        })
+      )
+      await source.init()
+      init.finish()
+    },
 
-  public release() {
-    this._cleanup.forEach(fn => fn())
-  }
+    requestDisconnection(network: BlockchainNetwork) {
+      return _windowWallets.disconnect(network)
+    },
 
-  public loginOAuth(options: any) {
-    this._socialConnector.login(options)
+    logout() {
+      return _accountSource.logout()
+    },
+
+    release() {
+      clean.clear()
+    },
+
+    // todos
+    // - login oauth
+    // - setup web3auth wallets
   }
 }

@@ -21,6 +21,15 @@ export const Mu_Authenticate = graphql(`
   }
 `)
 
+export const Mu_AuthenticateWeb3Auth = graphql(`
+  mutation AuthenticateWeb3Auth($input: AuthenticationWeb3AuthInput!) {
+    authenticate_web3auth(input: $input) {
+      accessToken
+      refreshToken
+    }
+  }
+`)
+
 export const Mu_RefreshToken = graphql(`
   mutation Refresh($input: RefreshInput!) {
     refresh(input: $input) {

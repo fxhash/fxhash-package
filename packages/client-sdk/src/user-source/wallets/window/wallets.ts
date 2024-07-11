@@ -4,12 +4,12 @@
  */
 
 import { BlockchainNetwork } from "@fxhash/shared"
-import { IWalletsSource } from "../_interfaces.js"
 import { multichainWallets } from "../common.js"
 import { Config } from "@wagmi/core"
 import { type DAppClientOptions } from "@airgap/beacon-sdk"
 import { eip1193WalletConnector } from "./evm.js"
 import { tzip10WalletConnector } from "./tezos.js"
+import { CommonWindowWallet, IWindowWalletsSource } from "./_interfaces.js"
 
 type Options = {
   evm?: Config
@@ -33,8 +33,8 @@ type Options = {
  * the wallets being used by the app as they plug to blockchain-respective
  * window wallet specification.
  */
-export function windowWallets({ evm, tezos }: Options): IWalletsSource {
-  return multichainWallets({
+export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
+  const wallets = multichainWallets({
     [BlockchainNetwork.ETHEREUM]: eip1193WalletConnector({
       wagmiConfig: evm,
     }),
@@ -42,6 +42,14 @@ export function windowWallets({ evm, tezos }: Options): IWalletsSource {
       beaconConfig: tezos,
     }),
   })
+
+  return {
+    ...wallets,
+    requestConnection(network) {
+      const wallet = wallets.getWallet(network)
+      if (wallet) (wallet as any as CommonWindowWallet).requestConnection()
+    },
+  }
 }
 
 export type WindowWalletsOptions = Options

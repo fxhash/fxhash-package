@@ -5,18 +5,22 @@
 
 import {
   Authenticator,
+  CredentialsDriver,
   CredentialsStrategy,
   GraphqlWrapper,
+  ICredentialsDriver,
   IGraphqlWrapper,
+  IUserSource,
   IWalletsOrchestratorParams,
   Storage,
   UserReconciliation,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletsOrchestrator,
   getAnyActiveManager,
+  jwtCredentials,
 } from "@fxhash/client-sdk"
 import { ClientBasicEventTarget } from "./events.js"
-import { intialization } from "@fxhash/utils"
+import { cleanup, intialization } from "@fxhash/utils"
 
 export type FxhashClientBasicOptions = {
   /**
@@ -31,23 +35,22 @@ export type FxhashClientBasicOptions = {
    * **Warning:** JWT is recommended for 3rd parties because 3rd party cookies
    * are being sunset on chrome, and won't be a sensible choice in the future.
    *
-   * @default CredentialsStrategy.JWT
+   * @default jwtCredentials
    */
-  credentialsStrategy?: CredentialsStrategy
+  credentials?: ICredentialsDriver<any>
 
   /**
    * Wallet settings for the Wallet Orchestrator module.
    */
-  wallets?: IWalletsOrchestratorParams
+  userSource: IUserSource
 }
 
-const defaultOptions: Required<Omit<FxhashClientBasicOptions, never>> = {
+const defaultOptions = (
+  gql: IGraphqlWrapper
+): Required<Omit<FxhashClientBasicOptions, "userSource">> => ({
   storage: new Storage(),
-  credentialsStrategy: CredentialsStrategy.COOKIE,
-  wallets: {
-    connectors: [],
-  },
-}
+  credentials: jwtCredentials(gql),
+})
 
 /**
  * The Fxhash Client Basic provides an abstraction over the different modules
@@ -227,5 +230,31 @@ export class FxhashClientBasic extends ClientBasicEventTarget {
     this._reconciliation.release()
     this._toClean.forEach(f => f())
     this._toClean.length = 0
+  }
+}
+
+export function fxhashClientBasic(options: FxhashClientBasicOptions) {
+  const init = intialization()
+  const clean = cleanup()
+  const gql = new GraphqlWrapper()
+  const _options = {
+    ...defaultOptions(gql),
+    ...options,
+  }
+
+  return {
+    gql,
+    emitter: userSource.emitter,
+
+    async init() {
+      init.start()
+      await userSource.init()
+      init.finish()
+    },
+
+    release() {
+      userSource.release?.()
+      clean.clear()
+    },
   }
 }

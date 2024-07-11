@@ -1,7 +1,9 @@
 import {
   AuthenticationInput,
+  AuthenticationWeb3AuthInput,
   AuthenticationResult,
   Mu_Authenticate,
+  Mu_AuthenticateWeb3Auth,
 } from "@fxhash/gql"
 import { GraphQLError, UnexpectedError } from "@/util/Error.js"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
@@ -36,4 +38,25 @@ export async function authenticate(
     throw new UnexpectedError()
   }
   return data.authenticate
+}
+
+/**
+ * Send a query to authenticate a user using credentials they obtained using
+ * Web3Auth.
+ */
+export async function authenticateWeb3Auth(
+  input: AuthenticationWeb3AuthInput,
+  options: GqlOptions = gqlDefaultOptions
+) {
+  const { gqlClient } = options
+  const { data, error } = await gqlClient.mutation(Mu_AuthenticateWeb3Auth, {
+    input,
+  })
+  if (error) {
+    throw new GraphQLError(error.message)
+  }
+  if (!data || !data.authenticate_web3auth) {
+    throw new UnexpectedError()
+  }
+  return data.authenticate_web3auth
 }

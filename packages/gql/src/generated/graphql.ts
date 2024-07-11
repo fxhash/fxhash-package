@@ -57,8 +57,8 @@ export type Account = {
   id: Scalars['uuid']['output'];
   /** An object relationship */
   mainWallet: Wallet;
-  /** An array relationship */
-  profile: Array<Profile>;
+  /** An object relationship */
+  profile?: Maybe<Profile>;
   /** An array relationship */
   roles: Array<AccountsRoles>;
   status: Scalars['AccountStatus']['output'];
@@ -95,16 +95,6 @@ export type AccountCuratedProjectsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Project_Order_By>>;
   where?: InputMaybe<Project_Bool_Exp>;
-};
-
-
-/** columns and relationships of "Account" */
-export type AccountProfileArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Profile_Order_By>>;
-  where?: InputMaybe<Profile_Bool_Exp>;
 };
 
 
@@ -231,7 +221,7 @@ export type Account_Order_By = {
   curatedProjects_aggregate?: InputMaybe<Project_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
   mainWallet?: InputMaybe<Wallet_Order_By>;
-  profile_aggregate?: InputMaybe<Profile_Aggregate_Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
   roles_aggregate?: InputMaybe<AccountsRoles_Aggregate_Order_By>;
   status?: InputMaybe<Order_By>;
   username?: InputMaybe<Order_By>;
@@ -359,6 +349,11 @@ export type AuthenticationResult = {
   __typename?: 'AuthenticationResult';
   accessToken: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
+};
+
+export type AuthenticationWeb3AuthInput = {
+  compressedPublicKey: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 /** Boolean expression to compare columns of type "BlockchainNetwork". All fields are combined with logical 'AND'. */
@@ -638,6 +633,12 @@ export type Int_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
+export type LinkWalletInput = {
+  id: Scalars['String']['input'];
+  publicKey?: InputMaybe<Scalars['String']['input']>;
+  signature: Scalars['String']['input'];
+};
+
 export type LogoutInput = {
   refreshToken?: InputMaybe<Scalars['String']['input']>;
 };
@@ -751,13 +752,6 @@ export type Profile = {
   website?: Maybe<Scalars['String']['output']>;
 };
 
-/** order by aggregate values of table "Profile" */
-export type Profile_Aggregate_Order_By = {
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Profile_Max_Order_By>;
-  min?: InputMaybe<Profile_Min_Order_By>;
-};
-
 /** Boolean expression to filter rows from the table "Profile". All fields are combined with a logical 'AND'. */
 export type Profile_Bool_Exp = {
   _and?: InputMaybe<Array<Profile_Bool_Exp>>;
@@ -769,26 +763,6 @@ export type Profile_Bool_Exp = {
   picture?: InputMaybe<String_Comparison_Exp>;
   twitter?: InputMaybe<String_Comparison_Exp>;
   website?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** order by max() on columns of table "Profile" */
-export type Profile_Max_Order_By = {
-  accountId?: InputMaybe<Order_By>;
-  description?: InputMaybe<Order_By>;
-  instagram?: InputMaybe<Order_By>;
-  picture?: InputMaybe<Order_By>;
-  twitter?: InputMaybe<Order_By>;
-  website?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "Profile" */
-export type Profile_Min_Order_By = {
-  accountId?: InputMaybe<Order_By>;
-  description?: InputMaybe<Order_By>;
-  instagram?: InputMaybe<Order_By>;
-  picture?: InputMaybe<Order_By>;
-  twitter?: InputMaybe<Order_By>;
-  website?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "Profile" */
@@ -1559,6 +1533,12 @@ export type String_Comparison_Exp = {
   _regex?: InputMaybe<Scalars['String']['input']>;
   /** does the column match the given SQL regular expression */
   _similar?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UnlinkWalletInput = {
+  id: Scalars['String']['input'];
+  publicKey?: InputMaybe<Scalars['String']['input']>;
+  signature: Scalars['String']['input'];
 };
 
 /** columns and relationships of "UserAccount" */
@@ -4542,7 +4522,8 @@ export type Generative_Token = {
   author_id?: Maybe<Scalars['String']['output']>;
   balance: Scalars['numeric']['output'];
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
-  chain: Scalars['String']['output'];
+  /** A computed field, executes function "token_chain_for_token" */
+  chain?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   codex?: Maybe<Codex>;
   codex_id?: Maybe<Scalars['String']['output']>;
@@ -4550,6 +4531,10 @@ export type Generative_Token = {
   codex_update_requests: Array<Codex_Update_Request>;
   /** An array relationship */
   collection_offers: Array<Collection_Offer>;
+  /** An array relationship */
+  collectors: Array<Generative_Token_Collected>;
+  /** An aggregate relationship */
+  collectors_aggregate: Generative_Token_Collected_Aggregate;
   created_at: Scalars['timestamptz']['output'];
   display_uri?: Maybe<Scalars['String']['output']>;
   enabled: Scalars['Boolean']['output'];
@@ -4599,6 +4584,8 @@ export type Generative_Token = {
   random_objkts?: Maybe<Array<Objkt>>;
   /** An array relationship */
   redeemables: Array<Redeemable>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   /** An array relationship */
   reports: Array<Report>;
   /** An array relationship */
@@ -4658,6 +4645,26 @@ export type Generative_TokenCollection_OffersArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Collection_Offer_Order_By>>;
   where?: InputMaybe<Collection_Offer_Bool_Exp>;
+};
+
+
+/** columns and relationships of "generative_token" */
+export type Generative_TokenCollectorsArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+};
+
+
+/** columns and relationships of "generative_token" */
+export type Generative_TokenCollectors_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
 };
 
 
@@ -4899,6 +4906,8 @@ export type Generative_Token_Avg_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -4930,6 +4939,8 @@ export type Generative_Token_Bool_Exp = {
   codex_id?: InputMaybe<String_Comparison_Exp>;
   codex_update_requests?: InputMaybe<Codex_Update_Request_Bool_Exp>;
   collection_offers?: InputMaybe<Collection_Offer_Bool_Exp>;
+  collectors?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+  collectors_aggregate?: InputMaybe<Generative_Token_Collected_Aggregate_Bool_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   display_uri?: InputMaybe<String_Comparison_Exp>;
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
@@ -4965,6 +4976,7 @@ export type Generative_Token_Bool_Exp = {
   pricing_dutch_auctions?: InputMaybe<Pricing_Dutch_Auction_Bool_Exp>;
   pricing_fixeds?: InputMaybe<Pricing_Fixed_Bool_Exp>;
   redeemables?: InputMaybe<Redeemable_Bool_Exp>;
+  redeemed_percentage?: InputMaybe<Float8_Comparison_Exp>;
   reports?: InputMaybe<Report_Bool_Exp>;
   reserves?: InputMaybe<Reserve_Bool_Exp>;
   royalties?: InputMaybe<Int_Comparison_Exp>;
@@ -4978,6 +4990,234 @@ export type Generative_Token_Bool_Exp = {
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
+};
+
+/** columns and relationships of "generative_token_collected" */
+export type Generative_Token_Collected = {
+  __typename?: 'generative_token_collected';
+  generative_token_id?: Maybe<Scalars['String']['output']>;
+  total_collected?: Maybe<Scalars['bigint']['output']>;
+  /** An object relationship */
+  user?: Maybe<User>;
+  user_id?: Maybe<Scalars['String']['output']>;
+};
+
+/** aggregated selection of "generative_token_collected" */
+export type Generative_Token_Collected_Aggregate = {
+  __typename?: 'generative_token_collected_aggregate';
+  aggregate?: Maybe<Generative_Token_Collected_Aggregate_Fields>;
+  nodes: Array<Generative_Token_Collected>;
+};
+
+export type Generative_Token_Collected_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Generative_Token_Collected_Aggregate_Bool_Exp_Count>;
+};
+
+export type Generative_Token_Collected_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "generative_token_collected" */
+export type Generative_Token_Collected_Aggregate_Fields = {
+  __typename?: 'generative_token_collected_aggregate_fields';
+  avg?: Maybe<Generative_Token_Collected_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Generative_Token_Collected_Max_Fields>;
+  min?: Maybe<Generative_Token_Collected_Min_Fields>;
+  stddev?: Maybe<Generative_Token_Collected_Stddev_Fields>;
+  stddev_pop?: Maybe<Generative_Token_Collected_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Generative_Token_Collected_Stddev_Samp_Fields>;
+  sum?: Maybe<Generative_Token_Collected_Sum_Fields>;
+  var_pop?: Maybe<Generative_Token_Collected_Var_Pop_Fields>;
+  var_samp?: Maybe<Generative_Token_Collected_Var_Samp_Fields>;
+  variance?: Maybe<Generative_Token_Collected_Variance_Fields>;
+};
+
+
+/** aggregate fields of "generative_token_collected" */
+export type Generative_Token_Collected_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by aggregate values of table "generative_token_collected" */
+export type Generative_Token_Collected_Aggregate_Order_By = {
+  avg?: InputMaybe<Generative_Token_Collected_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Generative_Token_Collected_Max_Order_By>;
+  min?: InputMaybe<Generative_Token_Collected_Min_Order_By>;
+  stddev?: InputMaybe<Generative_Token_Collected_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Generative_Token_Collected_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Generative_Token_Collected_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Generative_Token_Collected_Sum_Order_By>;
+  var_pop?: InputMaybe<Generative_Token_Collected_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Generative_Token_Collected_Var_Samp_Order_By>;
+  variance?: InputMaybe<Generative_Token_Collected_Variance_Order_By>;
+};
+
+/** aggregate avg on columns */
+export type Generative_Token_Collected_Avg_Fields = {
+  __typename?: 'generative_token_collected_avg_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by avg() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Avg_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "generative_token_collected". All fields are combined with a logical 'AND'. */
+export type Generative_Token_Collected_Bool_Exp = {
+  _and?: InputMaybe<Array<Generative_Token_Collected_Bool_Exp>>;
+  _not?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+  _or?: InputMaybe<Array<Generative_Token_Collected_Bool_Exp>>;
+  generative_token_id?: InputMaybe<String_Comparison_Exp>;
+  total_collected?: InputMaybe<Bigint_Comparison_Exp>;
+  user?: InputMaybe<User_Bool_Exp>;
+  user_id?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Generative_Token_Collected_Max_Fields = {
+  __typename?: 'generative_token_collected_max_fields';
+  generative_token_id?: Maybe<Scalars['String']['output']>;
+  total_collected?: Maybe<Scalars['bigint']['output']>;
+  user_id?: Maybe<Scalars['String']['output']>;
+};
+
+/** order by max() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Max_Order_By = {
+  generative_token_id?: InputMaybe<Order_By>;
+  total_collected?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Generative_Token_Collected_Min_Fields = {
+  __typename?: 'generative_token_collected_min_fields';
+  generative_token_id?: Maybe<Scalars['String']['output']>;
+  total_collected?: Maybe<Scalars['bigint']['output']>;
+  user_id?: Maybe<Scalars['String']['output']>;
+};
+
+/** order by min() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Min_Order_By = {
+  generative_token_id?: InputMaybe<Order_By>;
+  total_collected?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "generative_token_collected". */
+export type Generative_Token_Collected_Order_By = {
+  generative_token_id?: InputMaybe<Order_By>;
+  total_collected?: InputMaybe<Order_By>;
+  user?: InputMaybe<User_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "generative_token_collected" */
+export enum Generative_Token_Collected_Select_Column {
+  /** column name */
+  GenerativeTokenId = 'generative_token_id',
+  /** column name */
+  TotalCollected = 'total_collected',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** aggregate stddev on columns */
+export type Generative_Token_Collected_Stddev_Fields = {
+  __typename?: 'generative_token_collected_stddev_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Stddev_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Generative_Token_Collected_Stddev_Pop_Fields = {
+  __typename?: 'generative_token_collected_stddev_pop_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_pop() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Stddev_Pop_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Generative_Token_Collected_Stddev_Samp_Fields = {
+  __typename?: 'generative_token_collected_stddev_samp_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_samp() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Stddev_Samp_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "generative_token_collected" */
+export type Generative_Token_Collected_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Generative_Token_Collected_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Generative_Token_Collected_Stream_Cursor_Value_Input = {
+  generative_token_id?: InputMaybe<Scalars['String']['input']>;
+  total_collected?: InputMaybe<Scalars['bigint']['input']>;
+  user_id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Generative_Token_Collected_Sum_Fields = {
+  __typename?: 'generative_token_collected_sum_fields';
+  total_collected?: Maybe<Scalars['bigint']['output']>;
+};
+
+/** order by sum() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Sum_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_pop on columns */
+export type Generative_Token_Collected_Var_Pop_Fields = {
+  __typename?: 'generative_token_collected_var_pop_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_pop() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Var_Pop_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Generative_Token_Collected_Var_Samp_Fields = {
+  __typename?: 'generative_token_collected_var_samp_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_samp() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Var_Samp_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Generative_Token_Collected_Variance_Fields = {
+  __typename?: 'generative_token_collected_variance_fields';
+  total_collected?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by variance() on columns of table "generative_token_collected" */
+export type Generative_Token_Collected_Variance_Order_By = {
+  total_collected?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to compare columns of type "generative_token_flag_enum". All fields are combined with logical 'AND'. */
@@ -4999,6 +5239,7 @@ export type Generative_Token_Max_Fields = {
   author_id?: Maybe<Scalars['String']['output']>;
   balance?: Maybe<Scalars['numeric']['output']>;
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
+  /** A computed field, executes function "token_chain_for_token" */
   chain?: Maybe<Scalars['String']['output']>;
   codex_id?: Maybe<Scalars['String']['output']>;
   created_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -5018,6 +5259,8 @@ export type Generative_Token_Max_Fields = {
   open_editions_ends_at?: Maybe<Scalars['timestamptz']['output']>;
   original_supply?: Maybe<Scalars['numeric']['output']>;
   preview_input_bytes?: Maybe<Scalars['String']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Int']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   supply?: Maybe<Scalars['numeric']['output']>;
@@ -5032,7 +5275,6 @@ export type Generative_Token_Max_Order_By = {
   author_id?: InputMaybe<Order_By>;
   balance?: InputMaybe<Order_By>;
   capture_media_id?: InputMaybe<Order_By>;
-  chain?: InputMaybe<Order_By>;
   codex_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
@@ -5066,6 +5308,7 @@ export type Generative_Token_Min_Fields = {
   author_id?: Maybe<Scalars['String']['output']>;
   balance?: Maybe<Scalars['numeric']['output']>;
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
+  /** A computed field, executes function "token_chain_for_token" */
   chain?: Maybe<Scalars['String']['output']>;
   codex_id?: Maybe<Scalars['String']['output']>;
   created_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -5085,6 +5328,8 @@ export type Generative_Token_Min_Fields = {
   open_editions_ends_at?: Maybe<Scalars['timestamptz']['output']>;
   original_supply?: Maybe<Scalars['numeric']['output']>;
   preview_input_bytes?: Maybe<Scalars['String']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Int']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   supply?: Maybe<Scalars['numeric']['output']>;
@@ -5099,7 +5344,6 @@ export type Generative_Token_Min_Order_By = {
   author_id?: InputMaybe<Order_By>;
   balance?: InputMaybe<Order_By>;
   capture_media_id?: InputMaybe<Order_By>;
-  chain?: InputMaybe<Order_By>;
   codex_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
@@ -5139,6 +5383,7 @@ export type Generative_Token_Order_By = {
   codex_id?: InputMaybe<Order_By>;
   codex_update_requests_aggregate?: InputMaybe<Codex_Update_Request_Aggregate_Order_By>;
   collection_offers_aggregate?: InputMaybe<Collection_Offer_Aggregate_Order_By>;
+  collectors_aggregate?: InputMaybe<Generative_Token_Collected_Aggregate_Order_By>;
   created_at?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
   enabled?: InputMaybe<Order_By>;
@@ -5173,6 +5418,7 @@ export type Generative_Token_Order_By = {
   pricing_dutch_auctions_aggregate?: InputMaybe<Pricing_Dutch_Auction_Aggregate_Order_By>;
   pricing_fixeds_aggregate?: InputMaybe<Pricing_Fixed_Aggregate_Order_By>;
   redeemables_aggregate?: InputMaybe<Redeemable_Aggregate_Order_By>;
+  redeemed_percentage?: InputMaybe<Order_By>;
   reports_aggregate?: InputMaybe<Report_Aggregate_Order_By>;
   reserves_aggregate?: InputMaybe<Reserve_Aggregate_Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -5196,8 +5442,6 @@ export enum Generative_Token_Select_Column {
   Balance = 'balance',
   /** column name */
   CaptureMediaId = 'capture_media_id',
-  /** column name */
-  Chain = 'chain',
   /** column name */
   CodexId = 'codex_id',
   /** column name */
@@ -5294,6 +5538,8 @@ export type Generative_Token_Stddev_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -5317,6 +5563,8 @@ export type Generative_Token_Stddev_Pop_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -5340,6 +5588,8 @@ export type Generative_Token_Stddev_Samp_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -5368,7 +5618,6 @@ export type Generative_Token_Stream_Cursor_Value_Input = {
   author_id?: InputMaybe<Scalars['String']['input']>;
   balance?: InputMaybe<Scalars['numeric']['input']>;
   capture_media_id?: InputMaybe<Scalars['bpchar']['input']>;
-  chain?: InputMaybe<Scalars['String']['input']>;
   codex_id?: InputMaybe<Scalars['String']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   display_uri?: InputMaybe<Scalars['String']['input']>;
@@ -5410,6 +5659,8 @@ export type Generative_Token_Sum_Fields = {
   iterations_count?: Maybe<Scalars['numeric']['output']>;
   locked_seconds?: Maybe<Scalars['Int']['output']>;
   original_supply?: Maybe<Scalars['numeric']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Int']['output']>;
   supply?: Maybe<Scalars['numeric']['output']>;
 };
@@ -5433,6 +5684,8 @@ export type Generative_Token_Var_Pop_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -5456,6 +5709,8 @@ export type Generative_Token_Var_Samp_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -5479,6 +5734,8 @@ export type Generative_Token_Variance_Fields = {
   iterations_count?: Maybe<Scalars['Float']['output']>;
   locked_seconds?: Maybe<Scalars['Float']['output']>;
   original_supply?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "get_redeemable_percentage" */
+  redeemed_percentage?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   supply?: Maybe<Scalars['Float']['output']>;
 };
@@ -7356,7 +7613,10 @@ export type Moderation_Reason_Stream_Cursor_Value_Input = {
 export type Mutation_Root = {
   __typename?: 'mutation_root';
   authenticate?: Maybe<AuthenticationResult>;
+  /** Authenticate using a Web3Auth idToken */
+  authenticate_web3auth?: Maybe<AuthenticationResult>;
   generate_challenge?: Maybe<ChallengeResult>;
+  link_wallet_to_account: Scalars['Boolean']['output'];
   /** Logout the current logged in user. For cookie sessions, no need to pass any input. */
   logout?: Maybe<LogoutResult>;
   offchain?: Maybe<Offchain_Mutation_Frontend>;
@@ -7364,6 +7624,7 @@ export type Mutation_Root = {
   /** given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile */
   set_farcaster_handle?: Maybe<SetFarcasterHandleResult>;
   set_whitelist?: Maybe<SetWhitelistOutput>;
+  unlink_wallet_from_account: Scalars['Boolean']['output'];
 };
 
 
@@ -7374,8 +7635,20 @@ export type Mutation_RootAuthenticateArgs = {
 
 
 /** mutation root */
+export type Mutation_RootAuthenticate_Web3authArgs = {
+  input: AuthenticationWeb3AuthInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootGenerate_ChallengeArgs = {
   input: ChallengeInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootLink_Wallet_To_AccountArgs = {
+  input?: InputMaybe<LinkWalletInput>;
 };
 
 
@@ -7400,6 +7673,12 @@ export type Mutation_RootSet_Farcaster_HandleArgs = {
 /** mutation root */
 export type Mutation_RootSet_WhitelistArgs = {
   whitelist: Scalars['jsonb']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootUnlink_Wallet_From_AccountArgs = {
+  input?: InputMaybe<UnlinkWalletInput>;
 };
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -7447,7 +7726,7 @@ export type Objkt = {
   created_at: Scalars['timestamptz']['output'];
   display_uri?: Maybe<Scalars['bpchar']['output']>;
   duplicate?: Maybe<Scalars['Boolean']['output']>;
-  features?: Maybe<Scalars['json']['output']>;
+  features?: Maybe<Scalars['jsonb']['output']>;
   generation_hash?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   generative_token: Generative_Token;
@@ -7463,15 +7742,23 @@ export type Objkt = {
   media_image?: Maybe<Media_Image>;
   metadata?: Maybe<Scalars['json']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
+  /** An object relationship */
+  minter?: Maybe<User>;
   minter_id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   offers: Array<Offer>;
+  /** An object relationship */
+  owner?: Maybe<User>;
   owner_id?: Maybe<Scalars['String']['output']>;
   rarity?: Maybe<Scalars['float8']['output']>;
   /** An array relationship */
   redemptions: Array<Redemption>;
   royalties: Scalars['Int']['output'];
+  /** An array relationship */
+  secondary_splits: Array<Split>;
   slug?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   splits: Array<Split>;
@@ -7480,10 +7767,6 @@ export type Objkt = {
   /** An array relationship */
   transactions: Array<Transaction>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
-  /** An object relationship */
-  user?: Maybe<User>;
-  /** An object relationship */
-  userByOwnerId?: Maybe<User>;
   version: Scalars['Int']['output'];
 };
 
@@ -7557,6 +7840,16 @@ export type ObjktRedemptionsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Redemption_Order_By>>;
   where?: InputMaybe<Redemption_Bool_Exp>;
+};
+
+
+/** columns and relationships of "objkt" */
+export type ObjktSecondary_SplitsArgs = {
+  distinct_on?: InputMaybe<Array<Split_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Split_Order_By>>;
+  where?: InputMaybe<Split_Bool_Exp>;
 };
 
 
@@ -7729,6 +8022,8 @@ export type Objkt_Aggregate_Order_By = {
 export type Objkt_Avg_Fields = {
   __typename?: 'objkt_avg_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -7756,7 +8051,7 @@ export type Objkt_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   display_uri?: InputMaybe<Bpchar_Comparison_Exp>;
   duplicate?: InputMaybe<Boolean_Comparison_Exp>;
-  features?: InputMaybe<Json_Comparison_Exp>;
+  features?: InputMaybe<Jsonb_Comparison_Exp>;
   generation_hash?: InputMaybe<String_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   gentk_assign?: InputMaybe<Gentk_Assign_Bool_Exp>;
@@ -7768,21 +8063,23 @@ export type Objkt_Bool_Exp = {
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
   metadata?: InputMaybe<Json_Comparison_Exp>;
   metadata_uri?: InputMaybe<String_Comparison_Exp>;
+  minted_price?: InputMaybe<Numeric_Comparison_Exp>;
+  minter?: InputMaybe<User_Bool_Exp>;
   minter_id?: InputMaybe<String_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   offers?: InputMaybe<Offer_Bool_Exp>;
+  owner?: InputMaybe<User_Bool_Exp>;
   owner_id?: InputMaybe<String_Comparison_Exp>;
   rarity?: InputMaybe<Float8_Comparison_Exp>;
   redemptions?: InputMaybe<Redemption_Bool_Exp>;
   royalties?: InputMaybe<Int_Comparison_Exp>;
+  secondary_splits?: InputMaybe<Split_Bool_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
   splits?: InputMaybe<Split_Bool_Exp>;
   tags?: InputMaybe<String_Array_Comparison_Exp>;
   thumbnail_uri?: InputMaybe<Bpchar_Comparison_Exp>;
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  user?: InputMaybe<User_Bool_Exp>;
-  userByOwnerId?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Int_Comparison_Exp>;
 };
 
@@ -7799,6 +8096,8 @@ export type Objkt_Max_Fields = {
   issuer_id?: Maybe<Scalars['String']['output']>;
   iteration?: Maybe<Scalars['numeric']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   minter_id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   owner_id?: Maybe<Scalars['String']['output']>;
@@ -7848,6 +8147,8 @@ export type Objkt_Min_Fields = {
   issuer_id?: Maybe<Scalars['String']['output']>;
   iteration?: Maybe<Scalars['numeric']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   minter_id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   owner_id?: Maybe<Scalars['String']['output']>;
@@ -7906,21 +8207,23 @@ export type Objkt_Order_By = {
   media_image?: InputMaybe<Media_Image_Order_By>;
   metadata?: InputMaybe<Order_By>;
   metadata_uri?: InputMaybe<Order_By>;
+  minted_price?: InputMaybe<Order_By>;
+  minter?: InputMaybe<User_Order_By>;
   minter_id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   offers_aggregate?: InputMaybe<Offer_Aggregate_Order_By>;
+  owner?: InputMaybe<User_Order_By>;
   owner_id?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   redemptions_aggregate?: InputMaybe<Redemption_Aggregate_Order_By>;
   royalties?: InputMaybe<Order_By>;
+  secondary_splits_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
   slug?: InputMaybe<Order_By>;
   splits_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
   tags?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
-  user?: InputMaybe<User_Order_By>;
-  userByOwnerId?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
 };
 
@@ -8044,6 +8347,8 @@ export enum Objkt_Select_Column_Objkt_Aggregate_Bool_Exp_Var_Samp_Arguments_Colu
 export type Objkt_Stddev_Fields = {
   __typename?: 'objkt_stddev_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -8061,6 +8366,8 @@ export type Objkt_Stddev_Order_By = {
 export type Objkt_Stddev_Pop_Fields = {
   __typename?: 'objkt_stddev_pop_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -8078,6 +8385,8 @@ export type Objkt_Stddev_Pop_Order_By = {
 export type Objkt_Stddev_Samp_Fields = {
   __typename?: 'objkt_stddev_samp_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -8107,7 +8416,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   display_uri?: InputMaybe<Scalars['bpchar']['input']>;
   duplicate?: InputMaybe<Scalars['Boolean']['input']>;
-  features?: InputMaybe<Scalars['json']['input']>;
+  features?: InputMaybe<Scalars['jsonb']['input']>;
   generation_hash?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
@@ -8131,6 +8440,8 @@ export type Objkt_Stream_Cursor_Value_Input = {
 export type Objkt_Sum_Fields = {
   __typename?: 'objkt_sum_fields';
   iteration?: Maybe<Scalars['numeric']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['float8']['output']>;
   royalties?: Maybe<Scalars['Int']['output']>;
   version?: Maybe<Scalars['Int']['output']>;
@@ -8148,6 +8459,8 @@ export type Objkt_Sum_Order_By = {
 export type Objkt_Var_Pop_Fields = {
   __typename?: 'objkt_var_pop_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -8165,6 +8478,8 @@ export type Objkt_Var_Pop_Order_By = {
 export type Objkt_Var_Samp_Fields = {
   __typename?: 'objkt_var_samp_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -8182,6 +8497,8 @@ export type Objkt_Var_Samp_Order_By = {
 export type Objkt_Variance_Fields = {
   __typename?: 'objkt_variance_fields';
   iteration?: Maybe<Scalars['Float']['output']>;
+  /** A computed field, executes function "objkt_minted_price" */
+  minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['Float']['output']>;
   royalties?: Maybe<Scalars['Float']['output']>;
   version?: Maybe<Scalars['Float']['output']>;
@@ -9143,6 +9460,10 @@ export type Onchain_Query = {
   generative_token_aggregate: Generative_Token_Aggregate;
   /** fetch data from the table: "generative_token" using primary key columns */
   generative_token_by_pk?: Maybe<Generative_Token>;
+  /** fetch data from the table: "generative_token_collected" */
+  generative_token_collected: Array<Generative_Token_Collected>;
+  /** fetch aggregated fields from the table: "generative_token_collected" */
+  generative_token_collected_aggregate: Generative_Token_Collected_Aggregate;
   /** fetch data from the table: "gentk_assign" */
   gentk_assign: Array<Gentk_Assign>;
   /** fetch data from the table: "gentk_assign" using primary key columns */
@@ -9546,6 +9867,24 @@ export type Onchain_QueryGenerative_Token_AggregateArgs = {
 
 export type Onchain_QueryGenerative_Token_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type Onchain_QueryGenerative_Token_CollectedArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+};
+
+
+export type Onchain_QueryGenerative_Token_Collected_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
 };
 
 
@@ -10031,6 +10370,12 @@ export type Onchain_Subscription = {
   generative_token_aggregate: Generative_Token_Aggregate;
   /** fetch data from the table: "generative_token" using primary key columns */
   generative_token_by_pk?: Maybe<Generative_Token>;
+  /** fetch data from the table: "generative_token_collected" */
+  generative_token_collected: Array<Generative_Token_Collected>;
+  /** fetch aggregated fields from the table: "generative_token_collected" */
+  generative_token_collected_aggregate: Generative_Token_Collected_Aggregate;
+  /** fetch data from the table in a streaming manner: "generative_token_collected" */
+  generative_token_collected_stream: Array<Generative_Token_Collected>;
   /** fetch data from the table in a streaming manner: "generative_token" */
   generative_token_stream: Array<Generative_Token>;
   /** fetch data from the table: "gentk_assign" */
@@ -10619,6 +10964,31 @@ export type Onchain_SubscriptionGenerative_Token_AggregateArgs = {
 
 export type Onchain_SubscriptionGenerative_Token_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type Onchain_SubscriptionGenerative_Token_CollectedArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionGenerative_Token_Collected_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Collected_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionGenerative_Token_Collected_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Generative_Token_Collected_Stream_Cursor_Input>>;
+  where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
 };
 
 
@@ -13410,6 +13780,13 @@ export type AuthenticateMutationVariables = Exact<{
 
 export type AuthenticateMutation = { __typename?: 'mutation_root', authenticate?: { __typename?: 'AuthenticationResult', accessToken: string, refreshToken: string } | null };
 
+export type AuthenticateWeb3AuthMutationVariables = Exact<{
+  input: AuthenticationWeb3AuthInput;
+}>;
+
+
+export type AuthenticateWeb3AuthMutation = { __typename?: 'mutation_root', authenticate_web3auth?: { __typename?: 'AuthenticationResult', accessToken: string, refreshToken: string } | null };
+
 export type RefreshMutationVariables = Exact<{
   input: RefreshInput;
 }>;
@@ -13424,7 +13801,7 @@ export type LogoutMutationVariables = Exact<{
 
 export type LogoutMutation = { __typename?: 'mutation_root', logout?: { __typename?: 'LogoutResult', success: boolean } | null };
 
-export type Account_BaseDetailsFragment = { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> };
+export type Account_BaseDetailsFragment = { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> };
 
 export type Account_WalletsFragment = { __typename?: 'Account', wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } };
 
@@ -13433,19 +13810,19 @@ export type GetAccountsQueryVariables = Exact<{
 }>;
 
 
-export type GetAccountsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }> } | null };
+export type GetAccountsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }> } | null };
 
 export type GetAccountWalletsQueryVariables = Exact<{
   where?: InputMaybe<Account_Bool_Exp>;
 }>;
 
 
-export type GetAccountWalletsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } }> } | null };
+export type GetAccountWalletsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Account: Array<{ __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } }> } | null };
 
 export type GetMyAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyAccountQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', UserAccount: Array<{ __typename?: 'UserAccount', account?: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } } | null }> } | null };
+export type GetMyAccountQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', UserAccount: Array<{ __typename?: 'UserAccount', account?: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }>, mainWallet: { __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> } } | null }> } | null };
 
 export type SetFarcasterHandleMutationVariables = Exact<{
   input: SetFarcasterHandleInput;
@@ -13454,28 +13831,28 @@ export type SetFarcasterHandleMutationVariables = Exact<{
 
 export type SetFarcasterHandleMutation = { __typename?: 'mutation_root', set_farcaster_handle?: { __typename?: 'SetFarcasterHandleResult', handle: string } | null };
 
-export type Project_BaseDetailsFragment = { __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> };
+export type Project_BaseDetailsFragment = { __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> };
 
 export type Project_UserSecretsFragment = { __typename?: 'Project', state: string };
 
 export type GetAllProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllProjectsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
+export type GetAllProjectsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
 
 export type GetAllProjectsAfterDateQueryVariables = Exact<{
   afterDate: Scalars['timestamptz']['input'];
 }>;
 
 
-export type GetAllProjectsAfterDateQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
+export type GetAllProjectsAfterDateQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
 
 export type GetUserSubmissionsQueryVariables = Exact<{
   authorId: Scalars['uuid']['input'];
 }>;
 
 
-export type GetUserSubmissionsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, state: string, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null, description?: string | null }>, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
+export type GetUserSubmissionsQuery = { __typename?: 'query_root', offchain?: { __typename?: 'offchain_query', Project: Array<{ __typename?: 'Project', id: string, title: string, description?: string | null, tokenId?: string | null, releaseAt?: any | null, blockchain?: any | null, storage?: any | null, pricing?: any | null, state: string, curator?: { __typename?: 'Account', id: string, status: any, username: string, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } | null, author: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> }, collaborators: Array<{ __typename?: 'ProjectCollaborator', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null, description?: string | null } | null, wallets: Array<{ __typename?: 'Wallet', address: string, network: any, accountId: string, walletUser: Array<{ __typename?: 'user', flag: any }> }> } }>, projectMedias: Array<{ __typename?: 'ProjectMedia', index: any, media: { __typename?: 'Media', id: string, url: string } }> }> } | null };
 
 export type CreateProjectMutationVariables = Exact<{
   object: Project_Insert_Input;
@@ -13540,7 +13917,7 @@ export type Qu_GenerativeTokenByIdQueryVariables = Exact<{
 }>;
 
 
-export type Qu_GenerativeTokenByIdQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', generative_token_by_pk?: { __typename?: 'generative_token', id: string, actions: Array<{ __typename?: 'action', id: string, chain?: string | null, created_at: any, metadata?: any | null, numeric_value?: any | null, op_hash: string, type: any, generative_token?: { __typename?: 'generative_token', id: string } | null, objkt?: { __typename?: 'objkt', id: string, iteration?: any | null } | null, issuer?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null }> } } | null } | null, target?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile: Array<{ __typename?: 'Profile', picture?: string | null }> } } | null } | null }> } | null } | null };
+export type Qu_GenerativeTokenByIdQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', generative_token_by_pk?: { __typename?: 'generative_token', id: string, actions: Array<{ __typename?: 'action', id: string, chain?: string | null, created_at: any, metadata?: any | null, numeric_value?: any | null, op_hash: string, type: any, generative_token?: { __typename?: 'generative_token', id: string } | null, objkt?: { __typename?: 'objkt', id: string, iteration?: any | null } | null, issuer?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null } | null } } | null } | null, target?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null } | null } } | null } | null }> } | null } | null };
 
 export type Qu_GetObjectsOfTokenAndWalletsQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['String']['input']>;
@@ -13595,6 +13972,7 @@ export const GenerativeToken_PricingFragmentDoc = {"kind":"Document","definition
 export const CreateWhitelistDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateWhitelist"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"whitelist"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"jsonb"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"set_whitelist"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"whitelist"},"value":{"kind":"Variable","name":{"kind":"Name","value":"whitelist"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"merkleRoot"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<CreateWhitelistMutation, CreateWhitelistMutationVariables>;
 export const GenerateChallengeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GenerateChallenge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ChallengeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generate_challenge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]} as unknown as DocumentNode<GenerateChallengeMutation, GenerateChallengeMutationVariables>;
 export const AuthenticateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Authenticate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuthenticationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<AuthenticateMutation, AuthenticateMutationVariables>;
+export const AuthenticateWeb3AuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AuthenticateWeb3Auth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuthenticationWeb3AuthInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticate_web3auth"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<AuthenticateWeb3AuthMutation, AuthenticateWeb3AuthMutationVariables>;
 export const RefreshDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Refresh"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RefreshInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"refresh"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<RefreshMutation, RefreshMutationVariables>;
 export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Logout"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LogoutInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
 export const GetAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountsQuery, GetAccountsQueryVariables>;

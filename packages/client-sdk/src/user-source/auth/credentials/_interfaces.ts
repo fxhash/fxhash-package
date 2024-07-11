@@ -3,11 +3,6 @@ import { Storage } from "@/index.js"
 import { PromiseResult } from "@fxhash/shared"
 import { StoredAccount } from "../_interfaces.js"
 
-export enum CredentialsDriver {
-  JWT = "JWT",
-  COOKIE = "COOKIE",
-}
-
 export class CredentialsRefreshError extends Error {
   name = "CredentialsRefreshError"
 }

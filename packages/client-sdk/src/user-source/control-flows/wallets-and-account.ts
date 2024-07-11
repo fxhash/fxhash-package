@@ -22,7 +22,7 @@ type Options = {
  * which case it automatically starts a signing process with the provided
  * authenticator.
  */
-export function walletsWithAccount({ wallets, account }: Options): IUserSource {
+export function walletsAndAccount({ wallets, account }: Options): IUserSource {
   const init = intialization()
   const clean = cleanup()
   const emitter = new UserSourceEventEmitter()
