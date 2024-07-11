@@ -9,12 +9,22 @@ import {
 import { type Signer } from "@taquito/taquito"
 import { type BeaconWallet } from "@taquito/beacon-wallet"
 import { PromiseResult, type BlockchainNetwork } from "@fxhash/shared"
-import { type IUserSource } from "../_interfaces.js"
+import { WalletManagersMap, type IUserSource } from "../_interfaces.js"
 import { EventEmitter } from "@fxhash/utils"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"
+import { WalletError } from "../_errors.js"
 
+/**
+ * A Wallets Source exposes some utilities to handle multi-chain wallets through
+ * a common interface.
+ */
 export interface IWalletsSource extends IUserSource {
+  /**
+   * Wallet sources MUST return a Managers Map
+   */
+  getWalletManagers: () => WalletManagersMap
+
   /**
    * Wallet sources cannot handle accounts directly and must return null when
    * trying to access the account.
@@ -91,7 +101,7 @@ export interface IEvmWallet extends ICommonWallet {
    * @returns A promise which resolves with an object of the wallet clients
    * ready for interactions, or rejects if no such clients are avaiable.
    */
-  getClients: () => PromiseResult<IEvmWalletConnectorClients, any>
+  getClients: () => PromiseResult<IEvmWalletConnectorClients, WalletError>
 
   getInfo: GetWalletInfo<Address>
 }

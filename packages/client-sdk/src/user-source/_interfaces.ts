@@ -1,8 +1,11 @@
-import { GetSingleUserAccountResult } from "@/index.js"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { BlockchainEnv, BlockchainNetwork } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
 import { EventEmitter } from "@fxhash/utils"
+import {
+  GetSingleUserAccountResult,
+  MapNetworkToWalletManager,
+} from "./_index.js"
 
 export type WalletChangedPayload =
   | {
@@ -28,11 +31,17 @@ export type UserSourceEventsTypemap = {
 
 export class UserSourceEventEmitter extends EventEmitter<UserSourceEventsTypemap> {}
 
+export type WalletManagersMap = {
+  [Net in BlockchainNetwork]?: MapNetworkToWalletManager<Net> | null
+}
+
 export interface IUserSource {
   init: () => Promise<void>
+  initialized: boolean
   emitter: UserSourceEventEmitter
-  getAccount: () => any
-  getWalletManagers: () => any
+  getAccount: () => GetSingleUserAccountResult | null
+  getWalletManagers: () => WalletManagersMap | null
+  release?: () => void
 }
 
 // // basic wallet + account authentication

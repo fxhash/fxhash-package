@@ -31,6 +31,27 @@ export enum BlockchainType {
   BASE = "BASE",
 }
 
+export type ChainNetworkToChainTypemap = {
+  [T in BlockchainNetwork]: {
+    [BlockchainNetwork.ETHEREUM]: BlockchainType.ETHEREUM
+    [BlockchainNetwork.TEZOS]: BlockchainType.TEZOS
+  }[T]
+}
+
+const chainNetworkToChainMap: ChainNetworkToChainTypemap = {
+  [BlockchainNetwork.ETHEREUM]: BlockchainType.ETHEREUM,
+  [BlockchainNetwork.TEZOS]: BlockchainType.TEZOS,
+}
+
+/**
+ * Given a BlockchainNetwork, returns an associated BlockchainType of preference
+ */
+export function networkToChain<N extends BlockchainNetwork>(
+  network: N
+): ChainNetworkToChainTypemap[N] {
+  return chainNetworkToChainMap[network]
+}
+
 export type ChainToChainEnvTypemap = {
   [T in BlockchainType]: {
     [BlockchainType.BASE]: BlockchainEnv.EVM

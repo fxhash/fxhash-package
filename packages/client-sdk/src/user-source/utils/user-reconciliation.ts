@@ -1,13 +1,13 @@
-import { BlockchainEnvs, Result, failure, success } from "@fxhash/shared"
+import { Result, failure, success } from "@fxhash/shared"
 import {
   AccountAuthenticatedButNoWalletConnectedError,
   UserReconciliationError,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletDoesntBelongAccountError,
-} from "./errors.js"
-import { TActiveManagersMap } from "@/wallets/WalletOrchestrator.js"
-import { GetSingleUserAccountResult } from "@/auth/index.js"
-import { getAnyActiveManager } from "@/index.js"
+} from "../_errors.js"
+import { WalletManagersMap } from "../_interfaces.js"
+import { BlockchainNetworks, anyActiveManager } from "../_index.js"
+import { GetSingleUserAccountResult } from "../auth/_index.js"
 
 /**
  * Given an Account and some Wallet Managers, returns a failure with an error
@@ -18,18 +18,18 @@ import { getAnyActiveManager } from "@/index.js"
  */
 export function reconciliationState(
   account: GetSingleUserAccountResult | null,
-  managers: TActiveManagersMap
+  managers: WalletManagersMap
 ): Result<true, UserReconciliationError> {
   // any of the active wallet managers
-  const anyActiveManager = getAnyActiveManager(managers)
-  const noWalletConnected = !anyActiveManager
+  const _anyActiveManager = anyActiveManager(managers)
+  const noWalletConnected = !_anyActiveManager
 
   if (!account) {
     if (noWalletConnected) {
       return success(true)
     }
     return failure(
-      new WalletConnectedButNoAccountAuthenticatedError(anyActiveManager)
+      new WalletConnectedButNoAccountAuthenticatedError(_anyActiveManager)
     )
   }
 
@@ -39,8 +39,8 @@ export function reconciliationState(
   }
 
   // check whether the wallets currently connected are owned by the account
-  for (const env of BlockchainEnvs) {
-    const man = managers[env]?.manager
+  for (const net of BlockchainNetworks) {
+    const man = managers[net] || null
     if (!man) continue
     if (!account.wallets.find(w => w.address === man.address)) {
       return failure(new WalletDoesntBelongAccountError(man))

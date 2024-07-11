@@ -1,4 +1,4 @@
-import { invariant } from "."
+import { invariant } from "../"
 
 export enum Init {
   NOT_STARTED = "NOT_STARTED",

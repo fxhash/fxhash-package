@@ -4,12 +4,12 @@ import {
   ITezosWallet,
   IWalletsSource,
   MapNetworkToWalletInterface,
-  MapNetworkToWalletManager,
 } from "./_interfaces.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config as fxConfig } from "@fxhash/config"
 import { TezosWalletManager } from "@fxhash/tez"
-import { UserSourceEventEmitter } from "../_interfaces.js"
+import { WalletManagersMap, UserSourceEventEmitter } from "../_interfaces.js"
+import { intialization } from "@fxhash/utils"
 
 /**
  * Given an EVM wallet interface, returns an Ethereum Wallet Manager instance
@@ -31,7 +31,7 @@ export async function createEvmWalletManager(evmWallet: IEvmWallet) {
       signer: clientToSigner(clients.wallet),
     })
   } else {
-    throw new Error(_clients.error)
+    throw _clients.error
   }
 }
 
@@ -75,10 +75,6 @@ type WalletsMap = {
   [Net in BlockchainNetwork]?: MapNetworkToWalletInterface<Net>
 }
 
-type ManagersMap = {
-  [Net in BlockchainNetwork]?: MapNetworkToWalletManager<Net> | null
-}
-
 /**
  * Given a map of network->wallet, abstracts event-handling & wallet manager
  * management based on events received from the wallet implementations.
@@ -86,9 +82,10 @@ type ManagersMap = {
  * @returns A wallet source-compatible interface
  */
 export function multichainWallets(wallets: WalletsMap): IWalletsSource {
-  const networks = Object.keys(wallets) as BlockchainNetwork[]
+  const init = intialization()
+  const { networks, supports } = walletsNetworks(wallets)
   const emitter = new UserSourceEventEmitter()
-  const managers: ManagersMap = Object.fromEntries(
+  const managers: WalletManagersMap = Object.fromEntries(
     networks.map(net => [net, null])
   )
 
@@ -117,9 +114,18 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
   return {
     emitter,
     init: async () => {
-      Object.values(wallets).map(wal => wal.init?.())
+      init.start()
+      await Promise.all(
+        Object.values(wallets)
+          .map(w => w.init && w.init())
+          .filter(p => !!p)
+      )
+      init.finish()
     },
-    supports: (network: BlockchainNetwork) => networks.includes(network),
+    get initialized() {
+      return init.finished
+    },
+    supports,
     getWalletManagers: () => managers,
     getWallet,
     disconnect,
@@ -128,4 +134,25 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     },
     getAccount: () => null,
   }
+}
+
+export function walletsNetworks(wallets: WalletsMap) {
+  const networks = Object.keys(wallets) as BlockchainNetwork[]
+  return {
+    networks,
+    supports: (network: BlockchainNetwork) => networks.includes(network),
+  }
+}
+
+/**
+ * @param managers A map of Wallet Managers
+ * @returns Any active manager available in the given map (a manager is
+ * considered active if not null)
+ */
+export function anyActiveManager(
+  managers: WalletManagersMap
+): EthereumWalletManager | TezosWalletManager | null {
+  return BlockchainNetworks.map(net => managers[net])
+    .map(man => man || null)
+    .reduce((prev, curr) => prev || curr, null)
 }

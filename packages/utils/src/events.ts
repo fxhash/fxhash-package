@@ -28,6 +28,7 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
   private _listeners: {
     [K in EventKey<T>]?: EventReceiver<T[K]>[]
   } = {}
+  public muted: boolean = false
 
   /**
    * Attach a listener on event of given name.
@@ -75,6 +76,7 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
     name: K,
     ...[payload]: OptionalIfUndefined<T[K]>
   ) {
+    if (this.muted) return
     const listeners = this._listeners[name]
     if (!listeners) return
     await Promise.allSettled(
@@ -93,5 +95,15 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
    */
   public pipe<K extends EventKey<T>>(name: K, emitter: EventEmitter<T>) {
     return this.on(name, payload => emitter.emit(name, payload))
+  }
+
+  /**
+   * Mute/Unmute the Event Emitter. If muted, no event will be emitted when the
+   * `emit()` method is called.
+   * @param muted Whether the emitter should be muted or not
+   */
+  public mute(muted: boolean = true) {
+    this.muted = muted
+    return this
   }
 }
