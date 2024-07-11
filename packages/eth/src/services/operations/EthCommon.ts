@@ -52,6 +52,7 @@ export interface MintInfo {
   minter: `0x${string}`
   reserveInfo: ReserveInfo
   params: `0x${string}`
+  maxAmountPerFid?: number
 }
 
 export interface InitInfo {
@@ -120,6 +121,8 @@ export interface FixedPriceParams extends BaseReserves {
 export interface FarcasterFrameFixedPriceMintParams {
   price: bigint
   maxAmountPerFid?: bigint
+  whitelist?: MerkleTreeWhitelist | null
+  mintPassSigner?: string
 }
 
 export interface DutchAuctionParams extends BaseReserves {

@@ -106,9 +106,11 @@ export type ReserveListEntry = {
  * root.
  */
 export function getFixedPriceMinterEncodedParams(
+  version: GenerativeTokenVersion,
   price: bigint,
   whitelist?: MerkleTreeWhitelist | null,
-  signer: `0x${string}` = ZERO_ADDRESS
+  signer: `0x${string}` = ZERO_ADDRESS,
+  maxAmount: number = 0
 ) {
   let merkleRoot: `0x${string}` = EMPTY_BYTES_32
 
@@ -124,14 +126,29 @@ export function getFixedPriceMinterEncodedParams(
     }
   }
 
-  return encodeAbiParameters(
-    [
-      { name: "price", type: "uint256" },
-      { name: "merkleRoot", type: "bytes32" },
-      { name: "signer", type: "address" },
-    ],
-    [BigInt(price), merkleRoot, signer]
-  )
+  if (
+    version === GenerativeTokenVersion.ETH_V2 ||
+    version === GenerativeTokenVersion.BASE_V2
+  ) {
+    return encodeAbiParameters(
+      [
+        { name: "price", type: "uint256" },
+        { name: "merkleRoot", type: "bytes32" },
+        { name: "signer", type: "address" },
+        { name: "maxAmountPerFid", type: "uint256" },
+      ],
+      [BigInt(price), merkleRoot, signer, BigInt(maxAmount)]
+    )
+  } else {
+    return encodeAbiParameters(
+      [
+        { name: "price", type: "uint256" },
+        { name: "merkleRoot", type: "bytes32" },
+        { name: "signer", type: "address" },
+      ],
+      [BigInt(price), merkleRoot, signer]
+    )
+  }
 }
 
 /**
@@ -283,19 +300,16 @@ export async function processAndFormatMintInfos(
         argsMintInfo.reserveInfo
       )
       if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-        if (argsMintInfo.isFrame) {
+        if (argsMintInfo.isFrame && !isV2) {
           if (mintInfos.length > 1) {
             throw Error("Only frame minter can be configured when using frames")
           }
           const params =
             argsMintInfo.params as FarcasterFrameFixedPriceMintParams
 
-          const minter = isV2
-            ? (currentConfig.contracts as IEthContracts).fixed_price_minter_v2
-            : (currentConfig.contracts as IEthContracts)
-                .farcaster_frame_fixed_price_minter_v1
           const mintInfo: MintInfo = {
-            minter: minter,
+            minter: (currentConfig.contracts as IEthContracts)
+              .farcaster_frame_fixed_price_minter_v1,
             reserveInfo: reserveInfo,
             params: encodeAbiParameters(
               [
@@ -318,19 +332,40 @@ export async function processAndFormatMintInfos(
           const minter = isV2
             ? (currentConfig.contracts as IEthContracts).fixed_price_minter_v2
             : (currentConfig.contracts as IEthContracts).fixed_price_minter_v1
-          const params = argsMintInfo.params as FixedPriceParams
-          const mintInfo: MintInfo = {
-            minter: minter,
-            reserveInfo: reserveInfo,
-            params: getFixedPriceMinterEncodedParams(
-              argsMintInfo.params.price,
-              params.whitelist,
-              params.mintPassSigner
-                ? (params.mintPassSigner as `0x${string}`)
-                : undefined
-            ),
+          if (argsMintInfo.isFrame) {
+            const params =
+              argsMintInfo.params as FarcasterFrameFixedPriceMintParams
+            const mintInfo: MintInfo = {
+              minter: minter,
+              reserveInfo: reserveInfo,
+              params: getFixedPriceMinterEncodedParams(
+                version,
+                argsMintInfo.params.price,
+                params.whitelist,
+                params.mintPassSigner
+                  ? (params.mintPassSigner as `0x${string}`)
+                  : undefined
+              ),
+              maxAmountPerFid: 0,
+            }
+            return mintInfo
+          } else {
+            const params = argsMintInfo.params as FixedPriceParams
+            const mintInfo: MintInfo = {
+              minter: minter,
+              reserveInfo: reserveInfo,
+              params: getFixedPriceMinterEncodedParams(
+                version,
+                argsMintInfo.params.price,
+                params.whitelist,
+                params.mintPassSigner
+                  ? (params.mintPassSigner as `0x${string}`)
+                  : undefined
+              ),
+              maxAmountPerFid: 0,
+            }
+            return mintInfo
           }
-          return mintInfo
         }
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
         const minter = isV2
