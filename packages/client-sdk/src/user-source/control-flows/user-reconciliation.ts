@@ -46,12 +46,14 @@ export function userReconciliation({ wallets, account }: Options) {
       // initialized before it's initialized. This is to enforce a certain flow
       // for api consumers
 
+      console.log({ wallets, account })
+
       invariant(
-        account.initialized,
+        account.initialized(),
         `Account Source must be initialized when userReconciliation is initialized, to ensure the initial state is ready when the first reconciliation happens.`
       )
       invariant(
-        wallets.initialized,
+        wallets.initialized(),
         `Wallets Source must be initialized when userReconciliation is initialized, to ensure the initial state is ready when the first reconciliation happens.`
       )
 

@@ -12,11 +12,16 @@ export interface IAccountSource extends IUserSource {
   getWalletManagers: () => null
 }
 
-export interface IWalletsAccountSource extends IAccountSource {
-  authenticate: (
-    walletManager: TezosWalletManager | EthereumWalletManager
-  ) => PromiseResult<GetSingleUserAccountResult, SignMessageError>
+export interface IAuthAccountSource<AuthFnSignature> extends IAccountSource {
+  authenticate: AuthFnSignature
 }
+
+export interface IWalletsAccountSource
+  extends IAuthAccountSource<
+    (
+      walletManager: TezosWalletManager | EthereumWalletManager
+    ) => PromiseResult<GetSingleUserAccountResult, SignMessageError>
+  > {}
 
 export interface IWeb3AuthAuthPayload {
   /**
@@ -33,14 +38,16 @@ export interface IWeb3AuthAuthPayload {
   compressedPublicKey: Hex
 }
 
-export interface IWeb3AuthAccountSource extends IAccountSource {
-  /**
-   * Authenticate the user in fxhash backend using Web3Auth credentials.
-   */
-  authenticate: (
-    payload: IWeb3AuthAuthPayload
-  ) => PromiseResult<GetSingleUserAccountResult, Error> // todo: type error
-}
+/**
+ * Authenticate the user in fxhash backend using Web3Auth credentials.
+ * todo: type error
+ */
+export interface IWeb3AuthAccountSource
+  extends IAuthAccountSource<
+    (
+      payload: IWeb3AuthAuthPayload
+    ) => PromiseResult<GetSingleUserAccountResult, Error>
+  > {}
 
 export type StoredAccount<
   Credentials extends Record<string, string> = Record<string, string>,
@@ -67,5 +74,5 @@ export interface IAccountSourceCommonOptions {
   /**
    * An interface handling authentication credentials (JWT tokens)
    */
-  credentialsDriver: ICredentialsDriver
+  credentialsDriver: ICredentialsDriver<any>
 }

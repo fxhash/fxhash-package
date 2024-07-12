@@ -4,17 +4,14 @@ import {
   Config,
   GetAccountReturnType,
   WatchAccountReturnType,
-  createConfig,
   getAccount,
   getPublicClient,
   getWalletClient,
-  http,
   watchAccount,
   connect,
   disconnect,
   injected,
 } from "@wagmi/core"
-import { mainnet, base, baseSepolia, sepolia } from "@wagmi/core/chains"
 import { IWalletInfo, WalletEventEmitter } from "../_interfaces.js"
 import { failure, success } from "@fxhash/shared"
 import {
@@ -22,28 +19,10 @@ import {
   EvmWagmiClientGenerationError,
 } from "../../_errors.js"
 import { intialization, sleep } from "@fxhash/utils"
-import { config as fxConfig } from "@fxhash/config"
 import { Address } from "viem"
 
-const allowedChains =
-  fxConfig.config.envName === "production"
-    ? ([mainnet, base] as const)
-    : ([sepolia, baseSepolia] as const)
-
-/**
- * A default generic config for WAGMI. Consumers should pass their own config
- * when instanciating WindowWalletsConnector if they already use one throughout
- * their app.
- */
-const defaultWagmiConfig = createConfig({
-  chains: allowedChains,
-  transports: Object.fromEntries(
-    allowedChains.map(chain => [chain.id, http()])
-  ) as any,
-})
-
 type Options = {
-  wagmiConfig?: Config
+  wagmiConfig: Config
 }
 
 /**
@@ -74,7 +53,6 @@ export function eip1193WalletConnector({
   wagmiConfig,
 }: Options): EvmWindowWallet {
   const _init = intialization()
-  const _wagmiConfig = wagmiConfig ?? defaultWagmiConfig
   const emitter = new WalletEventEmitter()
   let _unwatchAccount: WatchAccountReturnType | null = null
   let _info: IWalletInfo<Address> | null = null
@@ -109,10 +87,10 @@ export function eip1193WalletConnector({
 
     init: async () => {
       _init.start()
-      _unwatchAccount = watchAccount(_wagmiConfig, {
+      _unwatchAccount = watchAccount(wagmiConfig, {
         onChange: _handleAccountChange,
       })
-      await _handleAccountChange(getAccount(_wagmiConfig))
+      await _handleAccountChange(getAccount(wagmiConfig))
       _init.finish()
     },
 
@@ -139,17 +117,17 @@ export function eip1193WalletConnector({
        */
       {
         for (let i = 0; i < 20; i++) {
-          if (!_wagmiConfig.state.current!) break // shoudn't happen
-          const connection = _wagmiConfig.state.connections.get(
-            _wagmiConfig.state.current!
+          if (!wagmiConfig.state.current!) break // shoudn't happen
+          const connection = wagmiConfig.state.connections.get(
+            wagmiConfig.state.current!
           )
           if (connection && (connection.connector as any).getChainId) break
           await sleep(100)
         }
       }
 
-      const walletClient = await getWalletClient(_wagmiConfig)
-      const publicClient = getPublicClient(_wagmiConfig)
+      const walletClient = await getWalletClient(wagmiConfig)
+      const publicClient = getPublicClient(wagmiConfig)
 
       if (!walletClient || !publicClient) {
         throw failure(new EvmWagmiClientGenerationError())
@@ -161,9 +139,9 @@ export function eip1193WalletConnector({
       })
     },
 
-    disconnect: () => disconnect(_wagmiConfig),
+    disconnect: () => disconnect(wagmiConfig),
 
     // note: doesn't work very well, TBD
-    requestConnection: () => connect(_wagmiConfig, { connector: injected() }),
+    requestConnection: () => connect(wagmiConfig, { connector: injected() }),
   }
 }

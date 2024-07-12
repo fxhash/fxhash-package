@@ -3,13 +3,9 @@
  * @license MIT
  */
 
-import { FxhashClientBasic } from "@fxhash/client-basic"
-import { NonNullableFields, cleanup, intialization } from "@fxhash/utils"
+import { cleanup, intialization } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
-  type IGraphqlWrapper,
-  type GetSingleUserAccountResult,
-  IUserSource,
   windowWallets,
   authWallets,
   GraphqlWrapper,
@@ -18,56 +14,31 @@ import {
   walletsAndAccount,
   UserSourceEventEmitter,
 } from "@fxhash/client-sdk"
-import { BlockchainEnv, BlockchainNetwork, invariant } from "@fxhash/shared"
-import { config as fxConfig } from "@fxhash/config"
-import { base, baseSepolia, mainnet, sepolia } from "viem/chains"
-import { getDefaultConfig, ConnectKitProvider, useModal } from "connectkit"
-import { WagmiProvider, createConfig, http, Config } from "wagmi"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { BlockchainNetwork, invariant } from "@fxhash/shared"
+import { IAppMetadata, config as fxConfig } from "@fxhash/config"
+import { getDefaultConfig, useModal } from "connectkit"
+import { createConfig, Config } from "wagmi"
+import { QueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
-import { ClientPlugnPlayEventEmitter } from "./events.js"
-import { DefaultBeaconWalletConfig } from "@fxhash/tez"
-
-const chains =
-  fxConfig.config.envName === "production"
-    ? ([mainnet, base] as const)
-    : ([sepolia, baseSepolia] as const)
-
-const projectId = fxConfig.config.walletConnectId
-
-type EvmConfigMetadata = {
-  name: string
-  description: string
-  url: string
-  icon?: string
-}
+import { IClientPlugnPlay } from "./_interfaces.js"
+import { DependencyProviders } from "./providers.js"
+import { supportedEvmChains } from "@fxhash/eth"
+import { viemSimpleTransports } from "@fxhash/eth"
 
 type EvmConfigOptions = {
-  metadata: EvmConfigMetadata
+  metadata: IAppMetadata
   projectId: string
-}
-
-const defaultEvmConfigMetadata: NonNullableFields<EvmConfigMetadata> = {
-  name: "FXHASH",
-  description:
-    "fxhash is an open platform to mint and collect Generative Tokens.",
-  url: "https://fxhash.xyz",
-  icon: "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG",
 }
 
 export const fxCreateWagmiConfig = ({
   metadata,
   projectId,
 }: EvmConfigOptions) => {
-  metadata = {
-    ...defaultEvmConfigMetadata,
-    ...metadata,
-  }
   return createConfig(
     getDefaultConfig({
-      chains: chains,
-      transports: Object.fromEntries(chains.map(chain => [chain.id, http()])),
+      chains: supportedEvmChains,
+      transports: viemSimpleTransports,
       walletConnectProjectId: projectId,
       ssr: true,
       // metadata config
@@ -79,70 +50,17 @@ export const fxCreateWagmiConfig = ({
   ) as Config
 }
 
-/**
- * The fxhash ClientPlugNPlay provides a fully-featured and opiniated wallets &
- * accounts implementation, with a simple and high-level API for building
- * application with fxhash in the simplest manner, without thinking too much
- * about the underlying stack for interacting with EVM & TEZOS wallets.
- */
-export class ClientPlugnPlay extends ClientPlugnPlayEventEmitter {
-  private _init = intialization()
-  private _clientBasic: FxhashClientBasic
-  private _windowConnector: WindowWalletsConnector
-  private _socialConnector: SocialWalletsConnector
-  private _openConnectKitModal: (() => void) | null = null
-  private _wagmiConfig: Config
-  private _manageConnectKit: boolean
-  private _cleanup: (() => void)[] = []
+export type ClientPlugnPlayOptions = {
+  /**
+   * Some metdata about your application, which will be used by wallets to
+   * display details about your app when you request some wallet interaction
+   * from the url.
+   *
+   * **Important**: the URL must match the URL under which the application is
+   * served !
+   */
+  metadata: IAppMetadata
 
-  constructor(options: ClientPlugnPlayOptions) {
-    super()
-
-    invariant(
-      isBrowser(),
-      "fxhash ClientPlugnPlay can only be instanciated in a browser context."
-    )
-
-    const _options: ClientPlugnPlayOptions = {
-      ...defaultOptions,
-      ...options,
-    }
-
-    /**
-     * Todo improve settings passed (should be high level as possible) & process
-     * these properly. API should be straightforward and cohesive.
-     */
-    this._wagmiConfig = fxCreateWagmiConfig({
-      metadata: defaultEvmConfigMetadata,
-      projectId: fxConfig.config.walletConnectId,
-    })
-
-    this._windowConnector = new WindowWalletsConnector(
-      options.wallets || {
-        evm: {
-          wagmiConfig: this._wagmiConfig as any,
-        },
-        tezos: true,
-      }
-    )
-
-    this._socialConnector = new SocialWalletsConnector()
-
-    this._clientBasic = new FxhashClientBasic({
-      wallets: {
-        connectors: [this._windowConnector, this._socialConnector],
-      },
-    })
-
-    this._manageConnectKit = _options.manageConnectKit || false
-  }
-
-  public loginOAuth(options: any) {
-    this._socialConnector.login(options)
-  }
-}
-
-type Options = {
   /**
    * Whether the PlugnPlay client should use `ConnectKit`. `ConnectKit` provides
    * an inituitive and flexible UI for connecting a wallet on EVM chains, it is
@@ -157,7 +75,10 @@ type Options = {
   manageConnectKit?: boolean
 }
 
-export function clientPlugnPlay({ manageConnectKit = true }: Options) {
+export function clientPlugnPlay({
+  metadata,
+  manageConnectKit = true,
+}: ClientPlugnPlayOptions): IClientPlugnPlay {
   invariant(
     isBrowser(),
     "fxhash Client PlugnPlay can only be instanciated in a browser context."
@@ -173,13 +94,18 @@ export function clientPlugnPlay({ manageConnectKit = true }: Options) {
   }) as any
   let _openConnectKitModal: (() => void) | null = null
 
-  const queryClient = new QueryClient()
   const gql = new GraphqlWrapper()
 
   // handles window object wallets (eip1933 & tzip10)
   const _windowWallets = windowWallets({
-    evm: _wagmiConfig,
-    tezos: DefaultBeaconWalletConfig,
+    evm: {
+      // todo: better way for the default config, like tezos
+      config: fxCreateWagmiConfig({
+        metadata: defaultEvmConfigMetadata,
+        projectId,
+      }) as any,
+    },
+    tezos: true, // ""
   })
 
   const _accountSource = authWallets({
@@ -208,6 +134,7 @@ export function clientPlugnPlay({ manageConnectKit = true }: Options) {
    */
   const _initConnectKit = () => {
     return new Promise<void>(resolve => {
+      const queryClient = new QueryClient()
       // wraps ConnectKit useModal().setOpen() to expose to this class context
       const ConnectKitDriver = () => {
         _openConnectKitModal = useModal().setOpen.bind(null, true)
@@ -215,18 +142,18 @@ export function clientPlugnPlay({ manageConnectKit = true }: Options) {
         return null
       }
       createRoot(document.createElement("div")).render(
-        <WagmiProvider config={_wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <ConnectKitProvider>
-              <ConnectKitDriver />
-            </ConnectKitProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
+        <DependencyProviders
+          wagmiConfig={_wagmiConfig}
+          queryClient={queryClient}
+        >
+          <ConnectKitDriver />
+        </DependencyProviders>
       )
     })
   }
 
   function requestConnection(network: BlockchainNetwork) {
+    init.assertFinished()
     // on EVM use connectKit, need to bypass call to wallets source
     if (network === BlockchainNetwork.ETHEREUM && manageConnectKit) {
       _openConnectKitModal?.()
@@ -237,6 +164,11 @@ export function clientPlugnPlay({ manageConnectKit = true }: Options) {
   }
 
   return {
+    config: {
+      wagmi: _wagmiConfig,
+      fxhash: fxConfig,
+    },
+
     source,
     emitter,
     requestConnection,
@@ -258,14 +190,17 @@ export function clientPlugnPlay({ manageConnectKit = true }: Options) {
     },
 
     requestDisconnection(network: BlockchainNetwork) {
+      init.assertFinished()
       return _windowWallets.disconnect(network)
     },
 
     logout() {
+      init.assertFinished()
       return _accountSource.logout()
     },
 
     release() {
+      init.assertFinished()
       clean.clear()
     },
 

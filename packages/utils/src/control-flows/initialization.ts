@@ -66,6 +66,16 @@ export function intialization() {
       )
     },
     /**
+     * Throws an error if initialization is not finished.
+     * @param message Optional message for thrown exception
+     */
+    check(message?: string) {
+      invariant(
+        state === Init.FINISHED,
+        message || "Initialization not finished"
+      )
+    },
+    /**
      * Sets the initialization state to `STARTED`. Will throw an error if the
      * initialization is either `STARTED` (in progress) or `FINISHED`. This
      * module is only designed for only-once initialization processes.
@@ -92,5 +102,27 @@ export function intialization() {
       )
       state = Init.FINISHED
     },
+  }
+}
+
+type Initialization = ReturnType<typeof intialization>
+
+/**
+ * @example
+ *
+ * ```ts
+ * const init = initialization()
+ * const initFn = initOnce(init, async () => {
+ *   // do async tasks...
+ * })
+ * await initOnce() // ok
+ * await initOnce() // throws
+ * ```
+ */
+export function initOnce(init: Initialization, fn: () => Promise<void>) {
+  return async () => {
+    init.start()
+    await fn()
+    init.finish()
   }
 }

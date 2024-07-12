@@ -44,7 +44,7 @@ type AccountUtilsOptions = {
   emitter: UserSourceEventEmitter
   storage: Storage
   gql: IGraphqlWrapper
-  credentialsDriver: ICredentialsDriver
+  credentialsDriver: ICredentialsDriver<any>
 }
 
 /**

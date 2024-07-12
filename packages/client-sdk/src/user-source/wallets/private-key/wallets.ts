@@ -9,6 +9,7 @@ import { Hex } from "viem"
 import { multichainWallets } from "../common.js"
 import { evmPrivateKeyWallet } from "./evm.js"
 import { tezosPrivateKeyWallet } from "./tezos.js"
+import { ICommonPrivateKeyWallet } from "./_interfaces.js"
 
 type Options = {
   evm?: Hex

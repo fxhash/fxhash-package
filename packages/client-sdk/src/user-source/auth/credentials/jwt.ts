@@ -4,16 +4,15 @@ import {
   invariant,
   success,
 } from "@fxhash/shared"
-import { CredentialsRefreshError, ICredentialsDriver } from "./_interfaces.js"
+import {
+  CredentialsRefreshError,
+  ICredentialsDriver,
+  JWTCredentials,
+} from "./_interfaces.js"
 import { refreshAccessToken } from "../_index.js"
 import { jwtDecode } from "jwt-decode"
 import { getAccountFromStorage } from "../common.js"
 import { IGraphqlWrapper } from "@/index.js"
-
-export type JWTCredentials = {
-  accessToken: string
-  refreshToken: string
-}
 
 /**
  * JWT Authentication requires storing the refresh token in the storage, as well
@@ -30,7 +29,7 @@ export const jwtCredentials = (
    */
   const apply: ICredentialsDriver["apply"] = credentials => {
     gql.updateRequestHeaders({
-      authorization: `Bearer: ${credentials.accessToken}`,
+      authorization: `Bearer ${credentials.accessToken}`,
     })
   }
 

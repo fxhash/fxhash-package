@@ -5,15 +5,36 @@
 
 import { BlockchainNetwork } from "@fxhash/shared"
 import { multichainWallets } from "../common.js"
-import { Config } from "@wagmi/core"
-import { type DAppClientOptions } from "@airgap/beacon-sdk"
+import { type Config as WagmiConfig } from "@wagmi/core"
+import { type DAppClientOptions as BeaconConfig } from "@airgap/beacon-sdk"
 import { eip1193WalletConnector } from "./evm.js"
 import { tzip10WalletConnector } from "./tezos.js"
 import { CommonWindowWallet, IWindowWalletsSource } from "./_interfaces.js"
 
 type Options = {
-  evm?: Config
-  tezos?: DAppClientOptions
+  /**
+   * If defined, an EVM window wallet will be instanciated. If true, the default
+   * wagmi config will be used, otherwise an object with a wagmi config can be
+   * passed to use such config instead.
+   */
+  evm?: {
+    /**
+     * WAGMI config
+     */
+    config: WagmiConfig
+  }
+
+  /**
+   * If defined, a tezos window wallet will be instanciated. If true, the
+   * default beacon config will be used, otherwise an object with a beacon
+   * config can be passed to use such config instead.
+   */
+  tezos?: {
+    /**
+     * Beacon Wallet config
+     */
+    config: BeaconConfig
+  }
 }
 
 /**
@@ -35,12 +56,16 @@ type Options = {
  */
 export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
   const wallets = multichainWallets({
-    [BlockchainNetwork.ETHEREUM]: eip1193WalletConnector({
-      wagmiConfig: evm,
-    }),
-    [BlockchainNetwork.TEZOS]: tzip10WalletConnector({
-      beaconConfig: tezos,
-    }),
+    [BlockchainNetwork.ETHEREUM]: evm
+      ? eip1193WalletConnector({
+          wagmiConfig: evm.config,
+        })
+      : null,
+    [BlockchainNetwork.TEZOS]: tezos
+      ? tzip10WalletConnector({
+          beaconConfig: tezos.config,
+        })
+      : null,
   })
 
   return {

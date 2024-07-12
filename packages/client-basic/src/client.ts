@@ -3,258 +3,122 @@
  * @license MIT
  */
 
+import { invariant } from "@fxhash/utils"
 import {
-  Authenticator,
-  CredentialsDriver,
-  CredentialsStrategy,
+  ClientBasicWallets,
+  IClientBasic,
+  IClientBasicParams,
+} from "./_interfaces.js"
+import {
   GraphqlWrapper,
-  ICredentialsDriver,
-  IGraphqlWrapper,
   IUserSource,
-  IWalletsOrchestratorParams,
   Storage,
-  UserReconciliation,
-  WalletConnectedButNoAccountAuthenticatedError,
-  WalletsOrchestrator,
-  getAnyActiveManager,
+  authWallets,
   jwtCredentials,
+  privateKeyWallets,
+  walletsAndAccount,
+  web3AuthWallets,
+  authWeb3Auth,
+  windowWallets,
+  IAccountSourceCommonOptions,
+  multipleUserSources,
 } from "@fxhash/client-sdk"
-import { ClientBasicEventTarget } from "./events.js"
-import { cleanup, intialization } from "@fxhash/utils"
-
-export type FxhashClientBasicOptions = {
-  /**
-   * The Storage interface for storing user data on the client-side. Storage
-   * will be used by modules such as the account module for storing account
-   * details between sessions.
-   */
-  storage?: Storage
-
-  /**
-   * Which strategy should be used for handling authentication credentials.
-   * **Warning:** JWT is recommended for 3rd parties because 3rd party cookies
-   * are being sunset on chrome, and won't be a sensible choice in the future.
-   *
-   * @default jwtCredentials
-   */
-  credentials?: ICredentialsDriver<any>
-
-  /**
-   * Wallet settings for the Wallet Orchestrator module.
-   */
-  userSource: IUserSource
-}
-
-const defaultOptions = (
-  gql: IGraphqlWrapper
-): Required<Omit<FxhashClientBasicOptions, "userSource">> => ({
-  storage: new Storage(),
-  credentials: jwtCredentials(gql),
-})
 
 /**
- * The Fxhash Client Basic provides an abstraction over the different modules
- * of the `@fxhash/client-sdk` package, by exposing simple options & interfaces
- * to applications.
+ * A medium-level API which provides the instanciation of user sources using
+ * a declarative JS object with a simple API. This client doesn't provide any
+ * high-level utility function to interact with the underlying wallets
+ * instanciated but rather exposes these directly.
  *
- * This client uses the Observer pattern (implemented with EventTarget) for
- * forwardding events emitted by the different modules during their different
- * lifecycles. Consumers of this API should listen to these events for handling
- * side-effects.
+ * This client should be used for use-cases where having some level of control
+ * over the fxhash client is useful, but when using the low-level imperative
+ * API is overkill.
+ *
+ * This client is also be used by higher level abstractions
+ * (`@fxhash/client-plugnplay` for instance).
  */
-export class FxhashClientBasic extends ClientBasicEventTarget {
-  private _init = intialization()
-  private _gql: IGraphqlWrapper
-  private _storage: Storage
-  private _auth: Authenticator
-  private _wallets: WalletsOrchestrator
-  private _reconciliation: UserReconciliation
-  private _toClean: (() => void)[] = []
+export function createClient(params: IClientBasicParams): IClientBasic {
+  invariant(params.metadata, "metadata are required")
 
-  constructor(_options?: FxhashClientBasicOptions) {
-    super()
-    const options = { ...defaultOptions, ..._options }
-    this._gql = new GraphqlWrapper()
-    this._storage = options.storage
+  // defaults
+  const gql = params.drivers?.gql || new GraphqlWrapper()
+  const storage = params.drivers?.storage || new Storage()
+  const credentialsDriver = params.drivers?.credentials || jwtCredentials(gql)
+  const accountSourceOptions: IAccountSourceCommonOptions = {
+    gqlWrapper: gql,
+    storage,
+    credentialsDriver,
+  }
 
-    this._auth = new Authenticator({
-      gqlWrapper: this._gql,
-      storage: this._storage,
-      credentialsStrategy: options.credentialsStrategy,
+  // different sources will be pushed here based on provided settings
+  const userSources: IUserSource[] = []
+
+  const wallets: ClientBasicWallets = {
+    window: null,
+    web3auth: null,
+    privateKeys: null,
+  }
+
+  if (params.wallets?.privateKeys) {
+    const opts = params.wallets.privateKeys
+    wallets.privateKeys = privateKeyWallets({
+      evm: opts.evm,
+      tezos: opts.tezos,
     })
+    let source: IUserSource = wallets.privateKeys
+    // if auth, wrap wallets with some wallet-authentication
+    if (params.authentication) {
+      source = walletsAndAccount({
+        wallets: wallets.privateKeys,
+        account: authWallets(accountSourceOptions),
+      })
+    }
+    userSources.push(source)
+  }
 
-    this._wallets = new WalletsOrchestrator(options.wallets)
+  if (params.wallets?.web3auth) {
+    wallets.web3auth = web3AuthWallets({})
+    let source: IUserSource = wallets.web3auth
+    // if auth, wrap with some web3 authentication
+    if (params.authentication) {
+      source = walletsAndAccount({
+        wallets: wallets.web3auth,
+        account: authWeb3Auth(accountSourceOptions),
+      })
+    }
+    userSources.push(source)
+  }
 
-    this._reconciliation = new UserReconciliation({
-      authenticator: this._auth,
-      wallets: this._wallets,
+  if (params.wallets?.window) {
+    const opts = params.wallets.window
+    wallets.window = windowWallets({
+      evm: opts.evm
+        ? {
+            config: opts.evm.wagmiConfig,
+          }
+        : undefined,
+      tezos: opts.tezos
+        ? {
+            config: opts.tezos.beaconConfig,
+          }
+        : undefined,
     })
-  }
-
-  /**
-   * The GraphQL wrapper instance, which can be used to run authenticated
-   * GraphQL queries (once user is authenticated of course).
-   */
-  get gql() {
-    return this._gql
-  }
-
-  get auth() {
-    return this._auth
-  }
-
-  get wallets() {
-    return this._wallets
-  }
-
-  async init() {
-    this._init.start()
-
-    /**
-     * @dev The order in which the modules are initialized is very important
-     * here. A few considerations:
-     * - Authenticator & WalletsOrchestrator may take a while to initialize, so
-     *   it's best to init them in parallel
-     * - UserReconciliation only emits events when reconciliating the state
-     * - This client is plugged to the UserReconciliation module to execute
-     *   its flow
-     * - When initializing UserReconciliation, it only sets up event listeners,
-     *   but doesn't do any state reconciliation. Clients are expected to
-     *   implement that.
-     */
-
-    await Promise.all([this._auth.init(), this._wallets.init()])
-    await this._reconciliation.init()
-
-    // during initialisation we want a custom behaviour to reconciliate the
-    // state, as if there are any discrepancy we want to reset all the states
-    const reconciliation = this._reconciliation.reconciliationState()
-
-    if (reconciliation.isFailure()) {
-      // todo ? remove logs here ?
-      console.log(
-        `The wallets/account are in an incoherent state, the following error was emitted after initialization:`
-      )
-      console.log(reconciliation.error)
-      console.log(
-        `Wallets/Account will be cleared as a coherent cannot be recovered at this stage.`
-      )
-
-      await Promise.allSettled([
-        this.auth.logout(),
-        this.wallets.disonnectAll(),
-      ])
+    let source: IUserSource = wallets.window
+    // if auth, wrap authentication wallets arround window source
+    if (params.authentication) {
+      source = walletsAndAccount({
+        wallets: wallets.window,
+        account: authWallets(accountSourceOptions),
+      })
     }
-
-    // broadcast — it's always a valid user change here, either no user or
-    // a user ready to do stuff
-    this.emit("valid-user-changed")
-
-    // now attach listeners for automatically plug into the flows
-    this._attachListeners()
+    userSources.push(source)
   }
 
-  /**
-   * Forward events from the different components so that they are emitted
-   * directly by this instance.
-   */
-  private _attachListeners() {
-    this._toClean.push(
-      /**
-       * Hook on user reconciliation error, with 2 cases:
-       * - if error is WalletConnectedButNoAccountAuthenticatedError: a user
-       *   just connected their wallet, we trigger an authentication flow
-       *   (signing an operation, etc...)
-       * - if other error, forward the error so that it can be treated by
-       *   applications
-       */
-      this._reconciliation.on("user-reconciliation-error", async err => {
-        // if a wallet was connected, but there is no account we can attempt a
-        // signing process with said wallet
-        if (err instanceof WalletConnectedButNoAccountAuthenticatedError) {
-          console.log("attemp sign in with wallet")
-          const managers = this.wallets.managers
-          const anyManager = getAnyActiveManager(managers)
-          if (!anyManager) {
-            throw Error(
-              `something weird with the implementation, shouldn't reach this`
-            )
-          }
-          const result = await this.auth.authenticate(anyManager)
-
-          // in case of failure, we reset the
-          if (result.isFailure()) {
-            // todo: should we provide a way to get feedback here ?
-            await this.reset()
-          }
-          // otherwise events will be automatically broadcasted
-          return
-        }
-
-        // otherwise forward the error to be handlded by applications
-        // todo ? should we enforce some reconciliation here ??
-        this.emit("user-reconciliation-error", err)
-      }),
-      this._reconciliation.pipe("valid-user-changed", this),
-      this._wallets.pipe("wallet-changed", this),
-      this._auth.pipe("account-updated", this)
-    )
-  }
-
-  /**
-   * Resets modules to a blank state.
-   * - auth: Authentication is cleared, logout (if any account) is performed
-   * - wallets: all wallets are disconnected
-   * An object can be passed to define which modules should be reset
-   */
-  public async reset(
-    {
-      auth = true,
-      wallets = true,
-    }: {
-      auth: boolean
-      wallets: boolean
-    } = {
-      auth: true,
-      wallets: true,
-    }
-  ) {
-    const promises: Promise<void>[] = []
-    if (auth) promises.push(this.auth.logout())
-    if (wallets) promises.push(this.wallets.disonnectAll())
-    await Promise.all(promises)
-  }
-
-  public release() {
-    this._wallets.release()
-    this._reconciliation.release()
-    this._toClean.forEach(f => f())
-    this._toClean.length = 0
-  }
-}
-
-export function fxhashClientBasic(options: FxhashClientBasicOptions) {
-  const init = intialization()
-  const clean = cleanup()
-  const gql = new GraphqlWrapper()
-  const _options = {
-    ...defaultOptions(gql),
-    ...options,
-  }
+  // will reconciliate the different sources to ensure only a single source
+  const rootSource = multipleUserSources({ sources: userSources })
 
   return {
-    gql,
-    emitter: userSource.emitter,
-
-    async init() {
-      init.start()
-      await userSource.init()
-      init.finish()
-    },
-
-    release() {
-      userSource.release?.()
-      clean.clear()
-    },
+    userSource: rootSource,
+    wallets,
   }
 }

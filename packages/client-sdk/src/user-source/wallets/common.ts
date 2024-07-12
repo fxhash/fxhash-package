@@ -72,7 +72,7 @@ export const BlockchainNetworks = Object.keys(
 ) as BlockchainNetwork[]
 
 type WalletsMap = {
-  [Net in BlockchainNetwork]?: MapNetworkToWalletInterface<Net>
+  [Net in BlockchainNetwork]?: MapNetworkToWalletInterface<Net> | null
 }
 
 /**
@@ -116,15 +116,11 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     init: async () => {
       init.start()
       await Promise.all(
-        Object.values(wallets)
-          .map(w => w.init && w.init())
-          .filter(p => !!p)
+        networks.map(net => wallets[net]?.init?.()).filter(p => !!p)
       )
       init.finish()
     },
-    get initialized() {
-      return init.finished
-    },
+    initialized: () => init.finished,
     supports,
     getWalletManagers: () => managers,
     getWallet,
@@ -137,7 +133,9 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
 }
 
 export function walletsNetworks(wallets: WalletsMap) {
-  const networks = Object.keys(wallets) as BlockchainNetwork[]
+  const networks = (Object.keys(wallets) as BlockchainNetwork[]).filter(
+    net => !!wallets[net]
+  )
   return {
     networks,
     supports: (network: BlockchainNetwork) => networks.includes(network),

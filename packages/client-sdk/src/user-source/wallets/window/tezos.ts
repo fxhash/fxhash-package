@@ -11,7 +11,7 @@ import { TezosWindowWallet } from "./_interfaces.js"
 import { intialization } from "@fxhash/utils"
 
 type Options = {
-  beaconConfig?: DAppClientOptions
+  beaconConfig: DAppClientOptions
 }
 
 /**

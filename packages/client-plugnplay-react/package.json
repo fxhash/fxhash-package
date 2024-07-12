@@ -1,15 +1,13 @@
 {
-  "name": "@fxhash/client-basic",
-  "description": "A basic client wrapping @fxhash/client-sdk by providing a medium-level API where all the @fxhash/client-sdk modules are properly configured together. Should be used for medium/advanced use cases.",
+  "name": "@fxhash/client-plugnplay-react",
+  "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
+  "private": true,
   "version": "0.0.1",
   "author": "fxhash",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -26,26 +24,25 @@
     "dist"
   ],
   "scripts": {
-    "test": "vitest",
-    "test:local": "FXHASH_ENV=local vitest",
     "build": "tsup",
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@fxhash/client-sdk": "workspace:*",
-    "@fxhash/config": "workspace:*",
+    "@fxhash/client-plugnplay": "workspace:*",
+    "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*"
   },
+  "peerDependencies": {
+    "@fxhash/client-sdk": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@types/eslint": "8.44.0",
-    "@typescript-eslint/eslint-plugin": "5.62.0",
-    "@typescript-eslint/parser": "5.62.0",
-    "eslint": "8.45.0",
+    "@types/react": "18.2.48",
     "tsup": "8.0.1",
-    "typescript": "5.3.3",
-    "vitest": "0.34.6"
+    "typescript": "5.3.3"
   }
 }

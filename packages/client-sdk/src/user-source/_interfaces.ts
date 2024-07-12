@@ -37,38 +37,13 @@ export type WalletManagersMap = {
 
 export interface IUserSource {
   init: () => Promise<void>
-  initialized: boolean
+  initialized: () => boolean
   emitter: UserSourceEventEmitter
   getAccount: () => GetSingleUserAccountResult | null
   getWalletManagers: () => WalletManagersMap | null
   release?: () => void
 }
 
-// // basic wallet + account authentication
-// const client = new Client({
-//   source: walletAuthentication({
-//     source: windowWalletsConnector(...)
-//   })
-// })
-
-// // for multiple sources
-// const client = new Client({
-//   source: multipleUserSources({
-//     sources: [...],
-//     strategy: ...
-//   })
-// })
-
-// // for instance for our website
-// const client = new Client({
-//   source: multipleUserSources({
-//     sources: [
-//       walletAuthentication(
-//         windowWallets(...)
-//       ),
-//       web3authAuthentication(
-//         web3authWallets(...)
-//       )
-//     ]
-//   })
-// })
+export interface IClient {
+  userSource: IUserSource
+}

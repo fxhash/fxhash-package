@@ -6,12 +6,12 @@ import {
   WalletConnectedButNoAccountAuthenticatedError,
   anyActiveManager,
 } from "../_index.js"
-import { IWalletsAccountSource } from "../auth/_interfaces.js"
+import { IAuthAccountSource } from "../auth/_interfaces.js"
 import { userReconciliation } from "./user-reconciliation.js"
 
 type Options = {
   wallets: IWalletsSource
-  account: IWalletsAccountSource
+  account: IAuthAccountSource<any>
 }
 
 /**
@@ -42,7 +42,13 @@ export function walletsAndAccount({ wallets, account }: Options): IUserSource {
               `something weird with the implementation, shouldn't reach this`
             )
           }
+
+          // todo: authenticate doesn't always have the same signature here,
+          // what to do ?
+          // todo maybe pass `wallets` instance and let the auth module handle
+          // how it should use it ?
           const result = await account.authenticate(anyManager)
+          console.log({ result })
 
           // in case of failure, we reset the
           if (result.isFailure()) {
@@ -85,9 +91,7 @@ export function walletsAndAccount({ wallets, account }: Options): IUserSource {
     emitter,
     getAccount: account.getAccount,
     getWalletManagers: wallets.getWalletManagers,
-    get initialized() {
-      return init.finished
-    },
+    initialized: () => init.finished,
 
     init: async () => {
       init.start()

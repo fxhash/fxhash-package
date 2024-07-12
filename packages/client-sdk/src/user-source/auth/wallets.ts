@@ -127,6 +127,7 @@ export function authWallets({
       const account = await _account.sync()
       return success(account)
     } catch (err) {
+      console.log(err)
       // todo: better authentication error (clean plz baptiste)
       return failure(new Error("todo"))
     }
@@ -137,6 +138,7 @@ export function authWallets({
     getAccount: _account.get,
     authenticate,
     authenticated: () => !!_account.get,
+    initialized: () => init.finished,
     logout: _account.logout,
 
     /**
@@ -149,10 +151,6 @@ export function authWallets({
       init.start()
       await _account.reconnectFromStorage()
       init.finish()
-    },
-
-    get initialized() {
-      return init.finished
     },
 
     getWalletManagers: () => null,

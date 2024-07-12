@@ -36,6 +36,7 @@
     "@fxhash/client-basic": "workspace:*",
     "@fxhash/client-sdk": "workspace:*",
     "@fxhash/config": "workspace:*",
+    "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",

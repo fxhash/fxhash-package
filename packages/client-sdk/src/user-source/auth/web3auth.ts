@@ -11,6 +11,9 @@ import { jwtDecode } from "jwt-decode"
 
 type Options = IAccountSourceCommonOptions
 
+/**
+ * Module exposing account management as well as authentication
+ */
 export function authWeb3Auth({
   gqlWrapper: gql,
   storage,
@@ -63,15 +66,12 @@ export function authWeb3Auth({
     authenticated: _account.authenticated,
     authenticate,
     logout: _account.logout,
+    initialized: () => init.finished,
 
     init: async () => {
       init.start()
       await _account.reconnectFromStorage()
       init.finish()
-    },
-
-    get initialized() {
-      return init.finished
     },
 
     getWalletManagers: () => null,

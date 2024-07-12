@@ -24,3 +24,32 @@ export type NonNullableFields<T> = {
  */
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U]
+
+type Only<T, U> = {
+  [P in keyof T]: T[P]
+} & {
+  [P in keyof U]?: never
+}
+
+/**
+ * When you need either interface, but don't want to accept both.
+ *
+ * @example
+ *
+ * ```ts
+ * interface One {
+ *   a: string
+ * }
+ * interface Two {
+ *   b: string
+ * }
+ * type OneOrTwo = Either<One, Two>
+ *
+ * function f(par: OneOrTwo) {}
+ *
+ * f({ a: "" }) // ok
+ * f({ b: "" }) // ok
+ * f({ a: "", b: "" }) // not ok
+ * ```
+ */
+export type Either<T, U> = Only<T, U> | Only<U, T>
