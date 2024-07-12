@@ -30,6 +30,7 @@ import {
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
+import { fxAppEnvMetadata, IAppMetadata } from "./config/metadata"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -46,6 +47,7 @@ export interface IFxhashNetworkConfig {
 
 export interface IFxhashEnvConfig {
   envName: TEnvName
+  metadata: IAppMetadata
   gtMinPrice: string
   walletConnectId: string
   projectLockTime: number
@@ -186,6 +188,7 @@ export const fxhashConfig: IFxhashConfig = {
       apis: fxhashLocalApis,
       config: {
         envName: "local",
+        metadata: fxAppEnvMetadata("local"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
@@ -210,6 +213,7 @@ export const fxhashConfig: IFxhashConfig = {
       apis: fxhashLocalDockerApis,
       config: {
         envName: "localDocker",
+        metadata: fxAppEnvMetadata("localDocker"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
@@ -234,6 +238,7 @@ export const fxhashConfig: IFxhashConfig = {
       apis: fxhashDevApis,
       config: {
         envName: "development",
+        metadata: fxAppEnvMetadata("dev"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
@@ -258,6 +263,7 @@ export const fxhashConfig: IFxhashConfig = {
       apis: fxhashPrdApis,
       config: {
         envName: "production",
+        metadata: fxAppEnvMetadata("prd"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,

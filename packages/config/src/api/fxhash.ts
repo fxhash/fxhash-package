@@ -1,3 +1,4 @@
+import { TEnv } from "../config"
 import { getDockerInternalUrl } from "../helpers"
 
 export interface IFxhashApis {
@@ -180,4 +181,18 @@ export const fxhashPrdApis: IFxhashApis = {
     eth: "http://fxhash-multichain-prd-eth-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
     base: "http://fxhash-multichain-prd-base-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
   },
+}
+
+const fxEnvToApisMap: Record<TEnv, IFxhashApis> = {
+  local: fxhashLocalApis,
+  localDocker: fxhashLocalDockerApis,
+  dev: fxhashDevApis,
+  prd: fxhashPrdApis,
+}
+
+/**
+ * Given some env, returns the associated APIs config.
+ */
+export function fxApisByEnv(env: TEnv) {
+  return fxEnvToApisMap[env]
 }
