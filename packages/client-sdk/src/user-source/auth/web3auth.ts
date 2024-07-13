@@ -65,7 +65,7 @@ export function authWeb3Auth({
     getAccount: _account.get,
     authenticated: _account.authenticated,
     authenticate,
-    logout: _account.logout,
+    logoutAccount: _account.logoutAccount,
     initialized: () => init.finished,
 
     init: async () => {
@@ -75,5 +75,7 @@ export function authWeb3Auth({
     },
 
     getWalletManagers: () => null,
+    disconnectWallet: async () => {},
+    disconnectAllWallets: async () => {},
   }
 }

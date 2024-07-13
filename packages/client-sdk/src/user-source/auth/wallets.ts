@@ -139,7 +139,7 @@ export function authWallets({
     authenticate,
     authenticated: () => !!_account.get,
     initialized: () => init.finished,
-    logout: _account.logout,
+    logoutAccount: _account.logoutAccount,
 
     /**
      * Should be called when the application starts to retrieve credentials from
@@ -154,5 +154,7 @@ export function authWallets({
     },
 
     getWalletManagers: () => null,
+    disconnectWallet: async () => {},
+    disconnectAllWallets: async () => {},
   }
 }

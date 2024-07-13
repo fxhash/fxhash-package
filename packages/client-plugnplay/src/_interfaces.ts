@@ -5,14 +5,15 @@ import { config as fxConfig } from "@fxhash/config"
 
 export interface IClientPlugnPlay {
   config: {
-    wagmi: WagmiConfig
+    wagmi?: WagmiConfig
     fxhash: typeof fxConfig
   }
   source: IUserSource
   emitter: UserSourceEventEmitter
-  requestConnection: (network: BlockchainNetwork) => void
+  connectWallet: (network: BlockchainNetwork) => void
   init: () => Promise<void>
-  requestDisconnection: (network: BlockchainNetwork) => Promise<void>
-  logout: () => Promise<void>
+  disconnectWallet: (network: BlockchainNetwork) => Promise<void>
+  disconnectAllWallets: () => Promise<void>
+  logoutAccount: () => Promise<void>
   release: () => void
 }

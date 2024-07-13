@@ -44,16 +44,6 @@ export interface IWalletsSource extends IUserSource {
   getWallet: <N extends BlockchainNetwork>(
     network: N
   ) => MapNetworkToWalletInterface<N> | null
-
-  /**
-   * Disconnect the wallet currently active (if any) on a given network.
-   */
-  disconnect: (network: BlockchainNetwork) => Promise<void>
-
-  /**
-   * Disconnect all the wallets currently active (if any).
-   */
-  disconnectAll: () => Promise<void>
 }
 
 /**

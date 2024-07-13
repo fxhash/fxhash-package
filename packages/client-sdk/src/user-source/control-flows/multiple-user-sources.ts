@@ -6,13 +6,19 @@ type Options = {
   sources: IUserSource[]
 }
 
+export interface IMultipleUserSources extends IUserSource {
+  activeSource: () => IUserSource | null
+}
+
 /**
  * Takes an array of user sources as an input, and handles how to reconciliate
  * the different sources such that only one source is considered as active.
  * The current implementation watches for the first `user-changed` event emitted
  * by a source to put it as active (if any wallet/user),
  */
-export function multipleUserSources({ sources }: Options): IUserSource {
+export function multipleUserSources({
+  sources,
+}: Options): IMultipleUserSources {
   const emitter = new UserSourceEventEmitter()
   const init = intialization()
   const clean = cleanup()
@@ -57,9 +63,24 @@ export function multipleUserSources({ sources }: Options): IUserSource {
 
   return {
     emitter,
+    activeSource: () => _activeSource,
     initialized: () => init.finished,
+
     getAccount: () => _activeSource?.getAccount() || null,
+    logoutAccount: async () => {
+      if (!_activeSource) return
+      return _activeSource.logoutAccount()
+    },
+
     getWalletManagers: () => _activeSource?.getWalletManagers() || null,
+    disconnectWallet: async network => {
+      if (!_activeSource) return
+      return _activeSource.disconnectWallet(network)
+    },
+    disconnectAllWallets: async () => {
+      if (!_activeSource) return
+      return _activeSource.disconnectAllWallets()
+    },
 
     init: initOnce(init, async () => {
       _hookEvents()

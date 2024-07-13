@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@fxhash/client-plugnplay": "workspace:*",
+    "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",

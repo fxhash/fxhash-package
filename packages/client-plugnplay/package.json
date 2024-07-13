@@ -38,6 +38,7 @@
     "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "@react-oauth/google": "0.12.1",

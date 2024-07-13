@@ -8,7 +8,6 @@ import { Hex } from "viem"
 
 export interface IAccountSource extends IUserSource {
   authenticated: () => boolean
-  logout: () => Promise<any>
   getWalletManagers: () => null
 }
 

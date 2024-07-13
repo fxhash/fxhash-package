@@ -29,17 +29,21 @@ import {
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
-import { config } from "@fxhash/config"
+import { IAppMetadata, config } from "@fxhash/config"
 
-export const DefaultBeaconWalletConfig: DAppClientOptions = {
-  name: "fxhash",
-  // TODO: check the requirements of the icon
-  iconUrl:
-    "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG",
-  network: {
-    type: config.tez.config.network as NetworkType,
-  },
+export function createBeaconConfig(metadata: IAppMetadata): DAppClientOptions {
+  return {
+    name: metadata.name,
+    iconUrl: metadata.icon,
+    network: {
+      type: config.tez.config.network as NetworkType,
+    },
+  }
 }
+
+export const DefaultBeaconWalletConfig: DAppClientOptions = createBeaconConfig(
+  config.config.metadata
+)
 
 export function isBeacon(
   wallet: BeaconWallet | Signer

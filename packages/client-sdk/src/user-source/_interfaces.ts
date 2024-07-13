@@ -6,6 +6,7 @@ import {
   GetSingleUserAccountResult,
   MapNetworkToWalletManager,
 } from "./_index.js"
+import { WalletSourcesMap } from "@/index.js"
 
 export type WalletChangedPayload =
   | {
@@ -38,12 +39,11 @@ export type WalletManagersMap = {
 export interface IUserSource {
   init: () => Promise<void>
   initialized: () => boolean
+  release?: () => void
   emitter: UserSourceEventEmitter
   getAccount: () => GetSingleUserAccountResult | null
+  logoutAccount: () => Promise<void>
   getWalletManagers: () => WalletManagersMap | null
-  release?: () => void
-}
-
-export interface IClient {
-  userSource: IUserSource
+  disconnectWallet: (network: BlockchainNetwork) => Promise<void>
+  disconnectAllWallets: () => Promise<void>
 }

@@ -45,8 +45,8 @@ export function web3AuthWallets({
   return {
     ...wallets,
 
-    disconnect: disconnect,
-    disconnectAll: disconnect,
+    disconnectWallet: disconnect,
+    disconnectAllWallets: disconnect,
 
     login: async options => {
       const res = await frameManager.login(options)

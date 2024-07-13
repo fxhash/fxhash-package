@@ -106,7 +106,7 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
   }
 
   const getWallet: IWalletsSource["getWallet"] = net => wallets[net] || null
-  const disconnect: IWalletsSource["disconnect"] = async net => {
+  const disconnect: IWalletsSource["disconnectWallet"] = async net => {
     const wallet = getWallet(net)
     if (wallet) await wallet.disconnect()
   }
@@ -124,11 +124,12 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     supports,
     getWalletManagers: () => managers,
     getWallet,
-    disconnect,
-    disconnectAll: async () => {
+    disconnectWallet: disconnect,
+    disconnectAllWallets: async () => {
       await Promise.all(networks.map(net => disconnect(net)))
     },
     getAccount: () => null,
+    logoutAccount: async () => {},
   }
 }
 

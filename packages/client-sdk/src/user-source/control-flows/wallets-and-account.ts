@@ -82,16 +82,21 @@ export function walletsAndAccount({ wallets, account }: Options): IUserSource {
     }
   ) => {
     const promises: Promise<void>[] = []
-    if (auth) promises.push(account.logout())
-    if (_wallets) promises.push(wallets.disconnectAll())
+    if (auth) promises.push(account.logoutAccount())
+    if (_wallets) promises.push(wallets.disconnectAllWallets())
     return Promise.all(promises)
   }
 
   return {
     emitter,
-    getAccount: account.getAccount,
-    getWalletManagers: wallets.getWalletManagers,
     initialized: () => init.finished,
+
+    getAccount: account.getAccount,
+    logoutAccount: account.logoutAccount,
+
+    getWalletManagers: wallets.getWalletManagers,
+    disconnectWallet: wallets.disconnectWallet,
+    disconnectAllWallets: wallets.disconnectAllWallets,
 
     init: async () => {
       init.start()
@@ -110,7 +115,10 @@ export function walletsAndAccount({ wallets, account }: Options): IUserSource {
           `Wallets/Account will be cleared as a coherent cannot be recovered at this stage.`
         )
 
-        await Promise.allSettled([account.logout(), wallets.disconnectAll()])
+        await Promise.allSettled([
+          account.logoutAccount(),
+          wallets.disconnectAllWallets(),
+        ])
       }
 
       emitter.emit("user-changed")

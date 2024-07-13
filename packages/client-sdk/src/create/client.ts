@@ -4,25 +4,37 @@
  */
 
 import { invariant } from "@fxhash/utils"
-import {
-  IClientBasic,
-  IClientBasicParams,
-  WalletSourcesMap,
-} from "./_interfaces.js"
+import { ICreateClientParams, WalletSourcesMap } from "./_interfaces.js"
 import {
   GraphqlWrapper,
+  IAccountSourceCommonOptions,
+  IClient,
+  IMultipleUserSources,
   IUserSource,
   Storage,
   authWallets,
+  authWeb3Auth,
   jwtCredentials,
+  multipleUserSources,
   privateKeyWallets,
   walletsAndAccount,
   web3AuthWallets,
-  authWeb3Auth,
   windowWallets,
-  IAccountSourceCommonOptions,
-  multipleUserSources,
-} from "@fxhash/client-sdk"
+} from "@/index.js"
+
+export interface IClientManySources extends IClient {
+  /**
+   * @override
+   */
+  userSource: IMultipleUserSources
+
+  /**
+   * A map of the wallets instanciated, based on the provided configuration.
+   * **Note**: If a wallet wasn't declared in the provided config, its value
+   * will be null in the map.
+   */
+  walletSources: WalletSourcesMap
+}
 
 /**
  * A medium-level API which provides the instanciation of user sources using
@@ -37,7 +49,7 @@ import {
  * This client is also be used by higher level abstractions
  * (`@fxhash/client-plugnplay` for instance).
  */
-export function createClient(params: IClientBasicParams): IClientBasic {
+export function createClient(params: ICreateClientParams): IClientManySources {
   invariant(params.metadata, "metadata are required")
 
   // defaults
@@ -57,6 +69,13 @@ export function createClient(params: IClientBasicParams): IClientBasic {
     window: null,
     web3auth: null,
     privateKeys: null,
+  }
+
+  // instanciate some shared authentication modules
+  // note: if `authentication` isn't enabled, they won't be added to the user
+  // sources graph and won't be initialized either.
+  const auth = {
+    wallets: authWallets(accountSourceOptions),
   }
 
   if (params.wallets?.privateKeys) {

@@ -9,7 +9,11 @@ import { Hex } from "viem"
 import { multichainWallets } from "../common.js"
 import { evmPrivateKeyWallet } from "./evm.js"
 import { tezosPrivateKeyWallet } from "./tezos.js"
-import { ICommonPrivateKeyWallet } from "./_interfaces.js"
+import {
+  CommonPrivateKeyWallet,
+  ICommonPrivateKeyWallet,
+  IPrivateKeyWalletsSource,
+} from "./_interfaces.js"
 
 type Options = {
   evm?: Hex
@@ -25,8 +29,11 @@ type Options = {
  *
  * More infos: <https://github.com/ecadlabs/taquito/issues/1764>
  */
-export function privateKeyWallets({ evm, tezos }: Options): IWalletsSource {
-  return multichainWallets({
+export function privateKeyWallets({
+  evm,
+  tezos,
+}: Options): IPrivateKeyWalletsSource {
+  const wallets = multichainWallets({
     [BlockchainNetwork.ETHEREUM]: evmPrivateKeyWallet({
       privateKey: evm,
     }),
@@ -34,6 +41,15 @@ export function privateKeyWallets({ evm, tezos }: Options): IWalletsSource {
       privateKey: tezos,
     }),
   })
+
+  return {
+    ...wallets,
+    updatePrivateKey: async (network, privateKey) => {
+      return (
+        wallets.getWallet(network) as any as CommonPrivateKeyWallet
+      ).updatePrivateKey(privateKey)
+    },
+  }
 }
 
 export type PrivateKeyWalletsOptions = Options

@@ -1,42 +1,32 @@
 import {
+  FunctionComponent,
   PropsWithChildren,
   createContext,
   useEffect,
-  useRef,
+  useMemo,
   useState,
 } from "react"
 import {
   IClientPlugnPlay,
-  clientPlugnPlay,
   ClientPlugnPlayOptions,
   DependencyProviders,
+  createClientPlugnPlay,
+  QueryClient,
 } from "@fxhash/client-plugnplay"
 import {
   GetSingleUserAccountResult,
   UserReconciliationError,
   WalletManagersMap,
 } from "@fxhash/client-sdk"
-import { cleanup } from "@fxhash/utils"
+import { cleanup, DeepOmit } from "@fxhash/utils"
 
-type PropertiesOf<T extends {}, Props extends keyof T> = Props
-
-type EnforcedConfigProperties = PropertiesOf<
+export type ReactClientPlugnPlayOptions = DeepOmit<
   ClientPlugnPlayOptions,
-  "manageConnectKit"
+  "manageConnectKitProvider"
 >
 
 export type ClientBasicproviderOptions = {
-  config: Omit<ClientPlugnPlayOptions, EnforcedConfigProperties>
-}
-
-const enforcedConfigProperties: Pick<
-  ClientPlugnPlayOptions,
-  EnforcedConfigProperties
-> = {
-  /**
-   * This react module implements ConnectKit itself
-   */
-  manageConnectKit: false,
+  config: ReactClientPlugnPlayOptions
 }
 
 export type ClientBasicState = {
@@ -72,16 +62,17 @@ export function ClientPlugnPlayProvider({
     setState(st => ({ ...st, [k]: val }))
   }
 
-  console.log({ state })
+  const client = useMemo(
+    () =>
+      createClientPlugnPlay({
+        metadata: config.metadata,
+        wallets: config.wallets,
+      }),
+    []
+  )
 
-  const once = useRef(false)
   useEffect(() => {
-    if (once.current) return
-    once.current = true
-
     const clean = cleanup()
-
-    const client = clientPlugnPlay(config)
     clean.add(
       client.emitter.on("error", err => {
         set("userError", err)
@@ -98,20 +89,31 @@ export function ClientPlugnPlayProvider({
     client.init()
     set("client", client)
 
-    // todo: in prod we shoudl return, but in dev this runs only once cause
-    // of the once.current, but then it doesn't reset these
+    return () => {
+      clean.clear()
+      client.release()
+    }
+  }, [client])
 
-    // return () => {
-    //   clean.clear()
-    //   client.release()
-    // }
-  }, [])
+  // depending on whether EVM is needed we don't expose the same tree
+  const Wrapper: FunctionComponent<PropsWithChildren> = (() => {
+    if (!config.wallets.evm) return props => props.children
+    const queryClient = new QueryClient()
+    return props => (
+      <DependencyProviders
+        wagmiConfig={client.config.wagmi! as any}
+        queryClient={queryClient}
+      >
+        {props.children}
+      </DependencyProviders>
+    )
+  })()
 
   return (
-    <DependencyProviders wagmiConfig={}>
+    <Wrapper>
       <ClientPlugnPlayContext.Provider value={state}>
         {children}
       </ClientPlugnPlayContext.Provider>
-    </DependencyProviders>
+    </Wrapper>
   )
 }

@@ -155,6 +155,6 @@ export function accountUtils({
     cleanup,
     store,
     reconnectFromStorage,
-    logout: _logout,
+    logoutAccount: _logout,
   }
 }
