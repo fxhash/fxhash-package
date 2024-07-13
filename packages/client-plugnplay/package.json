@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@airgap/beacon-sdk": "4.2.2-beta.3",
-    "@fxhash/client-basic": "workspace:*",
     "@fxhash/client-sdk": "workspace:*",
     "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
