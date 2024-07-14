@@ -43,6 +43,45 @@ source.emitter.on("wallets-changed", () => { ... })
 source.emitter.on("account-changed", () => { ... })
 ```
 
+### Simple window wallets without account
+
+```ts
+const source = windowWallets({
+  evm: {
+    config: "...",
+  },
+  tezos: {
+    config: "...",
+  },
+})
+// source.emitter.on("wallets-changed") ...
+// source.getWalletManagers() ...
+```
+
+### Backend private key wallet
+
+```ts
+const source = privateKeyWallets({
+  evm: "0x...",
+})
+const managers = source.getWalletManagers()
+```
+
+### Wallets and account
+
+```ts
+const source = walletsAndAccount({
+  wallets: windowWallets({
+    evm: wagmiConfig,
+    tezos: beaconConfig,
+  }),
+  account: authWallets(accountSourceOptions),
+})
+// source.on("user-changed", () => { /* handler */ }) ...
+```
+
+### Declarative API
+
 ```ts
 import { createClient } from "@fxhash/client-sdk"
 
@@ -63,10 +102,4 @@ const client = createClient({
   },
   authentication: true,
 })
-```
-
-### Simple ETH wallet
-
-```ts
-import {} from "@fxhash/client-sdk"
 ```
