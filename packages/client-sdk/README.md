@@ -1,42 +1,72 @@
 # `@fxhash/client-sdk`
 
-A set of low-level modules to build clients for interracting applications with fxhash.
+A set of low-to-medium-level modules for building applications with fxhash.
 
 > [!CAUTION]
-> If you are building a 3rd party application on top of fxhash, we recommended using `@fxhash/client-basic`, `@fxhash/client-plugnplay` (or their React counterpart `@fxhash/client-basic-react`, `@fxhash/client-plugnplay-react`), which have been designed for a seamless integration into applications. They are build on top of this package, which is more suited if you really need low-level granular control.
+> If you are building a 3rd party application on top of fxhash, we recommended using `@fxhash/client-plugnplay` (or its React counterpart `@fxhash/client-plugnplay-react`), which has been designed for a seamless integration into applications. They are build on top of this package, which is more suited if you really need low-level granular control.
+
+## Installation
+
+```sh
+pnpm add @fxhash/client-sdk
+```
+
+```ts
+import { createClient } from "@fxhash/client-sdk"
+const fxClient = createClient(...)
+```
 
 ## Design principles
+
+This package
 
 ## Usage
 
 Installation
 
-```sh
-pnpm add @fxhash/client @fxhash/config
-```
+## Examples
 
-# some title
+### Using the `createClient` utility
 
-##
+The `createClient` function provides the creation of a "client" using a declarative config object.
 
-For backend applications, the `WalletOrchestrator` can simply be used with a private key connector. This may be arguably a bit overkill but can also ensure some cohesiveness accross a stack.
+### All the sources support the same interface
 
 ```ts
-import {
-  WalletOrchestrator,
-  PrivateKeyWalletsConnector,
-} from "@fxhash/client-sdk"
+import {} from "@fxhash/client-sdk"
 
-const wallets = new WalletsOrchestrator({
-  connectors: [
-    new PrivateKeyWalletsConnector({
-      TEZOS: {
-        privateKey: "...",
+const source = windowWallets(...)
+
+// hook on events
+source.emitter.on("user-changed", () => { ... })
+source.emitter.on("wallets-changed", () => { ... })
+source.emitter.on("account-changed", () => { ... })
+```
+
+```ts
+import { createClient } from "@fxhash/client-sdk"
+
+const client = createClient({
+  metadata: {
+    name: "...",
+    description: "...",
+    url: "...",
+    icon: "...",
+  },
+  wallets: {
+    window: {
+      evm: {
+        wagmiConfig: "...",
       },
-    }),
-  ],
+    },
+    web3auth: true,
+  },
+  authentication: true,
 })
+```
 
-const tezosWalletManager = wallets.managers.TEZOS!.manager!
-tezosWalletManager.sendTransaction(/*...*/)
+### Simple ETH wallet
+
+```ts
+import {} from "@fxhash/client-sdk"
 ```

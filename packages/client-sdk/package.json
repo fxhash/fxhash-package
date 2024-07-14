@@ -40,8 +40,8 @@
     "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
-    "@wagmi/connectors": "5.0.20",
-    "@wagmi/core": "2.11.5",
+    "@wagmi/connectors": "5.0.22",
+    "@wagmi/core": "2.11.7",
     "jwt-decode": "4.0.0"
   },
   "devDependencies": {
@@ -62,7 +62,7 @@
     "@taquito/beacon-wallet": "19.2.1-beta.1",
     "@taquito/signer": "17.3.1",
     "@taquito/taquito": "17.3.1",
-    "viem": "2.9.2",
-    "wagmi": "2.5.12"
+    "viem": "2.13.10",
+    "wagmi": "2.10.10"
   }
 }

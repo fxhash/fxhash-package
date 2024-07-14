@@ -125,12 +125,11 @@ export function eip1193WalletConnector({
           await sleep(100)
         }
       }
-
       const walletClient = await getWalletClient(wagmiConfig)
       const publicClient = getPublicClient(wagmiConfig)
 
       if (!walletClient || !publicClient) {
-        throw failure(new EvmWagmiClientGenerationError())
+        return failure(new EvmWagmiClientGenerationError())
       }
 
       return success({
@@ -141,7 +140,7 @@ export function eip1193WalletConnector({
 
     disconnect: () => disconnect(wagmiConfig),
 
-    // note: doesn't work very well, TBD
+    // todo: wassup with connect: injected() is this the right way ?
     requestConnection: () => connect(wagmiConfig, { connector: injected() }),
   }
 }

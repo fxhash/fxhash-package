@@ -4,6 +4,7 @@ import {
   createContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react"
 import {
@@ -62,6 +63,8 @@ export function ClientPlugnPlayProvider({
     setState(st => ({ ...st, [k]: val }))
   }
 
+  const once = useRef(false)
+
   const client = useMemo(
     () =>
       createClientPlugnPlay({
@@ -86,14 +89,19 @@ export function ClientPlugnPlayProvider({
         )
       })
     )
-    client.init()
     set("client", client)
+
+    // only initialize once
+    if (!once.current) {
+      client.init()
+      once.current = true
+    }
 
     return () => {
       clean.clear()
-      client.release()
+      // client.release()
     }
-  }, [client])
+  }, [])
 
   // depending on whether EVM is needed we don't expose the same tree
   const Wrapper: FunctionComponent<PropsWithChildren> = (() => {

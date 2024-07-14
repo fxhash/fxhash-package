@@ -12,10 +12,9 @@ import { transports } from "./_unstable.js"
 
 export const supportedEvmChains = [chains.ETHEREUM, chains.BASE] as const
 export const viemTransports = [transports.ETHEREUM, transports.BASE] as const
-export const viemSimpleTransports = supportedEvmChains.map(chain => [
-  chain,
-  http(),
-])
+export const viemSimpleTransports = Object.fromEntries(
+  supportedEvmChains.map(chain => [chain.id, http()])
+)
 
 export const fxCreateWagmiConfig = () => {
   return createConfig({

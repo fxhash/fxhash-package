@@ -31,7 +31,7 @@ export function multipleUserSources({
 
   const _clearActiveIfInactive = () => {
     if (!_activeSource) return
-    if (isSourceActive(_activeSource)) _activeSource = null
+    if (!isSourceActive(_activeSource)) _activeSource = null
   }
 
   const _hookEvents = () => {

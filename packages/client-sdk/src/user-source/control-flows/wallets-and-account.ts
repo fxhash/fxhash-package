@@ -1,5 +1,6 @@
 import { cleanup, intialization } from "@fxhash/utils"
 import {
+  AccountAuthenticatedButNoWalletConnectedError,
   IUserSource,
   IWalletsSource,
   UserSourceEventEmitter,
@@ -56,6 +57,12 @@ export function walletsAndAccount({ wallets, account }: Options): IUserSource {
             await _reset()
           }
           // otherwise events will be automatically broadcasted
+          return
+        }
+        // in a case where account is authenticated but no wallet is connected,
+        // logout the account
+        else if (err instanceof AccountAuthenticatedButNoWalletConnectedError) {
+          await account.logoutAccount()
           return
         }
 
@@ -115,10 +122,11 @@ export function walletsAndAccount({ wallets, account }: Options): IUserSource {
           `Wallets/Account will be cleared as a coherent cannot be recovered at this stage.`
         )
 
-        await Promise.allSettled([
+        const results = await Promise.allSettled([
           account.logoutAccount(),
           wallets.disconnectAllWallets(),
         ])
+        console.log({ results })
       }
 
       emitter.emit("user-changed")

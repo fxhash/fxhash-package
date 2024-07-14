@@ -22,8 +22,7 @@ import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { IClientPlugnPlay } from "./_interfaces.js"
 import { DependencyProviders } from "./providers.js"
-import { supportedEvmChains } from "@fxhash/eth"
-import { viemSimpleTransports } from "@fxhash/eth"
+import { supportedEvmChains, viemSimpleTransports } from "@fxhash/eth"
 import { createBeaconConfig } from "@fxhash/tez"
 
 type EvmConfigOptions = {
@@ -103,6 +102,10 @@ export function createClientPlugnPlay({
     "fxhash Client PlugnPlay can only be instanciated in a browser context."
   )
 
+  // checks on provided values
+  invariant(metadata, "metadata required")
+  invariant(wallets, "missing wallets configuration")
+
   const init = intialization()
   const clean = cleanup()
   const emitter = new UserSourceEventEmitter()
@@ -134,7 +137,7 @@ export function createClientPlugnPlay({
           }
         : undefined,
     },
-    web3auth: true,
+    // web3auth: true,
   }
 
   const gql = new GraphqlWrapper()
@@ -180,8 +183,6 @@ export function createClientPlugnPlay({
       }
       createRoot(document.createElement("div")).render(
         <DependencyProviders
-          // todo: fix again weird config thing
-          // @ts-expect-error
           wagmiConfig={walletsConfig.window.evm.wagmiConfig}
           queryClient={queryClient}
         >
@@ -217,7 +218,7 @@ export function createClientPlugnPlay({
     connectWallet: requestConnection,
 
     async init() {
-      init.start()
+      init.start("client can only be initialized once!")
       if (_manageConnectKit) await _initConnectKit()
       clean.add(
         client.userSource.emitter.pipe("account-changed", emitter),

@@ -20,17 +20,11 @@ export function userReconciliation({ wallets, account }: Options) {
   const clean = cleanup()
   const emitter = new UserSourceEventEmitter()
 
-  const _reconciliationState = () => {
-    return reconciliationState(
-      account.getAccount(),
-      wallets.getWalletManagers()
-    )
-  }
+  const _reconciliationState = () =>
+    reconciliationState(account.getAccount(), wallets.getWalletManagers())
 
   const _reconciliate = () => {
-    console.log("_reconciliate")
     const reconciliation = _reconciliationState()
-    console.log({ reconciliation })
     if (reconciliation.isSuccess()) {
       emitter.emit("user-changed")
     } else {
@@ -45,8 +39,6 @@ export function userReconciliation({ wallets, account }: Options) {
       // This module expects the Account Source & Wallets Source to be fully
       // initialized before it's initialized. This is to enforce a certain flow
       // for api consumers
-
-      console.log({ wallets, account })
 
       invariant(
         account.initialized(),

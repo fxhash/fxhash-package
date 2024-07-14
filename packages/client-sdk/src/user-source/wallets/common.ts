@@ -17,10 +17,9 @@ import { intialization } from "@fxhash/utils"
  */
 export async function createEvmWalletManager(evmWallet: IEvmWallet) {
   invariant(evmWallet, "should not be null")
-  const _clients = await evmWallet.getClients()
   const info = evmWallet.getInfo()
-  invariant(info, "cannot generate evm wallet manager without wallet info")
-
+  if (!info) return null
+  const _clients = await evmWallet.getClients()
   if (_clients.isSuccess()) {
     const clients = _clients.unwrap()
     return new EthereumWalletManager({
@@ -42,12 +41,12 @@ export async function createEvmWalletManager(evmWallet: IEvmWallet) {
 export async function createTezosWalletManager(tezWallet: ITezosWallet) {
   invariant(tezWallet, "should not be null")
   const info = tezWallet.getInfo()
-  invariant(info, "cannot generate tezos wallet manager without wallet info")
-
-  return new TezosWalletManager({
-    wallet: tezWallet.getWallet(),
-    address: info.address,
-  })
+  return info
+    ? new TezosWalletManager({
+        wallet: tezWallet.getWallet(),
+        address: info.address,
+      })
+    : null
 }
 
 const createWalletManagerMap = {
@@ -93,8 +92,13 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
   for (const net of networks) {
     const wallet = wallets[net]
     wallet?.emitter.on("wallet-changed", async () => {
-      // @ts-expect-error
-      managers[net] = await createWalletManager(net, wallet)
+      try {
+        // @ts-expect-error
+        managers[net] = await createWalletManager(net, wallet)
+      } catch (err) {
+        console.log(err)
+        throw err
+      }
       emitter.emit("wallets-changed", [
         // @ts-expect-error
         {

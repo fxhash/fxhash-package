@@ -35,13 +35,13 @@
     "@safe-global/protocol-kit": "3.0.0",
     "@safe-global/safe-core-sdk-types": "4.0.0",
     "@wagmi/connectors": "5.0.22",
-    "@wagmi/core": "2.11.5",
+    "@wagmi/core": "2.11.7",
     "dotenv": "16.3.1",
     "ethers": "6.8.1",
     "multiformats": "13.1.0",
     "onchfs": "workspace:*",
     "path": "0.12.7",
-    "viem": "2.9.2"
+    "viem": "2.13.10"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
@@ -52,7 +52,6 @@
     "tslib": "2.6.2",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
-    "viem": "2.9.2",
     "vitest": "0.34.6"
   },
   "peerDependencies": {

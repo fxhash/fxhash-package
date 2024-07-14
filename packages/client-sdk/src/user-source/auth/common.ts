@@ -64,6 +64,8 @@ export function accountUtils({
 
     // everytime the account is updated, emit event.
     if (prev !== account || prev?.id !== account?.id) {
+      console.log("update account!")
+      console.log({ account })
       emitter.emit("account-changed", { account })
     }
   }
@@ -139,12 +141,17 @@ export function accountUtils({
    * Send a logout query, clear credentials, disconnect all the wallets.
    */
   const _logout = async () => {
-    const account = await getAccountFromStorage(storage)
-    invariant(account, "no account authenticated")
-    await logout(credentialsDriver.getLogoutPayload(account.credentials), {
-      gqlClient: gql.client(),
-    })
-    cleanup()
+    try {
+      const account = await getAccountFromStorage(storage)
+      invariant(account, "no account authenticated")
+      await logout(credentialsDriver.getLogoutPayload(account.credentials), {
+        gqlClient: gql.client(),
+      })
+      cleanup()
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
   }
 
   return {
