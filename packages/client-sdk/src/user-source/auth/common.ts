@@ -16,26 +16,6 @@ import { invariant } from "@fxhash/shared"
  */
 export const ACCOUNT_STORAGE_KEY = `fxhash.${fxConfig.config.envName}.account`
 
-/**
- * Read the Storage to retrieve an account potentially stored there, and return
- * it. This function ensures the returned payload is in the right format,
- * otherwise it resets the storage account key.
- * @returns Account stored in storage solution, or null if none
- */
-export async function getAccountFromStorage(
-  storage: Storage
-): Promise<StoredAccount | null> {
-  const account = await storage.getItem(ACCOUNT_STORAGE_KEY)
-  if (!account) return null
-  // return account if data is valid
-  if (isStoredAccountValid(account)) {
-    return account
-  }
-  // somehow the storage was compromised, as the value doesn't
-  await storage.removeItem(ACCOUNT_STORAGE_KEY)
-  return null
-}
-
 function isStoredAccountValid(account: any): account is StoredAccount {
   return !!account && typeof account.id === "string"
 }
@@ -45,6 +25,7 @@ type AccountUtilsOptions = {
   storage: Storage
   gql: IGraphqlWrapper
   credentialsDriver: ICredentialsDriver<any>
+  storageNamespace: string
 }
 
 /**
@@ -55,8 +36,30 @@ export function accountUtils({
   storage,
   gql,
   credentialsDriver,
+  storageNamespace,
 }: AccountUtilsOptions) {
   let _account: GetSingleUserAccountResult | null = null
+
+  const _getStorageKey = () => `${ACCOUNT_STORAGE_KEY}:${storageNamespace}`
+
+  /**
+   * Read the Storage to retrieve an account potentially stored there, and return
+   * it. This function ensures the returned payload is in the right format,
+   * otherwise it resets the storage account key.
+   * @returns Account stored in storage solution, or null if none
+   */
+  const getAccountFromStorage = async (): Promise<StoredAccount | null> => {
+    const key = _getStorageKey()
+    const account = await storage.getItem(key)
+    if (!account) return null
+    // return account if data is valid
+    if (isStoredAccountValid(account)) {
+      return account
+    }
+    // somehow the storage was compromised, as the value doesn't
+    await storage.removeItem(key)
+    return null
+  }
 
   const update = (account: GetSingleUserAccountResult | null) => {
     const prev = _account
@@ -78,7 +81,7 @@ export function accountUtils({
    * @returns Authenticated account (or null if none)
    */
   const sync = async () => {
-    const account = await getAccountFromStorage(storage)
+    const account = await getAccountFromStorage()
     invariant(account, "No account authenticated")
     const res = await getMyProfile({ gqlClient: gql.client() })
     update(res)
@@ -89,17 +92,19 @@ export function accountUtils({
    * Cleanup of the storage & properties of the authentication state
    */
   const cleanup = async () => {
-    await storage.removeItem(ACCOUNT_STORAGE_KEY)
+    await storage.removeItem(_getStorageKey())
     await credentialsDriver.clear()
     update(null)
   }
 
   const store = async (account: StoredAccount) =>
-    storage.setItem(ACCOUNT_STORAGE_KEY, account)
+    storage.setItem(_getStorageKey(), account)
 
   const refreshCredentials = async () => {
     try {
-      const res = await credentialsDriver.refresh(storage)
+      const accountFromStorage = await getAccountFromStorage()
+      invariant(accountFromStorage, "no account to refresh")
+      const res = await credentialsDriver.refresh(accountFromStorage)
       if (res.isFailure()) throw null
       const account = res.unwrap()
       await store(account)
@@ -115,7 +120,7 @@ export function accountUtils({
    * stored in the storage.
    */
   const reconnectFromStorage = async () => {
-    const account = await getAccountFromStorage(storage)
+    const account = await getAccountFromStorage()
     // if there's an account in the storage, then init authentication
     // recovery process, which depends on the authentication strategy
     if (account) {
@@ -142,7 +147,7 @@ export function accountUtils({
    */
   const _logout = async () => {
     try {
-      const account = await getAccountFromStorage(storage)
+      const account = await getAccountFromStorage()
       invariant(account, "no account authenticated")
       await logout(credentialsDriver.getLogoutPayload(account.credentials), {
         gqlClient: gql.client(),
@@ -156,6 +161,7 @@ export function accountUtils({
 
   return {
     get: () => _account,
+    getAccountFromStorage,
     authenticated: () => !!_account,
     update,
     sync,

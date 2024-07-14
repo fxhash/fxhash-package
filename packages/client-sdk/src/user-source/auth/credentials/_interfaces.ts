@@ -47,7 +47,7 @@ export interface ICredentialsDriver<
    * @returns Newly generated credentials (or null in case of failure)
    */
   refresh: (
-    storage: Storage
+    account: StoredAccount<Credentials>
   ) => PromiseResult<StoredAccount<Credentials>, CredentialsRefreshError>
 
   /**

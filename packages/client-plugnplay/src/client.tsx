@@ -137,7 +137,7 @@ export function createClientPlugnPlay({
           }
         : undefined,
     },
-    // web3auth: true,
+    web3auth: true,
   }
 
   const gql = new GraphqlWrapper()

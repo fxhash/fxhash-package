@@ -74,4 +74,9 @@ export interface IAccountSourceCommonOptions {
    * An interface handling authentication credentials (JWT tokens)
    */
   credentialsDriver: ICredentialsDriver<any>
+
+  /**
+   * A namespace to scope the account storage between different account sources.
+   */
+  storageNamespace?: string
 }

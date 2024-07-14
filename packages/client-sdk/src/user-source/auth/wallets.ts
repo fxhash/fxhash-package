@@ -28,6 +28,8 @@ import { accountUtils } from "./common.js"
 
 type Options = IAccountSourceCommonOptions
 
+const DEFAULT_STORAGE_NAMESPACE = "wallets"
+
 /**
  * Provides some authentication utilities for WalletManager interfaces.
  */
@@ -35,6 +37,7 @@ export function authWallets({
   gqlWrapper: gql,
   storage,
   credentialsDriver,
+  storageNamespace,
 }: Options): IWalletsAccountSource {
   const emitter = new UserSourceEventEmitter()
   const init = intialization()
@@ -43,6 +46,7 @@ export function authWallets({
     storage,
     gql,
     credentialsDriver,
+    storageNamespace: storageNamespace || DEFAULT_STORAGE_NAMESPACE,
   })
 
   /**

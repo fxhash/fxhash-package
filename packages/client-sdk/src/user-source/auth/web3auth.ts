@@ -11,6 +11,8 @@ import { jwtDecode } from "jwt-decode"
 
 type Options = IAccountSourceCommonOptions
 
+const DEFAULT_STORAGE_NAMESPACE = "web3auth"
+
 /**
  * Module exposing account management as well as authentication
  */
@@ -18,6 +20,7 @@ export function authWeb3Auth({
   gqlWrapper: gql,
   storage,
   credentialsDriver,
+  storageNamespace,
 }: Options): IWeb3AuthAccountSource {
   const emitter = new UserSourceEventEmitter()
   const init = intialization()
@@ -26,6 +29,7 @@ export function authWeb3Auth({
     storage,
     gql,
     credentialsDriver,
+    storageNamespace: storageNamespace || DEFAULT_STORAGE_NAMESPACE,
   })
 
   const authenticate: IWeb3AuthAccountSource["authenticate"] =

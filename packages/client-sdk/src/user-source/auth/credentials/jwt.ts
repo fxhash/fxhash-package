@@ -11,7 +11,6 @@ import {
 } from "./_interfaces.js"
 import { refreshAccessToken } from "../_index.js"
 import { jwtDecode } from "jwt-decode"
-import { getAccountFromStorage } from "../common.js"
 import { IGraphqlWrapper } from "@/index.js"
 
 /**
@@ -45,10 +44,8 @@ export const jwtCredentials = (
 
     validate: creds => !!(creds?.refreshToken && creds?.accessToken),
 
-    async refresh(storage) {
+    async refresh(account) {
       try {
-        const account = await getAccountFromStorage(storage)
-        invariant(account, "No account authenticated")
         invariant(account.credentials.refreshToken, "No refresh token")
         const { refreshToken } = account.credentials
         const credentials = await refreshAccessToken(
