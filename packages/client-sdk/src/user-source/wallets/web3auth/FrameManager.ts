@@ -3,7 +3,7 @@
  * @license MIT
  */
 
-import { PromiseResult, intialization, setIntervalCapped } from "@fxhash/utils"
+import { PromiseResult, Result } from "@fxhash/utils"
 import {
   IframeBDCommHost,
   IframeRequestTimeout,
@@ -12,11 +12,17 @@ import {
 } from "@fxhash/utils-browser"
 import {
   Web3AuthFrameInitializationError,
+  Web3AuthFrameNotInitialized,
   Web3AuthFrameNotLoading,
   Web3AuthFrameNotResponding,
 } from "./_errors.js"
-import { Success, failure, invariant, success } from "@fxhash/shared"
-import { Web3AuthLoginPayload } from "./_interfaces.js"
+import { failure, invariant, success } from "@fxhash/shared"
+import {
+  FrameManagerEventEmitter,
+  Web3AuthLoginPayload,
+} from "./_interfaces.js"
+import { Hex } from "viem"
+import { UserSourceEventEmitter } from "@/index.js"
 
 export type Web3AuthFrameConfig = {
   /**
@@ -35,19 +41,21 @@ export type Web3AuthFrameConfig = {
   container?: HTMLElement
 }
 
-// todo: what's this ? type better ?
-interface SessionDetails {
+export type SessionDetails = {
   /**
    * The Auth Provider is a string identifying the authentication solution
    * which is used for managing the wallet.
    */
-  provider: string
+  provider: "web3auth"
 
   /**
    * Any extra info provided by the auth provided which may be used by
    * consumers if needed.
    */
-  providerDetails: any
+  providerDetails: {
+    compressedPublicKey: Hex
+    idToken: string
+  }
 }
 
 type TMessages = {
@@ -141,10 +149,11 @@ type TMessages = {
  * needs browser APIs to load the `<iframe>`.
  */
 export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
-  _config: Web3AuthFrameConfig
-  _container: HTMLElement
-  _wrapper: HTMLDivElement | null = null
-  _iframe: HTMLIFrameElement | null = null
+  private _emitter = new FrameManagerEventEmitter()
+  private _config: Web3AuthFrameConfig
+  private _container: HTMLElement
+  private _wrapper: HTMLDivElement | null = null
+  private _iframe: HTMLIFrameElement | null = null
 
   constructor(config: Web3AuthFrameConfig) {
     super()
@@ -154,8 +163,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
       "The Social Wallets frame can only be loaded in a browser context."
     )
     this._config = config
-    // this._container = this._config.container || document.body
-    this._container = document.body
+    this._container = this._config.container || document.body
   }
 
   /**
@@ -174,15 +182,17 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
     return this._wrapper
   }
 
+  public get emitter() {
+    return this._emitter
+  }
+
   /**
    * Initialize the various DOM elements:
    * - HTML wrapper
    * - iframe (& load the URL)
    */
-  private initDOM(): PromiseResult<void, Web3AuthFrameNotLoading> {
-    return new Promise<Success<void>>(async (resolve, reject) => {
-      console.log("init dom !!")
-      console.log(this._container)
+  private initDOM() {
+    return new Promise<Result<void, Web3AuthFrameNotLoading>>(async resolve => {
       // initialize iframe
       this._wrapper = document.createElement("div")
       this._wrapper.classList.add("__fxhash__wallet-iframe")
@@ -194,18 +204,76 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
         resolve(success())
       })
       this._iframe.onerror = err => {
-        reject(failure(new Web3AuthFrameNotLoading(this._config.url, err)))
+        resolve(failure(new Web3AuthFrameNotLoading(this._config.url, err)))
       }
       this._iframe.src = this._config.url
       this._iframe.sandbox.add("allow-scripts", "allow-same-origin")
       this._wrapper.appendChild(this._iframe)
 
+      /**
+       * !   _________________________________________________________________
+       * ! /_____________________WARNING EXPLICIT CONTENT_____________________\
+       *
+       * This is a dirty hack which prevents the <iframe> from being removed
+       * from the DOM by React applications, more specifically
+       * React applications where the `<body>` is handled by react itself (as
+       * such using `document.body.append()` only appends temporary until a
+       * rerender of the `<body>` happens).
+       *
+       * When `@client/client-plugnplay-react` is used, we expect users to
+       * wrap their app with <ClientPlugnPlayProvider>, so it's a bit tricky to
+       * have access to a safe DOM element there.
+       *
+       * The option `getContainer()` offered by this module would work to some
+       * extent, but would be quite cumburstone to use for devs, though when
+       * used makes this hack irrelevant.
+       *
+       * Note: an observer still watches for the `<iframe>` removal in the
+       * document, and will warn in the console if the `<iframe>` stil gets
+       * removed. In such a case, using `getContainer()` is the only option.
+       *
+       * -----
+       *
+       * This solution involves leveraging a test filter React-dom is doing
+       * on nodes before it removes them from the DOM
+       * [1] https://github.com/facebook/react/blob/8b08e99efa56b848538768e25265fd3aa24dd8a1/packages/react-dom-bindings/src/client/ReactFiberConfigDOM.js#L1808
+       * [2] https://github.com/facebook/react/blob/8b08e99efa56b848538768e25265fd3aa24dd8a1/packages/react-dom-bindings/src/client/ReactDOMComponentTree.js#L289
+       * [3] https://github.com/facebook/react/blob/8b08e99efa56b848538768e25265fd3aa24dd8a1/packages/react-dom-bindings/src/client/ReactDOMComponentTree.js#L47
+       *
+       * Hoistable nodes have a `'__reactMarker$' + randomKey` property, so we
+       * find the key by going through the DOM and looking for such signature.
+       * If we find it, we also add it to our node so that it's skipped by
+       * React-dom.
+       */
+      let reactMarker$: string | null = null
+      let currentNode: Node | null,
+        nodeIte = document.createNodeIterator(
+          document.documentElement,
+          NodeFilter.SHOW_ALL
+        )
+      breakWhile: while ((currentNode = nodeIte.nextNode())) {
+        for (const key in currentNode) {
+          if (key.startsWith("__reactMarker$")) {
+            reactMarker$ = key
+            break breakWhile
+          }
+        }
+      }
+      // obviously reactMarker$ isn't a valid HTMLElement property
+      if (reactMarker$) (this.wrapper as any)[reactMarker$] = true
+
+      // add attach an observer to detect if the iframe is removed from the DOM
       const observer = new MutationObserver(records => {
-        for (const { target, removedNodes } of records) {
+        for (const { removedNodes } of records) {
           for (const [_, node] of removedNodes.entries()) {
-            if (node === this.wrapper) {
-              this._container.prepend(this._wrapper!)
-              this._setupFrameCommProtocol()
+            if (
+              node === this.wrapper ||
+              node === this._container ||
+              node === this.iframe
+            ) {
+              console.error(
+                `The fxhash Web3Auth wallet <iframe> has been removed from the DOM. Please look into providing a safe container when you instanciate the client. Some Web3Auth wallet features are now broken`
+              )
             }
           }
         }
@@ -215,30 +283,9 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
         childList: true,
       })
 
+      // this triggers iframe being loaded, eventually resolving this promise
       this._container.prepend(this._wrapper!)
     })
-  }
-
-  private async _setupFrameCommProtocol() {
-    invariant(this._iframe, "no iframe available")
-    // initialize the iframe with the IframeCommBd
-    {
-      const res = await super.init(this._iframe)
-      console.log({ res })
-      if (res.isFailure())
-        return failure(new Web3AuthFrameNotResponding(this._config.url))
-    }
-
-    // send request to wallet to init
-    {
-      const res = await this.sendRequest({ type: "init" })
-      console.log("init request result:")
-      console.log({ res })
-      if (res.isFailure())
-        return failure(new Web3AuthFrameNotResponding(this._config.url))
-    }
-
-    return success()
   }
 
   private _showFrame(show: boolean) {
@@ -247,22 +294,38 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
   }
 
   async init(): PromiseResult<void, Web3AuthFrameInitializationError> {
-    console.log("init iframe !!!")
     // initialize DOM elements
     {
-      console.log("here")
       const res = await this.initDOM()
-      console.log({ res })
       if (res.isFailure()) return res
+      if (!this._iframe) return failure(new Web3AuthFrameNotInitialized())
     }
-    // initialize the communication protocol
+
+    // initialize the iframe with the IframeCommBd
     {
-      const res = await this._setupFrameCommProtocol()
-      console.log({ res })
-      if (res?.isFailure()) return res
+      const res = await super.init(this._iframe)
+      if (res.isFailure())
+        return failure(new Web3AuthFrameNotResponding(this._config.url))
+    }
+
+    // send request to wallet to init
+    {
+      const res = await this.sendRequest({ type: "init" })
+      if (res.isFailure())
+        return failure(new Web3AuthFrameNotResponding(this._config.url))
+    }
+
+    // fetch initial details (emit event if a session exists)
+    const initDetails = await this.getSessionDetails()
+    if (initDetails.isSuccess() && initDetails.value) {
+      this._handleSessionChanged(initDetails.value)
     }
 
     return success()
+  }
+
+  private _handleSessionChanged(details: SessionDetails | null) {
+    this.emitter.emit("session-changed", details)
   }
 
   protected async processRequest<K extends keyof TMessages["frame->host"]>(
@@ -283,24 +346,26 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
     return this.sendRequest({ type: "getSessionDetails" })
   }
 
-  async login(
+  public async login(
     payload: Web3AuthLoginPayload
   ): PromiseResult<SessionDetails | null, IframeRequestTimeout> {
-    try {
-      console.log(
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      )
-      console.log({ payload })
-      const res = await this.sendRequest({ type: "login", body: payload })
-      console.log({ res })
-      return res
-    } catch (err) {
-      console.log(err)
-      throw err
+    const res = await this.sendRequest({ type: "login", body: payload })
+    if (res.isSuccess() && res.value) {
+      this._handleSessionChanged(res.value)
     }
+
+    // todo: handle error ?
+    return res
   }
 
   async logout(): PromiseResult<any, IframeRequestTimeout> {
-    return this.sendRequest({ type: "logout" })
+    const res = await this.sendRequest({ type: "logout" })
+    if (res.isSuccess()) {
+      this._handleSessionChanged(null)
+      return success()
+    }
+
+    // todo: handle error better ?
+    return res
   }
 }

@@ -1,15 +1,26 @@
 import {
+  AccountAuthenticatedButNoWalletConnectedError,
   GetSingleUserAccountResult,
   ICredentialsDriver,
   IGraphqlWrapper,
+  IWalletsSource,
+  SignMessageError,
   Storage,
   UserSourceEventEmitter,
+  WalletConnectedButNoAccountAuthenticatedError,
+  anyActiveManager,
   getMyProfile,
   logout,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
-import { StoredAccount } from "./_interfaces.js"
-import { invariant } from "@fxhash/shared"
+import {
+  IAccountSourceCommonOptions,
+  IWalletsAccountSource,
+  StoredAccount,
+} from "./_interfaces.js"
+import { PromiseResult, invariant } from "@fxhash/shared"
+import { cleanup, intialization } from "@fxhash/utils"
+import { isUserStateConsistent } from "../utils/user-consistency.js"
 
 /**
  * The key which will be used to store the account data.
@@ -20,11 +31,25 @@ function isStoredAccountValid(account: any): account is StoredAccount {
   return !!account && typeof account.id === "string"
 }
 
-type AccountUtilsOptions = {
+export type AccountUtilsOptions = {
   storage: Storage
   gql: IGraphqlWrapper
   credentialsDriver: ICredentialsDriver<any>
   storageNamespace: string
+}
+
+export type AccountUtils = {
+  // todo: only emits account-changed so type should reflect that
+  emitter: UserSourceEventEmitter
+  get: () => GetSingleUserAccountResult | null
+  getAccountFromStorage: () => Promise<StoredAccount | null>
+  authenticated: () => boolean
+  update: (account: GetSingleUserAccountResult | null) => void
+  sync: () => Promise<GetSingleUserAccountResult>
+  cleanup: () => Promise<void>
+  store: (account: StoredAccount) => Promise<void>
+  reconnectFromStorage: () => Promise<void>
+  logoutAccount: () => Promise<void>
 }
 
 /**
@@ -35,7 +60,7 @@ export function accountUtils({
   gql,
   credentialsDriver,
   storageNamespace,
-}: AccountUtilsOptions) {
+}: AccountUtilsOptions): AccountUtils {
   const emitter = new UserSourceEventEmitter()
   let _account: GetSingleUserAccountResult | null = null
 
@@ -96,7 +121,7 @@ export function accountUtils({
     update(null)
   }
 
-  const store = async (account: StoredAccount) =>
+  const store = (account: StoredAccount) =>
     storage.setItem(_getStorageKey(), account)
 
   const refreshCredentials = async () => {
@@ -169,5 +194,128 @@ export function accountUtils({
     store,
     reconnectFromStorage,
     logoutAccount: _logout,
+  }
+}
+
+export type AuthWithWalletsParams = IAccountSourceCommonOptions & {
+  wallets: IWalletsSource
+  storageNamespace: string
+  authenticate: (
+    utils: AccountUtils
+    // todo: better typing of | Error depending on the authenticator
+  ) => PromiseResult<GetSingleUserAccountResult, SignMessageError | Error>
+}
+
+export function authWithWallets({
+  wallets,
+  gqlWrapper: gql,
+  storage,
+  credentialsDriver,
+  storageNamespace,
+  authenticate,
+}: AuthWithWalletsParams): IWalletsAccountSource {
+  const emitter = new UserSourceEventEmitter()
+  const init = intialization()
+  const clean = cleanup()
+  const _account = accountUtils({
+    storage,
+    gql,
+    credentialsDriver,
+    storageNamespace,
+  })
+
+  const _reconciliate = () => {
+    const account = _account.get()
+    const managers = wallets.getWalletManagers()
+    console.log("_reconciliate")
+    console.log({ account, managers })
+    const consistency = isUserStateConsistent(account, managers)
+    console.log({ consistency })
+    if (consistency.isSuccess()) {
+      emitter.emit("user-changed")
+    } else {
+      if (
+        consistency.error instanceof
+        AccountAuthenticatedButNoWalletConnectedError
+      ) {
+        _account.logoutAccount()
+        return
+      }
+
+      if (
+        consistency.error instanceof
+        WalletConnectedButNoAccountAuthenticatedError
+      ) {
+        // todo: reconnect can be handled by caller ?
+        wallets.disconnectAllWallets()
+        return
+      }
+
+      // some error not handlded at this level
+      emitter.emit("error", consistency.error)
+    }
+  }
+
+  const _hookEvents = () => {
+    clean.add(
+      wallets.emitter.on("wallets-changed", async () => {
+        const anyManager = anyActiveManager(wallets.getWalletManagers())
+
+        console.log({
+          managers: wallets.getWalletManagers(),
+          anyManager,
+        })
+
+        // when wallet is connected, but no account is authenticated, we start
+        // authentication process
+        if (anyManager && !_account.get()) {
+          const result = await authenticate(_account)
+          if (result.isFailure()) {
+            console.log(result.error)
+            wallets.disconnectAllWallets()
+            return
+          }
+        }
+
+        // otherwise run the reconciliation
+        _reconciliate()
+      }),
+
+      // when account changes, run state reconciliation
+      _account.emitter.on("account-changed", () => {
+        _reconciliate()
+      })
+    )
+  }
+
+  return {
+    emitter,
+    getAccount: _account.get,
+    authenticated: () => !!_account.get,
+    initialized: () => init.finished,
+    logoutAccount: _account.logoutAccount,
+
+    /**
+     * Should be called when the application starts to retrieve credentials from
+     * the storage, synchronize user state with the backend (eventually by
+     * refreshing the credentials if needed), to get to a stable state with
+     * regards to the authentication.
+     */
+    init: async () => {
+      init.start()
+      await Promise.all([wallets.init(), _account.reconnectFromStorage()])
+      _reconciliate()
+      _hookEvents()
+      init.finish()
+    },
+
+    release: () => {
+      clean.clear()
+      wallets.release?.()
+    },
+
+    getWalletManagers: wallets.getWalletManagers,
+    disconnectWallet: wallets.disconnectWallet,
+    disconnectAllWallets: wallets.disconnectAllWallets,
   }
 }

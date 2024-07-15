@@ -17,7 +17,6 @@ import {
   jwtCredentials,
   multipleUserSources,
   privateKeyWallets,
-  walletsAndAccount,
   web3AuthWallets,
   windowWallets,
 } from "@/index.js"

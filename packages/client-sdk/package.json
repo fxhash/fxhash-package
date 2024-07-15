@@ -40,8 +40,10 @@
     "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
+    "@taquito/utils": "17.3.1",
     "@wagmi/connectors": "5.0.22",
     "@wagmi/core": "2.11.7",
+    "ethers": "6.8.1",
     "jwt-decode": "4.0.0"
   },
   "devDependencies": {

@@ -18,7 +18,7 @@ import {
 } from "@fxhash/client-plugnplay"
 import {
   GetSingleUserAccountResult,
-  UserReconciliationError,
+  UserConsistencyError,
   WalletManagersMap,
 } from "@fxhash/client-sdk"
 import { cleanup, DeepOmit } from "@fxhash/utils"
@@ -31,13 +31,15 @@ export type ReactClientPlugnPlayOptions = DeepOmit<
 
 export type ClientBasicproviderOptions = {
   config: ReactClientPlugnPlayOptions
+} & {
+  safeDomContainer: HTMLElement
 }
 
 export type ClientBasicState = {
   client: IClientPlugnPlay | null
   account: GetSingleUserAccountResult | null
   managers: WalletManagersMap
-  userError: UserReconciliationError | null
+  userError: UserConsistencyError | null
 }
 
 const defaultActiveManagers = {
@@ -57,6 +59,7 @@ export const ClientPlugnPlayContext = createContext(defaultContext)
 export function ClientPlugnPlayProvider({
   children,
   config,
+  safeDomContainer,
 }: PropsWithChildren<ClientBasicproviderOptions>) {
   const [state, setState] = useState<ClientBasicState>(defaultContext)
   const set = <K extends keyof ClientBasicState>(
@@ -66,21 +69,19 @@ export function ClientPlugnPlayProvider({
     setState(st => ({ ...st, [k]: val }))
   }
 
-  const $wrapperRef = useRef<HTMLDivElement>(null)
-
   const once = useRef(false)
   useEffect(() => {
     if (once.current) return
     once.current = true
 
-    invariant($wrapperRef.current, "wrapper not available")
+    invariant(safeDomContainer, "wrapper not available")
 
     const clean = cleanup()
-    console.log($wrapperRef)
+    console.log(safeDomContainer)
     const client = createClientPlugnPlay({
       metadata: config.metadata,
       wallets: config.wallets,
-      safeDomWrapper: $wrapperRef.current || document.body,
+      safeDomWrapper: safeDomContainer,
     })
 
     clean.add(
@@ -122,13 +123,10 @@ export function ClientPlugnPlayProvider({
   })()
 
   return (
-    <>
-      {createPortal(<div ref={$wrapperRef} />, document.body)}
-      <Wrapper>
-        <ClientPlugnPlayContext.Provider value={state}>
-          {children}
-        </ClientPlugnPlayContext.Provider>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <ClientPlugnPlayContext.Provider value={state}>
+        {children}
+      </ClientPlugnPlayContext.Provider>
+    </Wrapper>
   )
 }

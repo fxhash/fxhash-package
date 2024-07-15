@@ -5,8 +5,12 @@ import {
   ITezosWallet,
   IWalletsSource,
 } from "../_interfaces.js"
+import { SessionDetails } from "./FrameManager.js"
+import { EventEmitter } from "@fxhash/utils"
 
-export interface ICommonWeb3AuthWallet {}
+export interface ICommonWeb3AuthWallet {
+  updateSession: (detais: SessionDetails | null) => void
+}
 
 export type CommonWeb3AuthWallet = ICommonWallet & ICommonWeb3AuthWallet
 export type EvmWeb3AuthWallet = IEvmWallet & ICommonWeb3AuthWallet
@@ -14,6 +18,7 @@ export type TezosWeb3AuthWallet = ITezosWallet & ICommonWeb3AuthWallet
 
 export interface IWeb3AuthWalletsSource extends IWalletsSource {
   login: (payload: Web3AuthLoginPayload) => Promise<any>
+  getWeb3AuthSessionDetails: () => Promise<SessionDetails | null>
 }
 
 export interface IWeb3AuthIdentity {
@@ -45,3 +50,9 @@ export type Web3AuthLoginPayload =
         token: string
       }
     }
+
+export type FrameManagerEventsTypemap = {
+  "session-changed": SessionDetails | null
+}
+
+export class FrameManagerEventEmitter extends EventEmitter<FrameManagerEventsTypemap> {}

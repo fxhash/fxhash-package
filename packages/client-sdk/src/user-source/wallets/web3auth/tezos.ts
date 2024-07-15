@@ -2,31 +2,64 @@ import { type Signer } from "@taquito/taquito"
 import { WalletEventEmitter } from "../_interfaces.js"
 import { type Web3AuthFrameManager } from "./FrameManager.js"
 import { type TezosWeb3AuthWallet } from "./_interfaces.js"
+import { b58cencode, getPkhfromPk, prefix } from "@taquito/utils"
+import { invariant } from "@fxhash/shared"
 
 type Options = Web3AuthFrameManager
 
 export function tezosWeb3AuthWallet(
   frameManager: Options
 ): TezosWeb3AuthWallet {
-  return {
-    // todo: instanciate signer when available, and get pkh from it
-    // then just get it from there
-    getWallet: () => frameManagerTezosSigner(frameManager),
+  const emitter = new WalletEventEmitter()
+  let _address: string | null = null
 
-    // todo: need a way to know when a wallet is available from iframe ?
-    // hook to some Frame Events ?
-    // function exposed for the parent to manually call ?
-    getInfo: () => ({
-      address: "",
-    }),
+  const _updateAddress = (address: string | null) => {
+    if (address !== _address) {
+      _address = address
+      emitter.emit(
+        "wallet-changed",
+        address
+          ? {
+              address,
+            }
+          : null
+      )
+    }
+  }
+
+  return {
+    emitter,
+
+    getWallet: () => {
+      invariant(_address, "no tezos wallet available")
+      return frameManagerTezosSigner(frameManager)
+    },
+
+    updateSession: details => {
+      _updateAddress(
+        details
+          ? getPkhfromPk(
+              b58cencode(
+                details.providerDetails.compressedPublicKey.replace("0x", ""),
+                prefix.sppk
+              )
+            )
+          : null
+      )
+    },
+
+    getInfo: () =>
+      _address
+        ? {
+            address: _address,
+          }
+        : null,
 
     disconnect: async () => {
       const res = await frameManager.logout()
       if (res.isFailure()) throw res.error
     },
 
-    // to comply to the interface, but it can never emit
-    emitter: new WalletEventEmitter().mute(),
     init: async () => {},
     release: () => {},
   }

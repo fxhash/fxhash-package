@@ -135,7 +135,7 @@ export class AccountAuthenticatedButNoWalletConnectedError extends Error {
   }
 }
 
-export type UserReconciliationError =
+export type UserConsistencyError =
   | WalletDoesntBelongAccountError
   | WalletConnectedButNoAccountAuthenticatedError
   | AccountAuthenticatedButNoWalletConnectedError

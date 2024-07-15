@@ -1,40 +1,14 @@
-import { TezosWalletManager } from "@fxhash/tez"
 import { IUserSource } from "../_interfaces.js"
-import { EthereumWalletManager } from "@fxhash/eth"
-import { PromiseResult } from "@fxhash/shared"
-import {
-  IGraphqlWrapper,
-  IWeb3AuthIdentity,
-  SignMessageError,
-  Storage,
-} from "@/index.js"
-import { GetSingleUserAccountResult, ICredentialsDriver } from "./_index.js"
+import { IGraphqlWrapper, Storage } from "@/index.js"
+import { ICredentialsDriver } from "./_index.js"
 
 export interface IAccountSource extends IUserSource {
   authenticated: () => boolean
 }
 
-export interface IAuthAccountSource<AuthFnSignature> extends IAccountSource {
-  authenticate: AuthFnSignature
-}
-
-export interface IWalletsAccountSource
-  extends IAuthAccountSource<
-    (
-      walletManager: TezosWalletManager | EthereumWalletManager
-    ) => PromiseResult<GetSingleUserAccountResult, SignMessageError>
-  > {}
-
-/**
- * Authenticate the user in fxhash backend using Web3Auth credentials.
- * todo: type error
- */
-export interface IWeb3AuthAccountSource
-  extends IAuthAccountSource<
-    (
-      payload: IWeb3AuthIdentity
-    ) => PromiseResult<GetSingleUserAccountResult, Error>
-  > {}
+export interface IAuthAccountSource extends IAccountSource {}
+export interface IWalletsAccountSource extends IAuthAccountSource {}
+export interface IWeb3AuthAccountSource extends IAuthAccountSource {}
 
 export type StoredAccount<
   Credentials extends Record<string, string> = Record<string, string>,

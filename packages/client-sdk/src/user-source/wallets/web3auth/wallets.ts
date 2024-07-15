@@ -4,11 +4,12 @@
  */
 
 import { BlockchainNetwork } from "@fxhash/shared"
-import { Web3AuthFrameManager } from "./FrameManager.js"
+import { SessionDetails, Web3AuthFrameManager } from "./FrameManager.js"
 import { evmWeb3AuthWallet } from "./evm.js"
 import { tezosWeb3AuthWallet } from "./tezos.js"
 import { type IWeb3AuthWalletsSource } from "./_interfaces.js"
 import { multichainWallets } from "../common.js"
+import { cleanup } from "@fxhash/utils"
 
 type Options = {
   frameRootUrl?: string
@@ -38,15 +39,23 @@ export function web3AuthWallets({
   frameRootUrl = "http://localhost:3001",
   safeFrameDomWrapper,
 }: Options): IWeb3AuthWalletsSource {
+  const clean = cleanup()
+  let _currentSession: SessionDetails | null = null
+
   const frameManager = new Web3AuthFrameManager({
     url: frameRootUrl,
     container: safeFrameDomWrapper,
   })
 
+  const _wallets = {
+    evm: evmWeb3AuthWallet(frameManager),
+    tez: tezosWeb3AuthWallet(frameManager),
+  }
+
   // todo: based on events multichainWallets() needs a mini refacto
   const wallets = multichainWallets({
-    [BlockchainNetwork.ETHEREUM]: evmWeb3AuthWallet(frameManager),
-    [BlockchainNetwork.TEZOS]: tezosWeb3AuthWallet(frameManager),
+    [BlockchainNetwork.ETHEREUM]: _wallets.evm,
+    [BlockchainNetwork.TEZOS]: _wallets.tez,
   })
 
   const disconnect = async () => {
@@ -54,10 +63,29 @@ export function web3AuthWallets({
     if (res.isFailure()) throw res.error
   }
 
+  const _handleConnected = (details: SessionDetails | null) => {
+    if (
+      details?.providerDetails.compressedPublicKey !==
+      _currentSession?.providerDetails.compressedPublicKey
+    ) {
+      _currentSession = details
+      // note: this in turns trigger the listeners in multichainWallets(), which
+      // propagates the event up
+      _wallets.evm.updateSession(details)
+      _wallets.tez.updateSession(details)
+    }
+  }
+
   return {
     ...wallets,
 
+    release: () => {
+      wallets.release?.()
+      clean.clear()
+    },
+
     init: async () => {
+      clean.add(frameManager.emitter.on("session-changed", _handleConnected))
       await Promise.all([frameManager.init(), wallets.init()])
     },
 
@@ -68,6 +96,12 @@ export function web3AuthWallets({
       const res = await frameManager.login(options)
       console.log({ res })
       if (res.isFailure()) throw res.error
+    },
+
+    getWeb3AuthSessionDetails: async () => {
+      const res = await frameManager.getSessionDetails()
+      if (res.isFailure()) throw res.error
+      return res.value
     },
   }
 }

@@ -17,17 +17,42 @@ import {
 import { toAccount } from "viem/accounts"
 import { sepolia } from "viem/chains"
 import { type EvmWeb3AuthWallet } from "./_interfaces.js"
+import { computeAddress } from "ethers"
 
 type Options = Web3AuthFrameManager
 
 export function evmWeb3AuthWallet(frameManager: Options): EvmWeb3AuthWallet {
+  const emitter = new WalletEventEmitter()
   let _address: Hash | null = null
 
+  const _updateAddress = (address: Hash | null) => {
+    if (address !== _address) {
+      _address = address
+      emitter.emit(
+        "wallet-changed",
+        address
+          ? {
+              address,
+            }
+          : null
+      )
+    }
+  }
+
   return {
-    // provide an emitter to implement interface, but muted (never emits)
-    emitter: new WalletEventEmitter().mute(),
+    emitter,
 
     init: async () => {},
+
+    updateSession: details => {
+      _updateAddress(
+        details
+          ? (computeAddress(
+              details.providerDetails.compressedPublicKey
+            ) as Hash)
+          : null
+      )
+    },
 
     getClients: async () => {
       invariant(_address, "EVM address missing when requesting client")
@@ -65,6 +90,7 @@ export function evmWeb3AuthWallet(frameManager: Options): EvmWeb3AuthWallet {
     disconnect: async () => {
       const res = await frameManager.logout()
       if (res.isFailure()) throw res.error
+      _address = null
     },
   }
 }
