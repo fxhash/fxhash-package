@@ -1,12 +1,15 @@
-import { UserSourceEventEmitter } from "../_index.js"
+import {
+  AccountAuthenticatedButNoWalletConnectedError,
+  IWalletsSource,
+  UserSourceEventEmitter,
+  anyActiveManager,
+} from "../_index.js"
 import {
   IAccountSourceCommonOptions,
   IWalletsAccountSource,
 } from "./_interfaces.js"
 import { BlockchainNetwork, networkToChain } from "@fxhash/shared"
-import { type EthereumWalletManager } from "@fxhash/eth"
 import {
-  BlockchainType,
   JwtAccessTokenPayload,
   PromiseResult,
   failure,
@@ -14,7 +17,6 @@ import {
   success,
 } from "@fxhash/shared"
 import { type TezosWalletManager } from "@fxhash/tez"
-import { AuthenticationResult } from "@fxhash/gql"
 import { jwtDecode } from "jwt-decode"
 import { isEthereumWalletManager, isTezosWalletManager } from "@/util/types.js"
 import {
@@ -23,17 +25,27 @@ import {
   generateChallenge,
 } from "./_index.js"
 import { SignMessageError } from "@/util/Error.js"
-import { intialization } from "@fxhash/utils"
+import { cleanup, intialization } from "@fxhash/utils"
 import { accountUtils } from "./common.js"
+import { reconciliationState } from "../utils/user-reconciliation.js"
 
-type Options = IAccountSourceCommonOptions
+type Options = {
+  wallets: IWalletsSource
+} & IAccountSourceCommonOptions
 
 const DEFAULT_STORAGE_NAMESPACE = "wallets"
 
 /**
- * Provides some authentication utilities for WalletManager interfaces.
+ * Provides account authentication using some wallets as a source. This module
+ * will hook to `wallets-changed` events emitted by the wallets source to
+ * trigger authentication flows, if needed.
+ *
+ * This module only emits `user-changed`/`error` events, and never propagates
+ * `account-changed`/`wallets-changed` events as it checks if account & wallets
+ * are in a coherent state before exposing those to the rest of the app.
  */
 export function authWallets({
+  wallets,
   gqlWrapper: gql,
   storage,
   credentialsDriver,
@@ -41,8 +53,8 @@ export function authWallets({
 }: Options): IWalletsAccountSource {
   const emitter = new UserSourceEventEmitter()
   const init = intialization()
+  const clean = cleanup()
   const _account = accountUtils({
-    emitter,
     storage,
     gql,
     credentialsDriver,
@@ -58,16 +70,20 @@ export function authWallets({
    * - fetch account using authenticated query
    * - return account
    *
-   * @param manager A WalletManager ready to sign a message.
-   *
    * @returns Account on success, error on failure. (Note: the account is also
    * stored and managed internally, application don't have to rely on the value
    * returned by this function to manager the account state.)
    */
-  const authenticate = async (
-    manager: TezosWalletManager | EthereumWalletManager
-  ): PromiseResult<GetSingleUserAccountResult, SignMessageError> => {
-    init.assertFinished()
+  const authenticate = async (): PromiseResult<
+    GetSingleUserAccountResult,
+    SignMessageError
+  > => {
+    init.check()
+
+    // get a wallet manager from the provided wallets
+    const managers = wallets.getWalletManagers()
+    const manager = anyActiveManager(managers)
+    invariant(manager, "no wallet for authentication")
 
     // derive blockchain env from WalletManager instance
     let network: BlockchainNetwork | null = null
@@ -137,6 +153,53 @@ export function authWallets({
     }
   }
 
+  const _reconciliate = () => {
+    const account = _account.get()
+    const managers = wallets.getWalletManagers()
+    console.log("_reconciliate")
+    console.log({ account, managers })
+    const res = reconciliationState(account, managers)
+    console.log({ _reconciliate: res })
+    if (res.isSuccess()) {
+      emitter.emit("user-changed")
+    } else {
+      if (res.error instanceof AccountAuthenticatedButNoWalletConnectedError) {
+        _account.logoutAccount()
+        return
+      }
+
+      // some error not handlded at this level
+      emitter.emit("error", res.error)
+    }
+  }
+
+  const _hookEvents = () => {
+    clean.add(
+      wallets.emitter.on("wallets-changed", async () => {
+        const anyManager = anyActiveManager(wallets.getWalletManagers())
+
+        // when wallet is connected, but no account is authenticated, we start
+        // authentication process
+        if (anyManager && !_account.get()) {
+          const result = await authenticate()
+          if (result.isFailure()) {
+            console.log(result.error)
+            wallets.disconnectAllWallets()
+            return
+          }
+        }
+
+        // otherwise run the reconciliation
+        _reconciliate()
+      }),
+
+      // when account changes, run state reconciliation
+      _account.emitter.on("account-changed", () => {
+        _reconciliate()
+      })
+    )
+  }
+
   return {
     emitter,
     getAccount: _account.get,
@@ -153,12 +216,19 @@ export function authWallets({
      */
     init: async () => {
       init.start()
-      await _account.reconnectFromStorage()
+      await Promise.all([wallets.init(), _account.reconnectFromStorage()])
+      _reconciliate()
+      _hookEvents()
       init.finish()
     },
 
-    getWalletManagers: () => null,
-    disconnectWallet: async () => {},
-    disconnectAllWallets: async () => {},
+    release: () => {
+      clean.clear()
+      wallets.release?.()
+    },
+
+    getWalletManagers: wallets.getWalletManagers,
+    disconnectWallet: wallets.disconnectWallet,
+    disconnectAllWallets: wallets.disconnectAllWallets,
   }
 }

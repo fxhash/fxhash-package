@@ -8,7 +8,7 @@ import {
   Storage,
   ICredentialsDriver,
   IWindowWalletsSource,
-  IWeb3WalletsSource,
+  IWeb3AuthWalletsSource,
   IWalletsSource,
   IUserSource,
   IPrivateKeyWalletsSource,
@@ -71,7 +71,19 @@ export interface ICreateClientParams {
      * available some utilities to have self-custody wallets created from oauth
      * providers such as Google, Apple, Facebook, etc... and email.
      */
-    web3auth: true
+    web3auth:
+      | true
+      | {
+          /**
+           * In case your application would alter the content of `document.body`
+           * such that it removes the <iframe> this module adds to
+           * `document.body`, you should provide such wrapper here. It should be
+           * a safe html element in which the <iframe> can be appended.
+           *
+           * @default document.body
+           */
+          safeDomWrapper?: HTMLElement
+        }
 
     /**
      * If defined, will instanciate some in-memory wallets where the provided
@@ -156,7 +168,7 @@ export type WalletSourcesMap = {
   /**
    * The Web3Auth wallets source.
    */
-  web3auth: IWeb3WalletsSource | null
+  web3auth: IWeb3AuthWalletsSource | null
 
   /**
    * The Private Key wallets source.

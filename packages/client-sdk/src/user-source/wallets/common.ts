@@ -92,6 +92,8 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
   for (const net of networks) {
     const wallet = wallets[net]
     wallet?.emitter.on("wallet-changed", async () => {
+      console.log("wallet emitter emitted")
+
       try {
         // @ts-expect-error
         managers[net] = await createWalletManager(net, wallet)
@@ -99,6 +101,8 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
         console.log(err)
         throw err
       }
+      console.log("emit wallets-changed")
+      console.log({ net, manager: managers[net] })
       emitter.emit("wallets-changed", [
         // @ts-expect-error
         {
@@ -155,6 +159,12 @@ export function walletsNetworks(wallets: WalletsMap) {
 export function anyActiveManager(
   managers: WalletManagersMap
 ): EthereumWalletManager | TezosWalletManager | null {
+  const mapped = BlockchainNetworks.map(net => managers[net])
+  console.log({
+    BlockchainNetworks,
+    map: mapped,
+    managers: { ...managers },
+  })
   return BlockchainNetworks.map(net => managers[net])
     .map(man => man || null)
     .reduce((prev, curr) => prev || curr, null)

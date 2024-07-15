@@ -3,7 +3,7 @@
  * @license MIT
  */
 
-import { PromiseResult } from "@fxhash/utils"
+import { PromiseResult, intialization, setIntervalCapped } from "@fxhash/utils"
 import {
   IframeBDCommHost,
   IframeRequestTimeout,
@@ -16,6 +16,7 @@ import {
   Web3AuthFrameNotResponding,
 } from "./_errors.js"
 import { Success, failure, invariant, success } from "@fxhash/shared"
+import { Web3AuthLoginPayload } from "./_interfaces.js"
 
 export type Web3AuthFrameConfig = {
   /**
@@ -74,20 +75,7 @@ type TMessages = {
     }
 
     login: {
-      req:
-        | {
-            method: "email"
-            options: {
-              email: string
-            }
-          }
-        | {
-            method: "oauth"
-            options: {
-              provider: "google" | "apple"
-              token: string
-            }
-          }
+      req: Web3AuthLoginPayload
       res: SessionDetails | null
     }
 
@@ -166,7 +154,8 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
       "The Social Wallets frame can only be loaded in a browser context."
     )
     this._config = config
-    this._container = this._config.container || document.body
+    // this._container = this._config.container || document.body
+    this._container = document.body
   }
 
   /**
@@ -191,13 +180,15 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
    * - iframe (& load the URL)
    */
   private initDOM(): PromiseResult<void, Web3AuthFrameNotLoading> {
-    return new Promise<Success<void>>((resolve, reject) => {
+    return new Promise<Success<void>>(async (resolve, reject) => {
+      console.log("init dom !!")
+      console.log(this._container)
       // initialize iframe
       this._wrapper = document.createElement("div")
       this._wrapper.classList.add("__fxhash__wallet-iframe")
 
       this._iframe = document.createElement("iframe")
-      this._iframe.addEventListener("load", () => {
+      this._iframe.addEventListener("load", async () => {
         // reset error handler to clear potential cases
         if (this._iframe) this._iframe.onerror = () => {}
         resolve(success())
@@ -207,11 +198,47 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
       }
       this._iframe.src = this._config.url
       this._iframe.sandbox.add("allow-scripts", "allow-same-origin")
-
-      // add iframe to DOM and load it
       this._wrapper.appendChild(this._iframe)
-      document.body.appendChild(this._wrapper)
+
+      const observer = new MutationObserver(records => {
+        for (const { target, removedNodes } of records) {
+          for (const [_, node] of removedNodes.entries()) {
+            if (node === this.wrapper) {
+              this._container.prepend(this._wrapper!)
+              this._setupFrameCommProtocol()
+            }
+          }
+        }
+      })
+      observer.observe(document.body, {
+        subtree: true,
+        childList: true,
+      })
+
+      this._container.prepend(this._wrapper!)
     })
+  }
+
+  private async _setupFrameCommProtocol() {
+    invariant(this._iframe, "no iframe available")
+    // initialize the iframe with the IframeCommBd
+    {
+      const res = await super.init(this._iframe)
+      console.log({ res })
+      if (res.isFailure())
+        return failure(new Web3AuthFrameNotResponding(this._config.url))
+    }
+
+    // send request to wallet to init
+    {
+      const res = await this.sendRequest({ type: "init" })
+      console.log("init request result:")
+      console.log({ res })
+      if (res.isFailure())
+        return failure(new Web3AuthFrameNotResponding(this._config.url))
+    }
+
+    return success()
   }
 
   private _showFrame(show: boolean) {
@@ -220,23 +247,21 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
   }
 
   async init(): PromiseResult<void, Web3AuthFrameInitializationError> {
+    console.log("init iframe !!!")
     // initialize DOM elements
     {
+      console.log("here")
       const res = await this.initDOM()
+      console.log({ res })
       if (res.isFailure()) return res
     }
     // initialize the communication protocol
     {
-      const res = await super.init(this._iframe!)
-      if (res.isFailure())
-        return failure(new Web3AuthFrameNotResponding(this._config.url))
+      const res = await this._setupFrameCommProtocol()
+      console.log({ res })
+      if (res?.isFailure()) return res
     }
-    // send request to wallet to init
-    {
-      const res = await this.sendRequest({ type: "init" })
-      if (res.isFailure())
-        return failure(new Web3AuthFrameNotResponding(this._config.url))
-    }
+
     return success()
   }
 
@@ -258,11 +283,21 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
     return this.sendRequest({ type: "getSessionDetails" })
   }
 
-  // todo: properly type login options
   async login(
-    options: any
+    payload: Web3AuthLoginPayload
   ): PromiseResult<SessionDetails | null, IframeRequestTimeout> {
-    return this.sendRequest({ type: "login", body: options })
+    try {
+      console.log(
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      )
+      console.log({ payload })
+      const res = await this.sendRequest({ type: "login", body: payload })
+      console.log({ res })
+      return res
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
   }
 
   async logout(): PromiseResult<any, IframeRequestTimeout> {

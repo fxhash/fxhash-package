@@ -7,11 +7,21 @@ import { BlockchainNetwork } from "@fxhash/shared"
 import { Web3AuthFrameManager } from "./FrameManager.js"
 import { evmWeb3AuthWallet } from "./evm.js"
 import { tezosWeb3AuthWallet } from "./tezos.js"
-import { type IWeb3WalletsSource } from "./_interfaces.js"
+import { type IWeb3AuthWalletsSource } from "./_interfaces.js"
 import { multichainWallets } from "../common.js"
 
 type Options = {
   frameRootUrl?: string
+
+  /**
+   * In case your application would alter the content of `document.body` such
+   * that it removes the <iframe> this module adds to `document.body`, you
+   * should provide such wrapper here. It should be a safe html element in which
+   * the <iframe> can be appended.
+   *
+   * @default document.body
+   */
+  safeFrameDomWrapper?: HTMLElement
 }
 
 /**
@@ -26,9 +36,11 @@ type Options = {
 export function web3AuthWallets({
   // todo: from config
   frameRootUrl = "http://localhost:3001",
-}: Options): IWeb3WalletsSource {
+  safeFrameDomWrapper,
+}: Options): IWeb3AuthWalletsSource {
   const frameManager = new Web3AuthFrameManager({
     url: frameRootUrl,
+    container: safeFrameDomWrapper,
   })
 
   // todo: based on events multichainWallets() needs a mini refacto
@@ -44,6 +56,10 @@ export function web3AuthWallets({
 
   return {
     ...wallets,
+
+    init: async () => {
+      await Promise.all([frameManager.init(), wallets.init()])
+    },
 
     disconnectWallet: disconnect,
     disconnectAllWallets: disconnect,

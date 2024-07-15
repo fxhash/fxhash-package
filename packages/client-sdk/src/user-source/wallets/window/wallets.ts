@@ -37,6 +37,8 @@ type Options = {
   }
 }
 
+let instanciated = false
+
 /**
  * The WindowWalletsConnector implements support for connecting with wallets
  * using Javascript objects exposed in the main page by wallets. Using common
@@ -55,6 +57,14 @@ type Options = {
  * window wallet specification.
  */
 export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
+  // show a warning if it's already been instanciated, as undesired
+  if (instanciated) {
+    console.warn(
+      "windowWallets as already been instanciated once. It is unrecommended behaviour usually."
+    )
+  }
+  instanciated = true
+
   const wallets = multichainWallets({
     [BlockchainNetwork.ETHEREUM]: evm
       ? eip1193WalletConnector({

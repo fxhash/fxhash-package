@@ -288,7 +288,7 @@ export abstract class IframeBDCommHost<
   }
 
   protected _postMessage(message: any): void {
-    if (!this.iframe) throw Error(`wallet iframe not initialized`)
+    if (!this.iframe) throw Error(`iframe not initialized`)
     this.iframe.contentWindow?.postMessage(
       message,
       new URL(this.iframe.src).origin

@@ -11,6 +11,7 @@ import {
   connect,
   disconnect,
   injected,
+  getConnections,
 } from "@wagmi/core"
 import { IWalletInfo, WalletEventEmitter } from "../_interfaces.js"
 import { failure, success } from "@fxhash/shared"
@@ -18,7 +19,7 @@ import {
   EvmClientsNotAvailable,
   EvmWagmiClientGenerationError,
 } from "../../_errors.js"
-import { intialization, sleep } from "@fxhash/utils"
+import { intialization, setIntervalCapped, sleep } from "@fxhash/utils"
 import { Address } from "viem"
 
 type Options = {
@@ -57,13 +58,17 @@ export function eip1193WalletConnector({
   let _unwatchAccount: WatchAccountReturnType | null = null
   let _info: IWalletInfo<Address> | null = null
 
-  const _accountChangedEvent = (account: GetAccountReturnType) => {
+  const _accountChangedEvent = async (account: GetAccountReturnType) => {
+    const prevInfo = _info
     _info = account?.address
       ? {
           address: account.address,
         }
       : null
-    emitter.emit("wallet-changed", _info)
+    if (prevInfo?.address !== _info?.address) {
+      console.log("emit wallet-changed")
+      await emitter.emit("wallet-changed", _info)
+    }
   }
 
   const _handleAccountChange = async (
@@ -90,6 +95,23 @@ export function eip1193WalletConnector({
       _unwatchAccount = watchAccount(wagmiConfig, {
         onChange: _handleAccountChange,
       })
+
+      // this basically achieves doing isReady(wagmiConfig) because we want to
+      // get the initial account state here but we can't if its not reconnected
+      let steps = 0
+      await setIntervalCapped(
+        () => {
+          if (steps++ < 5) return
+          // if not reconnecting after 3 steps, move forward
+          if (wagmiConfig.state.status !== "reconnecting") return true
+          return
+        },
+        {
+          delay: 50,
+          maxSteps: 20,
+        }
+      )
+
       await _handleAccountChange(getAccount(wagmiConfig))
       _init.finish()
     },

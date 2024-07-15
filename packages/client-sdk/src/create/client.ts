@@ -71,13 +71,6 @@ export function createClient(params: ICreateClientParams): IClientManySources {
     privateKeys: null,
   }
 
-  // instanciate some shared authentication modules
-  // note: if `authentication` isn't enabled, they won't be added to the user
-  // sources graph and won't be initialized either.
-  const auth = {
-    wallets: authWallets(accountSourceOptions),
-  }
-
   if (params.wallets?.privateKeys) {
     const opts = params.wallets.privateKeys
     wallets.privateKeys = privateKeyWallets({
@@ -87,22 +80,27 @@ export function createClient(params: ICreateClientParams): IClientManySources {
     let source: IUserSource = wallets.privateKeys
     // if auth, wrap wallets with some wallet-authentication
     if (params.authentication) {
-      source = walletsAndAccount({
+      source = authWallets({
         wallets: wallets.privateKeys,
-        account: authWallets(accountSourceOptions),
+        ...accountSourceOptions,
       })
     }
     userSources.push(source)
   }
 
   if (params.wallets?.web3auth) {
-    wallets.web3auth = web3AuthWallets({})
+    wallets.web3auth = web3AuthWallets({
+      safeFrameDomWrapper:
+        typeof params.wallets.web3auth !== "boolean"
+          ? params.wallets.web3auth.safeDomWrapper
+          : undefined,
+    })
     let source: IUserSource = wallets.web3auth
     // if auth, wrap with some web3 authentication
     if (params.authentication) {
-      source = walletsAndAccount({
+      source = authWeb3Auth({
         wallets: wallets.web3auth,
-        account: authWeb3Auth(accountSourceOptions),
+        ...accountSourceOptions,
       })
     }
     userSources.push(source)
@@ -117,9 +115,9 @@ export function createClient(params: ICreateClientParams): IClientManySources {
     let source: IUserSource = wallets.window
     // if auth, wrap authentication wallets arround window source
     if (params.authentication) {
-      source = walletsAndAccount({
+      source = authWallets({
         wallets: wallets.window,
-        account: authWallets(accountSourceOptions),
+        ...accountSourceOptions,
       })
     }
     userSources.push(source)

@@ -1,18 +1,15 @@
+import { useClient } from "@/index.js"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
-import { IClientPlugnPlay } from "./index.js"
 
 const GOOGLE_CLIENT_ID =
   "989746027092-sagkbf4apuj13qlt5jrq693i9cl4bpsn.apps.googleusercontent.com"
 
-type Props = {
-  client: IClientPlugnPlay
-}
-
 /**
  * TODO: Remove from here, shoudl be in react package
  */
-export function GoogleLoginBtn({ client }: Props) {
-  console.log(client)
+export function GoogleLoginBtn() {
+  const { client } = useClient()
+
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <GoogleLogin
@@ -20,14 +17,13 @@ export function GoogleLoginBtn({ client }: Props) {
           if (!response.credential)
             throw Error("credentials missing from google login")
           console.log(response)
-          // client.loginOAuth("google", response.credential)
-          // client.loginOAuth({
-          //   method: "oauth",
-          //   options: {
-          //     provider: "google",
-          //     token: response.credential,
-          //   },
-          // })
+          client?.loginWeb2({
+            method: "oauth",
+            options: {
+              provider: "google",
+              token: response.credential,
+            },
+          })
         }}
       />
     </GoogleOAuthProvider>

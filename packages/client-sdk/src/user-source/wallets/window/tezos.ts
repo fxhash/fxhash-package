@@ -39,8 +39,11 @@ export function tzip10WalletConnector({
   let _info: AccountInfo | null = null
 
   const _handleAccountSet = (account?: AccountInfo) => {
+    const prevInfo = _info
     _info = account || null
-    return emitter.emit("wallet-changed", _info)
+    if (_info?.address !== prevInfo?.address) {
+      emitter.emit("wallet-changed", _info)
+    }
   }
 
   return {

@@ -1,12 +1,14 @@
 import {
   FunctionComponent,
   PropsWithChildren,
+  StrictMode,
   createContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react"
+import { createPortal } from "react-dom"
 import {
   IClientPlugnPlay,
   ClientPlugnPlayOptions,
@@ -20,6 +22,7 @@ import {
   WalletManagersMap,
 } from "@fxhash/client-sdk"
 import { cleanup, DeepOmit } from "@fxhash/utils"
+import { invariant } from "@fxhash/shared"
 
 export type ReactClientPlugnPlayOptions = DeepOmit<
   ClientPlugnPlayOptions,
@@ -63,19 +66,23 @@ export function ClientPlugnPlayProvider({
     setState(st => ({ ...st, [k]: val }))
   }
 
+  const $wrapperRef = useRef<HTMLDivElement>(null)
+
   const once = useRef(false)
-
-  const client = useMemo(
-    () =>
-      createClientPlugnPlay({
-        metadata: config.metadata,
-        wallets: config.wallets,
-      }),
-    []
-  )
-
   useEffect(() => {
+    if (once.current) return
+    once.current = true
+
+    invariant($wrapperRef.current, "wrapper not available")
+
     const clean = cleanup()
+    console.log($wrapperRef)
+    const client = createClientPlugnPlay({
+      metadata: config.metadata,
+      wallets: config.wallets,
+      safeDomWrapper: $wrapperRef.current || document.body,
+    })
+
     clean.add(
       client.emitter.on("error", err => {
         set("userError", err)
@@ -89,16 +96,12 @@ export function ClientPlugnPlayProvider({
         )
       })
     )
+
+    client.init()
     set("client", client)
 
-    // only initialize once
-    if (!once.current) {
-      client.init()
-      once.current = true
-    }
-
     return () => {
-      clean.clear()
+      // clean.clear()
       // client.release()
     }
   }, [])
@@ -107,21 +110,25 @@ export function ClientPlugnPlayProvider({
   const Wrapper: FunctionComponent<PropsWithChildren> = (() => {
     if (!config.wallets.evm) return props => props.children
     const queryClient = new QueryClient()
-    return props => (
-      <DependencyProviders
-        wagmiConfig={client.config.wagmi! as any}
-        queryClient={queryClient}
-      >
-        {props.children}
-      </DependencyProviders>
-    )
+    return props =>
+      state.client ? (
+        <DependencyProviders
+          wagmiConfig={state.client.config.wagmi!}
+          queryClient={queryClient}
+        >
+          {props.children}
+        </DependencyProviders>
+      ) : null
   })()
 
   return (
-    <Wrapper>
-      <ClientPlugnPlayContext.Provider value={state}>
-        {children}
-      </ClientPlugnPlayContext.Provider>
-    </Wrapper>
+    <>
+      {createPortal(<div ref={$wrapperRef} />, document.body)}
+      <Wrapper>
+        <ClientPlugnPlayContext.Provider value={state}>
+          {children}
+        </ClientPlugnPlayContext.Provider>
+      </Wrapper>
+    </>
   )
 }

@@ -33,16 +33,18 @@
     "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@fxhash/utils": "workspace:*",
+    "@react-oauth/google": "0.12.1"
   },
   "peerDependencies": {
     "@fxhash/client-sdk": "workspace:*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/react": "18.2.48",
+    "@types/react-dom": "18.3.0",
     "tsup": "8.0.1",
     "typescript": "5.3.3"
   }

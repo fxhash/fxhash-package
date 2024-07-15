@@ -2,13 +2,16 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { IUserSource } from "../_interfaces.js"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { PromiseResult } from "@fxhash/shared"
-import { IGraphqlWrapper, SignMessageError, Storage } from "@/index.js"
+import {
+  IGraphqlWrapper,
+  IWeb3AuthIdentity,
+  SignMessageError,
+  Storage,
+} from "@/index.js"
 import { GetSingleUserAccountResult, ICredentialsDriver } from "./_index.js"
-import { Hex } from "viem"
 
 export interface IAccountSource extends IUserSource {
   authenticated: () => boolean
-  getWalletManagers: () => null
 }
 
 export interface IAuthAccountSource<AuthFnSignature> extends IAccountSource {
@@ -22,21 +25,6 @@ export interface IWalletsAccountSource
     ) => PromiseResult<GetSingleUserAccountResult, SignMessageError>
   > {}
 
-export interface IWeb3AuthAuthPayload {
-  /**
-   * A Web3Auth authentication token obtained after authenticating with Web3Auth
-   * Such token will be used to securely validate wallet details using Web3Auth
-   * JWKS and validate the public key.
-   */
-  token: string
-
-  /**
-   * A public key in the format EVM compressed public key, which is returned
-   * by Web3Auth when going through their authentication flow.
-   */
-  compressedPublicKey: Hex
-}
-
 /**
  * Authenticate the user in fxhash backend using Web3Auth credentials.
  * todo: type error
@@ -44,7 +32,7 @@ export interface IWeb3AuthAuthPayload {
 export interface IWeb3AuthAccountSource
   extends IAuthAccountSource<
     (
-      payload: IWeb3AuthAuthPayload
+      payload: IWeb3AuthIdentity
     ) => PromiseResult<GetSingleUserAccountResult, Error>
   > {}
 

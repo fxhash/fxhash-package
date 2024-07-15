@@ -21,7 +21,6 @@ function isStoredAccountValid(account: any): account is StoredAccount {
 }
 
 type AccountUtilsOptions = {
-  emitter: UserSourceEventEmitter
   storage: Storage
   gql: IGraphqlWrapper
   credentialsDriver: ICredentialsDriver<any>
@@ -32,12 +31,12 @@ type AccountUtilsOptions = {
  * Abstracts some generic account-handling utilities.
  */
 export function accountUtils({
-  emitter,
   storage,
   gql,
   credentialsDriver,
   storageNamespace,
 }: AccountUtilsOptions) {
+  const emitter = new UserSourceEventEmitter()
   let _account: GetSingleUserAccountResult | null = null
 
   const _getStorageKey = () => `${ACCOUNT_STORAGE_KEY}:${storageNamespace}`
@@ -160,6 +159,7 @@ export function accountUtils({
   }
 
   return {
+    emitter,
     get: () => _account,
     getAccountFromStorage,
     authenticated: () => !!_account,

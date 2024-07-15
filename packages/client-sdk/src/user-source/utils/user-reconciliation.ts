@@ -19,14 +19,16 @@ import { GetSingleUserAccountResult } from "../auth/_index.js"
 export function reconciliationState(
   account: GetSingleUserAccountResult | null,
   managers: WalletManagersMap
-): Result<true, UserReconciliationError> {
+): Result<void, UserReconciliationError> {
   // any of the active wallet managers
   const _anyActiveManager = anyActiveManager(managers)
   const noWalletConnected = !_anyActiveManager
 
+  console.log({ account, managers, _anyActiveManager, noWalletConnected })
+
   if (!account) {
     if (noWalletConnected) {
-      return success(true)
+      return success()
     }
     return failure(
       new WalletConnectedButNoAccountAuthenticatedError(_anyActiveManager)
@@ -47,5 +49,5 @@ export function reconciliationState(
     }
   }
 
-  return success(true)
+  return success()
 }

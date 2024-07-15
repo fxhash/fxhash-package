@@ -12,6 +12,7 @@ import {
   UserSourceEventEmitter,
   createClient,
   ICreateClientParams,
+  Web3AuthLoginPayload,
 } from "@fxhash/client-sdk"
 import { BlockchainNetwork, invariant } from "@fxhash/shared"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
@@ -91,11 +92,22 @@ export type ClientPlugnPlayOptions = {
      */
     tezos: true
   }>
+
+  /**
+   * In case your application would alter the content of `document.body`
+   * such that it removes the <iframe> this module adds to
+   * `document.body`, you should provide such wrapper here. It should be
+   * a safe html element in which the <iframe> can be appended.
+   *
+   * @default document.body
+   */
+  safeDomWrapper?: HTMLElement
 }
 
 export function createClientPlugnPlay({
   metadata,
   wallets,
+  safeDomWrapper,
 }: ClientPlugnPlayOptions): IClientPlugnPlay {
   invariant(
     isBrowser(),
@@ -137,7 +149,9 @@ export function createClientPlugnPlay({
           }
         : undefined,
     },
-    web3auth: true,
+    web3auth: {
+      safeDomWrapper,
+    },
   }
 
   const gql = new GraphqlWrapper()
@@ -253,7 +267,8 @@ export function createClientPlugnPlay({
       clean.clear()
     },
 
-    // todos
-    // - login oauth
+    async loginWeb2(payload: Web3AuthLoginPayload) {
+      return client.walletSources.web3auth?.login(payload)
+    },
   }
 }

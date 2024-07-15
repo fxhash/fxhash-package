@@ -22,6 +22,7 @@ type Options = {
  * doesn't handle reconciliation errors except when a wallet is connected, in
  * which case it automatically starts a signing process with the provided
  * authenticator.
+ * @deprecated
  */
 export function walletsAndAccount({ wallets, account }: Options): IUserSource {
   const init = intialization()
