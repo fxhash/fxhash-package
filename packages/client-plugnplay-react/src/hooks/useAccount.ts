@@ -1,12 +1,15 @@
 import { GetSingleUserAccountResult } from "@fxhash/client-sdk"
 import { useClient } from "./useClient.js"
 
-type Ret = {
+export type UseAccount = {
   account: GetSingleUserAccountResult | null
   authenticated: boolean
 }
 
-export function useAccount(): Ret {
+/**
+ * Returns the account currenly authenticated by the configured user source.
+ */
+export function useAccount(): UseAccount {
   const client = useClient()
   return { account: client.account, authenticated: !!client.account }
 }

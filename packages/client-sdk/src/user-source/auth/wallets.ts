@@ -62,7 +62,7 @@ export function authWallets({
      * stored and managed internally, application don't have to rely on the value
      * returned by this function to manager the account state.)
      */
-    authenticate: async utils => {
+    authenticate: async () => {
       // get a wallet manager from the provided wallets
       const managers = wallets.getWalletManagers()
       const manager = anyActiveManager(managers)
@@ -110,25 +110,7 @@ export function authWallets({
           },
           { gqlClient: gql.client() }
         )
-
-        const { accessToken, refreshToken } = credentials
-        const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
-
-        // store user ID in storage, as well as some additionnal data based on the
-        // authentication payload we received.
-        await utils.store({
-          id,
-          credentials: credentialsDriver.getStoredAuthentication(
-            accessToken,
-            refreshToken
-          ),
-        })
-
-        // eventually apply effects of the authentication strategy
-        credentialsDriver.apply(credentials)
-        // fetch user account, should be authenticated
-        const account = await utils.sync()
-        return success(account)
+        return success(credentials)
       } catch (err) {
         console.log(err)
         // todo: better authentication error (clean plz baptiste)

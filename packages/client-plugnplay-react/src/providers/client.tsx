@@ -1,14 +1,12 @@
 import {
   FunctionComponent,
   PropsWithChildren,
-  StrictMode,
   createContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react"
-import { createPortal } from "react-dom"
 import {
   IClientPlugnPlay,
   ClientPlugnPlayOptions,
@@ -68,41 +66,50 @@ export function ClientPlugnPlayProvider({
   ) => {
     setState(st => ({ ...st, [k]: val }))
   }
+  const update = (values: Partial<ClientBasicState>) => {
+    setState(st => ({ ...st, ...values }))
+  }
 
-  const once = useRef(false)
-  useEffect(() => {
-    if (once.current) return
-    once.current = true
-
-    invariant(safeDomContainer, "wrapper not available")
-
-    const clean = cleanup()
-    console.log(safeDomContainer)
-    const client = createClientPlugnPlay({
+  const clientRef = useRef<IClientPlugnPlay | null>(null)
+  const client = useMemo(() => {
+    if (clientRef.current) return clientRef.current
+    return (clientRef.current = createClientPlugnPlay({
       metadata: config.metadata,
       wallets: config.wallets,
       safeDomWrapper: safeDomContainer,
-    })
+    }))
+  }, [])
 
+  const once = useRef(false)
+
+  useEffect(() => {
+    invariant(safeDomContainer, "wrapper not available")
+
+    const clean = cleanup()
     clean.add(
       client.emitter.on("error", err => {
         set("userError", err)
       }),
       client.emitter.on("user-changed", () => {
-        set("userError", null)
-        set("account", client.source.getAccount())
-        set(
-          "managers",
-          client.source.getWalletManagers() || defaultActiveManagers
-        )
+        update({
+          userError: null,
+          account: client.source.getAccount(),
+          managers: client.source.getWalletManagers() || defaultActiveManagers,
+        })
       })
     )
 
-    client.init()
+    if (!once.current) {
+      client.init()
+      once.current = true
+    }
+
     set("client", client)
 
     return () => {
-      // clean.clear()
+      clean.clear()
+
+      // todo: in dev we don't want to releave and init the client twice ?
       // client.release()
     }
   }, [])

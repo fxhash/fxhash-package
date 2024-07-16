@@ -57,6 +57,7 @@ let instanciated = false
  * window wallet specification.
  */
 export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
+  console.log("called !")
   // show a warning if it's already been instanciated, as undesired
   if (instanciated) {
     console.warn(

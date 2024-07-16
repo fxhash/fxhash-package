@@ -11,8 +11,8 @@ type Props = PropsWithChildren<{
 /**
  * Although this package is framework-agnostic, because we use ConnectKit to
  * provide a connection UI for users, we need to implement it there. React
- * packages can re-use this implementation if they define this provider
- * themselves.
+ * packages can re-use this implementation if they define need a custom
+ * Provider tree.
  *
  * **If you are using `@fxhash/client-plugnplay` in a react context and happen
  * to find a need to use this module, you should look into

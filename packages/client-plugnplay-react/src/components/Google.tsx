@@ -1,6 +1,7 @@
 import { useClient } from "@/index.js"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 
+// todo: move in config
 const GOOGLE_CLIENT_ID =
   "989746027092-sagkbf4apuj13qlt5jrq693i9cl4bpsn.apps.googleusercontent.com"
 

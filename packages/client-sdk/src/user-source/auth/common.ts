@@ -4,6 +4,7 @@ import {
   ICredentialsDriver,
   IGraphqlWrapper,
   IWalletsSource,
+  JWTCredentials,
   SignMessageError,
   Storage,
   UserSourceEventEmitter,
@@ -18,9 +19,15 @@ import {
   IWalletsAccountSource,
   StoredAccount,
 } from "./_interfaces.js"
-import { PromiseResult, invariant } from "@fxhash/shared"
+import {
+  JwtAccessTokenPayload,
+  PromiseResult,
+  failure,
+  invariant,
+} from "@fxhash/shared"
 import { cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"
+import { jwtDecode } from "jwt-decode"
 
 /**
  * The key which will be used to store the account data.
@@ -200,12 +207,17 @@ export function accountUtils({
 export type AuthWithWalletsParams = IAccountSourceCommonOptions & {
   wallets: IWalletsSource
   storageNamespace: string
-  authenticate: (
-    utils: AccountUtils
-    // todo: better typing of | Error depending on the authenticator
-  ) => PromiseResult<GetSingleUserAccountResult, SignMessageError | Error>
+  // todo: type Error union: need clear errors
+  authenticate: () => PromiseResult<JWTCredentials, SignMessageError | Error>
 }
 
+/**
+ * Some generic helper providing authentication flows and user coherency when
+ * there is some authentication with wallets sources.
+ * This will hook on events coming from the wallets source to trigger
+ * authentication flows, where the `authenticate()` method is called when needed
+ * in the flow.
+ */
 export function authWithWallets({
   wallets,
   gqlWrapper: gql,
@@ -269,9 +281,33 @@ export function authWithWallets({
         // when wallet is connected, but no account is authenticated, we start
         // authentication process
         if (anyManager && !_account.get()) {
-          const result = await authenticate(_account)
-          if (result.isFailure()) {
-            console.log(result.error)
+          try {
+            const credentials = await authenticate()
+            // todo: good way to handle errors ?
+            if (credentials.isFailure()) {
+              console.log(credentials.error)
+              throw credentials.error
+            }
+
+            const { accessToken, refreshToken } = credentials.unwrap()
+            const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
+
+            // store user ID in storage, and some additionnal data based on the
+            // authentication payload received.
+            await _account.store({
+              id,
+              credentials: credentialsDriver.getStoredAuthentication(
+                accessToken,
+                refreshToken
+              ),
+            })
+
+            // eventually apply effects of the authentication strategy
+            credentialsDriver.apply(credentials.value)
+            // fetch user account, should be authenticated
+            await _account.sync()
+          } catch (err) {
+            console.log(err)
             wallets.disconnectAllWallets()
             return
           }

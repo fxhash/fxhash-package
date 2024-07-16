@@ -3,16 +3,10 @@ import {
   IAccountSourceCommonOptions,
   IWeb3AuthAccountSource,
 } from "./_interfaces.js"
-import { UserSourceEventEmitter } from "../_interfaces.js"
-import { cleanup, intialization } from "@fxhash/utils"
-import { accountUtils, authWithWallets } from "./common.js"
+import { authWithWallets } from "./common.js"
 import { authenticateWeb3Auth } from "./_index.js"
 import { jwtDecode } from "jwt-decode"
-import {
-  AccountAuthenticatedButNoWalletConnectedError,
-  IWeb3AuthWalletsSource,
-} from "../_index.js"
-import { isUserStateConsistent } from "../utils/user-consistency.js"
+import { IWeb3AuthWalletsSource } from "../_index.js"
 
 type Options = {
   wallets: IWeb3AuthWalletsSource
@@ -20,8 +14,13 @@ type Options = {
 
 const DEFAULT_STORAGE_NAMESPACE = "web3auth"
 
+const instances: Record<string, boolean> = {}
+
 /**
- * Module exposing account management as well as authentication
+ * Can be wrapped around `IWeb3AuthWalletsSource` to provide fxhash backend
+ * authentication using the web3auth wallet source. This module will ensure
+ * consistency between the wallets & the account, eventually exposing user
+ * errors when resolution may require user input.
  */
 export function authWeb3Auth({
   wallets,
@@ -30,13 +29,23 @@ export function authWeb3Auth({
   credentialsDriver,
   storageNamespace,
 }: Options): IWeb3AuthAccountSource {
+  const _storageNamespace = storageNamespace || DEFAULT_STORAGE_NAMESPACE
+
+  // utility warning to catch bad implementations in dev
+  if (instances[_storageNamespace]) {
+    console.warn(
+      "At least 2 instances of authWeb3Auth() have been called with the same storage namespace. This may result in inconsistent behaviours due to storage overrides. This issue should be fixed before releasing to prod."
+    )
+  }
+  instances[_storageNamespace] = true
+
   return authWithWallets({
     wallets,
     gqlWrapper: gql,
     storage,
     credentialsDriver,
-    storageNamespace: storageNamespace || DEFAULT_STORAGE_NAMESPACE,
-    authenticate: async _account => {
+    storageNamespace: _storageNamespace,
+    authenticate: async () => {
       try {
         console.log("authenticate web3auth !")
         const sessionDetails = await wallets.getWeb3AuthSessionDetails()
@@ -59,24 +68,7 @@ export function authWeb3Auth({
             gqlClient: gql.client(),
           }
         )
-        const { accessToken, refreshToken } = credentials
-        const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
-
-        // store user ID in storage, and some additionnal data based on the
-        // authentication payload received.
-        await _account.store({
-          id,
-          credentials: credentialsDriver.getStoredAuthentication(
-            accessToken,
-            refreshToken
-          ),
-        })
-
-        // eventually apply effects of the authentication strategy
-        credentialsDriver.apply(credentials)
-        // fetch user account, should be authenticated
-        const account = await _account.sync()
-        return success(account)
+        return success(credentials)
       } catch (err) {
         // todo: better authentication error (clean plz baptiste)
         return failure(new Error("todo"))

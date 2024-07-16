@@ -1,8 +1,8 @@
 import { UserConsistencyError } from "@fxhash/client-sdk"
 import { useClient } from "./useClient.js"
 
-type Ret = UserConsistencyError | null
+export type UseUserError = UserConsistencyError | null
 
-export function useUserError(): Ret {
+export function useUserError(): UseUserError {
   return useClient().userError
 }
