@@ -5,7 +5,6 @@ import {
   ITezosWallet,
   IWalletsSource,
 } from "../_interfaces.js"
-import { SessionDetails } from "./FrameManager.js"
 import { EventEmitter } from "@fxhash/utils"
 
 export interface ICommonWeb3AuthWallet {
@@ -56,3 +55,111 @@ export type FrameManagerEventsTypemap = {
 }
 
 export class FrameManagerEventEmitter extends EventEmitter<FrameManagerEventsTypemap> {}
+
+/**
+ * Some generic session details, currently only used for Web3Auth sessions.
+ * This type should be extended with unions following the same structure.
+ */
+export type SessionDetails = {
+  /**
+   * The Auth Provider is a string identifying the authentication solution
+   * which is used for managing the wallet.
+   */
+  provider: "web3auth"
+
+  /**
+   * Any extra info provided by the auth provided which may be used by
+   * consumers if needed.
+   */
+  providerDetails: {
+    compressedPublicKey: Hex
+    idToken: string
+  }
+}
+
+/**
+ * Type of the messages (payload, response) between the main context and the
+ * Web3Auth iframe.
+ */
+export type Web3AuthFrameMessageTypes = {
+  "host->frame": {
+    /**
+     * Request to initialize the wallet. If already initialized, resolves
+     * immediately.
+     */
+    init: {
+      req: void
+      res: void
+    }
+
+    /**
+     * Request the current session details to the wallet frame.
+     */
+    getSessionDetails: {
+      req: void
+      res: SessionDetails | null
+    }
+
+    logout: {
+      req: any
+      res: any
+    }
+
+    login: {
+      req: Web3AuthLoginPayload
+      res: SessionDetails | null
+    }
+
+    tez_sign: {
+      req: {
+        op: string
+        magicByte?: Uint8Array
+      }
+      res: {
+        bytes: string
+        sig: string
+        prefixSig: string
+        sbytes: string
+      }
+    }
+
+    "tez__pub-key": {
+      req: void
+      res: string
+    }
+
+    tez__pkh: {
+      req: void
+      res: string
+    }
+
+    "evm__sign-message": {
+      req: {
+        chain: "ETHEREUM" | "BASE"
+        message: string
+      }
+      res: string
+    }
+
+    "evm__sign-transaction": {
+      req: any
+      res: any
+    }
+  }
+
+  "frame->host": {
+    /**
+     * The frame makes a request to the host to hide/show the iframe. The host
+     * should oblige, as such a request is usually made because there's a need
+     * for some user input or the need to display important information to
+     * display to user.
+     */
+    showFrame: {
+      /**
+       * Whether the iframe should be displayed or not.
+       */
+      req: boolean
+      res: void
+    }
+  }
+}

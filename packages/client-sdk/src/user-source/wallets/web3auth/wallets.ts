@@ -4,10 +4,10 @@
  */
 
 import { BlockchainNetwork } from "@fxhash/shared"
-import { SessionDetails, Web3AuthFrameManager } from "./FrameManager.js"
+import { Web3AuthFrameManager } from "./FrameManager.js"
 import { evmWeb3AuthWallet } from "./evm.js"
 import { tezosWeb3AuthWallet } from "./tezos.js"
-import { type IWeb3AuthWalletsSource } from "./_interfaces.js"
+import { SessionDetails, type IWeb3AuthWalletsSource } from "./_interfaces.js"
 import { multichainWallets } from "../common.js"
 import { cleanup } from "@fxhash/utils"
 
@@ -29,10 +29,6 @@ type Options = {
  * The Social Wallets Connector provides an interface to interface with fxhash
  * social wallets (wallets managed by traditionnal social network oauth
  * providers, as well as email).
- *
- * Todos:
- * - when/how to emit events ?
- * - login method
  */
 export function web3AuthWallets({
   // todo: from config
@@ -52,7 +48,6 @@ export function web3AuthWallets({
     tez: tezosWeb3AuthWallet(frameManager),
   }
 
-  // todo: based on events multichainWallets() needs a mini refacto
   const wallets = multichainWallets({
     [BlockchainNetwork.ETHEREUM]: _wallets.evm,
     [BlockchainNetwork.TEZOS]: _wallets.tez,
