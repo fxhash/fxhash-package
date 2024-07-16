@@ -103,3 +103,42 @@ const client = createClient({
   authentication: true,
 })
 ```
+
+## TEMP
+
+### Run the mock
+
+Run `core/hasura`
+
+```sh
+fxrepo apps:run core/hasura
+```
+
+Run social wallet in `core/applications/fxhash-wallet`
+
+```sh
+pnpm dev
+```
+
+Run mock client plunplay in `applications/utils/mock-client-plugnplay-react`
+
+```sh
+FXHASH_ENV=local NEXT_PUBLIC_FXHASH_ENV=local pnpm dev
+```
+
+Folders of interest:
+
+- `packages/public/fxhash-package/packages/client-sdk`
+- `packages/public/fxhash-package/packages/client-plugnplay`
+- `packages/public/fxhash-package/packages/client-plugnplay-react`
+
+## TODO
+
+- [ ] writing tests
+  - [ ] test operations
+- [ ] write documentation about packages
+- [ ] check if the iframe solution can be improved
+- [ ] start integrating into website-v2 to start testing integration
+- [ ] mock test sending operations with wallets
+- [ ] think about google auth using single Provider with web3auth
+- [ ] refacto storage for having a IStorage directly implemented by drivers

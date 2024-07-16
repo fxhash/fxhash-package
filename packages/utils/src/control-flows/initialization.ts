@@ -33,7 +33,7 @@ const initFinishErrorMessage = {
  *   }
  *
  *   public requiresInit() {
- *     this._init.assertFinished("not finished") // throws if not finished
+ *     this._init.check("not finished") // throws if not finished
  *   }
  * }
  * ```

@@ -277,6 +277,8 @@ export class TezosWalletManager extends WalletManager {
    *  - `tezosToolkit` The TezosToolkit instance to use.
    *  - `wallet` The InMemorySigner instance to use.
    * @returns A promise that resolves with the new TezosWalletManager instance.
+   *
+   * @deprecated in favor of private key wallets sources
    */
 
   static async fromPrivateKey(

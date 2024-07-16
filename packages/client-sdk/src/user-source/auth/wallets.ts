@@ -59,8 +59,8 @@ export function authWallets({
      * - return account
      *
      * @returns Account on success, error on failure. (Note: the account is also
-     * stored and managed internally, application don't have to rely on the value
-     * returned by this function to manager the account state.)
+     * stored and managed internally, application don't have to rely on the
+     * value returned by this function to manager the account state.)
      */
     authenticate: async () => {
       // get a wallet manager from the provided wallets

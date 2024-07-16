@@ -38,6 +38,7 @@ export function tzip10WalletConnector({
   let _beaconWallet: BeaconWallet | null = null
   let _info: AccountInfo | null = null
 
+  // todo async
   const _handleAccountSet = (account?: AccountInfo) => {
     const prevInfo = _info
     _info = account || null
