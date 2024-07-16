@@ -586,14 +586,6 @@ type ChallengeResult {
   text: String!
 }
 
-enum EWalletOperatorState {
-  AVAILABLE
-  EMPTY
-  INITIALIZING
-  PREPARING
-  WAITING_CONFIRMATION
-}
-
 """
 columns and relationships of "Event"
 """
@@ -944,9 +936,12 @@ input Int_comparison_exp {
   _nin: [Int!]
 }
 
-type MailTemplate {
-  id: String!
-  name: String!
+input LogoutInput {
+  refreshToken: String
+}
+
+type LogoutResult {
+  success: Boolean!
 }
 
 """
@@ -2334,6 +2329,68 @@ input String_comparison_exp {
 }
 
 """
+columns and relationships of "UserAccount"
+"""
+type UserAccount {
+  """
+  An object relationship
+  """
+  account: Account
+  user_id: uuid
+}
+
+"""
+Boolean expression to filter rows from the table "UserAccount". All fields are combined with a logical 'AND'.
+"""
+input UserAccount_bool_exp {
+  _and: [UserAccount_bool_exp!]
+  _not: UserAccount_bool_exp
+  _or: [UserAccount_bool_exp!]
+  account: Account_bool_exp
+  user_id: uuid_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "UserAccount".
+"""
+input UserAccount_order_by {
+  account: Account_order_by
+  user_id: order_by
+}
+
+"""
+select columns of table "UserAccount"
+"""
+enum UserAccount_select_column {
+  """
+  column name
+  """
+  user_id
+}
+
+"""
+Streaming cursor of the table "UserAccount"
+"""
+input UserAccount_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: UserAccount_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input UserAccount_stream_cursor_value_input {
+  user_id: uuid
+}
+
+"""
 columns and relationships of "Wallet"
 """
 type Wallet {
@@ -2370,12 +2427,6 @@ type Wallet {
     """
     where: user_bool_exp
   ): [user!]!
-}
-
-type WalletRpc {
-  active: Boolean!
-  available: Boolean!
-  url: String!
 }
 
 """
@@ -2802,6 +2853,42 @@ type action {
 }
 
 """
+aggregated selection of "action"
+"""
+type action_aggregate {
+  aggregate: action_aggregate_fields
+  nodes: [action!]!
+}
+
+input action_aggregate_bool_exp {
+  count: action_aggregate_bool_exp_count
+}
+
+input action_aggregate_bool_exp_count {
+  arguments: [action_select_column!]
+  distinct: Boolean
+  filter: action_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "action"
+"""
+type action_aggregate_fields {
+  avg: action_avg_fields
+  count(columns: [action_select_column!], distinct: Boolean): Int!
+  max: action_max_fields
+  min: action_min_fields
+  stddev: action_stddev_fields
+  stddev_pop: action_stddev_pop_fields
+  stddev_samp: action_stddev_samp_fields
+  sum: action_sum_fields
+  var_pop: action_var_pop_fields
+  var_samp: action_var_samp_fields
+  variance: action_variance_fields
+}
+
+"""
 order by aggregate values of table "action"
 """
 input action_aggregate_order_by {
@@ -2816,6 +2903,14 @@ input action_aggregate_order_by {
   var_pop: action_var_pop_order_by
   var_samp: action_var_samp_order_by
   variance: action_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type action_avg_fields {
+  article_id: Float
+  numeric_value: Float
 }
 
 """
@@ -2858,6 +2953,29 @@ input action_bool_exp {
 }
 
 """
+aggregate max on columns
+"""
+type action_max_fields {
+  article_id: Int
+
+  """
+  A computed field, executes function "token_or_objkt_chain_for_action"
+  """
+  chain: String
+  created_at: timestamptz
+  id: uuid
+  issuer_id: String
+  numeric_value: numeric
+  objkt_id: String
+  op_hash: String
+  redeemable_address: String
+  target_id: String
+  ticket_id: String
+  token_id: String
+  type: action_type_enum
+}
+
+"""
 order by max() on columns of table "action"
 """
 input action_max_order_by {
@@ -2873,6 +2991,29 @@ input action_max_order_by {
   ticket_id: order_by
   token_id: order_by
   type: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type action_min_fields {
+  article_id: Int
+
+  """
+  A computed field, executes function "token_or_objkt_chain_for_action"
+  """
+  chain: String
+  created_at: timestamptz
+  id: uuid
+  issuer_id: String
+  numeric_value: numeric
+  objkt_id: String
+  op_hash: String
+  redeemable_address: String
+  target_id: String
+  ticket_id: String
+  token_id: String
+  type: action_type_enum
 }
 
 """
@@ -2992,6 +3133,14 @@ enum action_select_column {
 }
 
 """
+aggregate stddev on columns
+"""
+type action_stddev_fields {
+  article_id: Float
+  numeric_value: Float
+}
+
+"""
 order by stddev() on columns of table "action"
 """
 input action_stddev_order_by {
@@ -3000,11 +3149,27 @@ input action_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type action_stddev_pop_fields {
+  article_id: Float
+  numeric_value: Float
+}
+
+"""
 order by stddev_pop() on columns of table "action"
 """
 input action_stddev_pop_order_by {
   article_id: order_by
   numeric_value: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type action_stddev_samp_fields {
+  article_id: Float
+  numeric_value: Float
 }
 
 """
@@ -3050,6 +3215,14 @@ input action_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type action_sum_fields {
+  article_id: Int
+  numeric_value: numeric
+}
+
+"""
 order by sum() on columns of table "action"
 """
 input action_sum_order_by {
@@ -3075,6 +3248,14 @@ input action_type_enum_comparison_exp {
 }
 
 """
+aggregate var_pop on columns
+"""
+type action_var_pop_fields {
+  article_id: Float
+  numeric_value: Float
+}
+
+"""
 order by var_pop() on columns of table "action"
 """
 input action_var_pop_order_by {
@@ -3083,11 +3264,27 @@ input action_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type action_var_samp_fields {
+  article_id: Float
+  numeric_value: Float
+}
+
+"""
 order by var_samp() on columns of table "action"
 """
 input action_var_samp_order_by {
   article_id: order_by
   numeric_value: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type action_variance_fields {
+  article_id: Float
+  numeric_value: Float
 }
 
 """
@@ -3131,6 +3328,36 @@ type article {
     """
     where: action_bool_exp
   ): [action!]!
+
+  """
+  An aggregate relationship
+  """
+  actions_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
 
   """
   An array relationship
@@ -3360,6 +3587,7 @@ input article_bool_exp {
   _not: article_bool_exp
   _or: [article_bool_exp!]
   actions: action_bool_exp
+  actions_aggregate: action_aggregate_bool_exp
   article_ledgers: article_ledger_bool_exp
   article_revisions: article_revision_bool_exp
   artifact_uri: String_comparison_exp
@@ -6430,17 +6658,43 @@ type generative_token {
   ): [action!]!
 
   """
+  An aggregate relationship
+  """
+  actions_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
+
+  """
   An object relationship
   """
   author: user
   author_id: String
   balance: numeric!
   capture_media_id: bpchar
-
-  """
-  A computed field, executes function "token_chain_for_token"
-  """
-  chain: String
+  chain: String!
 
   """
   An object relationship
@@ -6510,6 +6764,16 @@ type generative_token {
   created_at: timestamptz!
   display_uri: String
   enabled: Boolean!
+
+  """
+  A computed field, executes function "get_features_for_generative_token"
+  """
+  features(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
   flag: generative_token_flag_enum!
   generative_uri: String
   id: String!
@@ -6665,6 +6929,36 @@ type generative_token {
     """
     where: objkt_bool_exp
   ): [objkt!]!
+
+  """
+  An aggregate relationship
+  """
+  objkts_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): objkt_aggregate!
   open_editions: Boolean!
   open_editions_ends_at: timestamptz
   original_supply: numeric!
@@ -6737,13 +7031,13 @@ type generative_token {
   ): [pricing_fixed!]!
 
   """
-  A computed field, executes function "get_random_objkt"
+  A computed field, executes function "get_random_objkts"
   """
-  random_objkt(
+  random_objkts(
     """
-    input parameters for computed field "random_objkt" defined on table "generative_token"
+    input parameters for computed field "random_objkts" defined on table "generative_token"
     """
-    args: random_objkt_generative_token_args
+    args: random_objkts_generative_token_args
 
     """
     distinct select on columns
@@ -7067,6 +7361,7 @@ input generative_token_bool_exp {
   _not: generative_token_bool_exp
   _or: [generative_token_bool_exp!]
   actions: action_bool_exp
+  actions_aggregate: action_aggregate_bool_exp
   author: user_bool_exp
   author_id: String_comparison_exp
   balance: numeric_comparison_exp
@@ -7079,6 +7374,7 @@ input generative_token_bool_exp {
   created_at: timestamptz_comparison_exp
   display_uri: String_comparison_exp
   enabled: Boolean_comparison_exp
+  features: jsonb_comparison_exp
   flag: generative_token_flag_enum_comparison_exp
   generative_uri: String_comparison_exp
   id: String_comparison_exp
@@ -7101,6 +7397,7 @@ input generative_token_bool_exp {
   moderation_reason_id: String_comparison_exp
   name: String_comparison_exp
   objkts: objkt_bool_exp
+  objkts_aggregate: objkt_aggregate_bool_exp
   open_editions: Boolean_comparison_exp
   open_editions_ends_at: timestamptz_comparison_exp
   original_supply: numeric_comparison_exp
@@ -7148,10 +7445,6 @@ type generative_token_max_fields {
   author_id: String
   balance: numeric
   capture_media_id: bpchar
-
-  """
-  A computed field, executes function "token_chain_for_token"
-  """
   chain: String
   codex_id: String
   created_at: timestamptz
@@ -7187,6 +7480,7 @@ input generative_token_max_order_by {
   author_id: order_by
   balance: order_by
   capture_media_id: order_by
+  chain: order_by
   codex_id: order_by
   created_at: order_by
   display_uri: order_by
@@ -7221,10 +7515,6 @@ type generative_token_min_fields {
   author_id: String
   balance: numeric
   capture_media_id: bpchar
-
-  """
-  A computed field, executes function "token_chain_for_token"
-  """
   chain: String
   codex_id: String
   created_at: timestamptz
@@ -7260,6 +7550,7 @@ input generative_token_min_order_by {
   author_id: order_by
   balance: order_by
   capture_media_id: order_by
+  chain: order_by
   codex_id: order_by
   created_at: order_by
   display_uri: order_by
@@ -7304,6 +7595,7 @@ input generative_token_order_by {
   created_at: order_by
   display_uri: order_by
   enabled: order_by
+  features: order_by
   flag: order_by
   generative_uri: order_by
   id: order_by
@@ -7367,6 +7659,11 @@ enum generative_token_select_column {
   column name
   """
   capture_media_id
+
+  """
+  column name
+  """
+  chain
 
   """
   column name
@@ -7674,6 +7971,7 @@ input generative_token_stream_cursor_value_input {
   author_id: String
   balance: numeric
   capture_media_id: bpchar
+  chain: String
   codex_id: String
   created_at: timestamptz
   display_uri: String
@@ -8358,6 +8656,7 @@ type listing {
   objkt_id: String
   price: numeric!
   royalties: Int!
+  status: listing_status_enum!
 
   """
   An object relationship
@@ -8421,6 +8720,7 @@ input listing_bool_exp {
   objkt_id: String_comparison_exp
   price: numeric_comparison_exp
   royalties: Int_comparison_exp
+  status: listing_status_enum_comparison_exp
   user: user_bool_exp
   userByAcceptedById: user_bool_exp
   version: Int_comparison_exp
@@ -8441,6 +8741,7 @@ input listing_max_order_by {
   objkt_id: order_by
   price: order_by
   royalties: order_by
+  status: order_by
   version: order_by
 }
 
@@ -8459,6 +8760,7 @@ input listing_min_order_by {
   objkt_id: order_by
   price: order_by
   royalties: order_by
+  status: order_by
   version: order_by
 }
 
@@ -8481,6 +8783,7 @@ input listing_order_by {
   objkt_id: order_by
   price: order_by
   royalties: order_by
+  status: order_by
   user: user_order_by
   userByAcceptedById: user_order_by
   version: order_by
@@ -8558,7 +8861,29 @@ enum listing_select_column {
   """
   column name
   """
+  status
+
+  """
+  column name
+  """
   version
+}
+
+scalar listing_status_enum
+
+"""
+Boolean expression to compare columns of type "listing_status_enum". All fields are combined with logical 'AND'.
+"""
+input listing_status_enum_comparison_exp {
+  _eq: listing_status_enum
+  _gt: listing_status_enum
+  _gte: listing_status_enum
+  _in: [listing_status_enum!]
+  _is_null: Boolean
+  _lt: listing_status_enum
+  _lte: listing_status_enum
+  _neq: listing_status_enum
+  _nin: [listing_status_enum!]
 }
 
 """
@@ -8626,6 +8951,7 @@ input listing_stream_cursor_value_input {
   objkt_id: String
   price: numeric
   royalties: Int
+  status: listing_status_enum
   version: Int
 }
 
@@ -8681,6 +9007,7 @@ type market_stats {
   floor_change7d: numeric
   floor_change24: numeric
   floor_change30d: numeric
+  floor_fiat: numeric
   from: timestamptz
 
   """
@@ -8688,8 +9015,10 @@ type market_stats {
   """
   generative_token: generative_token!
   highest_sold: numeric
+  highest_sold_fiat: numeric
   listed: Int
   lowest_sold: numeric
+  lowest_sold_fiat: numeric
   median: numeric
   prim_volume: numeric
   prim_volume_fiat: numeric
@@ -8736,11 +9065,14 @@ input market_stats_bool_exp {
   floor_change7d: numeric_comparison_exp
   floor_change24: numeric_comparison_exp
   floor_change30d: numeric_comparison_exp
+  floor_fiat: numeric_comparison_exp
   from: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
   highest_sold: numeric_comparison_exp
+  highest_sold_fiat: numeric_comparison_exp
   listed: Int_comparison_exp
   lowest_sold: numeric_comparison_exp
+  lowest_sold_fiat: numeric_comparison_exp
   median: numeric_comparison_exp
   prim_volume: numeric_comparison_exp
   prim_volume_fiat: numeric_comparison_exp
@@ -9233,11 +9565,14 @@ input market_stats_order_by {
   floor_change7d: order_by
   floor_change24: order_by
   floor_change30d: order_by
+  floor_fiat: order_by
   from: order_by
   generative_token: generative_token_order_by
   highest_sold: order_by
+  highest_sold_fiat: order_by
   listed: order_by
   lowest_sold: order_by
+  lowest_sold_fiat: order_by
   median: order_by
   prim_volume: order_by
   prim_volume_fiat: order_by
@@ -9300,6 +9635,11 @@ enum market_stats_select_column {
   """
   column name
   """
+  floor_fiat
+
+  """
+  column name
+  """
   from
 
   """
@@ -9310,12 +9650,22 @@ enum market_stats_select_column {
   """
   column name
   """
+  highest_sold_fiat
+
+  """
+  column name
+  """
   listed
 
   """
   column name
   """
   lowest_sold
+
+  """
+  column name
+  """
+  lowest_sold_fiat
 
   """
   column name
@@ -9506,10 +9856,13 @@ input market_stats_stream_cursor_value_input {
   floor_change7d: numeric
   floor_change24: numeric
   floor_change30d: numeric
+  floor_fiat: numeric
   from: timestamptz
   highest_sold: numeric
+  highest_sold_fiat: numeric
   listed: Int
   lowest_sold: numeric
+  lowest_sold_fiat: numeric
   median: numeric
   prim_volume: numeric
   prim_volume_fiat: numeric
@@ -10427,6 +10780,11 @@ mutation root
 type mutation_root {
   authenticate(input: AuthenticationInput!): AuthenticationResult
   generate_challenge(input: ChallengeInput!): ChallengeResult
+
+  """
+  Logout the current logged in user. For cookie sessions, no need to pass any input.
+  """
+  logout(input: LogoutInput): LogoutResult
   offchain: offchain_mutation_frontend
   refresh(input: RefreshInput!): AuthenticationResult
 
@@ -10513,6 +10871,36 @@ type objkt {
     """
     where: action_bool_exp
   ): [action!]!
+
+  """
+  An aggregate relationship
+  """
+  actions_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
   assigned: Boolean
   assigned_at: timestamptz
 
@@ -10755,6 +11143,132 @@ type objkt {
 }
 
 """
+aggregated selection of "objkt"
+"""
+type objkt_aggregate {
+  aggregate: objkt_aggregate_fields
+  nodes: [objkt!]!
+}
+
+input objkt_aggregate_bool_exp {
+  avg: objkt_aggregate_bool_exp_avg
+  bool_and: objkt_aggregate_bool_exp_bool_and
+  bool_or: objkt_aggregate_bool_exp_bool_or
+  corr: objkt_aggregate_bool_exp_corr
+  count: objkt_aggregate_bool_exp_count
+  covar_samp: objkt_aggregate_bool_exp_covar_samp
+  max: objkt_aggregate_bool_exp_max
+  min: objkt_aggregate_bool_exp_min
+  stddev_samp: objkt_aggregate_bool_exp_stddev_samp
+  sum: objkt_aggregate_bool_exp_sum
+  var_samp: objkt_aggregate_bool_exp_var_samp
+}
+
+input objkt_aggregate_bool_exp_avg {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_avg_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_bool_and {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_bool_and_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_bool_or {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_bool_or_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_corr {
+  arguments: objkt_aggregate_bool_exp_corr_arguments!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_corr_arguments {
+  X: objkt_select_column_objkt_aggregate_bool_exp_corr_arguments_columns!
+  Y: objkt_select_column_objkt_aggregate_bool_exp_corr_arguments_columns!
+}
+
+input objkt_aggregate_bool_exp_count {
+  arguments: [objkt_select_column!]
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_covar_samp {
+  arguments: objkt_aggregate_bool_exp_covar_samp_arguments!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_covar_samp_arguments {
+  X: objkt_select_column_objkt_aggregate_bool_exp_covar_samp_arguments_columns!
+  Y: objkt_select_column_objkt_aggregate_bool_exp_covar_samp_arguments_columns!
+}
+
+input objkt_aggregate_bool_exp_max {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_max_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_min {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_min_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_stddev_samp {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_stddev_samp_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_sum {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_sum_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+input objkt_aggregate_bool_exp_var_samp {
+  arguments: objkt_select_column_objkt_aggregate_bool_exp_var_samp_arguments_columns!
+  distinct: Boolean
+  filter: objkt_bool_exp
+  predicate: float8_comparison_exp!
+}
+
+"""
+aggregate fields of "objkt"
+"""
+type objkt_aggregate_fields {
+  avg: objkt_avg_fields
+  count(columns: [objkt_select_column!], distinct: Boolean): Int!
+  max: objkt_max_fields
+  min: objkt_min_fields
+  stddev: objkt_stddev_fields
+  stddev_pop: objkt_stddev_pop_fields
+  stddev_samp: objkt_stddev_samp_fields
+  sum: objkt_sum_fields
+  var_pop: objkt_var_pop_fields
+  var_samp: objkt_var_samp_fields
+  variance: objkt_variance_fields
+}
+
+"""
 order by aggregate values of table "objkt"
 """
 input objkt_aggregate_order_by {
@@ -10769,6 +11283,16 @@ input objkt_aggregate_order_by {
   var_pop: objkt_var_pop_order_by
   var_samp: objkt_var_samp_order_by
   variance: objkt_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type objkt_avg_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -10789,6 +11313,7 @@ input objkt_bool_exp {
   _not: objkt_bool_exp
   _or: [objkt_bool_exp!]
   actions: action_bool_exp
+  actions_aggregate: action_aggregate_bool_exp
   assigned: Boolean_comparison_exp
   assigned_at: timestamptz_comparison_exp
   auctions: auction_bool_exp
@@ -10827,6 +11352,32 @@ input objkt_bool_exp {
 }
 
 """
+aggregate max on columns
+"""
+type objkt_max_fields {
+  assigned_at: timestamptz
+  capture_media_id: bpchar
+  created_at: timestamptz
+  display_uri: bpchar
+  generation_hash: String
+  id: String
+  input_bytes: String
+  issuer_id: String
+  iteration: numeric
+  metadata_uri: String
+  minter_id: String
+  name: String
+  owner_id: String
+  rarity: float8
+  royalties: Int
+  slug: String
+  tags: [String!]
+  thumbnail_uri: bpchar
+  updated_at: timestamptz
+  version: Int
+}
+
+"""
 order by max() on columns of table "objkt"
 """
 input objkt_max_order_by {
@@ -10850,6 +11401,32 @@ input objkt_max_order_by {
   thumbnail_uri: order_by
   updated_at: order_by
   version: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type objkt_min_fields {
+  assigned_at: timestamptz
+  capture_media_id: bpchar
+  created_at: timestamptz
+  display_uri: bpchar
+  generation_hash: String
+  id: String
+  input_bytes: String
+  issuer_id: String
+  iteration: numeric
+  metadata_uri: String
+  minter_id: String
+  name: String
+  owner_id: String
+  rarity: float8
+  royalties: Int
+  slug: String
+  tags: [String!]
+  thumbnail_uri: bpchar
+  updated_at: timestamptz
+  version: Int
 }
 
 """
@@ -11046,6 +11623,126 @@ enum objkt_select_column {
 }
 
 """
+select "objkt_aggregate_bool_exp_avg_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_avg_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_bool_and_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_bool_and_arguments_columns {
+  """
+  column name
+  """
+  assigned
+
+  """
+  column name
+  """
+  duplicate
+}
+
+"""
+select "objkt_aggregate_bool_exp_bool_or_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_bool_or_arguments_columns {
+  """
+  column name
+  """
+  assigned
+
+  """
+  column name
+  """
+  duplicate
+}
+
+"""
+select "objkt_aggregate_bool_exp_corr_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_corr_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_covar_samp_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_covar_samp_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_max_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_max_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_min_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_min_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_stddev_samp_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_stddev_samp_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_sum_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_sum_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+select "objkt_aggregate_bool_exp_var_samp_arguments_columns" columns of table "objkt"
+"""
+enum objkt_select_column_objkt_aggregate_bool_exp_var_samp_arguments_columns {
+  """
+  column name
+  """
+  rarity
+}
+
+"""
+aggregate stddev on columns
+"""
+type objkt_stddev_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 order by stddev() on columns of table "objkt"
 """
 input objkt_stddev_order_by {
@@ -11056,6 +11753,16 @@ input objkt_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type objkt_stddev_pop_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 order by stddev_pop() on columns of table "objkt"
 """
 input objkt_stddev_pop_order_by {
@@ -11063,6 +11770,16 @@ input objkt_stddev_pop_order_by {
   rarity: order_by
   royalties: order_by
   version: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type objkt_stddev_samp_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -11121,6 +11838,16 @@ input objkt_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type objkt_sum_fields {
+  iteration: numeric
+  rarity: float8
+  royalties: Int
+  version: Int
+}
+
+"""
 order by sum() on columns of table "objkt"
 """
 input objkt_sum_order_by {
@@ -11128,6 +11855,16 @@ input objkt_sum_order_by {
   rarity: order_by
   royalties: order_by
   version: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type objkt_var_pop_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -11141,6 +11878,16 @@ input objkt_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type objkt_var_samp_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 order by var_samp() on columns of table "objkt"
 """
 input objkt_var_samp_order_by {
@@ -11148,6 +11895,16 @@ input objkt_var_samp_order_by {
   rarity: order_by
   royalties: order_by
   version: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type objkt_variance_fields {
+  iteration: Float
+  rarity: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -11735,6 +12492,36 @@ type offchain_query {
   Project_by_pk(id: uuid!): Project
 
   """
+  fetch data from the table: "UserAccount"
+  """
+  UserAccount(
+    """
+    distinct select on columns
+    """
+    distinct_on: [UserAccount_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [UserAccount_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: UserAccount_bool_exp
+  ): [UserAccount!]!
+
+  """
   fetch data from the table: "Wallet"
   """
   Wallet(
@@ -12278,6 +13065,56 @@ type offchain_subscription {
   ): [Project!]!
 
   """
+  fetch data from the table: "UserAccount"
+  """
+  UserAccount(
+    """
+    distinct select on columns
+    """
+    distinct_on: [UserAccount_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [UserAccount_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: UserAccount_bool_exp
+  ): [UserAccount!]!
+
+  """
+  fetch data from the table in a streaming manner: "UserAccount"
+  """
+  UserAccount_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [UserAccount_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: UserAccount_bool_exp
+  ): [UserAccount!]!
+
+  """
   fetch data from the table: "Wallet"
   """
   Wallet(
@@ -12741,6 +13578,36 @@ type onchain_query {
     """
     where: action_bool_exp
   ): [action!]!
+
+  """
+  fetch aggregated fields from the table: "action"
+  """
+  action_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
 
   """
   fetch data from the table: "action" using primary key columns
@@ -13933,6 +14800,36 @@ type onchain_query {
   ): [objkt!]!
 
   """
+  fetch aggregated fields from the table: "objkt"
+  """
+  objkt_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): objkt_aggregate!
+
+  """
   fetch data from the table: "objkt" using primary key columns
   """
   objkt_by_pk(id: String!): objkt
@@ -14353,6 +15250,36 @@ type onchain_subscription {
     """
     where: action_bool_exp
   ): [action!]!
+
+  """
+  fetch aggregated fields from the table: "action"
+  """
+  action_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
 
   """
   fetch data from the table: "action" using primary key columns
@@ -16205,6 +17132,36 @@ type onchain_subscription {
   ): [objkt!]!
 
   """
+  fetch aggregated fields from the table: "objkt"
+  """
+  objkt_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): objkt_aggregate!
+
+  """
   fetch data from the table: "objkt" using primary key columns
   """
   objkt_by_pk(id: String!): objkt
@@ -17355,16 +18312,14 @@ type query_root {
   fetch data from the table: "Featured" using primary key columns
   """
   Featured_by_pk(id: Int!): Featured
-  mailTemplates: [MailTemplate!]!
-  managedWalletState(publicKey: String!): EWalletOperatorState
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
-  walletRpcs: [WalletRpc!]
 }
 
-input random_objkt_generative_token_args {
+input random_objkts_generative_token_args {
   excluded_ids: _text
+  limit_param: Int
 }
 
 """
@@ -17400,6 +18355,36 @@ type redeemable {
     """
     where: action_bool_exp
   ): [action!]!
+
+  """
+  An aggregate relationship
+  """
+  actions_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
   address: String!
   base_amount: numeric!
   created_at: timestamptz!
@@ -17506,6 +18491,7 @@ input redeemable_bool_exp {
   _not: redeemable_bool_exp
   _or: [redeemable_bool_exp!]
   actions: action_bool_exp
+  actions_aggregate: action_aggregate_bool_exp
   address: String_comparison_exp
   base_amount: numeric_comparison_exp
   created_at: timestamptz_comparison_exp
@@ -19074,6 +20060,66 @@ type user {
   ): [action!]!
 
   """
+  An aggregate relationship
+  """
+  actionsByIssuerId_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
+
+  """
+  An aggregate relationship
+  """
+  actions_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [action_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [action_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: action_bool_exp
+  ): action_aggregate!
+
+  """
   An array relationship
   """
   article_ledgers(
@@ -19550,6 +20596,66 @@ type user {
   ): [objkt!]!
 
   """
+  An aggregate relationship
+  """
+  objktsByOwnerId_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): objkt_aggregate!
+
+  """
+  An aggregate relationship
+  """
+  objkts_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): objkt_aggregate!
+
+  """
   An array relationship
   """
   offers(
@@ -19696,6 +20802,8 @@ input user_bool_exp {
   _or: [user_bool_exp!]
   actions: action_bool_exp
   actionsByIssuerId: action_bool_exp
+  actionsByIssuerId_aggregate: action_aggregate_bool_exp
+  actions_aggregate: action_aggregate_bool_exp
   article_ledgers: article_ledger_bool_exp
   articles: article_bool_exp
   auction_bids: auction_bid_bool_exp
@@ -19724,6 +20832,8 @@ input user_bool_exp {
   name: String_comparison_exp
   objkts: objkt_bool_exp
   objktsByOwnerId: objkt_bool_exp
+  objktsByOwnerId_aggregate: objkt_aggregate_bool_exp
+  objkts_aggregate: objkt_aggregate_bool_exp
   offers: offer_bool_exp
   redemptions: redemption_bool_exp
   reports: report_bool_exp

@@ -18,7 +18,6 @@ export interface IFxhashApis {
   ipfsGatewaySafe: string
   ipfsGatewayInternal: string
   onchfsProxy: string
-  onchfsProxyInternal: string
   opensea: string
   authority: {
     api: string
@@ -36,7 +35,6 @@ export interface IFxhashApis {
   }
   dashboard: {
     backend: string
-    aggregator: string
   }
   events: {
     liveBackend: string
@@ -57,8 +55,8 @@ export const fxhashDevApis: IFxhashApis = {
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
-    "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
-  fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
+    "http://fxhash-multichain-dev-testnet-file-api.fxhash-multichain-dev-testnet.svc.cluster.local:4004",
+  fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
     " http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
@@ -71,8 +69,6 @@ export const fxhashDevApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
-  onchfsProxyInternal:
-    "http://fxhash-dev-testnet-onchfs-proxy.fxhash-dev-testnet.svc.cluster.local:4004",
   opensea: "https://testnets-api.opensea.io/api/v2/chain/sepolia",
   authority: {
     api: "NONE",
@@ -94,7 +90,6 @@ export const fxhashDevApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://live-minting.fxhash-dev.xyz",
-    aggregator: "_NONE",
   },
   events: {
     liveBackend: "_NONE",
@@ -116,7 +111,6 @@ export const fxhashLocalApis: IFxhashApis = {
   hasuraGql: "http://localhost:8888/v1/graphql",
   fileInternal: fxhashDevApis.file,
   ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
-  onchfsProxyInternal: fxhashDevApis.onchfsProxy,
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -133,8 +127,9 @@ export const fxhashPrdApis: IFxhashApis = {
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
-  fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
-  fsEmulator: "https://fs-emulator.fxhash2.xyz",
+  fileInternal:
+    "http://fxhash-multichain-prd-file-api.fxhash-multichain-prd.svc.cluster.local:4004",
+  fsEmulator: "https://file-api.fxhash.xyz/fs",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
     "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
@@ -147,8 +142,6 @@ export const fxhashPrdApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
-  onchfsProxyInternal:
-    "http://fxhash-prd-onchfs-proxy.fxhash-prd.svc.cluster.local:4004",
   opensea: "https://api.opensea.io/api/v2/chain/ethereum",
   authority: {
     api: "NONE",
@@ -170,7 +163,6 @@ export const fxhashPrdApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://events.fxhash.xyz",
-    aggregator: "NONE",
   },
   events: {
     liveBackend: "_NONE",
