@@ -858,6 +858,15 @@ input Media_stream_cursor_value_input {
   uploaderId: uuid
 }
 
+input OAuthWeb3AuthInput {
+  provider: String!
+  token: String!
+}
+
+type OAuthWeb3AuthOutput {
+  idToken: String!
+}
+
 """
 columns and relationships of "Profile"
 """
@@ -9178,6 +9187,11 @@ type mutation_root {
   Logout the current logged in user. For cookie sessions, no need to pass any input.
   """
   logout(input: LogoutInput): LogoutResult
+
+  """
+  Use a provider oauth id token to issue a JWT for web3auth custom provider validation
+  """
+  oauth_web3auth(input: OAuthWeb3AuthInput!): OAuthWeb3AuthOutput
   offchain: offchain_mutation_frontend
   refresh(input: RefreshInput!): AuthenticationResult
 

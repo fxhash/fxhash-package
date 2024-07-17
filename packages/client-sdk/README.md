@@ -142,3 +142,7 @@ Folders of interest:
 - [ ] mock test sending operations with wallets
 - [ ] think about google auth using single Provider with web3auth
 - [ ] refacto storage for having a IStorage directly implemented by drivers
+- [ ] proper error management for all code paths
+- [ ] loading states - right now there is now way to have some "loading"
+      state from the user sources. we'd want to know when some authentication is
+      happening, etc...
