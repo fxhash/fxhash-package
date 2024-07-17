@@ -30,9 +30,26 @@ export const Mu_AuthenticateWeb3Auth = graphql(`
   }
 `)
 
-export const Mu_OAuthWeb3Auth = graphql(`
-  mutation OAuthWeb3Auth($input: OAuthWeb3AuthInput!) {
-    oauth_web3auth(input: $input) {
+export const Mu_Web3AuthOAuth = graphql(`
+  mutation Web3AuthOAuth($input: Web3AuthOAuthInput!) {
+    web3auth_oauth(input: $input) {
+      idToken
+    }
+  }
+`)
+
+export const Mu_Web3AuthEmailRequestOTP = graphql(`
+  mutation Web3AuthEmailRequestOTP($email: String!) {
+    web3auth_email_request_otp(input: $email) {
+      email
+      expires
+    }
+  }
+`)
+
+export const Mu_Web3AuthEmailAuthOTP = graphql(`
+  mutation MyMutation($input: Web3AuthEmailAuthOTPInput!) {
+    web3auth_email_auth_otp(input: $input) {
       idToken
     }
   }

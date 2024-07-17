@@ -741,16 +741,6 @@ export type Media_Stream_Cursor_Value_Input = {
   uploaderId?: InputMaybe<Scalars['uuid']['input']>;
 };
 
-export type OAuthWeb3AuthInput = {
-  provider: Scalars['String']['input'];
-  token: Scalars['String']['input'];
-};
-
-export type OAuthWeb3AuthOutput = {
-  __typename?: 'OAuthWeb3AuthOutput';
-  idToken: Scalars['String']['output'];
-};
-
 /** columns and relationships of "Profile" */
 export type Profile = {
   __typename?: 'Profile';
@@ -1677,6 +1667,32 @@ export type Wallet_Stream_Cursor_Value_Input = {
   accountId?: InputMaybe<Scalars['uuid']['input']>;
   address?: InputMaybe<Scalars['String']['input']>;
   network?: InputMaybe<Scalars['BlockchainNetwork']['input']>;
+};
+
+export type Web3AuthEmailAuthOtpInput = {
+  email: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
+};
+
+export type Web3AuthEmailAuthOtpOutput = {
+  __typename?: 'Web3AuthEmailAuthOTPOutput';
+  idToken: Scalars['String']['output'];
+};
+
+export type Web3AuthEmailRequestOtpOutput = {
+  __typename?: 'Web3AuthEmailRequestOTPOutput';
+  email: Scalars['String']['output'];
+  expires: Scalars['String']['output'];
+};
+
+export type Web3AuthOAuthInput = {
+  provider: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+export type Web3AuthOAuthOutput = {
+  __typename?: 'Web3AuthOAuthOutput';
+  idToken: Scalars['String']['output'];
 };
 
 /** columns and relationships of "Whitelist" */
@@ -7629,14 +7645,18 @@ export type Mutation_Root = {
   link_wallet_to_account: Scalars['Boolean']['output'];
   /** Logout the current logged in user. For cookie sessions, no need to pass any input. */
   logout?: Maybe<LogoutResult>;
-  /** Use a provider oauth id token to issue a JWT for web3auth custom provider validation */
-  oauth_web3auth?: Maybe<OAuthWeb3AuthOutput>;
   offchain?: Maybe<Offchain_Mutation_Frontend>;
   refresh?: Maybe<AuthenticationResult>;
   /** given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile */
   set_farcaster_handle?: Maybe<SetFarcasterHandleResult>;
   set_whitelist?: Maybe<SetWhitelistOutput>;
   unlink_wallet_from_account: Scalars['Boolean']['output'];
+  /** Use an OTP with an email to issue a JWT for web3auth custom provider validation */
+  web3auth_email_auth_otp?: Maybe<Web3AuthEmailAuthOtpOutput>;
+  /** Request an OTP verification for email verification */
+  web3auth_email_request_otp?: Maybe<Web3AuthEmailRequestOtpOutput>;
+  /** Use a provider oauth id token to issue a JWT for web3auth custom provider validation */
+  web3auth_oauth?: Maybe<Web3AuthOAuthOutput>;
 };
 
 
@@ -7671,12 +7691,6 @@ export type Mutation_RootLogoutArgs = {
 
 
 /** mutation root */
-export type Mutation_RootOauth_Web3authArgs = {
-  input: OAuthWeb3AuthInput;
-};
-
-
-/** mutation root */
 export type Mutation_RootRefreshArgs = {
   input: RefreshInput;
 };
@@ -7697,6 +7711,24 @@ export type Mutation_RootSet_WhitelistArgs = {
 /** mutation root */
 export type Mutation_RootUnlink_Wallet_From_AccountArgs = {
   input?: InputMaybe<UnlinkWalletInput>;
+};
+
+
+/** mutation root */
+export type Mutation_RootWeb3auth_Email_Auth_OtpArgs = {
+  input: Web3AuthEmailAuthOtpInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootWeb3auth_Email_Request_OtpArgs = {
+  input: Scalars['String']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootWeb3auth_OauthArgs = {
+  input: Web3AuthOAuthInput;
 };
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -13805,12 +13837,26 @@ export type AuthenticateWeb3AuthMutationVariables = Exact<{
 
 export type AuthenticateWeb3AuthMutation = { __typename?: 'mutation_root', authenticate_web3auth?: { __typename?: 'AuthenticationResult', accessToken: string, refreshToken: string } | null };
 
-export type OAuthWeb3AuthMutationVariables = Exact<{
-  input: OAuthWeb3AuthInput;
+export type Web3AuthOAuthMutationVariables = Exact<{
+  input: Web3AuthOAuthInput;
 }>;
 
 
-export type OAuthWeb3AuthMutation = { __typename?: 'mutation_root', oauth_web3auth?: { __typename?: 'OAuthWeb3AuthOutput', idToken: string } | null };
+export type Web3AuthOAuthMutation = { __typename?: 'mutation_root', web3auth_oauth?: { __typename?: 'Web3AuthOAuthOutput', idToken: string } | null };
+
+export type Web3AuthEmailRequestOtpMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type Web3AuthEmailRequestOtpMutation = { __typename?: 'mutation_root', web3auth_email_request_otp?: { __typename?: 'Web3AuthEmailRequestOTPOutput', email: string, expires: string } | null };
+
+export type MyMutationMutationVariables = Exact<{
+  input: Web3AuthEmailAuthOtpInput;
+}>;
+
+
+export type MyMutationMutation = { __typename?: 'mutation_root', web3auth_email_auth_otp?: { __typename?: 'Web3AuthEmailAuthOTPOutput', idToken: string } | null };
 
 export type RefreshMutationVariables = Exact<{
   input: RefreshInput;
@@ -13998,7 +14044,9 @@ export const CreateWhitelistDocument = {"kind":"Document","definitions":[{"kind"
 export const GenerateChallengeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GenerateChallenge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ChallengeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generate_challenge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]} as unknown as DocumentNode<GenerateChallengeMutation, GenerateChallengeMutationVariables>;
 export const AuthenticateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Authenticate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuthenticationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<AuthenticateMutation, AuthenticateMutationVariables>;
 export const AuthenticateWeb3AuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AuthenticateWeb3Auth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AuthenticationWeb3AuthInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authenticate_web3auth"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<AuthenticateWeb3AuthMutation, AuthenticateWeb3AuthMutationVariables>;
-export const OAuthWeb3AuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"OAuthWeb3Auth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OAuthWeb3AuthInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oauth_web3auth"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"idToken"}}]}}]}}]} as unknown as DocumentNode<OAuthWeb3AuthMutation, OAuthWeb3AuthMutationVariables>;
+export const Web3AuthOAuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Web3AuthOAuth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Web3AuthOAuthInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"web3auth_oauth"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"idToken"}}]}}]}}]} as unknown as DocumentNode<Web3AuthOAuthMutation, Web3AuthOAuthMutationVariables>;
+export const Web3AuthEmailRequestOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Web3AuthEmailRequestOTP"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"web3auth_email_request_otp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"expires"}}]}}]}}]} as unknown as DocumentNode<Web3AuthEmailRequestOtpMutation, Web3AuthEmailRequestOtpMutationVariables>;
+export const MyMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MyMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Web3AuthEmailAuthOTPInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"web3auth_email_auth_otp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"idToken"}}]}}]}}]} as unknown as DocumentNode<MyMutationMutation, MyMutationMutationVariables>;
 export const RefreshDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Refresh"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RefreshInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"refresh"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<RefreshMutation, RefreshMutationVariables>;
 export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Logout"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LogoutInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
 export const GetAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountsQuery, GetAccountsQueryVariables>;

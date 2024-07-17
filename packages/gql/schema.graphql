@@ -858,15 +858,6 @@ input Media_stream_cursor_value_input {
   uploaderId: uuid
 }
 
-input OAuthWeb3AuthInput {
-  provider: String!
-  token: String!
-}
-
-type OAuthWeb3AuthOutput {
-  idToken: String!
-}
-
 """
 columns and relationships of "Profile"
 """
@@ -2031,6 +2022,29 @@ input Wallet_stream_cursor_value_input {
   accountId: uuid
   address: String
   network: BlockchainNetwork
+}
+
+input Web3AuthEmailAuthOTPInput {
+  email: String!
+  otp: String!
+}
+
+type Web3AuthEmailAuthOTPOutput {
+  idToken: String!
+}
+
+type Web3AuthEmailRequestOTPOutput {
+  email: String!
+  expires: String!
+}
+
+input Web3AuthOAuthInput {
+  provider: String!
+  token: String!
+}
+
+type Web3AuthOAuthOutput {
+  idToken: String!
 }
 
 """
@@ -9187,11 +9201,6 @@ type mutation_root {
   Logout the current logged in user. For cookie sessions, no need to pass any input.
   """
   logout(input: LogoutInput): LogoutResult
-
-  """
-  Use a provider oauth id token to issue a JWT for web3auth custom provider validation
-  """
-  oauth_web3auth(input: OAuthWeb3AuthInput!): OAuthWeb3AuthOutput
   offchain: offchain_mutation_frontend
   refresh(input: RefreshInput!): AuthenticationResult
 
@@ -9201,6 +9210,19 @@ type mutation_root {
   set_farcaster_handle(input: SetFarcasterHandleInput!): SetFarcasterHandleResult
   set_whitelist(whitelist: jsonb!): SetWhitelistOutput
   unlink_wallet_from_account(input: UnlinkWalletInput): Boolean!
+
+  """
+  Use an OTP with an email to issue a JWT for web3auth custom provider validation
+  """
+  web3auth_email_auth_otp(input: Web3AuthEmailAuthOTPInput!): Web3AuthEmailAuthOTPOutput
+
+  """Request an OTP verification for email verification"""
+  web3auth_email_request_otp(input: String!): Web3AuthEmailRequestOTPOutput
+
+  """
+  Use a provider oauth id token to issue a JWT for web3auth custom provider validation
+  """
+  web3auth_oauth(input: Web3AuthOAuthInput!): Web3AuthOAuthOutput
 }
 
 scalar numeric
