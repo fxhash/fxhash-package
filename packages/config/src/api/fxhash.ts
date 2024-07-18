@@ -57,7 +57,8 @@ export const fxhashDevApis: IFxhashApis = {
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
     "http://fxhash-multichain-dev-testnet-file-api.fxhash-multichain-dev-testnet.svc.cluster.local:4004",
-  walletInternal: "http://fxhash-multichain-dev-testnet-wallet-api.fxhash-multichain-dev-testnet.svc.cluster.local:4004",
+  walletInternal:
+    "http://fxhash-multichain-dev-testnet-wallet-api.fxhash-multichain-dev-testnet.svc.cluster.local:3208",
   fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
@@ -113,7 +114,7 @@ export const fxhashLocalApis: IFxhashApis = {
   hasuraGql: "http://localhost:8888/v1/graphql",
   fileInternal: fxhashDevApis.file,
   ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
-  walletInternal: "tbd",
+  walletInternal: "http://host.docker.internal:3208",
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -132,7 +133,8 @@ export const fxhashPrdApis: IFxhashApis = {
   file: "https://file-api.fxhash.xyz",
   fileInternal:
     "http://fxhash-multichain-prd-file-api.fxhash-multichain-prd.svc.cluster.local:4004",
-  walletInternal: "http://fxhash-multichain-prd-wallet-api.fxhash-multichain-prd.svc.cluster.local:4004",
+  walletInternal:
+    "http://fxhash-multichain-prd-wallet-api.fxhash-multichain-prd.svc.cluster.local:3208",
   fsEmulator: "https://file-api.fxhash.xyz/fs",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
