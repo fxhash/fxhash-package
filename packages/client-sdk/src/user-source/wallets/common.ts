@@ -27,7 +27,8 @@ export async function createEvmWalletManager(evmWallet: IEvmWallet) {
       publicClient: clients.public,
       rpcNodes: fxConfig.eth.apis.rpcs,
       address: info.address,
-      signer: clientToSigner(clients.wallet),
+      signer: clients.signer || clientToSigner(clients.wallet),
+      ethersAdapterForSafe: clients.ethersAdapterForSafe,
     })
   } else {
     throw _clients.error

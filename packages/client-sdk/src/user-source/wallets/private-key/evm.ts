@@ -12,6 +12,8 @@ import {
 import { sepolia } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
 import { EvmPrivateKeyWallet } from "./_interfaces.js"
+import { getEthersAdapterForSafe, getWalletProvider } from "@fxhash/eth"
+import { config } from "@fxhash/config"
 
 export type EvmPrivateKeyWalletOptions = {
   privateKey?: Hex
@@ -67,9 +69,15 @@ export function evmPrivateKeyWallet({
         throw new Error("TODO error handling — undefined wallet/public client")
       }
 
+      const ethersAdapterForSafe = getEthersAdapterForSafe(
+        getWalletProvider(_pk as string, config.eth.apis.rpcs[0])
+      )
+
       return success({
         public: publicClient,
         wallet: walletClient,
+        ethersAdapterForSafe,
+        signer: _info,
       })
     },
 

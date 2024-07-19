@@ -11,7 +11,12 @@ import { type BeaconWallet } from "@taquito/beacon-wallet"
 import { PromiseResult, type BlockchainNetwork } from "@fxhash/shared"
 import { WalletManagersMap, type IUserSource } from "../_interfaces.js"
 import { EventEmitter } from "@fxhash/utils"
-import { EthereumWalletManager } from "@fxhash/eth"
+import {
+  EthereumWalletManager,
+  EthersAdapter,
+  JsonRpcSigner,
+  PrivateKeyAccount,
+} from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"
 import { WalletError } from "../_errors.js"
 
@@ -139,6 +144,8 @@ export type MapNetworkToWalletManager<N extends BlockchainNetwork> = {
 export interface IEvmWalletConnectorClients {
   wallet: WalletClient<Transport, Chain, Account>
   public: PublicClient<Transport, Chain>
+  signer?: PrivateKeyAccount
+  ethersAdapterForSafe?: EthersAdapter
 }
 
 export type WalletEventsTypemap = {
