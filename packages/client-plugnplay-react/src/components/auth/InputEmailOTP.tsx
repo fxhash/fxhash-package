@@ -13,8 +13,6 @@ export function InputRequestEmailOTP() {
     ReturnType<IClientPlugnPlay["requestEmailOTP"]>
   > | null>(null)
 
-  console.log({ value })
-
   return (
     <>
       {otpReq ? (
