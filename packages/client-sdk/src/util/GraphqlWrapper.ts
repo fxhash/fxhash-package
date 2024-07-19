@@ -1,4 +1,8 @@
-import { createGqlClient, Client } from "@fxhash/gql-client"
+import {
+  createGqlClient,
+  Client,
+  CreateHasuraClientOptions,
+} from "@fxhash/gql-client"
 
 /**
  * An interface for a GraphQL Client Wrapper which provides some high-level
@@ -42,7 +46,9 @@ export class GraphqlWrapper implements IGraphqlWrapper {
   private _client: Client
   private _headers: Record<string, string> = {}
 
-  constructor() {
+  constructor(
+    clientOptions: Omit<CreateHasuraClientOptions, "fetchOptions"> = {}
+  ) {
     this._client = createGqlClient({
       /**
        * This function will be called on each request, which is how dynamic
@@ -52,6 +58,7 @@ export class GraphqlWrapper implements IGraphqlWrapper {
        * request.
        */
       fetchOptions: this.getFetchOptions,
+      ...clientOptions,
     })
   }
 
