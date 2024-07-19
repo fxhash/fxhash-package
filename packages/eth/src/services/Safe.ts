@@ -101,6 +101,7 @@ export function getEthersAdapterForSafe(
     // TODO: hack because of esm/cjs confusion with ethers
   } as unknown as EthersAdapterConfig)
 }
+export { EthersAdapter }
 
 /**
  * The function proposes a safe transaction by creating a transaction, signing it, and then sending it
