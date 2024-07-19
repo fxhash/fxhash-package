@@ -236,11 +236,39 @@ export function authWithWallets({
     storageNamespace,
   })
 
-  const _reconciliate = () => {
+  const _authenticate = async () => {
+    const credentials = await authenticate()
+    // todo: good way to handle errors ?
+    if (credentials.isFailure()) {
+      console.log(credentials.error)
+      throw credentials.error
+    }
+
+    const { accessToken, refreshToken } = credentials.unwrap()
+    const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
+
+    // store user ID in storage, and some additionnal data based on the
+    // authentication payload received.
+    await _account.store({
+      id,
+      credentials: credentialsDriver.getStoredAuthentication(
+        accessToken,
+        refreshToken
+      ),
+    })
+
+    // eventually apply effects of the authentication strategy
+    credentialsDriver.apply(credentials.value)
+    // fetch user account, should be authenticated
+    await _account.sync()
+  }
+
+  const _reconciliate = async () => {
     const account = _account.get()
     const managers = wallets.getWalletManagers()
+    const requirements = wallets.requirements()
     console.log("_reconciliate")
-    console.log({ account, managers })
+    console.log({ account, managers, requirements })
     const consistency = isUserStateConsistent(account, managers)
     console.log({ consistency })
     if (consistency.isSuccess()) {
@@ -259,6 +287,16 @@ export function authWithWallets({
         WalletConnectedButNoAccountAuthenticatedError
       ) {
         // todo: reconnect can be handled by caller ?
+        // If no user input is required, we can try to authenticate the user
+        // If the authentication fails, we disconnect all wallets
+        if (!requirements.userInput) {
+          try {
+            await _authenticate()
+            return
+          } catch (err) {
+            console.log(err)
+          }
+        }
         wallets.disconnectAllWallets()
         return
       }
@@ -282,33 +320,9 @@ export function authWithWallets({
         // authentication process
         if (anyManager && !_account.get()) {
           try {
-            const credentials = await authenticate()
-            // todo: good way to handle errors ?
-            if (credentials.isFailure()) {
-              console.log(credentials.error)
-              throw credentials.error
-            }
-
-            const { accessToken, refreshToken } = credentials.unwrap()
-            const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
-
-            // store user ID in storage, and some additionnal data based on the
-            // authentication payload received.
-            await _account.store({
-              id,
-              credentials: credentialsDriver.getStoredAuthentication(
-                accessToken,
-                refreshToken
-              ),
-            })
-
-            // eventually apply effects of the authentication strategy
-            credentialsDriver.apply(credentials.value)
-            // fetch user account, should be authenticated
-            await _account.sync()
+            await _authenticate()
           } catch (err) {
             console.log(err)
-            wallets.disconnectAllWallets()
             return
           }
         }
@@ -327,7 +341,7 @@ export function authWithWallets({
   return {
     emitter,
     getAccount: _account.get,
-    authenticated: () => !!_account.get,
+    authenticated: () => !!_account.get(),
     initialized: () => init.finished,
     logoutAccount: _account.logoutAccount,
 
@@ -340,7 +354,7 @@ export function authWithWallets({
     init: async () => {
       init.start()
       await Promise.all([wallets.init(), _account.reconnectFromStorage()])
-      _reconciliate()
+      await _reconciliate()
       _hookEvents()
       init.finish()
     },

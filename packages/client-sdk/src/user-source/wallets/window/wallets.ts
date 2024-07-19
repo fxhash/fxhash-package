@@ -85,6 +85,11 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
       const wallet = wallets.getWallet(network)
       if (wallet) (wallet as any as CommonWindowWallet).requestConnection()
     },
+    requirements() {
+      return {
+        userInput: true,
+      }
+    },
   }
 }
 

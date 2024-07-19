@@ -138,6 +138,11 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     },
     getAccount: () => null,
     logoutAccount: async () => {},
+    requirements: () => ({
+      userInput: networks
+        .map(net => wallets[net])
+        .some(w => !!w?.requirements?.userInput),
+    }),
   }
 }
 

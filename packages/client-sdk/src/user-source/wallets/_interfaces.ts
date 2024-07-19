@@ -15,6 +15,10 @@ import { EthereumWalletManager } from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"
 import { WalletError } from "../_errors.js"
 
+export interface IRequirements {
+  userInput: boolean
+}
+
 /**
  * A Wallets Source exposes some utilities to handle multi-chain wallets through
  * a common interface.
@@ -44,6 +48,11 @@ export interface IWalletsSource extends IUserSource {
   getWallet: <N extends BlockchainNetwork>(
     network: N
   ) => MapNetworkToWalletInterface<N> | null
+
+  /**
+   * Different wallet sources can implement different sets of requirements
+   */
+  requirements: () => IRequirements
 }
 
 /**
@@ -80,6 +89,8 @@ export interface ICommonWallet {
    * Release events/memory usage.
    */
   release?: () => void
+
+  requirements?: IRequirements
 }
 
 /**
