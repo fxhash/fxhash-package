@@ -270,5 +270,10 @@ export function createClientPlugnPlay({
     async loginWeb2(payload: Web3AuthLoginPayload) {
       return client.walletSources.web3auth?.login(payload)
     },
+
+    async requestEmailOTP(email: string) {
+      invariant(client.walletSources.web3auth, "no web3auth wallet")
+      return client.walletSources.web3auth.emailRequestOTP(email)
+    },
   }
 }

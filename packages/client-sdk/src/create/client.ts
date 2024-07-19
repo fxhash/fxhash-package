@@ -89,6 +89,7 @@ export function createClient(params: ICreateClientParams): IClientManySources {
 
   if (params.wallets?.web3auth) {
     wallets.web3auth = web3AuthWallets({
+      gqlWrapper: gql,
       safeFrameDomWrapper:
         typeof params.wallets.web3auth !== "boolean"
           ? params.wallets.web3auth.safeDomWrapper

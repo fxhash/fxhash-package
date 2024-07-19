@@ -6,6 +6,7 @@ import {
   IWalletsSource,
 } from "../_interfaces.js"
 import { EventEmitter } from "@fxhash/utils"
+import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 
 export interface ICommonWeb3AuthWallet {
   updateSession: (detais: SessionDetails | null) => void
@@ -16,7 +17,25 @@ export type EvmWeb3AuthWallet = IEvmWallet & ICommonWeb3AuthWallet
 export type TezosWeb3AuthWallet = ITezosWallet & ICommonWeb3AuthWallet
 
 export interface IWeb3AuthWalletsSource extends IWalletsSource {
+  /**
+   * Login the Web3Auth wallet using the provided credentials.
+   *
+   * @param payload login payload
+   */
   login: (payload: Web3AuthLoginPayload) => Promise<any>
+
+  /**
+   * Request a OTP for a given email. The OTP will be sent to the email and
+   * will be valid for roughly 5 minutes. The OTP can then be used to login to
+   * Web3Auth
+   *
+   * @param email Email to which the OTP should be sent
+   */
+  emailRequestOTP: (email: string) => Promise<Web3AuthEmailRequestOtpOutput>
+
+  /**
+   * @returns The current Web3Auth session details.
+   */
   getWeb3AuthSessionDetails: () => Promise<SessionDetails | null>
 }
 
@@ -39,13 +58,27 @@ export type Web3AuthLoginPayload =
   | {
       method: "email"
       options: {
+        /**
+         * Email to authenticate with.
+         */
         email: string
+        /**
+         * OTP which was requested on fxhash backend for the provided email.
+         */
+        otp: string
       }
     }
   | {
       method: "oauth"
       options: {
+        /**
+         * String-id of the provider which was used to generate the oauth token
+         */
         provider: "google" | "apple"
+        /**
+         * OAuth JWT token returned by the provider. This token will be checked
+         * on fxhash backend to ensure it is safe.
+         */
         token: string
       }
     }

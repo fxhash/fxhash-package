@@ -10,8 +10,21 @@ import { tezosWeb3AuthWallet } from "./tezos.js"
 import { SessionDetails, type IWeb3AuthWalletsSource } from "./_interfaces.js"
 import { multichainWallets } from "../common.js"
 import { cleanup } from "@fxhash/utils"
+import { IGraphqlWrapper } from "@/index.js"
+import { Mu_Web3AuthEmailRequestOTP } from "@fxhash/gql"
 
 type Options = {
+  /**
+   * A GraphQL Wrapper so that this module can send gql requests for some of
+   * its actions (such as email OTP requests for instance).
+   */
+  gqlWrapper: IGraphqlWrapper
+
+  /**
+   * Optionnal frame root URL. Shouldn't be changed except if a custom
+   * implementation is needed.
+   * **Only for most advanced use cases.**
+   */
   frameRootUrl?: string
 
   /**
@@ -31,6 +44,7 @@ type Options = {
  * providers, as well as email).
  */
 export function web3AuthWallets({
+  gqlWrapper,
   // todo: from config
   frameRootUrl = "http://localhost:3001",
   safeFrameDomWrapper,
@@ -86,6 +100,21 @@ export function web3AuthWallets({
 
     disconnectWallet: disconnect,
     disconnectAllWallets: disconnect,
+
+    emailRequestOTP: async (email: string) => {
+      const res = await gqlWrapper
+        .client()
+        .mutation(Mu_Web3AuthEmailRequestOTP, {
+          email,
+        })
+
+      // todo: better error handling !
+      if (res.error) throw res.error
+      if (!res?.data?.web3auth_email_request_otp?.email)
+        throw Error("missing data")
+
+      return res.data.web3auth_email_request_otp
+    },
 
     login: async options => {
       const res = await frameManager.login(options)
