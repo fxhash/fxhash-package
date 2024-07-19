@@ -53,6 +53,7 @@ export {
   fxhashConfig,
   devConfig,
   prdConfig,
+  localConfig,
   config,
   setConfig,
   type IEthApis,
