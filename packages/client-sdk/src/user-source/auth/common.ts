@@ -183,7 +183,7 @@ export function accountUtils({
       await logout(credentialsDriver.getLogoutPayload(account.credentials), {
         gqlClient: gql.client(),
       })
-      cleanup()
+      await cleanup()
     } catch (err) {
       console.log(err)
       throw err
@@ -263,12 +263,11 @@ export function authWithWallets({
     await _account.sync()
   }
 
-  const _reconciliate = async () => {
+  const _reconciliate = () => {
     const account = _account.get()
     const managers = wallets.getWalletManagers()
-    const requirements = wallets.requirements()
     console.log("_reconciliate")
-    console.log({ account, managers, requirements })
+    console.log({ account, managers })
     const consistency = isUserStateConsistent(account, managers)
     console.log({ consistency })
     if (consistency.isSuccess()) {
@@ -286,17 +285,6 @@ export function authWithWallets({
         consistency.error instanceof
         WalletConnectedButNoAccountAuthenticatedError
       ) {
-        // todo: reconnect can be handled by caller ?
-        // If no user input is required, we can try to authenticate the user
-        // If the authentication fails, we disconnect all wallets
-        if (!requirements.userInput) {
-          try {
-            await _authenticate()
-            return
-          } catch (err) {
-            console.log(err)
-          }
-        }
         wallets.disconnectAllWallets()
         return
       }
@@ -354,8 +342,16 @@ export function authWithWallets({
     init: async () => {
       init.start()
       await Promise.all([wallets.init(), _account.reconnectFromStorage()])
-      await _reconciliate()
+      const requirements = wallets.requirements()
       _hookEvents()
+      if (!requirements.userInput) {
+        try {
+          await _authenticate()
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      _reconciliate()
       init.finish()
     },
 

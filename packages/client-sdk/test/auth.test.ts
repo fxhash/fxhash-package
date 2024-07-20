@@ -10,6 +10,7 @@ import {
 } from "@/index.js"
 import { localConfig } from "@fxhash/config"
 import { BlockchainNetwork } from "@fxhash/shared"
+import { vi } from "vitest"
 
 describe("EVM: private key wallets", async () => {
   const gql = new GraphqlWrapper({
@@ -46,9 +47,14 @@ describe("EVM: private key wallets", async () => {
   })
 
   it("cannot logout private key wallet", async () => {
-    // Calling logout with a private key wallet will trigger the reconcilation
-    // which will reauthenticate the with the private key wallet
     await source.logoutAccount()
+    expect(source.authenticated()).toBe(false)
+    expect(source.authenticated()).toBe(false)
+  })
+
+  it("can re authenticate", async () => {
+    await evmWallet.updatePrivateKey(privateKey)
+    await vi.waitUntil(() => source.authenticated())
     expect(source.authenticated()).toBe(true)
   })
   /*
