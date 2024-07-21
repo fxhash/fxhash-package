@@ -74,7 +74,7 @@ export type Web3AuthLoginPayload =
         /**
          * String-id of the provider which was used to generate the oauth token
          */
-        provider: "google" | "apple"
+        provider: "google" | "discord"
         /**
          * OAuth JWT token returned by the provider. This token will be checked
          * on fxhash backend to ensure it is safe.

@@ -3,6 +3,7 @@ import {
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
   IWeb3AuthWalletsSource,
+  IGraphqlWrapper,
 } from "@fxhash/client-sdk"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
@@ -48,6 +49,8 @@ export interface IClientPlugnPlay {
    * Disconect the wallets connected on the Given
    */
   disconnectWallet: (network: BlockchainNetwork) => Promise<void>
+
+  gql: IGraphqlWrapper
 
   // todo: comments
   disconnectAllWallets: () => Promise<void>

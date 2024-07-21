@@ -222,6 +222,7 @@ export function createClientPlugnPlay({
   }
 
   return {
+    gql,
     config: {
       wagmi: walletsConfig.window!.evm?.wagmiConfig,
       fxhash: fxConfig,
