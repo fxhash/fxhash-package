@@ -122,7 +122,7 @@ export enum GenerativeTokenVersion {
 }
 
 export interface GenerativeToken {
-  id: number
+  id: string
   version: GenerativeTokenVersion
   author: User
   name: string
