@@ -14,7 +14,6 @@ import { EventEmitter } from "@fxhash/utils"
 import {
   EthereumWalletManager,
   EthersAdapter,
-  JsonRpcSigner,
   PrivateKeyAccount,
 } from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"

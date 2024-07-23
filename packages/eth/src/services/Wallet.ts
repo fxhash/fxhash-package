@@ -57,7 +57,7 @@ import {
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 */
 
-export { JsonRpcSigner, PrivateKeyAccount }
+export type { PrivateKeyAccount }
 
 export function clientToSigner(
   client: Client<Transport, Chain, Account>
