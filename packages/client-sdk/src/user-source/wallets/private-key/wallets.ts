@@ -47,6 +47,11 @@ export function privateKeyWallets({
         wallets.getWallet(network) as any as CommonPrivateKeyWallet
       ).updatePrivateKey(privateKey)
     },
+    requirements() {
+      return {
+        userInput: false,
+      }
+    },
   }
 }
 

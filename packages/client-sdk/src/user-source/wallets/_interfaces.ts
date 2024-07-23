@@ -11,9 +11,18 @@ import { type BeaconWallet } from "@taquito/beacon-wallet"
 import { PromiseResult, type BlockchainNetwork } from "@fxhash/shared"
 import { WalletManagersMap, type IUserSource } from "../_interfaces.js"
 import { EventEmitter } from "@fxhash/utils"
-import { EthereumWalletManager } from "@fxhash/eth"
+import {
+  EthereumWalletManager,
+  EthersAdapter,
+  JsonRpcSigner,
+  PrivateKeyAccount,
+} from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"
 import { WalletError } from "../_errors.js"
+
+export interface IRequirements {
+  userInput: boolean
+}
 
 /**
  * A Wallets Source exposes some utilities to handle multi-chain wallets through
@@ -44,6 +53,11 @@ export interface IWalletsSource extends IUserSource {
   getWallet: <N extends BlockchainNetwork>(
     network: N
   ) => MapNetworkToWalletInterface<N> | null
+
+  /**
+   * Different wallet sources can implement different sets of requirements
+   */
+  requirements: () => IRequirements
 }
 
 /**
@@ -80,6 +94,8 @@ export interface ICommonWallet {
    * Release events/memory usage.
    */
   release?: () => void
+
+  requirements?: IRequirements
 }
 
 /**
@@ -128,6 +144,8 @@ export type MapNetworkToWalletManager<N extends BlockchainNetwork> = {
 export interface IEvmWalletConnectorClients {
   wallet: WalletClient<Transport, Chain, Account>
   public: PublicClient<Transport, Chain>
+  signer?: PrivateKeyAccount
+  ethersAdapterForSafe?: EthersAdapter
 }
 
 export type WalletEventsTypemap = {

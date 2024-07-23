@@ -27,7 +27,8 @@ export async function createEvmWalletManager(evmWallet: IEvmWallet) {
       publicClient: clients.public,
       rpcNodes: fxConfig.eth.apis.rpcs,
       address: info.address,
-      signer: clientToSigner(clients.wallet),
+      signer: clients.signer || clientToSigner(clients.wallet),
+      ethersAdapterForSafe: clients.ethersAdapterForSafe,
     })
   } else {
     throw _clients.error
@@ -138,6 +139,11 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     },
     getAccount: () => null,
     logoutAccount: async () => {},
+    requirements: () => ({
+      userInput: networks
+        .map(net => wallets[net])
+        .some(w => !!w?.requirements?.userInput),
+    }),
   }
 }
 

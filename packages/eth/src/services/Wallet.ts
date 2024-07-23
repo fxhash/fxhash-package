@@ -57,6 +57,8 @@ import {
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 */
 
+export { JsonRpcSigner, PrivateKeyAccount }
+
 export function clientToSigner(
   client: Client<Transport, Chain, Account>
 ): JsonRpcSigner {
@@ -224,7 +226,6 @@ export class EthereumWalletManager extends WalletManager {
       return failure(new PendingSigningRequestError())
     }
     this.signingInProgress = true
-
     try {
       let signature
       if (this.ethersAdapterForSafe) {

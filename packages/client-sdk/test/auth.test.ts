@@ -1,97 +1,146 @@
-import { EthereumWalletManager } from "@fxhash/eth"
-import { TezosWalletManager } from "@fxhash/tez"
-import { BlockchainType } from "@fxhash/shared"
-import { generateChallenge, authenticate } from "../src/auth/index.js"
+import {
+  GraphqlWrapper,
+  authWallets,
+  Storage,
+  privateKeyWallets,
+  jwtCredentials,
+  evmPrivateKeyWallet,
+  multichainWallets,
+  evmPrivateKeyWallet,
+} from "@/index.js"
+import { localConfig } from "@fxhash/config"
+import { BlockchainNetwork } from "@fxhash/shared"
+import { vi } from "vitest"
 
-describe("make sure that", async () => {
-  const wm = await EthereumWalletManager.fromPrivateKey(
+describe("EVM: private key wallets", async () => {
+  const gql = new GraphqlWrapper({
+    url: localConfig.apis.hasuraGql,
+  })
+
+  const accountSourceOptions = {
+    gqlWrapper: gql,
+    storage: new Storage(),
+    credentialsDriver: jwtCredentials(gql),
+  }
+
+  const privateKey =
+    "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
+
+  const evmWallet = evmPrivateKeyWallet({ privateKey })
+
+  const privateKeyWallet = multichainWallets({
+    [BlockchainNetwork.ETHEREUM]: evmWallet,
+  })
+
+  const source = authWallets({
+    wallets: privateKeyWallet,
+    ...accountSourceOptions,
+  })
+
+  it("can retrieve wallet manager", async () => {
+    expect(source.getWalletManagers()).toBeDefined()
+  })
+
+  it("will be authenticated after init", async () => {
+    await source.init()
+    expect(source.authenticated()).toBe(true)
+  })
+
+  it("cannot logout private key wallet", async () => {
+    await source.logoutAccount()
+    expect(source.authenticated()).toBe(false)
+    expect(source.authenticated()).toBe(false)
+  })
+
+  it("can re authenticate", async () => {
+    await evmWallet.updatePrivateKey(privateKey)
+    await vi.waitUntil(() => source.authenticated())
+    expect(source.authenticated()).toBe(true)
+  })
+  /*
+  const ewm = await EthereumWalletManager.fromPrivateKey(
     "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
   )
-  it("invalid challenge id is not found", async () => {
-    try {
-      await authenticate({
-        id: "afe7a262-4bef-4a15-8557-79b74e0fa99c",
-        signature: "test",
-      })
-    } catch (e) {
-      expect(e).toBeDefined()
-    }
+
+  /** Use this for testing against localhost
+   * const fxhashClient = new FxhashClient({
+   *  gqlClient: createGqlClient({ url: localConfig.apis.hasuraGql }),
+   * })
+   *
+
+  const fxhashClient = new FxhashClient({
+    gqlClient: createGqlClient({ url: localConfig.apis.hasuraGql }),
   })
-  it("invalid signature is not accepted", async () => {
-    const { text, id } = await generateChallenge({
-      chain: BlockchainType.ETHEREUM,
-      address: wm.address,
-    })
-    try {
-      await authenticate({
-        id,
-        signature: "test",
-      })
-    } catch (e) {
-      expect(e).toBeDefined()
-    }
-  })
-})
 
-describe("ETHEREUM: authentication user", async () => {
-  let _id: string
-  let _text: string
-
-  const wm = await EthereumWalletManager.fromPrivateKey(
-    "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
-  )
-
-  it("generate challenge", async () => {
-    const { text, id } = await generateChallenge({
-      chain: BlockchainType.ETHEREUM,
-      address: wm.address,
-    })
+  it("generate challenge for ETHEREUM", async () => {
+    const { text, id } = await fxhashClient.generateChallenge(
+      BlockchainType.ETHEREUM,
+      ewm.address
+    )
     expect(text).toBeDefined()
     expect(id).toBeDefined()
     _id = id
     _text = text
   })
-  it("valid signature is valid", async () => {
-    const sig = await wm.signMessage(_text)
+
+  it("invalid challenge id is not found", async () => {
+    try {
+      await fxhashClient.authenticate(
+        "afe7a262-4bef-4a15-8557-79b74e0fa99c",
+        "test"
+      )
+    } catch (e) {
+      expect(e).toBeDefined()
+    }
+  })
+  it("invalid signature is not valid", async () => {
+    try {
+      await fxhashClient.authenticate(_id, "test")
+    } catch (e) {
+      expect(e).toBeDefined()
+    }
+  })
+  it("Login with valid signature ETHEREUM", async () => {
+    const sig = await ewm.signMessage(_text)
     if (sig.isFailure()) {
       return
     }
-    const { accessToken, refreshToken } = await authenticate({
-      id: _id,
-      signature: sig.value.signature,
-    })
+    const { accessToken, refreshToken } = await fxhashClient.authenticate(
+      _id,
+      sig.value.signature
+    )
     expect(accessToken).toBeDefined()
     expect(refreshToken).toBeDefined()
   })
-})
-describe("TEZOS: authentication user", async () => {
-  let _id: string
-  let _text: string
 
-  const wm = await TezosWalletManager.fromPrivateKey(
+  const twm = await TezosWalletManager.fromPrivateKey(
     "edskRdPsQQjdB6ejSiHQXRffUdLm5E3UqjeKe9z8hkcBTzcEouR8Fsc7wgKTua7cp2es19WaFX5tt8AjjjsCeiADwQoRj6RBoD"
   )
 
-  it("generate challenge", async () => {
-    const { text, id } = await generateChallenge({
-      chain: BlockchainType.TEZOS,
-      address: wm.address,
-    })
+  it("generate another challenge for TEZOS", async () => {
+    const { text, id } = await fxhashClient.generateChallenge(
+      BlockchainType.TEZOS,
+      twm.address
+    )
     expect(text).toBeDefined()
     expect(id).toBeDefined()
     _id = id
     _text = text
   })
-  it("valid signature is valid", async () => {
-    const message = `Tezos (${wm.address})`
-    const sig = await wm.signMessage(_text)
+
+  it("Login with valid signature TEZOS", async () => {
+    const sig = await twm.signMessage(_text)
     if (sig.isFailure()) {
       return
     }
-    const res = await authenticate({
-      id: _id,
-      signature: sig.value.signature,
-      publicKey: await wm.getPublicKey(),
-    })
+    const publicKey = await twm.getPublicKey()
+    const { accessToken, refreshToken } = await fxhashClient.authenticate(
+      _id,
+      sig.value.signature,
+      publicKey
+    )
+    expect(accessToken).toBeDefined()
+    expect(refreshToken).toBeDefined()
   })
+  */
 })

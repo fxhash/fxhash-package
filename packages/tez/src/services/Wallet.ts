@@ -305,7 +305,8 @@ export class TezosWalletManager extends WalletManager {
     return new TezosWalletManager({
       address: pkh,
       wallet,
-      tezosToolkit: options.tezosToolkit,
+      tezosToolkit:
+        options?.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0]),
     })
   }
 
