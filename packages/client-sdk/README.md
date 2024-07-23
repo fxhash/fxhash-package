@@ -143,6 +143,8 @@ Folders of interest:
 - [ ] think about google auth using single Provider with web3auth
 - [ ] refacto storage for having a IStorage directly implemented by drivers
 - [ ] proper error management for all code paths
+- [ ] move some utilities (such as discord oauth) into client-sdk ? or into
+      client-plugnplay ? not sure, but move in any of these 2
 - [ ] loading states - right now there is now way to have some "loading"
       state from the user sources. we'd want to know when some authentication is
       happening, etc...

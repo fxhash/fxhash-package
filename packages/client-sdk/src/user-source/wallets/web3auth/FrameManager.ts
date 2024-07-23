@@ -95,6 +95,16 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
    */
   private initDOM() {
     return new Promise<Result<void, Web3AuthFrameNotLoading>>(async resolve => {
+      // Check if another instance already exists, if so we can just recover the
+      // state from this existing instance.
+      const existingDiv = document.querySelector(".__fxhash__wallet")
+      const existingIframe = existingDiv?.querySelector("iframe")
+      if (existingDiv && existingIframe) {
+        this._wrapper = existingDiv as HTMLDivElement
+        this._iframe = existingIframe
+        return resolve(success())
+      }
+
       // initialize iframe
       this._wrapper = document.createElement("div")
       this._wrapper.classList.add("__fxhash__wallet-iframe")
