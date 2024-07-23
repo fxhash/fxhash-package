@@ -43,6 +43,11 @@ export interface IFxhashNetworkConfig {
   chainId: BlockchainIdentifier
   ethFeeReceiver: `0x${string}`
   wertRelayer: string
+  fxhashFees: {
+    primary: number
+    secondary: number
+  }
+  splitBasisPoint: number
 }
 
 export interface IFxhashEnvConfig {
@@ -50,12 +55,11 @@ export interface IFxhashEnvConfig {
   metadata: IAppMetadata
   gtMinPrice: string
   walletConnectId: string
+  splitsApiKey: string
   projectLockTime: number
   referrerShare: number
   cloudflareTurnstileSiteKey: string
   cloudflareTurnstileSiteKeyV2: string
-  fxhashPrimaryFee: number
-  fxhashSecondaryFee: number
   syndicateProjectId: string
   awsS3Bucket: string
   awsS3Region: string
@@ -116,6 +120,29 @@ export type IFxhashConfigSingleEnv = {
   config: IFxhashEnvConfig
 }
 
+/**
+ * ! Beware ! Changing these values will result in current
+ * projects breaking.
+ * https://github.com/fxhash/monorepo/issues/701
+ */
+const tezosFees = {
+  primary: 500,
+  secondary: 250,
+}
+
+const ethFees = {
+  primary: 1000,
+  secondary: 2500,
+}
+
+const baseFees = {
+  primary: 1000,
+  secondary: 2500,
+}
+/**
+ * --------------------------------------------------------
+ */
+
 export const fxhashConfig: IFxhashConfig = {
   networks: {
     testnet: {
@@ -126,6 +153,8 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.TezosGhostnet,
           ethFeeReceiver: "0x",
           wertRelayer: "tz1T2uyYTshSGrEg13VGJFqsWwbi2H175hZb",
+          fxhashFees: tezosFees,
+          splitBasisPoint: 1000,
         },
         apis: tezosTestnetApis,
       },
@@ -136,6 +165,8 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.EthereumSepolia,
           ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
+          fxhashFees: ethFees,
+          splitBasisPoint: 1_000_000,
         },
         apis: ethTestnetApis,
       },
@@ -146,6 +177,8 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.BaseSepolia,
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
+          fxhashFees: baseFees,
+          splitBasisPoint: 1_000_000,
         },
         apis: baseTestnetApis,
       },
@@ -158,6 +191,8 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.TezosMainnet,
           ethFeeReceiver: "0x",
           wertRelayer: "tz1KkPS1TWFyDWfQwrdvmTmsCLUNMegDrrSi",
+          fxhashFees: tezosFees,
+          splitBasisPoint: 1000,
         },
         apis: tezosMainnetApis,
       },
@@ -168,6 +203,8 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.EthereumMainnet,
           ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
+          fxhashFees: ethFees,
+          splitBasisPoint: 1_000_000,
         },
         apis: ethMainnetApis,
       },
@@ -178,6 +215,8 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.BaseMainnet,
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
+          fxhashFees: baseFees,
+          splitBasisPoint: 1_000_000,
         },
         apis: baseMainnetApis,
       },
@@ -193,15 +232,9 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
         awsS3Region: "us-east-1",
@@ -218,15 +251,9 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
         awsS3Region: "us-east-1",
@@ -243,15 +270,9 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
         awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
         awsS3Region: "us-east-1",
@@ -268,15 +289,9 @@ export const fxhashConfig: IFxhashConfig = {
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-yE4Q6Wdz6SNb",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "398ad73d-341c-4861-a038-f0ae1ca58e07",
         awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
         awsS3Region: "us-east-1",

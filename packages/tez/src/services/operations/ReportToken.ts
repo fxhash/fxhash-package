@@ -10,7 +10,7 @@ type TReportContractKey = "token_v3" | "token"
 
 type TReportTokenParams = {
   contract: TReportContractKey
-  tokenId: number
+  tokenId: string
   reason: number
 }
 
