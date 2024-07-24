@@ -11,7 +11,7 @@ export interface StorageDriver {
 
 // if localStorage is available, use driver, otherwise use InMemory
 const newDefaultStorageDriver = () =>
-  typeof window !== undefined && global.window?.localStorage
+  typeof window !== undefined && window?.localStorage
     ? new LocalStorageDriver()
     : new InMemoryStorageDriver()
 
