@@ -52,6 +52,10 @@ export function tezosPrivateKeyWallet({
     },
 
     updatePrivateKey,
+
+    requirements: () => ({
+      userInput: true,
+    }),
   }
 }
 

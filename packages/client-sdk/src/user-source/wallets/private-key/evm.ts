@@ -88,5 +88,9 @@ export function evmPrivateKeyWallet({
     },
 
     updatePrivateKey,
+
+    requirements: () => ({
+      userInput: false,
+    }),
   }
 }

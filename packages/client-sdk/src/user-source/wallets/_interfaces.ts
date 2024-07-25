@@ -94,7 +94,10 @@ export interface ICommonWallet {
    */
   release?: () => void
 
-  requirements?: IRequirements
+  /**
+   * @returns An interface of the wallet requirements
+   */
+  requirements: () => IRequirements
 }
 
 /**

@@ -141,8 +141,12 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     logoutAccount: async () => {},
     requirements: () => ({
       userInput: networks
+        // get requirements of the available wallets
         .map(net => wallets[net])
-        .some(w => !!w?.requirements?.userInput),
+        .filter(wal => !!wal)
+        .map(wal => wal!.requirements())
+        // if any user input is `true`, union of wallets will require user input
+        .some(req => req.userInput),
     }),
   }
 }

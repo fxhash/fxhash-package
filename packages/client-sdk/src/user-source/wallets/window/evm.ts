@@ -164,5 +164,9 @@ export function eip1193WalletConnector({
 
     // todo: wassup with connect: injected() is this the right way ?
     requestConnection: () => connect(wagmiConfig, { connector: injected() }),
+
+    requirements: () => ({
+      userInput: true,
+    }),
   }
 }

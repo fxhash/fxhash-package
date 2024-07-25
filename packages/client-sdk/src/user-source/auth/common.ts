@@ -25,7 +25,7 @@ import {
   failure,
   invariant,
 } from "@fxhash/shared"
-import { cleanup, intialization } from "@fxhash/utils"
+import { Init, cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"
 import { jwtDecode } from "jwt-decode"
 
@@ -263,7 +263,14 @@ export function authWithWallets({
     await _account.sync()
   }
 
-  const _reconciliate = () => {
+  /**
+   * Compute the user reconciliation state (are wallets & account in a valid
+   * state?) and depending on the outcome either attempts an automatic
+   * reconciliation or emit a user error.
+   *
+   * **Note**: this may trigger events being emitted from account/wallets
+   */
+  const _reconciliate = async () => {
     const account = _account.get()
     const managers = wallets.getWalletManagers()
     console.log("_reconciliate")
@@ -285,8 +292,21 @@ export function authWithWallets({
         consistency.error instanceof
         WalletConnectedButNoAccountAuthenticatedError
       ) {
-        wallets.disconnectAllWallets()
-        return
+        // if we are during the initialization
+        if (init.state === Init.STARTED) {
+          // here events not hooked, so no side-effects triggered
+          try {
+            await _authenticate()
+            _reconciliate() // we can recursive call once, only at init
+            return
+          } catch (err) {
+            wallets.disconnectAllWallets()
+            return
+          }
+        } else {
+          wallets.disconnectAllWallets()
+          return
+        }
       }
 
       // some error not handlded at this level
@@ -342,16 +362,14 @@ export function authWithWallets({
     init: async () => {
       init.start()
       await Promise.all([wallets.init(), _account.reconnectFromStorage()])
-      const requirements = wallets.requirements()
+
+      // Note: here it's **very** important that the first reconciliation
+      // happens before we hook events, as _reconciliate may trigger some
+      // wallet/account event emissions which we don't want to propagate until
+      // initialization is finished
+      await _reconciliate()
       _hookEvents()
-      if (!requirements.userInput) {
-        try {
-          await _authenticate()
-        } catch (err) {
-          console.log(err)
-        }
-      }
-      _reconciliate()
+
       init.finish()
     },
 

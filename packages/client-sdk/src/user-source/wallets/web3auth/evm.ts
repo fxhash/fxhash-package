@@ -92,6 +92,10 @@ export function evmWeb3AuthWallet(frameManager: Options): EvmWeb3AuthWallet {
       if (res.isFailure()) throw res.error
       _address = null
     },
+
+    requirements: () => ({
+      userInput: true,
+    }),
   }
 }
 

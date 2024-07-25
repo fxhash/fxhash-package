@@ -82,5 +82,9 @@ export function tzip10WalletConnector({
     disconnect: async () => {
       await _beaconWallet?.clearActiveAccount()
     },
+
+    requirements: () => ({
+      userInput: true,
+    }),
   }
 }

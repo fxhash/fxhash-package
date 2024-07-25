@@ -62,6 +62,10 @@ export function tezosWeb3AuthWallet(
 
     init: async () => {},
     release: () => {},
+
+    requirements: () => ({
+      userInput: true,
+    }),
   }
 }
 
