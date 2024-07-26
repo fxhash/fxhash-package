@@ -284,15 +284,22 @@ export function walletSource<Net extends BlockchainNetwork>({
         // todo: should we update _info if couldn't create manager ?
         _info = info
         if (prev?.address !== info?.address) {
-          const res = await createManager(info)
-          if (res.isSuccess()) {
-            _manager = res.value
-            await emitter.emit("wallets-changed", [
-              { network, manager: _manager as any },
-            ])
+          if (!info) {
+            _manager = null
           } else {
-            emitter.emit("error", res.error)
+            const res = await createManager(info)
+            if (res.isSuccess()) {
+              _manager = res.value
+            } else {
+              // todo: should we emit error here or return ?
+              // what do we want to do if cannot create wallet manager ? dc ?
+              emitter.emit("error", res.error)
+              return
+            }
           }
+          await emitter.emit("wallets-changed", [
+            { network, manager: _manager as any },
+          ])
         }
       },
     },

@@ -11,22 +11,14 @@ import {
   connect,
   disconnect,
   injected,
-  getConnections,
 } from "@wagmi/core"
-import { IWalletInfo, WalletEventEmitter } from "../_interfaces.js"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import {
   EvmClientsNotAvailable,
   EvmWagmiClientGenerationError,
 } from "../../_errors.js"
-import { intialization, setIntervalCapped, sleep } from "@fxhash/utils"
-import { Address } from "viem"
-import { EthereumWalletManager } from "@fxhash/eth"
-import {
-  UserSourceEventEmitter,
-  createEvmWalletManager,
-  walletSource,
-} from "@/index.js"
+import { setIntervalCapped, sleep } from "@fxhash/utils"
+import { createEvmWalletManager, walletSource } from "@/index.js"
 
 type Options = {
   wagmiConfig: Config
@@ -69,7 +61,6 @@ export function eip1193WalletConnector({
         account: GetAccountReturnType,
         prevAccount?: GetAccountReturnType
       ) => {
-        console.log({ account, prevAccount })
         const accountNormalized = account?.address
           ? {
               address: account.address,
