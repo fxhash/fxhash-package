@@ -237,6 +237,7 @@ export function authWithWallets({
   })
 
   const _authenticate = async () => {
+    console.log("_authenticate!")
     const credentials = await authenticate()
     // todo: good way to handle errors ?
     if (credentials.isFailure()) {
@@ -292,12 +293,13 @@ export function authWithWallets({
         consistency.error instanceof
         WalletConnectedButNoAccountAuthenticatedError
       ) {
+        console.log("going here !!")
         // if we are during the initialization
-        if (init.state === Init.STARTED) {
+        if (init.state === Init.STARTED && !wallets.requirements().userInput) {
           // here events not hooked, so no side-effects triggered
           try {
+            console.log("calling authenticate here")
             await _authenticate()
-            _reconciliate() // we can recursive call once, only at init
             return
           } catch (err) {
             wallets.disconnectAllWallets()
@@ -328,6 +330,7 @@ export function authWithWallets({
         // authentication process
         if (anyManager && !_account.get()) {
           try {
+            console.log("trying to connect after login request")
             await _authenticate()
           } catch (err) {
             console.log(err)

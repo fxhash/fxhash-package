@@ -1,20 +1,18 @@
 import { Hex } from "viem"
 import {
-  ICommonWallet,
-  IEvmWallet,
-  ITezosWallet,
+  GetWalletInfo,
   IWalletsSource,
+  MapNetworkToWalletManager,
 } from "../_interfaces.js"
 import { EventEmitter } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
+import { BlockchainNetwork } from "@fxhash/shared"
 
-export interface ICommonWeb3AuthWallet {
-  updateSession: (detais: SessionDetails | null) => void
+export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
+  update: (detais: SessionDetails | null) => void
+  getWalletManager: () => MapNetworkToWalletManager<Net> | null
+  getInfo: GetWalletInfo<Net>
 }
-
-export type CommonWeb3AuthWallet = ICommonWallet & ICommonWeb3AuthWallet
-export type EvmWeb3AuthWallet = IEvmWallet & ICommonWeb3AuthWallet
-export type TezosWeb3AuthWallet = ITezosWallet & ICommonWeb3AuthWallet
 
 export interface IWeb3AuthWalletsSource extends IWalletsSource {
   /**

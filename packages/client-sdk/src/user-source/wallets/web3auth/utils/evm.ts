@@ -1,7 +1,5 @@
-import { failure, invariant, success } from "@fxhash/shared"
-import { WalletEventEmitter } from "../_interfaces.js"
-import { EvmWagmiClientGenerationError } from "../../_errors.js"
-import { type Web3AuthFrameManager } from "./FrameManager.js"
+import { BlockchainNetwork } from "@fxhash/shared"
+import { type Web3AuthFrameManager } from "../FrameManager.js"
 import {
   type AccountSource,
   type Hash,
@@ -16,35 +14,55 @@ import {
 } from "viem"
 import { toAccount } from "viem/accounts"
 import { sepolia } from "viem/chains"
-import { type EvmWeb3AuthWallet } from "./_interfaces.js"
+import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { computeAddress } from "ethers"
+import { EthereumWalletManager } from "@fxhash/eth"
+import { createEvmWalletManager } from "../../common.js"
 
 type Options = Web3AuthFrameManager
 
-export function evmWeb3AuthWallet(frameManager: Options): EvmWeb3AuthWallet {
-  const emitter = new WalletEventEmitter()
+export function evmWeb3AuthWallet(
+  frameManager: Options
+): IWeb3AuthWalletUtil<BlockchainNetwork.ETHEREUM> {
   let _address: Hash | null = null
+  let _manager: EthereumWalletManager | null = null
+
+  const getInfo = () => (_address ? { address: _address } : null)
 
   const _updateAddress = (address: Hash | null) => {
-    if (address !== _address) {
-      _address = address
-      emitter.emit(
-        "wallet-changed",
-        address
-          ? {
-              address,
-            }
-          : null
-      )
+    _address = address
+    const info = getInfo()
+
+    if (!info) {
+      _manager = null
+      return
     }
+
+    // todo: how to have multichain here ? possible ?
+    // maybe use a wagmi util instead ?
+    const chain = sepolia
+    const transport = http()
+
+    _manager = createEvmWalletManager({
+      info,
+      source: {
+        public: createPublicClient({
+          chain,
+          transport,
+        }),
+        wallet: createWalletClient({
+          account: toAccount(
+            frameManagerEvmAccountSource(frameManager, info.address)
+          ),
+          chain,
+          transport,
+        }),
+      },
+    })
   }
 
   return {
-    emitter,
-
-    init: async () => {},
-
-    updateSession: details => {
+    update: details => {
       _updateAddress(
         details
           ? (computeAddress(
@@ -53,49 +71,8 @@ export function evmWeb3AuthWallet(frameManager: Options): EvmWeb3AuthWallet {
           : null
       )
     },
-
-    getClients: async () => {
-      invariant(_address, "EVM address missing when requesting client")
-
-      try {
-        // todo: how to have multichain here ? possible ?
-        // maybe use a wagmi util instead ?
-        const chain = sepolia
-        const transport = http()
-        const publicClient = createPublicClient({
-          chain,
-          transport,
-        })
-        const walletClient = createWalletClient({
-          account: toAccount(
-            frameManagerEvmAccountSource(frameManager, _address)
-          ),
-          chain,
-          transport,
-        })
-
-        return success({
-          public: publicClient,
-          wallet: walletClient,
-        })
-      } catch (err: any) {
-        return failure(new EvmWagmiClientGenerationError())
-      }
-    },
-
-    getInfo: () => (_address ? { address: _address } : null),
-
-    release: () => {},
-
-    disconnect: async () => {
-      const res = await frameManager.logout()
-      if (res.isFailure()) throw res.error
-      _address = null
-    },
-
-    requirements: () => ({
-      userInput: true,
-    }),
+    getWalletManager: () => _manager,
+    getInfo,
   }
 }
 

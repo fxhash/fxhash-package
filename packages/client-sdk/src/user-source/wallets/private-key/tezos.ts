@@ -1,61 +1,56 @@
-import { IWalletInfo, WalletEventEmitter } from "../_interfaces.js"
 import { InMemorySigner } from "@taquito/signer"
-import { TezosPrivateKeyWallet } from "./_interfaces.js"
+import { IPrivateKeyWalletsSource } from "./_interfaces.js"
+import { walletSource } from "../common.js"
+import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
+import { EvmClientsNotAvailable } from "@/index.js"
+import { TezosWalletManager } from "@fxhash/tez"
 
 type Options = {
   privateKey?: string
 }
 export function tezosPrivateKeyWallet({
   privateKey,
-}: Options): TezosPrivateKeyWallet {
-  const emitter = new WalletEventEmitter()
-  let _pk: string | null = null
+}: Options): IPrivateKeyWalletsSource {
   let _signer: InMemorySigner | null = null
-  let _info: IWalletInfo<string> | null = null
 
-  const updatePrivateKey = async (pk: string | null) => {
-    const prev = _pk
-    if (pk) {
-      _pk = pk
-      _signer = new InMemorySigner(_pk)
-      _info = {
-        address: await _signer.publicKeyHash(),
-      }
-    } else {
-      _pk = null
-      _signer = null
-      _info = null
-    }
-    if (prev !== _pk) {
-      emitter.emit("wallet-changed", _info)
-    }
-  }
-
-  return {
-    emitter,
-
+  const wallet = walletSource({
+    network: BlockchainNetwork.TEZOS,
     init: async () => {
       if (privateKey) await updatePrivateKey(privateKey)
     },
-
-    getWallet: () => {
-      if (!_signer) {
-        throw new Error("todo better error handling !!!")
-      }
-      return _signer
-    },
-
-    getInfo: () => _info,
-
     disconnect: async () => {
       updatePrivateKey(null)
     },
-
-    updatePrivateKey,
-
+    createManager: async () => {
+      if (!_signer) {
+        // todo: tezos error typed here (and walletSource should type)
+        return failure(new EvmClientsNotAvailable())
+      } else {
+        return success(await TezosWalletManager.fromPrivateKey(_signer))
+      }
+    },
     requirements: () => ({
-      userInput: true,
+      userInput: false,
     }),
+  })
+
+  async function updatePrivateKey(pk: string | null) {
+    _signer = pk ? new InMemorySigner(pk) : null
+    return wallet.utils.update(
+      _signer
+        ? {
+            address: await _signer.publicKeyHash(),
+          }
+        : null
+    )
+  }
+
+  return {
+    ...wallet.source,
+    updatePrivateKey(net, pk) {
+      invariant(net === BlockchainNetwork.TEZOS, "wrong network")
+      return updatePrivateKey(pk)
+    },
   }
 }
 

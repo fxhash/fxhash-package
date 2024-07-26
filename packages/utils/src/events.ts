@@ -28,7 +28,8 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
   private _listeners: {
     [K in EventKey<T>]?: EventReceiver<T[K]>[]
   } = {}
-  public muted: boolean = false
+  private _muted: { [K in EventKey<T>]?: boolean } = {}
+  private _only: EventKey<T>[] | null = null
 
   /**
    * Attach a listener on event of given name.
@@ -76,7 +77,8 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
     name: K,
     ...[payload]: OptionalIfUndefined<T[K]>
   ) {
-    if (this.muted) return
+    if (this._only && !this._only.includes(name)) return
+    if (this._muted[name]) return
     const listeners = this._listeners[name]
     if (!listeners) return
     await Promise.allSettled(
@@ -98,12 +100,26 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
   }
 
   /**
-   * Mute/Unmute the Event Emitter. If muted, no event will be emitted when the
-   * `emit()` method is called.
+   * Mute/Unmute a particular event of the Event Emitter. If muted, no event of
+   * such kind will be emitted when the `emit()` method is called.
+   * @param event Event key to be muted
    * @param muted Whether the emitter should be muted or not
    */
-  public mute(muted: boolean = true) {
-    this.muted = muted
+  public mute(event: EventKey<T>, muted: boolean = true) {
+    this._muted[event] = muted
+    return this
+  }
+
+  /**
+   * Restricts this Event Emitter from only emitting a given list of events. Any
+   * other event will be ignored. This overrides the `mute(true)` option for an
+   * event (an event which was explicitely set to `mute(evt, true)` will not
+   * pass if it's not part of the array provided to this function).
+   *
+   * @param events A list of the only events which can be emitted
+   */
+  public only(...events: EventKey<T>[]) {
+    this._only = events
     return this
   }
 }

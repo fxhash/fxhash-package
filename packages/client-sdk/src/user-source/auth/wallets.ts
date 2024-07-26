@@ -84,6 +84,7 @@ export function authWallets({
        */
 
       try {
+        console.log("generate challenge !")
         const challenge = await generateChallenge(
           {
             chain: networkToChain(network),

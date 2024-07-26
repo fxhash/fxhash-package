@@ -8,10 +8,7 @@ import { Hex } from "viem"
 import { multichainWallets } from "../common.js"
 import { evmPrivateKeyWallet } from "./evm.js"
 import { tezosPrivateKeyWallet } from "./tezos.js"
-import {
-  CommonPrivateKeyWallet,
-  IPrivateKeyWalletsSource,
-} from "./_interfaces.js"
+import { IPrivateKeyWalletsSource } from "./_interfaces.js"
 
 type Options = {
   evm?: Hex
@@ -44,8 +41,8 @@ export function privateKeyWallets({
     ...wallets,
     updatePrivateKey: async (network, privateKey) => {
       return (
-        wallets.getWallet(network) as any as CommonPrivateKeyWallet
-      ).updatePrivateKey(privateKey)
+        wallets.getWallet(network) as IPrivateKeyWalletsSource
+      ).updatePrivateKey(network, privateKey)
     },
   }
 }

@@ -9,7 +9,7 @@ import { type Config as WagmiConfig } from "@wagmi/core"
 import { type DAppClientOptions as BeaconConfig } from "@airgap/beacon-sdk"
 import { eip1193WalletConnector } from "./evm.js"
 import { tzip10WalletConnector } from "./tezos.js"
-import { CommonWindowWallet, IWindowWalletsSource } from "./_interfaces.js"
+import { IWindowWalletsSource } from "./_interfaces.js"
 
 type Options = {
   /**
@@ -82,8 +82,8 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
   return {
     ...wallets,
     requestConnection(network) {
-      const wallet = wallets.getWallet(network)
-      if (wallet) (wallet as any as CommonWindowWallet).requestConnection()
+      const wallet = wallets.getWallet(network) as IWindowWalletsSource
+      wallet?.requestConnection(network)
     },
     requirements() {
       return {

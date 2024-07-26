@@ -1,56 +1,65 @@
-import { BlockchainNetwork, invariant } from "@fxhash/shared"
+import { BlockchainNetwork, PromiseResult, invariant } from "@fxhash/shared"
+import { type Signer } from "@taquito/taquito"
+import { type BeaconWallet } from "@taquito/beacon-wallet"
 import {
-  IEvmWallet,
-  ITezosWallet,
+  IEvmWalletConnectorClients,
+  IRequirements,
+  IWalletInfo,
   IWalletsSource,
-  MapNetworkToWalletInterface,
+  MapNetworkToWalletManager,
 } from "./_interfaces.js"
 import { EthereumWalletManager, clientToSigner } from "@fxhash/eth"
 import { config as fxConfig } from "@fxhash/config"
 import { TezosWalletManager } from "@fxhash/tez"
 import { WalletManagersMap, UserSourceEventEmitter } from "../_interfaces.js"
-import { intialization } from "@fxhash/utils"
+import { AtLeastOne, intialization } from "@fxhash/utils"
+import { WalletError } from "../_errors.js"
+
+interface IWalletManagerCreateParams<Net extends BlockchainNetwork> {
+  info: IWalletInfo<Net>
+  source: MapNetworkToWalletManagerCreateSourceInput<Net>
+}
+
+type FnCreateWalletManager<Net extends BlockchainNetwork> = (
+  params: IWalletManagerCreateParams<Net>
+) => MapNetworkToWalletManager<Net>
 
 /**
  * Given an EVM wallet interface, returns an Ethereum Wallet Manager instance
  * ready to rock.
  */
-export async function createEvmWalletManager(evmWallet: IEvmWallet) {
-  invariant(evmWallet, "should not be null")
-  const info = evmWallet.getInfo()
-  if (!info) return null
-  const _clients = await evmWallet.getClients()
-  if (_clients.isSuccess()) {
-    const clients = _clients.unwrap()
-    return new EthereumWalletManager({
-      walletClient: clients.wallet,
-      publicClient: clients.public,
-      rpcNodes: fxConfig.eth.apis.rpcs,
-      address: info.address,
-      signer: clients.signer || clientToSigner(clients.wallet),
-      ethersAdapterForSafe: clients.ethersAdapterForSafe,
-    })
-  } else {
-    throw _clients.error
-  }
+export const createEvmWalletManager: FnCreateWalletManager<
+  BlockchainNetwork.ETHEREUM
+> = ({ info, source }) => {
+  return new EthereumWalletManager({
+    walletClient: source.wallet,
+    publicClient: source.public,
+    rpcNodes: fxConfig.eth.apis.rpcs,
+    address: info.address,
+    signer: source.signer || clientToSigner(source.wallet),
+    ethersAdapterForSafe: source.ethersAdapterForSafe,
+  })
 }
 
 /**
  * Given a tezos wallet interface, returns a Tezos Wallet Manager instance
  * ready to rock.
  */
-export async function createTezosWalletManager(tezWallet: ITezosWallet) {
-  invariant(tezWallet, "should not be null")
-  const info = tezWallet.getInfo()
-  return info
-    ? new TezosWalletManager({
-        wallet: tezWallet.getWallet(),
-        address: info.address,
-      })
-    : null
+export const createTezosWalletManager: FnCreateWalletManager<
+  BlockchainNetwork.TEZOS
+> = ({ info, source }) => {
+  const anySource = source.beaconWallet || source.signer
+  // todo: what to do with error ?
+  if (!info || !anySource) throw new Error("todo")
+  return new TezosWalletManager({
+    wallet: anySource,
+    address: info.address,
+  })
 }
 
-const createWalletManagerMap = {
+const createWalletManagerMap: {
+  [Net in BlockchainNetwork]: FnCreateWalletManager<Net>
+} = {
   [BlockchainNetwork.ETHEREUM]: createEvmWalletManager,
   [BlockchainNetwork.TEZOS]: createTezosWalletManager,
 }
@@ -61,9 +70,9 @@ const createWalletManagerMap = {
  */
 export function createWalletManager<Net extends BlockchainNetwork>(
   network: Net,
-  wallet: MapNetworkToWalletInterface<Net>
+  params: IWalletManagerCreateParams<Net>
 ) {
-  return createWalletManagerMap[network](wallet as any)
+  return createWalletManagerMap[network](params)
 }
 
 // todo: move elsewhere
@@ -72,7 +81,11 @@ export const BlockchainNetworks = Object.keys(
 ) as BlockchainNetwork[]
 
 type WalletsMap = {
-  [Net in BlockchainNetwork]?: MapNetworkToWalletInterface<Net> | null
+  [Net in BlockchainNetwork]?: IWalletsSource | null
+}
+
+interface IMultichainWalletsSource extends IWalletsSource {
+  getWallet: (network: BlockchainNetwork) => IWalletsSource | null
 }
 
 /**
@@ -81,7 +94,9 @@ type WalletsMap = {
  * @param wallets A map of network -> wallet interface
  * @returns A wallet source-compatible interface
  */
-export function multichainWallets(wallets: WalletsMap): IWalletsSource {
+export function multichainWallets(
+  wallets: WalletsMap
+): IMultichainWalletsSource {
   const init = intialization()
   const { networks, supports } = walletsNetworks(wallets)
   const emitter = new UserSourceEventEmitter()
@@ -92,12 +107,17 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
   // listen to events emitted by all provided wallets
   for (const net of networks) {
     const wallet = wallets[net]
-    wallet?.emitter.on("wallet-changed", async () => {
+    wallet?.emitter.on("wallets-changed", async payload => {
       console.log("wallet emitter emitted")
 
       try {
+        const updated = payload.find(p => p.network === net)
+        if (!updated)
+          throw new Error(
+            "a wallet source emitted a wallet changed event without providing a proper payload"
+          )
         // @ts-expect-error
-        managers[net] = await createWalletManager(net, wallet)
+        managers[net] = updated.manager
       } catch (err) {
         console.log(err)
         throw err
@@ -114,14 +134,17 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     })
   }
 
-  const getWallet: IWalletsSource["getWallet"] = net => wallets[net] || null
+  const getWallet: IMultichainWalletsSource["getWallet"] = net =>
+    wallets[net] || null
   const disconnect: IWalletsSource["disconnectWallet"] = async net => {
     const wallet = getWallet(net)
-    if (wallet) await wallet.disconnect()
+    if (wallet) await wallet.disconnectWallet(net)
   }
 
   return {
     emitter,
+    getWallet,
+    getInfo: network => getWallet(network)?.getInfo(network) || null,
     init: async () => {
       init.start()
       await Promise.all(
@@ -132,7 +155,6 @@ export function multichainWallets(wallets: WalletsMap): IWalletsSource {
     initialized: () => init.finished,
     supports,
     getWalletManagers: () => managers,
-    getWallet,
     disconnectWallet: disconnect,
     disconnectAllWallets: async () => {
       await Promise.all(networks.map(net => disconnect(net)))
@@ -178,4 +200,101 @@ export function anyActiveManager(
   return BlockchainNetworks.map(net => managers[net])
     .map(man => man || null)
     .reduce((prev, curr) => prev || curr, null)
+}
+
+interface IWalletSourceParams<N extends BlockchainNetwork> {
+  network: N
+  init: () => Promise<void>
+  disconnect: () => Promise<void>
+  requirements: () => IRequirements
+  // todo: more specific error
+  createManager: (
+    info: IWalletInfo<N> | null
+  ) => PromiseResult<MapNetworkToWalletManager<N>, WalletError>
+}
+
+type TWalletSource<N extends BlockchainNetwork> = {
+  source: IWalletsSource
+  utils: {
+    update: (info: IWalletInfo<N> | null) => Promise<void>
+    init: ReturnType<typeof intialization>
+  }
+}
+
+export type MapNetworkToWalletManagerCreateSourceInput<
+  Net extends BlockchainNetwork,
+> = {
+  [N in BlockchainNetwork]: {
+    [BlockchainNetwork.ETHEREUM]: IEvmWalletConnectorClients
+    [BlockchainNetwork.TEZOS]: AtLeastOne<{
+      beaconWallet: BeaconWallet
+      signer: Signer
+    }>
+  }[N]
+}[Net]
+
+export function walletSource<Net extends BlockchainNetwork>({
+  network,
+  init,
+  disconnect,
+  createManager,
+  requirements,
+}: IWalletSourceParams<Net>): TWalletSource<Net> {
+  // derived types
+  type _Info = IWalletInfo<Net> | null
+
+  let _info: _Info = null
+  let _manager: MapNetworkToWalletManager<Net> | null = null
+
+  const _init = intialization()
+  const emitter = new UserSourceEventEmitter().only("wallets-changed", "error")
+
+  return {
+    source: {
+      emitter,
+      init: async () => {
+        _init.start()
+        await init()
+        _init.finish()
+      },
+      initialized: () => _init.finished,
+      getAccount: () => null,
+      logoutAccount: async () => {},
+      getWalletManagers: () => ({
+        [network]: _manager,
+      }),
+      // @ts-expect-error
+      getInfo: n => {
+        // @ts-expect-error
+        invariant(n === network, "cannot only get network info")
+        return _info
+      },
+      supports: n => n === network,
+      disconnectWallet: n => {
+        invariant(n === network, "can only disconnect on same network")
+        return disconnect()
+      },
+      disconnectAllWallets: disconnect,
+      requirements,
+    },
+    utils: {
+      init: _init,
+      update: async info => {
+        const prev = _info
+        // todo: should we update _info if couldn't create manager ?
+        _info = info
+        if (prev?.address !== info?.address) {
+          const res = await createManager(info)
+          if (res.isSuccess()) {
+            _manager = res.value
+            await emitter.emit("wallets-changed", [
+              { network, manager: _manager as any },
+            ])
+          } else {
+            emitter.emit("error", res.error)
+          }
+        }
+      },
+    },
+  }
 }

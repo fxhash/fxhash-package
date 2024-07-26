@@ -1,4 +1,4 @@
-import { EvmWindowWallet } from "./_interfaces.js"
+import { IWindowWalletsSource } from "./_interfaces.js"
 
 import {
   Config,
@@ -14,13 +14,19 @@ import {
   getConnections,
 } from "@wagmi/core"
 import { IWalletInfo, WalletEventEmitter } from "../_interfaces.js"
-import { failure, success } from "@fxhash/shared"
+import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import {
   EvmClientsNotAvailable,
   EvmWagmiClientGenerationError,
 } from "../../_errors.js"
 import { intialization, setIntervalCapped, sleep } from "@fxhash/utils"
 import { Address } from "viem"
+import { EthereumWalletManager } from "@fxhash/eth"
+import {
+  UserSourceEventEmitter,
+  createEvmWalletManager,
+  walletSource,
+} from "@/index.js"
 
 type Options = {
   wagmiConfig: Config
@@ -52,46 +58,36 @@ type Options = {
  */
 export function eip1193WalletConnector({
   wagmiConfig,
-}: Options): EvmWindowWallet {
-  const _init = intialization()
-  const emitter = new WalletEventEmitter()
+}: Options): IWindowWalletsSource {
   let _unwatchAccount: WatchAccountReturnType | null = null
-  let _info: IWalletInfo<Address> | null = null
 
-  const _accountChangedEvent = async (account: GetAccountReturnType) => {
-    const prevInfo = _info
-    _info = account?.address
-      ? {
-          address: account.address,
-        }
-      : null
-    if (prevInfo?.address !== _info?.address) {
-      console.log("emit wallet-changed")
-      await emitter.emit("wallet-changed", _info)
-    }
-  }
-
-  const _handleAccountChange = async (
-    account: GetAccountReturnType,
-    prevAccount?: GetAccountReturnType
-  ) => {
-    if (!prevAccount) {
-      // if no account, nothing to process
-      if (!account.isConnected) return
-      return _accountChangedEvent(account)
-    } else {
-      // a change of account
-      if (account.address !== prevAccount.address) {
-        return _accountChangedEvent(account)
-      }
-    }
-  }
-
-  return {
-    emitter,
+  const wallet = walletSource({
+    network: BlockchainNetwork.ETHEREUM,
 
     init: async () => {
-      _init.start()
+      const _handleAccountChange = async (
+        account: GetAccountReturnType,
+        prevAccount?: GetAccountReturnType
+      ) => {
+        console.log({ account, prevAccount })
+        const accountNormalized = account?.address
+          ? {
+              address: account.address,
+            }
+          : null
+
+        if (!prevAccount) {
+          // if no account, nothing to process
+          if (!account.isConnected) return
+          return wallet.utils.update(accountNormalized)
+        } else {
+          // a change of account
+          if (account.address !== prevAccount.address) {
+            return wallet.utils.update(accountNormalized)
+          }
+        }
+      }
+
       _unwatchAccount = watchAccount(wagmiConfig, {
         onChange: _handleAccountChange,
       })
@@ -113,17 +109,12 @@ export function eip1193WalletConnector({
       )
 
       await _handleAccountChange(getAccount(wagmiConfig))
-      _init.finish()
     },
 
-    getInfo: () => _info,
+    disconnect: () => disconnect(wagmiConfig),
 
-    release: () => _unwatchAccount?.(),
-
-    getClients: async () => {
-      if (!_info) {
-        return failure(new EvmClientsNotAvailable())
-      }
+    createManager: async info => {
+      if (!info) return failure(new EvmClientsNotAvailable())
 
       /**
        * @dev Here is a little hack to get some kind of "on('walletReady')"
@@ -154,19 +145,26 @@ export function eip1193WalletConnector({
         return failure(new EvmWagmiClientGenerationError())
       }
 
-      return success({
-        public: publicClient,
-        wallet: walletClient,
-      })
+      return success(
+        createEvmWalletManager({
+          info,
+          source: {
+            public: publicClient,
+            wallet: walletClient,
+          },
+        })
+      )
     },
-
-    disconnect: () => disconnect(wagmiConfig),
-
-    // todo: wassup with connect: injected() is this the right way ?
-    requestConnection: () => connect(wagmiConfig, { connector: injected() }),
 
     requirements: () => ({
       userInput: true,
     }),
+  })
+
+  return {
+    ...wallet.source,
+    release: () => _unwatchAccount?.(),
+    // todo: wassup with connect: injected() is this the right way ?
+    requestConnection: () => connect(wagmiConfig, { connector: injected() }),
   }
 }

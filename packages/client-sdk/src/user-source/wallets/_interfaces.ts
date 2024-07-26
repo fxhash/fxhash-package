@@ -20,6 +20,10 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { WalletError } from "../_errors.js"
 
 export interface IRequirements {
+  /**
+   * Whether the wallet implementation requires user input for signing payloads
+   * & operations.
+   */
   userInput: boolean
 }
 
@@ -33,6 +37,8 @@ export interface IWalletsSource extends IUserSource {
    */
   getWalletManagers: () => WalletManagersMap
 
+  getInfo: <N extends BlockchainNetwork>(network: N) => IWalletInfo<N> | null
+
   /**
    * Wallet sources cannot handle accounts directly and must return null when
    * trying to access the account.
@@ -45,15 +51,6 @@ export interface IWalletsSource extends IUserSource {
   supports: (network: BlockchainNetwork) => boolean
 
   /**
-   * Given a network (from those supported by fxhash), returns a Wallet
-   * instance which can be used by the fxhash client stack to interact with
-   * said wallet.
-   */
-  getWallet: <N extends BlockchainNetwork>(
-    network: N
-  ) => MapNetworkToWalletInterface<N> | null
-
-  /**
    * Different wallet sources can implement different sets of requirements
    */
   requirements: () => IRequirements
@@ -62,81 +59,49 @@ export interface IWalletsSource extends IUserSource {
 /**
  * Generic information about the wallet.
  */
-export interface IWalletInfo<AddressType extends string = string> {
-  address: AddressType
+export interface IWalletInfo<Net extends BlockchainNetwork> {
+  address: MapNetworkToAddressType<Net>
 }
-type GetWalletInfo<AddressType extends string = string> =
-  () => IWalletInfo<AddressType> | null
+export type GetWalletInfo<Net extends BlockchainNetwork> =
+  () => IWalletInfo<Net> | null
 
-/**
- * Common interface for a network-specific wallet.
- */
-export interface ICommonWallet {
-  emitter: WalletEventEmitter
+// /**
+//  * Must be implemented by a wallet abstraction for it to be supported by our
+//  * EVM stack.
+//  */
+// export interface IEvmWallet extends ICommonWallet {
+//   /**
+//    * @returns A promise which resolves with an object of the wallet clients
+//    * ready for interactions, or rejects if no such clients are avaiable.
+//    */
+//   // getClients: () => PromiseResult<IEvmWalletConnectorClients, WalletError>
 
-  /**
-   * @returns General information about the wallet (null if not connected).
-   */
-  getInfo: GetWalletInfo
+//   // getInfo: GetWalletInfo<Address>
+// }
 
-  /**
-   * Attempts to disconnect the wallet.
-   */
-  disconnect: () => Promise<void>
-
-  /**
-   * Initialize the connector.
-   */
-  init?: () => Promise<void>
-
-  /**
-   * Release events/memory usage.
-   */
-  release?: () => void
-
-  /**
-   * @returns An interface of the wallet requirements
-   */
-  requirements: () => IRequirements
-}
-
-/**
- * Must be implemented by a wallet abstraction for it to be supported by our
- * EVM stack.
- */
-export interface IEvmWallet extends ICommonWallet {
-  /**
-   * @returns A promise which resolves with an object of the wallet clients
-   * ready for interactions, or rejects if no such clients are avaiable.
-   */
-  getClients: () => PromiseResult<IEvmWalletConnectorClients, WalletError>
-
-  getInfo: GetWalletInfo<Address>
-}
-
-/**
- * Must be implemented by a wallet abstraction for it to be supported by our
- * Tezos stack.
- */
-export interface ITezosWallet extends ICommonWallet {
-  /**
-   * @returns Either a Beacon Wallet instance or an arbitrary signer. Both are
-   * compatible with the rest of the stack.
-   */
-  getWallet: () => BeaconWallet | Signer
-}
-
-export type MapNetworkToWalletInterface<N extends BlockchainNetwork> = {
-  [K in BlockchainNetwork]: {
-    [BlockchainNetwork.ETHEREUM]: IEvmWallet
-    [BlockchainNetwork.TEZOS]: ITezosWallet
-  }[K]
-}[N]
+// /**
+//  * Must be implemented by a wallet abstraction for it to be supported by our
+//  * Tezos stack.
+//  */
+// export interface ITezosWallet extends ICommonWallet {
+//   /**
+//    * @returns Either a Beacon Wallet instance or an arbitrary signer. Both are
+//    * compatible with the rest of the stack.
+//    */
+//   // getWallet: () => BeaconWallet | Signer
+// }
 
 export type MapNetworkToWalletManager<N extends BlockchainNetwork> = {
   [K in BlockchainNetwork]: {
     [BlockchainNetwork.ETHEREUM]: EthereumWalletManager
     [BlockchainNetwork.TEZOS]: TezosWalletManager
+  }[K]
+}[N]
+
+export type MapNetworkToAddressType<N extends BlockchainNetwork> = {
+  [K in BlockchainNetwork]: {
+    [BlockchainNetwork.ETHEREUM]: Address
+    [BlockchainNetwork.TEZOS]: string
   }[K]
 }[N]
 
@@ -151,7 +116,7 @@ export interface IEvmWalletConnectorClients {
 }
 
 export type WalletEventsTypemap = {
-  "wallet-changed": IWalletInfo | null
+  "wallet-changed": IWalletInfo<any> | null
   error: any
 }
 

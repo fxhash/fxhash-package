@@ -1,14 +1,14 @@
 import { DefaultBeaconWalletConfig } from "@fxhash/tez"
-import { WalletEventEmitter } from "../_interfaces.js"
 import {
   type DAppClientOptions,
   type AccountInfo,
   BeaconEvent,
 } from "@airgap/beacon-sdk"
 import { BeaconWallet } from "@taquito/beacon-wallet"
-import { invariant } from "@fxhash/shared"
-import { TezosWindowWallet } from "./_interfaces.js"
-import { intialization } from "@fxhash/utils"
+import { BlockchainNetwork, failure, success } from "@fxhash/shared"
+import { IWindowWalletsSource } from "./_interfaces.js"
+import { createTezosWalletManager, walletSource } from "../common.js"
+import { EvmClientsNotAvailable } from "@/index.js"
 
 type Options = {
   beaconConfig: DAppClientOptions
@@ -31,27 +31,16 @@ type Options = {
  */
 export function tzip10WalletConnector({
   beaconConfig,
-}: Options): TezosWindowWallet {
-  const emitter = new WalletEventEmitter()
-  const _init = intialization()
+}: Options): IWindowWalletsSource {
   const _beaconConfig = beaconConfig ?? DefaultBeaconWalletConfig
   let _beaconWallet: BeaconWallet | null = null
-  let _info: AccountInfo | null = null
 
-  // todo async
-  const _handleAccountSet = (account?: AccountInfo) => {
-    const prevInfo = _info
-    _info = account || null
-    if (_info?.address !== prevInfo?.address) {
-      emitter.emit("wallet-changed", _info)
-    }
-  }
-
-  return {
-    emitter,
-
+  const wallet = walletSource({
+    network: BlockchainNetwork.TEZOS,
     init: async () => {
-      _init.start()
+      const _handleAccountSet = (account?: AccountInfo) =>
+        wallet.utils.update(account || null)
+
       /**
        * Note: BeaconWallet uses getDAppClientInstance() under the hood, ensuring
        * there's only a single Beacon Wallet instance in all times.
@@ -63,28 +52,31 @@ export function tzip10WalletConnector({
       )
       const activeAccount = await _beaconWallet.client.getActiveAccount()
       await _handleAccountSet(activeAccount)
-      _init.finish()
     },
-
-    release: () => {},
-
-    requestConnection: () => {
-      _beaconWallet?.requestPermissions()
-    },
-
-    getWallet: () => {
-      invariant(_beaconWallet, "Beacon Wallet not instanciated")
-      return _beaconWallet
-    },
-
-    getInfo: () => _info,
-
     disconnect: async () => {
       await _beaconWallet?.clearActiveAccount()
     },
-
+    createManager: async info => {
+      // todo: different error (for tez !!)
+      if (!info || !_beaconWallet) return failure(new EvmClientsNotAvailable())
+      return success(
+        createTezosWalletManager({
+          info,
+          source: {
+            beaconWallet: _beaconWallet,
+          },
+        })
+      )
+    },
     requirements: () => ({
       userInput: true,
     }),
+  })
+
+  return {
+    ...wallet.source,
+    requestConnection: () => {
+      _beaconWallet?.requestPermissions()
+    },
   }
 }
