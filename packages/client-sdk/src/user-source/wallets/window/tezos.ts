@@ -8,7 +8,7 @@ import { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import { IWindowWalletsSource } from "./_interfaces.js"
 import { EvmClientsNotAvailable } from "@/index.js"
-import { createTezosWalletManager, walletSource } from "../common/_index.js"
+import { createTezosWalletManager, walletSource } from "../common/_private.js"
 
 type Options = {
   beaconConfig: DAppClientOptions

@@ -42,7 +42,7 @@ export function anyActiveManager(
  * @param wallets A Wallets Map
  * @returns A WalletManagers Map derived from the Wallets Map
  */
-function deriveManagersMap(wallets: WalletsMap): WalletManagersMap {
+export function deriveManagersMap(wallets: WalletsMap): WalletManagersMap {
   return Object.fromEntries(
     Object.keys(wallets).map(net => [
       net,

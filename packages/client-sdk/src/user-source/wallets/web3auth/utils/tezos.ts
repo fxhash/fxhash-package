@@ -4,7 +4,7 @@ import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { b58cencode, getPkhfromPk, prefix } from "@taquito/utils"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
-import { createTezosWalletManager } from "../../common/_index.js"
+import { createTezosWalletManager } from "../../common/_private.js"
 
 type Options = Web3AuthFrameManager
 

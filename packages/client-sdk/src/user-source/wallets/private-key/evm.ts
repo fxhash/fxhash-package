@@ -4,7 +4,7 @@ import { type Hex, type PrivateKeyAccount } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"
 import { EthereumWalletManager } from "@fxhash/eth"
-import { walletSource } from "../common/_index.js"
+import { walletSource } from "../common/_private.js"
 
 export type EvmPrivateKeyWalletOptions = {
   privateKey?: Hex

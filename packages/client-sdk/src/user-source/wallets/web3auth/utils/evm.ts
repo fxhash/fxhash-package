@@ -17,7 +17,7 @@ import { sepolia } from "viem/chains"
 import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { computeAddress } from "ethers"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
-import { createEvmWalletManager } from "../../common/_index.js"
+import { createEvmWalletManager } from "../../common/_private.js"
 
 type Options = Web3AuthFrameManager
 

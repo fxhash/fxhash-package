@@ -5,7 +5,7 @@
 
 import { BlockchainNetwork } from "@fxhash/shared"
 import { type Hex } from "viem"
-import { multichainWallets } from "../common/_index.js"
+import { multichainWallets } from "../common/_private.js"
 import { evmPrivateKeyWallet } from "./evm.js"
 import { tezosPrivateKeyWallet } from "./tezos.js"
 import { type IPrivateKeyWalletsSource } from "./_interfaces.js"

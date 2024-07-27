@@ -18,7 +18,7 @@ import {
   EvmWagmiClientGenerationError,
 } from "../../_errors.js"
 import { setIntervalCapped, sleep } from "@fxhash/utils"
-import { createEvmWalletManager, walletSource } from "../common/_index.js"
+import { createEvmWalletManager, walletSource } from "../common/_private.js"
 
 type Options = {
   wagmiConfig: Config

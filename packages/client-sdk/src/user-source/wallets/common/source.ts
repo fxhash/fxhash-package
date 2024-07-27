@@ -59,12 +59,10 @@ export function walletSource<Net extends BlockchainNetwork>({
     initialized: () => _init.finished,
     getAccount: () => null,
     logoutAccount: async () => {},
-    // @ts-expect-error
     getWallet(net) {
-      // @ts-expect-error
-      invariant(net !== network, "invalid network")
+      invariant(this.supports(net), "invalid network")
       return {
-        connected: connected,
+        connected: connected as any,
         source: this,
       }
     },

@@ -18,9 +18,10 @@ import {
   GetSingleUserAccountResult,
   UserConsistencyError,
   WalletManagersMap,
+  deriveManagersMap,
 } from "@fxhash/client-sdk"
 import { cleanup, DeepOmit } from "@fxhash/utils"
-import { invariant } from "@fxhash/shared"
+import { BlockchainNetwork, invariant } from "@fxhash/shared"
 
 export type ReactClientPlugnPlayOptions = DeepOmit<
   ClientPlugnPlayOptions,
@@ -41,8 +42,8 @@ export type ClientBasicState = {
 }
 
 const defaultActiveManagers = {
-  EVM: null,
-  TEZOS: null,
+  [BlockchainNetwork.ETHEREUM]: null,
+  [BlockchainNetwork.TEZOS]: null,
 }
 
 const defaultContext: ClientBasicState = {
@@ -91,10 +92,13 @@ export function ClientPlugnPlayProvider({
         set("userError", err)
       }),
       client.emitter.on("user-changed", () => {
+        const wallets = client.source.getWallets()
         update({
           userError: null,
           account: client.source.getAccount(),
-          managers: client.source.getWalletManagers() || defaultActiveManagers,
+          managers: wallets
+            ? deriveManagersMap(wallets)
+            : defaultActiveManagers,
         })
       })
     )
