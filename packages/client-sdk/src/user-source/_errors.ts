@@ -8,6 +8,7 @@
 import { BlockchainNetwork } from "@fxhash/shared"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"
+import { IWalletConnected } from "./_interfaces.js"
 
 /**
  * Can be thrown when a WalletsConnector doesn't support a specific chain, yet
@@ -107,9 +108,9 @@ export type WalletError =
  */
 export class WalletDoesntBelongAccountError extends Error {
   name = "WalletDoesntBelongAccountError" as const
-  constructor(walletManager: TezosWalletManager | EthereumWalletManager) {
+  constructor(wallet: IWalletConnected<BlockchainNetwork>) {
     super(
-      `The wallet "${walletManager.address}" doesn't belong to the currently authenticated user.`
+      `The wallet "${wallet.info.address}" doesn't belong to the currently authenticated user.`
     )
   }
 }

@@ -7,8 +7,8 @@ import {
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import { IWindowWalletsSource } from "./_interfaces.js"
-import { createTezosWalletManager, walletSource } from "../common.js"
 import { EvmClientsNotAvailable } from "@/index.js"
+import { createTezosWalletManager, walletSource } from "../common/_index.js"
 
 type Options = {
   beaconConfig: DAppClientOptions
@@ -29,7 +29,7 @@ type Options = {
  *    implementation
  *  - expose a signer which can be used by a taquito instance to sign operations
  */
-export function tzip10WalletConnector({
+export function tzip10WalletSource({
   beaconConfig,
 }: Options): IWindowWalletsSource {
   const _beaconConfig = beaconConfig ?? DefaultBeaconWalletConfig

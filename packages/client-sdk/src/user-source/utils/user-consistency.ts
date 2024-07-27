@@ -1,13 +1,13 @@
-import { Result, failure, success } from "@fxhash/shared"
+import { BlockchainNetworks, Result, failure, success } from "@fxhash/shared"
 import {
   AccountAuthenticatedButNoWalletConnectedError,
   UserConsistencyError,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletDoesntBelongAccountError,
 } from "../_errors.js"
-import { WalletManagersMap } from "../_interfaces.js"
-import { BlockchainNetworks, anyActiveManager } from "../_index.js"
+import { WalletsMap } from "../_index.js"
 import { GetSingleUserAccountResult } from "../auth/_index.js"
+import { anyActiveManager } from "../wallets/common/utils.js"
 
 /**
  * Given an Account and some Wallet Managers, returns a failure with an error
@@ -16,19 +16,20 @@ import { GetSingleUserAccountResult } from "../auth/_index.js"
  * `UserConsistency` union returned as a failure by this module.
  *
  * @param account Updated authenticated account (or lack thereof)
- * @param managers Updated active wallet managers
+ * @param wallets Updated map of the Wallets for which state consistency wants
+ * to be tested.
  *
  * @returns Success or Failure (with coherency error)
  */
 export function isUserStateConsistent(
   account: GetSingleUserAccountResult | null,
-  managers: WalletManagersMap
+  wallets: WalletsMap
 ): Result<void, UserConsistencyError> {
   // any of the active wallet managers
-  const _anyActiveManager = anyActiveManager(managers)
+  const _anyActiveManager = anyActiveManager(wallets)
   const noWalletConnected = !_anyActiveManager
 
-  console.log({ account, managers, _anyActiveManager, noWalletConnected })
+  console.log({ account, wallets, _anyActiveManager, noWalletConnected })
 
   if (!account) {
     if (noWalletConnected) {
@@ -46,10 +47,10 @@ export function isUserStateConsistent(
 
   // check whether the wallets currently connected are owned by the account
   for (const net of BlockchainNetworks) {
-    const man = managers[net] || null
-    if (!man) continue
-    if (!account.wallets.find(w => w.address === man.address)) {
-      return failure(new WalletDoesntBelongAccountError(man))
+    const wallet = wallets[net]?.connected || null
+    if (!wallet) continue
+    if (!account.wallets.find(w => w.address === wallet.info.address)) {
+      return failure(new WalletDoesntBelongAccountError(wallet))
     }
   }
 

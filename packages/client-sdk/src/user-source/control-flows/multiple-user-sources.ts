@@ -1,6 +1,6 @@
 import { cleanup, initOnce, intialization } from "@fxhash/utils"
 import { IUserSource, UserSourceEventEmitter } from "../_interfaces.js"
-import { anyActiveManager } from "../_index.js"
+import { anyActiveManager } from "../wallets/common/utils.js"
 
 type Options = {
   sources: IUserSource[]
@@ -72,7 +72,9 @@ export function multipleUserSources({
       return _activeSource.logoutAccount()
     },
 
-    getWalletManagers: () => _activeSource?.getWalletManagers() || null,
+    getWallet: net => _activeSource?.getWallet(net) || null,
+    getWallets: () => _activeSource?.getWallets() || null,
+
     disconnectWallet: async network => {
       if (!_activeSource) return
       return _activeSource.disconnectWallet(network)
@@ -96,6 +98,6 @@ export function multipleUserSources({
 
 function isSourceActive(source: IUserSource): boolean {
   const account = source.getAccount()
-  const wallets = source.getWalletManagers()
+  const wallets = source.getWallets()
   return !!(account || (wallets && anyActiveManager(wallets)))
 }

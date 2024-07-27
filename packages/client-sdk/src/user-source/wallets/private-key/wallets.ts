@@ -4,11 +4,11 @@
  */
 
 import { BlockchainNetwork } from "@fxhash/shared"
-import { Hex } from "viem"
-import { multichainWallets } from "../common.js"
+import { type Hex } from "viem"
+import { multichainWallets } from "../common/_index.js"
 import { evmPrivateKeyWallet } from "./evm.js"
 import { tezosPrivateKeyWallet } from "./tezos.js"
-import { IPrivateKeyWalletsSource } from "./_interfaces.js"
+import { type IPrivateKeyWalletsSource } from "./_interfaces.js"
 
 type Options = {
   evm?: Hex
@@ -40,9 +40,13 @@ export function privateKeyWallets({
   return {
     ...wallets,
     updatePrivateKey: async (network, privateKey) => {
-      return (
-        wallets.getWallet(network) as IPrivateKeyWalletsSource
-      ).updatePrivateKey(network, privateKey)
+      const source = wallets.getWallet(network)?.source
+      // todo error
+      if (!source) throw new Error(`network not available`)
+      return (source as IPrivateKeyWalletsSource).updatePrivateKey(
+        network,
+        privateKey
+      )
     },
   }
 }

@@ -1,12 +1,11 @@
-import { JwtAccessTokenPayload, failure, success } from "@fxhash/shared"
+import { failure, success } from "@fxhash/shared"
 import {
-  IAccountSourceCommonOptions,
-  IWeb3AuthAccountSource,
+  type IAccountSourceCommonOptions,
+  type IWeb3AuthAccountSource,
 } from "./_interfaces.js"
 import { authWithWallets } from "./common.js"
 import { authenticateWeb3Auth } from "./_index.js"
-import { jwtDecode } from "jwt-decode"
-import { IWeb3AuthWalletsSource } from "../_index.js"
+import { type IWeb3AuthWalletsSource } from "../_index.js"
 
 type Options = {
   wallets: IWeb3AuthWalletsSource

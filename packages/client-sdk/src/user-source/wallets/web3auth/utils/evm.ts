@@ -16,52 +16,53 @@ import { toAccount } from "viem/accounts"
 import { sepolia } from "viem/chains"
 import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { computeAddress } from "ethers"
-import { EthereumWalletManager } from "@fxhash/eth"
-import { createEvmWalletManager } from "../../common.js"
+import { type IWalletConnected, type IWalletInfo } from "@/index.js"
+import { createEvmWalletManager } from "../../common/_index.js"
 
 type Options = Web3AuthFrameManager
 
 export function evmWeb3AuthWallet(
   frameManager: Options
 ): IWeb3AuthWalletUtil<BlockchainNetwork.ETHEREUM> {
-  let _address: Hash | null = null
-  let _manager: EthereumWalletManager | null = null
-
-  const getInfo = () => (_address ? { address: _address } : null)
+  let _connected: IWalletConnected<BlockchainNetwork.ETHEREUM> | null = null
 
   const _updateAddress = (address: Hash | null) => {
-    _address = address
-    const info = getInfo()
-
-    if (!info) {
-      _manager = null
+    if (!address) {
+      _connected = null
       return
     }
 
+    const info: IWalletInfo<BlockchainNetwork.ETHEREUM> = {
+      address,
+    }
     // todo: how to have multichain here ? possible ?
     // maybe use a wagmi util instead ?
     const chain = sepolia
     const transport = http()
 
-    _manager = createEvmWalletManager({
+    _connected = {
       info,
-      source: {
-        public: createPublicClient({
-          chain,
-          transport,
-        }),
-        wallet: createWalletClient({
-          account: toAccount(
-            frameManagerEvmAccountSource(frameManager, info.address)
-          ),
-          chain,
-          transport,
-        }),
-      },
-    })
+      manager: createEvmWalletManager({
+        info,
+        source: {
+          public: createPublicClient({
+            chain,
+            transport,
+          }),
+          wallet: createWalletClient({
+            account: toAccount(
+              frameManagerEvmAccountSource(frameManager, info.address)
+            ),
+            chain,
+            transport,
+          }),
+        },
+      }),
+    }
   }
 
   return {
+    getWalletConnected: () => _connected,
     update: details => {
       _updateAddress(
         details
@@ -71,8 +72,6 @@ export function evmWeb3AuthWallet(
           : null
       )
     },
-    getWalletManager: () => _manager,
-    getInfo,
   }
 }
 

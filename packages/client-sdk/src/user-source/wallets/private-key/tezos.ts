@@ -1,9 +1,9 @@
 import { InMemorySigner } from "@taquito/signer"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"
-import { walletSource } from "../common.js"
 import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
 import { EvmClientsNotAvailable } from "@/index.js"
 import { TezosWalletManager } from "@fxhash/tez"
+import { walletSource } from "../common/_index.js"
 
 type Options = {
   privateKey?: string

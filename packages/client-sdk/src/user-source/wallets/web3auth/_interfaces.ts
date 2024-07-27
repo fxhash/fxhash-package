@@ -1,17 +1,12 @@
 import { Hex } from "viem"
-import {
-  GetWalletInfo,
-  IWalletsSource,
-  MapNetworkToWalletManager,
-} from "../_interfaces.js"
 import { EventEmitter } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
+import { IWalletConnected, IWalletsSource } from "@/index.js"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
   update: (detais: SessionDetails | null) => void
-  getWalletManager: () => MapNetworkToWalletManager<Net> | null
-  getInfo: GetWalletInfo<Net>
+  getWalletConnected: () => IWalletConnected<Net> | null
 }
 
 export interface IWeb3AuthWalletsSource extends IWalletsSource {

@@ -20,6 +20,10 @@ export enum BlockchainNetwork {
   ETHEREUM = "ETHEREUM",
 }
 
+export const BlockchainNetworks = Object.keys(
+  BlockchainNetwork
+) as BlockchainNetwork[]
+
 export enum TransactionType {
   OFFCHAIN = "OFFCHAIN",
   ONCHAIN = "ONCHAIN",

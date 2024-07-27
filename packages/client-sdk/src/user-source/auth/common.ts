@@ -1,33 +1,32 @@
 import {
   AccountAuthenticatedButNoWalletConnectedError,
-  GetSingleUserAccountResult,
-  ICredentialsDriver,
-  IGraphqlWrapper,
-  IWalletsSource,
-  JWTCredentials,
+  type GetSingleUserAccountResult,
+  type ICredentialsDriver,
+  type IGraphqlWrapper,
+  type IWalletsSource,
+  type JWTCredentials,
   SignMessageError,
-  Storage,
+  type Storage,
   UserSourceEventEmitter,
   WalletConnectedButNoAccountAuthenticatedError,
-  anyActiveManager,
   getMyProfile,
   logout,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
 import {
-  IAccountSourceCommonOptions,
-  IWalletsAccountSource,
-  StoredAccount,
+  type IAccountSourceCommonOptions,
+  type IWalletsAccountSource,
+  type StoredAccount,
 } from "./_interfaces.js"
 import {
-  JwtAccessTokenPayload,
+  type JwtAccessTokenPayload,
   PromiseResult,
-  failure,
   invariant,
 } from "@fxhash/shared"
 import { Init, cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"
 import { jwtDecode } from "jwt-decode"
+import { anyActiveManager } from "../wallets/common/utils.js"
 
 /**
  * The key which will be used to store the account data.
@@ -219,7 +218,7 @@ export type AuthWithWalletsParams = IAccountSourceCommonOptions & {
  * in the flow.
  */
 export function authWithWallets({
-  wallets,
+  wallets: walletsSource,
   gqlWrapper: gql,
   storage,
   credentialsDriver,
@@ -273,10 +272,10 @@ export function authWithWallets({
    */
   const _reconciliate = async () => {
     const account = _account.get()
-    const managers = wallets.getWalletManagers()
+    const wallets = walletsSource.getWallets()
     console.log("_reconciliate")
-    console.log({ account, managers })
-    const consistency = isUserStateConsistent(account, managers)
+    console.log({ account, wallets })
+    const consistency = isUserStateConsistent(account, wallets)
     console.log({ consistency })
     if (consistency.isSuccess()) {
       emitter.emit("user-changed")
@@ -295,18 +294,21 @@ export function authWithWallets({
       ) {
         console.log("going here !!")
         // if we are during the initialization
-        if (init.state === Init.STARTED && !wallets.requirements().userInput) {
+        if (
+          init.state === Init.STARTED &&
+          !walletsSource.requirements().userInput
+        ) {
           // here events not hooked, so no side-effects triggered
           try {
             console.log("calling authenticate here")
             await _authenticate()
             return
           } catch (err) {
-            wallets.disconnectAllWallets()
+            walletsSource.disconnectAllWallets()
             return
           }
         } else {
-          wallets.disconnectAllWallets()
+          walletsSource.disconnectAllWallets()
           return
         }
       }
@@ -318,13 +320,8 @@ export function authWithWallets({
 
   const _hookEvents = () => {
     clean.add(
-      wallets.emitter.on("wallets-changed", async () => {
-        const anyManager = anyActiveManager(wallets.getWalletManagers())
-
-        console.log({
-          managers: wallets.getWalletManagers(),
-          anyManager,
-        })
+      walletsSource.emitter.on("wallets-changed", async () => {
+        const anyManager = anyActiveManager(walletsSource.getWallets())
 
         // when wallet is connected, but no account is authenticated, we start
         // authentication process
@@ -364,7 +361,7 @@ export function authWithWallets({
      */
     init: async () => {
       init.start()
-      await Promise.all([wallets.init(), _account.reconnectFromStorage()])
+      await Promise.all([walletsSource.init(), _account.reconnectFromStorage()])
 
       // Note: here it's **very** important that the first reconciliation
       // happens before we hook events, as _reconciliate may trigger some
@@ -378,11 +375,12 @@ export function authWithWallets({
 
     release: () => {
       clean.clear()
-      wallets.release?.()
+      walletsSource.release?.()
     },
 
-    getWalletManagers: wallets.getWalletManagers,
-    disconnectWallet: wallets.disconnectWallet,
-    disconnectAllWallets: wallets.disconnectAllWallets,
+    getWallet: walletsSource.getWallet,
+    getWallets: walletsSource.getWallets,
+    disconnectWallet: walletsSource.disconnectWallet,
+    disconnectAllWallets: walletsSource.disconnectAllWallets,
   }
 }

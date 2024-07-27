@@ -4,36 +4,10 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { EventEmitter } from "@fxhash/utils"
 import {
   GetSingleUserAccountResult,
+  MapNetworkToAddressType,
   MapNetworkToWalletManager,
+  WalletsMap,
 } from "./_index.js"
-
-export type WalletChangedPayload =
-  | {
-      network: BlockchainNetwork.ETHEREUM
-      manager: EthereumWalletManager | null
-    }
-  | {
-      network: BlockchainNetwork.TEZOS
-      manager: TezosWalletManager | null
-    }
-export type WalletChangedEventData = WalletChangedPayload[]
-
-export interface AccountUpdatedEventData {
-  account: GetSingleUserAccountResult | null
-}
-
-export type UserSourceEventsTypemap = {
-  "wallets-changed": WalletChangedEventData
-  "account-changed": AccountUpdatedEventData
-  "user-changed": void
-  error: any
-}
-
-export class UserSourceEventEmitter extends EventEmitter<UserSourceEventsTypemap> {}
-
-export type WalletManagersMap = {
-  [Net in BlockchainNetwork]?: MapNetworkToWalletManager<Net> | null
-}
 
 /**
  * A generic-purpose User Source interface. A user source can be an account,
@@ -82,10 +56,17 @@ export interface IUserSource {
   logoutAccount: () => Promise<void>
 
   /**
-   * Returns a map of the active wallet managers. Will always be null if the
-   * source doesn't support wallets.
+   * Returns a map of { BlockchainNetwork -> Wallet } which holds info about
+   * wallets currently connected, their source, and eventually a Wallet Manager
+   * if the wallet is connected.
    */
-  getWalletManagers: () => WalletManagersMap | null
+  getWallets: () => WalletsMap | null
+
+  /**
+   * Returns a Wallet on a given Blockchain Network. Returns `null` if no walelt
+   * source is available on the given network.
+   */
+  getWallet: <N extends BlockchainNetwork>(network: N) => IWallet<N> | null
 
   /**
    * Disconnect a wallet on a given network. Has no effect if the source doesn't
@@ -99,3 +80,89 @@ export interface IUserSource {
    */
   disconnectAllWallets: () => Promise<void>
 }
+
+/**
+ * A Wallets Source exposes some utilities to handle multi-chain wallets through
+ * a common interface.
+ */
+export interface IWalletsSource extends IUserSource {
+  // overrides
+  getWallets: () => WalletsMap
+  getAccount: () => null
+
+  /**
+   * Whether the wallet source supports a given network.
+   */
+  supports: (network: BlockchainNetwork) => boolean
+
+  /**
+   * Different wallet sources can implement different sets of requirements
+   */
+  requirements: () => IWalletRequirements
+}
+
+/**
+ * Abstract interface representing a Wallet. This data may be returned by
+ * Wallet Sources to describe the current state of a wallet on a given network.
+ */
+export interface IWallet<Net extends BlockchainNetwork> {
+  /**
+   * The Wallet currently connected. If null, the wallet isn't connected.
+   */
+  connected: IWalletConnected<Net> | null
+
+  /**
+   * The Wallets Source which handles this Wallet.
+   */
+  source: IWalletsSource
+}
+
+/**
+ * Information and Wallet Manager instance of a wallet currently connected.
+ */
+export interface IWalletConnected<Net extends BlockchainNetwork> {
+  manager: MapNetworkToWalletManager<Net>
+  info: IWalletInfo<Net>
+}
+
+/**
+ * Generic information about a Wallet.
+ */
+export interface IWalletInfo<Net extends BlockchainNetwork> {
+  address: MapNetworkToAddressType<Net>
+}
+
+/**
+ * An interface which describes some of the requirements of a wallet
+ * implementation. These requirements give information about the behaviour of
+ * the underlying wallet and allows consumer implementations to adapt their
+ * behaviours based on the wallet requirements.
+ */
+export interface IWalletRequirements {
+  /**
+   * Whether the wallet implementation requires user input for signing payloads
+   * & operations.
+   */
+  userInput: boolean
+}
+
+export type WalletChangedPayload =
+  | {
+      network: BlockchainNetwork.ETHEREUM
+      wallet: IWallet<BlockchainNetwork.ETHEREUM>
+    }
+  | {
+      network: BlockchainNetwork.TEZOS
+      wallet: IWallet<BlockchainNetwork.TEZOS>
+    }
+export type WalletChangedEventData = WalletChangedPayload[]
+export interface AccountUpdatedEventData {
+  account: GetSingleUserAccountResult | null
+}
+export type UserSourceEventsTypemap = {
+  "wallets-changed": WalletChangedEventData
+  "account-changed": AccountUpdatedEventData
+  "user-changed": void
+  error: any
+}
+export class UserSourceEventEmitter extends EventEmitter<UserSourceEventsTypemap> {}

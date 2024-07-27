@@ -3,13 +3,14 @@
  * @license MIT
  */
 
-import { BlockchainNetwork } from "@fxhash/shared"
-import { multichainWallets } from "../common.js"
+import { BlockchainNetwork, invariant } from "@fxhash/shared"
 import { type Config as WagmiConfig } from "@wagmi/core"
 import { type DAppClientOptions as BeaconConfig } from "@airgap/beacon-sdk"
-import { eip1193WalletConnector } from "./evm.js"
-import { tzip10WalletConnector } from "./tezos.js"
-import { IWindowWalletsSource } from "./_interfaces.js"
+import { eip1193WalletSource } from "./evm.js"
+import { tzip10WalletSource } from "./tezos.js"
+import { type IWindowWalletsSource } from "./_interfaces.js"
+import { isBrowser } from "@fxhash/utils-browser"
+import { multichainWallets } from "../common/multichain.js"
 
 type Options = {
   /**
@@ -57,7 +58,8 @@ let instanciated = false
  * window wallet specification.
  */
 export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
-  console.log("called !")
+  invariant(isBrowser(), "Window wallets can only be instanciated in browser")
+
   // show a warning if it's already been instanciated, as undesired
   if (instanciated) {
     console.warn(
@@ -68,22 +70,23 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
 
   const wallets = multichainWallets({
     [BlockchainNetwork.ETHEREUM]: evm
-      ? eip1193WalletConnector({
+      ? eip1193WalletSource({
           wagmiConfig: evm.config,
         })
-      : null,
+      : undefined,
     [BlockchainNetwork.TEZOS]: tezos
-      ? tzip10WalletConnector({
+      ? tzip10WalletSource({
           beaconConfig: tezos.config,
         })
-      : null,
+      : undefined,
   })
 
   return {
     ...wallets,
     requestConnection(network) {
-      const wallet = wallets.getWallet(network) as IWindowWalletsSource
-      wallet?.requestConnection(network)
+      const wallet = wallets.getWallet(network)
+      wallet &&
+        (wallet.source as IWindowWalletsSource).requestConnection(network)
     },
     requirements() {
       return {

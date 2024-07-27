@@ -1,4 +1,4 @@
-import { IWalletsSource } from "../_interfaces.js"
+import { IWalletsSource } from "@/index.js"
 import { BlockchainNetwork } from "@fxhash/shared"
 
 export interface IWindowWalletsSource extends IWalletsSource {

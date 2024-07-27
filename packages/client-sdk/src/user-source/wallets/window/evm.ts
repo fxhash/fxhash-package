@@ -18,16 +18,14 @@ import {
   EvmWagmiClientGenerationError,
 } from "../../_errors.js"
 import { setIntervalCapped, sleep } from "@fxhash/utils"
-import { createEvmWalletManager, walletSource } from "@/index.js"
+import { createEvmWalletManager, walletSource } from "../common/_index.js"
 
 type Options = {
   wagmiConfig: Config
 }
 
 /**
- * @author fxhash
- *
- * Implements wallet connection for EIP-1193 spec.
+ * Implements wallet source for EIP-1193 spec.
  * <https://eips.ethereum.org/EIPS/eip-1193>
  *
  * The EIP-1193 spec defines a common interface for browser wallets to expose
@@ -48,7 +46,7 @@ type Options = {
  * application starts so that it can listen to the first events emitted by
  * Connectors, and have its internal state in-sync.
  */
-export function eip1193WalletConnector({
+export function eip1193WalletSource({
   wagmiConfig,
 }: Options): IWindowWalletsSource {
   let _unwatchAccount: WatchAccountReturnType | null = null

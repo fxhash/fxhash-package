@@ -1,22 +1,10 @@
 import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
 import { EvmClientsNotAvailable } from "../../_errors.js"
-import {
-  type Hex,
-  type PrivateKeyAccount,
-  createPublicClient,
-  http,
-  createWalletClient,
-} from "viem"
-import { sepolia } from "viem/chains"
+import { type Hex, type PrivateKeyAccount } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"
-import {
-  EthereumWalletManager,
-  getEthersAdapterForSafe,
-  getWalletProvider,
-} from "@fxhash/eth"
-import { config } from "@fxhash/config"
-import { createEvmWalletManager, walletSource } from "../common.js"
+import { EthereumWalletManager } from "@fxhash/eth"
+import { walletSource } from "../common/_index.js"
 
 export type EvmPrivateKeyWalletOptions = {
   privateKey?: Hex

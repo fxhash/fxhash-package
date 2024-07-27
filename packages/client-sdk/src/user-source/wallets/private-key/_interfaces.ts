@@ -1,6 +1,6 @@
 import { Hex } from "viem"
-import { IWalletsSource } from "../_interfaces.js"
 import { BlockchainNetwork } from "@fxhash/shared"
+import { IWalletsSource } from "@/index.js"
 
 /**
  * A map of Blockchain Network -> Private Key Type
@@ -15,7 +15,7 @@ export type MapNetworkToPrivateKeyType<Net extends BlockchainNetwork> = {
 export interface IPrivateKeyWalletsSource extends IWalletsSource {
   /**
    * Update the private key of one of the wallets on the given network. Calls
-   * `getWallet(network).updatePrivateKey` under the hood.
+   * `getWalletSource(network).updatePrivateKey` under the hood.
    * @param network The network on which private key should be updated
    * @param privateKey The private key to set. If not valid, will throw.
    */

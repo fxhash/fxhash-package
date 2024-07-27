@@ -1,17 +1,11 @@
-import { IWalletsSource, anyActiveManager } from "../_index.js"
+import { type IWalletsSource } from "../_index.js"
 import {
-  IAccountSourceCommonOptions,
-  IWalletsAccountSource,
+  type IAccountSourceCommonOptions,
+  type IWalletsAccountSource,
 } from "./_interfaces.js"
 import { BlockchainNetwork, networkToChain } from "@fxhash/shared"
-import {
-  JwtAccessTokenPayload,
-  failure,
-  invariant,
-  success,
-} from "@fxhash/shared"
+import { failure, invariant, success } from "@fxhash/shared"
 import { type TezosWalletManager } from "@fxhash/tez"
-import { jwtDecode } from "jwt-decode"
 import { isEthereumWalletManager, isTezosWalletManager } from "@/util/types.js"
 import {
   authenticate as authenticateWithChallenge,
@@ -19,6 +13,7 @@ import {
 } from "./_index.js"
 import { SignMessageError } from "@/util/Error.js"
 import { authWithWallets } from "./common.js"
+import { anyActiveManager } from "../wallets/common/utils.js"
 
 type Options = {
   wallets: IWalletsSource
@@ -64,8 +59,7 @@ export function authWallets({
      */
     authenticate: async () => {
       // get a wallet manager from the provided wallets
-      const managers = wallets.getWalletManagers()
-      const manager = anyActiveManager(managers)
+      const manager = anyActiveManager(wallets.getWallets())
       invariant(manager, "no wallet for authentication")
 
       // derive blockchain env from WalletManager instance

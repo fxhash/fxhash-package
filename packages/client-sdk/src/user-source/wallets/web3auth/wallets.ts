@@ -3,18 +3,17 @@
  * @license MIT
  */
 
-import { BlockchainNetwork } from "@fxhash/shared"
+import { BlockchainNetwork, BlockchainNetworks } from "@fxhash/shared"
 import { Web3AuthFrameManager } from "./FrameManager.js"
 import { evmWeb3AuthWallet } from "./utils/evm.js"
 import { tezosWeb3AuthWallet } from "./utils/tezos.js"
 import {
-  SessionDetails,
+  type SessionDetails,
   type IWeb3AuthWalletsSource,
-  IWeb3AuthWalletUtil,
+  type IWeb3AuthWalletUtil,
 } from "./_interfaces.js"
-import { BlockchainNetworks } from "../common.js"
 import { cleanup, intialization } from "@fxhash/utils"
-import { IGraphqlWrapper, UserSourceEventEmitter } from "@/index.js"
+import { type IGraphqlWrapper, UserSourceEventEmitter } from "@/index.js"
 import { Mu_Web3AuthEmailRequestOTP } from "@fxhash/gql"
 
 type Options = {
@@ -73,29 +72,7 @@ export function web3AuthWallets({
     if (res.isFailure()) throw res.error
   }
 
-  const _handleConnected = async (details: SessionDetails | null) => {
-    if (
-      details?.providerDetails.compressedPublicKey !==
-      _currentSession?.providerDetails.compressedPublicKey
-    ) {
-      _currentSession = details
-      for (const net of BlockchainNetworks) {
-        _wallets[net].update(details)
-      }
-      emitter.emit(
-        "wallets-changed",
-        BlockchainNetworks.map(network => {
-          const wallet = _wallets[network]
-          return {
-            network,
-            manager: wallet.getWalletManager(),
-          } as any
-        })
-      )
-    }
-  }
-
-  return {
+  const source: IWeb3AuthWalletsSource = {
     emitter,
     initialized: () => _init.finished,
     getAccount: () => null,
@@ -105,14 +82,17 @@ export function web3AuthWallets({
       userInput: true,
     }),
 
-    getInfo: network => _wallets[network].getInfo(),
-    getWalletManagers: () =>
-      Object.fromEntries(
-        [BlockchainNetwork.ETHEREUM, BlockchainNetwork.TEZOS].map(network => [
-          network,
-          _wallets[network].getWalletManager(),
-        ])
-      ),
+    getWallet(network) {
+      return {
+        connected: _wallets[network].getWalletConnected(),
+        source: this,
+      }
+    },
+    getWallets() {
+      return Object.fromEntries(
+        BlockchainNetworks.map(network => [network, this.getWallet(network)])
+      )
+    },
 
     init: async () => {
       _init.start()
@@ -156,4 +136,28 @@ export function web3AuthWallets({
       return res.value
     },
   }
+
+  function _handleConnected(details: SessionDetails | null) {
+    if (
+      details?.providerDetails.compressedPublicKey !==
+      _currentSession?.providerDetails.compressedPublicKey
+    ) {
+      _currentSession = details
+      for (const net of BlockchainNetworks) {
+        _wallets[net].update(details)
+      }
+      emitter.emit(
+        "wallets-changed",
+        BlockchainNetworks.map(network => ({
+          network,
+          wallet: {
+            connected: _wallets[network].getWalletConnected() as any,
+            source,
+          },
+        }))
+      )
+    }
+  }
+
+  return source
 }
