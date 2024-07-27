@@ -46,7 +46,7 @@
     "@taquito/signer": "17.3.1"
   },
   "devDependencies": {
-    "@babel/core": "7.23.9",
+    "@babel/core": "7.24.7",
     "@airgap/beacon-sdk": "4.2.2-beta.3",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
