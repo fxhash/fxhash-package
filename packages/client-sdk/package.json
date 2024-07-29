@@ -52,7 +52,7 @@
     "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.25",
+    "@types/react-dom": "18.2.18",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "utf-8-validate": "6.0.3",

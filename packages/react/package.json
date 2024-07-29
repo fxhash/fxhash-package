@@ -39,8 +39,8 @@
   "peerDependencies": {
     "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "^17.3.1",
-    "connectkit": "^1.7.3",
-    "react": "^18.2.0",
+    "connectkit": "1.7.3",
+    "react": "18.2.0",
     "react-dom": "^18.2.0",
     "viem": "^1.21.4",
     "wagmi": "^1.4.5"
