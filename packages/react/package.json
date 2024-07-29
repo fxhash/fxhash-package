@@ -27,7 +27,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
+    "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/tez": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/eth": "workspace:*",
@@ -37,7 +37,7 @@
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
+    "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "^17.3.1",
     "connectkit": "^1.7.3",
     "react": "^18.2.0",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "utf-8-validate": "6.0.3",
     "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
+    "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "17.3.1",
     "@types/react": "18.2.48",
     "tsup": "8.0.1",

@@ -32,7 +32,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
+    "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/client-sdk": "workspace:*",
     "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
@@ -41,7 +41,7 @@
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "@tanstack/react-query": "5.28.8",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
+    "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "17.3.1",
     "@wagmi/core": "2.11.7",
     "connectkit": "1.8.2",

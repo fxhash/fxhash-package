@@ -37,21 +37,21 @@
     "@taquito/utils": "17.3.1"
   },
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
+    "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
+    "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "17.3.1",
     "onchfs": "workspace:*",
     "@taquito/signer": "17.3.1"
   },
   "devDependencies": {
     "@babel/core": "7.24.7",
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
+    "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
+    "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "17.3.1",
     "@taquito/signer": "17.3.1",
     "onchfs": "workspace:*",
