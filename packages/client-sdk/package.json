@@ -19,7 +19,7 @@
     "jwt-decode": "4.0.0"
   },
   "devDependencies": {
-    "@fxhash/config": "workspace:^",
+    "@fxhash/config": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
@@ -47,7 +47,7 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "peerDependencies": {
-    "@fxhash/config": "workspace:^",
+    "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@taquito/beacon-wallet": "19.2.1",
