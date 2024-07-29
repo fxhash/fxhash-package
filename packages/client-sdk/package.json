@@ -3,34 +3,6 @@
   "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
   "version": "0.0.1",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "test": "vitest",
-    "test:local": "FXHASH_ENV=local vitest",
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/eth": "workspace:*",
@@ -55,12 +27,25 @@
     "@types/react-dom": "18.2.18",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
-    "utf-8-validate": "6.0.3",
     "eslint": "8.45.0",
     "tsup": "6.6.0",
     "typescript": "5.3.3",
+    "utf-8-validate": "6.0.3",
     "vitest": "0.34.6"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "peerDependencies": {
     "@fxhash/config": "workspace:^",
     "@fxhash/eth": "workspace:*",
@@ -70,5 +55,17 @@
     "@taquito/taquito": "17.3.1",
     "viem": "2.13.10",
     "wagmi": "2.10.10"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:local": "FXHASH_ENV=local vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

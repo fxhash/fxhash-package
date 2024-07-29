@@ -1,32 +1,7 @@
 {
   "name": "@fxhash/tez",
-  "private": true,
   "version": "0.0.9",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "test": "vitest",
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@apollo/client": "3.8.1",
     "@fxhash/auth": "workspace:*",
@@ -36,28 +11,50 @@
     "@taquito/rpc": "17.3.1",
     "@taquito/utils": "17.3.1"
   },
-  "peerDependencies": {
-    "@airgap/beacon-sdk": "4.2.2",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1",
-    "onchfs": "workspace:*",
-    "@taquito/signer": "17.3.1"
-  },
   "devDependencies": {
-    "@babel/core": "7.24.7",
     "@airgap/beacon-sdk": "4.2.2",
+    "@babel/core": "7.24.7",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1",
     "@taquito/signer": "17.3.1",
+    "@taquito/taquito": "17.3.1",
     "onchfs": "workspace:*",
     "tslib": "2.6.0",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
     "vitest": "0.34.6"
-  }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "peerDependencies": {
+    "@airgap/beacon-sdk": "4.2.2",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@taquito/beacon-wallet": "19.2.1",
+    "@taquito/signer": "17.3.1",
+    "@taquito/taquito": "17.3.1",
+    "onchfs": "workspace:*"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

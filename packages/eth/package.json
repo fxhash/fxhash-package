@@ -1,28 +1,6 @@
 {
   "name": "@fxhash/eth",
   "version": "0.0.9",
-  "private": true,
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "license": "MIT",
-  "scripts": {
-    "test": "vitest",
-    "clean": "rm -rf dist",
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@0xsplits/splits-sdk": "4.0.3",
     "@fxhash/gql": "workspace:*",
@@ -50,14 +28,36 @@
     "@types/dotenv": "8.2.0",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
-    "utf-8-validate": "6.0.3",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
+    "utf-8-validate": "6.0.3",
     "vitest": "0.34.6"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "peerDependencies": {
     "@fxhash/config": "workspace:*"
-  }
+  },
+  "private": true,
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "test": "vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

@@ -2,23 +2,20 @@
   "name": "fxhash",
   "version": "0.0.10",
   "author": "fxhash",
-  "license": "MIT",
+  "bin": {
+    "fxhash": "./index.js"
+  },
+  "dependencies": {
+    "@fxhash/cli": "workspace:*"
+  },
   "engines": {
     "npm": ">=9.0.0",
     "node": ">=18.0.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
+  "license": "MIT",
+  "main": "./index.js",
   "publishConfig": {
     "access": "public"
   },
-  "bin": {
-    "fxhash": "./index.js"
-  },
-  "main": "./index.js",
-  "dependencies": {
-    "@fxhash/cli": "workspace:*"
-  }
+  "repository": "fxhash/fxhash-package"
 }

@@ -1,41 +1,41 @@
 {
   "name": "@fxhash/react",
-  "private": true,
   "version": "0.0.1",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@airgap/beacon-sdk": "4.2.2",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/shared": "workspace:*",
     "@fxhash/eth": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
     "@taquito/utils": "17.3.1",
     "autonomy-irl-js": "1.0.0",
     "ethers": "6.8.1",
     "rxjs": "7.8.1"
   },
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@taquito/beacon-wallet": "19.2.1",
+    "@taquito/taquito": "17.3.1",
+    "@types/react": "18.2.48",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3",
+    "utf-8-validate": "6.0.3",
+    "viem": "2.13.10",
+    "wagmi": "2.10.10"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "peerDependencies": {
     "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "^17.3.1",
@@ -45,15 +45,12 @@
     "viem": "^1.21.4",
     "wagmi": "^1.4.5"
   },
-  "devDependencies": {
-    "utf-8-validate": "6.0.3",
-    "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1",
-    "@types/react": "18.2.48",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
-    "viem": "2.13.10",
-    "wagmi": "2.10.10"
-  }
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }
