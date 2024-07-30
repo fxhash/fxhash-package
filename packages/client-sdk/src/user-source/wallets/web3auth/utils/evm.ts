@@ -67,8 +67,6 @@ export function evmWeb3AuthWallet(
 
 // todo
 // - comment this fn
-// - wallets, initial blockchain initialized from config (grab from @fxhash.eth)
-//   package
 // - cleanup wallets, rn a bit too much code, messy
 // - clean packages used in wallets api
 function frameManagerTransport(
