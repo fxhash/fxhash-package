@@ -8,11 +8,11 @@ import {
   http,
   createTransport,
 } from "viem"
-import { sepolia } from "viem/chains"
 import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { computeAddress } from "ethers"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
 import { createEvmWalletManager } from "../../common/_private.js"
+import { chains } from "@fxhash/eth"
 
 type Options = Web3AuthFrameManager
 
@@ -30,17 +30,8 @@ export function evmWeb3AuthWallet(
     const info: IWalletInfo<BlockchainNetwork.ETHEREUM> = {
       address,
     }
-    // todo: how to have multichain here ? possible ?
-    // maybe use a wagmi util instead ?
-    const chain = sepolia
-    const transport = http()
 
-    const wallet = createWalletClient({
-      account: info.address,
-      chain,
-      transport: frameManagerTransport(frameManager),
-    })
-
+    const chain = chains.ETHEREUM
     _connected = {
       info,
       manager: createEvmWalletManager({
@@ -48,9 +39,13 @@ export function evmWeb3AuthWallet(
         source: {
           public: createPublicClient({
             chain,
-            transport,
+            transport: http(),
           }),
-          wallet: wallet,
+          wallet: createWalletClient({
+            account: info.address,
+            chain,
+            transport: frameManagerTransport(frameManager),
+          }),
         },
       }),
     }
