@@ -159,16 +159,11 @@ export type Web3AuthFrameMessageTypes = {
       res: string
     }
 
-    "evm__sign-message": {
+    "evm__json-rpc": {
       req: {
-        chain: "ETHEREUM" | "BASE"
-        message: string
+        method: string
+        params: any
       }
-      res: string
-    }
-
-    "evm__sign-transaction": {
-      req: any
       res: any
     }
   }
