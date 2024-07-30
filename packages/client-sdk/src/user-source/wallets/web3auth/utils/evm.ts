@@ -1,23 +1,18 @@
 import { BlockchainNetwork } from "@fxhash/shared"
 import { type Web3AuthFrameManager } from "../FrameManager.js"
 import {
-  type AccountSource,
   type Hash,
-  type SerializeTransactionFn,
-  type SignableMessage,
-  type TransactionSerializable,
-  type TypedData,
-  type TypedDataDefinition,
+  type CustomTransport,
   createPublicClient,
   createWalletClient,
   http,
+  createTransport,
 } from "viem"
-import { toAccount } from "viem/accounts"
-import { sepolia } from "viem/chains"
 import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { computeAddress } from "ethers"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
 import { createEvmWalletManager } from "../../common/_private.js"
+import { chains } from "@fxhash/eth"
 
 type Options = Web3AuthFrameManager
 
@@ -35,11 +30,8 @@ export function evmWeb3AuthWallet(
     const info: IWalletInfo<BlockchainNetwork.ETHEREUM> = {
       address,
     }
-    // todo: how to have multichain here ? possible ?
-    // maybe use a wagmi util instead ?
-    const chain = sepolia
-    const transport = http()
 
+    const chain = chains.ETHEREUM
     _connected = {
       info,
       manager: createEvmWalletManager({
@@ -47,14 +39,12 @@ export function evmWeb3AuthWallet(
         source: {
           public: createPublicClient({
             chain,
-            transport,
+            transport: http(),
           }),
           wallet: createWalletClient({
-            account: toAccount(
-              frameManagerEvmAccountSource(frameManager, info.address)
-            ),
+            account: info.address,
             chain,
-            transport,
+            transport: frameManagerTransport(frameManager),
           }),
         },
       }),
@@ -76,63 +66,37 @@ export function evmWeb3AuthWallet(
 }
 
 /**
- * Given a FrameManager and an account Address, returns an AccountSource which
- * can be used to create a Viem Wallet Client.
- * @param frameManager Active Frame Manager
- * @param address Address of the account
- * @returns An AccountSource which can be used as an account for viem to sign
- * transactions, messages
+ * Viem uses Transports to send requests to wallets using the EVM JSON RPC spec,
+ * more specifically EIP-1193 but not only (ex EIP-3085). Because the wallet
+ * which can sign bytes is running in the <iframe>, we are proxying the requests
+ * made by viem when wallet interaction is required towards our wallets <iframe>
+ * which implements support for responding to EVM JSON RPC requests in a same
+ * way a local client would.
+ * @param frameManager Active Frame Manager to which requests can be sent to.
+ * @returns A factory which can instanciate a transport given some settings.
  */
-function frameManagerEvmAccountSource(
-  frameManager: Web3AuthFrameManager,
-  address: Hash
-): AccountSource {
-  return {
-    address: address,
-    signMessage: async ({
-      message,
-    }: {
-      message: SignableMessage
-    }): Promise<Hash> => {
-      const res = await frameManager.sendRequest({
-        type: "evm__sign-message",
-        body: {
-          chain: "ETHEREUM",
-          message: message.toString(),
-        },
-      })
-      if (res.isSuccess()) return res.unwrap() as Hash
-      throw res.error
-    },
-
-    signTransaction: async <
-      serializer extends
-        SerializeTransactionFn<TransactionSerializable> = SerializeTransactionFn<TransactionSerializable>,
-      transaction extends Parameters<serializer>[0] = Parameters<serializer>[0],
-    >(
-      transaction: transaction
-    ): Promise<any> => {
-      const res = await frameManager.sendRequest({
-        type: "evm__sign-transaction",
-        body: {
-          chain: "ETHEREUM",
-          transaction: {
-            from: address,
-            ...transaction,
+function frameManagerTransport(
+  frameManager: Web3AuthFrameManager
+): CustomTransport {
+  return ({ retryCount }) => {
+    return createTransport({
+      key: "fxhash-web3auth-frame",
+      name: "fxhash Web3Auth Frame",
+      type: "custom",
+      retryCount,
+      async request({ method, params }) {
+        const frameResponse = await frameManager.sendRequest({
+          type: "evm__json-rpc",
+          body: {
+            method,
+            params,
           },
-        },
-      })
-      if (res.isSuccess()) return res.unwrap()
-      throw res.error
-    },
-
-    signTypedData: async <
-      const typedData extends TypedData | Record<string, unknown>,
-      primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
-    >(
-      _: TypedDataDefinition<typedData, primaryType>
-    ): Promise<Hash> => {
-      throw "TODO but ez"
-    },
+        })
+        if (frameResponse.isFailure()) {
+          throw frameResponse.error
+        }
+        return frameResponse.value
+      },
+    })
   }
 }
