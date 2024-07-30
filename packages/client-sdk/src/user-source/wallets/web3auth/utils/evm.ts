@@ -65,8 +65,16 @@ export function evmWeb3AuthWallet(
   }
 }
 
-// todo
-// - comment this fn
+/**
+ * Viem uses Transports to send requests to wallets using the EVM JSON RPC spec,
+ * more specifically EIP-1193 but not only (ex EIP-3085). Because the wallet
+ * which can sign bytes is running in the <iframe>, we are proxying the requests
+ * made by viem when wallet interaction is required towards our wallets <iframe>
+ * which implements support for responding to EVM JSON RPC requests in a same
+ * way a local client would.
+ * @param frameManager Active Frame Manager to which requests can be sent to.
+ * @returns A factory which can instanciate a transport given some settings.
+ */
 function frameManagerTransport(
   frameManager: Web3AuthFrameManager
 ): CustomTransport {
