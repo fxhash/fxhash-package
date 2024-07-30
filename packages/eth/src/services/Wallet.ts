@@ -441,6 +441,8 @@ export class EthereumWalletManager extends WalletManager {
       })
       return success()
     } catch (error) {
+      console.log("error when switching chains:")
+      console.log(error)
       // Do nothing as we return an error below
     }
     return failure(
