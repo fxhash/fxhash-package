@@ -107,7 +107,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
 
       // initialize iframe
       this._wrapper = document.createElement("div")
-      this._wrapper.classList.add("__fxhash__wallet-iframe")
+      this._wrapper.classList.add("__fxhash__wallet")
 
       this._iframe = document.createElement("iframe")
       this._iframe.addEventListener("load", async () => {
@@ -121,6 +121,8 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
       this._iframe.src = this._config.url
       this._iframe.sandbox.add("allow-scripts", "allow-same-origin")
       this._wrapper.appendChild(this._iframe)
+
+      this._addStyles()
 
       /**
        * !   _________________________________________________________________
@@ -198,6 +200,29 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
       // this triggers iframe being loaded, eventually resolving this promise
       this._container.prepend(this._wrapper!)
     })
+  }
+
+  /**
+   * Add the CSS styles to the DOM.
+   */
+  private _addStyles() {
+    const css = /* css */ `
+      .__fxhash__wallet {
+
+      }
+      .__fxhash__wallet iframe {
+        width: 500px;
+        height: 600px;
+      }
+    `.replaceAll("\n", "")
+    if (!document.querySelector("style#__fxhash__wallet-styles")) {
+      const head = document.querySelector("head")
+      if (!head) throw Error("couldn't find a <head> node in the document")
+      const style = document.createElement("style")
+      style.id = "__fxhash__wallet-styles"
+      style.innerText = css
+      head.appendChild(style)
+    }
   }
 
   private _showFrame(show: boolean) {

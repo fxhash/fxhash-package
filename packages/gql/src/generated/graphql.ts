@@ -393,27 +393,217 @@ export type ChallengeResult = {
   text: Scalars['String']['output'];
 };
 
+/** columns and relationships of "Consumable" */
+export type Consumable = {
+  __typename?: 'Consumable';
+  active: Scalars['Boolean']['output'];
+  address: Scalars['String']['output'];
+  amount: Scalars['bigint']['output'];
+  createdAt: Scalars['timestamp']['output'];
+  description: Scalars['String']['output'];
+  expiresAt?: Maybe<Scalars['timestamp']['output']>;
+  fa2: Scalars['String']['output'];
+  maxConsumptions: Scalars['Int']['output'];
+  /** An array relationship */
+  medias: Array<MediasOnConsumables>;
+  name: Scalars['String']['output'];
+  options: Scalars['jsonb']['output'];
+  projectId: Scalars['String']['output'];
+  publicDefinition: Scalars['jsonb']['output'];
+  splits: Scalars['jsonb']['output'];
+  successInfos: Scalars['String']['output'];
+};
+
+
+/** columns and relationships of "Consumable" */
+export type ConsumableMediasArgs = {
+  distinct_on?: InputMaybe<Array<MediasOnConsumables_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<MediasOnConsumables_Order_By>>;
+  where?: InputMaybe<MediasOnConsumables_Bool_Exp>;
+};
+
+
+/** columns and relationships of "Consumable" */
+export type ConsumableOptionsArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** columns and relationships of "Consumable" */
+export type ConsumablePublicDefinitionArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** columns and relationships of "Consumable" */
+export type ConsumableSplitsArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "Consumable". All fields are combined with a logical 'AND'. */
+export type Consumable_Bool_Exp = {
+  _and?: InputMaybe<Array<Consumable_Bool_Exp>>;
+  _not?: InputMaybe<Consumable_Bool_Exp>;
+  _or?: InputMaybe<Array<Consumable_Bool_Exp>>;
+  active?: InputMaybe<Boolean_Comparison_Exp>;
+  address?: InputMaybe<String_Comparison_Exp>;
+  amount?: InputMaybe<Bigint_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamp_Comparison_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
+  expiresAt?: InputMaybe<Timestamp_Comparison_Exp>;
+  fa2?: InputMaybe<String_Comparison_Exp>;
+  maxConsumptions?: InputMaybe<Int_Comparison_Exp>;
+  medias?: InputMaybe<MediasOnConsumables_Bool_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  options?: InputMaybe<Jsonb_Comparison_Exp>;
+  projectId?: InputMaybe<String_Comparison_Exp>;
+  publicDefinition?: InputMaybe<Jsonb_Comparison_Exp>;
+  splits?: InputMaybe<Jsonb_Comparison_Exp>;
+  successInfos?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "Consumable". */
+export type Consumable_Order_By = {
+  active?: InputMaybe<Order_By>;
+  address?: InputMaybe<Order_By>;
+  amount?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  expiresAt?: InputMaybe<Order_By>;
+  fa2?: InputMaybe<Order_By>;
+  maxConsumptions?: InputMaybe<Order_By>;
+  medias_aggregate?: InputMaybe<MediasOnConsumables_Aggregate_Order_By>;
+  name?: InputMaybe<Order_By>;
+  options?: InputMaybe<Order_By>;
+  projectId?: InputMaybe<Order_By>;
+  publicDefinition?: InputMaybe<Order_By>;
+  splits?: InputMaybe<Order_By>;
+  successInfos?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "Consumable" */
+export enum Consumable_Select_Column {
+  /** column name */
+  Active = 'active',
+  /** column name */
+  Address = 'address',
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  ExpiresAt = 'expiresAt',
+  /** column name */
+  Fa2 = 'fa2',
+  /** column name */
+  MaxConsumptions = 'maxConsumptions',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Options = 'options',
+  /** column name */
+  ProjectId = 'projectId',
+  /** column name */
+  PublicDefinition = 'publicDefinition',
+  /** column name */
+  Splits = 'splits',
+  /** column name */
+  SuccessInfos = 'successInfos'
+}
+
+/** Streaming cursor of the table "Consumable" */
+export type Consumable_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Consumable_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Consumable_Stream_Cursor_Value_Input = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  amount?: InputMaybe<Scalars['bigint']['input']>;
+  createdAt?: InputMaybe<Scalars['timestamp']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  expiresAt?: InputMaybe<Scalars['timestamp']['input']>;
+  fa2?: InputMaybe<Scalars['String']['input']>;
+  maxConsumptions?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  options?: InputMaybe<Scalars['jsonb']['input']>;
+  projectId?: InputMaybe<Scalars['String']['input']>;
+  publicDefinition?: InputMaybe<Scalars['jsonb']['input']>;
+  splits?: InputMaybe<Scalars['jsonb']['input']>;
+  successInfos?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum EWalletOperatorState {
+  Available = 'AVAILABLE',
+  Empty = 'EMPTY',
+  Initializing = 'INITIALIZING',
+  Preparing = 'PREPARING',
+  WaitingConfirmation = 'WAITING_CONFIRMATION'
+}
+
+export type EstimateEvmTransactionInput = {
+  chainId: Scalars['String']['input'];
+  transactions: Array<EvmTransactionInput>;
+};
+
+export type EstimateEvmTransactionOutput = {
+  __typename?: 'EstimateEvmTransactionOutput';
+  changes: Array<EvmTransactionChanges>;
+  error?: Maybe<Scalars['String']['output']>;
+  gasUsed: Scalars['String']['output'];
+};
+
 /** columns and relationships of "Event" */
 export type Event = {
   __typename?: 'Event';
   /** An object relationship */
   Featured?: Maybe<Featured>;
   availabilities?: Maybe<Array<Scalars['EventAvailability']['output']>>;
+  createdAt: Scalars['timestamp']['output'];
   description: Scalars['String']['output'];
   endsAt: Scalars['timestamp']['output'];
   freeLiveMinting: Scalars['Boolean']['output'];
-  headerMediaId?: Maybe<Scalars['String']['output']>;
+  /** An object relationship */
+  headerMedia?: Maybe<Media>;
+  headerMediaId?: Maybe<Scalars['uuid']['output']>;
   id: Scalars['String']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
   labelIds?: Maybe<Array<Scalars['Int']['output']>>;
   location?: Maybe<Scalars['String']['output']>;
   mintPageUrl: Scalars['String']['output'];
+  /** An array relationship */
+  mintPassGroups: Array<MintPassGroup>;
   name: Scalars['String']['output'];
-  partnerMediaId?: Maybe<Scalars['String']['output']>;
-  projectIds?: Maybe<Array<Scalars['Int']['output']>>;
+  /** An object relationship */
+  onboarding?: Maybe<EventOnboarding>;
+  /** An object relationship */
+  partnerMedia?: Maybe<Media>;
+  partnerMediaId?: Maybe<Scalars['uuid']['output']>;
+  projectIds?: Maybe<Array<Scalars['String']['output']>>;
   startsAt: Scalars['timestamp']['output'];
   status: Scalars['EventStatus']['output'];
-  thumbnailMediaId?: Maybe<Scalars['String']['output']>;
+  /** An object relationship */
+  thumbnailMedia?: Maybe<Media>;
+  thumbnailMediaId?: Maybe<Scalars['uuid']['output']>;
+  updatedAt: Scalars['timestamp']['output'];
+};
+
+
+/** columns and relationships of "Event" */
+export type EventMintPassGroupsArgs = {
+  distinct_on?: InputMaybe<Array<MintPassGroup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<MintPassGroup_Order_By>>;
+  where?: InputMaybe<MintPassGroup_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "EventAvailability". All fields are combined with logical 'AND'. */
@@ -431,6 +621,215 @@ export type EventAvailability_Array_Comparison_Exp = {
   _lte?: InputMaybe<Array<Scalars['EventAvailability']['input']>>;
   _neq?: InputMaybe<Array<Scalars['EventAvailability']['input']>>;
   _nin?: InputMaybe<Array<Array<Scalars['EventAvailability']['input']>>>;
+};
+
+/** columns and relationships of "EventOnboarding" */
+export type EventOnboarding = {
+  __typename?: 'EventOnboarding';
+  /** An array relationship */
+  components: Array<EventOnboardingOnComponents>;
+  description?: Maybe<Scalars['String']['output']>;
+  enabled: Scalars['Boolean']['output'];
+  eventId: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+};
+
+
+/** columns and relationships of "EventOnboarding" */
+export type EventOnboardingComponentsArgs = {
+  distinct_on?: InputMaybe<Array<EventOnboardingOnComponents_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<EventOnboardingOnComponents_Order_By>>;
+  where?: InputMaybe<EventOnboardingOnComponents_Bool_Exp>;
+};
+
+/** columns and relationships of "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents = {
+  __typename?: 'EventOnboardingOnComponents';
+  /** An object relationship */
+  component: OnboardingComponent;
+  componentId: Scalars['Int']['output'];
+  eventOnboardingId: Scalars['Int']['output'];
+  index: Scalars['Int']['output'];
+};
+
+/** order by aggregate values of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Aggregate_Order_By = {
+  avg?: InputMaybe<EventOnboardingOnComponents_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<EventOnboardingOnComponents_Max_Order_By>;
+  min?: InputMaybe<EventOnboardingOnComponents_Min_Order_By>;
+  stddev?: InputMaybe<EventOnboardingOnComponents_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<EventOnboardingOnComponents_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<EventOnboardingOnComponents_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<EventOnboardingOnComponents_Sum_Order_By>;
+  var_pop?: InputMaybe<EventOnboardingOnComponents_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<EventOnboardingOnComponents_Var_Samp_Order_By>;
+  variance?: InputMaybe<EventOnboardingOnComponents_Variance_Order_By>;
+};
+
+/** order by avg() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Avg_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "EventOnboardingOnComponents". All fields are combined with a logical 'AND'. */
+export type EventOnboardingOnComponents_Bool_Exp = {
+  _and?: InputMaybe<Array<EventOnboardingOnComponents_Bool_Exp>>;
+  _not?: InputMaybe<EventOnboardingOnComponents_Bool_Exp>;
+  _or?: InputMaybe<Array<EventOnboardingOnComponents_Bool_Exp>>;
+  component?: InputMaybe<OnboardingComponent_Bool_Exp>;
+  componentId?: InputMaybe<Int_Comparison_Exp>;
+  eventOnboardingId?: InputMaybe<Int_Comparison_Exp>;
+  index?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Max_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Min_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "EventOnboardingOnComponents". */
+export type EventOnboardingOnComponents_Order_By = {
+  component?: InputMaybe<OnboardingComponent_Order_By>;
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "EventOnboardingOnComponents" */
+export enum EventOnboardingOnComponents_Select_Column {
+  /** column name */
+  ComponentId = 'componentId',
+  /** column name */
+  EventOnboardingId = 'eventOnboardingId',
+  /** column name */
+  Index = 'index'
+}
+
+/** order by stddev() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Stddev_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Stddev_Pop_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Stddev_Samp_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: EventOnboardingOnComponents_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type EventOnboardingOnComponents_Stream_Cursor_Value_Input = {
+  componentId?: InputMaybe<Scalars['Int']['input']>;
+  eventOnboardingId?: InputMaybe<Scalars['Int']['input']>;
+  index?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** order by sum() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Sum_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Var_Pop_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Var_Samp_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by variance() on columns of table "EventOnboardingOnComponents" */
+export type EventOnboardingOnComponents_Variance_Order_By = {
+  componentId?: InputMaybe<Order_By>;
+  eventOnboardingId?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "EventOnboarding". All fields are combined with a logical 'AND'. */
+export type EventOnboarding_Bool_Exp = {
+  _and?: InputMaybe<Array<EventOnboarding_Bool_Exp>>;
+  _not?: InputMaybe<EventOnboarding_Bool_Exp>;
+  _or?: InputMaybe<Array<EventOnboarding_Bool_Exp>>;
+  components?: InputMaybe<EventOnboardingOnComponents_Bool_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
+  enabled?: InputMaybe<Boolean_Comparison_Exp>;
+  eventId?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "EventOnboarding". */
+export type EventOnboarding_Order_By = {
+  components_aggregate?: InputMaybe<EventOnboardingOnComponents_Aggregate_Order_By>;
+  description?: InputMaybe<Order_By>;
+  enabled?: InputMaybe<Order_By>;
+  eventId?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "EventOnboarding" */
+export enum EventOnboarding_Select_Column {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Enabled = 'enabled',
+  /** column name */
+  EventId = 'eventId',
+  /** column name */
+  Id = 'id'
+}
+
+/** Streaming cursor of the table "EventOnboarding" */
+export type EventOnboarding_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: EventOnboarding_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type EventOnboarding_Stream_Cursor_Value_Input = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  eventId?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** Boolean expression to compare columns of type "EventStatus". All fields are combined with logical 'AND'. */
@@ -453,48 +852,64 @@ export type Event_Bool_Exp = {
   _not?: InputMaybe<Event_Bool_Exp>;
   _or?: InputMaybe<Array<Event_Bool_Exp>>;
   availabilities?: InputMaybe<EventAvailability_Array_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamp_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   endsAt?: InputMaybe<Timestamp_Comparison_Exp>;
   freeLiveMinting?: InputMaybe<Boolean_Comparison_Exp>;
-  headerMediaId?: InputMaybe<String_Comparison_Exp>;
+  headerMedia?: InputMaybe<Media_Bool_Exp>;
+  headerMediaId?: InputMaybe<Uuid_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   imageUrl?: InputMaybe<String_Comparison_Exp>;
   labelIds?: InputMaybe<Int_Array_Comparison_Exp>;
   location?: InputMaybe<String_Comparison_Exp>;
   mintPageUrl?: InputMaybe<String_Comparison_Exp>;
+  mintPassGroups?: InputMaybe<MintPassGroup_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
-  partnerMediaId?: InputMaybe<String_Comparison_Exp>;
-  projectIds?: InputMaybe<Int_Array_Comparison_Exp>;
+  onboarding?: InputMaybe<EventOnboarding_Bool_Exp>;
+  partnerMedia?: InputMaybe<Media_Bool_Exp>;
+  partnerMediaId?: InputMaybe<Uuid_Comparison_Exp>;
+  projectIds?: InputMaybe<String_Array_Comparison_Exp>;
   startsAt?: InputMaybe<Timestamp_Comparison_Exp>;
   status?: InputMaybe<EventStatus_Comparison_Exp>;
-  thumbnailMediaId?: InputMaybe<String_Comparison_Exp>;
+  thumbnailMedia?: InputMaybe<Media_Bool_Exp>;
+  thumbnailMediaId?: InputMaybe<Uuid_Comparison_Exp>;
+  updatedAt?: InputMaybe<Timestamp_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "Event". */
 export type Event_Order_By = {
   Featured?: InputMaybe<Featured_Order_By>;
   availabilities?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   endsAt?: InputMaybe<Order_By>;
   freeLiveMinting?: InputMaybe<Order_By>;
+  headerMedia?: InputMaybe<Media_Order_By>;
   headerMediaId?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   imageUrl?: InputMaybe<Order_By>;
   labelIds?: InputMaybe<Order_By>;
   location?: InputMaybe<Order_By>;
   mintPageUrl?: InputMaybe<Order_By>;
+  mintPassGroups_aggregate?: InputMaybe<MintPassGroup_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
+  onboarding?: InputMaybe<EventOnboarding_Order_By>;
+  partnerMedia?: InputMaybe<Media_Order_By>;
   partnerMediaId?: InputMaybe<Order_By>;
   projectIds?: InputMaybe<Order_By>;
   startsAt?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
+  thumbnailMedia?: InputMaybe<Media_Order_By>;
   thumbnailMediaId?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "Event" */
 export enum Event_Select_Column {
   /** column name */
   Availabilities = 'availabilities',
+  /** column name */
+  CreatedAt = 'createdAt',
   /** column name */
   Description = 'description',
   /** column name */
@@ -524,7 +939,9 @@ export enum Event_Select_Column {
   /** column name */
   Status = 'status',
   /** column name */
-  ThumbnailMediaId = 'thumbnailMediaId'
+  ThumbnailMediaId = 'thumbnailMediaId',
+  /** column name */
+  UpdatedAt = 'updatedAt'
 }
 
 /** Streaming cursor of the table "Event" */
@@ -538,45 +955,73 @@ export type Event_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Event_Stream_Cursor_Value_Input = {
   availabilities?: InputMaybe<Array<Scalars['EventAvailability']['input']>>;
+  createdAt?: InputMaybe<Scalars['timestamp']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endsAt?: InputMaybe<Scalars['timestamp']['input']>;
   freeLiveMinting?: InputMaybe<Scalars['Boolean']['input']>;
-  headerMediaId?: InputMaybe<Scalars['String']['input']>;
+  headerMediaId?: InputMaybe<Scalars['uuid']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   labelIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   location?: InputMaybe<Scalars['String']['input']>;
   mintPageUrl?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  partnerMediaId?: InputMaybe<Scalars['String']['input']>;
-  projectIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  partnerMediaId?: InputMaybe<Scalars['uuid']['input']>;
+  projectIds?: InputMaybe<Array<Scalars['String']['input']>>;
   startsAt?: InputMaybe<Scalars['timestamp']['input']>;
   status?: InputMaybe<Scalars['EventStatus']['input']>;
-  thumbnailMediaId?: InputMaybe<Scalars['String']['input']>;
+  thumbnailMediaId?: InputMaybe<Scalars['uuid']['input']>;
+  updatedAt?: InputMaybe<Scalars['timestamp']['input']>;
+};
+
+export type EvmTransactionChanges = {
+  __typename?: 'EvmTransactionChanges';
+  amount?: Maybe<Scalars['String']['output']>;
+  assetType?: Maybe<Scalars['String']['output']>;
+  changeType: Scalars['String']['output'];
+  contractAddress: Scalars['String']['output'];
+  decimals?: Maybe<Scalars['Int']['output']>;
+  from: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  rawAmount: Scalars['String']['output'];
+  symbol?: Maybe<Scalars['String']['output']>;
+  to: Scalars['String']['output'];
+  tokenId?: Maybe<Scalars['String']['output']>;
+};
+
+export type EvmTransactionInput = {
+  data?: InputMaybe<Scalars['String']['input']>;
+  from: Scalars['String']['input'];
+  gas?: InputMaybe<Scalars['String']['input']>;
+  gasPrice?: InputMaybe<Scalars['String']['input']>;
+  maxFeePerGas?: InputMaybe<Scalars['String']['input']>;
+  maxPriorityFeePerGas?: InputMaybe<Scalars['String']['input']>;
+  to?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** columns and relationships of "Featured" */
 export type Featured = {
   __typename?: 'Featured';
   /** An object relationship */
-  Event?: Maybe<Event>;
+  event?: Maybe<Event>;
   eventId?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
 };
 
 /** Boolean expression to filter rows from the table "Featured". All fields are combined with a logical 'AND'. */
 export type Featured_Bool_Exp = {
-  Event?: InputMaybe<Event_Bool_Exp>;
   _and?: InputMaybe<Array<Featured_Bool_Exp>>;
   _not?: InputMaybe<Featured_Bool_Exp>;
   _or?: InputMaybe<Array<Featured_Bool_Exp>>;
+  event?: InputMaybe<Event_Bool_Exp>;
   eventId?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "Featured". */
 export type Featured_Order_By = {
-  Event?: InputMaybe<Event_Order_By>;
+  event?: InputMaybe<Event_Order_By>;
   eventId?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
 };
@@ -648,11 +1093,17 @@ export type LogoutResult = {
   success: Scalars['Boolean']['output'];
 };
 
+export type MailTemplate = {
+  __typename?: 'MailTemplate';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
 /** columns and relationships of "Media" */
 export type Media = {
   __typename?: 'Media';
   createdAt: Scalars['timestamptz']['output'];
-  etag: Scalars['String']['output'];
+  etag?: Maybe<Scalars['String']['output']>;
   id: Scalars['uuid']['output'];
   name: Scalars['String']['output'];
   /** An array relationship */
@@ -741,11 +1192,338 @@ export type Media_Stream_Cursor_Value_Input = {
   uploaderId?: InputMaybe<Scalars['uuid']['input']>;
 };
 
+/** columns and relationships of "MediasOnConsumables" */
+export type MediasOnConsumables = {
+  __typename?: 'MediasOnConsumables';
+  consumableAddress: Scalars['String']['output'];
+  index: Scalars['Int']['output'];
+  /** An object relationship */
+  media: Media;
+  mediaId: Scalars['uuid']['output'];
+};
+
+/** order by aggregate values of table "MediasOnConsumables" */
+export type MediasOnConsumables_Aggregate_Order_By = {
+  avg?: InputMaybe<MediasOnConsumables_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<MediasOnConsumables_Max_Order_By>;
+  min?: InputMaybe<MediasOnConsumables_Min_Order_By>;
+  stddev?: InputMaybe<MediasOnConsumables_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<MediasOnConsumables_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<MediasOnConsumables_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<MediasOnConsumables_Sum_Order_By>;
+  var_pop?: InputMaybe<MediasOnConsumables_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<MediasOnConsumables_Var_Samp_Order_By>;
+  variance?: InputMaybe<MediasOnConsumables_Variance_Order_By>;
+};
+
+/** order by avg() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Avg_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "MediasOnConsumables". All fields are combined with a logical 'AND'. */
+export type MediasOnConsumables_Bool_Exp = {
+  _and?: InputMaybe<Array<MediasOnConsumables_Bool_Exp>>;
+  _not?: InputMaybe<MediasOnConsumables_Bool_Exp>;
+  _or?: InputMaybe<Array<MediasOnConsumables_Bool_Exp>>;
+  consumableAddress?: InputMaybe<String_Comparison_Exp>;
+  index?: InputMaybe<Int_Comparison_Exp>;
+  media?: InputMaybe<Media_Bool_Exp>;
+  mediaId?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Max_Order_By = {
+  consumableAddress?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+  mediaId?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Min_Order_By = {
+  consumableAddress?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+  mediaId?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "MediasOnConsumables". */
+export type MediasOnConsumables_Order_By = {
+  consumableAddress?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+  media?: InputMaybe<Media_Order_By>;
+  mediaId?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "MediasOnConsumables" */
+export enum MediasOnConsumables_Select_Column {
+  /** column name */
+  ConsumableAddress = 'consumableAddress',
+  /** column name */
+  Index = 'index',
+  /** column name */
+  MediaId = 'mediaId'
+}
+
+/** order by stddev() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Stddev_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Stddev_Pop_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Stddev_Samp_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "MediasOnConsumables" */
+export type MediasOnConsumables_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: MediasOnConsumables_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type MediasOnConsumables_Stream_Cursor_Value_Input = {
+  consumableAddress?: InputMaybe<Scalars['String']['input']>;
+  index?: InputMaybe<Scalars['Int']['input']>;
+  mediaId?: InputMaybe<Scalars['uuid']['input']>;
+};
+
+/** order by sum() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Sum_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Var_Pop_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Var_Samp_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** order by variance() on columns of table "MediasOnConsumables" */
+export type MediasOnConsumables_Variance_Order_By = {
+  index?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "MintPassGroup" */
+export type MintPassGroup = {
+  __typename?: 'MintPassGroup';
+  address: Scalars['String']['output'];
+  /** An object relationship */
+  event: Event;
+  eventId: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  maxMints?: Maybe<Scalars['Int']['output']>;
+  maxMintsPerProject?: Maybe<Scalars['Int']['output']>;
+  supportsLiveTokenGeneration: Scalars['Boolean']['output'];
+};
+
+/** order by aggregate values of table "MintPassGroup" */
+export type MintPassGroup_Aggregate_Order_By = {
+  avg?: InputMaybe<MintPassGroup_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<MintPassGroup_Max_Order_By>;
+  min?: InputMaybe<MintPassGroup_Min_Order_By>;
+  stddev?: InputMaybe<MintPassGroup_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<MintPassGroup_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<MintPassGroup_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<MintPassGroup_Sum_Order_By>;
+  var_pop?: InputMaybe<MintPassGroup_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<MintPassGroup_Var_Samp_Order_By>;
+  variance?: InputMaybe<MintPassGroup_Variance_Order_By>;
+};
+
+/** order by avg() on columns of table "MintPassGroup" */
+export type MintPassGroup_Avg_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "MintPassGroup". All fields are combined with a logical 'AND'. */
+export type MintPassGroup_Bool_Exp = {
+  _and?: InputMaybe<Array<MintPassGroup_Bool_Exp>>;
+  _not?: InputMaybe<MintPassGroup_Bool_Exp>;
+  _or?: InputMaybe<Array<MintPassGroup_Bool_Exp>>;
+  address?: InputMaybe<String_Comparison_Exp>;
+  event?: InputMaybe<Event_Bool_Exp>;
+  eventId?: InputMaybe<String_Comparison_Exp>;
+  label?: InputMaybe<String_Comparison_Exp>;
+  maxMints?: InputMaybe<Int_Comparison_Exp>;
+  maxMintsPerProject?: InputMaybe<Int_Comparison_Exp>;
+  supportsLiveTokenGeneration?: InputMaybe<Boolean_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "MintPassGroup" */
+export type MintPassGroup_Max_Order_By = {
+  address?: InputMaybe<Order_By>;
+  eventId?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "MintPassGroup" */
+export type MintPassGroup_Min_Order_By = {
+  address?: InputMaybe<Order_By>;
+  eventId?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "MintPassGroup". */
+export type MintPassGroup_Order_By = {
+  address?: InputMaybe<Order_By>;
+  event?: InputMaybe<Event_Order_By>;
+  eventId?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+  supportsLiveTokenGeneration?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "MintPassGroup" */
+export enum MintPassGroup_Select_Column {
+  /** column name */
+  Address = 'address',
+  /** column name */
+  EventId = 'eventId',
+  /** column name */
+  Label = 'label',
+  /** column name */
+  MaxMints = 'maxMints',
+  /** column name */
+  MaxMintsPerProject = 'maxMintsPerProject',
+  /** column name */
+  SupportsLiveTokenGeneration = 'supportsLiveTokenGeneration'
+}
+
+/** order by stddev() on columns of table "MintPassGroup" */
+export type MintPassGroup_Stddev_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "MintPassGroup" */
+export type MintPassGroup_Stddev_Pop_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "MintPassGroup" */
+export type MintPassGroup_Stddev_Samp_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "MintPassGroup" */
+export type MintPassGroup_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: MintPassGroup_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type MintPassGroup_Stream_Cursor_Value_Input = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  eventId?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  maxMints?: InputMaybe<Scalars['Int']['input']>;
+  maxMintsPerProject?: InputMaybe<Scalars['Int']['input']>;
+  supportsLiveTokenGeneration?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by sum() on columns of table "MintPassGroup" */
+export type MintPassGroup_Sum_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "MintPassGroup" */
+export type MintPassGroup_Var_Pop_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "MintPassGroup" */
+export type MintPassGroup_Var_Samp_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** order by variance() on columns of table "MintPassGroup" */
+export type MintPassGroup_Variance_Order_By = {
+  maxMints?: InputMaybe<Order_By>;
+  maxMintsPerProject?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "OnboardingComponent" */
+export type OnboardingComponent = {
+  __typename?: 'OnboardingComponent';
+  content: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+};
+
+/** Boolean expression to filter rows from the table "OnboardingComponent". All fields are combined with a logical 'AND'. */
+export type OnboardingComponent_Bool_Exp = {
+  _and?: InputMaybe<Array<OnboardingComponent_Bool_Exp>>;
+  _not?: InputMaybe<OnboardingComponent_Bool_Exp>;
+  _or?: InputMaybe<Array<OnboardingComponent_Bool_Exp>>;
+  content?: InputMaybe<String_Comparison_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "OnboardingComponent". */
+export type OnboardingComponent_Order_By = {
+  content?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "OnboardingComponent" */
+export enum OnboardingComponent_Select_Column {
+  /** column name */
+  Content = 'content',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Id = 'id'
+}
+
+/** Streaming cursor of the table "OnboardingComponent" */
+export type OnboardingComponent_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: OnboardingComponent_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type OnboardingComponent_Stream_Cursor_Value_Input = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /** columns and relationships of "Profile" */
 export type Profile = {
   __typename?: 'Profile';
   accountId: Scalars['uuid']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  farcaster?: Maybe<Scalars['String']['output']>;
   instagram?: Maybe<Scalars['String']['output']>;
   picture?: Maybe<Scalars['String']['output']>;
   twitter?: Maybe<Scalars['String']['output']>;
@@ -759,6 +1537,7 @@ export type Profile_Bool_Exp = {
   _or?: InputMaybe<Array<Profile_Bool_Exp>>;
   accountId?: InputMaybe<Uuid_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
+  farcaster?: InputMaybe<String_Comparison_Exp>;
   instagram?: InputMaybe<String_Comparison_Exp>;
   picture?: InputMaybe<String_Comparison_Exp>;
   twitter?: InputMaybe<String_Comparison_Exp>;
@@ -778,6 +1557,7 @@ export type Profile_Mutation_Response = {
 export type Profile_Order_By = {
   accountId?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  farcaster?: InputMaybe<Order_By>;
   instagram?: InputMaybe<Order_By>;
   picture?: InputMaybe<Order_By>;
   twitter?: InputMaybe<Order_By>;
@@ -795,6 +1575,8 @@ export enum Profile_Select_Column {
   AccountId = 'accountId',
   /** column name */
   Description = 'description',
+  /** column name */
+  Farcaster = 'farcaster',
   /** column name */
   Instagram = 'instagram',
   /** column name */
@@ -826,6 +1608,7 @@ export type Profile_Stream_Cursor_Input = {
 export type Profile_Stream_Cursor_Value_Input = {
   accountId?: InputMaybe<Scalars['uuid']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  farcaster?: InputMaybe<Scalars['String']['input']>;
   instagram?: InputMaybe<Scalars['String']['input']>;
   picture?: InputMaybe<Scalars['String']['input']>;
   twitter?: InputMaybe<Scalars['String']['input']>;
@@ -1604,6 +2387,13 @@ export type WalletWalletUserArgs = {
   where?: InputMaybe<User_Bool_Exp>;
 };
 
+export type WalletRpc = {
+  __typename?: 'WalletRpc';
+  active: Scalars['Boolean']['output'];
+  available: Scalars['Boolean']['output'];
+  url: Scalars['String']['output'];
+};
+
 /** order by aggregate values of table "Wallet" */
 export type Wallet_Aggregate_Order_By = {
   count?: InputMaybe<Order_By>;
@@ -2273,6 +3063,8 @@ export type Article = {
   /** An aggregate relationship */
   actions_aggregate: Action_Aggregate;
   /** An array relationship */
+  article_generative_tokens: Array<Article_Generative_Token>;
+  /** An array relationship */
   article_ledgers: Array<Article_Ledger>;
   /** An array relationship */
   article_revisions: Array<Article_Revision>;
@@ -2331,6 +3123,16 @@ export type ArticleActions_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Action_Order_By>>;
   where?: InputMaybe<Action_Bool_Exp>;
+};
+
+
+/** columns and relationships of "article" */
+export type ArticleArticle_Generative_TokensArgs = {
+  distinct_on?: InputMaybe<Array<Article_Generative_Token_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Article_Generative_Token_Order_By>>;
+  where?: InputMaybe<Article_Generative_Token_Bool_Exp>;
 };
 
 
@@ -2418,6 +3220,7 @@ export type Article_Bool_Exp = {
   _or?: InputMaybe<Array<Article_Bool_Exp>>;
   actions?: InputMaybe<Action_Bool_Exp>;
   actions_aggregate?: InputMaybe<Action_Aggregate_Bool_Exp>;
+  article_generative_tokens?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   article_ledgers?: InputMaybe<Article_Ledger_Bool_Exp>;
   article_revisions?: InputMaybe<Article_Revision_Bool_Exp>;
   artifact_uri?: InputMaybe<String_Comparison_Exp>;
@@ -2472,6 +3275,27 @@ export type Article_Generative_Token = {
   line: Scalars['Int']['output'];
 };
 
+/** order by aggregate values of table "article_generative_token" */
+export type Article_Generative_Token_Aggregate_Order_By = {
+  avg?: InputMaybe<Article_Generative_Token_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Article_Generative_Token_Max_Order_By>;
+  min?: InputMaybe<Article_Generative_Token_Min_Order_By>;
+  stddev?: InputMaybe<Article_Generative_Token_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Article_Generative_Token_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Article_Generative_Token_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Article_Generative_Token_Sum_Order_By>;
+  var_pop?: InputMaybe<Article_Generative_Token_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Article_Generative_Token_Var_Samp_Order_By>;
+  variance?: InputMaybe<Article_Generative_Token_Variance_Order_By>;
+};
+
+/** order by avg() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Avg_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
 /** Boolean expression to filter rows from the table "article_generative_token". All fields are combined with a logical 'AND'. */
 export type Article_Generative_Token_Bool_Exp = {
   _and?: InputMaybe<Array<Article_Generative_Token_Bool_Exp>>;
@@ -2480,6 +3304,20 @@ export type Article_Generative_Token_Bool_Exp = {
   article_id?: InputMaybe<Int_Comparison_Exp>;
   generative_token_id?: InputMaybe<String_Comparison_Exp>;
   line?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Max_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  generative_token_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Min_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  generative_token_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "article_generative_token". */
@@ -2499,6 +3337,24 @@ export enum Article_Generative_Token_Select_Column {
   Line = 'line'
 }
 
+/** order by stddev() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Stddev_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Stddev_Pop_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Stddev_Samp_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
 /** Streaming cursor of the table "article_generative_token" */
 export type Article_Generative_Token_Stream_Cursor_Input = {
   /** Stream column input with initial value */
@@ -2512,6 +3368,30 @@ export type Article_Generative_Token_Stream_Cursor_Value_Input = {
   article_id?: InputMaybe<Scalars['Int']['input']>;
   generative_token_id?: InputMaybe<Scalars['String']['input']>;
   line?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** order by sum() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Sum_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Var_Pop_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Var_Samp_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
+};
+
+/** order by variance() on columns of table "article_generative_token" */
+export type Article_Generative_Token_Variance_Order_By = {
+  article_id?: InputMaybe<Order_By>;
+  line?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "article_ledger" */
@@ -2702,6 +3582,7 @@ export type Article_Min_Order_By = {
 /** Ordering options when selecting data from "article". */
 export type Article_Order_By = {
   actions_aggregate?: InputMaybe<Action_Aggregate_Order_By>;
+  article_generative_tokens_aggregate?: InputMaybe<Article_Generative_Token_Aggregate_Order_By>;
   article_ledgers_aggregate?: InputMaybe<Article_Ledger_Aggregate_Order_By>;
   article_revisions_aggregate?: InputMaybe<Article_Revision_Aggregate_Order_By>;
   artifact_uri?: InputMaybe<Order_By>;
@@ -4567,6 +5448,8 @@ export type Generative_Token = {
   /** A computed field, executes function "get_features_for_generative_token" */
   features?: Maybe<Scalars['jsonb']['output']>;
   flag: Scalars['generative_token_flag_enum']['output'];
+  /** An array relationship */
+  generative_token_articles: Array<Article_Generative_Token>;
   generative_uri?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   input_bytes_size: Scalars['Int']['output'];
@@ -4697,6 +5580,16 @@ export type Generative_TokenCollectors_AggregateArgs = {
 /** columns and relationships of "generative_token" */
 export type Generative_TokenFeaturesArgs = {
   path?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** columns and relationships of "generative_token" */
+export type Generative_TokenGenerative_Token_ArticlesArgs = {
+  distinct_on?: InputMaybe<Array<Article_Generative_Token_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Article_Generative_Token_Order_By>>;
+  where?: InputMaybe<Article_Generative_Token_Bool_Exp>;
 };
 
 
@@ -4972,6 +5865,7 @@ export type Generative_Token_Bool_Exp = {
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
   features?: InputMaybe<Jsonb_Comparison_Exp>;
   flag?: InputMaybe<Generative_Token_Flag_Enum_Comparison_Exp>;
+  generative_token_articles?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   generative_uri?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   input_bytes_size?: InputMaybe<Int_Comparison_Exp>;
@@ -5415,6 +6309,7 @@ export type Generative_Token_Order_By = {
   enabled?: InputMaybe<Order_By>;
   features?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
+  generative_token_articles_aggregate?: InputMaybe<Article_Generative_Token_Aggregate_Order_By>;
   generative_uri?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   input_bytes_size?: InputMaybe<Order_By>;
@@ -6454,6 +7349,82 @@ export type Market_Stats = {
   total_volume_nb30d?: Maybe<Scalars['Int']['output']>;
 };
 
+/** aggregated selection of "market_stats" */
+export type Market_Stats_Aggregate = {
+  __typename?: 'market_stats_aggregate';
+  aggregate?: Maybe<Market_Stats_Aggregate_Fields>;
+  nodes: Array<Market_Stats>;
+};
+
+/** aggregate fields of "market_stats" */
+export type Market_Stats_Aggregate_Fields = {
+  __typename?: 'market_stats_aggregate_fields';
+  avg?: Maybe<Market_Stats_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Market_Stats_Max_Fields>;
+  min?: Maybe<Market_Stats_Min_Fields>;
+  stddev?: Maybe<Market_Stats_Stddev_Fields>;
+  stddev_pop?: Maybe<Market_Stats_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Market_Stats_Stddev_Samp_Fields>;
+  sum?: Maybe<Market_Stats_Sum_Fields>;
+  var_pop?: Maybe<Market_Stats_Var_Pop_Fields>;
+  var_samp?: Maybe<Market_Stats_Var_Samp_Fields>;
+  variance?: Maybe<Market_Stats_Variance_Fields>;
+};
+
+
+/** aggregate fields of "market_stats" */
+export type Market_Stats_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Market_Stats_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Market_Stats_Avg_Fields = {
+  __typename?: 'market_stats_avg_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+};
+
 /** Boolean expression to filter rows from the table "market_stats". All fields are combined with a logical 'AND'. */
 export type Market_Stats_Bool_Exp = {
   _and?: InputMaybe<Array<Market_Stats_Bool_Exp>>;
@@ -6861,6 +7832,104 @@ export type Market_Stats_History_Variance_Order_By = {
   total_volume_nb?: InputMaybe<Order_By>;
 };
 
+/** aggregate max on columns */
+export type Market_Stats_Max_Fields = {
+  __typename?: 'market_stats_max_fields';
+  floor?: Maybe<Scalars['numeric']['output']>;
+  floor_change7d?: Maybe<Scalars['numeric']['output']>;
+  floor_change24?: Maybe<Scalars['numeric']['output']>;
+  floor_change30d?: Maybe<Scalars['numeric']['output']>;
+  floor_fiat?: Maybe<Scalars['numeric']['output']>;
+  from?: Maybe<Scalars['timestamptz']['output']>;
+  highest_sold?: Maybe<Scalars['numeric']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  listed?: Maybe<Scalars['Int']['output']>;
+  lowest_sold?: Maybe<Scalars['numeric']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  median?: Maybe<Scalars['numeric']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+  to?: Maybe<Scalars['timestamptz']['output']>;
+  token_id?: Maybe<Scalars['String']['output']>;
+  total_volume?: Maybe<Scalars['numeric']['output']>;
+  total_volume7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume24?: Maybe<Scalars['numeric']['output']>;
+  total_volume30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change24?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_nb?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate min on columns */
+export type Market_Stats_Min_Fields = {
+  __typename?: 'market_stats_min_fields';
+  floor?: Maybe<Scalars['numeric']['output']>;
+  floor_change7d?: Maybe<Scalars['numeric']['output']>;
+  floor_change24?: Maybe<Scalars['numeric']['output']>;
+  floor_change30d?: Maybe<Scalars['numeric']['output']>;
+  floor_fiat?: Maybe<Scalars['numeric']['output']>;
+  from?: Maybe<Scalars['timestamptz']['output']>;
+  highest_sold?: Maybe<Scalars['numeric']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  listed?: Maybe<Scalars['Int']['output']>;
+  lowest_sold?: Maybe<Scalars['numeric']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  median?: Maybe<Scalars['numeric']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+  to?: Maybe<Scalars['timestamptz']['output']>;
+  token_id?: Maybe<Scalars['String']['output']>;
+  total_volume?: Maybe<Scalars['numeric']['output']>;
+  total_volume7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume24?: Maybe<Scalars['numeric']['output']>;
+  total_volume30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change24?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_nb?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+};
+
 /** Ordering options when selecting data from "market_stats". */
 export type Market_Stats_Order_By = {
   floor?: InputMaybe<Order_By>;
@@ -7002,6 +8071,144 @@ export enum Market_Stats_Select_Column {
   TotalVolumeNb30d = 'total_volume_nb30d'
 }
 
+/** aggregate stddev on columns */
+export type Market_Stats_Stddev_Fields = {
+  __typename?: 'market_stats_stddev_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Market_Stats_Stddev_Pop_Fields = {
+  __typename?: 'market_stats_stddev_pop_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Market_Stats_Stddev_Samp_Fields = {
+  __typename?: 'market_stats_stddev_samp_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+};
+
 /** Streaming cursor of the table "market_stats" */
 export type Market_Stats_Stream_Cursor_Input = {
   /** Stream column input with initial value */
@@ -7056,6 +8263,190 @@ export type Market_Stats_Stream_Cursor_Value_Input = {
   total_volume_nb7d?: InputMaybe<Scalars['Int']['input']>;
   total_volume_nb24?: InputMaybe<Scalars['Int']['input']>;
   total_volume_nb30d?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Market_Stats_Sum_Fields = {
+  __typename?: 'market_stats_sum_fields';
+  floor?: Maybe<Scalars['numeric']['output']>;
+  floor_change7d?: Maybe<Scalars['numeric']['output']>;
+  floor_change24?: Maybe<Scalars['numeric']['output']>;
+  floor_change30d?: Maybe<Scalars['numeric']['output']>;
+  floor_fiat?: Maybe<Scalars['numeric']['output']>;
+  highest_sold?: Maybe<Scalars['numeric']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  listed?: Maybe<Scalars['Int']['output']>;
+  lowest_sold?: Maybe<Scalars['numeric']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  median?: Maybe<Scalars['numeric']['output']>;
+  prim_volume?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume?: Maybe<Scalars['numeric']['output']>;
+  sec_volume7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+  total_volume?: Maybe<Scalars['numeric']['output']>;
+  total_volume7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume24?: Maybe<Scalars['numeric']['output']>;
+  total_volume30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change24?: Maybe<Scalars['numeric']['output']>;
+  total_volume_change30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['numeric']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['numeric']['output']>;
+  total_volume_nb?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Int']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate var_pop on columns */
+export type Market_Stats_Var_Pop_Fields = {
+  __typename?: 'market_stats_var_pop_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Market_Stats_Var_Samp_Fields = {
+  __typename?: 'market_stats_var_samp_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Market_Stats_Variance_Fields = {
+  __typename?: 'market_stats_variance_fields';
+  floor?: Maybe<Scalars['Float']['output']>;
+  floor_change7d?: Maybe<Scalars['Float']['output']>;
+  floor_change24?: Maybe<Scalars['Float']['output']>;
+  floor_change30d?: Maybe<Scalars['Float']['output']>;
+  floor_fiat?: Maybe<Scalars['Float']['output']>;
+  highest_sold?: Maybe<Scalars['Float']['output']>;
+  highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  listed?: Maybe<Scalars['Float']['output']>;
+  lowest_sold?: Maybe<Scalars['Float']['output']>;
+  lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  median?: Maybe<Scalars['Float']['output']>;
+  prim_volume?: Maybe<Scalars['Float']['output']>;
+  prim_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  prim_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume?: Maybe<Scalars['Float']['output']>;
+  sec_volume7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume24?: Maybe<Scalars['Float']['output']>;
+  sec_volume30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  sec_volume_nb30d?: Maybe<Scalars['Float']['output']>;
+  total_volume?: Maybe<Scalars['Float']['output']>;
+  total_volume7d?: Maybe<Scalars['Float']['output']>;
+  total_volume24?: Maybe<Scalars['Float']['output']>;
+  total_volume30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_change24?: Maybe<Scalars['Float']['output']>;
+  total_volume_change30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat24?: Maybe<Scalars['Float']['output']>;
+  total_volume_fiat30d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb7d?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb24?: Maybe<Scalars['Float']['output']>;
+  total_volume_nb30d?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "media_image" */
@@ -7649,6 +9040,7 @@ export type Mutation_Root = {
   refresh?: Maybe<AuthenticationResult>;
   /** given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile */
   set_farcaster_handle?: Maybe<SetFarcasterHandleResult>;
+  /** updates the smart contract tied to a consumable */
   set_whitelist?: Maybe<SetWhitelistOutput>;
   unlink_wallet_from_account: Scalars['Boolean']['output'];
   /** Use an OTP with an email to issue a JWT for web3auth custom provider validation */
@@ -8737,10 +10129,42 @@ export type Offchain_Query = {
   AccountsRoles: Array<AccountsRoles>;
   /** fetch data from the table: "AccountsRoles" using primary key columns */
   AccountsRoles_by_pk?: Maybe<AccountsRoles>;
+  /** fetch data from the table: "Consumable" */
+  Consumable: Array<Consumable>;
+  /** fetch data from the table: "Consumable" using primary key columns */
+  Consumable_by_pk?: Maybe<Consumable>;
+  /** fetch data from the table: "Event" */
+  Event: Array<Event>;
+  /** fetch data from the table: "EventOnboarding" */
+  EventOnboarding: Array<EventOnboarding>;
+  /** fetch data from the table: "EventOnboardingOnComponents" */
+  EventOnboardingOnComponents: Array<EventOnboardingOnComponents>;
+  /** fetch data from the table: "EventOnboardingOnComponents" using primary key columns */
+  EventOnboardingOnComponents_by_pk?: Maybe<EventOnboardingOnComponents>;
+  /** fetch data from the table: "EventOnboarding" using primary key columns */
+  EventOnboarding_by_pk?: Maybe<EventOnboarding>;
+  /** fetch data from the table: "Event" using primary key columns */
+  Event_by_pk?: Maybe<Event>;
+  /** fetch data from the table: "Featured" */
+  Featured: Array<Featured>;
+  /** fetch data from the table: "Featured" using primary key columns */
+  Featured_by_pk?: Maybe<Featured>;
   /** fetch data from the table: "Media" */
   Media: Array<Media>;
   /** fetch data from the table: "Media" using primary key columns */
   Media_by_pk?: Maybe<Media>;
+  /** fetch data from the table: "MediasOnConsumables" */
+  MediasOnConsumables: Array<MediasOnConsumables>;
+  /** fetch data from the table: "MediasOnConsumables" using primary key columns */
+  MediasOnConsumables_by_pk?: Maybe<MediasOnConsumables>;
+  /** fetch data from the table: "MintPassGroup" */
+  MintPassGroup: Array<MintPassGroup>;
+  /** fetch data from the table: "MintPassGroup" using primary key columns */
+  MintPassGroup_by_pk?: Maybe<MintPassGroup>;
+  /** fetch data from the table: "OnboardingComponent" */
+  OnboardingComponent: Array<OnboardingComponent>;
+  /** fetch data from the table: "OnboardingComponent" using primary key columns */
+  OnboardingComponent_by_pk?: Maybe<OnboardingComponent>;
   /** fetch data from the table: "Profile" */
   Profile: Array<Profile>;
   /** fetch data from the table: "Profile" using primary key columns */
@@ -8813,6 +10237,77 @@ export type Offchain_QueryAccountsRoles_By_PkArgs = {
 };
 
 
+export type Offchain_QueryConsumableArgs = {
+  distinct_on?: InputMaybe<Array<Consumable_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Consumable_Order_By>>;
+  where?: InputMaybe<Consumable_Bool_Exp>;
+};
+
+
+export type Offchain_QueryConsumable_By_PkArgs = {
+  address: Scalars['String']['input'];
+};
+
+
+export type Offchain_QueryEventArgs = {
+  distinct_on?: InputMaybe<Array<Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Event_Order_By>>;
+  where?: InputMaybe<Event_Bool_Exp>;
+};
+
+
+export type Offchain_QueryEventOnboardingArgs = {
+  distinct_on?: InputMaybe<Array<EventOnboarding_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<EventOnboarding_Order_By>>;
+  where?: InputMaybe<EventOnboarding_Bool_Exp>;
+};
+
+
+export type Offchain_QueryEventOnboardingOnComponentsArgs = {
+  distinct_on?: InputMaybe<Array<EventOnboardingOnComponents_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<EventOnboardingOnComponents_Order_By>>;
+  where?: InputMaybe<EventOnboardingOnComponents_Bool_Exp>;
+};
+
+
+export type Offchain_QueryEventOnboardingOnComponents_By_PkArgs = {
+  componentId: Scalars['Int']['input'];
+  eventOnboardingId: Scalars['Int']['input'];
+};
+
+
+export type Offchain_QueryEventOnboarding_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Offchain_QueryEvent_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Offchain_QueryFeaturedArgs = {
+  distinct_on?: InputMaybe<Array<Featured_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Featured_Order_By>>;
+  where?: InputMaybe<Featured_Bool_Exp>;
+};
+
+
+export type Offchain_QueryFeatured_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type Offchain_QueryMediaArgs = {
   distinct_on?: InputMaybe<Array<Media_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -8824,6 +10319,49 @@ export type Offchain_QueryMediaArgs = {
 
 export type Offchain_QueryMedia_By_PkArgs = {
   id: Scalars['uuid']['input'];
+};
+
+
+export type Offchain_QueryMediasOnConsumablesArgs = {
+  distinct_on?: InputMaybe<Array<MediasOnConsumables_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<MediasOnConsumables_Order_By>>;
+  where?: InputMaybe<MediasOnConsumables_Bool_Exp>;
+};
+
+
+export type Offchain_QueryMediasOnConsumables_By_PkArgs = {
+  consumableAddress: Scalars['String']['input'];
+  mediaId: Scalars['uuid']['input'];
+};
+
+
+export type Offchain_QueryMintPassGroupArgs = {
+  distinct_on?: InputMaybe<Array<MintPassGroup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<MintPassGroup_Order_By>>;
+  where?: InputMaybe<MintPassGroup_Bool_Exp>;
+};
+
+
+export type Offchain_QueryMintPassGroup_By_PkArgs = {
+  address: Scalars['String']['input'];
+};
+
+
+export type Offchain_QueryOnboardingComponentArgs = {
+  distinct_on?: InputMaybe<Array<OnboardingComponent_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<OnboardingComponent_Order_By>>;
+  where?: InputMaybe<OnboardingComponent_Bool_Exp>;
+};
+
+
+export type Offchain_QueryOnboardingComponent_By_PkArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -8944,12 +10482,60 @@ export type Offchain_Subscription = {
   AccountsRoles_by_pk?: Maybe<AccountsRoles>;
   /** fetch data from the table in a streaming manner: "AccountsRoles" */
   AccountsRoles_stream: Array<AccountsRoles>;
+  /** fetch data from the table: "Consumable" */
+  Consumable: Array<Consumable>;
+  /** fetch data from the table: "Consumable" using primary key columns */
+  Consumable_by_pk?: Maybe<Consumable>;
+  /** fetch data from the table in a streaming manner: "Consumable" */
+  Consumable_stream: Array<Consumable>;
+  /** fetch data from the table: "Event" */
+  Event: Array<Event>;
+  /** fetch data from the table: "EventOnboarding" */
+  EventOnboarding: Array<EventOnboarding>;
+  /** fetch data from the table: "EventOnboardingOnComponents" */
+  EventOnboardingOnComponents: Array<EventOnboardingOnComponents>;
+  /** fetch data from the table: "EventOnboardingOnComponents" using primary key columns */
+  EventOnboardingOnComponents_by_pk?: Maybe<EventOnboardingOnComponents>;
+  /** fetch data from the table in a streaming manner: "EventOnboardingOnComponents" */
+  EventOnboardingOnComponents_stream: Array<EventOnboardingOnComponents>;
+  /** fetch data from the table: "EventOnboarding" using primary key columns */
+  EventOnboarding_by_pk?: Maybe<EventOnboarding>;
+  /** fetch data from the table in a streaming manner: "EventOnboarding" */
+  EventOnboarding_stream: Array<EventOnboarding>;
+  /** fetch data from the table: "Event" using primary key columns */
+  Event_by_pk?: Maybe<Event>;
+  /** fetch data from the table in a streaming manner: "Event" */
+  Event_stream: Array<Event>;
+  /** fetch data from the table: "Featured" */
+  Featured: Array<Featured>;
+  /** fetch data from the table: "Featured" using primary key columns */
+  Featured_by_pk?: Maybe<Featured>;
+  /** fetch data from the table in a streaming manner: "Featured" */
+  Featured_stream: Array<Featured>;
   /** fetch data from the table: "Media" */
   Media: Array<Media>;
   /** fetch data from the table: "Media" using primary key columns */
   Media_by_pk?: Maybe<Media>;
   /** fetch data from the table in a streaming manner: "Media" */
   Media_stream: Array<Media>;
+  /** fetch data from the table: "MediasOnConsumables" */
+  MediasOnConsumables: Array<MediasOnConsumables>;
+  /** fetch data from the table: "MediasOnConsumables" using primary key columns */
+  MediasOnConsumables_by_pk?: Maybe<MediasOnConsumables>;
+  /** fetch data from the table in a streaming manner: "MediasOnConsumables" */
+  MediasOnConsumables_stream: Array<MediasOnConsumables>;
+  /** fetch data from the table: "MintPassGroup" */
+  MintPassGroup: Array<MintPassGroup>;
+  /** fetch data from the table: "MintPassGroup" using primary key columns */
+  MintPassGroup_by_pk?: Maybe<MintPassGroup>;
+  /** fetch data from the table in a streaming manner: "MintPassGroup" */
+  MintPassGroup_stream: Array<MintPassGroup>;
+  /** fetch data from the table: "OnboardingComponent" */
+  OnboardingComponent: Array<OnboardingComponent>;
+  /** fetch data from the table: "OnboardingComponent" using primary key columns */
+  OnboardingComponent_by_pk?: Maybe<OnboardingComponent>;
+  /** fetch data from the table in a streaming manner: "OnboardingComponent" */
+  OnboardingComponent_stream: Array<OnboardingComponent>;
   /** fetch data from the table: "Profile" */
   Profile: Array<Profile>;
   /** fetch data from the table: "Profile" using primary key columns */
@@ -9059,6 +10645,112 @@ export type Offchain_SubscriptionAccountsRoles_StreamArgs = {
 };
 
 
+export type Offchain_SubscriptionConsumableArgs = {
+  distinct_on?: InputMaybe<Array<Consumable_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Consumable_Order_By>>;
+  where?: InputMaybe<Consumable_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionConsumable_By_PkArgs = {
+  address: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionConsumable_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Consumable_Stream_Cursor_Input>>;
+  where?: InputMaybe<Consumable_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEventArgs = {
+  distinct_on?: InputMaybe<Array<Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Event_Order_By>>;
+  where?: InputMaybe<Event_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEventOnboardingArgs = {
+  distinct_on?: InputMaybe<Array<EventOnboarding_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<EventOnboarding_Order_By>>;
+  where?: InputMaybe<EventOnboarding_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEventOnboardingOnComponentsArgs = {
+  distinct_on?: InputMaybe<Array<EventOnboardingOnComponents_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<EventOnboardingOnComponents_Order_By>>;
+  where?: InputMaybe<EventOnboardingOnComponents_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEventOnboardingOnComponents_By_PkArgs = {
+  componentId: Scalars['Int']['input'];
+  eventOnboardingId: Scalars['Int']['input'];
+};
+
+
+export type Offchain_SubscriptionEventOnboardingOnComponents_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<EventOnboardingOnComponents_Stream_Cursor_Input>>;
+  where?: InputMaybe<EventOnboardingOnComponents_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEventOnboarding_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Offchain_SubscriptionEventOnboarding_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<EventOnboarding_Stream_Cursor_Input>>;
+  where?: InputMaybe<EventOnboarding_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEvent_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionEvent_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Event_Stream_Cursor_Input>>;
+  where?: InputMaybe<Event_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionFeaturedArgs = {
+  distinct_on?: InputMaybe<Array<Featured_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Featured_Order_By>>;
+  where?: InputMaybe<Featured_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionFeatured_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Offchain_SubscriptionFeatured_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Featured_Stream_Cursor_Input>>;
+  where?: InputMaybe<Featured_Bool_Exp>;
+};
+
+
 export type Offchain_SubscriptionMediaArgs = {
   distinct_on?: InputMaybe<Array<Media_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -9077,6 +10769,70 @@ export type Offchain_SubscriptionMedia_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Media_Stream_Cursor_Input>>;
   where?: InputMaybe<Media_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionMediasOnConsumablesArgs = {
+  distinct_on?: InputMaybe<Array<MediasOnConsumables_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<MediasOnConsumables_Order_By>>;
+  where?: InputMaybe<MediasOnConsumables_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionMediasOnConsumables_By_PkArgs = {
+  consumableAddress: Scalars['String']['input'];
+  mediaId: Scalars['uuid']['input'];
+};
+
+
+export type Offchain_SubscriptionMediasOnConsumables_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<MediasOnConsumables_Stream_Cursor_Input>>;
+  where?: InputMaybe<MediasOnConsumables_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionMintPassGroupArgs = {
+  distinct_on?: InputMaybe<Array<MintPassGroup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<MintPassGroup_Order_By>>;
+  where?: InputMaybe<MintPassGroup_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionMintPassGroup_By_PkArgs = {
+  address: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionMintPassGroup_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<MintPassGroup_Stream_Cursor_Input>>;
+  where?: InputMaybe<MintPassGroup_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionOnboardingComponentArgs = {
+  distinct_on?: InputMaybe<Array<OnboardingComponent_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<OnboardingComponent_Order_By>>;
+  where?: InputMaybe<OnboardingComponent_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionOnboardingComponent_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Offchain_SubscriptionOnboardingComponent_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<OnboardingComponent_Stream_Cursor_Input>>;
+  where?: InputMaybe<OnboardingComponent_Bool_Exp>;
 };
 
 
@@ -9540,6 +11296,8 @@ export type Onchain_Query = {
   listing_by_pk?: Maybe<Listing>;
   /** fetch data from the table: "market_stats" */
   market_stats: Array<Market_Stats>;
+  /** fetch aggregated fields from the table: "market_stats" */
+  market_stats_aggregate: Market_Stats_Aggregate;
   /** fetch data from the table: "market_stats" using primary key columns */
   market_stats_by_pk?: Maybe<Market_Stats>;
   /** fetch data from the table: "market_stats_history" */
@@ -10032,6 +11790,15 @@ export type Onchain_QueryMarket_StatsArgs = {
 };
 
 
+export type Onchain_QueryMarket_Stats_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Market_Stats_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Market_Stats_Order_By>>;
+  where?: InputMaybe<Market_Stats_Bool_Exp>;
+};
+
+
 export type Onchain_QueryMarket_Stats_By_PkArgs = {
   token_id: Scalars['String']['input'];
 };
@@ -10466,6 +12233,8 @@ export type Onchain_Subscription = {
   listing_stream: Array<Listing>;
   /** fetch data from the table: "market_stats" */
   market_stats: Array<Market_Stats>;
+  /** fetch aggregated fields from the table: "market_stats" */
+  market_stats_aggregate: Market_Stats_Aggregate;
   /** fetch data from the table: "market_stats" using primary key columns */
   market_stats_by_pk?: Maybe<Market_Stats>;
   /** fetch data from the table: "market_stats_history" */
@@ -11185,6 +12954,15 @@ export type Onchain_SubscriptionMarket_StatsArgs = {
 };
 
 
+export type Onchain_SubscriptionMarket_Stats_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Market_Stats_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Market_Stats_Order_By>>;
+  where?: InputMaybe<Market_Stats_Bool_Exp>;
+};
+
+
 export type Onchain_SubscriptionMarket_Stats_By_PkArgs = {
   token_id: Scalars['String']['input'];
 };
@@ -11610,7 +13388,7 @@ export type Pricing_Dutch_Auction = {
   id: Scalars['String']['output'];
   levels: Array<Scalars['numeric']['output']>;
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
-  refundable: Scalars['Boolean']['output'];
+  refundable?: Maybe<Scalars['Boolean']['output']>;
   resting_price: Scalars['String']['output'];
   token_id?: Maybe<Scalars['String']['output']>;
 };
@@ -11902,45 +13680,24 @@ export type Pricing_Fixed_Variance_Order_By = {
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** fetch data from the table: "Event" */
-  Event: Array<Event>;
-  /** fetch data from the table: "Event" using primary key columns */
-  Event_by_pk?: Maybe<Event>;
-  /** fetch data from the table: "Featured" */
-  Featured: Array<Featured>;
-  /** fetch data from the table: "Featured" using primary key columns */
-  Featured_by_pk?: Maybe<Featured>;
+  /** Simulates an EVM transaction and returns the simulation results. */
+  estimate_evm_transaction?: Maybe<EstimateEvmTransactionOutput>;
+  mailTemplates: Array<MailTemplate>;
+  managedWalletState: EWalletOperatorState;
   mediaFullUrl: Scalars['String']['output'];
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
+  walletRpcs?: Maybe<Array<WalletRpc>>;
 };
 
 
-export type Query_RootEventArgs = {
-  distinct_on?: InputMaybe<Array<Event_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Event_Order_By>>;
-  where?: InputMaybe<Event_Bool_Exp>;
+export type Query_RootEstimate_Evm_TransactionArgs = {
+  input: EstimateEvmTransactionInput;
 };
 
 
-export type Query_RootEvent_By_PkArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type Query_RootFeaturedArgs = {
-  distinct_on?: InputMaybe<Array<Featured_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Featured_Order_By>>;
-  where?: InputMaybe<Featured_Bool_Exp>;
-};
-
-
-export type Query_RootFeatured_By_PkArgs = {
-  id: Scalars['Int']['input'];
+export type Query_RootManagedWalletStateArgs = {
+  publicKey: Scalars['String']['input'];
 };
 
 
@@ -12815,62 +14572,8 @@ export type Split_Variance_Order_By = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
-  /** fetch data from the table: "Event" */
-  Event: Array<Event>;
-  /** fetch data from the table: "Event" using primary key columns */
-  Event_by_pk?: Maybe<Event>;
-  /** fetch data from the table in a streaming manner: "Event" */
-  Event_stream: Array<Event>;
-  /** fetch data from the table: "Featured" */
-  Featured: Array<Featured>;
-  /** fetch data from the table: "Featured" using primary key columns */
-  Featured_by_pk?: Maybe<Featured>;
-  /** fetch data from the table in a streaming manner: "Featured" */
-  Featured_stream: Array<Featured>;
   offchain?: Maybe<Offchain_Subscription>;
   onchain?: Maybe<Onchain_Subscription>;
-};
-
-
-export type Subscription_RootEventArgs = {
-  distinct_on?: InputMaybe<Array<Event_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Event_Order_By>>;
-  where?: InputMaybe<Event_Bool_Exp>;
-};
-
-
-export type Subscription_RootEvent_By_PkArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type Subscription_RootEvent_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Event_Stream_Cursor_Input>>;
-  where?: InputMaybe<Event_Bool_Exp>;
-};
-
-
-export type Subscription_RootFeaturedArgs = {
-  distinct_on?: InputMaybe<Array<Featured_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Featured_Order_By>>;
-  where?: InputMaybe<Featured_Bool_Exp>;
-};
-
-
-export type Subscription_RootFeatured_By_PkArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type Subscription_RootFeatured_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Featured_Stream_Cursor_Input>>;
-  where?: InputMaybe<Featured_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
@@ -14033,6 +15736,13 @@ export type GetEthUserProceedsQueryVariables = Exact<{
 
 export type GetEthUserProceedsQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', eth_user_proceeds: Array<{ __typename?: 'eth_user_proceeds', id: string, total_proceeds: any }> } | null };
 
+export type EstimateEvmTransactionQueryVariables = Exact<{
+  input: EstimateEvmTransactionInput;
+}>;
+
+
+export type EstimateEvmTransactionQuery = { __typename?: 'query_root', estimate_evm_transaction?: { __typename?: 'EstimateEvmTransactionOutput', error?: string | null, gasUsed: string, changes: Array<{ __typename?: 'EvmTransactionChanges', amount?: string | null, assetType?: string | null, changeType: string, contractAddress: string, decimals?: number | null, from: string, name?: string | null, rawAmount: string, symbol?: string | null, to: string, tokenId?: string | null }> } | null };
+
 export const Wallet_BaseDetailsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}}]} as unknown as DocumentNode<Wallet_BaseDetailsFragment, unknown>;
 export const Account_WalletsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_Wallets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mainWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}}]} as unknown as DocumentNode<Account_WalletsFragment, unknown>;
 export const Account_BaseDetailsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}}]} as unknown as DocumentNode<Account_BaseDetailsFragment, unknown>;
@@ -14070,3 +15780,4 @@ export const GetReservesDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GetActionSalesBotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetActionSalesBot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"action_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"chain"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"numeric_value"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"issuer_id"}},{"kind":"Field","name":{"kind":"Name","value":"issuer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"target_id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"objkt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail_uri"}}]}},{"kind":"Field","name":{"kind":"Name","value":"generative_token"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail_uri"}},{"kind":"Field","name":{"kind":"Name","value":"author_id"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetActionSalesBotQuery, GetActionSalesBotQueryVariables>;
 export const GetTokenPricingsAndReservesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTokenPricingsAndReserves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generative_token_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"is_frame"}},{"kind":"Field","name":{"kind":"Name","value":"reserves"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"data"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_fixeds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"opens_at"}},{"kind":"Field","name":{"kind":"Name","value":"price"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_dutch_auctions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"opens_at"}},{"kind":"Field","name":{"kind":"Name","value":"levels"}},{"kind":"Field","name":{"kind":"Name","value":"decrement_duration"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetTokenPricingsAndReservesQuery, GetTokenPricingsAndReservesQueryVariables>;
 export const GetEthUserProceedsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEthUserProceeds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"eth_user_proceeds_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eth_user_proceeds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"total_proceeds"}}]}}]}}]}}]} as unknown as DocumentNode<GetEthUserProceedsQuery, GetEthUserProceedsQueryVariables>;
+export const EstimateEvmTransactionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"EstimateEvmTransaction"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EstimateEvmTransactionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"estimate_evm_transaction"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"changes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"assetType"}},{"kind":"Field","name":{"kind":"Name","value":"changeType"}},{"kind":"Field","name":{"kind":"Name","value":"contractAddress"}},{"kind":"Field","name":{"kind":"Name","value":"decimals"}},{"kind":"Field","name":{"kind":"Name","value":"from"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rawAmount"}},{"kind":"Field","name":{"kind":"Name","value":"symbol"}},{"kind":"Field","name":{"kind":"Name","value":"to"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"gasUsed"}}]}}]}}]} as unknown as DocumentNode<EstimateEvmTransactionQuery, EstimateEvmTransactionQueryVariables>;
