@@ -33,7 +33,6 @@ export interface IBaseContracts {
  * - onchfs
  */
 
-
 export const baseTestnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
@@ -49,9 +48,9 @@ export const baseTestnetContracts: IBaseContracts = {
   contract_registry_v1: "0xd44B3b2Ee596613c1aFcF85c9b0E41A0ec8B79E2",
   gen_art_token_impl_v1: "0x06976f5C039497d8a79Cc0dCE7A95B3E9748164A",
   mint_ticket_impl_v1: "0xa71b5935366BA29332033217a9E83698acadfd2f",
-  fee_manager_v1: "0x0168127fe2bd79bfa24a54ff5afc7391c8f70261",
-  fixed_price_minter_v2: "0xcb36e70d16cccd7a09fbe744ef0afb146033dc4c",
-  dutch_auction_minter_v2: "0x9b76309d83fcd28d40467e3063b621daa7e5b1ec",
+  fee_manager_v1: "0x97C782803C8E4F283eBeEd41eaC4a73748637a3B",
+  fixed_price_minter_v2: "0x061374e9aDB6521d15F5a6440cA56903F241a9e5",
+  dutch_auction_minter_v2: "0x5a514e7652Ea61C9245709A0beE9d6054CeD1628",
   onchfs_file_system: "0x3fb48e03291b2490f939c961a1ad088437129f71",
   onchfs_content_store: "0x48AC7370df2d5982852172A4D857c29608AFa774",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
