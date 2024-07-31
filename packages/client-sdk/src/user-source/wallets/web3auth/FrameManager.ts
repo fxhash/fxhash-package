@@ -119,7 +119,11 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
         resolve(failure(new Web3AuthFrameNotLoading(this._config.url, err)))
       }
       this._iframe.src = this._config.url
-      this._iframe.sandbox.add("allow-scripts", "allow-same-origin")
+      this._iframe.sandbox.add(
+        "allow-scripts",
+        "allow-same-origin",
+        "allow-popups"
+      )
       this._wrapper.appendChild(this._iframe)
 
       this._addStyles()
