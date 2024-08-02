@@ -63,7 +63,7 @@ export function tzip10WalletSource({
         createTezosWalletManager({
           info,
           source: {
-            beaconWallet: _beaconWallet,
+            wallet: _beaconWallet,
           },
         })
       )

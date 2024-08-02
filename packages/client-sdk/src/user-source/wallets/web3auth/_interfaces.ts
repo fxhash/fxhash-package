@@ -138,19 +138,19 @@ export type Web3AuthFrameMessageTypes = {
 
     tez_sign: {
       req: {
-        op: string
-        magicByte?: Uint8Array
-      }
-      res: {
         bytes: string
-        sig: string
-        prefixSig: string
-        sbytes: string
+        watermark?: Uint8Array
       }
+      res: string
     }
 
     "tez__pub-key": {
       req: void
+      res: string
+    }
+
+    tez__sendOperations: {
+      req: any[]
       res: string
     }
 
