@@ -27,3 +27,23 @@ export function xorshiftString(str: string): number {
   }
   return x
 }
+
+/**
+ * Computes a 64bit hash (returned as a number) for any serializable value
+ * passed. The value must be serializable using `JSON.stringify()` otherwise
+ * this function throws.
+ *
+ * Under the hood, does `xorshiftString(JSON.stringify(serializable))`
+ *
+ * @param serializable A value which can be serialized with `JSON.stringify()`
+ *
+ * @returns A 64bit hash as a number
+ *
+ * @example
+ * ```ts
+ * const hash = xorshift64({ some: "value", numb: 2 }) // 7e34a2b7
+ * ```
+ */
+export function xorshift64(serializable: any): number {
+  return xorshiftString(JSON.stringify(serializable))
+}

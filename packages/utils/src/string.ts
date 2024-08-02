@@ -38,3 +38,10 @@ export function truncateMiddle(
 export function uniqueId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
+
+/**
+ * Splits a string in 2 sections at a given index, and returns these 2 sections.
+ */
+export function splitStringAt(str: string, index: number): [string, string] {
+  return [str.slice(0, index), str.slice(index)]
+}

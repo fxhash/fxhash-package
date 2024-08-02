@@ -618,6 +618,11 @@ enum EWalletOperatorState {
   WAITING_CONFIRMATION
 }
 
+type EstimateEvmTransactionError {
+  message: String!
+  revertReason: String
+}
+
 input EstimateEvmTransactionInput {
   chainId: String!
   transactions: [EvmTransactionInput!]!
@@ -625,8 +630,8 @@ input EstimateEvmTransactionInput {
 
 type EstimateEvmTransactionOutput {
   changes: [EvmTransactionChanges!]!
-  error: String
-  gasUsed: String!
+  error: EstimateEvmTransactionError
+  gasUsed: String
 }
 
 """
