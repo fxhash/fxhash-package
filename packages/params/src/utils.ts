@@ -364,6 +364,16 @@ export function serializeParams(
   return bytes
 }
 
+// call seralizeParams(), returns nullif no params
+export function serializeParamsOrNull(
+  params: FxParamsData,
+  definition: FxParamDefinition<any>[]
+) {
+  const serialized = serializeParams(params, definition || [])
+  if (serialized.length === 0) return null
+  return serialized
+}
+
 // takes an array of bytes, in hexadecimal format, and a parametric space
 // definition and outputs an array of parameters, mapping the definition and
 // validating input based on the definition constraints
