@@ -4,11 +4,15 @@ import {
   WalletTransferParams,
 } from "@taquito/taquito"
 import { type Web3AuthFrameManager } from "../FrameManager.js"
-import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
+import {
+  TezosWalletRpcEndpoint,
+  type IWeb3AuthWalletUtil,
+} from "../_interfaces.js"
 import { b58cencode, getPkhfromPk, prefix } from "@taquito/utils"
-import { BlockchainNetwork } from "@fxhash/shared"
+import { BlockchainNetwork, Result } from "@fxhash/shared"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
 import { createTezosWalletManager } from "../../common/_private.js"
+import { bytesToHex } from "viem"
 
 type Options = Web3AuthFrameManager
 
@@ -63,35 +67,46 @@ function frameManagerTezosWalletProvider(
     throw Error("NOT_SUPPORTED")
   }
 
-  return {
-    getPKH: async () => {
-      const res = await frameManager.sendRequest({ type: "tez__pkh" })
-      if (res.isSuccess()) return res.unwrap()
-      throw res.error
-    },
+  const getAccount = async () => {
+    const res = await frameManager.sendRequest({
+      type: "tez__rpc",
+      body: {
+        method: "tez_getAccount",
+      },
+    })
+    if (res.isFailure()) throw res.error
+    return res.unwrap() as TezosWalletRpcEndpoint<"tez_getAccount">["res"]
+  }
 
-    getPK: async () => {
-      const res = await frameManager.sendRequest({ type: "tez__pub-key" })
-      if (res.isSuccess()) return res.unwrap()
-      throw res.error
-    },
+  return {
+    getPKH: async () => (await getAccount()).publicKeyHash,
+
+    getPK: async () => (await getAccount()).publicKey,
 
     sendOperations: async params => {
-      console.log({ params })
       const res = await frameManager.sendRequest({
-        type: "tez__sendOperations",
-        body: params,
+        type: "tez__rpc",
+        body: {
+          method: "tez_sendOperations",
+          params,
+        },
       })
-      if (res.isSuccess()) return res.unwrap()
+      if (res.isSuccess()) return res.unwrap() as string
       throw res.error
     },
 
     sign: async (bytes, watermark) => {
       const res = await frameManager.sendRequest({
-        type: "tez_sign",
-        body: { bytes, watermark },
+        type: "tez__rpc",
+        body: {
+          method: "tez_sign",
+          params: {
+            bytes,
+            watermark: watermark ? bytesToHex(watermark) : undefined,
+          },
+        },
       })
-      if (res.isSuccess()) return res.unwrap()
+      if (res.isSuccess()) return res.unwrap() as string
       throw res.error
     },
 
@@ -105,9 +120,6 @@ function frameManagerTezosWalletProvider(
     // mapStakeParamsToWalletParams: notSupported,
     // mapUnstakeParamsToWalletParams: notSupported,
     // mapFinalizeUnstakeParamsToWalletParams: notSupported,
-
-    // @ts-ignore
-    ___marker: "tezosWalletProvider",
   }
 }
 

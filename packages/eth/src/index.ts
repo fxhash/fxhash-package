@@ -1,6 +1,7 @@
 export * from "./services/operations/index.js"
 export * from "./services/reservoir/api.js"
 export * from "./services/reservoir/types.js"
+export * from "./services/messages.js"
 export * from "./services/Wallet.js"
 export * from "./services/Config.js"
 export * from "./services/Safe.js"

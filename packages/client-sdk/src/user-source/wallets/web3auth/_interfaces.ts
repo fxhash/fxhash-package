@@ -136,28 +136,7 @@ export type Web3AuthFrameMessageTypes = {
       res: SessionDetails | null
     }
 
-    tez_sign: {
-      req: {
-        bytes: string
-        watermark?: Uint8Array
-      }
-      res: string
-    }
-
-    "tez__pub-key": {
-      req: void
-      res: string
-    }
-
-    tez__sendOperations: {
-      req: any[]
-      res: string
-    }
-
-    tez__pkh: {
-      req: void
-      res: string
-    }
+    tez__rpc: TezosWalletRpcType
 
     "evm__json-rpc": {
       req: {
@@ -184,3 +163,35 @@ export type Web3AuthFrameMessageTypes = {
     }
   }
 }
+
+export type TezosWalletRpcType =
+  | {
+      req: {
+        method: "tez_sign"
+        params: {
+          bytes: string
+          watermark?: Hex
+        }
+      }
+      res: string
+    }
+  | {
+      req: {
+        method: "tez_sendOperations"
+        params: any[]
+      }
+      res: string
+    }
+  | {
+      req: {
+        method: "tez_getAccount"
+      }
+      res: {
+        publicKey: string
+        publicKeyHash: string
+      }
+    }
+
+export type TezosWalletRpcEndpoint<
+  K extends TezosWalletRpcType["req"]["method"],
+> = Extract<TezosWalletRpcType, { req: { method: K } }>
