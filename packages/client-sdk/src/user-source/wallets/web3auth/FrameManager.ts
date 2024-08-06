@@ -3,7 +3,6 @@
  * @license MIT
  */
 
-import { IEquatableError, PromiseResult } from "@fxhash/utils"
 import {
   IframeBDCommHost,
   IframeBDError,
@@ -18,7 +17,13 @@ import {
   Web3AuthFrameNotResponding,
   Web3AuthFrameResponseErrors,
 } from "./_errors.js"
-import { failure, invariant, success } from "@fxhash/shared"
+import {
+  failure,
+  invariant,
+  success,
+  IEquatableError,
+  PromiseResult,
+} from "@fxhash/shared"
 import {
   FrameManagerEventEmitter,
   SessionDetails,
