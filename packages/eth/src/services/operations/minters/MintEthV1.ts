@@ -1,6 +1,6 @@
 import { EthereumContractOperation } from "../contractOperation.js"
 import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1.js"
-import { prepareMintParams } from "@/utils/index.js"
+import { getFees, prepareMintParams } from "@/utils/index.js"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
@@ -44,6 +44,16 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
     if (pricing.opens_at && pricing.opens_at > new Date().toISOString())
       throw new Error("Minting is not yet open")
 
+    const [platformFees] = await getFees(
+      this.manager.publicClient,
+      this.chain,
+      this.params.token,
+      this.params.price,
+      this.params.qty
+    )
+
+    const price = this.params.price + platformFees
+
     if (!this.params.whitelist) {
       if (isFixed) {
         this.mintOperation = new MintFixedPriceEthV1Operation(
@@ -52,7 +62,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             token: this.params.token,
             to: this.params.to,
             reserveId: Number(pricing.id.split("-")[1]),
-            price: this.params.price,
+            price,
             amount: this.params.qty,
             isFrame: this.params.isFrame,
             version: this.params.version,
@@ -67,7 +77,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             to: this.params.to,
             reserveId: Number(pricing.id.split("-")[1]),
             amount: this.params.qty,
-            price: this.params.price,
+            price,
             version: this.params.version,
           },
           this.chain
@@ -86,7 +96,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             index: indexesAndProofs.indexes,
             proof: indexesAndProofs.proofs,
             reserveId: reserve.data.reserveId,
-            price: this.params.price,
+            price,
             amount: this.params.qty,
             version: this.params.version,
           },
@@ -102,7 +112,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             proof: indexesAndProofs.proofs,
             reserveId: reserve.data.reserveId,
             amount: this.params.qty,
-            price: this.params.price,
+            price,
             version: this.params.version,
           },
           this.chain

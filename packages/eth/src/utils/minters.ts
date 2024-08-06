@@ -38,6 +38,7 @@ import { config } from "@fxhash/config"
 import { EthereumWalletManager } from "@/services/Wallet.js"
 import { IEthContracts } from "@fxhash/config"
 import gqlClient from "@fxhash/gql-client"
+import { FEE_MANAGER_V1 } from "@/abi/FeeManagerV1.js"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -705,4 +706,24 @@ export async function getFirstValidReserve(
     args: [token],
   })
   return reserveId as bigint
+}
+
+export async function getFees(
+  publicClient: PublicClient,
+  chain: BlockchainType,
+  token: `0x${string}`,
+  price: bigint,
+  amount: bigint
+): Promise<bigint[]> {
+  const currentConfig =
+    chain === BlockchainType.ETHEREUM ? config.eth : config.base
+
+  const fees = await publicClient.readContract({
+    address: currentConfig.contracts.fee_manager_v1,
+    abi: FEE_MANAGER_V1,
+    functionName: "calculateFees",
+    args: [token, price, amount],
+  })
+
+  return fees as bigint[]
 }
