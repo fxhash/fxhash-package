@@ -3,10 +3,10 @@
  * @license MIT
  */
 
-import { PromiseResult, Result } from "@fxhash/utils"
+import { PromiseResult } from "@fxhash/utils"
 import {
   IframeBDCommHost,
-  IframeRequestTimeout,
+  IframeBDError,
   RequestPayload,
   isBrowser,
 } from "@fxhash/utils-browser"
@@ -50,7 +50,10 @@ type TMessages = Web3AuthFrameMessageTypes
  * **Warning**: This class can only be instanciated in a browser context, as it
  * needs browser APIs to load the `<iframe>`.
  */
-export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
+export class Web3AuthFrameManager extends IframeBDCommHost<
+  TMessages,
+  Web3AuthFrameInitializationError
+> {
   private _emitter = new FrameManagerEventEmitter()
   private _config: Web3AuthFrameConfig
   private _container: HTMLElement
@@ -93,8 +96,11 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
    * - HTML wrapper
    * - iframe (& load the URL)
    */
-  private initDOM() {
-    return new Promise<Result<void, Web3AuthFrameNotLoading>>(async resolve => {
+  private initDOM(): PromiseResult<
+    void,
+    Web3AuthFrameNotLoading | Web3AuthFrameNotResponding
+  > {
+    return new Promise(async resolve => {
       // Check if another instance already exists, if so we can just recover the
       // state from this existing instance.
       const existingDiv = document.querySelector(".__fxhash__wallet")
@@ -113,7 +119,8 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
       this._iframe.addEventListener("load", async () => {
         // reset error handler to clear potential cases
         if (this._iframe) this._iframe.onerror = () => {}
-        resolve(success())
+        const res = await this._handshake()
+        resolve(res)
       })
       this._iframe.onerror = err => {
         resolve(failure(new Web3AuthFrameNotLoading(this._config.url, err)))
@@ -234,13 +241,14 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
     this.wrapper.classList[show ? "add" : "remove"]("__fxhash__show")
   }
 
-  async init(): PromiseResult<void, Web3AuthFrameInitializationError> {
-    // initialize DOM elements
-    {
-      const res = await this.initDOM()
-      if (res.isFailure()) return res
-      if (!this._iframe) return failure(new Web3AuthFrameNotInitialized())
-    }
+  /**
+   * Performs the handshake procedure between the host and the <iframe>.
+   * - IframeBDComm handshake protocol
+   * - send init payload to <iframe>
+   * - get Web3Auth initial session details
+   */
+  private async _handshake(): PromiseResult<void, Web3AuthFrameNotResponding> {
+    invariant(this._iframe, "should be defined")
 
     // initialize the iframe with the IframeCommBd
     {
@@ -265,6 +273,17 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
     return success()
   }
 
+  async init(): PromiseResult<void, Web3AuthFrameInitializationError> {
+    // initialize DOM elements
+    {
+      const res = await this.initDOM()
+      if (res.isFailure()) return res
+      if (!this._iframe) return failure(new Web3AuthFrameNotInitialized())
+    }
+
+    return success()
+  }
+
   private _handleSessionChanged(details: SessionDetails | null) {
     this.emitter.emit("session-changed", details)
   }
@@ -282,14 +301,14 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
 
   public getSessionDetails(): PromiseResult<
     SessionDetails | null,
-    IframeRequestTimeout
+    IframeBDError
   > {
     return this.sendRequest({ type: "getSessionDetails" })
   }
 
   public async login(
     payload: Web3AuthLoginPayload
-  ): PromiseResult<SessionDetails | null, IframeRequestTimeout> {
+  ): PromiseResult<SessionDetails | null, IframeBDError> {
     const res = await this.sendRequest({ type: "login", body: payload })
     if (res.isSuccess() && res.value) {
       this._handleSessionChanged(res.value)
@@ -299,7 +318,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<TMessages> {
     return res
   }
 
-  async logout(): PromiseResult<any, IframeRequestTimeout> {
+  async logout(): PromiseResult<any, IframeBDError> {
     const res = await this.sendRequest({ type: "logout" })
     if (res.isSuccess()) {
       this._handleSessionChanged(null)

@@ -118,6 +118,7 @@ function frameManagerTezosWalletProvider(
           },
         },
       })
+      console.log(res)
       if (res.isSuccess()) {
         const response = res.value as TezosWalletRpcEndpoint<"tez_sign">["res"]
         if (response.type === BeaconMessageType.SignPayloadResponse) {

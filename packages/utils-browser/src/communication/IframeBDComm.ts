@@ -14,8 +14,18 @@
  * if they are it is eventually known).
  */
 
-import { PromiseResult, failure, success } from "@fxhash/shared"
-import { IframeBDError, IframeRequestTimeout } from "./errors"
+import {
+  IEquatableError,
+  PromiseResult,
+  failure,
+  success,
+} from "@fxhash/shared"
+import {
+  IframeBDError,
+  IframeDisconnectedError,
+  IframeRequestTimeoutError,
+} from "./errors"
+import { Initialization, cleanup, intialization } from "@fxhash/utils"
 
 /**
  * Potential improvements
@@ -81,7 +91,10 @@ type Payload<ReqType extends string> =
   | RequestPayload<ReqType>
   | ResponsePayload<ReqType>
 
-type RequestResolver = (body: any) => void
+type RequestResolver = {
+  resolve: (body: any) => void
+  reject: (reason: IframeDisconnectedError) => void
+}
 
 type TMessage = {
   [K: string]: {
@@ -118,8 +131,9 @@ abstract class IframeBDCommShared<
   MessageTypes extends MessageTypesSignature,
   Dir extends Direction,
 > {
-  initialized: boolean = false
   awaitingRequests: Record<RequestID, RequestResolver> = {}
+  _intialization: Initialization = intialization()
+  _clean: ReturnType<typeof cleanup> = cleanup()
 
   /**
    * Needs to implement sending a message to the other part.
@@ -161,9 +175,30 @@ abstract class IframeBDCommShared<
   ): Promise<MessageTypes[OtherDir<Dir>][K]["res"]>
 
   protected _init() {
-    if (this.initialized) throw Error(`already initialized`)
-    window.addEventListener("message", this._handleMessageEvent.bind(this))
-    this.initialized = true
+    if (this._intialization.finished) {
+      // The <iframe> has already been initialized, but a new instance was
+      //  received. The connection will be made with the new instance.`
+      this._clean.clear()
+    } else {
+      this._intialization.start()
+    }
+
+    const handler = this._handleMessageEvent.bind(this)
+    window.addEventListener("message", handler)
+    this._clean.add(
+      () => window.removeEventListener("message", handler),
+      // if init() is called another time, this will cleanup all the ongoing
+      // requests with a failure, as `clean.clear()` is called at the beginning
+      // of this method
+      () => {
+        const awaitingRequests = Object.values(this.awaitingRequests)
+        awaitingRequests.forEach(req =>
+          req.reject(new IframeDisconnectedError())
+        )
+      }
+    )
+
+    if (!this._intialization.finished) this._intialization.finish()
   }
 
   /**
@@ -184,7 +219,7 @@ abstract class IframeBDCommShared<
     timeout,
   }: SendRequestOptions<MessageTypes[Dir], K>): PromiseResult<
     MessageTypes[Dir][K]["res"],
-    IframeRequestTimeout
+    IframeRequestTimeoutError | IframeDisconnectedError
   > {
     return new Promise(resolve => {
       const requestID = randomRequestID()
@@ -192,16 +227,22 @@ abstract class IframeBDCommShared<
       let timeoutID: number
       if (timeout) {
         timeoutID = setTimeout(
-          () => resolve(failure(new IframeRequestTimeout())),
+          () => resolve(failure(new IframeRequestTimeoutError())),
           timeout
         )
       }
 
       // by adding a listener to the awaiting requests, it will resolve once a
       // response for this request is received
-      this.awaitingRequests[requestID] = (data: any) => {
-        typeof timeoutID !== "undefined" && clearTimeout(timeout)
-        resolve(success(data))
+      this.awaitingRequests[requestID] = {
+        resolve: (data: any) => {
+          typeof timeoutID !== "undefined" && clearTimeout(timeout)
+          resolve(success(data))
+        },
+        reject: reason => {
+          typeof timeoutID !== "undefined" && clearTimeout(timeout)
+          resolve(failure(reason))
+        },
       }
 
       this._sendPayload({
@@ -221,7 +262,7 @@ abstract class IframeBDCommShared<
     if (!awaitingRequest) return
     // delete from awaiting, then resolve the awaiting promise
     delete this.awaitingRequests[payload.header.id]
-    awaitingRequest(payload.body)
+    awaitingRequest.resolve(payload.body)
   }
 
   private async _handleMessageEvent(event: MessageEvent): Promise<void> {
@@ -253,6 +294,7 @@ abstract class IframeBDCommShared<
  */
 export abstract class IframeBDCommHost<
   MessageTypes extends MessageTypesSignature,
+  InitErrors extends IEquatableError = IframeBDError,
 > extends IframeBDCommShared<MessageTypes, "host->frame"> {
   iframe: HTMLIFrameElement | null = null
   url: string = ""
@@ -268,7 +310,7 @@ export abstract class IframeBDCommHost<
 
   public async init(
     iframe: HTMLIFrameElement
-  ): PromiseResult<void, IframeBDError> {
+  ): PromiseResult<void, InitErrors | IframeBDError> {
     super._init()
 
     this.iframe = iframe
