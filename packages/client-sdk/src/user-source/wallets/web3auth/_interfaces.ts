@@ -3,6 +3,7 @@ import { EventEmitter } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { IWalletConnected, IWalletsSource } from "@/index.js"
+import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
   update: (detais: SessionDetails | null) => void
@@ -173,14 +174,38 @@ export type TezosWalletRpcType =
           watermark?: Hex
         }
       }
-      res: string
+      res:
+        | {
+            type: BeaconMessageType.SignPayloadResponse
+            signature: string
+          }
+        | {
+            type: BeaconMessageType.Error
+            errorType:
+              | BeaconErrorType.ABORTED_ERROR
+              | BeaconErrorType.UNKNOWN_ERROR
+          }
     }
   | {
       req: {
         method: "tez_sendOperations"
         params: any[]
       }
-      res: string
+      res:
+        | {
+            type: BeaconMessageType.OperationResponse
+            transactionHash: string
+          }
+        | {
+            type: BeaconMessageType.Error
+            errorType:
+              | BeaconErrorType.ABORTED_ERROR
+              | BeaconErrorType.TRANSACTION_INVALID_ERROR
+              | BeaconErrorType.BROADCAST_ERROR
+              | BeaconErrorType.ABORTED_ERROR
+              | BeaconErrorType.TOO_MANY_OPERATIONS
+              | BeaconErrorType.UNKNOWN_ERROR
+          }
     }
   | {
       req: {

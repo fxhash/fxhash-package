@@ -13,6 +13,11 @@ import { BlockchainNetwork, Result } from "@fxhash/shared"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
 import { createTezosWalletManager } from "../../common/_private.js"
 import { bytesToHex } from "viem"
+import {
+  BeaconError,
+  BeaconErrorType,
+  BeaconMessageType,
+} from "@airgap/beacon-sdk"
 
 type Options = Web3AuthFrameManager
 
@@ -91,7 +96,14 @@ function frameManagerTezosWalletProvider(
           params,
         },
       })
-      if (res.isSuccess()) return res.unwrap() as string
+      if (res.isSuccess()) {
+        const response =
+          res.value as TezosWalletRpcEndpoint<"tez_sendOperations">["res"]
+        if (response.type === BeaconMessageType.OperationResponse) {
+          return response.transactionHash
+        }
+        throw BeaconError.getError(response.errorType, null)
+      }
       throw res.error
     },
 
@@ -106,7 +118,13 @@ function frameManagerTezosWalletProvider(
           },
         },
       })
-      if (res.isSuccess()) return res.unwrap() as string
+      if (res.isSuccess()) {
+        const response = res.value as TezosWalletRpcEndpoint<"tez_sign">["res"]
+        if (response.type === BeaconMessageType.SignPayloadResponse) {
+          return response.signature
+        }
+        throw BeaconError.getError(response.errorType, null)
+      }
       throw res.error
     },
 
