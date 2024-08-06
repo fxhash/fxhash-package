@@ -11,7 +11,7 @@ import {
   UserSourceEventEmitter,
 } from "../../_interfaces.js"
 import { intialization } from "@fxhash/utils"
-import { WalletError } from "../../_errors.js"
+import { type WalletSourceErrorTypemap } from "../../_errors.js"
 import { type MapNetworkToWalletManager } from "../../_types.js"
 
 interface IWalletSourceParams<N extends BlockchainNetwork> {
@@ -19,10 +19,9 @@ interface IWalletSourceParams<N extends BlockchainNetwork> {
   init: () => Promise<void>
   disconnect: () => Promise<void>
   requirements: () => IWalletRequirements
-  // todo: more specific error
   createManager: (
     info: IWalletInfo<N> | null
-  ) => PromiseResult<MapNetworkToWalletManager<N>, WalletError>
+  ) => PromiseResult<MapNetworkToWalletManager<N>, WalletSourceErrorTypemap[N]>
 }
 
 type TWalletSourceReturn<N extends BlockchainNetwork> = {

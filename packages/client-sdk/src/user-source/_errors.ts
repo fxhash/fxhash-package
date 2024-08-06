@@ -10,55 +10,11 @@ import { EthereumWalletManager } from "@fxhash/eth"
 import { TezosWalletManager } from "@fxhash/tez"
 import { IWalletConnected } from "./_interfaces.js"
 
-/**
- * Can be thrown when a WalletsConnector doesn't support a specific chain, yet
- * a request was made to interact with such wallet.
- *
- * TODO: remove if not used, or use
- */
-export class WalletsConnectorNoSupportForChain extends Error {
-  name = "WalletConnectorNoSupportForChain" as const
-
-  /**
-   * @param walletConnectorName Wallet Connector name for which the error was
-   * spawned; The name will be used in the error message for better
-   * troubleshooting.
-   * @param chain The blockchain on which the error was observed. The chain will
-   * be used in the error message for better troubleshooting.
-   */
-  constructor(
-    public walletConnectorName: string,
-    public chain: BlockchainNetwork
-  ) {
-    super(
-      `Wallet Connector "${walletConnectorName}" doesn't support blockchain "${chain}"`
-    )
-  }
+export class TezosClientNotAvailableError extends Error {
+  name = "TezosClientNotAvailableError" as const
 }
 
-/**
- * Can be thrown when a WalletsConnector has support for a given chain, but the
- * WalletConnector of such chain wasn't available at the time it was requested.
- */
-export class WalletsConnectorChainUnavailable extends Error {
-  name = "WalletsConnectorChainUnavailable" as const
-
-  /**
-   * @param walletConnectorName Wallet Connector name for which the error was
-   * spawned; The name will be used in the error message for better
-   * troubleshooting.
-   * @param chain The blockchain on which the error was observed. The chain will
-   * be used in the error message for better troubleshooting.
-   */
-  constructor(
-    public walletConnectorName: string,
-    public chain: BlockchainNetwork
-  ) {
-    super(
-      `The Wallet Connector for ${chain} is not available on ${walletConnectorName}.`
-    )
-  }
-}
+export type TezosWalletSourceError = TezosClientNotAvailableError
 
 /**
  * Is thrown when evm clients are requested on a connector, but such clients
@@ -73,20 +29,23 @@ export class EvmClientsNotAvailable extends Error {
   }
 }
 
-/**
- * Is thrown when an attempt at generating EVM clients did not succeed.
- */
-export class EvmWagmiClientGenerationError extends Error {
-  name = "EvmWagmiClientGenerationError" as const
-  constructor() {
-    super(`Could not generate a public/wallet client using wagmi.`)
-  }
+export class EvmViemClientGenerationError extends Error {
+  name = "EvmViemClientGenerationError" as const
 }
 
-/**
- * Is thrown whenever a request for a module supporting multiple blockchains is
- * made, but such module doesn't provide support for the request chain.
- */
+export type EvmWalletSourceError =
+  | EvmClientsNotAvailable
+  | EvmViemClientGenerationError
+
+export type WalletSourceErrorTypemap = {
+  [BlockchainNetwork.TEZOS]: TezosWalletSourceError
+  [BlockchainNetwork.ETHEREUM]: EvmWalletSourceError
+}
+
+export class BlockchainWalletNotAvailableError extends Error {
+  name = "BlockchainWalletNotAvailableError" as const
+}
+
 export class BlockchainNotSupported extends Error {
   name = "BlockchainNotSupported" as const
   constructor(chain: BlockchainNetwork) {
@@ -94,13 +53,15 @@ export class BlockchainNotSupported extends Error {
   }
 }
 
+export type WalletSourceError =
+  | TezosWalletSourceError
+  | EvmWalletSourceError
+  | BlockchainWalletNotAvailableError
+
 /**
  * All the errors which can be throw by network wallet instances.
  */
-export type WalletError =
-  | EvmClientsNotAvailable
-  | EvmWagmiClientGenerationError
-  | BlockchainNotSupported
+export type WalletError = EvmClientsNotAvailable | BlockchainNotSupported
 
 /**
  * Is thrown whenever a wallet is connected but such wallet doesn't belong

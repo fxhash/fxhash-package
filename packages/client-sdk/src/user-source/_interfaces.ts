@@ -105,7 +105,10 @@ export interface IWalletsSource extends IUserSource {
  * Abstract interface representing a Wallet. This data may be returned by
  * Wallet Sources to describe the current state of a wallet on a given network.
  */
-export interface IWallet<Net extends BlockchainNetwork> {
+export interface IWallet<
+  Net extends BlockchainNetwork,
+  WalletsSource extends IWalletsSource = IWalletsSource,
+> {
   /**
    * The Wallet currently connected. If null, the wallet isn't connected.
    */
@@ -114,7 +117,7 @@ export interface IWallet<Net extends BlockchainNetwork> {
   /**
    * The Wallets Source which handles this Wallet.
    */
-  source: IWalletsSource
+  source: WalletsSource
 }
 
 /**

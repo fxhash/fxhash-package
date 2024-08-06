@@ -1,10 +1,22 @@
 import {
   type IWalletsSource,
   UserSourceEventEmitter,
+  IWallet,
 } from "../../_interfaces.js"
 import { intialization } from "@fxhash/utils"
 import { type WalletsSourceMap } from "../../_types.js"
 import { walletsNetworks } from "./utils.js"
+import { BlockchainNetwork } from "@fxhash/shared"
+
+interface IMultichainWalletsSource<Source extends WalletsSourceMap>
+  extends IWalletsSource {
+  getWallet: <N extends BlockchainNetwork>(
+    network: N
+  ) => IWallet<N, NonNullable<Source[N]>> | null
+  getWallets: () => {
+    [N in BlockchainNetwork]?: IWallet<N, NonNullable<Source[N]>>
+  }
+}
 
 /**
  * Given a map of network->wallet, abstracts event-handling & wallet manager
@@ -12,7 +24,11 @@ import { walletsNetworks } from "./utils.js"
  * @param wallets A map of network -> wallet interface
  * @returns A wallet source-compatible interface
  */
-export function multichainWallets(wallets: WalletsSourceMap): IWalletsSource {
+export function multichainWallets<Source extends WalletsSourceMap>(
+  wallets: Source
+): IMultichainWalletsSource<Source> {
+  type TWalletsSource = IMultichainWalletsSource<Source>
+
   const init = intialization()
   const { networks, supports } = walletsNetworks(wallets)
   const emitter = new UserSourceEventEmitter()
@@ -37,13 +53,13 @@ export function multichainWallets(wallets: WalletsSourceMap): IWalletsSource {
     })
   }
 
-  const getWallet: IWalletsSource["getWallet"] = net =>
+  const getWallet: TWalletsSource["getWallet"] = net =>
     wallets[net]?.getWallet(net) || null
 
-  const getWallets: IWalletsSource["getWallets"] = () =>
+  const getWallets: TWalletsSource["getWallets"] = () =>
     Object.fromEntries(networks.map(network => [network, getWallet(network)]))
 
-  const disconnect: IWalletsSource["disconnectWallet"] = async net => {
+  const disconnect: TWalletsSource["disconnectWallet"] = async net => {
     const wallet = getWallet(net)
     if (wallet) await wallet.source.disconnectWallet(net)
   }

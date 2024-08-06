@@ -7,7 +7,10 @@ import {
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import { IWindowWalletsSource } from "./_interfaces.js"
-import { EvmClientsNotAvailable } from "@/index.js"
+import {
+  EvmClientsNotAvailable,
+  TezosClientNotAvailableError,
+} from "@/index.js"
 import { createTezosWalletManager, walletSource } from "../common/_private.js"
 
 type Options = {
@@ -57,8 +60,8 @@ export function tzip10WalletSource({
       await _beaconWallet?.clearActiveAccount()
     },
     createManager: async info => {
-      // todo: different error (for tez !!)
-      if (!info || !_beaconWallet) return failure(new EvmClientsNotAvailable())
+      if (!info || !_beaconWallet)
+        return failure(new TezosClientNotAvailableError())
       return success(
         createTezosWalletManager({
           info,

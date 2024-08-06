@@ -8,7 +8,6 @@ import {
 } from "viem"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { WalletProvider, type Signer } from "@taquito/taquito"
-import { type BeaconWallet } from "@taquito/beacon-wallet"
 import {
   EthereumWalletManager,
   type EthersAdapter,

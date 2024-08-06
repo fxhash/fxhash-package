@@ -15,7 +15,7 @@ import {
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import {
   EvmClientsNotAvailable,
-  EvmWagmiClientGenerationError,
+  EvmViemClientGenerationError,
 } from "../../_errors.js"
 import { setIntervalCapped, sleep } from "@fxhash/utils"
 import { createEvmWalletManager, walletSource } from "../common/_private.js"
@@ -131,7 +131,7 @@ export function eip1193WalletSource({
       const publicClient = getPublicClient(wagmiConfig)
 
       if (!walletClient || !publicClient) {
-        return failure(new EvmWagmiClientGenerationError())
+        return failure(new EvmViemClientGenerationError())
       }
 
       return success(
