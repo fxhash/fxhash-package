@@ -1,6 +1,6 @@
 import { LogoutResult, LogoutInput, Mu_Logout } from "@fxhash/gql"
-import { GraphQLError, UnexpectedError } from "@/util/Error.js"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
+import { GraphQLError, UnexpectedError } from "@/index.js"
 
 /**
  * Logout the account against the backend. Can eventually clear cookies if

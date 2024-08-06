@@ -5,8 +5,8 @@ import {
   Mu_Authenticate,
   Mu_AuthenticateWeb3Auth,
 } from "@fxhash/gql"
-import { GraphQLError, UnexpectedError } from "@/util/Error.js"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
+import { GraphQLError, UnexpectedError } from "@/index.js"
 
 /**
  * Authenticate using the provided input

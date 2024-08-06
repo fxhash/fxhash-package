@@ -41,8 +41,26 @@ export class BlockchainNotSupportedError extends Error {
   message = "the requested blockchain isn't supported"
 }
 
+export class NoWalletConnectedError extends Error {
+  name = "NoWalletConnectedError" as const
+  message =
+    "some operation which required any wallet could not be performed due to a lack of any wallet being connected."
+}
+
+export class SignMessageError extends Error {
+  name = "SignMessageError" as const
+  message = "error when signing a message with a wallet"
+}
+
+// chain agnostic errors, which can appear on any chain
+export type XChainWalletSourceError =
+  | BlockchainWalletNotAvailableError
+  | BlockchainNotSupportedError
+  | NoWalletConnectedError
+  | SignMessageError
+
+// union of all the wallet source errors
 export type WalletSourceError =
   | TezosWalletSourceError
   | EvmWalletSourceError
-  | BlockchainWalletNotAvailableError
-  | BlockchainNotSupportedError
+  | XChainWalletSourceError

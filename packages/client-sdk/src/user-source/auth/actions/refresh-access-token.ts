@@ -3,7 +3,7 @@ import {
   Mu_RefreshToken,
   AuthenticationResult,
 } from "@fxhash/gql"
-import { GraphQLError, UnexpectedError } from "@/util/Error.js"
+import { GraphQLError, UnexpectedError } from "@/index.js"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
 
 /**

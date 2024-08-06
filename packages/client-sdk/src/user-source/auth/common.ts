@@ -11,17 +11,24 @@ import {
   WalletConnectedButNoAccountAuthenticatedError,
   getMyProfile,
   logout,
+  CredentialsRefreshError,
+  GraphQLError,
+  UnexpectedError,
+  NoWalletConnectedError,
+  AuthenticationError,
+  TAuthenticationError,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
-import {
-  type IAccountSourceCommonOptions,
-  type IWalletsAccountSource,
-  type StoredAccount,
+import type {
+  IAccountSourceCommonOptions,
+  IWalletsAccountSource,
+  StoredAccount,
 } from "./_interfaces.js"
 import {
   type JwtAccessTokenPayload,
   PromiseResult,
   invariant,
+  IEquatableError,
 } from "@fxhash/shared"
 import { Init, cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"
@@ -45,7 +52,6 @@ export type AccountUtilsOptions = {
 }
 
 export type AccountUtils = {
-  // todo: only emits account-changed so type should reflect that
   emitter: UserSourceEventEmitter
   get: () => GetSingleUserAccountResult | null
   getAccountFromStorage: () => Promise<StoredAccount | null>
@@ -97,8 +103,6 @@ export function accountUtils({
 
     // everytime the account is updated, emit event.
     if (prev !== account || prev?.id !== account?.id) {
-      console.log("update account!")
-      console.log({ account })
       emitter.emit("account-changed", { account })
     }
   }
@@ -135,7 +139,7 @@ export function accountUtils({
       const accountFromStorage = await getAccountFromStorage()
       invariant(accountFromStorage, "no account to refresh")
       const res = await credentialsDriver.refresh(accountFromStorage)
-      if (res.isFailure()) throw null
+      if (res.isFailure()) throw new CredentialsRefreshError()
       const account = res.unwrap()
       await store(account)
       await sync()
@@ -203,12 +207,12 @@ export function accountUtils({
   }
 }
 
-export type AuthWithWalletsParams = IAccountSourceCommonOptions & {
-  wallets: IWalletsSource
-  storageNamespace: string
-  // todo: type Error union: need clear errors
-  authenticate: () => PromiseResult<JWTCredentials, SignMessageError | Error>
-}
+export type AuthWithWalletsParams<AuthError extends IEquatableError> =
+  IAccountSourceCommonOptions & {
+    wallets: IWalletsSource
+    storageNamespace: string
+    authenticate: () => PromiseResult<JWTCredentials, AuthError>
+  }
 
 /**
  * Some generic helper providing authentication flows and user coherency when
@@ -217,14 +221,14 @@ export type AuthWithWalletsParams = IAccountSourceCommonOptions & {
  * authentication flows, where the `authenticate()` method is called when needed
  * in the flow.
  */
-export function authWithWallets({
+export function authWithWallets<AuthError extends IEquatableError>({
   wallets: walletsSource,
   gqlWrapper: gql,
   storage,
   credentialsDriver,
   storageNamespace,
   authenticate,
-}: AuthWithWalletsParams): IWalletsAccountSource {
+}: AuthWithWalletsParams<AuthError>): IWalletsAccountSource {
   const emitter = new UserSourceEventEmitter()
   const init = intialization()
   const clean = cleanup()
@@ -236,13 +240,8 @@ export function authWithWallets({
   })
 
   const _authenticate = async () => {
-    console.log("_authenticate!")
     const credentials = await authenticate()
-    // todo: good way to handle errors ?
-    if (credentials.isFailure()) {
-      console.log(credentials.error)
-      throw credentials.error
-    }
+    if (credentials.isFailure()) throw credentials.error
 
     const { accessToken, refreshToken } = credentials.unwrap()
     const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
@@ -273,10 +272,7 @@ export function authWithWallets({
   const _reconciliate = async () => {
     const account = _account.get()
     const wallets = walletsSource.getWallets()
-    console.log("_reconciliate")
-    console.log({ account, wallets })
     const consistency = isUserStateConsistent(account, wallets)
-    console.log({ consistency })
     if (consistency.isSuccess()) {
       emitter.emit("user-changed")
     } else {
@@ -292,15 +288,14 @@ export function authWithWallets({
         consistency.error instanceof
         WalletConnectedButNoAccountAuthenticatedError
       ) {
-        console.log("going here !!")
-        // if we are during the initialization
+        // if we are during the initialization, and wallet doesn't require
+        // user input, attempt to automatically connect with the wallet
         if (
           init.state === Init.STARTED &&
           !walletsSource.requirements().userInput
         ) {
           // here events not hooked, so no side-effects triggered
           try {
-            console.log("calling authenticate here")
             await _authenticate()
             return
           } catch (err) {
@@ -314,7 +309,7 @@ export function authWithWallets({
       }
 
       // some error not handlded at this level
-      emitter.emit("error", consistency.error)
+      emitter.emit("error", { error: consistency.error })
     }
   }
 
@@ -330,7 +325,9 @@ export function authWithWallets({
             console.log("trying to connect after login request")
             await _authenticate()
           } catch (err) {
-            console.log(err)
+            emitter.emit("error", {
+              error: new AuthenticationError(err as TAuthenticationError),
+            })
             return
           }
         }

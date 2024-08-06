@@ -3,8 +3,8 @@ import {
   ChallengeResult,
   Mu_AuthGenerateChallenge,
 } from "@fxhash/gql"
-import { GraphQLError, UnexpectedError } from "@/util/Error.js"
 import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
+import { GraphQLError, UnexpectedError } from "@/index.js"
 
 /**
  * Generate a challenge for the user

@@ -8,6 +8,7 @@ import {
   MapNetworkToWalletManager,
   WalletsMap,
 } from "./_index.js"
+import { AuthenticationError, UserConsistencyError } from "@/index.js"
 
 /**
  * A generic-purpose User Source interface. A user source can be an account,
@@ -166,6 +167,8 @@ export type UserSourceEventsTypemap = {
   "wallets-changed": WalletChangedEventData
   "account-changed": AccountUpdatedEventData
   "user-changed": void
-  error: any
+  error: {
+    error: AuthenticationError | UserConsistencyError
+  }
 }
 export class UserSourceEventEmitter extends EventEmitter<UserSourceEventsTypemap> {}
