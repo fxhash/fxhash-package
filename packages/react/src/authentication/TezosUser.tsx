@@ -144,7 +144,7 @@ export function TezosUserProvider({
 
     context.tezosToolkit.setWalletProvider(provider as WalletProvider)
     const walletManager = new TezosWalletManager({
-      wallet: provider as BeaconWallet,
+      wallet: { wallet: provider as BeaconWallet },
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
       address: pkh,
@@ -202,7 +202,7 @@ export function TezosUserProvider({
     const address = await context.beaconWallet.getPKH()
     context.tezosToolkit.setWalletProvider(context.beaconWallet)
     const walletManager = new TezosWalletManager({
-      wallet: context.beaconWallet,
+      wallet: { wallet: context.beaconWallet },
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
       address,
@@ -256,7 +256,7 @@ export function TezosUserProvider({
       toolkit.setWalletProvider(beaconWallet)
 
       const walletManager = new TezosWalletManager({
-        wallet: beaconWallet,
+        wallet: { wallet: beaconWallet },
         tezosToolkit: toolkit,
         rpcNodes: config.rpcNodes,
         address,
