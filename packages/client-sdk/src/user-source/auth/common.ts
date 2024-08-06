@@ -357,17 +357,24 @@ export function authWithWallets<AuthError extends IEquatableError>({
      * regards to the authentication.
      */
     init: async () => {
-      init.start()
-      await Promise.all([walletsSource.init(), _account.reconnectFromStorage()])
+      try {
+        init.start()
+        await Promise.all([
+          walletsSource.init(),
+          _account.reconnectFromStorage(),
+        ])
 
-      // Note: here it's **very** important that the first reconciliation
-      // happens before we hook events, as _reconciliate may trigger some
-      // wallet/account event emissions which we don't want to propagate until
-      // initialization is finished
-      await _reconciliate()
-      _hookEvents()
+        // Note: here it's **very** important that the first reconciliation
+        // happens before we hook events, as _reconciliate may trigger some
+        // wallet/account event emissions which we don't want to propagate until
+        // initialization is finished
+        await _reconciliate()
+        _hookEvents()
 
-      init.finish()
+        init.finish()
+      } catch (err) {
+        throw init.fail(err)
+      }
     },
 
     release: () => {

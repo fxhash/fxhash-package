@@ -68,6 +68,7 @@ export function web3AuthWallets({
   }
 
   const disconnect = async () => {
+    _init.check()
     const res = await frameManager.logout()
     if (res.isFailure()) throw res.error
   }
@@ -83,12 +84,14 @@ export function web3AuthWallets({
     }),
 
     getWallet(network) {
+      _init.check()
       return {
         connected: _wallets[network].getWalletConnected(),
         source: this,
       }
     },
     getWallets() {
+      _init.check()
       return Object.fromEntries(
         BlockchainNetworks.map(network => [network, this.getWallet(network)])
       )
@@ -97,9 +100,12 @@ export function web3AuthWallets({
     init: async () => {
       _init.start()
       clean.add(frameManager.emitter.on("session-changed", _handleConnected))
-      // todo handle error and failure properly
-      await Promise.all([frameManager.init()])
-      _init.finish()
+      try {
+        await frameManager.init()
+        _init.finish()
+      } catch (err) {
+        throw _init.fail(err)
+      }
     },
     release: () => {
       clean.clear()
@@ -110,6 +116,8 @@ export function web3AuthWallets({
     logoutAccount: disconnect,
 
     emailRequestOTP: async (email: string) => {
+      _init.check()
+
       const res = await gqlWrapper
         .client()
         .mutation(Mu_Web3AuthEmailRequestOTP, {
@@ -125,12 +133,13 @@ export function web3AuthWallets({
     },
 
     login: async options => {
+      _init.check()
       const res = await frameManager.login(options)
-      console.log({ res })
       if (res.isFailure()) throw res.error
     },
 
     getWeb3AuthSessionDetails: async () => {
+      _init.check()
       const res = await frameManager.getSessionDetails()
       if (res.isFailure()) throw res.error
       return res.value

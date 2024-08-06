@@ -9,6 +9,7 @@ import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import { IWindowWalletsSource } from "./_interfaces.js"
 import { TezosClientNotAvailableError } from "@/index.js"
 import { createTezosWalletManager, walletSource } from "../common/_private.js"
+import { intialization } from "@fxhash/utils"
 
 type Options = {
   beaconConfig: DAppClientOptions
@@ -32,31 +33,40 @@ type Options = {
 export function tzip10WalletSource({
   beaconConfig,
 }: Options): IWindowWalletsSource {
+  const _init = intialization()
   const _beaconConfig = beaconConfig ?? DefaultBeaconWalletConfig
   let _beaconWallet: BeaconWallet | null = null
 
   const wallet = walletSource({
     network: BlockchainNetwork.TEZOS,
     init: async () => {
-      const _handleAccountSet = (account?: AccountInfo) =>
-        wallet.utils.update(account || null)
+      try {
+        _init.start()
+        const _handleAccountSet = (account?: AccountInfo) =>
+          wallet.utils.update(account || null)
 
-      /**
-       * Note: BeaconWallet uses getDAppClientInstance() under the hood, ensuring
-       * there's only a single Beacon Wallet instance in all times.
-       */
-      _beaconWallet = new BeaconWallet(_beaconConfig)
-      _beaconWallet.client.subscribeToEvent(
-        BeaconEvent.ACTIVE_ACCOUNT_SET,
-        _handleAccountSet
-      )
-      const activeAccount = await _beaconWallet.client.getActiveAccount()
-      await _handleAccountSet(activeAccount)
+        /**
+         * Note: BeaconWallet uses getDAppClientInstance() under the hood, ensuring
+         * there's only a single Beacon Wallet instance in all times.
+         */
+        _beaconWallet = new BeaconWallet(_beaconConfig)
+        _beaconWallet.client.subscribeToEvent(
+          BeaconEvent.ACTIVE_ACCOUNT_SET,
+          _handleAccountSet
+        )
+        const activeAccount = await _beaconWallet.client.getActiveAccount()
+        await _handleAccountSet(activeAccount)
+        _init.finish()
+      } catch (err) {
+        throw _init.fail(err)
+      }
     },
     disconnect: async () => {
+      _init.check()
       await _beaconWallet?.clearActiveAccount()
     },
     createManager: async info => {
+      _init.check()
       if (!info || !_beaconWallet)
         return failure(new TezosClientNotAvailableError())
       return success(

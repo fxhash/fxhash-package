@@ -70,7 +70,9 @@ export function multichainWallets<Source extends WalletsSourceMap>(
     getWallets,
     init: async () => {
       init.start()
-      await Promise.all(
+      // this module doesn't care whether each wallet has been successfully
+      // initialized, it just forwards requests
+      await Promise.allSettled(
         networks.map(net => wallets[net]?.init?.()).filter(p => !!p)
       )
       init.finish()

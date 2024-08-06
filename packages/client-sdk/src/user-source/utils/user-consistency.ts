@@ -29,15 +29,12 @@ export function isUserStateConsistent(
   const _anyActiveManager = anyActiveManager(wallets)
   const noWalletConnected = !_anyActiveManager
 
-  console.log({ account, wallets, _anyActiveManager, noWalletConnected })
-
   if (!account) {
-    if (noWalletConnected) {
-      return success()
-    }
-    return failure(
-      new WalletConnectedButNoAccountAuthenticatedError(_anyActiveManager)
-    )
+    return noWalletConnected
+      ? success()
+      : failure(
+          new WalletConnectedButNoAccountAuthenticatedError(_anyActiveManager)
+        )
   }
 
   // account is authenticated but no wallet is currently connected
