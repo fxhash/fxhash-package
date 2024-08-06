@@ -11,18 +11,17 @@ import {
   UserSourceEventEmitter,
 } from "../../_interfaces.js"
 import { intialization } from "@fxhash/utils"
-import { WalletError } from "../../_errors.js"
 import { type MapNetworkToWalletManager } from "../../_types.js"
+import { WalletSourceErrorTypemap } from "@/index.js"
 
 interface IWalletSourceParams<N extends BlockchainNetwork> {
   network: N
   init: () => Promise<void>
   disconnect: () => Promise<void>
   requirements: () => IWalletRequirements
-  // todo: more specific error
   createManager: (
     info: IWalletInfo<N> | null
-  ) => PromiseResult<MapNetworkToWalletManager<N>, WalletError>
+  ) => PromiseResult<MapNetworkToWalletManager<N>, WalletSourceErrorTypemap[N]>
 }
 
 type TWalletSourceReturn<N extends BlockchainNetwork> = {
@@ -53,13 +52,18 @@ export function walletSource<Net extends BlockchainNetwork>({
     emitter,
     init: async () => {
       _init.start()
-      await init()
-      _init.finish()
+      try {
+        await init()
+        _init.finish()
+      } catch (err) {
+        throw _init.fail(err)
+      }
     },
     initialized: () => _init.finished,
     getAccount: () => null,
     logoutAccount: async () => {},
     getWallet(net) {
+      _init.check()
       invariant(this.supports(net), "invalid network")
       return {
         connected: connected as any,
@@ -67,16 +71,21 @@ export function walletSource<Net extends BlockchainNetwork>({
       }
     },
     getWallets() {
+      _init.check()
       return {
         [network]: this.getWallet(network),
       }
     },
     supports: n => n === network,
     disconnectWallet: n => {
+      _init.check()
       invariant(n === network, "can only disconnect on same network")
       return disconnect()
     },
-    disconnectAllWallets: disconnect,
+    disconnectAllWallets: () => {
+      _init.check()
+      return disconnect()
+    },
     requirements,
   }
 
@@ -85,6 +94,7 @@ export function walletSource<Net extends BlockchainNetwork>({
     utils: {
       init: _init,
       update: async info => {
+        _init.check()
         // if addresses are different, it's a new connection
         if (connected?.info.address !== info?.address) {
           if (!info) {

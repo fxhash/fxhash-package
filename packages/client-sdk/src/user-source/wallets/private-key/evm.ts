@@ -1,10 +1,10 @@
 import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
-import { EvmClientsNotAvailable } from "../../_errors.js"
 import { type Hex, type PrivateKeyAccount } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"
 import { EthereumWalletManager } from "@fxhash/eth"
 import { walletSource } from "../common/_private.js"
+import { EvmClientsNotAvailableError } from "@/index.js"
 
 export type EvmPrivateKeyWalletOptions = {
   privateKey?: Hex
@@ -25,7 +25,7 @@ export function evmPrivateKeyWallet({
       updatePrivateKey(null)
     },
     createManager: async () => {
-      if (!_pk || !_account) return failure(new EvmClientsNotAvailable())
+      if (!_pk || !_account) return failure(new EvmClientsNotAvailableError())
       const manager = await EthereumWalletManager.fromPrivateKey(_pk)
       return success(manager)
     },

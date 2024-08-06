@@ -7,8 +7,7 @@ import {
   type PrivateKeyAccount,
 } from "viem"
 import { BlockchainNetwork } from "@fxhash/shared"
-import { type Signer } from "@taquito/taquito"
-import { type BeaconWallet } from "@taquito/beacon-wallet"
+import { WalletProvider, type Signer } from "@taquito/taquito"
 import {
   EthereumWalletManager,
   type EthersAdapter,
@@ -35,7 +34,7 @@ type MapNetworkToWalletManagerCreateSourceInput<Net extends BlockchainNetwork> =
         ethersAdapterForSafe?: EthersAdapter
       }
       [BlockchainNetwork.TEZOS]: AtLeastOne<{
-        beaconWallet: BeaconWallet
+        wallet: WalletProvider
         signer: Signer
       }>
     }[N]
@@ -69,11 +68,8 @@ export const createEvmWalletManager: FnCreateWalletManager<
 export const createTezosWalletManager: FnCreateWalletManager<
   BlockchainNetwork.TEZOS
 > = ({ info, source }) => {
-  const anySource = source.beaconWallet || source.signer
-  // todo: what to do with error ?
-  if (!info || !anySource) throw new Error("todo")
   return new TezosWalletManager({
-    wallet: anySource,
+    wallet: source,
     address: info.address,
   })
 }

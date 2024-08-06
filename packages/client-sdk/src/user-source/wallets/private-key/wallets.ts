@@ -9,6 +9,7 @@ import { multichainWallets } from "../common/_private.js"
 import { evmPrivateKeyWallet } from "./evm.js"
 import { tezosPrivateKeyWallet } from "./tezos.js"
 import { type IPrivateKeyWalletsSource } from "./_interfaces.js"
+import { BlockchainWalletNotAvailableError } from "@/index.js"
 
 type Options = {
   evm?: Hex
@@ -41,8 +42,7 @@ export function privateKeyWallets({
     ...wallets,
     updatePrivateKey: async (network, privateKey) => {
       const source = wallets.getWallet(network)?.source
-      // todo error
-      if (!source) throw new Error(`network not available`)
+      if (!source) throw new BlockchainWalletNotAvailableError()
       return (source as IPrivateKeyWalletsSource).updatePrivateKey(
         network,
         privateKey

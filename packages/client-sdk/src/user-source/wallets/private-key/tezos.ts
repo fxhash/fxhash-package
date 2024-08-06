@@ -1,7 +1,7 @@
 import { InMemorySigner } from "@taquito/signer"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"
 import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
-import { EvmClientsNotAvailable } from "@/index.js"
+import { TezosClientNotAvailableError } from "@/index.js"
 import { TezosWalletManager } from "@fxhash/tez"
 import { walletSource } from "../common/_private.js"
 
@@ -21,14 +21,10 @@ export function tezosPrivateKeyWallet({
     disconnect: async () => {
       updatePrivateKey(null)
     },
-    createManager: async () => {
-      if (!_signer) {
-        // todo: tezos error typed here (and walletSource should type)
-        return failure(new EvmClientsNotAvailable())
-      } else {
-        return success(await TezosWalletManager.fromPrivateKey(_signer))
-      }
-    },
+    createManager: async () =>
+      _signer
+        ? success(await TezosWalletManager.fromPrivateKey(_signer))
+        : failure(new TezosClientNotAvailableError()),
     requirements: () => ({
       userInput: false,
     }),

@@ -3,17 +3,28 @@ import {
   type IAccountSourceCommonOptions,
   type IWalletsAccountSource,
 } from "./_interfaces.js"
-import { BlockchainNetwork, networkToChain } from "@fxhash/shared"
+import {
+  BlockchainNetwork,
+  PromiseResult,
+  networkToChain,
+} from "@fxhash/shared"
 import { failure, invariant, success } from "@fxhash/shared"
 import { type TezosWalletManager } from "@fxhash/tez"
 import { isEthereumWalletManager, isTezosWalletManager } from "@/util/types.js"
 import {
+  JWTCredentials,
   authenticate as authenticateWithChallenge,
   generateChallenge,
 } from "./_index.js"
-import { SignMessageError } from "@/util/Error.js"
 import { authWithWallets } from "./common.js"
 import { anyActiveManager } from "../wallets/common/utils.js"
+import {
+  NoWalletConnectedError,
+  GraphQLError,
+  UnexpectedError,
+  SignMessageError,
+  SigningAuthenticationError,
+} from "@/index.js"
 
 type Options = {
   wallets: IWalletsSource
@@ -57,10 +68,13 @@ export function authWallets({
      * stored and managed internally, application don't have to rely on the
      * value returned by this function to manager the account state.)
      */
-    authenticate: async () => {
+    authenticate: async (): PromiseResult<
+      JWTCredentials,
+      SigningAuthenticationError | GraphQLError | UnexpectedError
+    > => {
       // get a wallet manager from the provided wallets
       const manager = anyActiveManager(wallets.getWallets())
-      invariant(manager, "no wallet for authentication")
+      if (!manager) return failure(new NoWalletConnectedError())
 
       // derive blockchain env from WalletManager instance
       let network: BlockchainNetwork | null = null
@@ -68,17 +82,7 @@ export function authWallets({
       if (isEthereumWalletManager(manager)) network = BlockchainNetwork.ETHEREUM
       invariant(network !== null, "WalletManager is neither tezos/ethereum")
 
-      /**
-       * TODOs:
-       * * check this flow
-       * * should we fetch account here ? and do anything with it ?
-       * * should implement mechanism to only have 1 authentication at once (and
-       *   maybe a way to cancel current flow if any)
-       * * improve error handling, right now we just throw if it fails
-       */
-
       try {
-        console.log("generate challenge !")
         const challenge = await generateChallenge(
           {
             chain: networkToChain(network),
@@ -88,8 +92,8 @@ export function authWallets({
             gqlClient: gql.client(),
           }
         )
-        const signature = await manager.signMessage(challenge.text)
 
+        const signature = await manager.signMessage(challenge.text)
         if (signature.isFailure()) {
           return failure(new SignMessageError())
         }
@@ -106,10 +110,10 @@ export function authWallets({
           { gqlClient: gql.client() }
         )
         return success(credentials)
-      } catch (err) {
-        console.log(err)
-        // todo: better authentication error (clean plz baptiste)
-        return failure(new Error("todo"))
+      } catch (err: any) {
+        if (err instanceof GraphQLError || err instanceof UnexpectedError)
+          return failure(err)
+        return failure(new UnexpectedError())
       }
     },
   })
