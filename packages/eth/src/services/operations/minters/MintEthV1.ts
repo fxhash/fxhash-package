@@ -34,6 +34,10 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
     undefined
 
   async prepare() {
+    const isV2 =
+      this.params.version === GenerativeTokenVersion.ETH_V2 ||
+      this.params.version === GenerativeTokenVersion.BASE_V2
+
     const { pricing, indexesAndProofs, reserve, isFixed } =
       await prepareMintParams(
         this.params.token,
@@ -52,7 +56,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
       this.params.qty
     )
 
-    const price = this.params.price + platformFees
+    const price = isV2 ? this.params.price + platformFees : this.params.price
 
     if (!this.params.whitelist) {
       if (isFixed) {
