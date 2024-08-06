@@ -1,8 +1,6 @@
 import { failure } from "@fxhash/shared"
-import {
-  CredentialsRefreshError,
-  type ICredentialsDriver,
-} from "./_interfaces.js"
+import { type ICredentialsDriver } from "./_interfaces.js"
+import { CredentialsRefreshError } from "@/index.js"
 
 /**
  * Cookie authentication doesn't really need any kind of processing as cookies

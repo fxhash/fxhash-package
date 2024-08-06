@@ -1,15 +1,11 @@
 import { AuthenticationResult, LogoutInput } from "@fxhash/gql"
-import { Storage } from "@/index.js"
 import { PromiseResult } from "@fxhash/shared"
 import { StoredAccount } from "../_interfaces.js"
+import { CredentialsRefreshError } from "@/errors/user-source/auth.js"
 
 export type JWTCredentials = {
   accessToken: string
   refreshToken: string
-}
-
-export class CredentialsRefreshError extends Error {
-  name = "CredentialsRefreshError"
 }
 
 /**

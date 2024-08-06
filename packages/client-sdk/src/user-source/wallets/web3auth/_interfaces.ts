@@ -3,6 +3,7 @@ import { EventEmitter } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { IWalletConnected, IWalletsSource } from "@/index.js"
+import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
   update: (detais: SessionDetails | null) => void
@@ -136,28 +137,7 @@ export type Web3AuthFrameMessageTypes = {
       res: SessionDetails | null
     }
 
-    tez_sign: {
-      req: {
-        op: string
-        magicByte?: Uint8Array
-      }
-      res: {
-        bytes: string
-        sig: string
-        prefixSig: string
-        sbytes: string
-      }
-    }
-
-    "tez__pub-key": {
-      req: void
-      res: string
-    }
-
-    tez__pkh: {
-      req: void
-      res: string
-    }
+    tez__rpc: TezosWalletRpcType
 
     "evm__json-rpc": {
       req: {
@@ -184,3 +164,59 @@ export type Web3AuthFrameMessageTypes = {
     }
   }
 }
+
+export type TezosWalletRpcType =
+  | {
+      req: {
+        method: "tez_sign"
+        params: {
+          bytes: string
+          watermark?: Hex
+        }
+      }
+      res:
+        | {
+            type: BeaconMessageType.SignPayloadResponse
+            signature: string
+          }
+        | {
+            type: BeaconMessageType.Error
+            errorType:
+              | BeaconErrorType.ABORTED_ERROR
+              | BeaconErrorType.UNKNOWN_ERROR
+          }
+    }
+  | {
+      req: {
+        method: "tez_sendOperations"
+        params: any[]
+      }
+      res:
+        | {
+            type: BeaconMessageType.OperationResponse
+            transactionHash: string
+          }
+        | {
+            type: BeaconMessageType.Error
+            errorType:
+              | BeaconErrorType.ABORTED_ERROR
+              | BeaconErrorType.TRANSACTION_INVALID_ERROR
+              | BeaconErrorType.BROADCAST_ERROR
+              | BeaconErrorType.ABORTED_ERROR
+              | BeaconErrorType.TOO_MANY_OPERATIONS
+              | BeaconErrorType.UNKNOWN_ERROR
+          }
+    }
+  | {
+      req: {
+        method: "tez_getAccount"
+      }
+      res: {
+        publicKey: string
+        publicKeyHash: string
+      }
+    }
+
+export type TezosWalletRpcEndpoint<
+  K extends TezosWalletRpcType["req"]["method"],
+> = Extract<TezosWalletRpcType, { req: { method: K } }>

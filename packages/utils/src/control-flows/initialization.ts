@@ -4,16 +4,19 @@ export enum Init {
   NOT_STARTED = "NOT_STARTED",
   STARTED = "STARTED",
   FINISHED = "FINISHED",
+  FAILED = "FAILED",
 }
 
 const initStartErrorMessage = {
   [Init.STARTED]: `Initialization already in process`,
   [Init.FINISHED]: `Already been intialized`,
+  [Init.FAILED]: `Already failed`,
 }
 
 const initFinishErrorMessage = {
   [Init.NOT_STARTED]: `Initialization cannot finish if it has not started`,
   [Init.FINISHED]: `Initialization has already finished`,
+  [Init.FAILED]: `Already failed`,
 }
 
 /**
@@ -38,8 +41,9 @@ const initFinishErrorMessage = {
  * }
  * ```
  */
-export function intialization() {
+export function intialization<Err extends Error = any>() {
   let state: Init = Init.NOT_STARTED
+  let failReason: InitializationError<Err> | undefined
 
   return {
     /**
@@ -56,20 +60,34 @@ export function intialization() {
       return state === Init.FINISHED
     },
     /**
-     * Throws an error if initialization is not finished.
-     * @param message Optional message for thrown exception
+     * Whether the initialization has failed.
      */
-    assertFinished(message?: string) {
-      invariant(
-        state === Init.FINISHED,
-        message || "Initialization not finished"
-      )
+    failed() {
+      return state === Init.FAILED
+    },
+    /**
+     * When initialization fails, this function should be called to set the
+     * state as failed.
+     * @param reason Failure reason
+     */
+    fail(reason: Err) {
+      invariant(reason, "a fail reason must be provided")
+      state = Init.FAILED
+      failReason = new InitializationError(reason)
+      return failReason
+    },
+    /**
+     * The reason of failure, or null if no failure happened.
+     */
+    get failReason() {
+      return failReason
     },
     /**
      * Throws an error if initialization is not finished.
      * @param message Optional message for thrown exception
      */
     check(message?: string) {
+      if (state === Init.FAILED) throw failReason
       invariant(
         state === Init.FINISHED,
         message || "Initialization not finished"
@@ -84,7 +102,10 @@ export function intialization() {
     start(message?: string) {
       invariant(
         state === Init.NOT_STARTED,
-        message || initStartErrorMessage[state as Init.FINISHED | Init.STARTED]
+        message ||
+          initStartErrorMessage[
+            state as Init.FINISHED | Init.STARTED | Init.FAILED
+          ]
       )
       state = Init.STARTED
     },
@@ -98,14 +119,29 @@ export function intialization() {
       invariant(
         state === Init.STARTED,
         message ||
-          initFinishErrorMessage[state as Init.FINISHED | Init.NOT_STARTED]
+          initFinishErrorMessage[
+            state as Init.FINISHED | Init.NOT_STARTED | Init.FAILED
+          ]
       )
       state = Init.FINISHED
     },
   }
 }
 
-type Initialization = ReturnType<typeof intialization>
+export type Initialization = ReturnType<typeof intialization>
+
+class UnknownError extends Error {
+  name = "UnknownError" as const
+}
+
+export class InitializationError<Reason extends Error> extends Error {
+  name = "InitializationError" as const
+  cause: Reason | UnknownError
+  constructor(cause?: Reason) {
+    super("InitializationError")
+    this.cause = cause || new UnknownError()
+  }
+}
 
 /**
  * @example
@@ -121,8 +157,12 @@ type Initialization = ReturnType<typeof intialization>
  */
 export function initOnce(init: Initialization, fn: () => Promise<void>) {
   return async () => {
-    init.start()
-    await fn()
-    init.finish()
+    try {
+      init.start()
+      await fn()
+      init.finish()
+    } catch (err: any) {
+      throw init.fail(err)
+    }
   }
 }

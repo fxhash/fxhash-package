@@ -13,12 +13,12 @@ import {
   injected,
 } from "@wagmi/core"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
-import {
-  EvmClientsNotAvailable,
-  EvmWagmiClientGenerationError,
-} from "../../_errors.js"
-import { setIntervalCapped, sleep } from "@fxhash/utils"
+import { intialization, setIntervalCapped, sleep } from "@fxhash/utils"
 import { createEvmWalletManager, walletSource } from "../common/_private.js"
+import {
+  EvmClientsNotAvailableError,
+  EvmViemClientGenerationError,
+} from "@/index.js"
 
 type Options = {
   wagmiConfig: Config
@@ -49,61 +49,73 @@ type Options = {
 export function eip1193WalletSource({
   wagmiConfig,
 }: Options): IWindowWalletsSource {
+  const _init = intialization()
   let _unwatchAccount: WatchAccountReturnType | null = null
 
   const wallet = walletSource({
     network: BlockchainNetwork.ETHEREUM,
 
     init: async () => {
-      const _handleAccountChange = async (
-        account: GetAccountReturnType,
-        prevAccount?: GetAccountReturnType
-      ) => {
-        const accountNormalized = account?.address
-          ? {
-              address: account.address,
-            }
-          : null
+      try {
+        _init.start()
 
-        if (!prevAccount) {
-          // if no account, nothing to process
-          if (!account.isConnected) return
-          return wallet.utils.update(accountNormalized)
-        } else {
-          // a change of account
-          if (account.address !== prevAccount.address) {
+        const _handleAccountChange = async (
+          account: GetAccountReturnType,
+          prevAccount?: GetAccountReturnType
+        ) => {
+          const accountNormalized = account?.address
+            ? {
+                address: account.address,
+              }
+            : null
+
+          if (!prevAccount) {
+            // if no account, nothing to process
+            if (!account.isConnected) return
             return wallet.utils.update(accountNormalized)
+          } else {
+            // a change of account
+            if (account.address !== prevAccount.address) {
+              return wallet.utils.update(accountNormalized)
+            }
           }
         }
+
+        _unwatchAccount = watchAccount(wagmiConfig, {
+          onChange: _handleAccountChange,
+        })
+
+        // this basically achieves doing isReady(wagmiConfig) because we want to
+        // get the initial account state here but we can't if its not reconnected
+        let steps = 0
+        await setIntervalCapped(
+          () => {
+            if (steps++ < 5) return
+            // if not reconnecting after 3 steps, move forward
+            if (wagmiConfig.state.status !== "reconnecting") return true
+            return
+          },
+          {
+            delay: 50,
+            maxSteps: 20,
+          }
+        )
+
+        await _handleAccountChange(getAccount(wagmiConfig))
+        _init.finish()
+      } catch (err) {
+        throw _init.fail(err)
       }
-
-      _unwatchAccount = watchAccount(wagmiConfig, {
-        onChange: _handleAccountChange,
-      })
-
-      // this basically achieves doing isReady(wagmiConfig) because we want to
-      // get the initial account state here but we can't if its not reconnected
-      let steps = 0
-      await setIntervalCapped(
-        () => {
-          if (steps++ < 5) return
-          // if not reconnecting after 3 steps, move forward
-          if (wagmiConfig.state.status !== "reconnecting") return true
-          return
-        },
-        {
-          delay: 50,
-          maxSteps: 20,
-        }
-      )
-
-      await _handleAccountChange(getAccount(wagmiConfig))
     },
 
-    disconnect: () => disconnect(wagmiConfig),
+    disconnect: () => {
+      _init.check()
+      return disconnect(wagmiConfig)
+    },
 
     createManager: async info => {
-      if (!info) return failure(new EvmClientsNotAvailable())
+      _init.check()
+      if (!info) return failure(new EvmClientsNotAvailableError())
 
       /**
        * @dev Here is a little hack to get some kind of "on('walletReady')"
@@ -131,7 +143,7 @@ export function eip1193WalletSource({
       const publicClient = getPublicClient(wagmiConfig)
 
       if (!walletClient || !publicClient) {
-        return failure(new EvmWagmiClientGenerationError())
+        return failure(new EvmViemClientGenerationError())
       }
 
       return success(
@@ -153,7 +165,10 @@ export function eip1193WalletSource({
   return {
     ...wallet.source,
     release: () => _unwatchAccount?.(),
-    // todo: wassup with connect: injected() is this the right way ?
-    requestConnection: () => connect(wagmiConfig, { connector: injected() }),
+    requestConnection: () => {
+      _init.check()
+      // todo: wassup with connect: injected() is this the right way ?
+      return connect(wagmiConfig, { connector: injected() })
+    },
   }
 }

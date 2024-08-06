@@ -288,11 +288,6 @@ export abstract class IframeBDCommHost<
   }
 
   protected _postMessage(message: any): void {
-    console.log({
-      message,
-      target: this.iframe && new URL(this.iframe.src).origin,
-      iframe: this.iframe,
-    })
     if (!this.iframe) throw Error(`iframe not initialized`)
     this.iframe.contentWindow?.postMessage(
       message,

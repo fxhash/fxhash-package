@@ -1,13 +1,13 @@
 import { BlockchainNetworks, Result, failure, success } from "@fxhash/shared"
+import { WalletsMap } from "../_index.js"
+import { GetSingleUserAccountResult } from "../auth/_index.js"
+import { anyActiveManager } from "../wallets/common/utils.js"
 import {
   AccountAuthenticatedButNoWalletConnectedError,
   UserConsistencyError,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletDoesntBelongAccountError,
-} from "../_errors.js"
-import { WalletsMap } from "../_index.js"
-import { GetSingleUserAccountResult } from "../auth/_index.js"
-import { anyActiveManager } from "../wallets/common/utils.js"
+} from "@/index.js"
 
 /**
  * Given an Account and some Wallet Managers, returns a failure with an error
@@ -29,15 +29,12 @@ export function isUserStateConsistent(
   const _anyActiveManager = anyActiveManager(wallets)
   const noWalletConnected = !_anyActiveManager
 
-  console.log({ account, wallets, _anyActiveManager, noWalletConnected })
-
   if (!account) {
-    if (noWalletConnected) {
-      return success()
-    }
-    return failure(
-      new WalletConnectedButNoAccountAuthenticatedError(_anyActiveManager)
-    )
+    return noWalletConnected
+      ? success()
+      : failure(
+          new WalletConnectedButNoAccountAuthenticatedError(_anyActiveManager)
+        )
   }
 
   // account is authenticated but no wallet is currently connected

@@ -64,6 +64,7 @@ export const Qu_GenerativeTokenById = graphql(`
           op_hash
           type
         }
+        thumbnail_uri
       }
     }
   }

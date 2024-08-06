@@ -1,11 +1,18 @@
-import { failure, success } from "@fxhash/shared"
+import { PromiseResult, failure, success } from "@fxhash/shared"
 import {
   type IAccountSourceCommonOptions,
   type IWeb3AuthAccountSource,
 } from "./_interfaces.js"
 import { authWithWallets } from "./common.js"
-import { authenticateWeb3Auth } from "./_index.js"
+import { JWTCredentials, authenticateWeb3Auth } from "./_index.js"
 import { type IWeb3AuthWalletsSource } from "../_index.js"
+import {
+  GraphQLError,
+  UnexpectedError,
+  Web3AuthAuthenticationError,
+  Web3AuthInvalidProviderError,
+  Web3AuthNoSessionConnectedError,
+} from "@/index.js"
 
 type Options = {
   wallets: IWeb3AuthWalletsSource
@@ -44,15 +51,17 @@ export function authWeb3Auth({
     storage,
     credentialsDriver,
     storageNamespace: _storageNamespace,
-    authenticate: async () => {
+    authenticate: async (): PromiseResult<
+      JWTCredentials,
+      Web3AuthAuthenticationError | GraphQLError | UnexpectedError
+    > => {
       try {
-        console.log("authenticate web3auth !")
         const sessionDetails = await wallets.getWeb3AuthSessionDetails()
         if (!sessionDetails) {
-          return failure(new Error("no web3auth session details"))
+          return failure(new Web3AuthNoSessionConnectedError())
         }
         if (sessionDetails.provider !== "web3auth") {
-          return failure(new Error("invalid session provider"))
+          return failure(new Web3AuthInvalidProviderError())
         }
 
         const { idToken: token, compressedPublicKey } =
@@ -68,9 +77,11 @@ export function authWeb3Auth({
           }
         )
         return success(credentials)
-      } catch (err) {
-        // todo: better authentication error (clean plz baptiste)
-        return failure(new Error("todo"))
+      } catch (err: any) {
+        if (err instanceof GraphQLError || err instanceof UnexpectedError) {
+          return failure(err)
+        }
+        return failure(new UnexpectedError("unknown error"))
       }
     },
   })

@@ -7,6 +7,7 @@ import {
   createWalletClient,
   http,
   createTransport,
+  InternalRpcError,
 } from "viem"
 import { type IWeb3AuthWalletUtil } from "../_interfaces.js"
 import { computeAddress } from "ethers"
@@ -85,17 +86,22 @@ function frameManagerTransport(
       type: "custom",
       retryCount,
       async request({ method, params }) {
-        const frameResponse = await frameManager.sendRequest({
+        const response = await frameManager.sendRequest({
           type: "evm__json-rpc",
           body: {
             method,
             params,
           },
         })
-        if (frameResponse.isFailure()) {
-          throw frameResponse.error
+        if (response.isFailure()) {
+          throw new InternalRpcError(response.error)
         }
-        return frameResponse.value
+        if (response.value?.error) {
+          // will be parsed as a RPC error
+          // https://github.com/wevm/viem/blob/55ef649e060c791fbf21fa4fa180fcf411c36799/src/utils/buildRequest.ts#L123
+          throw response.value.error
+        }
+        return response.value
       },
     })
   }

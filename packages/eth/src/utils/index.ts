@@ -1,3 +1,4 @@
+export * from "./chain.js"
 export * from "./constants.js"
 export * from "./minters.js"
 export * from "./mintpass.js"
