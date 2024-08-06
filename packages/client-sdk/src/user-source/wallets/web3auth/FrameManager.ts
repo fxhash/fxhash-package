@@ -3,11 +3,12 @@
  * @license MIT
  */
 
-import { PromiseResult } from "@fxhash/utils"
+import { IEquatableError, PromiseResult } from "@fxhash/utils"
 import {
   IframeBDCommHost,
   IframeBDError,
   RequestPayload,
+  ResponseError,
   isBrowser,
 } from "@fxhash/utils-browser"
 import {
@@ -15,6 +16,7 @@ import {
   Web3AuthFrameNotInitialized,
   Web3AuthFrameNotLoading,
   Web3AuthFrameNotResponding,
+  Web3AuthFrameResponseErrors,
 } from "./_errors.js"
 import { failure, invariant, success } from "@fxhash/shared"
 import {
@@ -291,41 +293,49 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
   protected async processRequest<K extends keyof TMessages["frame->host"]>(
     payload: RequestPayload<K, TMessages["frame->host"][K]["req"]>,
     _: MessageEvent<any>
-    //@ts-ignore
-  ): Promise<TMessages["frame->host"][K]["res"]> {
+  ): PromiseResult<
+    TMessages["frame->host"][K]["res"],
+    TMessages["frame->host"][K] extends { errors: IEquatableError }
+      ? TMessages["frame->host"][K]["errors"]
+      : never
+  > {
     if (payload.header.type === "showFrame") {
       this._showFrame(payload.body)
-      return // void return
+      return success()
     }
+    throw Error(`unsupported request!`) // fine to throw here, dev mistake
   }
 
   public getSessionDetails(): PromiseResult<
     SessionDetails | null,
-    IframeBDError
+    | IframeBDError
+    | ResponseError<Web3AuthFrameResponseErrors["getSessionDetails"]>
   > {
     return this.sendRequest({ type: "getSessionDetails" })
   }
 
   public async login(
     payload: Web3AuthLoginPayload
-  ): PromiseResult<SessionDetails | null, IframeBDError> {
+  ): PromiseResult<
+    SessionDetails | null,
+    IframeBDError | ResponseError<Web3AuthFrameResponseErrors["login"]>
+  > {
     const res = await this.sendRequest({ type: "login", body: payload })
     if (res.isSuccess() && res.value) {
       this._handleSessionChanged(res.value)
     }
-
-    // todo: handle error ?
     return res
   }
 
-  async logout(): PromiseResult<any, IframeBDError> {
+  async logout(): PromiseResult<
+    any,
+    IframeBDError | ResponseError<Web3AuthFrameResponseErrors["logout"]>
+  > {
     const res = await this.sendRequest({ type: "logout" })
     if (res.isSuccess()) {
       this._handleSessionChanged(null)
       return success()
     }
-
-    // todo: handle error better ?
     return res
   }
 }

@@ -101,15 +101,7 @@ export function walletSource<Net extends BlockchainNetwork>({
             connected = null
           } else {
             const res = await createManager(info)
-            if (res.isFailure()) {
-              // todo: what to do with error here ?
-              // I considered whether info should be updated if createManager
-              // fails, but figured it shoudl'nt be the case. But what if
-              // we can't make a Wallet Manager, should we try to disconnect ?
-              //
-              console.log(res.error)
-              throw res.error
-            }
+            if (res.isFailure()) throw res.error
             connected = {
               manager: res.value,
               info,

@@ -35,3 +35,40 @@ export type Web3AuthFrameError = Web3AuthFrameInitializationError
 
 // all the module errors
 export type Web3AuthError = Web3AuthFrameError
+
+export class Web3AuthFrameAuthenticationError extends Error {
+  name = "Web3AuthFrameAuthenticationError" as const
+  message = "An error occurred when attempting to authenticate on Web3Auth"
+}
+
+export class Web3AuthFrameFxhashAuthenticationError extends Error {
+  name = "Web3AuthFrameFxhashAuthenticationError" as const
+  message = "an error occurre when attempting to authenticate on fxhash"
+}
+
+export class Web3AuthFrameUnsupportedError extends Error {
+  name = "Web3AuthFrameUnsupportedError" as const
+}
+
+export class Web3AuthFrameLogoutFailedError extends Error {
+  name = "Web3AuthFrameLogoutFailedError" as const
+}
+
+export class Web3AuthInitializationFailedError extends Error {
+  name = "Web3AuthInitializationFailedError" as const
+}
+
+export class Web3AuthFrameUnknownError extends Error {
+  name = "Web3AuthFrameUnknownError" as const
+}
+
+export type Web3AuthFrameResponseErrors = {
+  init: Web3AuthInitializationFailedError
+  getSessionDetails: Web3AuthFrameAuthenticationError
+  login:
+    | Web3AuthFrameAuthenticationError
+    | Web3AuthFrameFxhashAuthenticationError
+    | Web3AuthFrameUnsupportedError
+    | Web3AuthFrameUnknownError
+  logout: Web3AuthFrameLogoutFailedError
+}

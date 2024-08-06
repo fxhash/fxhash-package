@@ -2,7 +2,11 @@ import { Hex } from "viem"
 import { EventEmitter } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
-import { IWalletConnected, IWalletsSource } from "@/index.js"
+import {
+  IWalletConnected,
+  IWalletsSource,
+  Web3AuthFrameResponseErrors,
+} from "@/index.js"
 import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
@@ -117,6 +121,7 @@ export type Web3AuthFrameMessageTypes = {
     init: {
       req: void
       res: void
+      errors: Web3AuthFrameResponseErrors["init"]
     }
 
     /**
@@ -125,16 +130,19 @@ export type Web3AuthFrameMessageTypes = {
     getSessionDetails: {
       req: void
       res: SessionDetails | null
+      errors: Web3AuthFrameResponseErrors["getSessionDetails"]
     }
 
     logout: {
       req: any
       res: any
+      errors: Web3AuthFrameResponseErrors["logout"]
     }
 
     login: {
       req: Web3AuthLoginPayload
       res: SessionDetails | null
+      errors: Web3AuthFrameResponseErrors["login"]
     }
 
     tez__rpc: TezosWalletRpcType
