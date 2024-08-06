@@ -13,12 +13,12 @@ import {
   injected,
 } from "@wagmi/core"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
-import {
-  EvmClientsNotAvailable,
-  EvmViemClientGenerationError,
-} from "../../_errors.js"
 import { setIntervalCapped, sleep } from "@fxhash/utils"
 import { createEvmWalletManager, walletSource } from "../common/_private.js"
+import {
+  EvmClientsNotAvailableError,
+  EvmViemClientGenerationError,
+} from "@/index.js"
 
 type Options = {
   wagmiConfig: Config
@@ -103,7 +103,7 @@ export function eip1193WalletSource({
     disconnect: () => disconnect(wagmiConfig),
 
     createManager: async info => {
-      if (!info) return failure(new EvmClientsNotAvailable())
+      if (!info) return failure(new EvmClientsNotAvailableError())
 
       /**
        * @dev Here is a little hack to get some kind of "on('walletReady')"

@@ -11,8 +11,8 @@ import {
   UserSourceEventEmitter,
 } from "../../_interfaces.js"
 import { intialization } from "@fxhash/utils"
-import { type WalletSourceErrorTypemap } from "../../_errors.js"
 import { type MapNetworkToWalletManager } from "../../_types.js"
+import { WalletSourceErrorTypemap } from "@/index.js"
 
 interface IWalletSourceParams<N extends BlockchainNetwork> {
   network: N

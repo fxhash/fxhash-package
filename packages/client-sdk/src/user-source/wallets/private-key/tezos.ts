@@ -1,10 +1,7 @@
 import { InMemorySigner } from "@taquito/signer"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"
 import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
-import {
-  EvmClientsNotAvailable,
-  TezosClientNotAvailableError,
-} from "@/index.js"
+import { TezosClientNotAvailableError } from "@/index.js"
 import { TezosWalletManager } from "@fxhash/tez"
 import { walletSource } from "../common/_private.js"
 

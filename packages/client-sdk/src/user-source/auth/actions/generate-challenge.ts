@@ -20,7 +20,6 @@ import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
  *  })
  * ```
  */
-
 export async function generateChallenge(
   input: ChallengeInput,
   options: GqlOptions = gqlDefaultOptions

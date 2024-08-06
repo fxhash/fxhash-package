@@ -7,10 +7,7 @@ import {
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork, failure, success } from "@fxhash/shared"
 import { IWindowWalletsSource } from "./_interfaces.js"
-import {
-  EvmClientsNotAvailable,
-  TezosClientNotAvailableError,
-} from "@/index.js"
+import { TezosClientNotAvailableError } from "@/index.js"
 import { createTezosWalletManager, walletSource } from "../common/_private.js"
 
 type Options = {

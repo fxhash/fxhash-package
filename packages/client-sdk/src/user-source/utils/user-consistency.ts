@@ -1,13 +1,13 @@
 import { BlockchainNetworks, Result, failure, success } from "@fxhash/shared"
+import { WalletsMap } from "../_index.js"
+import { GetSingleUserAccountResult } from "../auth/_index.js"
+import { anyActiveManager } from "../wallets/common/utils.js"
 import {
   AccountAuthenticatedButNoWalletConnectedError,
   UserConsistencyError,
   WalletConnectedButNoAccountAuthenticatedError,
   WalletDoesntBelongAccountError,
-} from "../_errors.js"
-import { WalletsMap } from "../_index.js"
-import { GetSingleUserAccountResult } from "../auth/_index.js"
-import { anyActiveManager } from "../wallets/common/utils.js"
+} from "@/index.js"
 
 /**
  * Given an Account and some Wallet Managers, returns a failure with an error

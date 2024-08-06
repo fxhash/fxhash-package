@@ -4,14 +4,10 @@ import {
   invariant,
   success,
 } from "@fxhash/shared"
-import {
-  CredentialsRefreshError,
-  ICredentialsDriver,
-  JWTCredentials,
-} from "./_interfaces.js"
+import { ICredentialsDriver, JWTCredentials } from "./_interfaces.js"
 import { refreshAccessToken } from "../_index.js"
 import { jwtDecode } from "jwt-decode"
-import { IGraphqlWrapper } from "@/index.js"
+import { CredentialsRefreshError, IGraphqlWrapper } from "@/index.js"
 
 /**
  * JWT Authentication requires storing the refresh token in the storage, as well
