@@ -302,9 +302,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
     IframeBDError | ResponseError<Web3AuthFrameResponseErrors["login"]>
   > {
     const res = await this.sendRequest({ type: "login", body: payload })
-    if (res.isSuccess() && res.value) {
-      this._handleSessionChanged(res.value)
-    }
+    if (res.isSuccess()) this._handleSessionChanged(res.value)
     return res
   }
 

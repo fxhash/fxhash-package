@@ -1,22 +1,18 @@
 import {
-  AccountAuthenticatedButNoWalletConnectedError,
   type GetSingleUserAccountResult,
   type ICredentialsDriver,
   type IGraphqlWrapper,
   type IWalletsSource,
   type JWTCredentials,
-  SignMessageError,
   type Storage,
+  type TAuthenticationError,
+  AccountAuthenticatedButNoWalletConnectedError,
   UserSourceEventEmitter,
   WalletConnectedButNoAccountAuthenticatedError,
   getMyProfile,
   logout,
   CredentialsRefreshError,
-  GraphQLError,
-  UnexpectedError,
-  NoWalletConnectedError,
   AuthenticationError,
-  TAuthenticationError,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
 import type {
@@ -26,9 +22,9 @@ import type {
 } from "./_interfaces.js"
 import {
   type JwtAccessTokenPayload,
-  PromiseResult,
+  type PromiseResult,
+  type IEquatableError,
   invariant,
-  IEquatableError,
 } from "@fxhash/shared"
 import { Init, cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"

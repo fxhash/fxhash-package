@@ -13,7 +13,11 @@ import {
   type IWeb3AuthWalletUtil,
 } from "./_interfaces.js"
 import { cleanup, intialization } from "@fxhash/utils"
-import { type IGraphqlWrapper, UserSourceEventEmitter } from "@/index.js"
+import {
+  type IGraphqlWrapper,
+  UserSourceEventEmitter,
+  GraphQLError,
+} from "@/index.js"
 import { Mu_Web3AuthEmailRequestOTP } from "@fxhash/gql"
 
 type Options = {
@@ -117,18 +121,13 @@ export function web3AuthWallets({
 
     emailRequestOTP: async (email: string) => {
       _init.check()
-
       const res = await gqlWrapper
         .client()
         .mutation(Mu_Web3AuthEmailRequestOTP, {
           email,
         })
-
-      // todo: better error handling !
-      if (res.error) throw res.error
-      if (!res?.data?.web3auth_email_request_otp?.email)
-        throw Error("missing data")
-
+      if (res.error || !res?.data?.web3auth_email_request_otp?.email)
+        throw new GraphQLError("couldn't generate request OTP")
       return res.data.web3auth_email_request_otp
     },
 

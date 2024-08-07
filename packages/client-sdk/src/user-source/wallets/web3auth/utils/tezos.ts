@@ -41,8 +41,7 @@ export function tezosWeb3AuthWallet(
       manager: createTezosWalletManager({
         info,
         source: {
-          // todo: type WalletProvider properly
-          wallet: frameManagerTezosWalletProvider(frameManager) as any,
+          wallet: frameManagerTezosWalletProvider(frameManager),
         },
       }),
     }
