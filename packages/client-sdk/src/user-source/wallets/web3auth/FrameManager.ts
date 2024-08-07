@@ -3,6 +3,7 @@
  * @license MIT
  */
 
+import css from "./FrameManager.module.css"
 import {
   IframeBDCommHost,
   IframeBDError,
@@ -120,7 +121,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
 
       // initialize iframe
       this._wrapper = document.createElement("div")
-      this._wrapper.classList.add("__fxhash__wallet")
+      this._wrapper.classList.add(css.frameWrapper)
 
       this._iframe = document.createElement("iframe")
       this._iframe.addEventListener("load", async () => {
@@ -139,8 +140,6 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
         "allow-popups"
       )
       this._wrapper.appendChild(this._iframe)
-
-      this._addStyles()
 
       /**
        * !   _________________________________________________________________
@@ -220,32 +219,9 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
     })
   }
 
-  /**
-   * Add the CSS styles to the DOM.
-   */
-  private _addStyles() {
-    const css = /* css */ `
-      .__fxhash__wallet {
-
-      }
-      .__fxhash__wallet iframe {
-        width: 500px;
-        height: 600px;
-      }
-    `.replaceAll("\n", "")
-    if (!document.querySelector("style#__fxhash__wallet-styles")) {
-      const head = document.querySelector("head")
-      if (!head) throw Error("couldn't find a <head> node in the document")
-      const style = document.createElement("style")
-      style.id = "__fxhash__wallet-styles"
-      style.innerText = css
-      head.appendChild(style)
-    }
-  }
-
   private _showFrame(show: boolean) {
     if (!this.wrapper) throw Error(`iframe doesn't exist`)
-    this.wrapper.classList[show ? "add" : "remove"]("__fxhash__show")
+    this.wrapper.classList[show ? "add" : "remove"](css.show)
   }
 
   /**

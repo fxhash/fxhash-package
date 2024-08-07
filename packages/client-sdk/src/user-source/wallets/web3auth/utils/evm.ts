@@ -93,6 +93,7 @@ function frameManagerTransport(
             params,
           },
         })
+        console.log({ response })
         if (response.isFailure()) {
           throw new InternalRpcError(response.error)
         }
