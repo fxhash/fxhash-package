@@ -86,6 +86,8 @@ export interface FxParamDefinition<Type extends FxParamType> {
   version?: string
 }
 
+export type FxParamDefinitions = FxParamDefinition<FxParamType>[]
+
 export type hexString = `#${string}`
 
 export type FxParamProcessorTransformer<Type extends FxParamType> = (
