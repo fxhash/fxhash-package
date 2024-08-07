@@ -1,5 +1,5 @@
 import { useClient } from "./useClient.js"
-import { type WalletManagersMap } from "@fxhash/client-sdk"
+import { type WalletManagersMap } from "../../../core/dist/index.js"
 import { type EthereumWalletManager } from "@fxhash/eth"
 import { type TezosWalletManager } from "@fxhash/tez"
 

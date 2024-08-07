@@ -1,5 +1,5 @@
 import { useClient } from "@/index.js"
-import { IClientPlugnPlay } from "@fxhash/client-plugnplay"
+import { IClientPlugnPlay } from "@fxhash/sdk"
 import { invariant } from "@fxhash/shared"
 import { useState } from "react"
 import OtpInput from "react-otp-input"

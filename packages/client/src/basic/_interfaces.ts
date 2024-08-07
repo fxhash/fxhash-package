@@ -1,18 +1,17 @@
-import { IAppMetadata } from "@fxhash/config"
-import { AtLeastOne } from "@fxhash/utils"
-import {
-  type WagmiConfig,
-  type BeaconConfig,
-  type Hex,
-  IGraphqlWrapper,
+import type { IAppMetadata } from "@fxhash/config"
+import type {
+  BeaconConfig,
+  Hex,
   ICredentialsDriver,
-  IWindowWalletsSource,
-  IWeb3AuthWalletsSource,
-  IWalletsSource,
-  IUserSource,
+  IGraphqlWrapper,
   IPrivateKeyWalletsSource,
   IStorageDriver,
-} from "@/index.js"
+  IUserSource,
+  IWeb3AuthWalletsSource,
+  IWindowWalletsSource,
+  WagmiConfig,
+} from "@fxhash/core"
+import type { AtLeastOne } from "@fxhash/utils"
 
 /**
  * A declarative object config which will be parsed by the client at its

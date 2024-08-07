@@ -1,4 +1,4 @@
-import { GetSingleUserAccountResult } from "@fxhash/client-sdk"
+import { GetSingleUserAccountResult } from "../../../core/dist/index.js"
 import { useClient } from "./useClient.js"
 
 export type UseAccount = {

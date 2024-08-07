@@ -1,0 +1,44 @@
+{
+  "name": "@fxhash/client-react",
+  "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@airgap/beacon-sdk": "4.2.2",
+    "@fxhash/sdk": "workspace:*",
+    "@react-oauth/google": "0.12.1",
+    "react-otp-input": "3.1.1"
+  },
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

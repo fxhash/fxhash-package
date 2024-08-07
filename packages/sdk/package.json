@@ -1,26 +1,28 @@
 {
-  "name": "@fxhash/client-plugnplay-react",
-  "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
+  "name": "@fxhash/sdk",
+  "description": "Bundle of all the fxhash low & medium level packages exported as one.",
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/client-plugnplay": "workspace:*",
+    "@fxhash/client": "workspace:*",
     "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
-    "@react-oauth/google": "0.12.1",
-    "react-otp-input": "3.1.1"
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.18",
+    "@types/eslint": "8.44.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint": "8.45.0",
     "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "vitest": "0.34.6"
   },
   "exports": {
     ".": {
@@ -35,16 +37,15 @@
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "peerDependencies": {
-    "@fxhash/client-sdk": "workspace:*",
-    "react": "18.2.0",
-    "react-dom": "^18.2.0"
+  "publishConfig": {
+    "access": "public"
   },
-  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:local": "FXHASH_ENV=local vitest"
   },
   "type": "module",
   "types": "./dist/index.d.ts"

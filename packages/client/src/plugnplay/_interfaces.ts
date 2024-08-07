@@ -1,10 +1,10 @@
-import {
+import type {
   IUserSource,
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
-} from "@fxhash/client-sdk"
+} from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
 import { config as fxConfig } from "@fxhash/config"

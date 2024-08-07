@@ -1,4 +1,4 @@
-import { UserSourceEventsTypemap } from "@fxhash/client-sdk"
+import { UserSourceEventsTypemap } from "../../../core/dist/index.js"
 import { useClient } from "./useClient.js"
 
 export type UseUserError = UserSourceEventsTypemap["error"]["error"] | null

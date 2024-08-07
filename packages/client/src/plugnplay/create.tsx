@@ -3,6 +3,7 @@
  * @license MIT
  */
 
+import { createClient, ICreateClientParams } from "@/basic/_index.js"
 import { AtLeastOne, cleanup, intialization } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
@@ -10,10 +11,8 @@ import {
   defaultStorageDriver,
   jwtCredentials,
   UserSourceEventEmitter,
-  createClient,
-  ICreateClientParams,
   Web3AuthLoginPayload,
-} from "@fxhash/client-sdk"
+} from "@fxhash/core"
 import { BlockchainNetwork, invariant } from "@fxhash/shared"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
 import { getDefaultConfig, useModal } from "connectkit"

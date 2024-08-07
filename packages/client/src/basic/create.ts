@@ -4,10 +4,13 @@
  */
 
 import { invariant } from "@fxhash/utils"
-import { ICreateClientParams, WalletSourcesMap } from "./_interfaces.js"
+import {
+  IClient,
+  ICreateClientParams,
+  WalletSourcesMap,
+} from "./_interfaces.js"
 import {
   type IAccountSourceCommonOptions,
-  type IClient,
   type IMultipleUserSources,
   type IUserSource,
   GraphqlWrapper,
@@ -19,7 +22,7 @@ import {
   web3AuthWallets,
   windowWallets,
   defaultStorageDriver,
-} from "@/index.js"
+} from "@fxhash/core"
 
 export interface IClientManySources extends IClient {
   /**

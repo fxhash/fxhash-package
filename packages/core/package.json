@@ -1,5 +1,5 @@
 {
-  "name": "@fxhash/client-sdk",
+  "name": "@fxhash/core",
   "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
   "version": "0.0.1",
   "author": "fxhash",

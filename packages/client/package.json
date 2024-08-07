@@ -1,12 +1,12 @@
 {
-  "name": "@fxhash/client-plugnplay",
-  "description": "A plug'n'play client interface to build applications with fxhash. This packages handles everything related to wallets & authentication and provides very high level functions for building applications on top of fxhash.",
+  "name": "@fxhash/client",
+  "description": "Medium-level APIs to instanciate low-level @fxhash/core modules easily.",
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.2.2",
-    "@fxhash/client-sdk": "workspace:*",
     "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
