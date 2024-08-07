@@ -8,8 +8,8 @@ import { localStorageDriver } from "./local-storage.js"
  * certain APIs, this module will return the most adequate storage driver
  * between those currently implemented.
  */
-export function envDefaultStorageDriverFactory(): () => IStorageDriver {
+export function defaultStorageDriver(): IStorageDriver {
   return typeof window !== undefined && window?.localStorage
-    ? localStorageDriver
-    : inMemoryStorageDriver
+    ? localStorageDriver()
+    : inMemoryStorageDriver()
 }

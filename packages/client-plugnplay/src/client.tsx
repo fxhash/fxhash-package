@@ -7,7 +7,7 @@ import { AtLeastOne, cleanup, intialization } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
-  Storage,
+  defaultStorageDriver,
   jwtCredentials,
   UserSourceEventEmitter,
   createClient,
@@ -155,7 +155,7 @@ export function createClientPlugnPlay({
   }
 
   const gql = new GraphqlWrapper()
-  const storage = new Storage()
+  const storage = defaultStorageDriver()
   const credentials = jwtCredentials(gql)
 
   const client = createClient({

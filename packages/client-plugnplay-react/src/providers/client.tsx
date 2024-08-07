@@ -16,7 +16,7 @@ import {
 } from "@fxhash/client-plugnplay"
 import {
   GetSingleUserAccountResult,
-  UserConsistencyError,
+  UserSourceEventsTypemap,
   WalletManagersMap,
   deriveManagersMap,
 } from "@fxhash/client-sdk"
@@ -38,7 +38,7 @@ export type ClientBasicState = {
   client: IClientPlugnPlay | null
   account: GetSingleUserAccountResult | null
   managers: WalletManagersMap
-  userError: UserConsistencyError | null
+  userError: UserSourceEventsTypemap["error"]["error"] | null
 }
 
 const defaultActiveManagers = {
@@ -89,7 +89,7 @@ export function ClientPlugnPlayProvider({
     const clean = cleanup()
     clean.add(
       client.emitter.on("error", err => {
-        set("userError", err)
+        set("userError", err.error)
       }),
       client.emitter.on("user-changed", () => {
         const wallets = client.source.getWallets()

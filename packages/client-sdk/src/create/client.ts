@@ -10,7 +10,6 @@ import {
   type IClient,
   type IMultipleUserSources,
   type IUserSource,
-  type IStorageDriver,
   GraphqlWrapper,
   authWallets,
   authWeb3Auth,
@@ -19,7 +18,7 @@ import {
   privateKeyWallets,
   web3AuthWallets,
   windowWallets,
-  envDefaultStorageDriverFactory,
+  defaultStorageDriver,
 } from "@/index.js"
 
 export interface IClientManySources extends IClient {
@@ -54,7 +53,7 @@ export function createClient(params: ICreateClientParams): IClientManySources {
 
   // defaults
   const gql = params.drivers?.gql || new GraphqlWrapper()
-  const storage = params.drivers?.storage || envDefaultStorageDriverFactory()()
+  const storage = params.drivers?.storage || defaultStorageDriver()
   const credentialsDriver = params.drivers?.credentials || jwtCredentials(gql)
   const accountSourceOptions: IAccountSourceCommonOptions = {
     gqlWrapper: gql,
