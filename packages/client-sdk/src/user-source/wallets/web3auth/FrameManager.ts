@@ -17,7 +17,7 @@ import {
   Web3AuthFrameNotLoading,
   Web3AuthFrameNotResponding,
   Web3AuthFrameResponseErrors,
-} from "./_errors.js"
+} from "@/index.js"
 import {
   failure,
   invariant,
