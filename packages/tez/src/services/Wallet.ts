@@ -12,9 +12,7 @@ import {
   AbortedBeaconError,
   DAppClientOptions,
   NetworkType,
-  SigningType,
 } from "@airgap/beacon-sdk"
-import { encodeTezosPayload } from "@fxhash/auth"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -31,6 +29,7 @@ import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
 import { IAppMetadata, config } from "@fxhash/config"
+import { encodeSignMessagePayload } from "./messages"
 
 export function createBeaconConfig(metadata: IAppMetadata): DAppClientOptions {
   return {
@@ -137,7 +136,7 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeTezosPayload(message)
+      const payloadBytes = encodeSignMessagePayload(message)
       let signature = null
       if (isWalletProvider(this.wallet)) {
         // todo: is it working ?!
