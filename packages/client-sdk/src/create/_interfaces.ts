@@ -5,13 +5,13 @@ import {
   type BeaconConfig,
   type Hex,
   IGraphqlWrapper,
-  Storage,
   ICredentialsDriver,
   IWindowWalletsSource,
   IWeb3AuthWalletsSource,
   IWalletsSource,
   IUserSource,
   IPrivateKeyWalletsSource,
+  IStorageDriver,
 } from "@/index.js"
 
 /**
@@ -148,7 +148,7 @@ export interface ICreateClientParams {
      * @default new() The client will instanciate a new Storage using the best
      * available option (on browser it will be the localStorage for instance)
      */
-    storage?: Storage
+    storage?: IStorageDriver
 
     /**
      * An interface which handles credentials (ex Cookie, JWT).

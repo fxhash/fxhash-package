@@ -10,7 +10,10 @@ import {
 } from "@fxhash/shared"
 import { failure, invariant, success } from "@fxhash/shared"
 import { type TezosWalletManager } from "@fxhash/tez"
-import { isEthereumWalletManager, isTezosWalletManager } from "@/util/types.js"
+import {
+  isEthereumWalletManager,
+  isTezosWalletManager,
+} from "@/utils/user-source/wallets.js"
 import {
   JWTCredentials,
   authenticate as authenticateWithChallenge,

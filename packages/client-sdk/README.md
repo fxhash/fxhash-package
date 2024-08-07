@@ -3,7 +3,7 @@
 A set of low-to-medium-level modules for building applications with fxhash.
 
 > [!CAUTION]
-> If you are building a 3rd party application on top of fxhash, we recommended using `@fxhash/client-plugnplay` (or its React counterpart `@fxhash/client-plugnplay-react`), which has been designed for a seamless integration into applications. They are build on top of this package, which is more suited if you really need low-level granular control.
+> If you are building a 3rd party application on top of fxhash, we recommended using `@fxhash/client-plugnplay` (or its React counterpart `@fxhash/client-plugnplay-react`), which have been designed for a simple and seamless integration into applications. They are build on top of this package, which is more suited if you really need low-level granular control.
 
 ## Installation
 
@@ -18,7 +18,10 @@ const fxClient = createClient(...)
 
 ## Design principles
 
-This package
+This package uses 2 different approaches:
+
+- low-level functional modules which can be chained in various ways to achieve a wide range of behaviours
+- a declarative instanciation function (`createClient`) which lets developers instanciate and link the modules they need by providing a config object
 
 ## Usage
 
@@ -137,14 +140,8 @@ Folders of interest:
 - [ ] writing tests
   - [ ] test operations
 - [ ] write documentation about packages
-- [ ] check if the iframe solution can be improved
 - [ ] start integrating into website-v2 to start testing integration
 - [ ] mock test sending operations with wallets
-- [ ] think about google auth using single Provider with web3auth
-- [ ] refacto storage for having a IStorage directly implemented by drivers
-- [ ] proper error management for all code paths
-- [ ] move some utilities (such as discord oauth) into client-sdk ? or into
-      client-plugnplay ? not sure, but move in any of these 2
 - [ ] loading states - right now there is now way to have some "loading"
       state from the user sources. we'd want to know when some authentication is
       happening, etc...

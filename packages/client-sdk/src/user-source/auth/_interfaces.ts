@@ -1,6 +1,6 @@
-import { IUserSource } from "../_interfaces.js"
-import { IGraphqlWrapper, Storage } from "@/index.js"
-import { ICredentialsDriver } from "./_index.js"
+import type { IUserSource } from "../_interfaces.js"
+import type { IGraphqlWrapper, IStorageDriver } from "@/index.js"
+import type { ICredentialsDriver } from "./_index.js"
 
 export interface IAccountSource extends IUserSource {
   authenticated: () => boolean
@@ -30,7 +30,7 @@ export interface IAccountSourceCommonOptions {
    * A Storage implementation. Doesn't have to be the same used by the rest of
    * the app.
    */
-  storage: Storage
+  storage: IStorageDriver
 
   /**
    * An interface handling authentication credentials (JWT tokens)

@@ -1,5 +1,5 @@
 import { LogoutResult, LogoutInput, Mu_Logout } from "@fxhash/gql"
-import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
+import { GqlOptions, gqlDefaultOptions } from "@/utils/network/gql.js"
 import { GraphQLError, UnexpectedError } from "@/index.js"
 
 /**

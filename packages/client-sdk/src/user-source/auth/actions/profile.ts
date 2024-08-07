@@ -1,5 +1,5 @@
 import { GetMyAccountQuery, Qu_GetMyAccount } from "@fxhash/gql"
-import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
+import { GqlOptions, gqlDefaultOptions } from "@/utils/network/gql.js"
 import { GraphQLError, UnexpectedError } from "@/index.js"
 
 export type GetSingleUserAccountResult = NonNullable<

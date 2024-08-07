@@ -6,12 +6,12 @@
 import { invariant } from "@fxhash/utils"
 import { ICreateClientParams, WalletSourcesMap } from "./_interfaces.js"
 import {
+  type IAccountSourceCommonOptions,
+  type IClient,
+  type IMultipleUserSources,
+  type IUserSource,
+  type IStorageDriver,
   GraphqlWrapper,
-  IAccountSourceCommonOptions,
-  IClient,
-  IMultipleUserSources,
-  IUserSource,
-  Storage,
   authWallets,
   authWeb3Auth,
   jwtCredentials,
@@ -19,6 +19,7 @@ import {
   privateKeyWallets,
   web3AuthWallets,
   windowWallets,
+  envDefaultStorageDriverFactory,
 } from "@/index.js"
 
 export interface IClientManySources extends IClient {
@@ -53,7 +54,7 @@ export function createClient(params: ICreateClientParams): IClientManySources {
 
   // defaults
   const gql = params.drivers?.gql || new GraphqlWrapper()
-  const storage = params.drivers?.storage || new Storage()
+  const storage = params.drivers?.storage || envDefaultStorageDriverFactory()()
   const credentialsDriver = params.drivers?.credentials || jwtCredentials(gql)
   const accountSourceOptions: IAccountSourceCommonOptions = {
     gqlWrapper: gql,

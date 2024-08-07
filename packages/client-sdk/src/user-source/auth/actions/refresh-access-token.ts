@@ -4,7 +4,7 @@ import {
   AuthenticationResult,
 } from "@fxhash/gql"
 import { GraphQLError, UnexpectedError } from "@/index.js"
-import { GqlOptions, gqlDefaultOptions } from "@/util/gql.js"
+import { GqlOptions, gqlDefaultOptions } from "@/utils/network/gql.js"
 
 /**
  * Calls the backend to request a refresh of the access token using the refresh

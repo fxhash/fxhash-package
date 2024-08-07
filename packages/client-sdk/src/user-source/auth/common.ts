@@ -4,7 +4,6 @@ import {
   type IGraphqlWrapper,
   type IWalletsSource,
   type JWTCredentials,
-  type Storage,
   type TAuthenticationError,
   AccountAuthenticatedButNoWalletConnectedError,
   UserSourceEventEmitter,
@@ -13,6 +12,7 @@ import {
   logout,
   CredentialsRefreshError,
   AuthenticationError,
+  IStorageDriver,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
 import type {
@@ -41,7 +41,7 @@ function isStoredAccountValid(account: any): account is StoredAccount {
 }
 
 export type AccountUtilsOptions = {
-  storage: Storage
+  storage: IStorageDriver
   gql: IGraphqlWrapper
   credentialsDriver: ICredentialsDriver<any>
   storageNamespace: string
