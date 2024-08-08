@@ -3,7 +3,7 @@
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "src",
     "paths": {
       "@/*": ["./src/*"]
     },
