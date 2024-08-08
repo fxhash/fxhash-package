@@ -1,15 +1,25 @@
 {
-  "name": "@fxhash/utils-browser",
-  "description": "A general-purpose package for browser-only compatible utilities.",
-  "version": "0.0.2",
+  "name": "@fxhash/sdk",
+  "description": "Bundle of all the fxhash low & medium level packages exported as one.",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
+    "@fxhash/client": "workspace:*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/gql": "workspace:*",
     "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
+    "@types/eslint": "8.44.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint": "8.45.0",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
     "vitest": "0.34.6"
@@ -27,7 +37,6 @@
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "private": true,
   "publishConfig": {
     "access": "public"
   },
@@ -35,7 +44,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest"
+    "test": "vitest",
+    "test:local": "FXHASH_ENV=local vitest"
   },
   "type": "module",
   "types": "./dist/index.d.ts"

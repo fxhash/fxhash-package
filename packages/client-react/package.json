@@ -1,18 +1,20 @@
 {
-  "name": "@fxhash/utils-browser",
-  "description": "A general-purpose package for browser-only compatible utilities.",
-  "version": "0.0.2",
+  "name": "@fxhash/client-react",
+  "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@airgap/beacon-sdk": "4.2.2",
+    "@fxhash/sdk": "workspace:*",
+    "@react-oauth/google": "0.12.1",
+    "react-otp-input": "3.1.1"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
     "tsup": "8.0.1",
-    "typescript": "5.3.3",
-    "vitest": "0.34.6"
+    "typescript": "5.3.3"
   },
   "exports": {
     ".": {
@@ -27,15 +29,15 @@
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "private": true,
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "^18.2.0"
   },
+  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest"
+    "dev": "tsup --watch"
   },
   "type": "module",
   "types": "./dist/index.d.ts"

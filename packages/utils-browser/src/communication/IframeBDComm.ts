@@ -14,8 +14,21 @@
  * if they are it is eventually known).
  */
 
-import { PromiseResult, failure, success } from "@fxhash/shared"
-import { IframeBDError, IframeRequestTimeout } from "./errors"
+import {
+  IEquatableError,
+  PromiseResult,
+  failure,
+  success,
+} from "@fxhash/shared"
+import {
+  ConnectionAlreadyEstablishedError,
+  IframeBDError,
+  IframeDisconnectedError,
+  IframeRequestTimeoutError,
+  ResponseError,
+  SerializableResponseError,
+} from "./errors"
+import { Initialization, cleanup, intialization } from "@fxhash/utils"
 
 /**
  * Potential improvements
@@ -65,28 +78,56 @@ interface GenericPayload<
   body: BodyType
 }
 
-export interface RequestPayload<ReqType extends string, BodyType = any>
-  extends GenericPayload<"request", ReqType, BodyType> {}
+export enum ResponseStatus {
+  OK = "OK",
+  ERROR = "ERROR",
+}
 
-export interface ResponsePayload<ReqType extends string, BodyType = any>
-  extends GenericPayload<"response", ReqType, BodyType> {
+export type RequestPayload<
+  ReqType extends string,
+  BodyType = any,
+> = GenericPayload<"request", ReqType, BodyType>
+
+export type ResponsePayload<ReqType extends string, BodyType = any> = Omit<
+  GenericPayload<"response", ReqType, BodyType>,
+  "body"
+> & {
   /**
    * A response whill always include the resquest header so that it can
    * properly be mapped to the original request.
    */
   header: RequestHeader<ReqType>
-}
+} & (
+    | {
+        status: ResponseStatus.OK
+        body: BodyType
+      }
+    | {
+        status: ResponseStatus.ERROR
+        body: {
+          error: SerializableResponseError
+        }
+      }
+  )
 
 type Payload<ReqType extends string> =
   | RequestPayload<ReqType>
   | ResponsePayload<ReqType>
 
-type RequestResolver = (body: any) => void
+type RequestResolver<Errors> = {
+  resolve: (body: any) => void
+  reject: (
+    reason:
+      | IframeDisconnectedError
+      | (Errors extends IEquatableError ? ResponseError<Errors> : never)
+  ) => void
+}
 
 type TMessage = {
   [K: string]: {
     req: any
     res: any
+    errors?: IEquatableError
   }
 }
 
@@ -118,8 +159,9 @@ abstract class IframeBDCommShared<
   MessageTypes extends MessageTypesSignature,
   Dir extends Direction,
 > {
-  initialized: boolean = false
-  awaitingRequests: Record<RequestID, RequestResolver> = {}
+  awaitingRequests: Record<RequestID, RequestResolver<any>> = {}
+  _intialization: Initialization = intialization()
+  _clean: ReturnType<typeof cleanup> = cleanup()
 
   /**
    * Needs to implement sending a message to the other part.
@@ -145,7 +187,10 @@ abstract class IframeBDCommShared<
   >(
     payload: RequestPayload<K, MessageTypes[OtherDir<Dir>][K]["req"]>,
     event: MessageEvent
-  ): Promise<MessageTypes[OtherDir<Dir>][K]["res"]>
+  ): PromiseResult<
+    MessageTypes[OtherDir<Dir>][K]["res"],
+    NonNullable<MessageTypes[OtherDir<Dir>][K]["errors"]>
+  >
 
   /**
    * Should be written by children of the children classes (Host & Frame) to
@@ -158,12 +203,36 @@ abstract class IframeBDCommShared<
   >(
     payload: RequestPayload<K, MessageTypes[OtherDir<Dir>][K]["req"]>,
     event: MessageEvent
-  ): Promise<MessageTypes[OtherDir<Dir>][K]["res"]>
+  ): PromiseResult<
+    MessageTypes[OtherDir<Dir>][K]["res"],
+    NonNullable<MessageTypes[OtherDir<Dir>][K]["errors"]>
+  >
 
   protected _init() {
-    if (this.initialized) throw Error(`already initialized`)
-    window.addEventListener("message", this._handleMessageEvent.bind(this))
-    this.initialized = true
+    if (this._intialization.finished) {
+      // The <iframe> has already been initialized, but a new instance was
+      //  received. The connection will be made with the new instance.`
+      this._clean.clear()
+    } else {
+      this._intialization.start()
+    }
+
+    const handler = this._handleMessageEvent.bind(this)
+    window.addEventListener("message", handler)
+    this._clean.add(
+      () => window.removeEventListener("message", handler),
+      // if init() is called another time, this will cleanup all the ongoing
+      // requests with a failure, as `clean.clear()` is called at the beginning
+      // of this method
+      () => {
+        const awaitingRequests = Object.values(this.awaitingRequests)
+        awaitingRequests.forEach(req =>
+          req.reject(new IframeDisconnectedError())
+        )
+      }
+    )
+
+    if (!this._intialization.finished) this._intialization.finish()
   }
 
   /**
@@ -184,7 +253,12 @@ abstract class IframeBDCommShared<
     timeout,
   }: SendRequestOptions<MessageTypes[Dir], K>): PromiseResult<
     MessageTypes[Dir][K]["res"],
-    IframeRequestTimeout
+    | IframeBDError
+    | ResponseError<
+        MessageTypes[Dir][K]["errors"] extends IEquatableError
+          ? NonNullable<MessageTypes[Dir][K]["errors"]>
+          : never
+      >
   > {
     return new Promise(resolve => {
       const requestID = randomRequestID()
@@ -192,16 +266,24 @@ abstract class IframeBDCommShared<
       let timeoutID: number
       if (timeout) {
         timeoutID = setTimeout(
-          () => resolve(failure(new IframeRequestTimeout())),
+          () => resolve(failure(new IframeRequestTimeoutError())),
           timeout
         )
       }
+      const clear = () =>
+        typeof timeoutID !== "undefined" && clearTimeout(timeout)
 
       // by adding a listener to the awaiting requests, it will resolve once a
       // response for this request is received
-      this.awaitingRequests[requestID] = (data: any) => {
-        typeof timeoutID !== "undefined" && clearTimeout(timeout)
-        resolve(success(data))
+      this.awaitingRequests[requestID] = {
+        resolve: (data: MessageTypes[Dir][K]["res"]) => {
+          clear()
+          resolve(success(data))
+        },
+        reject: reason => {
+          clear()
+          resolve(failure(reason))
+        },
       }
 
       this._sendPayload({
@@ -221,7 +303,9 @@ abstract class IframeBDCommShared<
     if (!awaitingRequest) return
     // delete from awaiting, then resolve the awaiting promise
     delete this.awaitingRequests[payload.header.id]
-    awaitingRequest(payload.body)
+    if (payload.status === ResponseStatus.OK)
+      awaitingRequest.resolve(payload.body)
+    else awaitingRequest.reject(ResponseError.Parse(payload.body.error))
   }
 
   private async _handleMessageEvent(event: MessageEvent): Promise<void> {
@@ -233,12 +317,29 @@ abstract class IframeBDCommShared<
     const payload: Payload<_Key<MessageTypes[Dir]>> = event.data.payload
 
     if (payload.type === "request") {
-      this._sendPayload({
-        type: "response",
-        header: payload.header,
-        body: await this._handleRequest(payload, event),
-      })
-      return
+      try {
+        const res = await this._handleRequest(payload, event)
+        if (res.isFailure()) throw new ResponseError(res.error)
+        this._sendPayload({
+          type: "response",
+          header: payload.header,
+          status: ResponseStatus.OK,
+          body: res.value,
+        })
+        return
+      } catch (err) {
+        this._sendPayload({
+          type: "response",
+          header: payload.header,
+          status: ResponseStatus.ERROR,
+          body: {
+            error: (err instanceof ResponseError
+              ? err
+              : ResponseError.Unknown(err)
+            ).toSeriazable(),
+          },
+        })
+      }
     }
 
     if (payload.type === "response") {
@@ -253,6 +354,7 @@ abstract class IframeBDCommShared<
  */
 export abstract class IframeBDCommHost<
   MessageTypes extends MessageTypesSignature,
+  InitErrors extends IEquatableError = IframeBDError,
 > extends IframeBDCommShared<MessageTypes, "host->frame"> {
   iframe: HTMLIFrameElement | null = null
   url: string = ""
@@ -268,7 +370,7 @@ export abstract class IframeBDCommHost<
 
   public async init(
     iframe: HTMLIFrameElement
-  ): PromiseResult<void, IframeBDError> {
+  ): PromiseResult<void, InitErrors | IframeBDError | ResponseError> {
     super._init()
 
     this.iframe = iframe
@@ -347,14 +449,14 @@ export abstract class IframeBDCommFrame<
   ) {
     if (payload.header.type === "__handshake") {
       if (this.connected) {
-        throw Error(
-          `connection with host at ${this.connection!.origin} has already been established, but a new connection request was received. There must be only a single handshake at initialisation.`
+        return failure(
+          new ConnectionAlreadyEstablishedError(this.connection!.origin)
         )
       }
       this.connection = {
         origin: new URL(event.origin).origin,
       }
-      return
+      return success()
     }
 
     return this.processRequest(payload, event)
