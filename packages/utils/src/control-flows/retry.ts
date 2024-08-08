@@ -1,4 +1,4 @@
-import { sleep } from "."
+import { sleep } from "./_index"
 
 export interface IRetryOptions<FnReturnType> {
   /**

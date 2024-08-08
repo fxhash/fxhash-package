@@ -1,4 +1,4 @@
-import { failure } from "@fxhash/shared"
+import { failure } from "@fxhash/utils"
 import { type ICredentialsDriver } from "./_interfaces.js"
 import { CredentialsRefreshError } from "@/index.js"
 

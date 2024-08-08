@@ -26,6 +26,7 @@
   "module": "./dist/index.js",
   "peerDependencies": {
     "@fxhash/sdk": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "solid-js": "^1.8.0",

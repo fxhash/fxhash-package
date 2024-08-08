@@ -1,5 +1,5 @@
 import { hexStringToString } from "@/utils/convert"
-import { Result, failure, success } from "@fxhash/shared"
+import { Result, failure, success } from "@fxhash/utils"
 import { char2Bytes, hex2Bytes } from "@taquito/utils"
 
 const TEZOS_SIGNING_PREFIX = "0501" // 05 'micheline expression', 01 'string'

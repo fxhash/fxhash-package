@@ -1,4 +1,5 @@
-import { BlockchainNetworks, Result, failure, success } from "@fxhash/shared"
+import { BlockchainNetworks } from "@fxhash/shared"
+import { Result, failure, success } from "@fxhash/utils"
 import { WalletsMap } from "../_index.js"
 import { GetSingleUserAccountResult } from "../auth/_index.js"
 import { anyActiveManager } from "../wallets/common/utils.js"

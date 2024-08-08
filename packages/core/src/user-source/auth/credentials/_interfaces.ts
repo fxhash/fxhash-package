@@ -1,6 +1,6 @@
-import { AuthenticationResult, LogoutInput } from "@fxhash/gql"
-import { PromiseResult } from "@fxhash/shared"
-import { StoredAccount } from "../_interfaces.js"
+import { type AuthenticationResult, LogoutInput } from "@fxhash/gql"
+import { type PromiseResult } from "@fxhash/utils"
+import { type StoredAccount } from "../_interfaces.js"
 import { CredentialsRefreshError } from "@/errors/user-source/auth.js"
 
 export type JWTCredentials = {

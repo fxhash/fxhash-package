@@ -1,4 +1,4 @@
-import { IEquatableError } from "@fxhash/shared"
+import { IEquatableError } from "@fxhash/utils"
 
 export class IframeRequestTimeoutError extends Error {
   name = "IframeRequestTimeoutError" as const

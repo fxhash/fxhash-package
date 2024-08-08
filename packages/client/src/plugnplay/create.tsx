@@ -4,7 +4,7 @@
  */
 
 import { createClient, ICreateClientParams } from "@/basic/_index.js"
-import { AtLeastOne, cleanup, intialization } from "@fxhash/utils"
+import { AtLeastOne, cleanup, intialization, invariant } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
@@ -13,7 +13,7 @@ import {
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
 } from "@fxhash/core"
-import { BlockchainNetwork, invariant } from "@fxhash/shared"
+import { BlockchainNetwork } from "@fxhash/shared"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
 import { getDefaultConfig, useModal } from "connectkit"
 import { createConfig, Config } from "wagmi"

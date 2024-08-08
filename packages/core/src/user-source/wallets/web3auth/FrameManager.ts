@@ -24,7 +24,7 @@ import {
   success,
   IEquatableError,
   PromiseResult,
-} from "@fxhash/shared"
+} from "@fxhash/utils"
 import {
   FrameManagerEventEmitter,
   SessionDetails,

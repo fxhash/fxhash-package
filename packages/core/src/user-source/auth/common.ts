@@ -20,12 +20,12 @@ import type {
   IWalletsAccountSource,
   StoredAccount,
 } from "./_interfaces.js"
+import { type JwtAccessTokenPayload } from "@fxhash/shared"
 import {
-  type JwtAccessTokenPayload,
   type PromiseResult,
   type IEquatableError,
   invariant,
-} from "@fxhash/shared"
+} from "@fxhash/utils"
 import { Init, cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"
 import { jwtDecode } from "jwt-decode"

@@ -17,9 +17,11 @@ import {
   UserSourceEventsTypemap,
   WalletManagersMap,
   deriveManagersMap,
+  cleanup,
+  DeepOmit,
+  BlockchainNetwork,
+  invariant,
 } from "@fxhash/sdk"
-import { cleanup, DeepOmit } from "@fxhash/utils"
-import { BlockchainNetwork, invariant } from "@fxhash/shared"
 
 export type ReactClientPlugnPlayOptions = DeepOmit<
   ClientPlugnPlayOptions,

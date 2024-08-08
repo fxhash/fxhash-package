@@ -12,8 +12,14 @@ import {
   disconnect,
   injected,
 } from "@wagmi/core"
-import { BlockchainNetwork, failure, success } from "@fxhash/shared"
-import { intialization, setIntervalCapped, sleep } from "@fxhash/utils"
+import { BlockchainNetwork } from "@fxhash/shared"
+import {
+  intialization,
+  setIntervalCapped,
+  sleep,
+  failure,
+  success,
+} from "@fxhash/utils"
 import { createEvmWalletManager, walletSource } from "../common/_private.js"
 import {
   EvmClientsNotAvailableError,

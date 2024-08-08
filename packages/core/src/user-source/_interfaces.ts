@@ -1,6 +1,4 @@
-import { EthereumWalletManager } from "@fxhash/eth"
 import { BlockchainNetwork } from "@fxhash/shared"
-import { TezosWalletManager } from "@fxhash/tez"
 import { EventEmitter } from "@fxhash/utils"
 import {
   GetSingleUserAccountResult,

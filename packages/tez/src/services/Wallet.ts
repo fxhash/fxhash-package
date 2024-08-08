@@ -17,14 +17,12 @@ import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   NetworkError,
   BadRequestError,
   TransactionType,
   BlockchainType,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success } from "@fxhash/utils"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"

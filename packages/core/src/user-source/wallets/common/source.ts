@@ -1,8 +1,5 @@
-import {
-  type PromiseResult,
-  BlockchainNetwork,
-  invariant,
-} from "@fxhash/shared"
+import { BlockchainNetwork } from "@fxhash/shared"
+import { type PromiseResult, invariant } from "@fxhash/utils"
 import {
   type IWalletsSource,
   type IWalletRequirements,

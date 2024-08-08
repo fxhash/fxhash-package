@@ -3,12 +3,8 @@ import {
   type IAccountSourceCommonOptions,
   type IWalletsAccountSource,
 } from "./_interfaces.js"
-import {
-  BlockchainNetwork,
-  PromiseResult,
-  networkToChain,
-} from "@fxhash/shared"
-import { failure, invariant, success } from "@fxhash/shared"
+import { BlockchainNetwork, networkToChain } from "@fxhash/shared"
+import { type PromiseResult, failure, invariant, success } from "@fxhash/utils"
 import { type TezosWalletManager } from "@fxhash/tez"
 import {
   isEthereumWalletManager,

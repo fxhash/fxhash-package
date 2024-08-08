@@ -14,12 +14,7 @@
  * if they are it is eventually known).
  */
 
-import {
-  IEquatableError,
-  PromiseResult,
-  failure,
-  success,
-} from "@fxhash/shared"
+import { IEquatableError, PromiseResult, failure, success } from "@fxhash/utils"
 import {
   ConnectionAlreadyEstablishedError,
   IframeBDError,
@@ -397,10 +392,13 @@ export abstract class IframeBDCommHost<
     )
   }
 
-  protected async _handleRequest(
-    payload: RequestPayload<_Key<MessageTypes["host->frame"]>>,
+  protected async _handleRequest<K extends _Key<MessageTypes["host->frame"]>>(
+    payload: RequestPayload<K>,
     event: MessageEvent
-  ) {
+  ): PromiseResult<
+    MessageTypes[OtherDir<"host->frame">][K]["res"],
+    NonNullable<MessageTypes[OtherDir<"host->frame">][K]["errors"]>
+  > {
     return this.processRequest(payload, event)
   }
 }
@@ -443,10 +441,13 @@ export abstract class IframeBDCommFrame<
     window.parent.postMessage(message, this.connection!.origin)
   }
 
-  protected async _handleRequest(
-    payload: RequestPayload<_Key<MessageTypes["frame->host"]>>,
+  protected async _handleRequest<K extends _Key<MessageTypes["frame->host"]>>(
+    payload: RequestPayload<K>,
     event: MessageEvent
-  ) {
+  ): PromiseResult<
+    MessageTypes[OtherDir<"frame->host">][K]["res"],
+    NonNullable<MessageTypes[OtherDir<"frame->host">][K]["errors"]>
+  > {
     if (payload.header.type === "__handshake") {
       if (this.connected) {
         return failure(

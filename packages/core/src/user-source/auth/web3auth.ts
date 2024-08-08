@@ -1,4 +1,4 @@
-import { PromiseResult, failure, success } from "@fxhash/shared"
+import { PromiseResult, failure, success } from "@fxhash/utils"
 import {
   type IAccountSourceCommonOptions,
   type IWeb3AuthAccountSource,
