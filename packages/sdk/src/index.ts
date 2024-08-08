@@ -3,6 +3,7 @@ export * from "@fxhash/config"
 export * from "@fxhash/core"
 export * from "@fxhash/eth"
 export * from "@fxhash/gql"
+export * from "@fxhash/gql-client"
 export * from "@fxhash/shared"
 export * from "@fxhash/tez"
 export * from "@fxhash/utils"
@@ -51,4 +52,4 @@ export {
   failure,
   invariant,
   success,
-} from "@fxhash/utils"
+} from "@fxhash/shared"

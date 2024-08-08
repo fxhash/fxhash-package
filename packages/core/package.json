@@ -3,22 +3,7 @@
   "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
   "version": "0.0.1",
   "author": "fxhash",
-  "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
-    "@taquito/utils": "17.3.1",
-    "@wagmi/connectors": "5.0.22",
-    "@wagmi/core": "2.11.7",
-    "esbuild-css-modules-plugin": "2.7.1",
-    "ethers": "6.8.1",
-    "jwt-decode": "4.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@fxhash/config": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
@@ -28,6 +13,7 @@
     "@types/react-dom": "18.2.18",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
+    "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.45.0",
     "tsup": "6.6.0",
     "typescript": "5.3.3",
@@ -48,6 +34,15 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "peerDependencies": {
+    "@airgap/beacon-sdk": "4.2.2",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@taquito/utils": "17.3.1",
+    "@wagmi/connectors": "5.0.22",
+    "@wagmi/core": "2.11.7",
     "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/tez": "workspace:*",
@@ -55,7 +50,9 @@
     "@taquito/signer": "17.3.1",
     "@taquito/taquito": "17.3.1",
     "viem": "2.13.10",
-    "wagmi": "2.10.10"
+    "wagmi": "2.10.10",
+    "ethers": "6.8.1",
+    "jwt-decode": "4.0.0"
   },
   "publishConfig": {
     "access": "public"

@@ -3,16 +3,7 @@
   "description": "Bundle of all the fxhash low & medium level packages exported as one.",
   "version": "0.0.1",
   "author": "fxhash",
-  "dependencies": {
-    "@fxhash/client": "workspace:*",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/core": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
@@ -23,6 +14,17 @@
     "tsup": "8.0.1",
     "typescript": "5.3.3",
     "vitest": "0.34.6"
+  },
+  "peerDependencies": {
+    "@fxhash/client": "workspace:*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "exports": {
     ".": {

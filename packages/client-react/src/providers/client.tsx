@@ -13,13 +13,11 @@ import {
   DependencyProviders,
   createClientPlugnPlay,
   QueryClient,
-} from "@fxhash/sdk"
-import {
   GetSingleUserAccountResult,
   UserSourceEventsTypemap,
   WalletManagersMap,
   deriveManagersMap,
-} from "../../../core/dist/index.js"
+} from "@fxhash/sdk"
 import { cleanup, DeepOmit } from "@fxhash/utils"
 import { BlockchainNetwork, invariant } from "@fxhash/shared"
 
