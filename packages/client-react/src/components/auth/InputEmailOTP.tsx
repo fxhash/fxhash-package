@@ -18,13 +18,20 @@ export function InputRequestEmailOTP() {
         <form
           onSubmit={async evt => {
             evt.preventDefault()
-            client?.loginWeb2({
-              method: "email",
-              options: {
-                email: otpReq.email,
-                otp: otp,
-              },
-            })
+            try {
+              const response = await client?.loginWeb2({
+                method: "email",
+                options: {
+                  email: otpReq.email,
+                  otp: otp,
+                },
+              })
+              console.log("login success !")
+              console.log({ response })
+            } catch (err) {
+              console.log("error when logging in")
+              console.log({ err })
+            }
           }}
         >
           <div>

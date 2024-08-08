@@ -110,17 +110,14 @@ export function eip1193WalletSource({
         await _handleAccountChange(getAccount(wagmiConfig))
         _init.finish()
       } catch (err) {
+        console.error(err)
         throw _init.fail(err)
       }
     },
 
-    disconnect: () => {
-      _init.check()
-      return disconnect(wagmiConfig)
-    },
+    disconnect: () => disconnect(wagmiConfig),
 
     createManager: async info => {
-      _init.check()
       if (!info) return failure(new EvmClientsNotAvailableError())
 
       /**

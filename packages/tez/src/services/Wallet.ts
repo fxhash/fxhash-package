@@ -12,6 +12,7 @@ import {
   AbortedBeaconError,
   DAppClientOptions,
   NetworkType,
+  SigningType,
 } from "@airgap/beacon-sdk"
 import {
   PendingSigningRequestError,
@@ -47,6 +48,19 @@ export function isWalletProvider(
   provider: TezosProvider
 ): provider is TezosWalletProvider {
   return !!(provider as TezosWalletProvider).wallet
+}
+
+/**
+ * Check whether a WalletProvider is a BeaconWallet (checking for the existence
+ * of some properties from BeaconWallet
+ */
+export function isBeaconWallet(
+  provider: WalletProvider
+): provider is BeaconWallet {
+  if (!(provider as BeaconWallet).client) return false
+  const client = (provider as BeaconWallet).client
+  if (client.requestSignPayload || client.requestOperation) return true
+  return false
 }
 
 type TezosSignerProvider = {
@@ -137,9 +151,19 @@ export class TezosWalletManager extends WalletManager {
       const payloadBytes = encodeSignMessagePayload(message)
       let signature = null
       if (isWalletProvider(this.wallet)) {
-        // todo: is it working ?!
-        const res = await this.wallet.wallet.sign(payloadBytes)
-        signature = res
+        const provider = this.wallet.wallet
+        // special case for BeaconWallet, requires calling requestSignPayload
+        if (isBeaconWallet(provider)) {
+          const res = await provider.client.requestSignPayload({
+            signingType: SigningType.MICHELINE,
+            payload: payloadBytes,
+            sourceAddress: this.address,
+          })
+          signature = res.signature
+        } else {
+          const res = await this.wallet.wallet.sign(payloadBytes)
+          signature = res
+        }
       } else {
         const res = await this.wallet.signer.sign(payloadBytes)
         signature = res.sig
