@@ -4,9 +4,8 @@ import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
-import { GenerativeTokenVersion, TransactionType } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
-import { DUTCH_AUCTION_MINTER_V2_ABI } from "@/abi/DutchAuctionMinterV2.js"
 
 /**
  * The TMintDAMintPassEthV1OperationParams type represents the parameters required for a mint operation in a
@@ -28,7 +27,6 @@ export type TMintDAMintPassEthV1OperationParams = {
   index: number
   signature: string
   to: string | null
-  version: GenerativeTokenVersion
 }
 
 /**
@@ -43,16 +41,9 @@ export class MintDAMintPassEthV1Operation extends EthereumContractOperation<TMin
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
-    const isV2 =
-      this.params.version === GenerativeTokenVersion.ETH_V2 ||
-      this.params.version === GenerativeTokenVersion.BASE_V2
-    const abi = isV2 ? DUTCH_AUCTION_MINTER_V2_ABI : DUTCH_AUCTION_MINTER_ABI
-    const minter = isV2
-      ? currentConfig.contracts.dutch_auction_minter_v2
-      : currentConfig.contracts.dutch_auction_minter_v1
     const args: SimulateAndExecuteContractRequest = {
-      address: minter,
-      abi: abi,
+      address: currentConfig.contracts.dutch_auction_minter_v1,
+      abi: DUTCH_AUCTION_MINTER_ABI,
       functionName: "buyMintPass",
       args: [
         this.params.token,
