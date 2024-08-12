@@ -29,16 +29,11 @@ import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import {
-  BlockchainType,
-  GenerativeTokenVersion,
-  invariant,
-} from "@fxhash/shared"
+import { BlockchainType, invariant } from "@fxhash/shared"
 import { config } from "@fxhash/config"
 import { EthereumWalletManager } from "@/services/Wallet.js"
 import { IEthContracts } from "@fxhash/config"
 import gqlClient from "@fxhash/gql-client"
-import { FEE_MANAGER_V1 } from "@/abi/FeeManagerV1.js"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -107,11 +102,9 @@ export type ReserveListEntry = {
  * root.
  */
 export function getFixedPriceMinterEncodedParams(
-  version: GenerativeTokenVersion,
   price: bigint,
   whitelist?: MerkleTreeWhitelist | null,
-  signer: `0x${string}` = ZERO_ADDRESS,
-  maxAmount: number = 0
+  signer: `0x${string}` = ZERO_ADDRESS
 ) {
   let merkleRoot: `0x${string}` = EMPTY_BYTES_32
 
@@ -127,29 +120,14 @@ export function getFixedPriceMinterEncodedParams(
     }
   }
 
-  if (
-    version === GenerativeTokenVersion.ETH_V2 ||
-    version === GenerativeTokenVersion.BASE_V2
-  ) {
-    return encodeAbiParameters(
-      [
-        { name: "price", type: "uint256" },
-        { name: "merkleRoot", type: "bytes32" },
-        { name: "signer", type: "address" },
-        { name: "maxAmountPerFid", type: "uint256" },
-      ],
-      [BigInt(price), merkleRoot, signer, BigInt(maxAmount)]
-    )
-  } else {
-    return encodeAbiParameters(
-      [
-        { name: "price", type: "uint256" },
-        { name: "merkleRoot", type: "bytes32" },
-        { name: "signer", type: "address" },
-      ],
-      [BigInt(price), merkleRoot, signer]
-    )
-  }
+  return encodeAbiParameters(
+    [
+      { name: "price", type: "uint256" },
+      { name: "merkleRoot", type: "bytes32" },
+      { name: "signer", type: "address" },
+    ],
+    [BigInt(price), merkleRoot, signer]
+  )
 }
 
 /**
@@ -287,21 +265,17 @@ export async function processAndFormatMintInfos(
     | TicketMintInfoArgs
   )[],
   manager: EthereumWalletManager,
-  chain: BlockchainType,
-  version: GenerativeTokenVersion
+  chain: BlockchainType
 ): Promise<MintInfo[]> {
   const currentConfig =
     chain === BlockchainType.ETHEREUM ? config.eth : config.base
-  const isV2 =
-    version === GenerativeTokenVersion.ETH_V2 ||
-    version === GenerativeTokenVersion.BASE_V2
   return await Promise.all(
     mintInfos.map(async argsMintInfo => {
       const reserveInfo: ReserveInfo = defineReserveInfo(
         argsMintInfo.reserveInfo
       )
       if (argsMintInfo.type === MintTypes.FIXED_PRICE) {
-        if (argsMintInfo.isFrame && !isV2) {
+        if (argsMintInfo.isFrame) {
           if (mintInfos.length > 1) {
             throw Error("Only frame minter can be configured when using frames")
           }
@@ -330,50 +304,23 @@ export async function processAndFormatMintInfos(
 
           return mintInfo
         } else {
-          const minter = isV2
-            ? (currentConfig.contracts as IEthContracts).fixed_price_minter_v2
-            : (currentConfig.contracts as IEthContracts).fixed_price_minter_v1
-          if (argsMintInfo.isFrame) {
-            const params =
-              argsMintInfo.params as FarcasterFrameFixedPriceMintParams
-            const mintInfo: MintInfo = {
-              minter: minter,
-              reserveInfo: reserveInfo,
-              params: getFixedPriceMinterEncodedParams(
-                version,
-                argsMintInfo.params.price,
-                params.whitelist,
-                params.mintPassSigner
-                  ? (params.mintPassSigner as `0x${string}`)
-                  : undefined
-              ),
-              maxAmountPerFid: 0,
-            }
-            return mintInfo
-          } else {
-            const params = argsMintInfo.params as FixedPriceParams
-            const mintInfo: MintInfo = {
-              minter: minter,
-              reserveInfo: reserveInfo,
-              params: getFixedPriceMinterEncodedParams(
-                version,
-                argsMintInfo.params.price,
-                params.whitelist,
-                params.mintPassSigner
-                  ? (params.mintPassSigner as `0x${string}`)
-                  : undefined
-              ),
-              maxAmountPerFid: 0,
-            }
-            return mintInfo
+          const params = argsMintInfo.params as FixedPriceParams
+          const mintInfo: MintInfo = {
+            minter: currentConfig.contracts.fixed_price_minter_v1,
+            reserveInfo: reserveInfo,
+            params: getFixedPriceMinterEncodedParams(
+              argsMintInfo.params.price,
+              params.whitelist,
+              params.mintPassSigner
+                ? (params.mintPassSigner as `0x${string}`)
+                : undefined
+            ),
           }
+          return mintInfo
         }
       } else if (argsMintInfo.type === MintTypes.DUTCH_AUCTION) {
-        const minter = isV2
-          ? (currentConfig.contracts as IEthContracts).dutch_auction_minter_v2
-          : (currentConfig.contracts as IEthContracts).dutch_auction_minter_v1
         const mintInfo: MintInfo = {
-          minter: minter,
+          minter: currentConfig.contracts.dutch_auction_minter_v1,
           reserveInfo: reserveInfo,
           params: getDutchAuctionMinterEncodedParams(
             argsMintInfo.params.prices,
@@ -706,24 +653,4 @@ export async function getFirstValidReserve(
     args: [token],
   })
   return reserveId as bigint
-}
-
-export async function getFees(
-  publicClient: PublicClient,
-  chain: BlockchainType,
-  token: `0x${string}`,
-  price: bigint,
-  amount: bigint
-): Promise<bigint[]> {
-  const currentConfig =
-    chain === BlockchainType.ETHEREUM ? config.eth : config.base
-
-  const fees = await publicClient.readContract({
-    address: currentConfig.contracts.fee_manager_v1,
-    abi: FEE_MANAGER_V1,
-    functionName: "calculateFees",
-    args: [token, price, amount],
-  })
-
-  return fees as bigint[]
 }

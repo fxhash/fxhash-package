@@ -1,14 +1,10 @@
 import { EthereumContractOperation } from "../contractOperation.js"
 import { MintFixedPriceWhitelistEthV1Operation } from "./MintFixedPriceWhitelistEthV1.js"
-import { getFees, prepareMintParams } from "@/utils/index.js"
+import { prepareMintParams } from "@/utils/index.js"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
-import {
-  GenerativeTokenVersion,
-  TransactionType,
-  invariant,
-} from "@fxhash/shared"
+import { TransactionType, invariant } from "@fxhash/shared"
 
 export type TMintEthV1OperationParams = {
   token: `0x${string}`
@@ -17,7 +13,6 @@ export type TMintEthV1OperationParams = {
   whitelist: boolean
   price: bigint
   isFrame: boolean
-  version: GenerativeTokenVersion
 }
 
 const MAX_RETRIES = 15 // 12 second block time + a few seconds for good measure
@@ -34,10 +29,6 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
     undefined
 
   async prepare() {
-    const isV2 =
-      this.params.version === GenerativeTokenVersion.ETH_V2 ||
-      this.params.version === GenerativeTokenVersion.BASE_V2
-
     const { pricing, indexesAndProofs, reserve, isFixed } =
       await prepareMintParams(
         this.params.token,
@@ -48,16 +39,6 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
     if (pricing.opens_at && pricing.opens_at > new Date().toISOString())
       throw new Error("Minting is not yet open")
 
-    const [platformFees] = await getFees(
-      this.manager.publicClient,
-      this.chain,
-      this.params.token,
-      this.params.price,
-      this.params.qty
-    )
-
-    const price = isV2 ? this.params.price + platformFees : this.params.price
-
     if (!this.params.whitelist) {
       if (isFixed) {
         this.mintOperation = new MintFixedPriceEthV1Operation(
@@ -66,10 +47,9 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             token: this.params.token,
             to: this.params.to,
             reserveId: Number(pricing.id.split("-")[1]),
-            price,
+            price: this.params.price,
             amount: this.params.qty,
             isFrame: this.params.isFrame,
-            version: this.params.version,
           },
           this.chain
         )
@@ -81,8 +61,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             to: this.params.to,
             reserveId: Number(pricing.id.split("-")[1]),
             amount: this.params.qty,
-            price,
-            version: this.params.version,
+            price: this.params.price,
           },
           this.chain
         )
@@ -100,9 +79,8 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             index: indexesAndProofs.indexes,
             proof: indexesAndProofs.proofs,
             reserveId: reserve.data.reserveId,
-            price,
+            price: this.params.price,
             amount: this.params.qty,
-            version: this.params.version,
           },
           this.chain
         )
@@ -116,8 +94,7 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
             proof: indexesAndProofs.proofs,
             reserveId: reserve.data.reserveId,
             amount: this.params.qty,
-            price,
-            version: this.params.version,
+            price: this.params.price,
           },
           this.chain
         )

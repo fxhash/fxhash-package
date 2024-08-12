@@ -13,9 +13,6 @@ export interface IBaseContracts {
   contract_registry_v1: `0x${string}`
   gen_art_token_impl_v1: `0x${string}`
   mint_ticket_impl_v1: `0x${string}`
-  fee_manager_v1: `0x${string}`
-  fixed_price_minter_v2: `0x${string}`
-  dutch_auction_minter_v2: `0x${string}`
   onchfs_file_system: `0x${string}`
   onchfs_content_store: `0x${string}`
   seaport: `0x${string}`
@@ -48,9 +45,6 @@ export const baseTestnetContracts: IBaseContracts = {
   contract_registry_v1: "0xd44B3b2Ee596613c1aFcF85c9b0E41A0ec8B79E2",
   gen_art_token_impl_v1: "0x06976f5C039497d8a79Cc0dCE7A95B3E9748164A",
   mint_ticket_impl_v1: "0xa71b5935366BA29332033217a9E83698acadfd2f",
-  fee_manager_v1: "0x97C782803C8E4F283eBeEd41eaC4a73748637a3B",
-  fixed_price_minter_v2: "0x061374e9aDB6521d15F5a6440cA56903F241a9e5",
-  dutch_auction_minter_v2: "0x5a514e7652Ea61C9245709A0beE9d6054CeD1628",
   onchfs_file_system: "0x3fb48e03291b2490f939c961a1ad088437129f71",
   onchfs_content_store: "0x48AC7370df2d5982852172A4D857c29608AFa774",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",
@@ -81,9 +75,6 @@ export const baseMainnetContracts: IBaseContracts = {
   contract_registry_v1: "0xCa6e30B1C7cBE7cF605cE30B334f968C5E2EA016",
   gen_art_token_impl_v1: "0xC5769428823C9a0393DC66855DD3817b2A85BEFD",
   mint_ticket_impl_v1: "0x3e9754Da0fb002Fa13D69B2f313d5CB441fC8ef5",
-  fee_manager_v1: "0xtodo",
-  fixed_price_minter_v2: "0xtodo",
-  dutch_auction_minter_v2: "0xtodo",
   onchfs_file_system: "0x2983008f292a43f208bba0275afd7e9b3d39af3b",
   onchfs_content_store: "0x070e5A608705aC4954eec054f9074eEe49bDcbfF",
   seaport: "0x00cA04c45da318d5b7E7B14D5381Ca59F09C73f0",

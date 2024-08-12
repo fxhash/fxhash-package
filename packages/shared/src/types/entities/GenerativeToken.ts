@@ -116,11 +116,8 @@ export enum GenerativeTokenVersion {
   "PRE_V3" = "PRE_V3",
   V3 = "V3",
   ETH_V1 = "ETH_V1",
-  ETH_V2 = "ETH_V2",
   BASE_V1 = "BASE_V1",
-  BASE_V2 = "BASE_V2",
 }
-
 export interface GenerativeToken {
   id: string
   version: GenerativeTokenVersion

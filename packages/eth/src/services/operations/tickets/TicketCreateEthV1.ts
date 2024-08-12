@@ -9,7 +9,7 @@ import {
   TicketMintInfoArgs,
 } from "@/services/operations/EthCommon.js"
 import { processAndFormatMintInfos } from "@/utils/minters.js"
-import { GenerativeTokenVersion, TransactionType } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
 
 export type TCreateTicketEthV1OperationParams = {
   token: string
@@ -20,7 +20,6 @@ export type TCreateTicketEthV1OperationParams = {
     | DutchAuctionMintInfoArgs
     | TicketMintInfoArgs
   )[]
-  version: GenerativeTokenVersion
 }
 
 /**
@@ -51,8 +50,7 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
         await processAndFormatMintInfos(
           this.params.mintInfo,
           this.manager,
-          this.chain,
-          this.params.version
+          this.chain
         ),
       ],
       chain: getCurrentChain(this.chain),

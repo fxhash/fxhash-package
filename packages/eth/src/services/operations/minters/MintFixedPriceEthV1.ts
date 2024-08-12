@@ -1,11 +1,10 @@
 import { EthereumContractOperation } from "../contractOperation.js"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
-import { FIXED_PRICE_MINTER_V2_ABI } from "@/abi/FixedPriceMinterV2.js"
 import {
   simulateAndExecuteContract,
   SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
-import { GenerativeTokenVersion, TransactionType } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import { getFirstValidReserve } from "@/utils/minters.js"
 import { FARCASTER_FRAME_FIXED_PRICE_MINTER } from "@/abi/FarcasterFrameFixedPriceMinter.js"
@@ -28,7 +27,6 @@ export type TMintFixedPriceEthV1OperationParams = {
   amount: bigint
   to: string | null
   isFrame: boolean
-  version: GenerativeTokenVersion
 }
 
 /**
@@ -51,26 +49,11 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
           this.params.token as `0x${string}`
         )
       : this.params.reserveId
-    const isV2 =
-      this.params.version === GenerativeTokenVersion.ETH_V2 ||
-      this.params.version === GenerativeTokenVersion.BASE_V2
-    const minter =
-      this.params.isFrame && !isV2
-        ? currentConfig.contracts.farcaster_frame_fixed_price_minter_v1
-        : isV2
-          ? currentConfig.contracts.fixed_price_minter_v2
-          : currentConfig.contracts.fixed_price_minter_v1
-
-    const abi =
-      this.params.isFrame && !isV2
-        ? FARCASTER_FRAME_FIXED_PRICE_MINTER
-        : isV2
-          ? FIXED_PRICE_MINTER_V2_ABI
-          : FIXED_PRICE_MINTER_ABI
-
     const args: SimulateAndExecuteContractRequest = {
-      address: minter,
-      abi: abi,
+      address: this.params.isFrame
+        ? currentConfig.contracts.farcaster_frame_fixed_price_minter_v1
+        : currentConfig.contracts.fixed_price_minter_v1,
+      abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buy",
       args: [this.params.token, reserveId, this.params.amount, this.params.to],
       account: this.manager.address as `0x${string}`,
