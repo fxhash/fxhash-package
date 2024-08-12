@@ -25,11 +25,7 @@ import {
   encodeProjectFactoryArgs,
   encodeTicketFactoryArgs,
 } from "@/utils/factories.js"
-import {
-  GenerativeTokenVersion,
-  TransactionType,
-  invariant,
-} from "@fxhash/shared"
+import { TransactionType, invariant } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 export type ScriptyHTMLTag = {
@@ -102,7 +98,6 @@ export type TCreateProjectEthV1OperationParams = {
     )[]
   }
   collabAddress?: string
-  version: GenerativeTokenVersion
 }
 
 /**
@@ -209,8 +204,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     const mintInfos: MintInfo[] = await processAndFormatMintInfos(
       this.params.mintInfo,
       this.manager,
-      this.chain,
-      this.params.version
+      this.chain
     )
 
     const hasTicketMintInfo = this.params.mintInfo.some(mint => {
@@ -251,8 +245,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         await processAndFormatMintInfos(
           this.params.ticketInfo.mintInfo,
           this.manager,
-          this.chain,
-          this.params.version
+          this.chain
         )
       )
       args = [
