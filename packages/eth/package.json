@@ -38,7 +38,7 @@
     "multiformats": "13.1.0",
     "onchfs": "workspace:*",
     "path": "0.12.7",
-    "viem": "2.9.2"
+    "viem": "2.19.4"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
@@ -49,7 +49,7 @@
     "tslib": "2.6.2",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
-    "viem": "2.9.2",
+    "viem": "2.19.4",
     "vitest": "0.34.6"
   },
   "peerDependencies": {
