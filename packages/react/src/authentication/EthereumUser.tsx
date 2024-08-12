@@ -144,6 +144,7 @@ export function EthereumUserProvider({
         network: BlockchainType.ETHEREUM,
         payload: result.value.message,
         signature: result.value.signature,
+        address: accountState.address!,
       },
     })
   }
@@ -175,6 +176,7 @@ export function EthereumUserProvider({
                   network: BlockchainType.ETHEREUM,
                   payload: result.value.message,
                   signature: result.value.signature,
+                  address: address,
                 },
               })
             )

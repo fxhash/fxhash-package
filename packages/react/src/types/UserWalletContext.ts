@@ -17,7 +17,9 @@ interface BaseWalletAuthorization {
 export interface TezosWalletAuthorization extends BaseWalletAuthorization {
   publicKey: string
 }
-export interface EthereumWalletAuthorization extends BaseWalletAuthorization {}
+export interface EthereumWalletAuthorization extends BaseWalletAuthorization {
+  address: string
+}
 export type BlockchainAuthorization =
   | TezosWalletAuthorization
   | EthereumWalletAuthorization

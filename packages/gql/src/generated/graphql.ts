@@ -57,8 +57,8 @@ export type Account = {
   id: Scalars['uuid']['output'];
   /** An object relationship */
   mainWallet: Wallet;
-  /** An object relationship */
-  profile?: Maybe<Profile>;
+  /** An array relationship */
+  profile: Array<Profile>;
   /** An array relationship */
   roles: Array<AccountsRoles>;
   status: Scalars['AccountStatus']['output'];
