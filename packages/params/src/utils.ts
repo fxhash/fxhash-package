@@ -480,17 +480,22 @@ export function buildParamsObject(
 
 export function getRandomParamValues(
   params: FxParamDefinition<FxParamType>[],
-  options?: { noTransform: boolean }
+  options?: { noTransform?: boolean; randomizeAll?: boolean }
 ): any {
   return params.reduce(
     (acc, definition) => {
       const processor = ParameterProcessors[
         definition.type as FxParamType
       ] as FxParamProcessor<FxParamType>
-      const v = processor.random(definition) as FxParamType
-      acc[definition.id] = options?.noTransform
-        ? v
-        : processor.transform?.(v) || v
+      let v = (definition.value || definition.default) as FxParamType
+      if (definition.update !== "code-driven" || options?.randomizeAll) {
+        v = processor.random(definition) as FxParamType
+      }
+      if (v) {
+        acc[definition.id] = options?.noTransform
+          ? v
+          : processor.transform?.(v) || v
+      }
       return acc
     },
     {} as Record<string, any>
