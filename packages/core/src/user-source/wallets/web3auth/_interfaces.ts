@@ -1,13 +1,14 @@
 import { Hex } from "viem"
-import { EventEmitter } from "@fxhash/utils"
+import { EventEmitter, PromiseResult } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
+import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
+import { EmailOTPRequestError, WithGqlErrors } from "@fxhash/errors"
 import {
   IWalletConnected,
   IWalletsSource,
   Web3AuthFrameResponseErrors,
 } from "@/index.js"
-import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
   update: (detais: SessionDetails | null) => void
@@ -29,7 +30,12 @@ export interface IWeb3AuthWalletsSource extends IWalletsSource {
    *
    * @param email Email to which the OTP should be sent
    */
-  emailRequestOTP: (email: string) => Promise<Web3AuthEmailRequestOtpOutput>
+  emailRequestOTP: (
+    email: string
+  ) => PromiseResult<
+    Web3AuthEmailRequestOtpOutput,
+    WithGqlErrors<EmailOTPRequestError>
+  >
 
   /**
    * @returns The current Web3Auth session details.
