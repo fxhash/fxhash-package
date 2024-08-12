@@ -234,8 +234,6 @@ export class EthereumWalletManager extends WalletManager {
       } else {
         signature = await this.walletClient.signMessage({
           message,
-          // ! TODO: to fix
-          // @ts-ignore
           account: this.address as `0x${string}`,
         })
       }
