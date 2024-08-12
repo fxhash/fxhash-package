@@ -8,12 +8,13 @@ const GOOGLE_CLIENT_ID =
 /**
  * TODO: Remove from here, shoudl be in react package
  */
-export function GoogleLoginBtn() {
+export function SigninButtonGoogle() {
   const { client } = useClient()
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <GoogleLogin
+        width={300}
         onSuccess={response => {
           if (!response.credential)
             throw Error("credentials missing from google login")

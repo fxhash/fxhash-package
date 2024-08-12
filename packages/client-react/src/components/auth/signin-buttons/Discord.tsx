@@ -1,11 +1,13 @@
 import { useClient } from "@/index.js"
 import { openPopup } from "@fxhash/utils-browser"
+import { AuthButton } from "./AuthButton"
+import icon from "@/icons/discord.svg"
 
-export type DiscordLoginBtnProps = {
+type Props = {
   clientId: string
 }
 
-export function DiscordLoginBtn({ clientId }: DiscordLoginBtnProps) {
+export function SigniButtonDiscord({ clientId }: Props) {
   const { client } = useClient()
 
   const handleToken = (token: string) => {
@@ -41,7 +43,6 @@ export function DiscordLoginBtn({ clientId }: DiscordLoginBtnProps) {
       scrollbars: true,
     })
     const ID = setInterval(() => {
-      console.log("tick")
       if (popup?.closed) clearInterval(ID)
       const close = () => {
         popup?.close()
@@ -50,14 +51,12 @@ export function DiscordLoginBtn({ clientId }: DiscordLoginBtnProps) {
 
       try {
         const href = popup?.location.href!
-        console.log(href)
         const url = new URL(href)
         if (url.origin === window.location.origin) {
           const fragParams = new URLSearchParams(url.hash)
           if (fragParams.get("state") !== state) return close()
           const _token = fragParams.get("access_token")
           if (!_token) return close()
-          console.log({ _token })
           handleToken(_token)
           return close()
         }
@@ -68,8 +67,8 @@ export function DiscordLoginBtn({ clientId }: DiscordLoginBtnProps) {
   }
 
   return (
-    <button type="button" onClick={handleLogin}>
-      login with discord
-    </button>
+    <AuthButton icon={icon} onClick={handleLogin}>
+      Sign in with Discord
+    </AuthButton>
   )
 }

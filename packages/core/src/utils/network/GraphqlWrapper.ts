@@ -89,3 +89,10 @@ export class GraphqlWrapper implements IGraphqlWrapper {
     delete this._headers[key]
   }
 }
+
+type AnyVariables =
+  | {
+      [prop: string]: any
+    }
+  | void
+  | undefined
