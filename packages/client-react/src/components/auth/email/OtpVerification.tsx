@@ -1,0 +1,85 @@
+import { OTPInput } from "input-otp"
+import css from "./OtpVerification.module.css"
+import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
+import { useState } from "react"
+import { useClient } from "@/index.js"
+
+type Props = {
+  request: Web3AuthEmailRequestOtpOutput
+}
+export function OtpVerification({ request }: Props) {
+  const { client } = useClient()
+  const [value, setValue] = useState("")
+  const [error, setError] = useState<string | null>(null)
+
+  async function _handleSubmit() {
+    if (!client) return
+    try {
+      const res = await client.loginWeb2({
+        method: "email",
+        options: {
+          email: request.email,
+          otp: value,
+        },
+      })
+      console.log(res)
+      if (res.isFailure()) {
+        // todo: should be userMessage here, when properly typed
+        // @ts-ignore
+        setError(res.error.cause?.message)
+      }
+    } catch (err) {
+      console.log(err)
+      setError("Unexpected error")
+    }
+  }
+
+  return (
+    <form
+      className={`${css.root} ${error ? css.error : ""}`}
+      onSubmit={async evt => {
+        evt.preventDefault()
+        _handleSubmit()
+      }}
+    >
+      <span className={css.title}>Enter verification code</span>
+      <span className={css.info}>
+        Check {request.email} for the verification code
+      </span>
+      <div className={css.otpWrapper}>
+        <OTPInput
+          autoFocus
+          value={value}
+          onChange={setValue}
+          maxLength={6}
+          containerClassName={css.otp}
+          textAlign="center"
+          render={({ slots }) =>
+            slots.map((slot, idx) => (
+              <div
+                key={idx}
+                className={`${css.otpDigit} ${slot.isActive ? css.active : ""}`}
+              >
+                {slot.char}
+                {slot.hasFakeCaret && <FakeCaret />}
+              </div>
+            ))
+          }
+        />
+        {error && <div className={css.errorMessage}>{error}</div>}
+      </div>
+
+      <button type="submit" disabled={value.length !== 6}>
+        Submit
+      </button>
+    </form>
+  )
+}
+
+function FakeCaret() {
+  return (
+    <div className={css.fakeCaretWrapper}>
+      <div className={css.fakeCaret} />
+    </div>
+  )
+}

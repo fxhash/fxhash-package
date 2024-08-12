@@ -3,9 +3,9 @@ import {
   SigniButtonDiscord,
   SigninButtonGoogle,
   SigninButtonTezos,
-  SigninEmail,
-} from "./_index"
-import { SigninButtonEthereum } from "./signin-buttons/Ethereum"
+} from "./_index.js"
+import { SigninEmail } from "./email/SigninEmail.js"
+import { SigninButtonEthereum } from "./signin-buttons/Ethereum.js"
 
 type Props = {}
 export function Authentication({}: Props) {

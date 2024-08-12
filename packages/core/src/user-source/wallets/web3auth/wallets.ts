@@ -134,15 +134,12 @@ export function web3AuthWallets({
 
     login: async options => {
       _init.check()
-      const res = await frameManager.login(options)
-      if (res.isFailure()) throw res.error
+      return frameManager.login(options)
     },
 
     getWeb3AuthSessionDetails: async () => {
       _init.check()
-      const res = await frameManager.getSessionDetails()
-      if (res.isFailure()) throw res.error
-      return res.value
+      return frameManager.getSessionDetails()
     },
   }
 

@@ -1,5 +1,5 @@
-import { useClient } from "@/index"
-import { AuthButton } from "./AuthButton"
+import { useClient } from "@/index.js"
+import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/ethereum.svg"
 import { BlockchainNetwork } from "@fxhash/sdk"
 

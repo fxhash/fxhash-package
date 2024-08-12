@@ -57,15 +57,15 @@ export function authWeb3Auth({
     > => {
       try {
         const sessionDetails = await wallets.getWeb3AuthSessionDetails()
-        if (!sessionDetails) {
+        if (sessionDetails.isFailure() || !sessionDetails.value) {
           return failure(new Web3AuthNoSessionConnectedError())
         }
-        if (sessionDetails.provider !== "web3auth") {
+        if (sessionDetails.value.provider !== "web3auth") {
           return failure(new Web3AuthInvalidProviderError())
         }
 
         const { idToken: token, compressedPublicKey } =
-          sessionDetails.providerDetails
+          sessionDetails.value.providerDetails
 
         const credentials = await authenticateWeb3Auth(
           {

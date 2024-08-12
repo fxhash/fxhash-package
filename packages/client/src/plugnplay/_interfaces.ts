@@ -55,7 +55,7 @@ export interface IClientPlugnPlay {
   // todo: comments
   disconnectAllWallets: () => Promise<void>
   requestEmailOTP: IWeb3AuthWalletsSource["emailRequestOTP"]
-  loginWeb2: (options: Web3AuthLoginPayload) => Promise<void>
+  loginWeb2: IWeb3AuthWalletsSource["login"]
   logoutAccount: () => Promise<void>
   release: () => void
 }

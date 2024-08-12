@@ -4,14 +4,21 @@
  */
 
 import { createClient, ICreateClientParams } from "@/basic/_index.js"
-import { AtLeastOne, cleanup, intialization, invariant } from "@fxhash/utils"
-import { isBrowser } from "@fxhash/utils-browser"
+import {
+  AtLeastOne,
+  cleanup,
+  failure,
+  intialization,
+  invariant,
+} from "@fxhash/utils"
+import { isBrowser, ResponseError } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
   defaultStorageDriver,
   jwtCredentials,
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
+  Web3AuthFrameUnknownError,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
@@ -268,7 +275,9 @@ export function createClientPlugnPlay({
     },
 
     async loginWeb2(payload: Web3AuthLoginPayload) {
-      return client.walletSources.web3auth?.login(payload)
+      if (!client.walletSources.web3auth)
+        return failure(new ResponseError(new Web3AuthFrameUnknownError()))
+      return client.walletSources.web3auth.login(payload)
     },
 
     async requestEmailOTP(email: string) {

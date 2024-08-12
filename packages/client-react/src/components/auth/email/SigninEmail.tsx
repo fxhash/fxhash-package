@@ -2,12 +2,16 @@ import { useState } from "react"
 import css from "./SigninEmail.module.css"
 import { useClient } from "@/hooks/useClient.js"
 import icon from "@/icons/email.svg"
+import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
+import { OtpVerification } from "./OtpVerification.js"
 
 type Props = {}
 export function SigninEmail({}: Props) {
   const { client } = useClient()
   const [email, setEmail] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [otpRequest, setOtpRequest] =
+    useState<Web3AuthEmailRequestOtpOutput | null>(null)
 
   const _setEmail = (email: string) => {
     setEmail(email)
@@ -21,8 +25,7 @@ export function SigninEmail({}: Props) {
       if (res.isFailure()) {
         setError(res.error.userMessage)
       } else {
-        console.log("TODO: handle")
-        console.log(res.value)
+        setOtpRequest(res.value)
       }
     } catch (err: any) {
       console.log(err)
@@ -31,29 +34,33 @@ export function SigninEmail({}: Props) {
   }
 
   return (
-    <div>
-      <form
-        className={`${css.root} ${error ? css.error : ""}`}
-        onSubmit={evt => {
-          evt.preventDefault()
-          _handleSubmitEmail()
-        }}
-      >
-        <label>
-          <img className={css.icon} src={icon} />
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={evt => _setEmail(evt.target.value)}
-            placeholder="your@email.com"
-          />
-          <button type="submit">submit</button>
-        </label>
-      </form>
+    <>
+      <div>
+        <form
+          className={`${css.root} ${error ? css.error : ""}`}
+          onSubmit={evt => {
+            evt.preventDefault()
+            _handleSubmitEmail()
+          }}
+        >
+          <label>
+            <img className={css.icon} src={icon} />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={evt => _setEmail(evt.target.value)}
+              placeholder="your@email.com"
+            />
+            <button type="submit">submit</button>
+          </label>
+        </form>
 
-      {error && <div className={css.errorMessage}>{error}</div>}
-    </div>
+        {error && <div className={css.errorMessage}>{error}</div>}
+      </div>
+
+      {otpRequest && <OtpVerification request={otpRequest} />}
+    </>
   )
 }

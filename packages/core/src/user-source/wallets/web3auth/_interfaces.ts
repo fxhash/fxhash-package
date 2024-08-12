@@ -7,6 +7,7 @@ import { EmailOTPRequestError, WithGqlErrors } from "@fxhash/errors"
 import {
   IWalletConnected,
   IWalletsSource,
+  Web3AuthFrameManager,
   Web3AuthFrameResponseErrors,
 } from "@/index.js"
 
@@ -21,7 +22,9 @@ export interface IWeb3AuthWalletsSource extends IWalletsSource {
    *
    * @param payload login payload
    */
-  login: (payload: Web3AuthLoginPayload) => Promise<any>
+  login: (
+    payload: Web3AuthLoginPayload
+  ) => ReturnType<Web3AuthFrameManager["login"]>
 
   /**
    * Request a OTP for a given email. The OTP will be sent to the email and
@@ -40,7 +43,9 @@ export interface IWeb3AuthWalletsSource extends IWalletsSource {
   /**
    * @returns The current Web3Auth session details.
    */
-  getWeb3AuthSessionDetails: () => Promise<SessionDetails | null>
+  getWeb3AuthSessionDetails: () => ReturnType<
+    Web3AuthFrameManager["getSessionDetails"]
+  >
 }
 
 export interface IWeb3AuthIdentity {

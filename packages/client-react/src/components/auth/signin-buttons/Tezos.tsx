@@ -1,7 +1,7 @@
 import { BlockchainNetwork } from "@fxhash/sdk"
-import { AuthButton } from "./AuthButton"
+import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/tezos.svg"
-import { useClient } from "@/index"
+import { useClient } from "@/index.js"
 
 export function SigninButtonTezos() {
   const { client } = useClient()

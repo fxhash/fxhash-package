@@ -1,0 +1,124 @@
+.root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.root button {
+  background: black;
+  color: white;
+  border-radius: 3px;
+  min-width: 150px;
+  height: 40px;
+  padding: 0 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.root button:hover {
+  transform: scale(1.1);
+  font-size: calc(1em / 1.1 * 0.9);
+}
+
+.root button:disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.title {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.info {
+  color: #909090;
+  font-size: 0.75em;
+  width: 80%;
+}
+
+.otpWrapper {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.otp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  gap: 10px;
+}
+
+.otpDigit {
+  flex: 1 1 0;
+  background-color: white;
+  border-radius: 3px;
+  border: 2px solid #3c4043;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 20px;
+  position: relative;
+}
+
+.otpDigit.active {
+  box-shadow: 0 0 0 1px black;
+}
+
+.fakeCaretWrapper {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: caret-blink 1.5s steps(2, jump-none) forwards infinite;
+}
+
+.fakeCaret {
+  height: 50%;
+  width: 1px;
+  background: #3c4043;
+}
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/** ERROR **/
+.root.error .otpDigit {
+  border-color: #ff3333;
+  outline: 1px solid #ff3333;
+}
+
+.root.error .otpDigit.active {
+  border-color: #ff3333;
+  box-shadow: 0 0 0 1px #ff3333;
+}
+
+.errorMessage {
+  color: #ff3333;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-top: 2px;
+}

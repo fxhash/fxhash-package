@@ -1,6 +1,6 @@
 import { useClient } from "@/index.js"
 import { openPopup } from "@fxhash/utils-browser"
-import { AuthButton } from "./AuthButton"
+import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/discord.svg"
 
 type Props = {

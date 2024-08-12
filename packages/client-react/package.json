@@ -40,5 +40,8 @@
     "dev": "tsup --watch"
   },
   "type": "module",
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "input-otp": "1.2.4"
+  }
 }
