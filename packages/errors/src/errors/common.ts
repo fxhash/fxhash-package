@@ -1,9 +1,41 @@
+import { type IEquatableError } from "@fxhash/utils"
+
 /**
- * Errors can implement this interface for error message which can be directly
- * displayed by front-end applications.
+ * Rich Error Messages are messages with extra data for a better usage of errors
+ * passed through the stack. Traditionally, error messages are intended for
+ * developers only (and some custom implementation for user error feedback is
+ * required for clean UIs).
  */
-export interface IFxhashErrorExtension {
-  code: string
+export interface IRichErrorMessages {
+  dev?: string
+  user?: string
+}
+
+/**
+ * Static error messages for "unexpected" errors. This payload is reused accross
+ * the stack for when error data is missing.
+ */
+export const UnexpectedRichErrorMessages: Readonly<
+  Required<IRichErrorMessages>
+> = {
+  dev: "Unexpected error",
+  user: "Unexpected error",
+} as const
+
+/**
+ * Flatenned Rich Error interface so that Rich Errors can also be passed in a
+ * more convenient way. The purpose of this interface is to provide back-
+ * compatibility with `Error`, as well as providing an unambiguous `userMessage`
+ * property which can be used by front-end applications.
+ */
+export interface IRichError {
+  /**
+   * Message intended for developers
+   */
+  message: string
+  /**
+   * Message intended for users
+   */
   userMessage: string
 }
 
@@ -34,26 +66,86 @@ export interface IFxhashErrorExtension {
  * }
  * ```
  */
-export class RichError extends Error implements IFxhashErrorExtension {
-  messages: {
-    dev: string
-    user: string
-  } = {
-    dev: "Unknown",
-    user: "An unknown error occured.",
+export class RichError extends Error implements IRichError, IEquatableError {
+  messages: IRichErrorMessages = UnexpectedRichErrorMessages
+  messagesOverride: IRichErrorMessages | undefined
+
+  constructor(messagesOverride?: IRichErrorMessages) {
+    super()
+    if (messagesOverride) {
+      this.messagesOverride = messagesOverride
+    }
+  }
+
+  private _message(target: "dev" | "user") {
+    return (
+      this.messagesOverride?.[target] ||
+      this.messages[target] ||
+      UnexpectedRichErrorMessages[target]
+    )
   }
 
   get message() {
-    return this.messages.dev
+    return this._message("dev")
   }
 
   get userMessage() {
-    return this.messages.user
+    return this._message("user")
   }
 
   get code() {
     return this.name
   }
+
+  public serialize(): IRichErrorSerialized {
+    return {
+      code: this.code,
+      messages: this.messages,
+    }
+  }
+
+  /**
+   * Instanciates a Rich Error, trying to match the serialized error with the
+   * provided Rich Error classes. The `code` property of the serialized payload
+   * is matched against `RichError.name`
+   *
+   * @param serialized A rich error serialized
+   * @param expected A list of Rich Error classes which are expected. If the
+   * serialized error doesn't match any of these, UnexpectedRichError will be
+   * returned.
+   *
+   * @returns An instance of Rich Error which type matches the `code` property,
+   * or {@link UnexpectedRichError} if no match.
+   */
+  static parse<T extends (typeof RichError)[]>(
+    serialized: IRichErrorSerialized,
+    expected: T
+  ): RichErrorUnion<T> | UnexpectedRichError {
+    for (const RichErrorClass of expected) {
+      if (RichErrorClass.name === serialized.code) {
+        return new RichErrorClass(serialized.messages) as InstanceType<
+          T[number]
+        >
+      }
+    }
+    return new UnexpectedRichError(serialized.messages)
+  }
+
+  /**
+   * Returns a new instance of {@link UnexpectedRichError}
+   * @param messagesOverride Optional overrides of default unexpected messages
+   */
+  static Unexpected(messagesOverride?: IRichErrorMessages) {
+    return new UnexpectedRichError(messagesOverride)
+  }
+}
+
+/**
+ * A Rich error serialized,
+ */
+export interface IRichErrorSerialized {
+  code: string
+  messages?: IRichErrorMessages
 }
 
 /**
@@ -62,22 +154,7 @@ export class RichError extends Error implements IFxhashErrorExtension {
  */
 export class UnexpectedRichError extends RichError {
   name = "UnexpectedRichError" as const
-  messages = {
-    dev: "Unexpected error",
-    user: "Unexpected error",
-  }
-  customMessage: string | undefined
-
-  constructor(message?: string) {
-    super()
-    this.customMessage = message
-  }
-
-  get message() {
-    return this.customMessage
-      ? `${this.messages.dev}: ${this.customMessage}`
-      : super.message
-  }
+  messages = UnexpectedRichErrorMessages
 }
 
 /**

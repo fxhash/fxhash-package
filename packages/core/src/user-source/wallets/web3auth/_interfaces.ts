@@ -3,12 +3,15 @@ import { EventEmitter, PromiseResult } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
-import { EmailOTPRequestError, WithGqlErrors } from "@fxhash/errors"
+import {
+  EmailOTPRequestError,
+  Web3AuthFrameError,
+  WithGqlErrors,
+} from "@fxhash/errors"
 import {
   IWalletConnected,
   IWalletsSource,
   Web3AuthFrameManager,
-  Web3AuthFrameResponseErrors,
 } from "@/index.js"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
@@ -132,7 +135,7 @@ export type Web3AuthFrameMessageTypes = {
     init: {
       req: void
       res: void
-      errors: Web3AuthFrameResponseErrors["init"]
+      errors: Web3AuthFrameError["init"]
     }
 
     /**
@@ -141,19 +144,19 @@ export type Web3AuthFrameMessageTypes = {
     getSessionDetails: {
       req: void
       res: SessionDetails | null
-      errors: Web3AuthFrameResponseErrors["getSessionDetails"]
+      errors: Web3AuthFrameError["getSessionDetails"]
     }
 
     logout: {
       req: any
       res: any
-      errors: Web3AuthFrameResponseErrors["logout"]
+      errors: Web3AuthFrameError["logout"]
     }
 
     login: {
       req: Web3AuthLoginPayload
       res: SessionDetails | null
-      errors: Web3AuthFrameResponseErrors["login"]
+      errors: Web3AuthFrameError["login"]
     }
 
     tez__rpc: TezosWalletRpcType

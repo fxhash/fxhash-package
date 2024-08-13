@@ -1,12 +1,19 @@
 import type { CombinedError, OperationResult } from "@urql/core"
 import {
   IFxhashGraphQLErrorExtensions,
+  IRichErrorMessages,
   NetworkRichError,
   RichError,
   UnexpectedRichError,
   WithGqlErrors,
 } from ".."
 import { Result, failure, success } from "@fxhash/utils"
+
+export type TypeOfRichError<T extends RichError> = {
+  new (): T
+  parse: (typeof RichError)["parse"]
+  Unexpected: (typeof RichError)["Unexpected"]
+}
 
 /**
  * Instanciate a new {@link RichError} using a declarative object. This is
@@ -15,18 +22,25 @@ import { Result, failure, success } from "@fxhash/utils"
  */
 export function richError(params: {
   name: string
-  messages: {
-    dev: string
-    user: string
-  }
+  messages?: IRichErrorMessages
 }) {
   return Object.assign(new RichError(), params) as RichError
 }
 
-function isFxhashErrorExtensions(
-  ext: Record<string, any>
+export function isFxhashErrorExtensions(
+  ext: any
 ): ext is IFxhashGraphQLErrorExtensions {
-  return ext.version === "fxhash@0.1.0"
+  return typeof ext === "object" && ext.version === "fxhash@0.1.0"
+}
+
+/**
+ * Test whether a given value is implementing the {@link IRichErrorMessages}
+ * interface.
+ * @param value Any value
+ */
+export function isRichErrorMessages(value: any): value is IRichErrorMessages {
+  if (typeof value !== "object") return false
+  return typeof value.dev === "string" || typeof value.user === "string"
 }
 
 /**
@@ -36,7 +50,7 @@ function isFxhashErrorExtensions(
  *
  * @param error A GraphQL error response
  *
- * @returns A rich error constructed by parsing the GraphQL error
+ * @returns An "untyped" rich error constructed by parsing the GraphQL error
  */
 export function richErrorFromGraphQLError(
   error: CombinedError
@@ -45,11 +59,8 @@ export function richErrorFromGraphQLError(
     const gqlError = error.graphQLErrors[0]
     if (isFxhashErrorExtensions(gqlError.extensions)) {
       return richError({
-        name: gqlError.extensions.code,
-        messages: {
-          dev: error.message,
-          user: gqlError.extensions.userMessage,
-        },
+        name: gqlError.extensions.richError.code,
+        messages: gqlError.extensions.richError.messages,
       })
     }
     return new UnexpectedRichError()
@@ -67,7 +78,7 @@ export function richErrorFromGraphQLError(
  * property of the fxhash error extension to find a match.
  *
  * @param graphQLError GraphQL error response
- * @param potentialErrors An array of RichError classes which will be parsed to
+ * @param expectedErrors An array of RichError classes which will be parsed to
  * find matches between the RichError `name` constant and the `code` returned
  * by the GraphQL fxhash error extension.
  *
@@ -77,21 +88,17 @@ export function richErrorFromGraphQLError(
  */
 export function typedRichErrorFromGraphQLError<T extends (typeof RichError)[]>(
   graphQLError: CombinedError,
-  potentialErrors: T
+  expectedErrors: T
 ): WithGqlErrors<InstanceType<T[number]>> {
+  if (graphQLError.networkError) {
+    return new NetworkRichError()
+  }
   if (graphQLError.graphQLErrors.length > 0) {
     const gqlError = graphQLError.graphQLErrors[0]
     if (isFxhashErrorExtensions(gqlError.extensions)) {
-      for (const RichErrorClass of potentialErrors) {
-        if (RichErrorClass.name === gqlError.extensions.code) {
-          return new RichErrorClass() as InstanceType<T[number]>
-        }
-      }
+      return RichError.parse(gqlError.extensions.richError, expectedErrors)
     }
     return new UnexpectedRichError()
-  }
-  if (graphQLError.networkError) {
-    return new NetworkRichError()
   }
   return new UnexpectedRichError()
 }
@@ -137,5 +144,11 @@ export function richResultFromGraphQLResponse<
     return failure(typedRichErrorFromGraphQLError(res.error, potentialErrors))
   }
   const data = getData(res)
-  return data ? success(data) : failure(new UnexpectedRichError("missing data"))
+  return data
+    ? success(data)
+    : failure(
+        new UnexpectedRichError({
+          dev: "Expected data missing from GraphQL response",
+        })
+      )
 }

@@ -7,6 +7,7 @@
     "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/config": "workspace:*",
     "@fxhash/core": "workspace:*",
+    "@fxhash/errors": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",

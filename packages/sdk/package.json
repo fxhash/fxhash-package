@@ -3,7 +3,9 @@
   "description": "Bundle of all the fxhash low & medium level packages exported as one.",
   "version": "0.0.1",
   "author": "fxhash",
-  "dependencies": {},
+  "dependencies": {
+    "@fxhash/errors": "workspace:*"
+  },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",

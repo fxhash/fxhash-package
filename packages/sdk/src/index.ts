@@ -7,6 +7,7 @@ export * from "@fxhash/gql-client"
 export * from "@fxhash/shared"
 export * from "@fxhash/tez"
 export * from "@fxhash/utils"
+export * from "@fxhash/errors"
 
 /**
  * TODO

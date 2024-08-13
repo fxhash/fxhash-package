@@ -6,25 +6,21 @@
 import css from "./FrameManager.module.css"
 import {
   IframeBDCommHost,
-  IframeBDError,
+  IframeUnsupportedRequestError,
+  MessageErrors,
   RequestPayload,
-  ResponseError,
+  WithIframeErrors,
   isBrowser,
 } from "@fxhash/utils-browser"
 import {
+  AllWeb3AuthFrameErrors,
+  Web3AuthFrameError,
   Web3AuthFrameInitializationError,
   Web3AuthFrameNotInitialized,
   Web3AuthFrameNotLoading,
   Web3AuthFrameNotResponding,
-  Web3AuthFrameResponseErrors,
-} from "@/index.js"
-import {
-  failure,
-  invariant,
-  success,
-  IEquatableError,
-  PromiseResult,
-} from "@fxhash/utils"
+} from "@fxhash/errors"
+import { failure, invariant, success, PromiseResult, _Key } from "@fxhash/utils"
 import {
   FrameManagerEventEmitter,
   SessionDetails,
@@ -52,11 +48,11 @@ export type Web3AuthFrameConfig = {
 type TMessages = Web3AuthFrameMessageTypes
 
 /**
- * Responsible for managing the `<iframe>` which hosts the wallets. Acts as a
- * high level interface to send/receives message to/from the `<iframe>`.
+ * Responsible for managing the `<iframe>` which holds the fxhash wallet. Acts
+ * as a high level interface to send/receives message to/from the fxhash wallet.
  *
- * **Warning**: This class can only be instanciated in a browser context, as it
- * needs browser APIs to load the `<iframe>`.
+ * **⚠️ Warning**: This class can only be instanciated in a browser context,
+ * as it needs browser APIs to load the `<iframe>`.
  */
 export class Web3AuthFrameManager extends IframeBDCommHost<
   TMessages,
@@ -69,12 +65,11 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
   private _iframe: HTMLIFrameElement | null = null
 
   constructor(config: Web3AuthFrameConfig) {
-    super()
-    //
     invariant(
       isBrowser(),
-      "The Social Wallets frame can only be loaded in a browser context."
+      "fxhash embedded wallet can only be loaded in a browser context."
     )
+    super(AllWeb3AuthFrameErrors)
     this._config = config
     this._container = this._config.container || document.body
   }
@@ -271,26 +266,22 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
     this.emitter.emit("session-changed", details)
   }
 
-  protected async processRequest<K extends keyof TMessages["frame->host"]>(
-    payload: RequestPayload<K, TMessages["frame->host"][K]["req"]>,
-    _: MessageEvent<any>
+  protected async processRequest<K extends _Key<TMessages["frame->host"]>>(
+    payload: RequestPayload<K, TMessages["frame->host"][K]["req"]>
   ): PromiseResult<
     TMessages["frame->host"][K]["res"],
-    TMessages["frame->host"][K] extends { errors: IEquatableError }
-      ? TMessages["frame->host"][K]["errors"]
-      : never
+    WithIframeErrors<MessageErrors<TMessages, "frame->host">>
   > {
     if (payload.header.type === "showFrame") {
       this._showFrame(payload.body)
       return success()
     }
-    throw Error(`unsupported request!`) // fine to throw here, dev mistake
+    return failure(new IframeUnsupportedRequestError(payload.header.type))
   }
 
   public getSessionDetails(): PromiseResult<
     SessionDetails | null,
-    | IframeBDError
-    | ResponseError<Web3AuthFrameResponseErrors["getSessionDetails"]>
+    WithIframeErrors<Web3AuthFrameError["getSessionDetails"]>
   > {
     return this.sendRequest({ type: "getSessionDetails" })
   }
@@ -299,7 +290,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
     payload: Web3AuthLoginPayload
   ): PromiseResult<
     SessionDetails | null,
-    IframeBDError | ResponseError<Web3AuthFrameResponseErrors["login"]>
+    WithIframeErrors<Web3AuthFrameError["login"]>
   > {
     const res = await this.sendRequest({ type: "login", body: payload })
     if (res.isSuccess()) this._handleSessionChanged(res.value)
@@ -307,8 +298,8 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
   }
 
   async logout(): PromiseResult<
-    any,
-    IframeBDError | ResponseError<Web3AuthFrameResponseErrors["logout"]>
+    void,
+    WithIframeErrors<Web3AuthFrameError["logout"]>
   > {
     const res = await this.sendRequest({ type: "logout" })
     if (res.isSuccess()) {

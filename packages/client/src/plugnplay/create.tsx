@@ -11,14 +11,13 @@ import {
   intialization,
   invariant,
 } from "@fxhash/utils"
-import { isBrowser, ResponseError } from "@fxhash/utils-browser"
+import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
   defaultStorageDriver,
   jwtCredentials,
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
-  Web3AuthFrameUnknownError,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
@@ -275,13 +274,12 @@ export function createClientPlugnPlay({
     },
 
     async loginWeb2(payload: Web3AuthLoginPayload) {
-      if (!client.walletSources.web3auth)
-        return failure(new ResponseError(new Web3AuthFrameUnknownError()))
+      invariant(client.walletSources.web3auth, "no web3auth wallet configured")
       return client.walletSources.web3auth.login(payload)
     },
 
     async requestEmailOTP(email: string) {
-      invariant(client.walletSources.web3auth, "no web3auth wallet")
+      invariant(client.walletSources.web3auth, "no web3auth wallet configured")
       return client.walletSources.web3auth.emailRequestOTP(email)
     },
   }

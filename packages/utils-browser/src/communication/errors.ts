@@ -1,62 +1,63 @@
-import { IEquatableError } from "@fxhash/utils"
+import {
+  IRichErrorMessages,
+  RichError,
+  RichErrorUnion,
+  UnexpectedRichError,
+  UnexpectedRichErrorMessages,
+  isRichErrorMessages,
+} from "@fxhash/errors"
 
-export class IframeRequestTimeoutError extends Error {
+export class IframeRequestTimeoutError extends RichError {
   name = "IframeRequestTimeoutError" as const
+  messages = {
+    dev: "Request to the <iframe> has timed out.",
+    user: "Unexpected error",
+  }
 }
 
-export class IframeDisconnectedError extends Error {
+export class IframeDisconnectedError extends RichError {
   name = "IframeDisconnectedError" as const
+  messages = {
+    dev: "Connection between main context and <iframe> has been lost.",
+    user: "Unexpected error",
+  }
 }
 
-export class ConnectionAlreadyEstablishedError extends Error {
+export class ConnectionAlreadyEstablishedError extends RichError {
   name = "ConnectionAlreadyEstablishedError" as const
-  constructor(origin: string) {
+  messages = {
+    dev: "Connection with <iframe> has already been established, but a new connection request was received. There must be only a single handshake at initialisation.",
+    user: "Unexpected error",
+  }
+}
+
+export class IframeUnsupportedRequestError extends RichError {
+  name = "IframeUnsupportedRequestError" as const
+
+  constructor(requested: string)
+  constructor(messages: IRichErrorMessages)
+  constructor(par1: string | IRichErrorMessages) {
     super(
-      `connection with host at ${origin} has already been established, but a new connection request was received. There must be only a single handshake at initialisation.`
+      isRichErrorMessages(par1)
+        ? par1
+        : {
+            dev: `The request "${par1}" is not supported by the embedded Iframe.`,
+            user: UnexpectedRichErrorMessages.user,
+          }
     )
   }
 }
 
-export type SerializableResponseError = {
-  name: string
-  message?: string
-}
+export const IframeBDErrors = [
+  IframeRequestTimeoutError,
+  IframeDisconnectedError,
+  ConnectionAlreadyEstablishedError,
+  IframeUnsupportedRequestError,
+  UnexpectedRichError,
+]
 
-interface IResponseEquatableError extends IEquatableError {
-  message?: string
-}
+export type IframeBDError = RichErrorUnion<typeof IframeBDErrors>
 
-export class ResponseError<
-  Cause extends IResponseEquatableError = IResponseEquatableError,
-> extends Error {
-  name = "ResponseError" as const
-  cause: Cause
-
-  constructor(cause: Cause) {
-    super()
-    this.cause = cause
-  }
-
-  toSeriazable(): SerializableResponseError {
-    return {
-      name: this.cause.name,
-      message: this.cause.message,
-    }
-  }
-
-  static Parse(error: SerializableResponseError): ResponseError {
-    return new ResponseError(error)
-  }
-
-  static Unknown(cause: any) {
-    return new ResponseError({
-      name: "UnknownError",
-      message: cause?.message,
-    })
-  }
-}
-
-export type IframeBDError =
-  | IframeRequestTimeoutError
-  | IframeDisconnectedError
-  | ConnectionAlreadyEstablishedError
+export type WithIframeErrors<T> =
+  | (T extends RichError ? T : never)
+  | IframeBDError
