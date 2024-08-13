@@ -109,7 +109,10 @@ export abstract class WalletManager {
    */
   abstract signMessageWithWallet(
     message: string
-  ): PromiseResult<string, PendingSigningRequestError | UserRejectedError>
+  ): PromiseResult<
+    string,
+    PendingSigningRequestError | UserRejectedError | WalletConnectionError
+  >
 
   /**
    * Sign a message using the wallet associated with the manager. Some sign
@@ -134,7 +137,7 @@ export abstract class WalletManager {
     options?: SignMessageOptions
   ): PromiseResult<
     MessageSigned,
-    PendingSigningRequestError | UserRejectedError
+    PendingSigningRequestError | UserRejectedError | WalletConnectionError
   > {
     return new Promise(async resolve => {
       // if options allow, get valid signature from the cache
