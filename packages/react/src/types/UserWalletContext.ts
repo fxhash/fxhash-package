@@ -3,6 +3,7 @@ import {
   PendingSigningRequestError,
   PromiseResult,
   UserRejectedError,
+  WalletConnectionError,
 } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
 import { EthereumWalletManager } from "@fxhash/eth"
@@ -64,7 +65,7 @@ export interface TUserWalletContext {
    */
   connect: () => PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   >
 
   /**
