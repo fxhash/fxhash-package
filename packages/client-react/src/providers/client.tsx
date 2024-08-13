@@ -9,7 +9,6 @@ import {
 } from "react"
 import {
   IClientPlugnPlay,
-  ClientPlugnPlayOptions,
   DependencyProviders,
   createClientPlugnPlay,
   QueryClient,
@@ -18,24 +17,24 @@ import {
   WalletManagersMap,
   deriveManagersMap,
   cleanup,
-  DeepOmit,
   BlockchainNetwork,
   invariant,
+  xorshift64,
 } from "@fxhash/sdk"
+import {
+  IClientPlugnPlayProviderWeb2SignInOptions,
+  IReactClientPlugnPlayConfig,
+  IReactClientPlugnPlayProviderProps,
+} from "@/_interfaces.js"
+import { isProviderCustomConfigValid } from "@/utils/validate.js"
 
-export type ReactClientPlugnPlayOptions = DeepOmit<
-  ClientPlugnPlayOptions,
-  "manageConnectKitProvider"
->
-
-export type ClientBasicproviderOptions = {
-  config: ReactClientPlugnPlayOptions
-} & {
-  safeDomContainer: HTMLElement
+const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
+  email: true,
 }
 
 export type ClientBasicState = {
-  client: IClientPlugnPlay | null
+  config: IReactClientPlugnPlayConfig
+  client: IClientPlugnPlay
   account: GetSingleUserAccountResult | null
   managers: WalletManagersMap
   userError: UserSourceEventsTypemap["error"]["error"] | null
@@ -47,7 +46,8 @@ const defaultActiveManagers = {
 }
 
 const defaultContext: ClientBasicState = {
-  client: null,
+  config: null as any, // a bit dirty but OK
+  client: null as any,
   account: null,
   managers: defaultActiveManagers,
   userError: null,
@@ -55,12 +55,48 @@ const defaultContext: ClientBasicState = {
 
 export const ClientPlugnPlayContext = createContext(defaultContext)
 
+/**
+ * A provider for fxhash client plugnplay.
+ */
 export function ClientPlugnPlayProvider({
   children,
   config,
   safeDomContainer,
-}: PropsWithChildren<ClientBasicproviderOptions>) {
-  const [state, setState] = useState<ClientBasicState>(defaultContext)
+}: PropsWithChildren<IReactClientPlugnPlayProviderProps>) {
+  // parse the provided config, verify if it matches requirements and provide
+  // default values where missing
+  const configChecked = useRef<number>()
+  const _config = useMemo(() => {
+    invariant(config, "missing config")
+
+    // check if config has changed: we don't support that
+    const configHash = xorshift64(config)
+    if (configChecked.current && configChecked.current !== configHash) {
+      throw Error(
+        "The fxhash client plugnplay config should never change through the application life."
+      )
+    }
+    configChecked.current = configHash
+
+    // extend with default values if missing
+    const out: IReactClientPlugnPlayConfig = {
+      ...config,
+      web2SignIn:
+        typeof config.web2SignIn !== "undefined"
+          ? config.web2SignIn
+          : defaultWeb2SignInOptions,
+    }
+
+    const configValidRes = isProviderCustomConfigValid(out)
+    if (configValidRes.isFailure()) throw configValidRes.error
+
+    return out
+  }, [config])
+
+  const [state, setState] = useState<ClientBasicState>({
+    ...defaultContext,
+    config: _config,
+  })
   const set = <K extends keyof ClientBasicState>(
     k: K,
     val: ClientBasicState[K]
@@ -117,6 +153,8 @@ export function ClientPlugnPlayProvider({
       // client.release()
     }
   }, [])
+
+  console.log({ state })
 
   // depending on whether EVM is needed we don't expose the same tree
   const Wrapper: FunctionComponent<PropsWithChildren> = (() => {

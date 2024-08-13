@@ -47,7 +47,7 @@
 }
 
 .root button:hover {
-  background: #dbdde1;
+  background: rgba(0, 0, 0, 0.13);
 }
 
 .icon {

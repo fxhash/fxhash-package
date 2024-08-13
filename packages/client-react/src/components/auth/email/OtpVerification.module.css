@@ -1,20 +1,62 @@
-.root {
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.cover {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+.root {
+  position: relative;
+  z-index: 2;
+  width: min(380px, 100%);
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  gap: 20px;
   text-align: center;
-  padding: 15px;
+  padding: 30px;
   border-radius: 4px;
+  box-shadow: 0 8px 40px -20px rgba(0, 0, 0, 0.5);
 }
 
-.root button {
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.close:hover {
+  opacity: 0.8;
+}
+
+.close img {
+  width: 20px;
+  height: 20px;
+}
+
+.root button.submit {
   background: black;
   color: white;
   border-radius: 3px;
@@ -68,6 +110,7 @@
   border-radius: 3px;
   border: 2px solid #3c4043;
   height: 47px;
+  max-width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;

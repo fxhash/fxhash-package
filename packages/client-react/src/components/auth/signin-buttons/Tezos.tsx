@@ -3,7 +3,7 @@ import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/tezos.svg"
 import { useClient } from "@/index.js"
 
-export function SigninButtonTezos() {
+export function SignInButtonTezos() {
   const { client } = useClient()
 
   return (

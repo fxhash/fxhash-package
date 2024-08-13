@@ -1,12 +1,12 @@
 import { useState } from "react"
-import css from "./SigninEmail.module.css"
+import css from "./SignInEmail.module.css"
 import { useClient } from "@/hooks/useClient.js"
 import icon from "@/icons/email.svg"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
 import { OtpVerification } from "./OtpVerification.js"
 
 type Props = {}
-export function SigninEmail({}: Props) {
+export function SignInEmail({}: Props) {
   const { client } = useClient()
   const [email, setEmail] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -60,7 +60,12 @@ export function SigninEmail({}: Props) {
         {error && <div className={css.errorMessage}>{error}</div>}
       </div>
 
-      {otpRequest && <OtpVerification request={otpRequest} />}
+      {otpRequest && (
+        <OtpVerification
+          request={otpRequest}
+          onCancel={() => setOtpRequest(null)}
+        />
+      )}
     </>
   )
 }

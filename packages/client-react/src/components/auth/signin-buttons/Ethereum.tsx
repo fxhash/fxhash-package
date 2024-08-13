@@ -3,7 +3,7 @@ import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/ethereum.svg"
 import { BlockchainNetwork } from "@fxhash/sdk"
 
-export function SigninButtonEthereum() {
+export function SignInButtonEthereum() {
   const { client } = useClient()
 
   return (

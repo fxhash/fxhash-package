@@ -2,16 +2,25 @@ import { useClient } from "@/index.js"
 import { openPopup } from "@fxhash/utils-browser"
 import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/discord.svg"
+import { invariant } from "@fxhash/sdk"
+import { web2SignInEnabled } from "@/utils/validate.js"
 
-type Props = {
-  clientId: string
-}
+type Props = {}
 
-export function SigniButtonDiscord({ clientId }: Props) {
-  const { client } = useClient()
+export function SignInButtonDiscord({}: Props) {
+  const { client, config } = useClient()
+
+  invariant(
+    web2SignInEnabled(config),
+    "<SignInButtonDiscord> cannot be used if web2 signin is disabled in the fxhash client provider config"
+  )
+  invariant(
+    config.web2SignIn.discord?.clientId,
+    "<SignInButtonDiscord> cannot be used if Google options have not been configured in the web2SignIn options of the fxhash client provider config"
+  )
 
   const handleToken = (token: string) => {
-    client?.loginWeb2({
+    client.loginWeb2({
       method: "oauth",
       options: {
         provider: "discord",
@@ -21,10 +30,11 @@ export function SigniButtonDiscord({ clientId }: Props) {
   }
 
   const handleLogin = () => {
+    invariant(config.web2SignIn.discord?.clientId, "missing Discord client id")
     const redirectUri = window.location.origin
     const state = Math.random().toString().slice(2)
     let urlOAuth = "https://discord.com/oauth2/authorize"
-    urlOAuth += `?client_id=${clientId}`
+    urlOAuth += `?client_id=${config.web2SignIn.discord.clientId}`
     urlOAuth += `&response_type=token`
     urlOAuth += `&redirect_uri=${encodeURIComponent(redirectUri)}`
     urlOAuth += `&scope=identify+email`

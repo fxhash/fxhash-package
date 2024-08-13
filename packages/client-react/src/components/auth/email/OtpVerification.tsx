@@ -3,11 +3,14 @@ import css from "./OtpVerification.module.css"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
 import { useState } from "react"
 import { useClient } from "@/index.js"
+import { createPortal } from "react-dom"
+import xmark from "@/icons/xmark.svg"
 
 type Props = {
   request: Web3AuthEmailRequestOtpOutput
+  onCancel: () => void
 }
-export function OtpVerification({ request }: Props) {
+export function OtpVerification({ request, onCancel }: Props) {
   const { client } = useClient()
   const [value, setValue] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -34,45 +37,57 @@ export function OtpVerification({ request }: Props) {
     }
   }
 
-  return (
-    <form
-      className={`${css.root} ${error ? css.error : ""}`}
-      onSubmit={async evt => {
-        evt.preventDefault()
-        _handleSubmit()
-      }}
-    >
-      <span className={css.title}>Enter verification code</span>
-      <span className={css.info}>
-        Check {request.email} for the verification code
-      </span>
-      <div className={css.otpWrapper}>
-        <OTPInput
-          autoFocus
-          value={value}
-          onChange={setValue}
-          maxLength={6}
-          containerClassName={css.otp}
-          textAlign="center"
-          render={({ slots }) =>
-            slots.map((slot, idx) => (
-              <div
-                key={idx}
-                className={`${css.otpDigit} ${slot.isActive ? css.active : ""}`}
-              >
-                {slot.char}
-                {slot.hasFakeCaret && <FakeCaret />}
-              </div>
-            ))
-          }
-        />
-        {error && <div className={css.errorMessage}>{error}</div>}
-      </div>
+  return createPortal(
+    <div className={css.wrapper}>
+      <div className={css.cover} onClick={onCancel} />
+      <form
+        className={`${css.root} ${error ? css.error : ""}`}
+        onSubmit={async evt => {
+          evt.preventDefault()
+          _handleSubmit()
+        }}
+      >
+        <button className={css.close} type="button" onClick={onCancel}>
+          <img src={xmark} />
+        </button>
 
-      <button type="submit" disabled={value.length !== 6}>
-        Submit
-      </button>
-    </form>
+        <span className={css.title}>Enter verification code</span>
+        <span className={css.info}>
+          Check {request.email} for the verification code
+        </span>
+        <div className={css.otpWrapper}>
+          <OTPInput
+            autoFocus
+            value={value}
+            onChange={setValue}
+            maxLength={6}
+            containerClassName={css.otp}
+            textAlign="center"
+            render={({ slots }) =>
+              slots.map((slot, idx) => (
+                <div
+                  key={idx}
+                  className={`${css.otpDigit} ${slot.isActive ? css.active : ""}`}
+                >
+                  {slot.char}
+                  {slot.hasFakeCaret && <FakeCaret />}
+                </div>
+              ))
+            }
+          />
+          {error && <div className={css.errorMessage}>{error}</div>}
+        </div>
+
+        <button
+          className={css.submit}
+          type="submit"
+          disabled={value.length !== 6}
+        >
+          Submit
+        </button>
+      </form>
+    </div>,
+    document.body
   )
 }
 

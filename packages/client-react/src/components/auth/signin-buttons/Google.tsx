@@ -1,18 +1,22 @@
 import { useClient } from "@/index.js"
+import { web2SignInEnabled } from "@/utils/validate.js"
+import { invariant } from "@fxhash/sdk"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 
-// todo: move in config
-const GOOGLE_CLIENT_ID =
-  "989746027092-sagkbf4apuj13qlt5jrq693i9cl4bpsn.apps.googleusercontent.com"
+export function SignInButtonGoogle() {
+  const { client, config } = useClient()
 
-/**
- * TODO: Remove from here, shoudl be in react package
- */
-export function SigninButtonGoogle() {
-  const { client } = useClient()
+  invariant(
+    web2SignInEnabled(config),
+    "<SignInButtonGoogle> cannot be used if web2 signin is disabled in the fxhash client provider config"
+  )
+  invariant(
+    config.web2SignIn.google?.clientId,
+    "<SignInButtonGoogle> cannot be used if Discord options have not been configured in the web2SignIn options of the fxhash client provider config"
+  )
 
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={config.web2SignIn.google.clientId}>
       <GoogleLogin
         width={300}
         onSuccess={response => {

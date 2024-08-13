@@ -1,13 +1,73 @@
 import type {
   IUserSource,
   UserSourceEventEmitter,
-  Web3AuthLoginPayload,
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
-import { config as fxConfig } from "@fxhash/config"
+import { IAppMetadata, config as fxConfig } from "@fxhash/config"
+import { AtLeastOne } from "@fxhash/utils"
+
+/**
+ * Options for creating a Client PlugnPlay
+ */
+export type ClientPlugnPlayOptions = {
+  /**
+   * Some metdata about your application, which will be used by wallets to
+   * display details about your app when you request some wallet interaction
+   * from the url.
+   *
+   * **Important**: the URL must match the URL under which the application is
+   * served !
+   */
+  metadata: IAppMetadata
+
+  /**
+   * Define the wallets you want your app to setup.
+   */
+  wallets: AtLeastOne<{
+    /**
+     * Set this key if you want support for EVM wallets.
+     */
+    evm: {
+      /**
+       * Your application Wallet Connect project id. The plug-n-play client uses
+       * ConnectKit for providing a connection interface (which itself uses
+       * Wallet Connect, an industry standard wallet connection solution).
+       * <https://docs.walletconnect.com/appkit/react/notifications/embedded-widget/usage>
+       */
+      walletConnectProjectId: string
+
+      /**
+       * Whether the client should instanciate ConnectKit and manage it on its
+       * own. You may want to set this to `false` when you already have a
+       * ConnectKit implementation in your app.
+       *
+       * **Warning**: setting this value to `false` implies that you have to
+       * provide some solution for connecting an EVM wallet youself.
+       *
+       * @default true
+       */
+      manageConnectKitProvider?: boolean
+    }
+
+    /**
+     * Set this key if you want support for tezos wallet.
+     */
+    tezos: true
+  }>
+
+  /**
+   * In case your application would alter the content of `document.body`
+   * such that it removes the <iframe> this module adds to
+   * `document.body`, you should provide such wrapper here. It should be
+   * a safe html element in which the <iframe> can be appended.
+   *
+   * @default document.body
+   */
+  safeDomWrapper?: HTMLElement
+}
 
 export interface IClientPlugnPlay {
   /**
