@@ -219,7 +219,10 @@ export class EthereumWalletManager extends WalletManager {
 
   async signMessageWithWallet(
     message: string
-  ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
+  ): PromiseResult<
+    string,
+    PendingSigningRequestError | UserRejectedError | WalletConnectionError
+  > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
     }
@@ -232,10 +235,16 @@ export class EthereumWalletManager extends WalletManager {
           message,
         })
       } else {
+        // For the coinbase smart wallet, we need to force the signer to be ETHEREUM and not BASE
+        const result = await this.prepareSigner({
+          blockchainType: BlockchainType.ETHEREUM,
+        })
+        if (result.isFailure()) {
+          return failure(result.error)
+        }
+
         signature = await this.walletClient.signMessage({
           message,
-          // ! TODO: to fix
-          // @ts-ignore
           account: this.address as `0x${string}`,
         })
       }

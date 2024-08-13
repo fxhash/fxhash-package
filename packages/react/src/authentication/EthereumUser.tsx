@@ -12,6 +12,7 @@ import {
   PendingSigningRequestError,
   PromiseResult,
   UserRejectedError,
+  WalletConnectionError,
   invariant,
   success,
 } from "@fxhash/shared"
@@ -125,7 +126,7 @@ export function EthereumUserProvider({
 
   const signConnectionMessage = async (): PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   > => {
     invariant(context.walletManager, "ETH wallet manager not available")
     let message = formatSignInPayload(accountState.address!)
@@ -144,13 +145,14 @@ export function EthereumUserProvider({
         network: BlockchainType.ETHEREUM,
         payload: result.value.message,
         signature: result.value.signature,
+        address: accountState.address!,
       },
     })
   }
 
   const connect = (): PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   > => {
     return new Promise(resolve => {
       if (!accountState.address) {
@@ -175,6 +177,7 @@ export function EthereumUserProvider({
                   network: BlockchainType.ETHEREUM,
                   payload: result.value.message,
                   signature: result.value.signature,
+                  address: address,
                 },
               })
             )
