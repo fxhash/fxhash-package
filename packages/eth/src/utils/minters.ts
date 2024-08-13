@@ -34,6 +34,7 @@ import { config } from "@fxhash/config"
 import { EthereumWalletManager } from "@/services/Wallet.js"
 import { IEthContracts } from "@fxhash/config"
 import gqlClient from "@fxhash/gql-client"
+import { FARCASTER_FRAME_FIXED_PRICE_MINTER } from "@/abi/FarcasterFrameFixedPriceMinter.js"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -653,4 +654,21 @@ export async function getFirstValidReserve(
     args: [token],
   })
   return reserveId as bigint
+}
+
+export async function getTotalMinted(
+  publicClient: PublicClient,
+  chain: BlockchainType,
+  token: `0x${string}`,
+  fid: number
+): Promise<number> {
+  const currentConfig =
+    chain === BlockchainType.ETHEREUM ? config.eth : config.base
+  const totalMinted = await publicClient.readContract({
+    address: currentConfig.contracts.farcaster_frame_fixed_price_minter_v1,
+    abi: FARCASTER_FRAME_FIXED_PRICE_MINTER,
+    functionName: "totalMinted",
+    args: [fid, token],
+  })
+  return totalMinted as number
 }
