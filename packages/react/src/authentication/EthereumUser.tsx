@@ -2,6 +2,7 @@ import "viem/window"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import {
   useAccount,
+  useConfig,
   useDisconnect,
   usePublicClient,
   useWalletClient,
@@ -25,6 +26,7 @@ import {
   TUserWalletContext,
 } from "../types/UserWalletContext"
 import { useEthersSigner } from "./SignerWagmi"
+import { getAccount } from "wagmi/actions"
 
 export interface TUserEthereumWalletContext extends TUserWalletContext {
   walletManager: EthereumWalletManager | null
@@ -67,6 +69,7 @@ export function EthereumUserProvider({
   config,
   children,
 }: EthereumUserProviderProps) {
+  const wagmiConfig = useConfig()
   const [context, setContext] = useState<TUserEthereumWalletContext>(defaultCtx)
   const { data: walletClient, status } = useWalletClient()
   const publicClient = usePublicClient()
@@ -95,12 +98,14 @@ export function EthereumUserProvider({
 
       invariant(publicClient, "Public client not available")
 
+      const wagmiAccount = getAccount(wagmiConfig)
       const walletManager = new EthereumWalletManager({
         walletClient,
         publicClient,
         rpcNodes: config.rpcNodes,
         address: account.address,
         signer,
+        connectorName: wagmiAccount.connector?.id,
       })
       setContext(context => ({
         ...context,
