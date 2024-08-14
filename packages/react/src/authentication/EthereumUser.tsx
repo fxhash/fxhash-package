@@ -2,6 +2,7 @@ import "viem/window"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import {
   useAccount,
+  useConfig,
   useDisconnect,
   usePublicClient,
   useWalletClient,
@@ -12,6 +13,7 @@ import {
   PendingSigningRequestError,
   PromiseResult,
   UserRejectedError,
+  WalletConnectionError,
   invariant,
   success,
 } from "@fxhash/shared"
@@ -24,6 +26,7 @@ import {
   TUserWalletContext,
 } from "../types/UserWalletContext"
 import { useEthersSigner } from "./SignerWagmi"
+import { getAccount } from "wagmi/actions"
 
 export interface TUserEthereumWalletContext extends TUserWalletContext {
   walletManager: EthereumWalletManager | null
@@ -66,6 +69,7 @@ export function EthereumUserProvider({
   config,
   children,
 }: EthereumUserProviderProps) {
+  const wagmiConfig = useConfig()
   const [context, setContext] = useState<TUserEthereumWalletContext>(defaultCtx)
   const { data: walletClient, status } = useWalletClient()
   const publicClient = usePublicClient()
@@ -94,12 +98,14 @@ export function EthereumUserProvider({
 
       invariant(publicClient, "Public client not available")
 
+      const wagmiAccount = getAccount(wagmiConfig)
       const walletManager = new EthereumWalletManager({
         walletClient,
         publicClient,
         rpcNodes: config.rpcNodes,
         address: account.address,
         signer,
+        connectorName: wagmiAccount.connector?.id,
       })
       setContext(context => ({
         ...context,
@@ -125,7 +131,7 @@ export function EthereumUserProvider({
 
   const signConnectionMessage = async (): PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   > => {
     invariant(context.walletManager, "ETH wallet manager not available")
     let message = formatSignInPayload(accountState.address!)
@@ -144,13 +150,14 @@ export function EthereumUserProvider({
         network: BlockchainType.ETHEREUM,
         payload: result.value.message,
         signature: result.value.signature,
+        address: accountState.address!,
       },
     })
   }
 
   const connect = (): PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   > => {
     return new Promise(resolve => {
       if (!accountState.address) {
@@ -175,6 +182,7 @@ export function EthereumUserProvider({
                   network: BlockchainType.ETHEREUM,
                   payload: result.value.message,
                   signature: result.value.signature,
+                  address: address,
                 },
               })
             )
