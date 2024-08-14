@@ -100,7 +100,7 @@ export class RichError extends Error implements IRichError, IEquatableError {
   public serialize(): IRichErrorSerialized {
     return {
       code: this.code,
-      messages: this.messages,
+      messages: this.messagesOverride || this.messages,
     }
   }
 
