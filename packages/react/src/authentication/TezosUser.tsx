@@ -12,6 +12,7 @@ import {
   PendingSigningRequestError,
   PromiseResult,
   UserRejectedError,
+  WalletConnectionError,
   failure,
   invariant,
   success,
@@ -178,7 +179,7 @@ export function TezosUserProvider({
   const isConnectingManually = useRef(false)
   const connect = async (): PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   > => {
     invariant(
       context.beaconWallet,
