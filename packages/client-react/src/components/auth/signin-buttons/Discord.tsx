@@ -4,11 +4,14 @@ import { AuthButton } from "./AuthButton.js"
 import icon from "@/icons/discord.svg"
 import { invariant } from "@fxhash/sdk"
 import { web2SignInEnabled } from "@/utils/validate.js"
+import { ErrorWrapper } from "@/components/feedback/ErrorWrapper.js"
+import { useState } from "react"
 
 type Props = {}
 
 export function SignInButtonDiscord({}: Props) {
   const { client, config } = useClient()
+  const [error, setError] = useState<string | null>(null)
 
   invariant(
     web2SignInEnabled(config),
@@ -19,14 +22,18 @@ export function SignInButtonDiscord({}: Props) {
     "<SignInButtonDiscord> cannot be used if Google options have not been configured in the web2SignIn options of the fxhash client provider config"
   )
 
-  const handleToken = (token: string) => {
-    client.loginWeb2({
+  const handleToken = async (token: string) => {
+    setError(null)
+    const res = await client.loginWeb2({
       method: "oauth",
       options: {
         provider: "discord",
         token,
       },
     })
+    if (res.isFailure()) {
+      setError(res.error.userMessage)
+    }
   }
 
   const handleLogin = () => {
@@ -77,8 +84,10 @@ export function SignInButtonDiscord({}: Props) {
   }
 
   return (
-    <AuthButton icon={icon} onClick={handleLogin}>
-      Sign in with Discord
-    </AuthButton>
+    <ErrorWrapper error={error} marginTop="5px">
+      <AuthButton icon={icon} onClick={handleLogin}>
+        Sign in with Discord
+      </AuthButton>
+    </ErrorWrapper>
   )
 }

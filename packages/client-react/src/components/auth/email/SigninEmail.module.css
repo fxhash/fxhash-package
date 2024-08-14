@@ -67,10 +67,3 @@
   border-color: #ff3333;
   outline: 1px solid #ff3333;
 }
-
-.errorMessage {
-  color: #ff3333;
-  font-size: 0.8em;
-  font-weight: 600;
-  margin-top: 2px;
-}

@@ -4,6 +4,7 @@ import { useClient } from "@/hooks/useClient.js"
 import icon from "@/icons/email.svg"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
 import { OtpVerification } from "./OtpVerification.js"
+import { ErrorWrapper } from "@/components/feedback/ErrorWrapper.js"
 
 type Props = {}
 export function SignInEmail({}: Props) {
@@ -35,7 +36,7 @@ export function SignInEmail({}: Props) {
 
   return (
     <>
-      <div>
+      <ErrorWrapper error={error} marginTop="2px">
         <form
           className={`${css.root} ${error ? css.error : ""}`}
           onSubmit={evt => {
@@ -56,9 +57,7 @@ export function SignInEmail({}: Props) {
             <button type="submit">submit</button>
           </label>
         </form>
-
-        {error && <div className={css.errorMessage}>{error}</div>}
-      </div>
+      </ErrorWrapper>
 
       {otpRequest && (
         <OtpVerification

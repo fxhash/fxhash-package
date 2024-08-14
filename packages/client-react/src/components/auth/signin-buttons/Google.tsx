@@ -1,10 +1,13 @@
+import { ErrorWrapper } from "@/components/feedback/ErrorWrapper.js"
 import { useClient } from "@/index.js"
 import { web2SignInEnabled } from "@/utils/validate.js"
 import { invariant } from "@fxhash/sdk"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
+import { useState } from "react"
 
 export function SignInButtonGoogle() {
   const { client, config } = useClient()
+  const [error, setError] = useState<string | null>(null)
 
   invariant(
     web2SignInEnabled(config),
@@ -16,22 +19,26 @@ export function SignInButtonGoogle() {
   )
 
   return (
-    <GoogleOAuthProvider clientId={config.web2SignIn.google.clientId}>
-      <GoogleLogin
-        width={300}
-        onSuccess={response => {
-          if (!response.credential)
-            throw Error("credentials missing from google login")
-          console.log(response)
-          client?.loginWeb2({
-            method: "oauth",
-            options: {
-              provider: "google",
-              token: response.credential,
-            },
-          })
-        }}
-      />
-    </GoogleOAuthProvider>
+    <ErrorWrapper error={error} marginTop="5px">
+      <GoogleOAuthProvider clientId={config.web2SignIn.google.clientId}>
+        <GoogleLogin
+          width={300}
+          onSuccess={async response => {
+            if (!response.credential)
+              throw Error("credentials missing from google login")
+            const res = await client.loginWeb2({
+              method: "oauth",
+              options: {
+                provider: "google",
+                token: response.credential,
+              },
+            })
+            if (res.isFailure()) {
+              res.error.userMessage
+            }
+          }}
+        />
+      </GoogleOAuthProvider>
+    </ErrorWrapper>
   )
 }
