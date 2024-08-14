@@ -25,11 +25,8 @@ export function OtpVerification({ request, onCancel }: Props) {
           otp: value,
         },
       })
-      console.log(res)
       if (res.isFailure()) {
-        // todo: should be userMessage here, when properly typed
-        // @ts-ignore
-        setError(res.error.cause?.message)
+        setError(res.error.userMessage)
       }
     } catch (err) {
       console.log(err)
@@ -59,7 +56,10 @@ export function OtpVerification({ request, onCancel }: Props) {
           <OTPInput
             autoFocus
             value={value}
-            onChange={setValue}
+            onChange={v => {
+              setValue(v)
+              error && setError(null)
+            }}
             maxLength={6}
             containerClassName={css.otp}
             textAlign="center"
