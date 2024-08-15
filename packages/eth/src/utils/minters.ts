@@ -664,14 +664,6 @@ export async function getTotalMinted(
 ): Promise<number> {
   const currentConfig =
     chain === BlockchainType.ETHEREUM ? config.eth : config.base
-
-  console.log({
-    address: currentConfig.contracts.farcaster_frame_fixed_price_minter_v1,
-    abi: FARCASTER_FRAME_FIXED_PRICE_MINTER,
-    functionName: "totalMinted",
-    args: [fid, token],
-  })
-
   const totalMinted = await publicClient.readContract({
     address: currentConfig.contracts.farcaster_frame_fixed_price_minter_v1,
     abi: FARCASTER_FRAME_FIXED_PRICE_MINTER,
