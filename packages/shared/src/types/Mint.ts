@@ -100,11 +100,17 @@ export interface GenTokenSettings {
   }
 }
 
+export type FrameMintingFormValues = {
+  enabled: boolean
+  mintsPerFid: number
+}
+
 export interface GenTokPricingForm<N> {
   pricingMethod?: GenTokPricing
   pricingFixed: Partial<IPricingFixed<N>>
   pricingDutchAuction: Partial<IPricingDutchAuction<N>>
   lockForReserves?: boolean
+  frameMinting?: FrameMintingFormValues
 }
 
 export enum GenTokEditions {
@@ -124,13 +130,6 @@ export type GenTokEditionsForm<N> = {
   type: GenTokEditions
   fixed: GenTokFixedEditionsForm<N>
   opened: GenTokOpenEditionsForm
-}
-
-export interface GenTokPricingForm<N> {
-  pricingMethod?: GenTokPricing
-  pricingFixed: Partial<IPricingFixed<N>>
-  pricingDutchAuction: Partial<IPricingDutchAuction<N>>
-  lockForReserves?: boolean
 }
 
 export interface GenTokDistributionForm<N> {

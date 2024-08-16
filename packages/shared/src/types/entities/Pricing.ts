@@ -4,9 +4,11 @@ export interface IPricingFixed<GNumber = number, GDate = Date> {
 }
 
 export interface IPricingDutchAuction<N = number> {
+  id?: string
   levels: N[]
   restingPrice?: number
   finalPrice?: number
   decrementDuration: N
   opensAt?: Date | null
+  refundable: boolean
 }
