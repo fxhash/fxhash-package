@@ -1,11 +1,20 @@
 export const PACKAGES: string[] = [
-  "config",
-  "utils",
+  // remove:
   "auth",
+
+  // sdk ?
+
+  "client",
+  "client-react",
+  "core",
+  "config",
+  "errors",
+  "eth",
+  "gql-client",
+  "libraries",
   "shared",
   "tez",
-  "eth",
-  "gql",
-  "gql-client",
-  "react",
-].sort((a, b) => a.localeCompare(b))
+  "tez-utils",
+  "utils",
+  "utils-browser",
+]
