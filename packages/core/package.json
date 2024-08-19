@@ -1,0 +1,72 @@
+{
+  "name": "@fxhash/core",
+  "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/errors": "workspace:*"
+  },
+  "devDependencies": {
+    "@fxhash/config": "workspace:*",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/eslint": "8.44.0",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "eslint": "8.45.0",
+    "msw": "2.3.4",
+    "tsup": "6.6.0",
+    "typescript": "5.3.3",
+    "utf-8-validate": "6.0.3",
+    "vitest": "0.34.6"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "peerDependencies": {
+    "@airgap/beacon-sdk": "4.2.2",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@taquito/beacon-wallet": "19.2.1",
+    "@taquito/signer": "17.3.1",
+    "@taquito/taquito": "17.3.1",
+    "@taquito/utils": "17.3.1",
+    "@wagmi/connectors": "5.0.22",
+    "@wagmi/core": "2.11.7",
+    "ethers": "6.8.1",
+    "jwt-decode": "4.0.0",
+    "viem": "2.13.10",
+    "wagmi": "2.10.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:local": "FXHASH_ENV=local vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

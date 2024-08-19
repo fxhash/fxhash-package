@@ -43,6 +43,7 @@ export const Mu_Web3AuthEmailRequestOTP = graphql(`
     web3auth_email_request_otp(input: $email) {
       email
       expires
+      attemptsLeft
     }
   }
 `)

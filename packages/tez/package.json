@@ -4,8 +4,8 @@
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.8.1",
-    "@fxhash/auth": "workspace:*",
     "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@taquito/michel-codec": "17.3.1",
     "@taquito/michelson-encoder": "17.3.1",
     "@taquito/rpc": "17.3.1",

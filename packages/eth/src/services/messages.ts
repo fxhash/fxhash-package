@@ -1,4 +1,4 @@
-import { Result, failure, success } from "@fxhash/shared"
+import { splitStringAt, Result, failure, success } from "@fxhash/utils"
 import {
   isHex,
   type Hex,
@@ -7,7 +7,6 @@ import {
   hexToNumber,
   hexToString,
 } from "viem"
-import { splitStringAt } from "@fxhash/utils"
 
 class InvalidFormatDecodeSignMessageError extends Error {
   name = "InvalidFormatDecodeSignMessageError" as const

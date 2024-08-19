@@ -2985,6 +2985,7 @@ type Web3AuthEmailAuthOTPOutput {
 }
 
 type Web3AuthEmailRequestOTPOutput {
+  attemptsLeft: Int!
   email: String!
   expires: String!
 }

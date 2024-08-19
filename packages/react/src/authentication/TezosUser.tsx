@@ -10,12 +10,9 @@ import { TezosWalletManager } from "@fxhash/tez"
 import {
   BlockchainType,
   PendingSigningRequestError,
-  PromiseResult,
   UserRejectedError,
-  failure,
-  invariant,
-  success,
 } from "@fxhash/shared"
+import { type PromiseResult, failure, invariant, success } from "@fxhash/utils"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { TezosToolkit, WalletProvider } from "@taquito/taquito"
 import {
@@ -144,7 +141,7 @@ export function TezosUserProvider({
 
     context.tezosToolkit.setWalletProvider(provider as WalletProvider)
     const walletManager = new TezosWalletManager({
-      wallet: { wallet: provider as BeaconWallet },
+      wallet: { wallet: provider as WalletProvider },
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
       address: pkh,

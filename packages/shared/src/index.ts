@@ -1,5 +1,3 @@
-export * from "./errors"
-export * from "./types"
-export * from "./Result"
+export * from "./types/_index"
 export * from "./wallet/ContractOperation"
 export * from "./wallet/WalletManager"

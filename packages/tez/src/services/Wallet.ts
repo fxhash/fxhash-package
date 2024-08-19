@@ -14,23 +14,21 @@ import {
   NetworkType,
   SigningType,
 } from "@airgap/beacon-sdk"
-import { encodeTezosPayload } from "@fxhash/auth"
 import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   NetworkError,
   BadRequestError,
   TransactionType,
   BlockchainType,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success } from "@fxhash/utils"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
 import { IAppMetadata, config } from "@fxhash/config"
+import { encodeSignMessagePayload } from "./messages"
 
 export function createBeaconConfig(metadata: IAppMetadata): DAppClientOptions {
   return {
@@ -50,6 +48,19 @@ export function isWalletProvider(
   provider: TezosProvider
 ): provider is TezosWalletProvider {
   return !!(provider as TezosWalletProvider).wallet
+}
+
+/**
+ * Check whether a WalletProvider is a BeaconWallet (checking for the existence
+ * of some properties from BeaconWallet
+ */
+export function isBeaconWallet(
+  provider: WalletProvider
+): provider is BeaconWallet {
+  if (!(provider as BeaconWallet).client) return false
+  const client = (provider as BeaconWallet).client
+  if (client.requestSignPayload || client.requestOperation) return true
+  return false
 }
 
 type TezosSignerProvider = {
@@ -137,12 +148,22 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeTezosPayload(message)
+      const payloadBytes = encodeSignMessagePayload(message)
       let signature = null
       if (isWalletProvider(this.wallet)) {
-        // todo: is it working ?!
-        const res = await this.wallet.wallet.sign(payloadBytes)
-        signature = res
+        const provider = this.wallet.wallet
+        // special case for BeaconWallet, requires calling requestSignPayload
+        if (isBeaconWallet(provider)) {
+          const res = await provider.client.requestSignPayload({
+            signingType: SigningType.MICHELINE,
+            payload: payloadBytes,
+            sourceAddress: this.address,
+          })
+          signature = res.signature
+        } else {
+          const res = await this.wallet.wallet.sign(payloadBytes)
+          signature = res
+        }
       } else {
         const res = await this.wallet.signer.sign(payloadBytes)
         signature = res.sig

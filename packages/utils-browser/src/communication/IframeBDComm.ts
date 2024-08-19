@@ -14,8 +14,17 @@
  * if they are it is eventually known).
  */
 
-import { PromiseResult, failure, success } from "@fxhash/shared"
-import { IframeBDError, IframeRequestTimeout } from "./errors"
+import { PromiseResult, failure, success } from "@fxhash/utils"
+import {
+  ConnectionAlreadyEstablishedError,
+  IframeBDError,
+  IframeBDErrors,
+  IframeDisconnectedError,
+  IframeRequestTimeoutError,
+  WithIframeErrors,
+} from "./errors"
+import { Initialization, cleanup, intialization } from "@fxhash/utils"
+import { IRichErrorSerialized, RichError } from "@fxhash/errors"
 
 /**
  * Potential improvements
@@ -65,28 +74,52 @@ interface GenericPayload<
   body: BodyType
 }
 
-export interface RequestPayload<ReqType extends string, BodyType = any>
-  extends GenericPayload<"request", ReqType, BodyType> {}
+export enum ResponseStatus {
+  OK = "OK",
+  ERROR = "ERROR",
+}
 
-export interface ResponsePayload<ReqType extends string, BodyType = any>
-  extends GenericPayload<"response", ReqType, BodyType> {
+export type RequestPayload<
+  ReqType extends string,
+  BodyType = any,
+> = GenericPayload<"request", ReqType, BodyType>
+
+export type ResponsePayload<ReqType extends string, BodyType = any> = Omit<
+  GenericPayload<"response", ReqType, BodyType>,
+  "body"
+> & {
   /**
    * A response whill always include the resquest header so that it can
    * properly be mapped to the original request.
    */
   header: RequestHeader<ReqType>
-}
+} & (
+    | {
+        status: ResponseStatus.OK
+        body: BodyType
+      }
+    | {
+        status: ResponseStatus.ERROR
+        body: {
+          error: IRichErrorSerialized
+        }
+      }
+  )
 
 type Payload<ReqType extends string> =
   | RequestPayload<ReqType>
   | ResponsePayload<ReqType>
 
-type RequestResolver = (body: any) => void
+type RequestResolver<Errors extends RichError> = {
+  resolve: (body: any) => void
+  reject: (reason: Errors) => void
+}
 
 type TMessage = {
   [K: string]: {
     req: any
     res: any
+    errors?: RichError
   }
 }
 
@@ -96,10 +129,14 @@ type MessageTypesSignature = {
 }
 
 type Direction = "host->frame" | "frame->host"
-type OtherDir<Dir extends Direction> = Dir extends "host->frame"
+type _OtherDir<Dir extends Direction> = Dir extends "host->frame"
   ? "frame->host"
   : "host->frame"
 type _Key<T extends { [k: string]: any }> = Extract<keyof T, string>
+export type MessageErrors<
+  TMsgs extends MessageTypesSignature,
+  TDir extends Direction,
+> = Extract<TMsgs[TDir][keyof TMsgs[TDir]], { errors: RichError }>["errors"]
 
 type SendRequestOptions<T extends TMessage, K extends _Key<T>> = {
   type: RequestType<K>
@@ -111,15 +148,46 @@ type SendRequestOptions<T extends TMessage, K extends _Key<T>> = {
   timeout?: number
 }
 
+type TypeOf<T extends RichError> = {
+  new (): T
+  parse: (typeof RichError)["parse"]
+  Unexpected: (typeof RichError)["Unexpected"]
+}
+
 /**
  * Shared implementation between the Host and the Frame
  */
 abstract class IframeBDCommShared<
   MessageTypes extends MessageTypesSignature,
   Dir extends Direction,
+  // derived types
+  OtherDir extends _OtherDir<Dir> = _OtherDir<Dir>,
+  Errors extends MessageErrors<MessageTypes, Dir> = MessageErrors<
+    MessageTypes,
+    Dir
+  >,
+  OtherDirErrors extends MessageErrors<MessageTypes, OtherDir> = MessageErrors<
+    MessageTypes,
+    OtherDir
+  >,
 > {
-  initialized: boolean = false
-  awaitingRequests: Record<RequestID, RequestResolver> = {}
+  awaitingRequests: Record<
+    RequestID,
+    RequestResolver<WithIframeErrors<Errors>>
+  > = {}
+
+  // errors proper to the implementation
+  expectedCustomErrors: TypeOf<Errors>[]
+  // all expected errors (including Iframe errors)
+  expectedErrors: TypeOf<WithIframeErrors<Errors>>[]
+
+  _intialization: Initialization = intialization()
+  _clean: ReturnType<typeof cleanup> = cleanup()
+
+  constructor(expectedErrors: TypeOf<Errors>[]) {
+    this.expectedCustomErrors = expectedErrors
+    this.expectedErrors = [...expectedErrors, ...IframeBDErrors] as any // todo?
+  }
 
   /**
    * Needs to implement sending a message to the other part.
@@ -140,12 +208,13 @@ abstract class IframeBDCommShared<
    * _handleRequest is called for processing individual message.
    * @param payload Payload received
    */
-  protected abstract _handleRequest<
-    K extends _Key<MessageTypes[OtherDir<Dir>]>,
-  >(
-    payload: RequestPayload<K, MessageTypes[OtherDir<Dir>][K]["req"]>,
+  protected abstract _handleRequest<K extends _Key<MessageTypes[OtherDir]>>(
+    payload: RequestPayload<K, MessageTypes[OtherDir][K]["req"]>,
     event: MessageEvent
-  ): Promise<MessageTypes[OtherDir<Dir>][K]["res"]>
+  ): PromiseResult<
+    MessageTypes[OtherDir][K]["res"],
+    WithIframeErrors<OtherDirErrors>
+  >
 
   /**
    * Should be written by children of the children classes (Host & Frame) to
@@ -153,17 +222,39 @@ abstract class IframeBDCommShared<
    * @param payload
    * @param event
    */
-  protected abstract processRequest<
-    K extends _Key<MessageTypes[OtherDir<Dir>]>,
-  >(
-    payload: RequestPayload<K, MessageTypes[OtherDir<Dir>][K]["req"]>,
+  protected abstract processRequest<K extends _Key<MessageTypes[OtherDir]>>(
+    payload: RequestPayload<K, MessageTypes[OtherDir][K]["req"]>,
     event: MessageEvent
-  ): Promise<MessageTypes[OtherDir<Dir>][K]["res"]>
+  ): PromiseResult<
+    MessageTypes[OtherDir][K]["res"],
+    WithIframeErrors<OtherDirErrors>
+  >
 
   protected _init() {
-    if (this.initialized) throw Error(`already initialized`)
-    window.addEventListener("message", this._handleMessageEvent.bind(this))
-    this.initialized = true
+    if (this._intialization.finished) {
+      // The <iframe> has already been initialized, but a new instance was
+      //  received. The connection will be made with the new instance.`
+      this._clean.clear()
+    } else {
+      this._intialization.start()
+    }
+
+    const handler = this._handleMessageEvent.bind(this)
+    window.addEventListener("message", handler)
+    this._clean.add(
+      () => window.removeEventListener("message", handler),
+      // if init() is called another time, this will cleanup all the ongoing
+      // requests with a failure, as `clean.clear()` is called at the beginning
+      // of this method
+      () => {
+        const awaitingRequests = Object.values(this.awaitingRequests)
+        awaitingRequests.forEach(req =>
+          req.reject(new IframeDisconnectedError())
+        )
+      }
+    )
+
+    if (!this._intialization.finished) this._intialization.finish()
   }
 
   /**
@@ -184,7 +275,7 @@ abstract class IframeBDCommShared<
     timeout,
   }: SendRequestOptions<MessageTypes[Dir], K>): PromiseResult<
     MessageTypes[Dir][K]["res"],
-    IframeRequestTimeout
+    WithIframeErrors<MessageTypes[Dir][K]["errors"]>
   > {
     return new Promise(resolve => {
       const requestID = randomRequestID()
@@ -192,16 +283,24 @@ abstract class IframeBDCommShared<
       let timeoutID: number
       if (timeout) {
         timeoutID = setTimeout(
-          () => resolve(failure(new IframeRequestTimeout())),
+          () => resolve(failure(new IframeRequestTimeoutError())),
           timeout
         )
       }
+      const clear = () =>
+        typeof timeoutID !== "undefined" && clearTimeout(timeout)
 
       // by adding a listener to the awaiting requests, it will resolve once a
       // response for this request is received
-      this.awaitingRequests[requestID] = (data: any) => {
-        typeof timeoutID !== "undefined" && clearTimeout(timeout)
-        resolve(success(data))
+      this.awaitingRequests[requestID] = {
+        resolve: (data: MessageTypes[Dir][K]["res"]) => {
+          clear()
+          resolve(success(data))
+        },
+        reject: reason => {
+          clear()
+          resolve(failure(reason))
+        },
       }
 
       this._sendPayload({
@@ -215,13 +314,20 @@ abstract class IframeBDCommShared<
     })
   }
 
-  private _processResponse(payload: ResponsePayload<_Key<MessageTypes[Dir]>>) {
+  private _processResponse(
+    payload: ResponsePayload<_Key<MessageTypes[OtherDir]>>
+  ) {
     // check if a request is awaiting for a response
     const awaitingRequest = this.awaitingRequests[payload.header.id]
     if (!awaitingRequest) return
     // delete from awaiting, then resolve the awaiting promise
     delete this.awaitingRequests[payload.header.id]
-    awaitingRequest(payload.body)
+    if (payload.status === ResponseStatus.OK)
+      awaitingRequest.resolve(payload.body)
+    else
+      awaitingRequest.reject(
+        RichError.parse(payload.body.error, this.expectedErrors)
+      )
   }
 
   private async _handleMessageEvent(event: MessageEvent): Promise<void> {
@@ -233,12 +339,29 @@ abstract class IframeBDCommShared<
     const payload: Payload<_Key<MessageTypes[Dir]>> = event.data.payload
 
     if (payload.type === "request") {
-      this._sendPayload({
-        type: "response",
-        header: payload.header,
-        body: await this._handleRequest(payload, event),
-      })
-      return
+      try {
+        const res = await this._handleRequest(payload, event)
+        if (res.isFailure()) throw res.error
+        this._sendPayload({
+          type: "response",
+          header: payload.header,
+          status: ResponseStatus.OK,
+          body: res.value,
+        })
+        return
+      } catch (err) {
+        this._sendPayload({
+          type: "response",
+          header: payload.header,
+          status: ResponseStatus.ERROR,
+          body: {
+            error: (err instanceof RichError
+              ? err
+              : RichError.Unexpected()
+            ).serialize(),
+          },
+        })
+      }
     }
 
     if (payload.type === "response") {
@@ -253,13 +376,25 @@ abstract class IframeBDCommShared<
  */
 export abstract class IframeBDCommHost<
   MessageTypes extends MessageTypesSignature,
-> extends IframeBDCommShared<MessageTypes, "host->frame"> {
+  InitErrors extends RichError = never,
+  // derived types
+  Dir extends "host->frame" = "host->frame",
+  OtherDir extends _OtherDir<Dir> = _OtherDir<Dir>,
+  Errors extends MessageErrors<MessageTypes, Dir> = MessageErrors<
+    MessageTypes,
+    Dir
+  >,
+  OtherDirErrors extends MessageErrors<MessageTypes, OtherDir> = MessageErrors<
+    MessageTypes,
+    OtherDir
+  >,
+> extends IframeBDCommShared<MessageTypes, Dir> {
   iframe: HTMLIFrameElement | null = null
   url: string = ""
   connected: boolean = false
 
-  constructor() {
-    super()
+  constructor(expectedErrors: TypeOf<Errors>[]) {
+    super(expectedErrors)
   }
 
   protected _shouldProcessMessageEvent(event: MessageEvent<any>): boolean {
@@ -268,7 +403,7 @@ export abstract class IframeBDCommHost<
 
   public async init(
     iframe: HTMLIFrameElement
-  ): PromiseResult<void, IframeBDError> {
+  ): PromiseResult<void, InitErrors | IframeBDError> {
     super._init()
 
     this.iframe = iframe
@@ -281,7 +416,7 @@ export abstract class IframeBDCommHost<
       type: "__handshake",
     })
     if (result.isFailure()) {
-      return result
+      return failure(result.error) as any // todo?
     }
     this.connected = true
     return success()
@@ -295,11 +430,14 @@ export abstract class IframeBDCommHost<
     )
   }
 
-  protected async _handleRequest(
-    payload: RequestPayload<_Key<MessageTypes["host->frame"]>>,
+  protected async _handleRequest<K extends _Key<MessageTypes[OtherDir]>>(
+    payload: RequestPayload<K, MessageTypes[OtherDir][K]["req"]>,
     event: MessageEvent
-  ) {
-    return this.processRequest(payload, event)
+  ): PromiseResult<
+    MessageTypes[OtherDir][K]["res"],
+    WithIframeErrors<OtherDirErrors>
+  > {
+    return this.processRequest(payload, event) as any // todo
   }
 }
 
@@ -312,15 +450,26 @@ interface IframeConnection {
  */
 export abstract class IframeBDCommFrame<
   MessageTypes extends MessageTypesSignature,
-> extends IframeBDCommShared<MessageTypes, "frame->host"> {
+  Dir extends "frame->host" = "frame->host",
+  // derived types
+  OtherDir extends _OtherDir<Dir> = _OtherDir<Dir>,
+  Errors extends MessageErrors<MessageTypes, Dir> = MessageErrors<
+    MessageTypes,
+    Dir
+  >,
+  OtherDirErrors extends MessageErrors<MessageTypes, OtherDir> = MessageErrors<
+    MessageTypes,
+    OtherDir
+  >,
+> extends IframeBDCommShared<MessageTypes, Dir> {
   /**
    * Will be set once the connection with the host is established through the
    * initial handshake
    */
   connection: IframeConnection | null = null
 
-  constructor() {
-    super()
+  constructor(expectedErrors: TypeOf<Errors>[]) {
+    super(expectedErrors)
     super._init()
   }
 
@@ -341,23 +490,24 @@ export abstract class IframeBDCommFrame<
     window.parent.postMessage(message, this.connection!.origin)
   }
 
-  protected async _handleRequest(
-    payload: RequestPayload<_Key<MessageTypes["frame->host"]>>,
+  protected async _handleRequest<K extends _Key<MessageTypes[OtherDir]>>(
+    payload: RequestPayload<K, MessageTypes[OtherDir][K]["req"]>,
     event: MessageEvent
-  ) {
+  ): PromiseResult<
+    MessageTypes["host->frame"][K]["res"],
+    WithIframeErrors<OtherDirErrors>
+  > {
     if (payload.header.type === "__handshake") {
       if (this.connected) {
-        throw Error(
-          `connection with host at ${this.connection!.origin} has already been established, but a new connection request was received. There must be only a single handshake at initialisation.`
-        )
+        return failure(new ConnectionAlreadyEstablishedError())
       }
       this.connection = {
         origin: new URL(event.origin).origin,
       }
-      return
+      return success()
     }
 
-    return this.processRequest(payload, event)
+    return this.processRequest(payload, event) as any // todo
   }
 }
 

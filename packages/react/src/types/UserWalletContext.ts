@@ -1,9 +1,9 @@
 import {
   BlockchainType,
   PendingSigningRequestError,
-  PromiseResult,
   UserRejectedError,
 } from "@fxhash/shared"
+import { type PromiseResult } from "@fxhash/utils"
 import { TezosWalletManager } from "@fxhash/tez"
 import { EthereumWalletManager } from "@fxhash/eth"
 // to avoid having to include there utilities

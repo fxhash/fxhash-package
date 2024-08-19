@@ -18,7 +18,7 @@ const documents = {
     "\n  mutation Authenticate($input: AuthenticationInput!) {\n    authenticate(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.AuthenticateDocument,
     "\n  mutation AuthenticateWeb3Auth($input: AuthenticationWeb3AuthInput!) {\n    authenticate_web3auth(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.AuthenticateWeb3AuthDocument,
     "\n  mutation Web3AuthOAuth($input: Web3AuthOAuthInput!) {\n    web3auth_oauth(input: $input) {\n      idToken\n    }\n  }\n": types.Web3AuthOAuthDocument,
-    "\n  mutation Web3AuthEmailRequestOTP($email: String!) {\n    web3auth_email_request_otp(input: $email) {\n      email\n      expires\n    }\n  }\n": types.Web3AuthEmailRequestOtpDocument,
+    "\n  mutation Web3AuthEmailRequestOTP($email: String!) {\n    web3auth_email_request_otp(input: $email) {\n      email\n      expires\n      attemptsLeft\n    }\n  }\n": types.Web3AuthEmailRequestOtpDocument,
     "\n  mutation MyMutation($input: Web3AuthEmailAuthOTPInput!) {\n    web3auth_email_auth_otp(input: $input) {\n      idToken\n    }\n  }\n": types.MyMutationDocument,
     "\n  mutation Refresh($input: RefreshInput!) {\n    refresh(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshDocument,
     "\n  mutation Logout($input: LogoutInput!) {\n    logout(input: $input) {\n      success\n    }\n  }\n": types.LogoutDocument,
@@ -90,7 +90,7 @@ export function graphql(source: "\n  mutation Web3AuthOAuth($input: Web3AuthOAut
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation Web3AuthEmailRequestOTP($email: String!) {\n    web3auth_email_request_otp(input: $email) {\n      email\n      expires\n    }\n  }\n"): (typeof documents)["\n  mutation Web3AuthEmailRequestOTP($email: String!) {\n    web3auth_email_request_otp(input: $email) {\n      email\n      expires\n    }\n  }\n"];
+export function graphql(source: "\n  mutation Web3AuthEmailRequestOTP($email: String!) {\n    web3auth_email_request_otp(input: $email) {\n      email\n      expires\n      attemptsLeft\n    }\n  }\n"): (typeof documents)["\n  mutation Web3AuthEmailRequestOTP($email: String!) {\n    web3auth_email_request_otp(input: $email) {\n      email\n      expires\n      attemptsLeft\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

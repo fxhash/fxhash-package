@@ -72,6 +72,6 @@ export {
 export * from "./types"
 export * from "./helpers"
 
-export { type IAppMetadata } from "./config/metadata"
+export { type IAppMetadata, isAppMetadataValid } from "./config/metadata"
 
 export default fxhashConfig
