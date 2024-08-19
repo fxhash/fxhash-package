@@ -23,6 +23,10 @@ export default defineConfig({
         text: "Introduction",
         items: [
           {
+            text: "Use cases",
+            link: "/use-cases",
+          },
+          {
             text: "Getting started",
             link: "/getting-started",
           },

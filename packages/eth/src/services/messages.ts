@@ -49,7 +49,7 @@ type DecodeSignMessageError =
  *
  * @param message The message to be signed as a Hex string
  *
- * @returns Success <message parts> or Failure if any
+ * @returns Success: Message parts; Failure: {@link DecodeSignMessageError}
  */
 export function decodeSignMessage(
   message: Hex
