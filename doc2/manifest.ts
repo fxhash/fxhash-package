@@ -1,4 +1,9 @@
 export const PACKAGES: string[] = [
+  // remove:
+  "auth",
+
+  // sdk ?
+
   "client",
   "client-react",
   "core",
@@ -12,9 +17,4 @@ export const PACKAGES: string[] = [
   "tez-utils",
   "utils",
   "utils-browser",
-
-  //sdk ?
-
-  //
-  "auth",
 ]

@@ -1,2 +1,2 @@
-.generated
-docs/pages/packages
+docs/.vitepress/cache
+docs/packages

@@ -1,15 +1,20 @@
 import fs from "node:fs"
 import path from "node:path"
-import TypeDoc from "typedoc"
+import { Application as TypedocApplication } from "typedoc"
 import { NavigationItem } from "typedoc-plugin-markdown"
 import remarkParse from "remark-parse"
 import remarkStringify from "remark-stringify"
 import { unified } from "unified"
 import chalk from "chalk"
 import { PACKAGES } from "./manifest"
-import { SidebarItem } from "vocs"
 import { Root } from "remark-parse/lib"
 import type { Heading, List, ListItem } from "mdast"
+import { DefaultTheme } from "vitepress"
+import cliProgress from "cli-progress"
+
+type SidebarItem = DefaultTheme.SidebarItem
+
+const DOCS_PATH = "./docs"
 
 /**
  * TODOS
@@ -18,7 +23,18 @@ import type { Heading, List, ListItem } from "mdast"
  */
 
 async function main() {
-  const outputRoot = "docs/pages/packages"
+  const outputRoot = path.join(DOCS_PATH, "packages")
+
+  const progress = new cliProgress.SingleBar(
+    {
+      format:
+        "progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | Task: {task}",
+    },
+    cliProgress.Presets.shades_classic
+  )
+  progress.start(PACKAGES.length, 0, {
+    task: "cleanup",
+  })
 
   // cleanup the output folder
   if (fs.existsSync(outputRoot)) {
@@ -26,13 +42,18 @@ async function main() {
   }
 
   // generate each package typedoc
-  for (const PACKAGE of PACKAGES) {
+  for (let i = 0; i < PACKAGES.length; i++) {
+    const PACKAGE = PACKAGES[i]
     const pkgRootPath = `../packages/${PACKAGE}`
     const pkgOutputPath = `${outputRoot}/${PACKAGE}`
     const pkgOutputRefPath = `${pkgOutputPath}/reference`
     const pkgDocPath = `${pkgRootPath}/doc`
 
-    const app = await TypeDoc.Application.bootstrapWithPlugins({
+    progress.update(i, {
+      task: `generate @fxhash/${PACKAGE} doc`,
+    })
+
+    const app = await TypedocApplication.bootstrapWithPlugins({
       plugin: ["typedoc-plugin-markdown"],
       tsconfig: `${pkgRootPath}/tsconfig.json`,
       entryPoints: [`${pkgRootPath}/src/index.ts`],
@@ -141,7 +162,10 @@ async function main() {
     if (project) {
       await app.generateDocs(project, pkgOutputRefPath)
     }
+
+    progress.update(i + 1)
   }
+  progress.stop()
 }
 
 main().catch(err => {
@@ -159,8 +183,8 @@ export function getSidebar(
   basePath: string
 ): SidebarItem[] {
   // console.log({ basePath })
-  if (basePath.startsWith("./docs/pages")) {
-    basePath = basePath.replace("./docs/pages", "")
+  if (basePath.startsWith(DOCS_PATH)) {
+    basePath = basePath.replace(DOCS_PATH, "")
   }
   return navigation
     .map(navigationItem => getNavigationItem(navigationItem, basePath))

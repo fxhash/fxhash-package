@@ -1,0 +1,12 @@
+[
+  {
+    "text": "Introduction",
+    "items": [
+      {
+        "text": "Getting started",
+        "link": "/getting-started",
+      },
+    ],
+  },
+  // ... here packages sidebar items will be injected
+]
