@@ -5,16 +5,16 @@ import { PACKAGES } from "./manifest"
 
 export default defineConfig({
   title: "Docs",
-  markdown: {
-    rehypePlugins: [
-      () => {
-        return (...params) => {
-          console.log("yooooo")
-          console.log(params)
-        }
-      },
-    ],
-  },
+  // markdown: {
+  //   rehypePlugins: [
+  //     () => {
+  //       return (...params) => {
+  //         console.log("yooooo")
+  //         console.log(params)
+  //       }
+  //     },
+  //   ],
+  // },
   sidebar: [
     {
       text: "Getting Started",
