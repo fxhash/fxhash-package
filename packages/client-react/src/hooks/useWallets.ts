@@ -1,5 +1,5 @@
+import { BlockchainNetwork } from "@fxhash/sdk"
 import { useClient } from "./useClient.js"
-import { BlockchainNetwork } from "@fxhash/shared"
 import type {
   EthereumWalletManager,
   TezosWalletManager,
