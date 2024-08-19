@@ -1,0 +1,32 @@
+{
+  "name": "fxhash-sdk",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "generate": "tsx ./generate.ts",
+    "dev": "vocs dev",
+    "build": "pnpm run generate && vocs build",
+    "preview": "pnpm run generate && vocs preview"
+  },
+  "dependencies": {
+    "@types/react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "tsx": "4.17.0",
+    "typescript": "5.3.3",
+    "vocs": "latest"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/mdast": "3.0.15",
+    "@types/node": "22.3.0",
+    "chalk": "5.3.0",
+    "remark": "^15.0.1",
+    "remark-parse": "10.0.2",
+    "remark-stringify": "10.0.3",
+    "typedoc": "0.25.8",
+    "typedoc-plugin-markdown": "4.0.0-next.53",
+    "unified": "10.1.2"
+  }
+}
