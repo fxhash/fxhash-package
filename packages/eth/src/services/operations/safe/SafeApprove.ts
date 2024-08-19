@@ -1,6 +1,7 @@
 import { EthereumContractOperation } from "../contractOperation.js"
 import { getSafeService } from "@/services/Safe.js"
-import { TransactionType, invariant } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 /**
  * The above type represents the parameters required for approving a safe multisig transaction on the

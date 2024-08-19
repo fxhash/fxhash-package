@@ -3,9 +3,6 @@ import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   InsufficientFundsError,
   TransactionRevertedError,
   TransactionReceiptError,
@@ -14,8 +11,8 @@ import {
   BlockchainType,
   WalletConnectionErrorReason,
   WalletConnectionError,
-  invariant,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success, invariant } from "@fxhash/utils"
 import {
   Account,
   Chain,

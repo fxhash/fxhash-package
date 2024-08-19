@@ -1,3 +1,4 @@
+import { enumKeys } from "@fxhash/utils"
 import { WalletManager } from "./WalletManager"
 
 /**
@@ -34,6 +35,8 @@ export enum BlockchainType {
   TEZOS = "TEZOS",
   BASE = "BASE",
 }
+export type Blockchain = keyof typeof BlockchainType
+export const BlockchainTypes = enumKeys(BlockchainType)
 
 export type ChainNetworkToChainTypemap = {
   [T in BlockchainNetwork]: {

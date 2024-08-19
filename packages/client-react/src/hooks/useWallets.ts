@@ -1,7 +1,9 @@
 import { useClient } from "./useClient.js"
-import { type WalletManagersMap } from "../../../core/dist/index.js"
-import { type EthereumWalletManager } from "@fxhash/eth"
-import { type TezosWalletManager } from "@fxhash/tez"
+import type {
+  EthereumWalletManager,
+  TezosWalletManager,
+  WalletManagersMap,
+} from "@fxhash/sdk"
 
 /**
  * Map of Wallet Managers currently available.

@@ -1,8 +1,5 @@
-import {
-  type PromiseResult,
-  BlockchainNetwork,
-  invariant,
-} from "@fxhash/shared"
+import { BlockchainNetwork } from "@fxhash/shared"
+import { type PromiseResult, invariant } from "@fxhash/utils"
 import {
   type IWalletsSource,
   type IWalletRequirements,
@@ -63,7 +60,6 @@ export function walletSource<Net extends BlockchainNetwork>({
     getAccount: () => null,
     logoutAccount: async () => {},
     getWallet(net) {
-      _init.check()
       invariant(this.supports(net), "invalid network")
       return {
         connected: connected as any,
@@ -71,7 +67,6 @@ export function walletSource<Net extends BlockchainNetwork>({
       }
     },
     getWallets() {
-      _init.check()
       return {
         [network]: this.getWallet(network),
       }
@@ -94,7 +89,6 @@ export function walletSource<Net extends BlockchainNetwork>({
     utils: {
       init: _init,
       update: async info => {
-        _init.check()
         // if addresses are different, it's a new connection
         if (connected?.info.address !== info?.address) {
           if (!info) {

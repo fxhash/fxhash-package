@@ -5,7 +5,8 @@ import {
   BeaconEvent,
 } from "@airgap/beacon-sdk"
 import { BeaconWallet } from "@taquito/beacon-wallet"
-import { BlockchainNetwork, failure, success } from "@fxhash/shared"
+import { BlockchainNetwork } from "@fxhash/shared"
+import { failure, success } from "@fxhash/utils"
 import { IWindowWalletsSource } from "./_interfaces.js"
 import { TezosClientNotAvailableError } from "@/index.js"
 import { createTezosWalletManager, walletSource } from "../common/_private.js"
@@ -58,15 +59,14 @@ export function tzip10WalletSource({
         await _handleAccountSet(activeAccount)
         _init.finish()
       } catch (err) {
+        console.error(err)
         throw _init.fail(err)
       }
     },
     disconnect: async () => {
-      _init.check()
       await _beaconWallet?.clearActiveAccount()
     },
     createManager: async info => {
-      _init.check()
       if (!info || !_beaconWallet)
         return failure(new TezosClientNotAvailableError())
       return success(

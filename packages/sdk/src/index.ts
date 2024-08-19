@@ -3,9 +3,11 @@ export * from "@fxhash/config"
 export * from "@fxhash/core"
 export * from "@fxhash/eth"
 export * from "@fxhash/gql"
+export * from "@fxhash/gql-client"
 export * from "@fxhash/shared"
 export * from "@fxhash/tez"
 export * from "@fxhash/utils"
+export * from "@fxhash/errors"
 
 /**
  * TODO
@@ -39,16 +41,3 @@ export {
   EWalletOperatorState,
 } from "@fxhash/gql"
 export { type CaptureSettings, type IAddress } from "@fxhash/shared"
-export {
-  type IEquatableError,
-  type PromiseResult,
-  type Result,
-  Failure,
-  InvariantError,
-  Success,
-  assertFailure,
-  assertSuccess,
-  failure,
-  invariant,
-  success,
-} from "@fxhash/utils"

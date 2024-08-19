@@ -9,7 +9,7 @@ import {
   type IWeb3AuthWalletUtil,
 } from "../_interfaces.js"
 import { b58cencode, getPkhfromPk, prefix } from "@taquito/utils"
-import { BlockchainNetwork, Result } from "@fxhash/shared"
+import { BlockchainNetwork } from "@fxhash/shared"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
 import { createTezosWalletManager } from "../../common/_private.js"
 import { bytesToHex } from "viem"

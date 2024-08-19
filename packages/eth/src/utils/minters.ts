@@ -29,7 +29,8 @@ import {
   GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import { BlockchainType, invariant } from "@fxhash/shared"
+import { BlockchainType } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { config } from "@fxhash/config"
 import { EthereumWalletManager } from "@/services/Wallet.js"
 import { IEthContracts } from "@fxhash/config"

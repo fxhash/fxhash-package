@@ -1,4 +1,5 @@
-import { BlockchainNetwork, failure, invariant, success } from "@fxhash/shared"
+import { BlockchainNetwork } from "@fxhash/shared"
+import { failure, invariant, success } from "@fxhash/utils"
 import { type Hex, type PrivateKeyAccount } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { IPrivateKeyWalletsSource } from "./_interfaces.js"

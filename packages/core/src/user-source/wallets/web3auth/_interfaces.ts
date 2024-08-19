@@ -1,13 +1,18 @@
 import { Hex } from "viem"
-import { EventEmitter } from "@fxhash/utils"
+import { EventEmitter, PromiseResult } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
+import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
+import {
+  EmailOTPRequestError,
+  Web3AuthFrameError,
+  WithGqlErrors,
+} from "@fxhash/errors"
 import {
   IWalletConnected,
   IWalletsSource,
-  Web3AuthFrameResponseErrors,
+  Web3AuthFrameManager,
 } from "@/index.js"
-import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
   update: (detais: SessionDetails | null) => void
@@ -20,7 +25,9 @@ export interface IWeb3AuthWalletsSource extends IWalletsSource {
    *
    * @param payload login payload
    */
-  login: (payload: Web3AuthLoginPayload) => Promise<any>
+  login: (
+    payload: Web3AuthLoginPayload
+  ) => ReturnType<Web3AuthFrameManager["login"]>
 
   /**
    * Request a OTP for a given email. The OTP will be sent to the email and
@@ -29,12 +36,19 @@ export interface IWeb3AuthWalletsSource extends IWalletsSource {
    *
    * @param email Email to which the OTP should be sent
    */
-  emailRequestOTP: (email: string) => Promise<Web3AuthEmailRequestOtpOutput>
+  emailRequestOTP: (
+    email: string
+  ) => PromiseResult<
+    Web3AuthEmailRequestOtpOutput,
+    WithGqlErrors<EmailOTPRequestError>
+  >
 
   /**
    * @returns The current Web3Auth session details.
    */
-  getWeb3AuthSessionDetails: () => Promise<SessionDetails | null>
+  getWeb3AuthSessionDetails: () => ReturnType<
+    Web3AuthFrameManager["getSessionDetails"]
+  >
 }
 
 export interface IWeb3AuthIdentity {
@@ -121,7 +135,7 @@ export type Web3AuthFrameMessageTypes = {
     init: {
       req: void
       res: void
-      errors: Web3AuthFrameResponseErrors["init"]
+      errors: Web3AuthFrameError["init"]
     }
 
     /**
@@ -130,19 +144,19 @@ export type Web3AuthFrameMessageTypes = {
     getSessionDetails: {
       req: void
       res: SessionDetails | null
-      errors: Web3AuthFrameResponseErrors["getSessionDetails"]
+      errors: Web3AuthFrameError["getSessionDetails"]
     }
 
     logout: {
       req: any
       res: any
-      errors: Web3AuthFrameResponseErrors["logout"]
+      errors: Web3AuthFrameError["logout"]
     }
 
     login: {
       req: Web3AuthLoginPayload
       res: SessionDetails | null
-      errors: Web3AuthFrameResponseErrors["login"]
+      errors: Web3AuthFrameError["login"]
     }
 
     tez__rpc: TezosWalletRpcType

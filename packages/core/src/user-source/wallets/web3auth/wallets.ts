@@ -12,13 +12,15 @@ import {
   type IWeb3AuthWalletsSource,
   type IWeb3AuthWalletUtil,
 } from "./_interfaces.js"
-import { cleanup, intialization } from "@fxhash/utils"
-import {
-  type IGraphqlWrapper,
-  UserSourceEventEmitter,
-  GraphQLError,
-} from "@/index.js"
+import { cleanup, failure, intialization, success } from "@fxhash/utils"
+import { type IGraphqlWrapper, UserSourceEventEmitter } from "@/index.js"
 import { Mu_Web3AuthEmailRequestOTP } from "@fxhash/gql"
+import {
+  EmailOTPRequestErrors,
+  UnexpectedRichError,
+  richResultFromGraphQLResponse,
+  typedRichErrorFromGraphQLError,
+} from "@fxhash/errors"
 
 type Options = {
   /**
@@ -119,29 +121,25 @@ export function web3AuthWallets({
     disconnectAllWallets: disconnect,
     logoutAccount: disconnect,
 
-    emailRequestOTP: async (email: string) => {
+    emailRequestOTP: async email => {
       _init.check()
-      const res = await gqlWrapper
-        .client()
-        .mutation(Mu_Web3AuthEmailRequestOTP, {
+      return richResultFromGraphQLResponse(
+        await gqlWrapper.client().mutation(Mu_Web3AuthEmailRequestOTP, {
           email,
-        })
-      if (res.error || !res?.data?.web3auth_email_request_otp?.email)
-        throw new GraphQLError("couldn't generate request OTP")
-      return res.data.web3auth_email_request_otp
+        }),
+        res => res.data?.web3auth_email_request_otp,
+        EmailOTPRequestErrors
+      )
     },
 
     login: async options => {
       _init.check()
-      const res = await frameManager.login(options)
-      if (res.isFailure()) throw res.error
+      return frameManager.login(options)
     },
 
     getWeb3AuthSessionDetails: async () => {
       _init.check()
-      const res = await frameManager.getSessionDetails()
-      if (res.isFailure()) throw res.error
-      return res.value
+      return frameManager.getSessionDetails()
     },
   }
 

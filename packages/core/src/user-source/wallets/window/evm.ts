@@ -12,8 +12,14 @@ import {
   disconnect,
   injected,
 } from "@wagmi/core"
-import { BlockchainNetwork, failure, success } from "@fxhash/shared"
-import { intialization, setIntervalCapped, sleep } from "@fxhash/utils"
+import { BlockchainNetwork } from "@fxhash/shared"
+import {
+  intialization,
+  setIntervalCapped,
+  sleep,
+  failure,
+  success,
+} from "@fxhash/utils"
 import { createEvmWalletManager, walletSource } from "../common/_private.js"
 import {
   EvmClientsNotAvailableError,
@@ -104,17 +110,14 @@ export function eip1193WalletSource({
         await _handleAccountChange(getAccount(wagmiConfig))
         _init.finish()
       } catch (err) {
+        console.error(err)
         throw _init.fail(err)
       }
     },
 
-    disconnect: () => {
-      _init.check()
-      return disconnect(wagmiConfig)
-    },
+    disconnect: () => disconnect(wagmiConfig),
 
     createManager: async info => {
-      _init.check()
       if (!info) return failure(new EvmClientsNotAvailableError())
 
       /**

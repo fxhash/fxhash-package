@@ -1,13 +1,73 @@
 import type {
   IUserSource,
   UserSourceEventEmitter,
-  Web3AuthLoginPayload,
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
-import { config as fxConfig } from "@fxhash/config"
+import { IAppMetadata, config as fxConfig } from "@fxhash/config"
+import { AtLeastOne } from "@fxhash/utils"
+
+/**
+ * Options for creating a Client PlugnPlay
+ */
+export type ClientPlugnPlayOptions = {
+  /**
+   * Some metdata about your application, which will be used by wallets to
+   * display details about your app when you request some wallet interaction
+   * from the url.
+   *
+   * **Important**: the URL must match the URL under which the application is
+   * served !
+   */
+  metadata: IAppMetadata
+
+  /**
+   * Define the wallets you want your app to setup.
+   */
+  wallets: AtLeastOne<{
+    /**
+     * Set this key if you want support for EVM wallets.
+     */
+    evm: {
+      /**
+       * Your application Wallet Connect project id. The plug-n-play client uses
+       * ConnectKit for providing a connection interface (which itself uses
+       * Wallet Connect, an industry standard wallet connection solution).
+       * <https://docs.walletconnect.com/appkit/react/notifications/embedded-widget/usage>
+       */
+      walletConnectProjectId: string
+
+      /**
+       * Whether the client should instanciate ConnectKit and manage it on its
+       * own. You may want to set this to `false` when you already have a
+       * ConnectKit implementation in your app.
+       *
+       * **Warning**: setting this value to `false` implies that you have to
+       * provide some solution for connecting an EVM wallet youself.
+       *
+       * @default true
+       */
+      manageConnectKitProvider?: boolean
+    }
+
+    /**
+     * Set this key if you want support for tezos wallet.
+     */
+    tezos: true
+  }>
+
+  /**
+   * In case your application would alter the content of `document.body`
+   * such that it removes the <iframe> this module adds to
+   * `document.body`, you should provide such wrapper here. It should be
+   * a safe html element in which the <iframe> can be appended.
+   *
+   * @default document.body
+   */
+  safeDomWrapper?: HTMLElement
+}
 
 export interface IClientPlugnPlay {
   /**
@@ -50,12 +110,48 @@ export interface IClientPlugnPlay {
    */
   disconnectWallet: (network: BlockchainNetwork) => Promise<void>
 
+  /**
+   * The GraphQL wrapper instance which should be used to make authenticated
+   * queries. The GraphQL client is synced with the currently authenticated
+   * user so that queries are properly authenticated.
+   *
+   * **ℹ️ Note**: If you wish to use your own GraphQL client, you should make
+   * sure to add the necessarry http headers based on the currently
+   * authenticated user.
+   */
   gql: IGraphqlWrapper
 
-  // todo: comments
+  /**
+   * Attempt to disconnect all the wallets currently connected to your
+   * application. If a user account is authenticated, this may trigger a
+   * logout as accounts are required to have wallet accounts attached to them.
+   */
   disconnectAllWallets: () => Promise<void>
+
+  /**
+   * Initiate an OTP email verification flow. This will send an OTP to the
+   * provided email address, which can then be used to log the user in with
+   * {@link loginWeb2}
+   */
   requestEmailOTP: IWeb3AuthWalletsSource["emailRequestOTP"]
-  loginWeb2: (options: Web3AuthLoginPayload) => Promise<void>
+
+  /**
+   * Login to fxhash using fxhash embedded wallet and a web2 source of login
+   * (email, google, discord, etc...). This will generate a wallet linked to the
+   * source of authentication, which can be used in the browser context.
+   */
+  loginWeb2: IWeb3AuthWalletsSource["login"]
+
+  /**
+   * Logout the account currently authenticated. If the account is linked to
+   * a wallet currently connected, this wallet will be disconnected
+   * automatically.
+   */
   logoutAccount: () => Promise<void>
+
+  /**
+   * Release the Client (detaches listeners, frees allocated resources).
+   * Once called the client cannot be used anymore.
+   */
   release: () => void
 }

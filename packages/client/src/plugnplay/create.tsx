@@ -4,7 +4,13 @@
  */
 
 import { createClient, ICreateClientParams } from "@/basic/_index.js"
-import { AtLeastOne, cleanup, intialization } from "@fxhash/utils"
+import {
+  AtLeastOne,
+  cleanup,
+  failure,
+  intialization,
+  invariant,
+} from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
@@ -13,14 +19,18 @@ import {
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
 } from "@fxhash/core"
-import { BlockchainNetwork, invariant } from "@fxhash/shared"
-import { IAppMetadata, config as fxConfig } from "@fxhash/config"
+import { BlockchainNetwork } from "@fxhash/shared"
+import {
+  IAppMetadata,
+  config as fxConfig,
+  isAppMetadataValid,
+} from "@fxhash/config"
 import { getDefaultConfig, useModal } from "connectkit"
 import { createConfig, Config } from "wagmi"
 import { QueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { createRoot } from "react-dom/client"
-import { IClientPlugnPlay } from "./_interfaces.js"
+import { ClientPlugnPlayOptions, IClientPlugnPlay } from "./_interfaces.js"
 import { DependencyProviders } from "./providers.js"
 import { supportedEvmChains, viemSimpleTransports } from "@fxhash/eth"
 import { createBeaconConfig } from "@fxhash/tez"
@@ -46,63 +56,6 @@ const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
   ) as Config
 }
 
-export type ClientPlugnPlayOptions = {
-  /**
-   * Some metdata about your application, which will be used by wallets to
-   * display details about your app when you request some wallet interaction
-   * from the url.
-   *
-   * **Important**: the URL must match the URL under which the application is
-   * served !
-   */
-  metadata: IAppMetadata
-
-  /**
-   * Define the wallets you want your app to setup.
-   */
-  wallets: AtLeastOne<{
-    /**
-     * Set this key if you want support for EVM wallets.
-     */
-    evm: {
-      /**
-       * Your application Wallet Connect project id. The plug-n-play client uses
-       * ConnectKit for providing a connection interface (which itself uses
-       * Wallet Connect, an industry standard wallet connection solution).
-       * <https://docs.walletconnect.com/appkit/react/notifications/embedded-widget/usage>
-       */
-      walletConnectProjectId: string
-
-      /**
-       * Whether the client should instanciate ConnectKit and manage it on its
-       * own. You may want to set this to `false` when you already have a
-       * ConnectKit implementation in your app.
-       *
-       * **Warning**: setting this value to `false` implies that you have to
-       * provide some solution for connecting an EVM wallet youself.
-       *
-       * @default true
-       */
-      manageConnectKitProvider?: boolean
-    }
-
-    /**
-     * Set this key if you want support for tezos wallet.
-     */
-    tezos: true
-  }>
-
-  /**
-   * In case your application would alter the content of `document.body`
-   * such that it removes the <iframe> this module adds to
-   * `document.body`, you should provide such wrapper here. It should be
-   * a safe html element in which the <iframe> can be appended.
-   *
-   * @default document.body
-   */
-  safeDomWrapper?: HTMLElement
-}
-
 export function createClientPlugnPlay({
   metadata,
   wallets,
@@ -116,6 +69,8 @@ export function createClientPlugnPlay({
   // checks on provided values
   invariant(metadata, "metadata required")
   invariant(wallets, "missing wallets configuration")
+  const metadataValidRes = isAppMetadataValid(metadata)
+  if (metadataValidRes.isFailure()) throw metadataValidRes.error
 
   const init = intialization()
   const clean = cleanup()
@@ -268,11 +223,12 @@ export function createClientPlugnPlay({
     },
 
     async loginWeb2(payload: Web3AuthLoginPayload) {
-      return client.walletSources.web3auth?.login(payload)
+      invariant(client.walletSources.web3auth, "no web3auth wallet configured")
+      return client.walletSources.web3auth.login(payload)
     },
 
     async requestEmailOTP(email: string) {
-      invariant(client.walletSources.web3auth, "no web3auth wallet")
+      invariant(client.walletSources.web3auth, "no web3auth wallet configured")
       return client.walletSources.web3auth.emailRequestOTP(email)
     },
   }

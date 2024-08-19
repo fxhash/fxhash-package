@@ -4,7 +4,8 @@ import { prepareMintParams } from "@/utils/index.js"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
-import { TransactionType, invariant } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 export type TMintEthV1OperationParams = {
   token: `0x${string}`

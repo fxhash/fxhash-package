@@ -22,8 +22,8 @@ import {
   InsufficientFundsError,
   TransactionRevertedError,
   UserRejectedError,
-  invariant,
 } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 export enum MintTypes {
   FIXED_PRICE,

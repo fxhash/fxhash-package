@@ -1,5 +1,11 @@
 import { fxApisByEnv } from "../api/fxhash"
 import { TEnv } from "../config"
+import { Result, failure, success } from "@fxhash/utils"
+import {
+  AppMetadataError,
+  AppMetadataInvalidTypeError,
+  AppMetadataMissingPropertiesError,
+} from "../errors/metadata"
 
 /**
  * Meta info about the application. Can be used by wallets to scope the
@@ -48,4 +54,29 @@ export function fxAppEnvMetadata(env: TEnv): IAppMetadata {
     ...crossEnvMetadata,
     url: fxApisByEnv(env).website,
   }
+}
+
+/**
+ * Test whether some value is a valid {@link IAppMetadata} interface. If not,
+ * the issue causing it to be invalid is returned as a failure.
+ * @param value Any value which should be tested for being valid App Metadata
+ * @returns A Result with void success or failure with the issue
+ */
+export function isAppMetadataValid(value: any): Result<void, AppMetadataError> {
+  if (!(typeof value === "object"))
+    return failure(new AppMetadataInvalidTypeError())
+
+  const missingProperties: string[] = []
+  const requiredProperties: (keyof Required<IAppMetadata>)[] = [
+    "name",
+    "description",
+    "url",
+  ]
+  for (const prop of requiredProperties) {
+    if (!value[prop]) missingProperties.push(prop)
+  }
+  if (missingProperties.length > 0)
+    return failure(new AppMetadataMissingPropertiesError(missingProperties))
+
+  return success()
 }

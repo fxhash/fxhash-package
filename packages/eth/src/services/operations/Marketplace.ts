@@ -21,7 +21,8 @@ import {
   getConfigForChain,
   getCurrentChain,
 } from "../Wallet.js"
-import { BlockchainType, UserRejectedError, invariant } from "@fxhash/shared"
+import { BlockchainType, UserRejectedError } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { RESERVOIR_API_URLS } from "../Reservoir.js"
 
 export const stepHandler = (

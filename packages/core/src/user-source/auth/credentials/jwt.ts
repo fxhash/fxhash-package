@@ -1,9 +1,5 @@
-import {
-  JwtAccessTokenPayload,
-  failure,
-  invariant,
-  success,
-} from "@fxhash/shared"
+import { JwtAccessTokenPayload } from "@fxhash/shared"
+import { failure, invariant, success } from "@fxhash/utils"
 import { ICredentialsDriver, JWTCredentials } from "./_interfaces.js"
 import { refreshAccessToken } from "../_index.js"
 import { jwtDecode } from "jwt-decode"
