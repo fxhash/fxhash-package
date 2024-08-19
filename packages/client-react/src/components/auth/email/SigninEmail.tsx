@@ -1,5 +1,5 @@
 import { useState } from "react"
-import css from "./SignInEmail.module.css"
+import css from "./SigninEmail.module.css"
 import { useClient } from "@/hooks/useClient.js"
 import icon from "@/icons/email.svg"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
