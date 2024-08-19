@@ -1,11 +1,11 @@
 import { OTPInput } from "input-otp"
 import css from "./OtpVerification.module.css"
-import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
 import { useState } from "react"
 import { useClient } from "@/index.js"
 import { createPortal } from "react-dom"
 import xmark from "@/icons/xmark.svg"
 import { ErrorWrapper } from "@/components/feedback/ErrorWrapper.js"
+import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
 
 type Props = {
   request: Web3AuthEmailRequestOtpOutput
