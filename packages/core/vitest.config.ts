@@ -17,5 +17,6 @@ export default defineConfig({
         `./node_modules/@airgap/beacon-sdk/dist/cjs/index.js`
       ),
     },
+    setupFiles: ["./test/mock/globals.ts", "./test/mock/handlers.ts"],
   },
 })

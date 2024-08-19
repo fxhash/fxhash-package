@@ -1,16 +1,14 @@
-import {
-  GraphqlWrapper,
-  authWallets,
-  Storage,
-  privateKeyWallets,
-  jwtCredentials,
-  evmPrivateKeyWallet,
-  multichainWallets,
-  evmPrivateKeyWallet,
-} from "@/index.js"
 import { localConfig } from "@fxhash/config"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { vi } from "vitest"
+import {
+  GraphqlWrapper,
+  authWallets,
+  evmPrivateKeyWallet,
+  inMemoryStorageDriver,
+  jwtCredentials,
+} from "../src"
+import { multichainWallets } from "../src/user-source/wallets/common/multichain"
 
 describe("EVM: private key wallets", async () => {
   const gql = new GraphqlWrapper({
@@ -19,7 +17,7 @@ describe("EVM: private key wallets", async () => {
 
   const accountSourceOptions = {
     gqlWrapper: gql,
-    storage: new Storage(),
+    storage: inMemoryStorageDriver(),
     credentialsDriver: jwtCredentials(gql),
   }
 
@@ -38,7 +36,7 @@ describe("EVM: private key wallets", async () => {
   })
 
   it("can retrieve wallet manager", async () => {
-    expect(source.getWalletManagers()).toBeDefined()
+    expect(source.getWallets()).toBeDefined()
   })
 
   it("will be authenticated after init", async () => {
@@ -49,11 +47,10 @@ describe("EVM: private key wallets", async () => {
   it("cannot logout private key wallet", async () => {
     await source.logoutAccount()
     expect(source.authenticated()).toBe(false)
-    expect(source.authenticated()).toBe(false)
   })
 
   it("can re authenticate", async () => {
-    await evmWallet.updatePrivateKey(privateKey)
+    await evmWallet.updatePrivateKey(BlockchainNetwork.ETHEREUM, privateKey)
     await vi.waitUntil(() => source.authenticated())
     expect(source.authenticated()).toBe(true)
   })
