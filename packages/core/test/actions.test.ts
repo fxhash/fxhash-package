@@ -4,43 +4,40 @@ import { BlockchainType } from "@fxhash/shared"
 import { localConfig } from "@fxhash/config"
 import { createGqlClient } from "@fxhash/gql-client"
 import { generateChallenge, authenticate } from "../src/index.js"
+import {
+  CHALLENGE_ID,
+  INVALID_CHALLENGE_ID,
+  INVALID_SIGNATURE,
+} from "./mock/constants.js"
 
 const gqlClient = createGqlClient({ url: localConfig.apis.hasuraGql })
 
-describe("INVALID: make sure that", async () => {
-  const wm = await EthereumWalletManager.fromPrivateKey(
-    "0x928a9ef9523357b2daf84785ddfc2bb25563b0105825e48fd70f525a135f825f"
-  )
-  it("invalid challenge id is not found", async () => {
-    try {
-      await authenticate(
-        {
-          id: "afe7a262-4bef-4a15-8557-79b74e0fa99c",
-          signature: "test",
-        },
-        { gqlClient }
-      )
-    } catch (e) {
-      expect(e).toBeDefined()
-    }
-  })
-  it("invalid signature is not accepted", async () => {
-    const { text, id } = await generateChallenge(
+test("invalid challenge id is not found", async () => {
+  try {
+    await authenticate(
       {
-        chain: BlockchainType.ETHEREUM,
-        address: wm.address,
+        id: INVALID_CHALLENGE_ID,
+        signature: "",
       },
       { gqlClient }
     )
-    try {
-      await authenticate({
-        id,
-        signature: "test",
-      })
-    } catch (e) {
-      expect(e).toBeDefined()
-    }
-  })
+  } catch (e) {
+    expect(e).toBeDefined()
+  }
+})
+
+test("invalid signature is not accepted", async () => {
+  try {
+    await authenticate(
+      {
+        id: CHALLENGE_ID,
+        signature: INVALID_SIGNATURE,
+      },
+      { gqlClient }
+    )
+  } catch (e) {
+    expect(e).toBeDefined()
+  }
 })
 
 describe("ETHEREUM: authentication user", async () => {
@@ -80,6 +77,7 @@ describe("ETHEREUM: authentication user", async () => {
     expect(refreshToken).toBeDefined()
   })
 })
+
 describe("TEZOS: authentication user", async () => {
   let _id: string
   let _text: string
@@ -102,12 +100,11 @@ describe("TEZOS: authentication user", async () => {
     _text = text
   })
   it("valid signature is valid", async () => {
-    const message = `Tezos (${wm.address})`
     const sig = await wm.signMessage(_text)
     if (sig.isFailure()) {
       return
     }
-    const res = await authenticate(
+    const { accessToken, refreshToken } = await authenticate(
       {
         id: _id,
         signature: sig.value.signature,
@@ -115,5 +112,7 @@ describe("TEZOS: authentication user", async () => {
       },
       { gqlClient }
     )
+    expect(accessToken).toBeDefined()
+    expect(refreshToken).toBeDefined()
   })
 })
