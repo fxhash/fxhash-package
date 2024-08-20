@@ -7,8 +7,8 @@ import {
   evmPrivateKeyWallet,
   inMemoryStorageDriver,
   jwtCredentials,
-} from "../src"
-import { multichainWallets } from "../src/user-source/wallets/common/multichain"
+} from "@/index.js"
+import { multichainWallets } from "@/user-source/wallets/common/multichain.js"
 
 describe("EVM: private key wallets", async () => {
   const gql = new GraphqlWrapper({

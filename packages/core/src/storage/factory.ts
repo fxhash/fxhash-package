@@ -9,7 +9,8 @@ import { localStorageDriver } from "./local-storage.js"
  * between those currently implemented.
  */
 export function defaultStorageDriver(): IStorageDriver {
-  return typeof window !== undefined && window?.localStorage
+  return typeof localStorage !== "undefined" ||
+    (typeof window !== "undefined" && window?.localStorage)
     ? localStorageDriver()
     : inMemoryStorageDriver()
 }

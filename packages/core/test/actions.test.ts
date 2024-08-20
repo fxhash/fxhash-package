@@ -3,7 +3,7 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { BlockchainType } from "@fxhash/shared"
 import { localConfig } from "@fxhash/config"
 import { createGqlClient } from "@fxhash/gql-client"
-import { generateChallenge, authenticate } from "../src/index.js"
+import { generateChallenge, authenticate } from "@/index.js"
 import {
   CHALLENGE_ID,
   INVALID_CHALLENGE_ID,

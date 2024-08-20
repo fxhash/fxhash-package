@@ -7,6 +7,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["vitest/globals"],
     "outDir": "dist",
     // FIXME: can be removed when all packages are migrated to esm and @fxhash/base config uses those defaults
     "module": "Node16",
