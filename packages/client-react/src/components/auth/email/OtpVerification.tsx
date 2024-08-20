@@ -1,20 +1,20 @@
 import { OTPInput } from "input-otp"
 import css from "./OtpVerification.module.css"
-import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
-import { useState } from "react"
+import * as React from "react"
 import { useClient } from "@/index.js"
 import { createPortal } from "react-dom"
 import xmark from "@/icons/xmark.svg"
 import { ErrorWrapper } from "@/components/feedback/ErrorWrapper.js"
+import { Web3AuthEmailRequestOtpOutput } from "@fxhash/sdk"
 
 type Props = {
   request: Web3AuthEmailRequestOtpOutput
   onCancel: () => void
 }
-export function OtpVerification({ request, onCancel }: Props) {
+export const OtpVerification: React.FC<Props> = ({ request, onCancel }) => {
   const { client } = useClient()
-  const [value, setValue] = useState("")
-  const [error, setError] = useState<string | null>(null)
+  const [value, setValue] = React.useState("")
+  const [error, setError] = React.useState<string | null>(null)
 
   async function _handleSubmit() {
     if (!client) return
