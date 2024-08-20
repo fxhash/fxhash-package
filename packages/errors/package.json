@@ -3,6 +3,10 @@
   "description": "Application-wide errors which are exposed and used by different parts of our stack.",
   "version": "0.0.9",
   "author": "fxhash",
+  "dependencies": {
+    "@fxhash/utils": "workspace:*",
+    "@urql/core": "4.1.4"
+  },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
@@ -32,9 +36,5 @@
     "dev": "tsup --watch"
   },
   "type": "module",
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "@fxhash/utils": "workspace:*",
-    "@urql/core": "4.1.4"
-  }
+  "types": "./dist/index.d.ts"
 }

@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/errors": "workspace:*",
     "@fxhash/client": "workspace:*",
     "@fxhash/config": "workspace:*",
     "@fxhash/core": "workspace:*",
+    "@fxhash/errors": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",

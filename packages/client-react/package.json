@@ -3,6 +3,9 @@
   "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
   "version": "0.0.1",
   "author": "fxhash",
+  "dependencies": {
+    "input-otp": "1.2.4"
+  },
   "devDependencies": {
     "@fxhash/sdk": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
@@ -42,8 +45,5 @@
     "dev": "tsup --watch"
   },
   "type": "module",
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "input-otp": "1.2.4"
-  }
+  "types": "./dist/index.d.ts"
 }

@@ -2,6 +2,10 @@
   "name": "@fxhash/config",
   "version": "0.0.9",
   "author": "fxhash",
+  "dependencies": {
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*"
+  },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
@@ -31,9 +35,5 @@
     "dev": "tsup --watch"
   },
   "type": "module",
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/utils": "workspace:*"
-  }
+  "types": "./dist/index.d.ts"
 }

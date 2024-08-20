@@ -1,17 +1,8 @@
 {
   "name": "fxhash-packages-documentation",
-  "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "generate": "tsx ./generate.ts",
-    "dev": "vitepress dev docs",
-    "build": "pnpm generate && vitepress build docs",
-    "preview": "pnpm generate && vitepress preview docs"
-  },
-  "keywords": [],
+  "version": "1.0.0",
   "author": "",
-  "license": "MIT",
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
@@ -29,5 +20,14 @@
     "typescript": "5.3.3",
     "unified": "10.1.2",
     "vitepress": "1.3.3"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "build": "pnpm generate && vitepress build docs",
+    "dev": "vitepress dev docs",
+    "generate": "tsx ./generate.ts",
+    "preview": "pnpm generate && vitepress preview docs"
   }
 }
