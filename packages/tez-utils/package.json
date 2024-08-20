@@ -27,7 +27,6 @@
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "peerDependencies": {},
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {

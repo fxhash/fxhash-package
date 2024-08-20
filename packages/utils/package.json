@@ -3,7 +3,6 @@
   "description": "A general-purpose nodejs/browser compatible utility package related to fxhash applications.",
   "version": "0.0.2",
   "author": "fxhash",
-  "dependencies": {},
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
