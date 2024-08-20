@@ -12,6 +12,7 @@ import {
   BlockchainType,
   PendingSigningRequestError,
   UserRejectedError,
+  WalletConnectionError,
 } from "@fxhash/shared"
 import { type PromiseResult, invariant, success } from "@fxhash/utils"
 import { useModal } from "connectkit"

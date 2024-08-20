@@ -11,6 +11,7 @@ import {
   BlockchainType,
   PendingSigningRequestError,
   UserRejectedError,
+  WalletConnectionError,
 } from "@fxhash/shared"
 import { type PromiseResult, failure, invariant, success } from "@fxhash/utils"
 import { BeaconWallet } from "@taquito/beacon-wallet"
