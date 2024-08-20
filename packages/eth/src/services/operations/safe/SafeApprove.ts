@@ -1,6 +1,7 @@
 import { EthereumContractOperation } from "../contractOperation.js"
 import { getSafeService } from "@/services/Safe.js"
 import { TransactionType, invariant } from "@fxhash/shared"
+import { getAddress } from "viem"
 
 /**
  * The above type represents the parameters required for approving a safe multisig transaction on the
@@ -19,15 +20,17 @@ export class ApproveSafeMultisigTxEthV1Operation extends EthereumContractOperati
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    invariant(this.manager.safe, "Safe not connected")
-
     await this.manager.connectSafe(this.params.collabAddress)
+    invariant(this.manager.safe, "Safe not connected")
 
     const safeService = getSafeService(this.chain)
     const signedSafeTx = await this.manager.safe.signTransaction(
       await safeService.getTransaction(this.params.txHash)
     )
-    const userSignature = signedSafeTx.signatures.get(this.manager.address)
+    const signatures = new Map(
+      [...signedSafeTx.signatures].map(([k, v]) => [getAddress(k), v])
+    )
+    const userSignature = signatures.get(getAddress(this.manager.address))
     if (!userSignature) {
       throw new Error("User signature not found")
     }
