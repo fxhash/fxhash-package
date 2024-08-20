@@ -192,6 +192,7 @@ interface EthereumWalletManagerParams {
   rpcNodes?: string[]
   signer: JsonRpcSigner | PrivateKeyAccount
   ethersAdapterForSafe?: EthersAdapter
+  connectorName?: string
 }
 
 export class EthereumWalletManager extends WalletManager {
@@ -202,6 +203,7 @@ export class EthereumWalletManager extends WalletManager {
   public safe: Safe.default | undefined
   public ethersAdapterForSafe?: EthersAdapter
   private rpcNodes: string[]
+  private connectorName?: string
 
   constructor(params: EthereumWalletManagerParams) {
     super(params.address)
@@ -210,6 +212,7 @@ export class EthereumWalletManager extends WalletManager {
     this.rpcNodes = params.rpcNodes || config.eth.apis!.rpcs
     this.signer = params.signer
     this.ethersAdapterForSafe = params.ethersAdapterForSafe
+    this.connectorName = params.connectorName
   }
 
   isConnected(): boolean {
@@ -218,7 +221,10 @@ export class EthereumWalletManager extends WalletManager {
 
   async signMessageWithWallet(
     message: string
-  ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
+  ): PromiseResult<
+    string,
+    PendingSigningRequestError | UserRejectedError | WalletConnectionError
+  > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
     }
@@ -230,10 +236,16 @@ export class EthereumWalletManager extends WalletManager {
           message,
         })
       } else {
+        // For the coinbase smart wallet, we need to force the signer to be ETHEREUM and not BASE
+        const result = await this.prepareSigner({
+          blockchainType: BlockchainType.ETHEREUM,
+        })
+        if (result.isFailure()) {
+          return failure(result.error)
+        }
+
         signature = await this.walletClient.signMessage({
           message,
-          // ! TODO: to fix
-          // @ts-ignore
           account: this.address as `0x${string}`,
         })
       }
@@ -418,6 +430,10 @@ export class EthereumWalletManager extends WalletManager {
     // see https://github.com/wevm/viem/issues/1193 so to avoid this, we only add chain
     // different than mainnet (id 1) as we assume that mainnet is already added in all wallets
     if (chain.id === 1) {
+      return
+    }
+    // Coinbase smart wallet doesn't support adding chains
+    if (this.connectorName === "coinbaseWalletSDK") {
       return
     }
     try {

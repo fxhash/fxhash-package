@@ -57,12 +57,12 @@
     "@taquito/signer": "17.3.1",
     "@taquito/taquito": "17.3.1",
     "@taquito/utils": "17.3.1",
-    "@wagmi/connectors": "5.0.22",
-    "@wagmi/core": "2.11.7",
+    "@wagmi/connectors": "5.1.5",
+    "@wagmi/core": "2.13.4",
     "ethers": "6.8.1",
     "jwt-decode": "4.0.0",
-    "viem": "2.13.10",
-    "wagmi": "2.10.10"
+    "viem": "2.19.4",
+    "wagmi": "2.12.5"
   },
   "publishConfig": {
     "access": "public"

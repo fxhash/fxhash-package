@@ -73,7 +73,7 @@ export const fxhashDevApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
-  opensea: "https://testnets-api.opensea.io/api/v2/chain/sepolia",
+  opensea: "https://testnets-api.opensea.io/api/v2",
   authority: {
     api: "NONE",
   },
@@ -149,7 +149,7 @@ export const fxhashPrdApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
-  opensea: "https://api.opensea.io/api/v2/chain/ethereum",
+  opensea: "https://api.opensea.io/api/v2",
   authority: {
     api: "NONE",
   },

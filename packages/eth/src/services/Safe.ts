@@ -141,7 +141,11 @@ export async function proposeSafeTransaction(
     }
     throw error
   }
-  const userSignature = safeTransaction.signatures.get(walletManager.address)
+
+  const signatures = new Map(
+    [...safeTransaction.signatures].map(([k, v]) => [getAddress(k), v])
+  )
+  const userSignature = signatures.get(getAddress(walletManager.address))
   if (!userSignature) {
     throw new Error("User signature not found")
   }

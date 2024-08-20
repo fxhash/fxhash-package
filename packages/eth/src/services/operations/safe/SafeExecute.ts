@@ -20,9 +20,8 @@ export class ExecuteSafeMultisigTxEthV1Operation extends EthereumContractOperati
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    invariant(this.manager.safe, "Safe not connected")
-
     await this.manager.connectSafe(this.params.collabAddress)
+    invariant(this.manager.safe, "Safe not connected")
 
     const safeService = getSafeService(this.chain)
     const tx = await safeService.getTransaction(this.params.safeTxHash)
