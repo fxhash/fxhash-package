@@ -12,7 +12,7 @@ import {
 } from "./constants.js"
 import { BlockchainType } from "@fxhash/shared"
 
-const hasuraMockClient = graphql.link(localConfig.apis.hasuraGql)
+export const hasuraMockClient = graphql.link(localConfig.apis.hasuraGql)
 
 export const handlers = [
   hasuraMockClient.mutation("Authenticate", ({ variables }) => {
@@ -102,3 +102,5 @@ afterAll(() => server.close())
 afterEach(() => {
   server.resetHandlers()
 })
+
+export const mockServer = server
