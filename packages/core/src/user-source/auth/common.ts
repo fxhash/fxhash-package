@@ -114,6 +114,8 @@ export function accountUtils({
     const account = await getAccountFromStorage()
     invariant(account, "No account authenticated")
     const res = await getMyProfile({ gqlClient: gql.client() })
+    // @ts-expect-error
+    credentialsDriver.apply(account.credentials)
     update(res)
     return res
   }
@@ -252,8 +254,6 @@ export function authWithWallets<AuthError extends IEquatableError>({
       ),
     })
 
-    // eventually apply effects of the authentication strategy
-    credentialsDriver.apply(credentials.value)
     // fetch user account, should be authenticated
     await _account.sync()
   }
