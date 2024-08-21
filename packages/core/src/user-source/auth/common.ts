@@ -36,8 +36,19 @@ import { anyActiveManager } from "../wallets/common/utils.js"
  */
 export const ACCOUNT_STORAGE_KEY = `fxhash.${fxConfig.config.envName}.account`
 
-function isStoredAccountValid(account: any): account is StoredAccount {
-  return !!account && typeof account.id === "string"
+/**
+ * @internal
+ * Checkes whether the account fetched from the storage is valid. This ensures
+ * the application doesn't work with an invalid value which may have been
+ * altered one way or the other since the storage might be shared with other
+ * modules.
+ */
+export function isStoredAccountValid(account: any): account is StoredAccount {
+  return (
+    !!account &&
+    typeof account.id === "string" &&
+    typeof account.credentials === "object"
+  )
 }
 
 export type AccountUtilsOptions = {
@@ -85,9 +96,7 @@ export function accountUtils({
     const account = await storage.getItem(key)
     if (!account) return null
     // return account if data is valid
-    if (isStoredAccountValid(account)) {
-      return account
-    }
+    if (isStoredAccountValid(account)) return account
     // somehow the storage was compromised, as the value doesn't
     await storage.removeItem(key)
     return null
@@ -141,7 +150,6 @@ export function accountUtils({
       const account = res.unwrap()
       await store(account)
       await sync()
-      credentialsDriver.apply(account.credentials as any)
     } catch (_) {
       await cleanup()
     }
@@ -164,12 +172,15 @@ export function accountUtils({
         }
         // If we can get the profile we are authenticated
         await sync()
+        // todo: carefully think about this flow here: is this how we handle fail?
       } catch (e) {
         // if a sync error occurs, we may want to try refreshing credentials
         console.log("Error getting profile", e)
         try {
           await refreshCredentials()
-        } catch (_) {}
+        } catch (_) {
+          // todo: handle error for credentials missing
+        }
       }
     }
   }
