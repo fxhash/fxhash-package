@@ -107,8 +107,12 @@ export function web3AuthWallets({
       _init.start()
       clean.add(frameManager.emitter.on("session-changed", _handleConnected))
       try {
-        await frameManager.init()
-        _init.finish()
+        const initResult = await frameManager.init()
+        if (initResult.isFailure()) {
+          throw _init.fail(initResult.error)
+        } else {
+          _init.finish()
+        }
       } catch (err) {
         throw _init.fail(err)
       }
