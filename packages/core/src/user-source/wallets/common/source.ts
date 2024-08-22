@@ -72,9 +72,9 @@ export function walletSource<Net extends BlockchainNetwork>({
       }
     },
     supports: n => n === network,
-    disconnectWallet: n => {
+    disconnectWallet(net) {
       _init.check()
-      invariant(n === network, "can only disconnect on same network")
+      invariant(this.supports(net), "invalid network")
       return disconnect()
     },
     disconnectAllWallets: () => {
