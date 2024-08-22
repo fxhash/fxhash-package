@@ -190,6 +190,28 @@ export type AccountStatus_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['AccountStatus']['input']>>;
 };
 
+/** aggregated selection of "Account" */
+export type Account_Aggregate = {
+  __typename?: 'Account_aggregate';
+  aggregate?: Maybe<Account_Aggregate_Fields>;
+  nodes: Array<Account>;
+};
+
+/** aggregate fields of "Account" */
+export type Account_Aggregate_Fields = {
+  __typename?: 'Account_aggregate_fields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<Account_Max_Fields>;
+  min?: Maybe<Account_Min_Fields>;
+};
+
+
+/** aggregate fields of "Account" */
+export type Account_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Account_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Boolean expression to filter rows from the table "Account". All fields are combined with a logical 'AND'. */
 export type Account_Bool_Exp = {
   _and?: InputMaybe<Array<Account_Bool_Exp>>;
@@ -205,6 +227,22 @@ export type Account_Bool_Exp = {
   status?: InputMaybe<AccountStatus_Comparison_Exp>;
   username?: InputMaybe<String_Comparison_Exp>;
   wallets?: InputMaybe<Wallet_Bool_Exp>;
+};
+
+/** aggregate max on columns */
+export type Account_Max_Fields = {
+  __typename?: 'Account_max_fields';
+  id?: Maybe<Scalars['uuid']['output']>;
+  status?: Maybe<Scalars['AccountStatus']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
+};
+
+/** aggregate min on columns */
+export type Account_Min_Fields = {
+  __typename?: 'Account_min_fields';
+  id?: Maybe<Scalars['uuid']['output']>;
+  status?: Maybe<Scalars['AccountStatus']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 /** response of any mutation on the table "Account" */
@@ -830,6 +868,28 @@ export type EventStatus_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['EventStatus']['input']>>;
 };
 
+/** aggregated selection of "Event" */
+export type Event_Aggregate = {
+  __typename?: 'Event_aggregate';
+  aggregate?: Maybe<Event_Aggregate_Fields>;
+  nodes: Array<Event>;
+};
+
+/** aggregate fields of "Event" */
+export type Event_Aggregate_Fields = {
+  __typename?: 'Event_aggregate_fields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<Event_Max_Fields>;
+  min?: Maybe<Event_Min_Fields>;
+};
+
+
+/** aggregate fields of "Event" */
+export type Event_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Event_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Boolean expression to filter rows from the table "Event". All fields are combined with a logical 'AND'. */
 export type Event_Bool_Exp = {
   Featured?: InputMaybe<Featured_Bool_Exp>;
@@ -859,6 +919,50 @@ export type Event_Bool_Exp = {
   thumbnailMedia?: InputMaybe<Media_Bool_Exp>;
   thumbnailMediaId?: InputMaybe<Uuid_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamp_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Event_Max_Fields = {
+  __typename?: 'Event_max_fields';
+  availabilities?: Maybe<Array<Scalars['EventAvailability']['output']>>;
+  createdAt?: Maybe<Scalars['timestamp']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  endsAt?: Maybe<Scalars['timestamp']['output']>;
+  headerMediaId?: Maybe<Scalars['uuid']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  labelIds?: Maybe<Array<Scalars['Int']['output']>>;
+  location?: Maybe<Scalars['String']['output']>;
+  mintPageUrl?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  partnerMediaId?: Maybe<Scalars['uuid']['output']>;
+  projectIds?: Maybe<Array<Scalars['String']['output']>>;
+  startsAt?: Maybe<Scalars['timestamp']['output']>;
+  status?: Maybe<Scalars['EventStatus']['output']>;
+  thumbnailMediaId?: Maybe<Scalars['uuid']['output']>;
+  updatedAt?: Maybe<Scalars['timestamp']['output']>;
+};
+
+/** aggregate min on columns */
+export type Event_Min_Fields = {
+  __typename?: 'Event_min_fields';
+  availabilities?: Maybe<Array<Scalars['EventAvailability']['output']>>;
+  createdAt?: Maybe<Scalars['timestamp']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  endsAt?: Maybe<Scalars['timestamp']['output']>;
+  headerMediaId?: Maybe<Scalars['uuid']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  labelIds?: Maybe<Array<Scalars['Int']['output']>>;
+  location?: Maybe<Scalars['String']['output']>;
+  mintPageUrl?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  partnerMediaId?: Maybe<Scalars['uuid']['output']>;
+  projectIds?: Maybe<Array<Scalars['String']['output']>>;
+  startsAt?: Maybe<Scalars['timestamp']['output']>;
+  status?: Maybe<Scalars['EventStatus']['output']>;
+  thumbnailMediaId?: Maybe<Scalars['uuid']['output']>;
+  updatedAt?: Maybe<Scalars['timestamp']['output']>;
 };
 
 /** Ordering options when selecting data from "Event". */
@@ -2630,6 +2734,8 @@ export type Action = {
   /** An object relationship */
   issuer?: Maybe<User>;
   issuer_id?: Maybe<Scalars['String']['output']>;
+  /** An object relationship */
+  issuer_wallet?: Maybe<Foreign_Wallet>;
   metadata?: Maybe<Scalars['jsonb']['output']>;
   numeric_value?: Maybe<Scalars['numeric']['output']>;
   /** An object relationship */
@@ -2647,8 +2753,6 @@ export type Action = {
   type: Scalars['action_type_enum']['output'];
   /** An object relationship */
   user?: Maybe<User>;
-  /** An object relationship */
-  userByIssuerId?: Maybe<User>;
 };
 
 
@@ -2739,6 +2843,7 @@ export type Action_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   issuer?: InputMaybe<User_Bool_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
+  issuer_wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   numeric_value?: InputMaybe<Numeric_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
@@ -2752,7 +2857,6 @@ export type Action_Bool_Exp = {
   token_id?: InputMaybe<String_Comparison_Exp>;
   type?: InputMaybe<Action_Type_Enum_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
-  userByIssuerId?: InputMaybe<User_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -2835,6 +2939,7 @@ export type Action_Order_By = {
   id?: InputMaybe<Order_By>;
   issuer?: InputMaybe<User_Order_By>;
   issuer_id?: InputMaybe<Order_By>;
+  issuer_wallet?: InputMaybe<Foreign_Wallet_Order_By>;
   metadata?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
@@ -2848,7 +2953,6 @@ export type Action_Order_By = {
   token_id?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
-  userByIssuerId?: InputMaybe<User_Order_By>;
 };
 
 /** select columns of table "action" */
@@ -3021,6 +3125,8 @@ export type Article = {
   article_generative_tokens: Array<Article_Generative_Token>;
   /** An array relationship */
   article_ledgers: Array<Article_Ledger>;
+  /** An aggregate relationship */
+  article_ledgers_aggregate: Article_Ledger_Aggregate;
   /** An array relationship */
   article_revisions: Array<Article_Revision>;
   artifact_uri: Scalars['String']['output'];
@@ -3058,6 +3164,8 @@ export type Article = {
   transactions: Array<Transaction>;
   /** An object relationship */
   user: User;
+  /** An object relationship */
+  wallet?: Maybe<Foreign_Wallet>;
 };
 
 
@@ -3093,6 +3201,16 @@ export type ArticleArticle_Generative_TokensArgs = {
 
 /** columns and relationships of "article" */
 export type ArticleArticle_LedgersArgs = {
+  distinct_on?: InputMaybe<Array<Article_Ledger_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Article_Ledger_Order_By>>;
+  where?: InputMaybe<Article_Ledger_Bool_Exp>;
+};
+
+
+/** columns and relationships of "article" */
+export type ArticleArticle_Ledgers_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Article_Ledger_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -3242,6 +3360,7 @@ export type Article_Bool_Exp = {
   actions_aggregate?: InputMaybe<Action_Aggregate_Bool_Exp>;
   article_generative_tokens?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   article_ledgers?: InputMaybe<Article_Ledger_Bool_Exp>;
+  article_ledgers_aggregate?: InputMaybe<Article_Ledger_Aggregate_Bool_Exp>;
   article_revisions?: InputMaybe<Article_Revision_Bool_Exp>;
   artifact_uri?: InputMaybe<String_Comparison_Exp>;
   author_id?: InputMaybe<String_Comparison_Exp>;
@@ -3272,6 +3391,7 @@ export type Article_Bool_Exp = {
   title?: InputMaybe<String_Comparison_Exp>;
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "article_flag_enum". All fields are combined with logical 'AND'. */
@@ -3424,6 +3544,49 @@ export type Article_Ledger = {
   owner_id: Scalars['String']['output'];
   /** An object relationship */
   user: User;
+  /** An object relationship */
+  wallet?: Maybe<Foreign_Wallet>;
+};
+
+/** aggregated selection of "article_ledger" */
+export type Article_Ledger_Aggregate = {
+  __typename?: 'article_ledger_aggregate';
+  aggregate?: Maybe<Article_Ledger_Aggregate_Fields>;
+  nodes: Array<Article_Ledger>;
+};
+
+export type Article_Ledger_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Article_Ledger_Aggregate_Bool_Exp_Count>;
+};
+
+export type Article_Ledger_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Article_Ledger_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Article_Ledger_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "article_ledger" */
+export type Article_Ledger_Aggregate_Fields = {
+  __typename?: 'article_ledger_aggregate_fields';
+  avg?: Maybe<Article_Ledger_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Article_Ledger_Max_Fields>;
+  min?: Maybe<Article_Ledger_Min_Fields>;
+  stddev?: Maybe<Article_Ledger_Stddev_Fields>;
+  stddev_pop?: Maybe<Article_Ledger_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Article_Ledger_Stddev_Samp_Fields>;
+  sum?: Maybe<Article_Ledger_Sum_Fields>;
+  var_pop?: Maybe<Article_Ledger_Var_Pop_Fields>;
+  var_samp?: Maybe<Article_Ledger_Var_Samp_Fields>;
+  variance?: Maybe<Article_Ledger_Variance_Fields>;
+};
+
+
+/** aggregate fields of "article_ledger" */
+export type Article_Ledger_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Article_Ledger_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "article_ledger" */
@@ -3439,6 +3602,13 @@ export type Article_Ledger_Aggregate_Order_By = {
   var_pop?: InputMaybe<Article_Ledger_Var_Pop_Order_By>;
   var_samp?: InputMaybe<Article_Ledger_Var_Samp_Order_By>;
   variance?: InputMaybe<Article_Ledger_Variance_Order_By>;
+};
+
+/** aggregate avg on columns */
+export type Article_Ledger_Avg_Fields = {
+  __typename?: 'article_ledger_avg_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "article_ledger" */
@@ -3457,6 +3627,15 @@ export type Article_Ledger_Bool_Exp = {
   article_id?: InputMaybe<Int_Comparison_Exp>;
   owner_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+};
+
+/** aggregate max on columns */
+export type Article_Ledger_Max_Fields = {
+  __typename?: 'article_ledger_max_fields';
+  amount?: Maybe<Scalars['bigint']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  owner_id?: Maybe<Scalars['String']['output']>;
 };
 
 /** order by max() on columns of table "article_ledger" */
@@ -3464,6 +3643,14 @@ export type Article_Ledger_Max_Order_By = {
   amount?: InputMaybe<Order_By>;
   article_id?: InputMaybe<Order_By>;
   owner_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Article_Ledger_Min_Fields = {
+  __typename?: 'article_ledger_min_fields';
+  amount?: Maybe<Scalars['bigint']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  owner_id?: Maybe<Scalars['String']['output']>;
 };
 
 /** order by min() on columns of table "article_ledger" */
@@ -3480,6 +3667,7 @@ export type Article_Ledger_Order_By = {
   article_id?: InputMaybe<Order_By>;
   owner_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** select columns of table "article_ledger" */
@@ -3492,16 +3680,37 @@ export enum Article_Ledger_Select_Column {
   OwnerId = 'owner_id'
 }
 
+/** aggregate stddev on columns */
+export type Article_Ledger_Stddev_Fields = {
+  __typename?: 'article_ledger_stddev_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+};
+
 /** order by stddev() on columns of table "article_ledger" */
 export type Article_Ledger_Stddev_Order_By = {
   amount?: InputMaybe<Order_By>;
   article_id?: InputMaybe<Order_By>;
 };
 
+/** aggregate stddev_pop on columns */
+export type Article_Ledger_Stddev_Pop_Fields = {
+  __typename?: 'article_ledger_stddev_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+};
+
 /** order by stddev_pop() on columns of table "article_ledger" */
 export type Article_Ledger_Stddev_Pop_Order_By = {
   amount?: InputMaybe<Order_By>;
   article_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Article_Ledger_Stddev_Samp_Fields = {
+  __typename?: 'article_ledger_stddev_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "article_ledger" */
@@ -3525,10 +3734,24 @@ export type Article_Ledger_Stream_Cursor_Value_Input = {
   owner_id?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** aggregate sum on columns */
+export type Article_Ledger_Sum_Fields = {
+  __typename?: 'article_ledger_sum_fields';
+  amount?: Maybe<Scalars['bigint']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+};
+
 /** order by sum() on columns of table "article_ledger" */
 export type Article_Ledger_Sum_Order_By = {
   amount?: InputMaybe<Order_By>;
   article_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_pop on columns */
+export type Article_Ledger_Var_Pop_Fields = {
+  __typename?: 'article_ledger_var_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "article_ledger" */
@@ -3537,10 +3760,24 @@ export type Article_Ledger_Var_Pop_Order_By = {
   article_id?: InputMaybe<Order_By>;
 };
 
+/** aggregate var_samp on columns */
+export type Article_Ledger_Var_Samp_Fields = {
+  __typename?: 'article_ledger_var_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+};
+
 /** order by var_samp() on columns of table "article_ledger" */
 export type Article_Ledger_Var_Samp_Order_By = {
   amount?: InputMaybe<Order_By>;
   article_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Article_Ledger_Variance_Fields = {
+  __typename?: 'article_ledger_variance_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "article_ledger" */
@@ -3686,6 +3923,7 @@ export type Article_Order_By = {
   title?: InputMaybe<Order_By>;
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   user?: InputMaybe<User_Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** columns and relationships of "article_revision" */
@@ -4035,6 +4273,130 @@ export type Article_Variance_Order_By = {
   editions?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "artists" */
+export type Artists = {
+  __typename?: 'artists';
+  authorizations?: Maybe<Array<Scalars['smallint']['output']>>;
+  avatar_media_id?: Maybe<Scalars['bpchar']['output']>;
+  avatar_uri?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  flag?: Maybe<Scalars['user_flag_enum']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['jsonb']['output']>;
+  metadata_uri?: Maybe<Scalars['String']['output']>;
+  moderation_reason_id?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['user_type_enum']['output']>;
+  updated_at?: Maybe<Scalars['timestamptz']['output']>;
+  /** An object relationship */
+  user?: Maybe<User>;
+  /** An object relationship */
+  wallet?: Maybe<Foreign_Wallet>;
+};
+
+
+/** columns and relationships of "artists" */
+export type ArtistsMetadataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "artists". All fields are combined with a logical 'AND'. */
+export type Artists_Bool_Exp = {
+  _and?: InputMaybe<Array<Artists_Bool_Exp>>;
+  _not?: InputMaybe<Artists_Bool_Exp>;
+  _or?: InputMaybe<Array<Artists_Bool_Exp>>;
+  authorizations?: InputMaybe<Smallint_Array_Comparison_Exp>;
+  avatar_media_id?: InputMaybe<Bpchar_Comparison_Exp>;
+  avatar_uri?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
+  flag?: InputMaybe<User_Flag_Enum_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
+  metadata_uri?: InputMaybe<String_Comparison_Exp>;
+  moderation_reason_id?: InputMaybe<String_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  type?: InputMaybe<User_Type_Enum_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  user?: InputMaybe<User_Bool_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "artists". */
+export type Artists_Order_By = {
+  authorizations?: InputMaybe<Order_By>;
+  avatar_media_id?: InputMaybe<Order_By>;
+  avatar_uri?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  flag?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
+  metadata_uri?: InputMaybe<Order_By>;
+  moderation_reason_id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<User_Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+};
+
+/** select columns of table "artists" */
+export enum Artists_Select_Column {
+  /** column name */
+  Authorizations = 'authorizations',
+  /** column name */
+  AvatarMediaId = 'avatar_media_id',
+  /** column name */
+  AvatarUri = 'avatar_uri',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Flag = 'flag',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  MetadataUri = 'metadata_uri',
+  /** column name */
+  ModerationReasonId = 'moderation_reason_id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** Streaming cursor of the table "artists" */
+export type Artists_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Artists_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Artists_Stream_Cursor_Value_Input = {
+  authorizations?: InputMaybe<Array<Scalars['smallint']['input']>>;
+  avatar_media_id?: InputMaybe<Scalars['bpchar']['input']>;
+  avatar_uri?: InputMaybe<Scalars['String']['input']>;
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['user_flag_enum']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['jsonb']['input']>;
+  metadata_uri?: InputMaybe<Scalars['String']['input']>;
+  moderation_reason_id?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['user_type_enum']['input']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
 /** columns and relationships of "auction" */
@@ -4523,6 +4885,62 @@ export type Auction_Variance_Order_By = {
   min_duration?: InputMaybe<Order_By>;
   reserve_price?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "squid_processor_base.status" */
+export type Base_Indexer = {
+  __typename?: 'base_indexer';
+  hash?: Maybe<Scalars['String']['output']>;
+  height: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  nonce?: Maybe<Scalars['Int']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "squid_processor_base.status". All fields are combined with a logical 'AND'. */
+export type Base_Indexer_Bool_Exp = {
+  _and?: InputMaybe<Array<Base_Indexer_Bool_Exp>>;
+  _not?: InputMaybe<Base_Indexer_Bool_Exp>;
+  _or?: InputMaybe<Array<Base_Indexer_Bool_Exp>>;
+  hash?: InputMaybe<String_Comparison_Exp>;
+  height?: InputMaybe<Int_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  nonce?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "squid_processor_base.status". */
+export type Base_Indexer_Order_By = {
+  hash?: InputMaybe<Order_By>;
+  height?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  nonce?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "squid_processor_base.status" */
+export enum Base_Indexer_Select_Column {
+  /** column name */
+  Hash = 'hash',
+  /** column name */
+  Height = 'height',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Nonce = 'nonce'
+}
+
+/** Streaming cursor of the table "base_indexer" */
+export type Base_Indexer_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Base_Indexer_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Base_Indexer_Stream_Cursor_Value_Input = {
+  hash?: InputMaybe<Scalars['String']['input']>;
+  height?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  nonce?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'. */
@@ -5522,6 +5940,98 @@ export type Float8_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['float8']['input']>>;
 };
 
+/** columns and relationships of "foreign_account" */
+export type Foreign_Account = {
+  __typename?: 'foreign_account';
+  id?: Maybe<Scalars['uuid']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "foreign_account". All fields are combined with a logical 'AND'. */
+export type Foreign_Account_Bool_Exp = {
+  _and?: InputMaybe<Array<Foreign_Account_Bool_Exp>>;
+  _not?: InputMaybe<Foreign_Account_Bool_Exp>;
+  _or?: InputMaybe<Array<Foreign_Account_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  username?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "foreign_account". */
+export type Foreign_Account_Order_By = {
+  id?: InputMaybe<Order_By>;
+  username?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "foreign_account" */
+export enum Foreign_Account_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Username = 'username'
+}
+
+/** Streaming cursor of the table "foreign_account" */
+export type Foreign_Account_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Foreign_Account_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Foreign_Account_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** columns and relationships of "foreign_wallet" */
+export type Foreign_Wallet = {
+  __typename?: 'foreign_wallet';
+  /** An object relationship */
+  account?: Maybe<Foreign_Account>;
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  address?: Maybe<Scalars['String']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "foreign_wallet". All fields are combined with a logical 'AND'. */
+export type Foreign_Wallet_Bool_Exp = {
+  _and?: InputMaybe<Array<Foreign_Wallet_Bool_Exp>>;
+  _not?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  _or?: InputMaybe<Array<Foreign_Wallet_Bool_Exp>>;
+  account?: InputMaybe<Foreign_Account_Bool_Exp>;
+  accountId?: InputMaybe<Uuid_Comparison_Exp>;
+  address?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "foreign_wallet". */
+export type Foreign_Wallet_Order_By = {
+  account?: InputMaybe<Foreign_Account_Order_By>;
+  accountId?: InputMaybe<Order_By>;
+  address?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "foreign_wallet" */
+export enum Foreign_Wallet_Select_Column {
+  /** column name */
+  AccountId = 'accountId',
+  /** column name */
+  Address = 'address'
+}
+
+/** Streaming cursor of the table "foreign_wallet" */
+export type Foreign_Wallet_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Foreign_Wallet_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Foreign_Wallet_Stream_Cursor_Value_Input = {
+  accountId?: InputMaybe<Scalars['uuid']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** columns and relationships of "generative_token" */
 export type Generative_Token = {
   __typename?: 'generative_token';
@@ -5607,9 +6117,9 @@ export type Generative_Token = {
   royalties: Scalars['Int']['output'];
   slug: Scalars['String']['output'];
   /** An array relationship */
-  splits: Array<Split>;
+  splits_primary: Array<Split>;
   /** An array relationship */
-  splitsByGenerativeTokenPrimaryId: Array<Split>;
+  splits_secondary: Array<Split>;
   supply: Scalars['numeric']['output'];
   tags?: Maybe<Array<Scalars['String']['output']>>;
   thumbnail_uri?: Maybe<Scalars['String']['output']>;
@@ -5619,6 +6129,8 @@ export type Generative_Token = {
   /** An object relationship */
   user?: Maybe<User>;
   version: Scalars['generative_token_version']['output'];
+  /** An object relationship */
+  wallet?: Maybe<Foreign_Wallet>;
 };
 
 
@@ -5822,7 +6334,7 @@ export type Generative_TokenReservesArgs = {
 
 
 /** columns and relationships of "generative_token" */
-export type Generative_TokenSplitsArgs = {
+export type Generative_TokenSplits_PrimaryArgs = {
   distinct_on?: InputMaybe<Array<Split_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -5832,7 +6344,7 @@ export type Generative_TokenSplitsArgs = {
 
 
 /** columns and relationships of "generative_token" */
-export type Generative_TokenSplitsByGenerativeTokenPrimaryIdArgs = {
+export type Generative_TokenSplits_SecondaryArgs = {
   distinct_on?: InputMaybe<Array<Split_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -6006,8 +6518,8 @@ export type Generative_Token_Bool_Exp = {
   reserves?: InputMaybe<Reserve_Bool_Exp>;
   royalties?: InputMaybe<Int_Comparison_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
-  splits?: InputMaybe<Split_Bool_Exp>;
-  splitsByGenerativeTokenPrimaryId?: InputMaybe<Split_Bool_Exp>;
+  splits_primary?: InputMaybe<Split_Bool_Exp>;
+  splits_secondary?: InputMaybe<Split_Bool_Exp>;
   supply?: InputMaybe<Numeric_Comparison_Exp>;
   tags?: InputMaybe<String_Array_Comparison_Exp>;
   thumbnail_uri?: InputMaybe<String_Comparison_Exp>;
@@ -6015,6 +6527,7 @@ export type Generative_Token_Bool_Exp = {
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 /** columns and relationships of "generative_token_collected" */
@@ -6449,8 +6962,8 @@ export type Generative_Token_Order_By = {
   reserves_aggregate?: InputMaybe<Reserve_Aggregate_Order_By>;
   royalties?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
-  splitsByGenerativeTokenPrimaryId_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
-  splits_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
+  splits_primary_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
+  splits_secondary_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
   supply?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   thumbnail_uri?: InputMaybe<Order_By>;
@@ -6458,6 +6971,7 @@ export type Generative_Token_Order_By = {
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** select columns of table "generative_token" */
@@ -9303,6 +9817,8 @@ export type Objkt = {
   transactions: Array<Transaction>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
   version: Scalars['Int']['output'];
+  /** An object relationship */
+  wallet?: Maybe<Foreign_Wallet>;
 };
 
 
@@ -9616,6 +10132,7 @@ export type Objkt_Bool_Exp = {
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   version?: InputMaybe<Int_Comparison_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -9760,6 +10277,7 @@ export type Objkt_Order_By = {
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** select columns of table "objkt" */
@@ -10216,6 +10734,8 @@ export type Offchain_Query = {
   AccountRole: Array<AccountRole>;
   /** fetch data from the table: "AccountRole" using primary key columns */
   AccountRole_by_pk?: Maybe<AccountRole>;
+  /** fetch aggregated fields from the table: "Account" */
+  Account_aggregate: Account_Aggregate;
   /** fetch data from the table: "Account" using primary key columns */
   Account_by_pk?: Maybe<Account>;
   /** fetch data from the table: "AccountsRoles" */
@@ -10236,6 +10756,8 @@ export type Offchain_Query = {
   EventOnboardingOnComponents_by_pk?: Maybe<EventOnboardingOnComponents>;
   /** fetch data from the table: "EventOnboarding" using primary key columns */
   EventOnboarding_by_pk?: Maybe<EventOnboarding>;
+  /** fetch aggregated fields from the table: "Event" */
+  Event_aggregate: Event_Aggregate;
   /** fetch data from the table: "Event" using primary key columns */
   Event_by_pk?: Maybe<Event>;
   /** fetch data from the table: "Featured" */
@@ -10310,6 +10832,15 @@ export type Offchain_QueryAccountRole_By_PkArgs = {
 };
 
 
+export type Offchain_QueryAccount_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Account_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Account_Order_By>>;
+  where?: InputMaybe<Account_Bool_Exp>;
+};
+
+
 export type Offchain_QueryAccount_By_PkArgs = {
   id: Scalars['uuid']['input'];
 };
@@ -10379,6 +10910,15 @@ export type Offchain_QueryEventOnboardingOnComponents_By_PkArgs = {
 
 export type Offchain_QueryEventOnboarding_By_PkArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type Offchain_QueryEvent_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Event_Order_By>>;
+  where?: InputMaybe<Event_Bool_Exp>;
 };
 
 
@@ -10565,6 +11105,8 @@ export type Offchain_Subscription = {
   AccountRole_by_pk?: Maybe<AccountRole>;
   /** fetch data from the table in a streaming manner: "AccountRole" */
   AccountRole_stream: Array<AccountRole>;
+  /** fetch aggregated fields from the table: "Account" */
+  Account_aggregate: Account_Aggregate;
   /** fetch data from the table: "Account" using primary key columns */
   Account_by_pk?: Maybe<Account>;
   /** fetch data from the table in a streaming manner: "Account" */
@@ -10595,6 +11137,8 @@ export type Offchain_Subscription = {
   EventOnboarding_by_pk?: Maybe<EventOnboarding>;
   /** fetch data from the table in a streaming manner: "EventOnboarding" */
   EventOnboarding_stream: Array<EventOnboarding>;
+  /** fetch aggregated fields from the table: "Event" */
+  Event_aggregate: Event_Aggregate;
   /** fetch data from the table: "Event" using primary key columns */
   Event_by_pk?: Maybe<Event>;
   /** fetch data from the table in a streaming manner: "Event" */
@@ -10704,6 +11248,15 @@ export type Offchain_SubscriptionAccountRole_StreamArgs = {
 };
 
 
+export type Offchain_SubscriptionAccount_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Account_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Account_Order_By>>;
+  where?: InputMaybe<Account_Bool_Exp>;
+};
+
+
 export type Offchain_SubscriptionAccount_By_PkArgs = {
   id: Scalars['uuid']['input'];
 };
@@ -10808,6 +11361,15 @@ export type Offchain_SubscriptionEventOnboarding_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<EventOnboarding_Stream_Cursor_Input>>;
   where?: InputMaybe<EventOnboarding_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionEvent_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Event_Order_By>>;
+  where?: InputMaybe<Event_Bool_Exp>;
 };
 
 
@@ -11316,12 +11878,16 @@ export type Onchain_Query = {
   article_generative_token_by_pk?: Maybe<Article_Generative_Token>;
   /** fetch data from the table: "article_ledger" */
   article_ledger: Array<Article_Ledger>;
+  /** fetch aggregated fields from the table: "article_ledger" */
+  article_ledger_aggregate: Article_Ledger_Aggregate;
   /** fetch data from the table: "article_ledger" using primary key columns */
   article_ledger_by_pk?: Maybe<Article_Ledger>;
   /** fetch data from the table: "article_revision" */
   article_revision: Array<Article_Revision>;
   /** fetch data from the table: "article_revision" using primary key columns */
   article_revision_by_pk?: Maybe<Article_Revision>;
+  /** fetch data from the table: "artists" */
+  artists: Array<Artists>;
   /** fetch data from the table: "auction" */
   auction: Array<Auction>;
   /** fetch data from the table: "auction_bid" */
@@ -11334,6 +11900,10 @@ export type Onchain_Query = {
   auction_bid_table_by_pk?: Maybe<Auction_Bid_Table>;
   /** fetch data from the table: "auction" using primary key columns */
   auction_by_pk?: Maybe<Auction>;
+  /** fetch data from the table: "squid_processor_base.status" */
+  base_indexer: Array<Base_Indexer>;
+  /** fetch data from the table: "squid_processor_base.status" using primary key columns */
+  base_indexer_by_pk?: Maybe<Base_Indexer>;
   /** fetch data from the table: "codex" */
   codex: Array<Codex>;
   /** fetch data from the table: "codex" using primary key columns */
@@ -11372,6 +11942,10 @@ export type Onchain_Query = {
   eth_user_proceeds: Array<Eth_User_Proceeds>;
   /** fetch data from the table: "eth_user_proceeds" using primary key columns */
   eth_user_proceeds_by_pk?: Maybe<Eth_User_Proceeds>;
+  /** fetch data from the table: "foreign_account" */
+  foreign_account: Array<Foreign_Account>;
+  /** fetch data from the table: "foreign_wallet" */
+  foreign_wallet: Array<Foreign_Wallet>;
   /** fetch data from the table: "generative_token" */
   generative_token: Array<Generative_Token>;
   /** fetch aggregated fields from the table: "generative_token" */
@@ -11559,6 +12133,15 @@ export type Onchain_QueryArticle_LedgerArgs = {
 };
 
 
+export type Onchain_QueryArticle_Ledger_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Article_Ledger_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Article_Ledger_Order_By>>;
+  where?: InputMaybe<Article_Ledger_Bool_Exp>;
+};
+
+
 export type Onchain_QueryArticle_Ledger_By_PkArgs = {
   article_id: Scalars['Int']['input'];
   owner_id: Scalars['String']['input'];
@@ -11577,6 +12160,15 @@ export type Onchain_QueryArticle_RevisionArgs = {
 export type Onchain_QueryArticle_Revision_By_PkArgs = {
   article_id: Scalars['Int']['input'];
   iteration: Scalars['smallint']['input'];
+};
+
+
+export type Onchain_QueryArtistsArgs = {
+  distinct_on?: InputMaybe<Array<Artists_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Artists_Order_By>>;
+  where?: InputMaybe<Artists_Bool_Exp>;
 };
 
 
@@ -11620,6 +12212,20 @@ export type Onchain_QueryAuction_Bid_Table_By_PkArgs = {
 export type Onchain_QueryAuction_By_PkArgs = {
   id: Scalars['Int']['input'];
   version: Scalars['Int']['input'];
+};
+
+
+export type Onchain_QueryBase_IndexerArgs = {
+  distinct_on?: InputMaybe<Array<Base_Indexer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Base_Indexer_Order_By>>;
+  where?: InputMaybe<Base_Indexer_Bool_Exp>;
+};
+
+
+export type Onchain_QueryBase_Indexer_By_PkArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -11759,6 +12365,24 @@ export type Onchain_QueryEth_User_ProceedsArgs = {
 
 export type Onchain_QueryEth_User_Proceeds_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type Onchain_QueryForeign_AccountArgs = {
+  distinct_on?: InputMaybe<Array<Foreign_Account_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Foreign_Account_Order_By>>;
+  where?: InputMaybe<Foreign_Account_Bool_Exp>;
+};
+
+
+export type Onchain_QueryForeign_WalletArgs = {
+  distinct_on?: InputMaybe<Array<Foreign_Wallet_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Foreign_Wallet_Order_By>>;
+  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 
@@ -12196,6 +12820,8 @@ export type Onchain_Subscription = {
   article_generative_token_stream: Array<Article_Generative_Token>;
   /** fetch data from the table: "article_ledger" */
   article_ledger: Array<Article_Ledger>;
+  /** fetch aggregated fields from the table: "article_ledger" */
+  article_ledger_aggregate: Article_Ledger_Aggregate;
   /** fetch data from the table: "article_ledger" using primary key columns */
   article_ledger_by_pk?: Maybe<Article_Ledger>;
   /** fetch data from the table in a streaming manner: "article_ledger" */
@@ -12208,6 +12834,10 @@ export type Onchain_Subscription = {
   article_revision_stream: Array<Article_Revision>;
   /** fetch data from the table in a streaming manner: "article" */
   article_stream: Array<Article>;
+  /** fetch data from the table: "artists" */
+  artists: Array<Artists>;
+  /** fetch data from the table in a streaming manner: "artists" */
+  artists_stream: Array<Artists>;
   /** fetch data from the table: "auction" */
   auction: Array<Auction>;
   /** fetch data from the table: "auction_bid" */
@@ -12226,6 +12856,12 @@ export type Onchain_Subscription = {
   auction_by_pk?: Maybe<Auction>;
   /** fetch data from the table in a streaming manner: "auction" */
   auction_stream: Array<Auction>;
+  /** fetch data from the table: "squid_processor_base.status" */
+  base_indexer: Array<Base_Indexer>;
+  /** fetch data from the table: "squid_processor_base.status" using primary key columns */
+  base_indexer_by_pk?: Maybe<Base_Indexer>;
+  /** fetch data from the table in a streaming manner: "squid_processor_base.status" */
+  base_indexer_stream: Array<Base_Indexer>;
   /** fetch data from the table: "codex" */
   codex: Array<Codex>;
   /** fetch data from the table: "codex" using primary key columns */
@@ -12284,6 +12920,14 @@ export type Onchain_Subscription = {
   eth_user_proceeds_by_pk?: Maybe<Eth_User_Proceeds>;
   /** fetch data from the table in a streaming manner: "eth_user_proceeds" */
   eth_user_proceeds_stream: Array<Eth_User_Proceeds>;
+  /** fetch data from the table: "foreign_account" */
+  foreign_account: Array<Foreign_Account>;
+  /** fetch data from the table in a streaming manner: "foreign_account" */
+  foreign_account_stream: Array<Foreign_Account>;
+  /** fetch data from the table: "foreign_wallet" */
+  foreign_wallet: Array<Foreign_Wallet>;
+  /** fetch data from the table in a streaming manner: "foreign_wallet" */
+  foreign_wallet_stream: Array<Foreign_Wallet>;
   /** fetch data from the table: "generative_token" */
   generative_token: Array<Generative_Token>;
   /** fetch aggregated fields from the table: "generative_token" */
@@ -12539,6 +13183,15 @@ export type Onchain_SubscriptionArticle_LedgerArgs = {
 };
 
 
+export type Onchain_SubscriptionArticle_Ledger_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Article_Ledger_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Article_Ledger_Order_By>>;
+  where?: InputMaybe<Article_Ledger_Bool_Exp>;
+};
+
+
 export type Onchain_SubscriptionArticle_Ledger_By_PkArgs = {
   article_id: Scalars['Int']['input'];
   owner_id: Scalars['String']['input'];
@@ -12578,6 +13231,22 @@ export type Onchain_SubscriptionArticle_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Article_Stream_Cursor_Input>>;
   where?: InputMaybe<Article_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionArtistsArgs = {
+  distinct_on?: InputMaybe<Array<Artists_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Artists_Order_By>>;
+  where?: InputMaybe<Artists_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionArtists_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Artists_Stream_Cursor_Input>>;
+  where?: InputMaybe<Artists_Bool_Exp>;
 };
 
 
@@ -12642,6 +13311,27 @@ export type Onchain_SubscriptionAuction_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Auction_Stream_Cursor_Input>>;
   where?: InputMaybe<Auction_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionBase_IndexerArgs = {
+  distinct_on?: InputMaybe<Array<Base_Indexer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Base_Indexer_Order_By>>;
+  where?: InputMaybe<Base_Indexer_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionBase_Indexer_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Onchain_SubscriptionBase_Indexer_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Base_Indexer_Stream_Cursor_Input>>;
+  where?: InputMaybe<Base_Indexer_Bool_Exp>;
 };
 
 
@@ -12851,6 +13541,38 @@ export type Onchain_SubscriptionEth_User_Proceeds_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Eth_User_Proceeds_Stream_Cursor_Input>>;
   where?: InputMaybe<Eth_User_Proceeds_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionForeign_AccountArgs = {
+  distinct_on?: InputMaybe<Array<Foreign_Account_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Foreign_Account_Order_By>>;
+  where?: InputMaybe<Foreign_Account_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionForeign_Account_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Foreign_Account_Stream_Cursor_Input>>;
+  where?: InputMaybe<Foreign_Account_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionForeign_WalletArgs = {
+  distinct_on?: InputMaybe<Array<Foreign_Wallet_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Foreign_Wallet_Order_By>>;
+  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionForeign_Wallet_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Foreign_Wallet_Stream_Cursor_Input>>;
+  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 
@@ -13479,7 +14201,7 @@ export type Pricing_Dutch_Auction = {
   id: Scalars['String']['output'];
   levels: Array<Scalars['numeric']['output']>;
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
-  refundable?: Maybe<Scalars['Boolean']['output']>;
+  refundable: Scalars['Boolean']['output'];
   resting_price: Scalars['String']['output'];
   token_id?: Maybe<Scalars['String']['output']>;
 };
@@ -14907,6 +15629,8 @@ export type User = {
   actions_aggregate: Action_Aggregate;
   /** An array relationship */
   article_ledgers: Array<Article_Ledger>;
+  /** An aggregate relationship */
+  article_ledgers_aggregate: Article_Ledger_Aggregate;
   /** An array relationship */
   articles: Array<Article>;
   /** An aggregate relationship */
@@ -15014,6 +15738,16 @@ export type UserActions_AggregateArgs = {
 
 /** columns and relationships of "user" */
 export type UserArticle_LedgersArgs = {
+  distinct_on?: InputMaybe<Array<Article_Ledger_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Article_Ledger_Order_By>>;
+  where?: InputMaybe<Article_Ledger_Bool_Exp>;
+};
+
+
+/** columns and relationships of "user" */
+export type UserArticle_Ledgers_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Article_Ledger_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -15254,6 +15988,7 @@ export type User_Bool_Exp = {
   actionsByIssuerId_aggregate?: InputMaybe<Action_Aggregate_Bool_Exp>;
   actions_aggregate?: InputMaybe<Action_Aggregate_Bool_Exp>;
   article_ledgers?: InputMaybe<Article_Ledger_Bool_Exp>;
+  article_ledgers_aggregate?: InputMaybe<Article_Ledger_Aggregate_Bool_Exp>;
   articles?: InputMaybe<Article_Bool_Exp>;
   articles_aggregate?: InputMaybe<Article_Aggregate_Bool_Exp>;
   auction_bids?: InputMaybe<Auction_Bid_Bool_Exp>;
