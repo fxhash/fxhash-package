@@ -4,7 +4,13 @@ import { BlockchainNetwork, WalletManager } from "@fxhash/shared"
 import { TezosWalletManager } from "@fxhash/tez"
 import { WALLETS } from "../../../mock/constants.js"
 import { success } from "@fxhash/utils"
-import { MapNetworkToWalletManager } from "@/index.js"
+import { MapNetworkToWalletManager, WalletsMap } from "@/index.js"
+import { EthereumWalletManager } from "@fxhash/eth"
+import {
+  anyActiveManager,
+  deriveManagersMap,
+  walletsNetworks,
+} from "@/user-source/wallets/common/utils.js"
 
 function newWalletSource<Net extends BlockchainNetwork>({
   network,
@@ -156,5 +162,145 @@ describe("walletSource", async () => {
         },
       },
     ])
+  })
+})
+
+describe("wallet source utilities", async () => {
+  const mockWalletManagers = {
+    [BlockchainNetwork.TEZOS]: await TezosWalletManager.fromPrivateKey(
+      WALLETS.TEZ.sk
+    ),
+    [BlockchainNetwork.ETHEREUM]: await EthereumWalletManager.fromPrivateKey(
+      WALLETS.ETH.sk
+    ),
+  }
+
+  function newTezWalletSource() {
+    return newWalletSource({
+      network: BlockchainNetwork.TEZOS,
+      walletManager: mockWalletManagers[BlockchainNetwork.TEZOS],
+    })
+  }
+
+  function newEthWalletSource() {
+    return newWalletSource({
+      network: BlockchainNetwork.ETHEREUM,
+      walletManager: mockWalletManagers[BlockchainNetwork.ETHEREUM],
+    })
+  }
+
+  test("walletNetworks implementation", () => {
+    const ethWalletNetworks = walletsNetworks({
+      [BlockchainNetwork.ETHEREUM]: newEthWalletSource().source,
+    })
+    const tezWalletNetworks = walletsNetworks({
+      [BlockchainNetwork.TEZOS]: newTezWalletSource().source,
+    })
+    const multiWalletsNetworks = walletsNetworks({
+      [BlockchainNetwork.ETHEREUM]: newEthWalletSource().source,
+      [BlockchainNetwork.TEZOS]: newTezWalletSource().source,
+    })
+    expect(tezWalletNetworks.networks).toEqual([BlockchainNetwork.TEZOS])
+    expect(ethWalletNetworks.networks).toEqual([BlockchainNetwork.ETHEREUM])
+    expect(multiWalletsNetworks.networks).toEqual([
+      BlockchainNetwork.ETHEREUM,
+      BlockchainNetwork.TEZOS,
+    ])
+    expect(tezWalletNetworks.supports(BlockchainNetwork.TEZOS)).toBe(true)
+    expect(tezWalletNetworks.supports(BlockchainNetwork.ETHEREUM)).toBe(false)
+    expect(ethWalletNetworks.supports(BlockchainNetwork.TEZOS)).toBe(false)
+    expect(ethWalletNetworks.supports(BlockchainNetwork.ETHEREUM)).toBe(true)
+    expect(multiWalletsNetworks.supports(BlockchainNetwork.TEZOS)).toBe(true)
+    expect(multiWalletsNetworks.supports(BlockchainNetwork.ETHEREUM)).toBe(true)
+  })
+
+  test("deriveManagersMap implementation", async () => {
+    const ethSource = newEthWalletSource().source
+    const tezSource = newTezWalletSource().source
+
+    const ethWalletsMap: WalletsMap = {
+      [BlockchainNetwork.ETHEREUM]: {
+        connected: {
+          info: {
+            address: "" as any,
+          },
+          manager: mockWalletManagers.ETHEREUM,
+        },
+        source: ethSource,
+      },
+    }
+    const tezWalletsMap: WalletsMap = {
+      [BlockchainNetwork.TEZOS]: {
+        connected: {
+          info: {
+            address: "" as any,
+          },
+          manager: mockWalletManagers.TEZOS,
+        },
+        source: tezSource,
+      },
+    }
+    const multiWalletsMap: WalletsMap = {
+      ...ethWalletsMap,
+      ...tezWalletsMap,
+    }
+
+    expect(deriveManagersMap(ethWalletsMap)).toEqual({
+      [BlockchainNetwork.ETHEREUM]:
+        mockWalletManagers[BlockchainNetwork.ETHEREUM],
+    })
+    expect(deriveManagersMap(tezWalletsMap)).toEqual({
+      [BlockchainNetwork.TEZOS]: mockWalletManagers[BlockchainNetwork.TEZOS],
+    })
+    expect(deriveManagersMap(multiWalletsMap)).toEqual({
+      [BlockchainNetwork.ETHEREUM]:
+        mockWalletManagers[BlockchainNetwork.ETHEREUM],
+      [BlockchainNetwork.TEZOS]: mockWalletManagers[BlockchainNetwork.TEZOS],
+    })
+  })
+
+  test("anyActiveManager implementation", async () => {
+    const ethSource = newEthWalletSource().source
+    const tezSource = newTezWalletSource().source
+
+    const ethWalletsMap: WalletsMap = {
+      [BlockchainNetwork.ETHEREUM]: {
+        connected: {
+          info: {
+            address: "" as any,
+          },
+          manager: mockWalletManagers.ETHEREUM,
+        },
+        source: ethSource,
+      },
+    }
+    const tezWalletsMap: WalletsMap = {
+      [BlockchainNetwork.TEZOS]: {
+        connected: {
+          info: {
+            address: "" as any,
+          },
+          manager: mockWalletManagers.TEZOS,
+        },
+        source: tezSource,
+      },
+    }
+
+    expect(anyActiveManager({ ...ethWalletsMap })).toEqual(
+      mockWalletManagers.ETHEREUM
+    )
+    expect(anyActiveManager({ ...tezWalletsMap })).toEqual(
+      mockWalletManagers.TEZOS
+    )
+    expect(anyActiveManager({})).toBe(null)
+    expect(
+      anyActiveManager({
+        [BlockchainNetwork.TEZOS]: {
+          connected: null,
+          source: tezSource,
+        },
+      })
+    ).toBe(null)
+    expect(anyActiveManager("" as any)).toBe(null)
   })
 })
