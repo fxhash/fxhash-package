@@ -414,6 +414,7 @@ export abstract class IframeBDCommHost<
     // messages go through
     const result = await this.sendRequest({
       type: "__handshake",
+      timeout: 100,
     })
     if (result.isFailure()) {
       return failure(result.error) as any // todo?

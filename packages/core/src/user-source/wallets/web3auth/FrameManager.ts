@@ -237,7 +237,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
 
     // send request to wallet to init
     {
-      const res = await this.sendRequest({ type: "init" })
+      const res = await this.sendRequest({ type: "init", timeout: 100 })
       if (res.isFailure())
         return failure(new Web3AuthFrameNotResponding(this._config.url))
     }
