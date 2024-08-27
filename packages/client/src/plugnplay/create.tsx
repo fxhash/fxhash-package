@@ -4,17 +4,12 @@
  */
 
 import { createClient, ICreateClientParams } from "@/basic/_index.js"
-import {
-  AtLeastOne,
-  cleanup,
-  failure,
-  intialization,
-  invariant,
-} from "@fxhash/utils"
+import { cleanup, intialization, invariant } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
   defaultStorageDriver,
+  cookieCredentials,
   jwtCredentials,
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
@@ -60,6 +55,7 @@ export function createClientPlugnPlay({
   metadata,
   wallets,
   safeDomWrapper,
+  credentials = "jwt",
 }: ClientPlugnPlayOptions): IClientPlugnPlay {
   invariant(
     isBrowser(),
@@ -110,7 +106,8 @@ export function createClientPlugnPlay({
 
   const gql = new GraphqlWrapper()
   const storage = defaultStorageDriver()
-  const credentials = jwtCredentials(gql)
+  const creds =
+    credentials === "jwt" ? jwtCredentials(gql) : cookieCredentials()
 
   const client = createClient({
     metadata,
@@ -119,7 +116,7 @@ export function createClientPlugnPlay({
     drivers: {
       gql,
       storage,
-      credentials: credentials as any,
+      credentials: creds as any,
     },
   })
 

@@ -113,6 +113,7 @@ export function ClientPlugnPlayProvider({
     return (clientRef.current = createClientPlugnPlay({
       metadata: config.metadata,
       wallets: config.wallets,
+      credentials: config.credentials,
       safeDomWrapper: safeDomContainer,
     }))
   }, [])

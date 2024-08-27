@@ -31,6 +31,7 @@ export const jwtCredentials = (
     })
 
   return {
+    name: "jwt",
     apply,
     getStoredAuthentication,
 

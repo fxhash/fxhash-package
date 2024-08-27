@@ -16,6 +16,11 @@ export interface ICredentialsDriver<
   Credentials extends Record<string, string> = Record<string, string>,
 > {
   /**
+   * A name identifier for the credentials strategy being used
+   */
+  name: string
+
+  /**
    * Some credentials have been successfully generated (or receovered), need to
    * apply those on the modules which need credentials applied (ex http fetcher)
    */

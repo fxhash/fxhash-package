@@ -59,6 +59,15 @@ export type ClientPlugnPlayOptions = {
   }>
 
   /**
+   * How should credentials be stored. If you are building a 3rd party
+   * application which isn't going to be hosted on the `.fxhash.xyz` domain,
+   * then you should use `jwt`
+   *
+   * @default "jwt"
+   */
+  credentials?: "jwt" | "cookie"
+
+  /**
    * In case your application would alter the content of `document.body`
    * such that it removes the <iframe> this module adds to
    * `document.body`, you should provide such wrapper here. It should be
