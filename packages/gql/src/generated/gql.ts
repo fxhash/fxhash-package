@@ -36,6 +36,8 @@ const documents = {
     "\n  mutation CreateProject($object: Project_insert_input!) {\n    offchain {\n      insert_Project_one(object: $object) {\n        projectMedias {\n          index\n          media {\n            id\n            name\n          }\n        }\n        id\n        description\n        author {\n          id\n        }\n        title\n        state\n        releaseAt\n      }\n    }\n  }\n": types.CreateProjectDocument,
     "\n  mutation Update_Project(\n    $projectId: uuid!\n    $projectData: Project_set_input\n    $projectMedias: [ProjectMedia_insert_input!]!\n    $projectCollaborators: [ProjectCollaborator_insert_input!]!\n  ) {\n    offchain {\n      delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {\n        affected_rows\n      }\n      delete_ProjectCollaborator(where: { projectId: { _eq: $projectId } }) {\n        affected_rows\n      }\n      update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {\n        affected_rows\n      }\n      insert_ProjectMedia(objects: $projectMedias) {\n        affected_rows\n      }\n      insert_ProjectCollaborator(objects: $projectCollaborators) {\n        affected_rows\n      }\n    }\n  }\n": types.Update_ProjectDocument,
     "\n  fragment Wallet_BaseDetails on Wallet {\n    address\n    network\n    accountId\n    walletUser {\n      flag\n    }\n  }\n": types.Wallet_BaseDetailsFragmentDoc,
+    "\n  mutation LinkWalletToAccount($input: LinkWalletInput!) {\n    link_wallet_to_account(input: $input)\n  }\n": types.LinkWalletToAccountDocument,
+    "\n  mutation UnlinkWalletFromAccount($input: UnlinkWalletInput) {\n    unlink_wallet_from_account(input: $input)\n  }\n": types.UnlinkWalletFromAccountDocument,
     "\n  fragment WhitelistEntries on Whitelist {\n    entries {\n      walletAddress\n      whitelistIndex\n    }\n  }\n": types.WhitelistEntriesFragmentDoc,
     "\n  query GetWhitelists($where: Whitelist_bool_exp = {}) {\n    offchain {\n      Whitelist(where: $where) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistsDocument,
     "\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistDocument,
@@ -159,6 +161,14 @@ export function graphql(source: "\n  mutation Update_Project(\n    $projectId: u
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment Wallet_BaseDetails on Wallet {\n    address\n    network\n    accountId\n    walletUser {\n      flag\n    }\n  }\n"): (typeof documents)["\n  fragment Wallet_BaseDetails on Wallet {\n    address\n    network\n    accountId\n    walletUser {\n      flag\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation LinkWalletToAccount($input: LinkWalletInput!) {\n    link_wallet_to_account(input: $input)\n  }\n"): (typeof documents)["\n  mutation LinkWalletToAccount($input: LinkWalletInput!) {\n    link_wallet_to_account(input: $input)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UnlinkWalletFromAccount($input: UnlinkWalletInput) {\n    unlink_wallet_from_account(input: $input)\n  }\n"): (typeof documents)["\n  mutation UnlinkWalletFromAccount($input: UnlinkWalletInput) {\n    unlink_wallet_from_account(input: $input)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -7,7 +7,7 @@ import {
   UnexpectedRichError,
   WithGqlErrors,
 } from ".."
-import { Result, failure, success } from "@fxhash/utils"
+import { IEquatableError, Result, failure, success } from "@fxhash/utils"
 
 export type TypeOfRichError<T extends RichError> = {
   new (): T
@@ -152,3 +152,45 @@ export function richResultFromGraphQLResponse<
         })
       )
 }
+
+/**
+ * Test if an error is of a certain error kind, among a list of [errors] or
+ * [list of errors]. This allows testing multiple array of errors, which are
+ * defined quite a lot throughout the errors stack.
+ *
+ * @param error The error which needs to be tested
+ * @param kinds List of [errors]/[array of errors]
+ *
+ * @returns boolean if error is of given kind
+ *
+ * @example
+ *
+ * ```ts
+ * isErrorOfKind(
+ *   someErr,
+ *   UnexpectedRichError,
+ *   [SuperError, BigError],
+ *   SimpleError
+ * )
+ * ```
+ */
+export function isErrorOfKind<
+  Errors extends (IEquatableError | IEquatableError[])[],
+>(
+  error: IEquatableError,
+  ...kinds: Errors
+): error is Instance<Flatten<Errors>> {
+  for (const kind of kinds) {
+    if (Array.isArray(kind)) {
+      if (isErrorOfKind(error, ...kind)) return true
+    } else {
+      if (error.name === kind.name) return true
+    }
+  }
+  return false
+}
+
+type Flatten<T> = T extends (infer U)[] ? Flatten<U> : T
+type Instance<T> = T extends abstract new (...args: any) => any
+  ? InstanceType<T>
+  : T

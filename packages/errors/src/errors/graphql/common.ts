@@ -1,4 +1,9 @@
-import { IRichErrorSerialized, RichError, UnexpectedRichError } from "../common"
+import {
+  IRichErrorSerialized,
+  RichError,
+  RichErrorUnion,
+  UnexpectedRichError,
+} from "../common"
 import { NetworkRichError } from "../network"
 
 /**
@@ -9,7 +14,8 @@ export interface IFxhashGraphQLErrorExtensions {
   richError: IRichErrorSerialized
 }
 
+export const GraphQLErrors = [NetworkRichError, UnexpectedRichError]
+
 export type WithGqlErrors<T extends RichError> =
   | T
-  | NetworkRichError
-  | UnexpectedRichError
+  | RichErrorUnion<typeof GraphQLErrors>

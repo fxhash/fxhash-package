@@ -3519,9 +3519,7 @@ input String_comparison_exp {
 }
 
 input UnlinkWalletInput {
-  id: String!
-  publicKey: String
-  signature: String!
+  address: String!
 }
 
 """
