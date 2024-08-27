@@ -4,11 +4,37 @@ export enum EReserveMethod {
   MINT_PASS = "MINT_PASS",
 }
 
-export interface IReserve<GNumber = number> {
-  data: any
-  amount: GNumber
-  method: EReserveMethod
+export interface IWhitelistData {
+  address: string
+  pct: number
 }
+
+export type ReserveWhiteList<T = number> = {
+  method: EReserveMethod.WHITELIST
+  data: IWhitelistData[]
+  amount: T
+}
+
+export function isReserveWhiteList(
+  reserve: IReserve
+): reserve is ReserveWhiteList {
+  return reserve.method === EReserveMethod.WHITELIST
+}
+
+export type ReserveMintPass<T = number> = {
+  method: EReserveMethod.MINT_PASS
+  data: string
+  amount: T
+}
+export function isReserveMintPass(
+  reserve: IReserve
+): reserve is ReserveMintPass {
+  return reserve.method === EReserveMethod.MINT_PASS
+}
+
+export type IReserve<GNumber = number> =
+  | ReserveWhiteList<GNumber>
+  | ReserveMintPass<GNumber>
 
 export interface IReserveMintInput {
   method: EReserveMethod
