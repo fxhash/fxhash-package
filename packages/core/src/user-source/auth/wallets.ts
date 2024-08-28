@@ -4,12 +4,9 @@ import {
   type IWalletsAccountSource,
 } from "./_interfaces.js"
 import { BlockchainNetwork, networkToChain } from "@fxhash/shared"
-import { type PromiseResult, failure, invariant, success } from "@fxhash/utils"
+import { type PromiseResult, failure, success } from "@fxhash/utils"
 import { type TezosWalletManager } from "@fxhash/tez"
-import {
-  isEthereumWalletManager,
-  isTezosWalletManager,
-} from "@/utils/user-source/wallets.js"
+import { walletManagerNetwork } from "@/utils/user-source/wallets.js"
 import {
   JWTCredentials,
   authenticate as authenticateWithChallenge,
@@ -55,13 +52,11 @@ export function authWallets({
     storageNamespace: storageNamespace || DEFAULT_STORAGE_NAMESPACE,
 
     /**
-     * Performs a full authentication flow using the provided WalletManager.
+     * Performs an authentication flow using any available WalletManager.
      * - generate a challenge for the blockchain of the wallet
      * - sign the challenge text message with WalletManager
      * - authenticate user against backend using challenge+signature
-     * - forward credentials to CredentialsStrategy for them to be handled
-     * - fetch account using authenticated query
-     * - return account
+     * - return credentials upon success
      *
      * @returns Account on success, error on failure. (Note: the account is also
      * stored and managed internally, application don't have to rely on the
@@ -74,12 +69,7 @@ export function authWallets({
       // get a wallet manager from the provided wallets
       const manager = anyActiveManager(wallets.getWallets())
       if (!manager) return failure(new NoWalletConnectedError())
-
-      // derive blockchain env from WalletManager instance
-      let network: BlockchainNetwork | null = null
-      if (isTezosWalletManager(manager)) network = BlockchainNetwork.TEZOS
-      if (isEthereumWalletManager(manager)) network = BlockchainNetwork.ETHEREUM
-      invariant(network !== null, "WalletManager is neither tezos/ethereum")
+      const network = walletManagerNetwork(manager)
 
       try {
         const challenge = await generateChallenge(
@@ -100,7 +90,7 @@ export function authWallets({
         const credentials = await authenticateWithChallenge(
           {
             id: challenge.id,
-            signature: signature.unwrap().signature,
+            signature: signature.value.signature,
             publicKey:
               network === BlockchainNetwork.TEZOS
                 ? await (manager as TezosWalletManager).getPublicKey()
@@ -114,6 +104,10 @@ export function authWallets({
           return failure(err)
         return failure(new UnexpectedError())
       }
+    },
+
+    supports: {
+      linking: true,
     },
   })
 }

@@ -3,6 +3,7 @@ import type {
   UserSourceEventEmitter,
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
+  IAccountSource,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
@@ -136,6 +137,13 @@ export interface IClientPlugnPlay {
    * logout as accounts are required to have wallet accounts attached to them.
    */
   disconnectAllWallets: () => Promise<void>
+
+  /**
+   * Unlink a wallet from the account. If the wallet is currently connected it
+   * will disconnect such wallet from the account.
+   * @param address Address of the wallet to unlink from the account
+   */
+  unlinkWallet: IAccountSource["unlinkWallet"]
 
   /**
    * Initiate an OTP email verification flow. This will send an OTP to the

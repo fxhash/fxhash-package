@@ -13,6 +13,7 @@ import {
   jwtCredentials,
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
+  IWalletsAccountSource,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import {
@@ -207,6 +208,17 @@ export function createClientPlugnPlay({
     disconnectAllWallets() {
       init.check()
       return client.userSource.disconnectAllWallets()
+    },
+
+    async unlinkWallet(address) {
+      const activeSource = client.userSource.activeSource()
+      if (
+        typeof (activeSource as IWalletsAccountSource).unlinkWallet ===
+        "function"
+      ) {
+        return (activeSource as IWalletsAccountSource).unlinkWallet(address)
+      }
+      throw Error("current source doesn't support unlinking wallet")
     },
 
     logoutAccount() {

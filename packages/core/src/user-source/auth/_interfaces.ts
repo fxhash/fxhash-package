@@ -1,9 +1,14 @@
 import type { IUserSource } from "../_interfaces.js"
 import type { IGraphqlWrapper, IStorageDriver } from "@/index.js"
 import type { ICredentialsDriver } from "./_index.js"
+import { PromiseResult } from "@fxhash/utils"
+import { UnlinkWalletError, WithGqlErrors } from "@fxhash/errors"
 
 export interface IAccountSource extends IUserSource {
   authenticated: () => boolean
+  unlinkWallet: (
+    address: string
+  ) => PromiseResult<true, WithGqlErrors<UnlinkWalletError>>
 }
 
 export interface IAuthAccountSource extends IAccountSource {}

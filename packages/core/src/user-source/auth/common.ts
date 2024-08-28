@@ -13,23 +13,39 @@ import {
   CredentialsRefreshError,
   AuthenticationError,
   IStorageDriver,
+  generateChallenge,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
 import type {
+  IAccountSource,
   IAccountSourceCommonOptions,
-  IWalletsAccountSource,
   StoredAccount,
 } from "./_interfaces.js"
-import { type JwtAccessTokenPayload } from "@fxhash/shared"
+import {
+  BlockchainNetwork,
+  networkToChain,
+  type JwtAccessTokenPayload,
+  PendingSigningRequestError,
+  UserRejectedError,
+  WalletConnectionError,
+  BlockchainNetworks,
+} from "@fxhash/shared"
 import {
   type PromiseResult,
   type IEquatableError,
   invariant,
+  success,
 } from "@fxhash/utils"
 import { Init, cleanup, intialization } from "@fxhash/utils"
 import { isUserStateConsistent } from "../utils/user-consistency.js"
 import { jwtDecode } from "jwt-decode"
 import { anyActiveManager } from "../wallets/common/utils.js"
+import {
+  linkWalletToAccount,
+  unlinkWalletFromAccount,
+} from "./actions/linking.js"
+import { TezosWalletManager } from "@fxhash/tez"
+import { GraphQLErrors, LinkWalletErrors, isErrorOfKind } from "@fxhash/errors"
 
 /**
  * The key which will be used to store the account data.
@@ -221,6 +237,10 @@ export type AuthWithWalletsParams<AuthError extends IEquatableError> =
     wallets: IWalletsSource
     storageNamespace: string
     authenticate: () => PromiseResult<JWTCredentials, AuthError>
+    supports: {
+      // whether wallets should be linked in case they don't belong to account
+      linking: boolean
+    }
   }
 
 /**
@@ -237,7 +257,8 @@ export function authWithWallets<AuthError extends IEquatableError>({
   credentialsDriver,
   storageNamespace,
   authenticate,
-}: AuthWithWalletsParams<AuthError>): IWalletsAccountSource {
+  supports,
+}: AuthWithWalletsParams<AuthError>): IAccountSource {
   const emitter = new UserSourceEventEmitter()
   const init = intialization()
   const clean = cleanup()
@@ -322,20 +343,83 @@ export function authWithWallets<AuthError extends IEquatableError>({
 
   const _hookEvents = () => {
     clean.add(
-      walletsSource.emitter.on("wallets-changed", async () => {
+      walletsSource.emitter.on("wallets-changed", async payload => {
         const anyManager = anyActiveManager(walletsSource.getWallets())
+        const account = _account.get()
 
         // when wallet is connected, but no account is authenticated, we start
         // authentication process
-        if (anyManager && !_account.get()) {
+        if (anyManager && !account) {
           try {
-            console.log("trying to connect after login request")
             await _authenticate()
           } catch (err) {
             emitter.emit("error", {
               error: new AuthenticationError(err as TAuthenticationError),
             })
             return
+          }
+        }
+
+        // if a connected wallet isn't linked to the account, and such account
+        // doesn't have a wallet on the given network, link the wallet
+        const walletChanged = payload[0]
+        if (
+          supports.linking &&
+          walletChanged &&
+          walletChanged.wallet.connected &&
+          account &&
+          !account.wallets.find(w => w.network === walletChanged.network)
+        ) {
+          const manager = walletChanged.wallet.connected.manager
+
+          try {
+            // todo: handle error (should be RichError at the API level)
+            const challenge = await generateChallenge(
+              {
+                chain: networkToChain(walletChanged.network),
+                address: manager.address,
+              },
+              {
+                gqlClient: gql.client(),
+              }
+            )
+
+            const signature = await manager.signMessage(challenge.text)
+            if (signature.isFailure()) {
+              throw signature.error
+            }
+
+            const linkResult = await linkWalletToAccount({
+              id: challenge.id,
+              signature: signature.value.signature,
+              publicKey:
+                walletChanged.network === BlockchainNetwork.TEZOS
+                  ? await (manager as TezosWalletManager).getPublicKey()
+                  : undefined,
+            })
+            if (linkResult.isFailure()) {
+              throw linkResult.error
+            }
+          } catch (error: any) {
+            if (
+              isErrorOfKind(
+                error,
+                [
+                  PendingSigningRequestError,
+                  UserRejectedError,
+                  WalletConnectionError,
+                ],
+                LinkWalletErrors,
+                GraphQLErrors
+              )
+            ) {
+              emitter.emit("error", { error })
+            }
+            await walletsSource.disconnectWallet(walletChanged.network)
+            return
+          } finally {
+            // this will emit "account-changed"
+            await _account.sync()
           }
         }
 
@@ -356,6 +440,29 @@ export function authWithWallets<AuthError extends IEquatableError>({
     authenticated: () => !!_account.get(),
     initialized: () => init.finished,
     logoutAccount: _account.logoutAccount,
+
+    unlinkWallet: async address => {
+      invariant(
+        supports.linking,
+        "the wallets of this account source cannot be unlinked from the account"
+      )
+
+      const res = await unlinkWalletFromAccount({
+        address,
+      })
+      if (res.isFailure()) return res
+
+      const wallets = walletsSource.getWallets()
+      const network = BlockchainNetworks.find(
+        net => wallets?.[net]?.connected?.manager.address === address
+      )
+      if (network) {
+        await walletsSource.disconnectWallet(network)
+      }
+
+      await _account.sync()
+      return success(true)
+    },
 
     /**
      * Should be called when the application starts to retrieve credentials from

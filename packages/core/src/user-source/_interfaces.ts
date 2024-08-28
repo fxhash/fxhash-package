@@ -1,4 +1,9 @@
-import { BlockchainNetwork } from "@fxhash/shared"
+import {
+  BlockchainNetwork,
+  PendingSigningRequestError,
+  UserRejectedError,
+  WalletConnectionError,
+} from "@fxhash/shared"
 import { EventEmitter } from "@fxhash/utils"
 import {
   GetSingleUserAccountResult,
@@ -7,6 +12,7 @@ import {
   WalletsMap,
 } from "./_index.js"
 import { AuthenticationError, UserConsistencyError } from "@/index.js"
+import { LinkWalletError, WithGqlErrors } from "@fxhash/errors"
 
 /**
  * A generic-purpose User Source interface. A user source can be an account,
@@ -166,7 +172,14 @@ export type UserSourceEventsTypemap = {
   "account-changed": AccountUpdatedEventData
   "user-changed": void
   error: {
-    error: AuthenticationError | UserConsistencyError
+    error:
+      | AuthenticationError
+      | UserConsistencyError
+      | WithGqlErrors<LinkWalletError>
+      // todo: these should be factorized
+      | PendingSigningRequestError
+      | UserRejectedError
+      | WalletConnectionError
   }
 }
 export class UserSourceEventEmitter extends EventEmitter<UserSourceEventsTypemap> {}

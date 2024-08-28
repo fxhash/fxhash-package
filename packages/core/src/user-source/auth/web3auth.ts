@@ -84,5 +84,9 @@ export function authWeb3Auth({
         return failure(new UnexpectedError("unknown error"))
       }
     },
+
+    supports: {
+      linking: false,
+    },
   })
 }
