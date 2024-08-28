@@ -2825,8 +2825,6 @@ export type Action = {
   type: Scalars['action_type_enum']['output'];
   /** An object relationship */
   user?: Maybe<User>;
-  /** An object relationship */
-  userByIssuerId?: Maybe<User>;
 };
 
 
@@ -2917,6 +2915,7 @@ export type Action_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   issuer?: InputMaybe<User_Bool_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
+  issuer_wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   numeric_value?: InputMaybe<Numeric_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
@@ -2930,7 +2929,6 @@ export type Action_Bool_Exp = {
   token_id?: InputMaybe<String_Comparison_Exp>;
   type?: InputMaybe<Action_Type_Enum_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
-  userByIssuerId?: InputMaybe<User_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -3013,6 +3011,7 @@ export type Action_Order_By = {
   id?: InputMaybe<Order_By>;
   issuer?: InputMaybe<User_Order_By>;
   issuer_id?: InputMaybe<Order_By>;
+  issuer_wallet?: InputMaybe<Foreign_Wallet_Order_By>;
   metadata?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
@@ -3026,7 +3025,6 @@ export type Action_Order_By = {
   token_id?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
-  userByIssuerId?: InputMaybe<User_Order_By>;
 };
 
 /** select columns of table "action" */
@@ -3420,6 +3418,7 @@ export type Article_Bool_Exp = {
   actions_aggregate?: InputMaybe<Action_Aggregate_Bool_Exp>;
   article_generative_tokens?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   article_ledgers?: InputMaybe<Article_Ledger_Bool_Exp>;
+  article_ledgers_aggregate?: InputMaybe<Article_Ledger_Aggregate_Bool_Exp>;
   article_revisions?: InputMaybe<Article_Revision_Bool_Exp>;
   artifact_uri?: InputMaybe<String_Comparison_Exp>;
   author_id?: InputMaybe<String_Comparison_Exp>;
@@ -3864,6 +3863,7 @@ export type Article_Order_By = {
   title?: InputMaybe<Order_By>;
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   user?: InputMaybe<User_Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** columns and relationships of "article_revision" */
@@ -6461,6 +6461,7 @@ export type Generative_Token_Bool_Exp = {
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 /** columns and relationships of "generative_token_collected" */
@@ -6904,6 +6905,7 @@ export type Generative_Token_Order_By = {
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** select columns of table "generative_token" */
@@ -14143,7 +14145,7 @@ export type Pricing_Dutch_Auction = {
   id: Scalars['String']['output'];
   levels: Array<Scalars['numeric']['output']>;
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
-  refundable?: Maybe<Scalars['Boolean']['output']>;
+  refundable: Scalars['Boolean']['output'];
   resting_price: Scalars['String']['output'];
   token_id?: Maybe<Scalars['String']['output']>;
 };

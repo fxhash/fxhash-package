@@ -4035,6 +4035,11 @@ type action {
   """
   issuer: user
   issuer_id: String
+
+  """
+  An object relationship
+  """
+  issuer_wallet: foreign_wallet
   metadata(
     """
     JSON select path
@@ -4069,11 +4074,6 @@ type action {
   An object relationship
   """
   user: user
-
-  """
-  An object relationship
-  """
-  userByIssuerId: user
 }
 
 """
@@ -4160,6 +4160,7 @@ input action_bool_exp {
   id: uuid_comparison_exp
   issuer: user_bool_exp
   issuer_id: String_comparison_exp
+  issuer_wallet: foreign_wallet_bool_exp
   metadata: jsonb_comparison_exp
   numeric_value: numeric_comparison_exp
   objkt: objkt_bool_exp
@@ -4173,7 +4174,6 @@ input action_bool_exp {
   token_id: String_comparison_exp
   type: action_type_enum_comparison_exp
   user: user_bool_exp
-  userByIssuerId: user_bool_exp
 }
 
 """
@@ -4270,6 +4270,7 @@ input action_order_by {
   id: order_by
   issuer: user_order_by
   issuer_id: order_by
+  issuer_wallet: foreign_wallet_order_by
   metadata: order_by
   numeric_value: order_by
   objkt: objkt_order_by
@@ -4283,7 +4284,6 @@ input action_order_by {
   token_id: order_by
   type: order_by
   user: user_order_by
-  userByIssuerId: user_order_by
 }
 
 """
@@ -4644,6 +4644,36 @@ type article {
   ): [article_ledger!]!
 
   """
+  An aggregate relationship
+  """
+  article_ledgers_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   An array relationship
   """
   article_revisions(
@@ -4805,6 +4835,11 @@ type article {
   An object relationship
   """
   user: user!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
 }
 
 """
@@ -4905,6 +4940,7 @@ input article_bool_exp {
   actions_aggregate: action_aggregate_bool_exp
   article_generative_tokens: article_generative_token_bool_exp
   article_ledgers: article_ledger_bool_exp
+  article_ledgers_aggregate: article_ledger_aggregate_bool_exp
   article_revisions: article_revision_bool_exp
   artifact_uri: String_comparison_exp
   author_id: String_comparison_exp
@@ -4935,6 +4971,7 @@ input article_bool_exp {
   title: String_comparison_exp
   transactions: transaction_bool_exp
   user: user_bool_exp
+  wallet: foreign_wallet_bool_exp
 }
 
 scalar article_flag_enum
@@ -5144,6 +5181,47 @@ type article_ledger {
   An object relationship
   """
   user: user!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
+}
+
+"""
+aggregated selection of "article_ledger"
+"""
+type article_ledger_aggregate {
+  aggregate: article_ledger_aggregate_fields
+  nodes: [article_ledger!]!
+}
+
+input article_ledger_aggregate_bool_exp {
+  count: article_ledger_aggregate_bool_exp_count
+}
+
+input article_ledger_aggregate_bool_exp_count {
+  arguments: [article_ledger_select_column!]
+  distinct: Boolean
+  filter: article_ledger_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "article_ledger"
+"""
+type article_ledger_aggregate_fields {
+  avg: article_ledger_avg_fields
+  count(columns: [article_ledger_select_column!], distinct: Boolean): Int!
+  max: article_ledger_max_fields
+  min: article_ledger_min_fields
+  stddev: article_ledger_stddev_fields
+  stddev_pop: article_ledger_stddev_pop_fields
+  stddev_samp: article_ledger_stddev_samp_fields
+  sum: article_ledger_sum_fields
+  var_pop: article_ledger_var_pop_fields
+  var_samp: article_ledger_var_samp_fields
+  variance: article_ledger_variance_fields
 }
 
 """
@@ -5161,6 +5239,14 @@ input article_ledger_aggregate_order_by {
   var_pop: article_ledger_var_pop_order_by
   var_samp: article_ledger_var_samp_order_by
   variance: article_ledger_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type article_ledger_avg_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5183,6 +5269,16 @@ input article_ledger_bool_exp {
   article_id: Int_comparison_exp
   owner_id: String_comparison_exp
   user: user_bool_exp
+  wallet: foreign_wallet_bool_exp
+}
+
+"""
+aggregate max on columns
+"""
+type article_ledger_max_fields {
+  amount: bigint
+  article_id: Int
+  owner_id: String
 }
 
 """
@@ -5192,6 +5288,15 @@ input article_ledger_max_order_by {
   amount: order_by
   article_id: order_by
   owner_id: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type article_ledger_min_fields {
+  amount: bigint
+  article_id: Int
+  owner_id: String
 }
 
 """
@@ -5212,6 +5317,7 @@ input article_ledger_order_by {
   article_id: order_by
   owner_id: order_by
   user: user_order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -5235,6 +5341,14 @@ enum article_ledger_select_column {
 }
 
 """
+aggregate stddev on columns
+"""
+type article_ledger_stddev_fields {
+  amount: Float
+  article_id: Float
+}
+
+"""
 order by stddev() on columns of table "article_ledger"
 """
 input article_ledger_stddev_order_by {
@@ -5243,11 +5357,27 @@ input article_ledger_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type article_ledger_stddev_pop_fields {
+  amount: Float
+  article_id: Float
+}
+
+"""
 order by stddev_pop() on columns of table "article_ledger"
 """
 input article_ledger_stddev_pop_order_by {
   amount: order_by
   article_id: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type article_ledger_stddev_samp_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5283,11 +5413,27 @@ input article_ledger_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type article_ledger_sum_fields {
+  amount: bigint
+  article_id: Int
+}
+
+"""
 order by sum() on columns of table "article_ledger"
 """
 input article_ledger_sum_order_by {
   amount: order_by
   article_id: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type article_ledger_var_pop_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5299,11 +5445,27 @@ input article_ledger_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type article_ledger_var_samp_fields {
+  amount: Float
+  article_id: Float
+}
+
+"""
 order by var_samp() on columns of table "article_ledger"
 """
 input article_ledger_var_samp_order_by {
   amount: order_by
   article_id: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type article_ledger_variance_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5459,6 +5621,7 @@ input article_order_by {
   title: order_by
   transactions_aggregate: transaction_aggregate_order_by
   user: user_order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -5998,6 +6161,11 @@ type artists {
   """
   An object relationship
   """
+  user: user
+
+  """
+  An object relationship
+  """
   wallet: foreign_wallet
 }
 
@@ -6021,6 +6189,7 @@ input artists_bool_exp {
   name: String_comparison_exp
   type: user_type_enum_comparison_exp
   updated_at: timestamptz_comparison_exp
+  user: user_bool_exp
   wallet: foreign_wallet_bool_exp
 }
 
@@ -6041,6 +6210,7 @@ input artists_order_by {
   name: order_by
   type: order_by
   updated_at: order_by
+  user: user_order_by
   wallet: foreign_wallet_order_by
 }
 
@@ -9248,6 +9418,11 @@ type generative_token {
   """
   user: user
   version: generative_token_version!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
 }
 
 """
@@ -9420,6 +9595,7 @@ input generative_token_bool_exp {
   updated_at: timestamptz_comparison_exp
   user: user_bool_exp
   version: generative_token_version_comparison_exp
+  wallet: foreign_wallet_bool_exp
 }
 
 """
@@ -9944,6 +10120,7 @@ input generative_token_order_by {
   updated_at: order_by
   user: user_order_by
   version: order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -17621,6 +17798,36 @@ type onchain_query {
   ): [article_ledger!]!
 
   """
+  fetch aggregated fields from the table: "article_ledger"
+  """
+  article_ledger_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   fetch data from the table: "article_ledger" using primary key columns
   """
   article_ledger_by_pk(article_id: Int!, owner_id: String!): article_ledger
@@ -19541,6 +19748,36 @@ type onchain_subscription {
     """
     where: article_ledger_bool_exp
   ): [article_ledger!]!
+
+  """
+  fetch aggregated fields from the table: "article_ledger"
+  """
+  article_ledger_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
 
   """
   fetch data from the table: "article_ledger" using primary key columns
@@ -22214,7 +22451,7 @@ type pricing_dutch_auction {
   id: String!
   levels: [numeric!]!
   opens_at: timestamptz
-  refundable: Boolean
+  refundable: Boolean!
   resting_price: String!
   token_id: String
 }
@@ -24354,6 +24591,36 @@ type user {
   ): [article_ledger!]!
 
   """
+  An aggregate relationship
+  """
+  article_ledgers_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   An array relationship
   """
   articles(
@@ -25039,6 +25306,7 @@ input user_bool_exp {
   actionsByIssuerId_aggregate: action_aggregate_bool_exp
   actions_aggregate: action_aggregate_bool_exp
   article_ledgers: article_ledger_bool_exp
+  article_ledgers_aggregate: article_ledger_aggregate_bool_exp
   articles: article_bool_exp
   articles_aggregate: article_aggregate_bool_exp
   auction_bids: auction_bid_bool_exp
