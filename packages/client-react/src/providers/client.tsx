@@ -31,6 +31,48 @@ import {
 } from "@/_interfaces.js"
 import { isProviderCustomConfigValid } from "@/utils/validate.js"
 
+interface WagmiWrapperProps {
+  client: IClientPlugnPlay
+}
+
+const WagmiWrapper: React.FC<PropsWithChildren<WagmiWrapperProps>> = ({
+  client,
+  children,
+}) => {
+  const queryClientRef = useRef<QueryClient>(new QueryClient())
+
+  return (
+    <DependencyProviders
+      wagmiConfig={client.config.wagmi!}
+      queryClient={queryClientRef.current!}
+    >
+      {children}
+    </DependencyProviders>
+  )
+}
+
+interface WrapperProps {
+  config: IReactClientPlugnPlayConfig
+  client: IClientPlugnPlay | null
+}
+
+const Wrapper: React.FC<PropsWithChildren<WrapperProps>> = ({
+  config,
+  client,
+  children,
+}) => {
+  // depending on wether EVM is neede we don't expose the same tree
+  if (!config.wallets.evm) {
+    return <Fragment>{children}</Fragment>
+  }
+
+  if (!client) {
+    return null
+  }
+
+  return <WagmiWrapper client={client!}>{children}</WagmiWrapper>
+}
+
 const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
   email: true,
 }
@@ -145,23 +187,8 @@ export function ClientPlugnPlayProvider({
     }
   }, [])
 
-  // depending on whether EVM is needed we don't expose the same tree
-  const Wrapper: FunctionComponent<PropsWithChildren> = (() => {
-    if (!_config.wallets.evm) return Fragment
-    const queryClient = new QueryClient()
-    return props =>
-      state.client ? (
-        <DependencyProviders
-          wagmiConfig={state.client.config.wagmi!}
-          queryClient={queryClient}
-        >
-          {props.children}
-        </DependencyProviders>
-      ) : null
-  })()
-
   return (
-    <Wrapper>
+    <Wrapper config={_config} client={state.client}>
       <ClientPlugnPlayContext.Provider value={state}>
         {children}
       </ClientPlugnPlayContext.Provider>
