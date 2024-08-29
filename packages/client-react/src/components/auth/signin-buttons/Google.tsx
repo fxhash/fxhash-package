@@ -26,6 +26,7 @@ export function SignInButtonGoogle() {
           onSuccess={async response => {
             if (!response.credential)
               throw Error("credentials missing from google login")
+            if (!client) return
             const res = await client.loginWeb2({
               method: "oauth",
               options: {
