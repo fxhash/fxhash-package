@@ -1,9 +1,11 @@
+"use client"
+
 import {
+  Fragment,
   FunctionComponent,
   PropsWithChildren,
   createContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react"
@@ -34,7 +36,7 @@ const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
 
 export type ClientBasicState = {
   config: IReactClientPlugnPlayConfig
-  client: IClientPlugnPlay
+  client: IClientPlugnPlay | null
   account: GetSingleUserAccountResult | null
   managers: WalletManagersMap
   userError: UserSourceEventsTypemap["error"]["error"] | null
@@ -46,8 +48,8 @@ const defaultActiveManagers = {
 }
 
 const defaultContext: ClientBasicState = {
-  config: null as any, // a bit dirty but OK
-  client: null as any,
+  config: null as any,
+  client: null,
   account: null,
   managers: defaultActiveManagers,
   userError: null,
@@ -55,21 +57,16 @@ const defaultContext: ClientBasicState = {
 
 export const ClientPlugnPlayContext = createContext(defaultContext)
 
-/**
- * A provider for fxhash client plugnplay.
- */
 export function ClientPlugnPlayProvider({
   children,
   config,
   safeDomContainer,
 }: PropsWithChildren<IReactClientPlugnPlayProviderProps>) {
-  // parse the provided config, verify if it matches requirements and provide
-  // default values where missing
   const configChecked = useRef<number>()
-  const _config = useMemo(() => {
+  const _config = (() => {
     invariant(config, "missing config")
 
-    // check if config has changed: we don't support that
+    // Check if config has changed: we don't support that
     const configHash = xorshift64(config)
     if (configChecked.current && configChecked.current !== configHash) {
       throw Error(
@@ -78,7 +75,7 @@ export function ClientPlugnPlayProvider({
     }
     configChecked.current = configHash
 
-    // extend with default values if missing
+    // Extend with default values if missing
     const out: IReactClientPlugnPlayConfig = {
       ...config,
       web2SignIn:
@@ -91,75 +88,58 @@ export function ClientPlugnPlayProvider({
     if (configValidRes.isFailure()) throw configValidRes.error
 
     return out
-  }, [config])
+  })()
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
     config: _config,
   })
-  const set = <K extends keyof ClientBasicState>(
-    k: K,
-    val: ClientBasicState[K]
-  ) => {
-    setState(st => ({ ...st, [k]: val }))
-  }
-  const update = (values: Partial<ClientBasicState>) => {
-    setState(st => ({ ...st, ...values }))
-  }
 
   const clientRef = useRef<IClientPlugnPlay | null>(null)
-  const client = useMemo(() => {
-    if (clientRef.current) return clientRef.current
-    return (clientRef.current = createClientPlugnPlay({
-      metadata: config.metadata,
-      wallets: config.wallets,
-      credentials: config.credentials,
-      safeDomWrapper: safeDomContainer,
-    }))
-  }, [])
-
-  const once = useRef(false)
 
   useEffect(() => {
+    if (clientRef.current) return
+
+    clientRef.current = createClientPlugnPlay({
+      metadata: _config.metadata,
+      wallets: _config.wallets,
+      credentials: _config.credentials,
+      safeDomWrapper: safeDomContainer,
+    })
+
+    const client = clientRef.current
     invariant(safeDomContainer, "wrapper not available")
 
     const clean = cleanup()
     clean.add(
       client.emitter.on("error", err => {
-        set("userError", err.error)
+        setState(st => ({ ...st, userError: err.error }))
       }),
       client.emitter.on("user-changed", () => {
         const wallets = client.source.getWallets()
-        update({
+        setState(st => ({
+          ...st,
           userError: null,
           account: client.source.getAccount(),
           managers: wallets
             ? deriveManagersMap(wallets)
             : defaultActiveManagers,
-        })
+        }))
       })
     )
 
-    if (!once.current) {
-      client.init()
-      once.current = true
-    }
+    client.init()
 
-    set("client", client)
+    setState(st => ({ ...st, client }))
 
     return () => {
       clean.clear()
-
-      // todo: in dev we don't want to releave and init the client twice ?
-      // client.release()
     }
-  }, [])
+  }, [_config, safeDomContainer])
 
-  console.log({ state })
-
-  // depending on whether EVM is needed we don't expose the same tree
+  // Depending on whether EVM is needed we don't expose the same tree
   const Wrapper: FunctionComponent<PropsWithChildren> = (() => {
-    if (!config.wallets.evm) return props => props.children
+    if (!_config.wallets.evm) return Fragment
     const queryClient = new QueryClient()
     return props =>
       state.client ? (
