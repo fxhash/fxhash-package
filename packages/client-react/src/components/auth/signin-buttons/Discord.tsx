@@ -23,8 +23,8 @@ export function SignInButtonDiscord({}: Props) {
   )
 
   const handleToken = async (token: string) => {
-    setError(null)
     if (!client) return
+    setError(null)
     const res = await client.loginWeb2({
       method: "oauth",
       options: {
