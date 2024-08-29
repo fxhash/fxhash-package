@@ -22,7 +22,6 @@
     "@wagmi/core": "2.13.4",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
-    "utf-8-validate": "6.0.3",
     "viem": "2.19.4",
     "wagmi": "2.12.5"
   },
