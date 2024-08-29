@@ -1,4 +1,4 @@
-import { PromiseResult, Result, failure, success } from "@fxhash/shared"
+import { type PromiseResult, Result, failure, success } from "@fxhash/utils"
 import {
   PropsWithChildren,
   ReactNode,

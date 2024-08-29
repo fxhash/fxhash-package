@@ -25,7 +25,8 @@ import {
   encodeProjectFactoryArgs,
   encodeTicketFactoryArgs,
 } from "@/utils/factories.js"
-import { TransactionType, invariant } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 export type ScriptyHTMLTag = {

@@ -13,7 +13,7 @@ const defaultClientOptions: ClientOptions = {
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
 
-type CreateHasuraClientOptions = Optional<
+export type CreateHasuraClientOptions = Optional<
   ClientOptions,
   "exchanges" | "url"
 > & {
@@ -27,17 +27,35 @@ type CreateHasuraClientOptions = Optional<
  * @returns @urql/core client
  */
 export function createGqlClient(options: CreateHasuraClientOptions) {
-  if (typeof options.fetchOptions === "function") {
-    throw new Error(
-      "The createHasuraClient options don't support a function for fetchOptions, as the module overrides the header field using the object notation."
-    )
+  const addHasuraAdminSecretHeaders = (reqInit: RequestInit) => {
+    if (options.hasuraAdminSecret) {
+      if (!reqInit.headers) {
+        reqInit.headers = {}
+      }
+      ;(reqInit as any).headers["x-hasura-admin-secret"] =
+        options.hasuraAdminSecret
+    }
+    return reqInit
   }
-  // merge the default options with the provided options, set headers if secret
+
+  const _fetchOptions = options.fetchOptions
+  delete options.fetchOptions
   const _options = deepmerge(defaultClientOptions, options)
-  if (options.hasuraAdminSecret) {
-    ;(_options.fetchOptions as any).headers["x-hasura-admin-secret"] =
-      options.hasuraAdminSecret
+
+  if (typeof _fetchOptions === "function") {
+    _options.fetchOptions = () => {
+      return addHasuraAdminSecretHeaders({
+        ...defaultClientOptions.fetchOptions,
+        ..._fetchOptions(),
+      })
+    }
+  } else {
+    _options.fetchOptions = addHasuraAdminSecretHeaders({
+      ...defaultClientOptions.fetchOptions,
+      ..._fetchOptions,
+    })
   }
+
   return new Client(_options)
 }
 
@@ -53,3 +71,8 @@ export const gqlClient = createGqlClient({
   hasuraAdminSecret: process.env.HASURA_ADMIN_SECRET,
 })
 export default gqlClient
+
+/**
+ * Export utility types from `@urql/core`
+ */
+export { type Client } from "@urql/core"

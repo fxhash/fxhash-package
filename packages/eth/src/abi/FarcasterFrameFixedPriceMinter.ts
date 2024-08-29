@@ -405,6 +405,16 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
     stateMutability: "nonpayable",
   },
   {
+    inputs: [
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "address", name: "", type: "address" },
+    ],
+    name: "totalMinted",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     type: "event",
     name: "FrameMinted",
     inputs: [

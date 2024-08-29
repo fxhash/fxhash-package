@@ -1,3 +1,4 @@
+import { TEnv } from "../config"
 import { getDockerInternalUrl } from "../helpers"
 
 export interface IFxhashApis {
@@ -72,7 +73,7 @@ export const fxhashDevApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
-  opensea: "https://testnets-api.opensea.io/api/v2/chain/sepolia",
+  opensea: "https://testnets-api.opensea.io/api/v2",
   authority: {
     api: "NONE",
   },
@@ -148,7 +149,7 @@ export const fxhashPrdApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
-  opensea: "https://api.opensea.io/api/v2/chain/ethereum",
+  opensea: "https://api.opensea.io/api/v2",
   authority: {
     api: "NONE",
   },
@@ -178,4 +179,18 @@ export const fxhashPrdApis: IFxhashApis = {
     eth: "http://fxhash-multichain-prd-eth-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
     base: "http://fxhash-multichain-prd-base-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
   },
+}
+
+const fxEnvToApisMap: Record<TEnv, IFxhashApis> = {
+  local: fxhashLocalApis,
+  localDocker: fxhashLocalDockerApis,
+  dev: fxhashDevApis,
+  prd: fxhashPrdApis,
+}
+
+/**
+ * Given some env, returns the associated APIs config.
+ */
+export function fxApisByEnv(env: TEnv) {
+  return fxEnvToApisMap[env]
 }

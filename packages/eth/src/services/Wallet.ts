@@ -3,9 +3,6 @@ import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   InsufficientFundsError,
   TransactionRevertedError,
   TransactionReceiptError,
@@ -14,8 +11,8 @@ import {
   BlockchainType,
   WalletConnectionErrorReason,
   WalletConnectionError,
-  invariant,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success, invariant } from "@fxhash/utils"
 import {
   Account,
   Chain,
@@ -56,6 +53,8 @@ import {
 } from "@wagmi/core"
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 */
+
+export type { PrivateKeyAccount }
 
 export function clientToSigner(
   client: Client<Transport, Chain, Account>
@@ -193,6 +192,7 @@ interface EthereumWalletManagerParams {
   rpcNodes?: string[]
   signer: JsonRpcSigner | PrivateKeyAccount
   ethersAdapterForSafe?: EthersAdapter
+  connectorName?: string
 }
 
 export class EthereumWalletManager extends WalletManager {
@@ -203,6 +203,7 @@ export class EthereumWalletManager extends WalletManager {
   public safe: Safe.default | undefined
   public ethersAdapterForSafe?: EthersAdapter
   private rpcNodes: string[]
+  private connectorName?: string
 
   constructor(params: EthereumWalletManagerParams) {
     super(params.address)
@@ -211,6 +212,7 @@ export class EthereumWalletManager extends WalletManager {
     this.rpcNodes = params.rpcNodes || config.eth.apis!.rpcs
     this.signer = params.signer
     this.ethersAdapterForSafe = params.ethersAdapterForSafe
+    this.connectorName = params.connectorName
   }
 
   isConnected(): boolean {
@@ -219,12 +221,14 @@ export class EthereumWalletManager extends WalletManager {
 
   async signMessageWithWallet(
     message: string
-  ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
+  ): PromiseResult<
+    string,
+    PendingSigningRequestError | UserRejectedError | WalletConnectionError
+  > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
     }
     this.signingInProgress = true
-
     try {
       let signature
       if (this.ethersAdapterForSafe) {
@@ -232,10 +236,16 @@ export class EthereumWalletManager extends WalletManager {
           message,
         })
       } else {
+        // For the coinbase smart wallet, we need to force the signer to be ETHEREUM and not BASE
+        const result = await this.prepareSigner({
+          blockchainType: BlockchainType.ETHEREUM,
+        })
+        if (result.isFailure()) {
+          return failure(result.error)
+        }
+
         signature = await this.walletClient.signMessage({
           message,
-          // ! TODO: to fix
-          // @ts-ignore
           account: this.address as `0x${string}`,
         })
       }
@@ -422,6 +432,10 @@ export class EthereumWalletManager extends WalletManager {
     if (chain.id === 1) {
       return
     }
+    // Coinbase smart wallet doesn't support adding chains
+    if (this.connectorName === "coinbaseWalletSDK") {
+      return
+    }
     try {
       await this.walletClient.addChain({ chain })
     } catch (error) {
@@ -440,6 +454,8 @@ export class EthereumWalletManager extends WalletManager {
       })
       return success()
     } catch (error) {
+      console.log("error when switching chains:")
+      console.log(error)
       // Do nothing as we return an error below
     }
     return failure(

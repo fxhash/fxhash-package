@@ -1,32 +1,8 @@
 {
   "name": "@fxhash/libraries",
   "description": "A collection of libraries artists can use in their projects.",
-  "private": true,
   "version": "0.0.9",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@fxhash/config": "workspace:*"
   },
@@ -35,5 +11,26 @@
     "tslib": "2.6.0",
     "tsup": "8.0.1",
     "typescript": "5.3.3"
-  }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

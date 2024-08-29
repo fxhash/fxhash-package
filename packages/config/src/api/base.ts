@@ -4,6 +4,9 @@ export interface IBaseApis {
   safe: string
   splits: string
   whitelist: string
+  alchemy: {
+    rpc: string
+  }
 }
 
 export const baseTestnetApis: IBaseApis = {
@@ -12,6 +15,9 @@ export const baseTestnetApis: IBaseApis = {
   safe: "https://safe-transaction-base-sepolia.safe.global/",
   splits: "https://api.splits.org",
   whitelist: "http://localhost:9999/whitelist/new",
+  alchemy: {
+    rpc: "https://base-sepolia.g.alchemy.com/v2/xTtlsglqRKcFwSkg2bilqp7U2smOt3g9",
+  },
 }
 
 export const baseMainnetApis: IBaseApis = {
@@ -20,4 +26,7 @@ export const baseMainnetApis: IBaseApis = {
   safe: "https://safe-transaction-base.safe.global/",
   splits: "https://api.splits.org",
   whitelist: "https://api.v2.dev.fxhash-dev.xyz/whitelist/new",
+  alchemy: {
+    rpc: "https://base-mainnet.g.alchemy.com/v2/xTtlsglqRKcFwSkg2bilqp7U2smOt3g9",
+  },
 }

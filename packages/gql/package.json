@@ -1,52 +1,52 @@
 {
   "name": "@fxhash/gql",
   "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
-  "license": "MIT",
-  "author": "fxhash",
   "version": "0.0.8",
-  "keywords": [],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
-    "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
-    "codegen": "npm run codegen:schema && npm run codegen:typescript",
-    "codegen:dev": "npm run codegen:typescript && npm run build",
-    "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent",
-    "build": "tsup"
-  },
-  "peerDependencies": {
-    "graphql": "16.7.1"
-  },
+  "author": "fxhash",
   "dependencies": {
     "tslib": "2.6.2"
   },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
-    "@graphql-codegen/cli": "5.0.0",
-    "@graphql-codegen/client-preset": "4.1.0",
-    "@graphql-codegen/introspection": "4.0.0",
-    "@graphql-codegen/schema-ast": "4.0.0",
-    "@graphql-codegen/typescript": "4.0.1",
-    "@graphql-codegen/typescript-document-nodes": "4.0.1",
-    "@graphql-codegen/typescript-resolvers": "4.0.1",
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/client-preset": "4.3.3",
+    "@graphql-codegen/introspection": "4.0.3",
+    "@graphql-codegen/schema-ast": "4.1.0",
+    "@graphql-codegen/typescript": "4.0.9",
+    "@graphql-codegen/typescript-document-nodes": "4.0.9",
+    "@graphql-codegen/typescript-resolvers": "4.2.1",
     "@graphql-typed-document-node/core": "3.2.0",
-    "@parcel/watcher": "2.3.0",
+    "@parcel/watcher": "2.4.1",
     "chokidar-cli": "3.0.0",
     "graphql": "16.7.1",
-    "typescript": "5.3.3",
-    "tsup": "8.0.1"
-  }
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "peerDependencies": {
+    "graphql": "16.7.1"
+  },
+  "scripts": {
+    "build": "tsup",
+    "codegen": "npm run codegen:schema && npm run codegen:typescript",
+    "codegen:dev": "npm run codegen:typescript && npm run build",
+    "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
+    "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
+    "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

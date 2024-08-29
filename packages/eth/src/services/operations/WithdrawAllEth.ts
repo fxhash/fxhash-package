@@ -16,9 +16,9 @@ import { CallData } from "@0xsplits/splits-sdk"
 import {
   TransactionUnknownError,
   TransactionType,
-  invariant,
   BlockchainType,
 } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { getConfigForChain, getCurrentChain } from "../Wallet.js"
 import gqlClient from "@fxhash/gql-client"
 

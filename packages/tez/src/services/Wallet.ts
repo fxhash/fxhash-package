@@ -1,9 +1,11 @@
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import {
   ContractAbstraction,
+  Signer,
   TezosToolkit,
   Wallet,
   WalletOperation,
+  WalletProvider,
 } from "@taquito/taquito"
 import { InMemorySigner } from "@taquito/signer"
 import {
@@ -12,50 +14,79 @@ import {
   NetworkType,
   SigningType,
 } from "@airgap/beacon-sdk"
-import { encodeTezosPayload } from "@fxhash/auth"
 import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   NetworkError,
   BadRequestError,
   TransactionType,
   BlockchainType,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success } from "@fxhash/utils"
 import { TzktOperation } from "@/types/Tzkt"
 import { isOperationApplied } from "./Blockchain"
 import { TTezosContractOperation } from "./operations"
-import { config } from "@fxhash/config"
+import { IAppMetadata, config } from "@fxhash/config"
+import { encodeSignMessagePayload } from "./messages"
 
-export const DefaultBeaconWalletConfig: DAppClientOptions = {
-  name: "fxhash",
-  // TODO: check the requirements of the icon
-  iconUrl:
-    "https://gateway.fxhash2.xyz/ipfs/QmUQUtCenBEYQLoHvfFCRxyHYDqBE49UGxtcp626FZnFDG",
-  network: {
-    type: config.tez.config.network as NetworkType,
-  },
+export function createBeaconConfig(metadata: IAppMetadata): DAppClientOptions {
+  return {
+    name: metadata.name,
+    iconUrl: metadata.icon,
+    network: {
+      type: config.tez.config.network as NetworkType,
+    },
+  }
 }
 
-export function isInMemorySigner(
-  wallet: BeaconWallet | InMemorySigner
-): wallet is InMemorySigner {
-  return wallet instanceof InMemorySigner
+export const DefaultBeaconWalletConfig: DAppClientOptions = createBeaconConfig(
+  config.config.metadata
+)
+
+export function isWalletProvider(
+  provider: TezosProvider
+): provider is TezosWalletProvider {
+  return !!(provider as TezosWalletProvider).wallet
 }
+
+/**
+ * Check whether a WalletProvider is a BeaconWallet (checking for the existence
+ * of some properties from BeaconWallet
+ */
+export function isBeaconWallet(
+  provider: WalletProvider
+): provider is BeaconWallet {
+  if (!(provider as BeaconWallet).client) return false
+  const client = (provider as BeaconWallet).client
+  if (client.requestSignPayload || client.requestOperation) return true
+  return false
+}
+
+type TezosSignerProvider = {
+  signer: Signer
+}
+type TezosWalletProvider = {
+  wallet: WalletProvider
+}
+type TezosProvider =
+  | {
+      signer: Signer
+    }
+  | {
+      wallet: WalletProvider
+    }
 
 interface TezosWalletManagerParams {
   address: string
-  wallet: BeaconWallet | InMemorySigner
-  tezosToolkit: TezosToolkit
+  wallet: TezosProvider
+  tezosToolkit?: TezosToolkit
   rpcNodes?: string[]
 }
 
 export class TezosWalletManager extends WalletManager {
   private signingInProgress = false
-  wallet: BeaconWallet | InMemorySigner
+  wallet: TezosProvider
   tezosToolkit: TezosToolkit
   contracts: Record<string, ContractAbstraction<Wallet> | null> = {}
   rpcNodes: string[]
@@ -63,7 +94,13 @@ export class TezosWalletManager extends WalletManager {
   constructor(params: TezosWalletManagerParams) {
     super(params.address)
     this.wallet = params.wallet
-    this.tezosToolkit = params.tezosToolkit
+    this.tezosToolkit =
+      params.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
+    if (isWalletProvider(params.wallet)) {
+      this.tezosToolkit.setWalletProvider(params.wallet.wallet)
+    } else {
+      this.tezosToolkit.setSignerProvider(params.wallet.signer)
+    }
     this.rpcNodes = params.rpcNodes || config.tez.apis.rpcs
   }
 
@@ -73,10 +110,10 @@ export class TezosWalletManager extends WalletManager {
    * @throws {Error} If there is an unexpected error
    */
   async getPublicKey(): Promise<string> {
-    if (isInMemorySigner(this.wallet)) {
-      return await this.wallet.publicKey()
+    if (isWalletProvider(this.wallet)) {
+      return this.wallet.wallet.getPK()
     } else {
-      return (await this.wallet.client.getActiveAccount()).publicKey
+      return this.wallet.signer.publicKey()
     }
   }
 
@@ -86,10 +123,10 @@ export class TezosWalletManager extends WalletManager {
    * @throws {Error} If there is an unexpected error
    */
   getPublicKeyHash(): Promise<string> {
-    if (isInMemorySigner(this.wallet)) {
-      return this.wallet.publicKeyHash()
+    if (isWalletProvider(this.wallet)) {
+      return this.wallet.wallet.getPKH()
     } else {
-      return this.wallet.getPKH()
+      return this.wallet.signer.publicKeyHash()
     }
   }
 
@@ -111,18 +148,25 @@ export class TezosWalletManager extends WalletManager {
     this.signingInProgress = true
 
     try {
-      const payloadBytes = encodeTezosPayload(message)
+      const payloadBytes = encodeSignMessagePayload(message)
       let signature = null
-      if (isInMemorySigner(this.wallet)) {
-        const res = await this.wallet.sign(payloadBytes)
-        signature = res.sig
+      if (isWalletProvider(this.wallet)) {
+        const provider = this.wallet.wallet
+        // special case for BeaconWallet, requires calling requestSignPayload
+        if (isBeaconWallet(provider)) {
+          const res = await provider.client.requestSignPayload({
+            signingType: SigningType.MICHELINE,
+            payload: payloadBytes,
+            sourceAddress: this.address,
+          })
+          signature = res.signature
+        } else {
+          const res = await this.wallet.wallet.sign(payloadBytes)
+          signature = res
+        }
       } else {
-        const res = await this.wallet.client.requestSignPayload({
-          signingType: SigningType.MICHELINE,
-          payload: payloadBytes,
-          sourceAddress: this.address,
-        })
-        signature = res.signature
+        const res = await this.wallet.signer.sign(payloadBytes)
+        signature = res.sig
       }
       return success(signature)
     } catch (error) {
@@ -279,9 +323,6 @@ export class TezosWalletManager extends WalletManager {
     privateKeyOrWallet: string | InMemorySigner,
     options?: { tezosToolkit?: TezosToolkit }
   ) {
-    // init tezostoolkit
-    const tezosToolkit =
-      options?.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
     // init signer from private key
     const wallet =
       privateKeyOrWallet instanceof InMemorySigner
@@ -289,12 +330,11 @@ export class TezosWalletManager extends WalletManager {
         : await InMemorySigner.fromSecretKey(privateKeyOrWallet)
     // get public key hash
     const pkh = await wallet.publicKeyHash()
-    // set provider
-    tezosToolkit.setProvider({ signer: wallet })
     return new TezosWalletManager({
       address: pkh,
-      wallet,
-      tezosToolkit,
+      wallet: { signer: wallet },
+      tezosToolkit:
+        options?.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0]),
     })
   }
 
@@ -310,9 +350,6 @@ export class TezosWalletManager extends WalletManager {
     wallet?: BeaconWallet
     tezosToolkit?: TezosToolkit
   }) {
-    // init tezostoolkit
-    const tezosToolkit =
-      options?.tezosToolkit || new TezosToolkit(config.tez.apis.rpcs[0])
     // init beacon wallet
     const wallet =
       options?.wallet || new BeaconWallet(DefaultBeaconWalletConfig)
@@ -320,12 +357,10 @@ export class TezosWalletManager extends WalletManager {
     await wallet.requestPermissions()
     // get public key hash
     const pkh = await wallet.getPKH()
-    // set provider
-    tezosToolkit.setWalletProvider(wallet)
     return new TezosWalletManager({
       address: pkh,
-      wallet,
-      tezosToolkit,
+      wallet: { wallet },
+      tezosToolkit: options.tezosToolkit,
     })
   }
 }
