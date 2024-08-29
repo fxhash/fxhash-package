@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
   createContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react"
@@ -48,7 +49,7 @@ const defaultActiveManagers = {
 }
 
 const defaultContext: ClientBasicState = {
-  config: null as any,
+  config: null as any, // a bit dirty but OK
   client: null,
   account: null,
   managers: defaultActiveManagers,
@@ -57,16 +58,21 @@ const defaultContext: ClientBasicState = {
 
 export const ClientPlugnPlayContext = createContext(defaultContext)
 
+/**
+ * A provider for fxhash client plugnplay.
+ */
 export function ClientPlugnPlayProvider({
   children,
   config,
   safeDomContainer,
 }: PropsWithChildren<IReactClientPlugnPlayProviderProps>) {
+  // parse the provided config, verify if it matches requirements and provide
+  // default values where missing
   const configChecked = useRef<number>()
-  const _config = (() => {
+  const _config = useMemo(() => {
     invariant(config, "missing config")
 
-    // Check if config has changed: we don't support that
+    // check if config has changed: we don't support that
     const configHash = xorshift64(config)
     if (configChecked.current && configChecked.current !== configHash) {
       throw Error(
@@ -75,7 +81,7 @@ export function ClientPlugnPlayProvider({
     }
     configChecked.current = configHash
 
-    // Extend with default values if missing
+    // extend with default values if missing
     const out: IReactClientPlugnPlayConfig = {
       ...config,
       web2SignIn:
@@ -88,7 +94,7 @@ export function ClientPlugnPlayProvider({
     if (configValidRes.isFailure()) throw configValidRes.error
 
     return out
-  })()
+  }, [config])
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
@@ -134,10 +140,12 @@ export function ClientPlugnPlayProvider({
 
     return () => {
       clean.clear()
+      // TODO: in dev we don't want to releave and init the client twice ?
+      // client.release()
     }
-  }, [_config, safeDomContainer])
+  }, [])
 
-  // Depending on whether EVM is needed we don't expose the same tree
+  // depending on whether EVM is needed we don't expose the same tree
   const Wrapper: FunctionComponent<PropsWithChildren> = (() => {
     if (!_config.wallets.evm) return Fragment
     const queryClient = new QueryClient()
