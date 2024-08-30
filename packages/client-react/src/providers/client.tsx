@@ -1,8 +1,6 @@
 "use client"
 
 import {
-  Fragment,
-  FunctionComponent,
   PropsWithChildren,
   createContext,
   useEffect,
@@ -12,9 +10,7 @@ import {
 } from "react"
 import {
   IClientPlugnPlay,
-  DependencyProviders,
   createClientPlugnPlay,
-  QueryClient,
   GetSingleUserAccountResult,
   UserSourceEventsTypemap,
   WalletManagersMap,
@@ -30,6 +26,7 @@ import {
   IReactClientPlugnPlayProviderProps,
 } from "@/_interfaces.js"
 import { isProviderCustomConfigValid } from "@/utils/validate.js"
+import { Wrapper } from "./Wrapper.js"
 
 const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
   email: true,
@@ -37,7 +34,7 @@ const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
 
 export type ClientBasicState = {
   config: IReactClientPlugnPlayConfig
-  client: IClientPlugnPlay | null
+  client: IClientPlugnPlay
   account: GetSingleUserAccountResult | null
   managers: WalletManagersMap
   userError: UserSourceEventsTypemap["error"]["error"] | null
@@ -50,7 +47,7 @@ const defaultActiveManagers = {
 
 const defaultContext: ClientBasicState = {
   config: null as any, // a bit dirty but OK
-  client: null,
+  client: null as any, // a bit dirty but OK
   account: null,
   managers: defaultActiveManagers,
   userError: null,
@@ -96,24 +93,27 @@ export function ClientPlugnPlayProvider({
     return out
   }, [config])
 
+  const clientRef = useRef<IClientPlugnPlay | null>(null)
+
+  const client = useMemo(() => {
+    if (clientRef.current) return clientRef.current
+    return (clientRef.current = createClientPlugnPlay({
+      metadata: config.metadata,
+      wallets: config.wallets,
+      credentials: config.credentials,
+      safeDomWrapper: safeDomContainer,
+    }))
+  }, [])
+
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
     config: _config,
+    client,
   })
 
-  const clientRef = useRef<IClientPlugnPlay | null>(null)
+  const once = useRef(false)
 
   useEffect(() => {
-    if (clientRef.current) return
-
-    clientRef.current = createClientPlugnPlay({
-      metadata: _config.metadata,
-      wallets: _config.wallets,
-      credentials: _config.credentials,
-      safeDomWrapper: safeDomContainer,
-    })
-
-    const client = clientRef.current
     invariant(safeDomContainer, "wrapper not available")
 
     const clean = cleanup()
@@ -134,9 +134,10 @@ export function ClientPlugnPlayProvider({
       })
     )
 
-    client.init()
-
-    setState(st => ({ ...st, client }))
+    if (!once.current) {
+      client.init()
+      once.current = true
+    }
 
     return () => {
       clean.clear()
@@ -145,23 +146,8 @@ export function ClientPlugnPlayProvider({
     }
   }, [])
 
-  // depending on whether EVM is needed we don't expose the same tree
-  const Wrapper: FunctionComponent<PropsWithChildren> = (() => {
-    if (!_config.wallets.evm) return Fragment
-    const queryClient = new QueryClient()
-    return props =>
-      state.client ? (
-        <DependencyProviders
-          wagmiConfig={state.client.config.wagmi!}
-          queryClient={queryClient}
-        >
-          {props.children}
-        </DependencyProviders>
-      ) : null
-  })()
-
   return (
-    <Wrapper>
+    <Wrapper config={_config} client={state.client}>
       <ClientPlugnPlayContext.Provider value={state}>
         {children}
       </ClientPlugnPlayContext.Provider>

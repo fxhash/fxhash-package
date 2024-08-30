@@ -58,11 +58,6 @@ export function createClientPlugnPlay({
   safeDomWrapper,
   credentials = "jwt",
 }: ClientPlugnPlayOptions): IClientPlugnPlay {
-  invariant(
-    isBrowser(),
-    "fxhash Client PlugnPlay can only be instanciated in a browser context."
-  )
-
   // checks on provided values
   invariant(metadata, "metadata required")
   invariant(wallets, "missing wallets configuration")
@@ -185,6 +180,10 @@ export function createClientPlugnPlay({
     connectWallet: requestConnection,
 
     async init() {
+      invariant(
+        isBrowser(),
+        "fxhash Client PlugnPlay can only be initialised in a browser context."
+      )
       init.start("client can only be initialized once!")
       if (_manageConnectKit) await _initConnectKit()
       clean.add(
