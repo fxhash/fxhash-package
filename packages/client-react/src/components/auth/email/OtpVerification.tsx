@@ -17,7 +17,6 @@ export const OtpVerification: React.FC<Props> = ({ request, onCancel }) => {
   const [error, setError] = React.useState<string | null>(null)
 
   async function _handleSubmit() {
-    if (!client) return
     try {
       const res = await client.loginWeb2({
         method: "email",
