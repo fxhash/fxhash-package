@@ -59,8 +59,6 @@ let instanciated = false
  * window wallet specification.
  */
 export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
-  invariant(isBrowser(), "Window wallets can only be instanciated in browser")
-
   // show a warning if it's already been instanciated, as undesired
   if (instanciated) {
     console.warn(
@@ -84,6 +82,13 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
 
   return {
     ...wallets,
+    init: async () => {
+      invariant(
+        isBrowser(),
+        "Window wallets can only be initialised in a browser context"
+      )
+      wallets.init()
+    },
     requestConnection(network) {
       const wallet = wallets.getWallet(network)
       wallet &&

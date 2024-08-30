@@ -20,7 +20,6 @@ export function SignInEmail({}: Props) {
   }
 
   const _handleSubmitEmail = async () => {
-    if (!client) return
     try {
       const res = await client.requestEmailOTP(email)
       if (res.isFailure()) {
