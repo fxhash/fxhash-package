@@ -9,7 +9,7 @@ export function SignInButtonTezos() {
   return (
     <AuthButton
       icon={icon}
-      onClick={client?.connectWallet.bind(null, BlockchainNetwork.TEZOS)}
+      onClick={client.connectWallet.bind(null, BlockchainNetwork.TEZOS)}
     >
       Tezos wallet
     </AuthButton>
