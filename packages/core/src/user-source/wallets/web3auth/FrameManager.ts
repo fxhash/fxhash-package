@@ -60,18 +60,16 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
 > {
   private _emitter = new FrameManagerEventEmitter()
   private _config: Web3AuthFrameConfig
-  private _container: HTMLElement
+  private _container: HTMLElement | null = null
   private _wrapper: HTMLDivElement | null = null
   private _iframe: HTMLIFrameElement | null = null
 
   constructor(config: Web3AuthFrameConfig) {
-    invariant(
-      isBrowser(),
-      "fxhash embedded wallet can only be loaded in a browser context."
-    )
     super(AllWeb3AuthFrameErrors)
     this._config = config
-    this._container = this._config.container || document.body
+    this._container =
+      this._config.container ||
+      (typeof document !== "undefined" ? document.body : null)
   }
 
   /**
@@ -210,7 +208,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
       })
 
       // this triggers iframe being loaded, eventually resolving this promise
-      this._container.prepend(this._wrapper!)
+      this._container?.prepend(this._wrapper!)
     })
   }
 
@@ -252,6 +250,10 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
   }
 
   async init(): PromiseResult<void, Web3AuthFrameInitializationError> {
+    invariant(
+      isBrowser(),
+      "fxhash embedded wallet can only be initialised in a browser context."
+    )
     // initialize DOM elements
     {
       const res = await this.initDOM()
