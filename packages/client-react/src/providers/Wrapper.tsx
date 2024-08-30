@@ -1,6 +1,6 @@
 import { IReactClientPlugnPlayConfig } from "@/_interfaces.js"
 import { DependencyProviders, IClientPlugnPlay, QueryClient } from "@fxhash/sdk"
-import { PropsWithChildren, useRef } from "react"
+import { PropsWithChildren, useMemo } from "react"
 
 interface WagmiWrapperProps {
   client: IClientPlugnPlay
@@ -13,12 +13,12 @@ const WagmiWrapper: React.FC<PropsWithChildren<WagmiWrapperProps>> = ({
   client,
   children,
 }) => {
-  const queryClientRef = useRef<QueryClient>(new QueryClient())
+  const queryClient = useMemo<QueryClient>(() => new QueryClient(), [])
 
   return (
     <DependencyProviders
       wagmiConfig={client.config.wagmi!}
-      queryClient={queryClientRef.current!}
+      queryClient={queryClient}
     >
       {children}
     </DependencyProviders>
