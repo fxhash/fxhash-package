@@ -85,18 +85,21 @@ export interface MintGenerativeData<N = string> {
   snippetVersion?: string | null
 }
 
+export interface GenTokConstrains {
+  hashConstraints?: string[] | null
+  minterConstraints?: string[] | null
+  iterationConstraints?: number[] | null
+  paramsConstraints?: string[] | null
+}
+
 export interface GenTokenSettings {
   exploration?: {
     preMint?: {
       enabled: boolean
-      hashConstraints?: string[] | null
-      paramsConstraints?: string[] | null
-    }
+    } & GenTokConstrains
     postMint?: {
       enabled: boolean
-      hashConstraints?: string[] | null
-      paramsConstraints?: string[] | null
-    }
+    } & GenTokConstrains
   }
 }
 
