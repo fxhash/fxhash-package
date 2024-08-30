@@ -85,7 +85,7 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
     init: async () => {
       invariant(
         isBrowser(),
-        "Window wallets can only be initialise in a browser context"
+        "Window wallets can only be initialised in a browser context"
       )
       wallets.init()
     },
