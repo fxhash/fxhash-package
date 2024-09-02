@@ -17,31 +17,46 @@ export default withMermaid(
       // https://vitepress.dev/reference/default-theme-config
       nav: [
         { text: "Home", link: "/" },
-        { text: "Getting started", link: "/introduction" },
+        { text: "Getting started", link: "/introduction/getting-started" },
       ],
 
       sidebar: [
         {
           text: "Introduction",
-          link: "/introduction",
           items: [
             {
               text: "Getting started",
               link: "/introduction/getting-started",
             },
             {
-              text: "Use cases",
-              link: "/introduction/use-cases",
+              text: "Features",
+              link: "/introduction/features",
             },
           ],
         },
         {
-          text: "Concepts",
+          text: "Use cases",
+          link: "/use-cases",
           items: [],
         },
         {
+          text: "Concepts",
+          items: [
+            {
+              text: "Cross-environment",
+              link: "/concepts/cross-environment",
+            },
+          ],
+        },
+        {
           text: "Packages",
-          items: PACKAGES.map(pkg => pkgSidebarItem(pkg)),
+          items: [
+            {
+              text: "@fxhash/sdk",
+              link: "/packages/sdk/README",
+            },
+            ...PACKAGES.map(pkg => pkgSidebarItem(pkg)),
+          ],
         },
       ],
 

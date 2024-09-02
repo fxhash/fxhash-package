@@ -8,10 +8,10 @@ hero:
   actions:
     - theme: brand
       text: Getting started
-      link: /introduction
+      link: /introduction/getting-started
     - theme: alt
       text: Discover use-cases
-      link: /introduction/use-cases
+      link: /use-cases
 
 features:
   - title: Low-to-High level APIs

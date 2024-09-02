@@ -1,12 +1,9 @@
 export const PACKAGES: string[] = [
-  // remove:
-  "auth",
-
   // sdk ?
 
+  "core",
   "client",
   "client-react",
-  "core",
   "config",
   "errors",
   "eth",
