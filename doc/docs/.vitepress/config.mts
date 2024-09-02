@@ -3,56 +3,60 @@ import path from "node:path"
 import { defineConfig } from "vitepress"
 import { PACKAGES } from "../../manifest"
 import { DefaultTheme } from "vitepress"
+import { withMermaid } from "vitepress-plugin-mermaid"
 
 type SidebarItem = DefaultTheme.SidebarItem
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
-  title: "fxhash sdk",
-  description:
-    "Build all kinds of applications on top of fxhash using our versatile sdk",
-  themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: "Home", link: "/" },
-      { text: "Getting started", link: "/getting-started" },
-    ],
+export default withMermaid(
+  defineConfig({
+    title: "fxhash sdk",
+    description:
+      "Build all kinds of applications on top of fxhash using our versatile sdk",
+    themeConfig: {
+      // https://vitepress.dev/reference/default-theme-config
+      nav: [
+        { text: "Home", link: "/" },
+        { text: "Getting started", link: "/getting-started" },
+      ],
 
-    sidebar: [
-      {
-        text: "Introduction",
-        items: [
-          {
-            text: "Use cases",
-            link: "/use-cases",
-          },
-          {
-            text: "Getting started",
-            link: "/getting-started",
-          },
-        ],
-      },
-      {
-        text: "Concepts",
-        items: [],
-      },
-      {
-        text: "Packages",
-        items: PACKAGES.map(pkg => pkgSidebarItem(pkg)),
-      },
-    ],
+      sidebar: [
+        {
+          text: "Introduction",
+          link: "/introduction",
+          items: [
+            {
+              text: "Use cases",
+              link: "/introduction/use-cases",
+            },
+            {
+              text: "Getting started",
+              link: "/introduction/getting-started",
+            },
+          ],
+        },
+        {
+          text: "Concepts",
+          items: [],
+        },
+        {
+          text: "Packages",
+          items: PACKAGES.map(pkg => pkgSidebarItem(pkg)),
+        },
+      ],
 
-    socialLinks: [
-      { icon: "github", link: "https://github.com/fxhash/fxhash-package" },
-    ],
-  },
+      socialLinks: [
+        { icon: "github", link: "https://github.com/fxhash/fxhash-package" },
+      ],
+    },
 
-  /**
-   * Removes `.html` extension at the end of URLs
-   * https://vitepress.dev/guide/routing#generating-clean-url
-   */
-  cleanUrls: true,
-})
+    /**
+     * Removes `.html` extension at the end of URLs
+     * https://vitepress.dev/guide/routing#generating-clean-url
+     */
+    cleanUrls: true,
+  })
+)
 
 /**
  * Generates a package sidebar item using the package `sidebar.json` file.

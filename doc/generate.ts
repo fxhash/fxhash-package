@@ -16,12 +16,6 @@ type SidebarItem = DefaultTheme.SidebarItem
 
 const DOCS_PATH = "./docs"
 
-/**
- * TODOS
- * * /doc generates an index of the different doc files
- * * fix links, vocs is using filesystem path ?
- */
-
 async function main() {
   const outputRoot = path.join(DOCS_PATH, "packages")
 
