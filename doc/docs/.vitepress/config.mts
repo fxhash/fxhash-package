@@ -17,7 +17,7 @@ export default withMermaid(
       // https://vitepress.dev/reference/default-theme-config
       nav: [
         { text: "Home", link: "/" },
-        { text: "Getting started", link: "/getting-started" },
+        { text: "Getting started", link: "/introduction" },
       ],
 
       sidebar: [
@@ -26,12 +26,12 @@ export default withMermaid(
           link: "/introduction",
           items: [
             {
-              text: "Use cases",
-              link: "/introduction/use-cases",
-            },
-            {
               text: "Getting started",
               link: "/introduction/getting-started",
+            },
+            {
+              text: "Use cases",
+              link: "/introduction/use-cases",
             },
           ],
         },
