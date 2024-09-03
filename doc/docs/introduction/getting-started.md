@@ -25,7 +25,7 @@ Finally, we also expose framework-specific packages, which act as a wrapper arro
 
 ### Doc structure
 
-At the root of the documentation, you will find articles covering general concepts. For most cases, this should be enough for what you need to implement.
+At the root of the documentation, you will find articles covering general use-cases & concepts. For most cases, this should be enough for what you need to implement.
 
 In addition, this main documentation aggregates the doc of each individual package. These sub-documentations are often referenced in the high-level guides if you need to go deeper. API references are also automatically generated from the codebase, which are exposed in each package section (`packages/{package}/reference`).
 

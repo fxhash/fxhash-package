@@ -43,6 +43,9 @@ export default withMermaid(
           text: "Concepts",
           items: [
             {
+              text: "Wallet options",
+            },
+            {
               text: "Cross-environment",
               link: "/concepts/cross-environment",
             },
@@ -50,13 +53,7 @@ export default withMermaid(
         },
         {
           text: "Packages",
-          items: [
-            {
-              text: "@fxhash/sdk",
-              link: "/packages/sdk/README",
-            },
-            ...PACKAGES.map(pkg => pkgSidebarItem(pkg)),
-          ],
+          items: PACKAGES.map(pkg => pkgSidebarItem(pkg)),
         },
       ],
 

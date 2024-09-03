@@ -6,7 +6,7 @@ import remarkParse from "remark-parse"
 import remarkStringify from "remark-stringify"
 import { unified } from "unified"
 import chalk from "chalk"
-import { PACKAGES } from "./manifest"
+import { PACKAGES, PACKAGES_CONFIG } from "./manifest"
 import { Root } from "remark-parse/lib"
 import type { Heading, List, ListItem } from "mdast"
 import { DefaultTheme } from "vitepress"
@@ -61,6 +61,7 @@ async function main() {
       },
       readme: "none",
       logLevel: "Error",
+      exclude: PACKAGES_CONFIG[PACKAGE].omitTypedoc ? ["**/*"] : [],
     })
 
     app.renderer.postRenderAsyncJobs.push(async output => {
@@ -135,15 +136,15 @@ async function main() {
         pkgDocReadmeParsed
       )
 
-      const sidebarMerged: SidebarItem[] = [
-        ...pkgDocSidebar,
-        {
+      const sidebarMerged: SidebarItem[] = [...pkgDocSidebar]
+      if (nav.length > 0) {
+        sidebarMerged.push({
           text: "Reference",
           collapsed: true,
           link: `/reference/README`,
           items: sidebarReference,
-        },
-      ]
+        })
+      }
 
       fs.writeFileSync(
         `${pkgOutputPath}/sidebar.json`,
