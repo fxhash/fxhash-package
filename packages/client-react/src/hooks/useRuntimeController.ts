@@ -1,25 +1,21 @@
-import { RefObject, useEffect, useRef, useState } from "react"
+import { RefObject, useEffect, useMemo, useState } from "react"
 import {
   ProjectState,
   RuntimeControllerOptions,
   RuntimeContext,
-  ControlState,
   RuntimeController,
   createRuntimeController,
+  RuntimeControls,
 } from "@fxhash/sdk"
 
 type UseRuntimeController = (params: {
   iframeRef: RefObject<HTMLIFrameElement>
   state: ProjectState
-  options?: Omit<RuntimeControllerOptions, "onChange">
+  options?: RuntimeControllerOptions
 }) => {
+  controller: RuntimeController
   runtime?: RuntimeContext
-  controls?: ControlState
-  hardSync: () => void
-  updateControls: (
-    update: Partial<Record<string, any>>,
-    forceRefresh?: boolean
-  ) => void
+  controls?: RuntimeControls
 }
 
 export const useRuntimeController: UseRuntimeController = ({
@@ -27,36 +23,34 @@ export const useRuntimeController: UseRuntimeController = ({
   state,
   options,
 }) => {
-  const _controller = useRef<RuntimeController>()
+  const controller = useMemo(
+    () =>
+      createRuntimeController({
+        state,
+        options: {
+          ...options,
+        },
+      }),
+    []
+  )
   const [runtime, setRuntime] = useState<RuntimeContext>()
-  const [controls, setControls] = useState<ControlState>()
+  const [controls, setControls] = useState<RuntimeControls>()
 
   useEffect(() => {
     if (!iframeRef.current) return
-    const controller = createRuntimeController({
-      iframe: iframeRef.current,
-      state,
-      options: {
-        ...options,
-      },
-    })
     controller.emitter.on("runtime-changed", setRuntime)
     controller.emitter.on("controls-changed", setControls)
-    controller.init()
-    _controller.current = controller
+    controller.init(iframeRef.current)
 
     setRuntime(controller.runtime)
     return () => {
       controller.release()
-      _controller.current = undefined
     }
   }, [])
 
   return {
+    controller,
     runtime,
     controls,
-    hardSync: () => _controller.current?.hardSync(),
-    updateControls: (update, forceRefresh = false) =>
-      _controller.current?.updateControls(update, forceRefresh),
   }
 }

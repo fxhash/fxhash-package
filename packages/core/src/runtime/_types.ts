@@ -1,15 +1,5 @@
 import { BlockchainType } from "@fxhash/shared"
-import {
-  FxParamDefinition,
-  FxParamType,
-  FxParamsData,
-  FxParamDefinitions,
-} from "@fxhash/params"
-import {
-  RuntimeContextEventEmitter,
-  RuntimeControllerEventEmitter,
-  RuntimeControlsEventEmitter,
-} from "./_interfaces.js"
+import { FxParamDefinition, FxParamType, FxParamsData } from "@fxhash/params"
 import { RawTokenFeatures } from "@fxhash/tez"
 
 export type RuntimeConnector = (iframe: HTMLIFrameElement) => {
@@ -41,67 +31,15 @@ export type RuntimeState = Omit<
   params: FxParamsData
 }
 
-export interface RuntimeDefinition {
+export type RuntimeDefinition = {
   params: FxParamDefinition<FxParamType>[] | null
   version: string | null
   features: RawTokenFeatures | null
 }
 
-export interface RuntimeController {
-  runtime: RuntimeContext
-  controls: RuntimeControls
-  init: () => void
-  release: () => void
-  getUrl: () => string
-  hardSync: () => void
-  updateControls: (update: Partial<FxParamsData>, forceRefresh: boolean) => void
-  emitter: RuntimeControllerEventEmitter
-}
-
-export interface ControlState {
-  params: {
-    definition: FxParamDefinitions | null
-    values: FxParamsData
-  }
-}
-
-export interface RuntimeControls {
-  state: ControlState
-  setValues: (update: Partial<FxParamsData>) => RuntimeControls
-  setDefinition: (
-    definition: FxParamDefinition<FxParamType>[] | null,
-    values: FxParamsData | Record<string, never>
-  ) => RuntimeControls
-  emitter: RuntimeControlsEventEmitter
-}
-
-export interface RuntimeWholeState {
+export type RuntimeWholeState = {
   state: RuntimeState
   definition: RuntimeDefinition
-}
-
-export interface RuntimeContext {
-  // the base state of the runtime
-  state: TUpdateableState<RuntimeState, RuntimeContext>
-  // definitions, used to manipulate the state
-  definition: TUpdateableState<RuntimeDefinition, RuntimeContext>
-  // extra details derived from the state & definition
-  details: {
-    params: {
-      inputBytes: string | null
-      bytesSize: number
-    }
-    stateHash: {
-      soft: string
-      hard: string
-    }
-    definitionHash: {
-      params: string
-    }
-  }
-  // whole-state update function, should be used to prevent side-effects
-  update: TUpdateStateFn<RuntimeWholeState, RuntimeContext>
-  emitter: RuntimeContextEventEmitter
 }
 
 export type DeepPartialState<T> = T extends object

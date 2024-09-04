@@ -3,27 +3,29 @@ import {
   mockBlockchainAddress,
   mockTransactionHash,
 } from "@fxhash/utils"
-import { runtime } from "./runtime.js"
+import { runtimeContext } from "./context.js"
 import { BlockchainNetwork, BlockchainType } from "@fxhash/shared"
 import { iframeConnector } from "./connectors.js"
+import { ProjectState, RuntimeConnector } from "./_types.js"
+import { FxParamsData, buildParamsObject } from "@fxhash/params"
 import {
-  ControlState,
-  ProjectState,
-  RuntimeConnector,
   RuntimeContext,
   RuntimeController,
-} from "./_types.js"
-import { FxParamsData, buildParamsObject } from "@fxhash/params"
-import { cloneDeep, merge } from "lodash"
-import { RuntimeControllerEventEmitter } from "./_interfaces.js"
-import { runtimeControls } from "./runtimeControls.js"
+  RuntimeControllerEventEmitter,
+  RuntimeControls,
+} from "./_interfaces.js"
+import { runtimeControls } from "./controls.js"
+import { debounce } from "lodash"
+
+/*
+ * This function is used to handle old snippet events
+ */
 
 function handleOldSnippetEvents(e: any, runtime: RuntimeContext) {
   if (e.data) {
     if (e.data.id === "fxhash_getHash") {
       if (e.data.data) {
         runtime.state.update({ hash: e.data.data })
-      } else {
       }
     }
     if (e.data.id === "fxhash_getFeatures") {
@@ -73,24 +75,27 @@ export interface RuntimeControllerOptions {
 }
 
 export interface RuntimeControllerParams {
-  iframe: HTMLIFrameElement
   state: ProjectState
   options?: RuntimeControllerOptions
 }
+
+/**
+ * The runtime controller is the main controller for the runtime.
+ * It holds the state of the runtime and the controls.
+ * @param params - initial state of the runtime and options
+ * @returns RuntimeController - Which exoses the runtime, controls, init, release, getUrl, hardSync, updateControls and an event emitter
+ */
 
 export function createRuntimeController(
   params: RuntimeControllerParams
 ): RuntimeController {
   const { options, state } = params
   const runtimeOptions = { ...DEFAULT_RUNTIME_OPTIONS, ...options }
-
-  let _controls2 = runtimeControls()
-
   const emitter = new RuntimeControllerEventEmitter()
 
-  const _iframe = params.iframe
-
-  let _runtime = runtime({
+  let _iframe: HTMLIFrameElement
+  let _controls = runtimeControls()
+  let _runtime = runtimeContext({
     state: {
       hash: state.hash || mockTransactionHash(runtimeOptions.chain),
       minter: state.minter || mockBlockchainAddress(runtimeOptions.chain),
@@ -103,39 +108,40 @@ export function createRuntimeController(
     },
   })
 
-  _runtime.emitter.on("context-changed", handleChangeRuntime)
-  _controls2.emitter.on("controls-changed", controls => {
-    _controls2 = controls
-    emitter.emit("controls-changed", controls.state)
-  })
-
-  function handleChangeRuntime(runtime: RuntimeContext) {
+  _runtime.emitter.on("context-changed", runtime => {
     // If definition or state hash changed, sync the iframe
     if (runtime.details.stateHash.hard !== _runtime.details.stateHash.hard) {
+      console.log("sync")
       syncIframe(runtime)
     }
     if (
       runtime.details.definitionHash.params !==
       _runtime.details.definitionHash.params
     ) {
-      _controls2.setDefinition(
-        runtime.definition.params,
+      _controls.update(
         runtime.definition.params
           ? buildParamsObject(runtime.definition.params, runtime.state.params)
-          : {}
+          : {},
+        runtime.definition.params
       )
-      // emitter.emit("controls-changed", _controls)
     }
     _runtime = runtime
     emitter.emit("runtime-changed", _runtime)
-  }
+  })
+
+  _controls.emitter.on("controls-changed", (controls: RuntimeControls) => {
+    _controls = controls
+    emitter.emit("controls-changed", controls)
+  })
+
+  const _updateParamsDebounced = debounce(_runtime.state.update, 200)
 
   function softUpdateParams(params: FxParamsData) {
-    // TODO: debounce
-    _runtime.state.update({ params })
+    invariant(_controls.state.params.definition, "definition is required")
+    _updateParamsDebounced({ params })
     // TODO: make enum for events
     _iframe.contentWindow?.postMessage(
-      { id: "fxhash_params:update", params },
+      { id: "fxhash_params:update", data: { params } },
       "*"
     )
   }
@@ -143,8 +149,8 @@ export function createRuntimeController(
   function updateControls(update: Partial<FxParamsData>, forceRefresh = false) {
     // find the params which have changed and are "synced"
     const changed = Object.keys(update)
-      .filter(id => _controls2.state.params.values[id] !== update[id])
-      .map(id => _controls2.state.params.definition?.find(d => d.id === id))
+      .filter(id => _controls.state.params.values[id] !== update[id])
+      .map(id => _controls.state.params.definition?.find(d => d.id === id))
     // when there are no changes we don't need to do anything
     // e.g. when artworks call emit in a draw loop this should
     // catch too many updates that are actually not needed
@@ -162,19 +168,16 @@ export function createRuntimeController(
     if (!forceRefresh) {
       // if auto-refresh is defined, we update params on the runtime (will only)
       // reload the hard params
-      // TODO: handle auto-refresh
-      /*
-        if (options.autoRefresh) {
-          updtParamsDeb({
-            params: update,
-          })
-        }
-        */
+      if (options?.autoRefresh) {
+        _updateParamsDebounced({
+          params: update,
+        })
+      }
     } else {
       _runtime.state.update({ params: update })
     }
-    _controls2.setValues(update)
-    // emitter.emit("controls-changed", _controls)
+    // in any case, refresh the control state
+    _controls.update(update)
   }
 
   function onMessage(e: MessageEvent) {
@@ -244,7 +247,9 @@ export function createRuntimeController(
   }
 
   return {
-    init: () => {
+    init: (iframe: HTMLIFrameElement) => {
+      invariant(iframe, "iframe is required")
+      _iframe = iframe
       handleWindowMessages()
       handleIframeLoad()
       syncIframe(_runtime)
@@ -255,16 +260,14 @@ export function createRuntimeController(
       window.removeEventListener("message", onMessage, false)
     },
     runtime: _runtime,
-    controls: _controls2,
+    controls: _controls,
     getUrl: () => getUrl(_runtime),
     hardSync: () => {
       _runtime.update({
         state: {
-          params: _controls2.state.params.values,
+          params: _controls.state.params.values,
         },
       })
-      console.log(_controls2.state.params.values)
-      console.log(_runtime.state.params)
       syncIframe(_runtime)
     },
     updateControls,

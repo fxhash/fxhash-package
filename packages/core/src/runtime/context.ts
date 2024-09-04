@@ -7,25 +7,26 @@ import {
   serializeParamsOrNull,
 } from "@fxhash/params"
 import {
-  RuntimeContext,
   RuntimeDefinition,
   RuntimeState,
+  RuntimeWholeState,
   TUpdateStateFn,
 } from "./_types.js"
 import { hashRuntimeHardState, hashRuntimeState } from "./utils.js"
-import { RuntimeContextEventEmitter } from "./_interfaces.js"
+import { RuntimeContext, RuntimeContextEventEmitter } from "./_interfaces.js"
 
-interface RuntimeWholeState {
-  state: RuntimeState
-  definition: RuntimeDefinition
-}
-
-type RuntimeParams = {
+export interface RuntimeParams {
   state?: Partial<RuntimeState>
   definition?: Partial<RuntimeDefinition>
 }
 
-export function runtime(initial: RuntimeParams): RuntimeContext {
+/**
+ * The runtime context holds all informations about a project that defines its state
+ * @param initial - initial state of the project devided in state and definition
+ * @returns RuntimeContext - Which exoses the state, definition, update method and an event emitter
+ */
+
+export function runtimeContext(initial: RuntimeParams): RuntimeContext {
   const emitter = new RuntimeContextEventEmitter()
 
   let _runtime: RuntimeWholeState = {
