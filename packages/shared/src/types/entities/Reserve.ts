@@ -4,14 +4,14 @@ export enum EReserveMethod {
   MINT_PASS = "MINT_PASS",
 }
 
-export interface IWhitelistData {
+export interface IWhitelistData<T = number> {
   address: string
-  pct: number
+  pct: T
 }
 
 export type ReserveWhiteList<T = number> = {
   method: EReserveMethod.WHITELIST
-  data: IWhitelistData[]
+  data: IWhitelistData<T>[]
   amount: T
 }
 

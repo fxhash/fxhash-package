@@ -10,6 +10,10 @@ export const transformSplitsSum1000: TSplitsTransformer = (splits, index) => {
   )
 }
 
+export const transformSplitsSum100: TSplitsTransformer = (splits, index) => {
+  return Math.floor(100 / splits.length) + (index < 100 % splits.length ? 1 : 0)
+}
+
 export const transformSplitsAccessList: TSplitsTransformer = (
   splits,
   index
