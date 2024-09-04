@@ -67,6 +67,15 @@ export default withMermaid(
      * https://vitepress.dev/guide/routing#generating-clean-url
      */
     cleanUrls: true,
+
+    /**
+     * Allows README.md files to be considered as index files
+     * (for integration with github & cleaner URLs)
+     */
+    rewrites: {
+      "README.md": "index.md",
+      "(.*)/README.md": "(.*)/index.md",
+    },
   })
 )
 
@@ -79,7 +88,7 @@ function pkgSidebarItem(pkg: string): SidebarItem {
   ) as SidebarItem[]
   const out: SidebarItem = {
     text: `@fxhash/${pkg}`,
-    link: `/packages/${pkg}/README`,
+    link: `/packages/${pkg}/`,
     collapsed: true,
     items: sidebarLinks(pkgSidebar, `/packages/${pkg}`),
   }

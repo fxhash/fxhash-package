@@ -19,7 +19,7 @@ On top of that, we provide a declarative API which allows instanciating the low-
 
 The low-level APIs and the `@fxhash/client` are bundlded together in the [`@fxhash/sdk`](../packages/sdk/README.md), which exposes all of their APIs so that you only have to import a single package into your application, greatly simplifying your initial development as well as iterations on your project.
 
-Finally, we also expose framework-specific packages, which act as a wrapper arround `@fxhash/sdk` by providing APIs as expected by such frameworks. For now, we only support react at this level, with [`@fxhash/client-react`](../packages/client-react/README.md).
+Finally, we also expose framework-specific packages, which act as a wrapper around `@fxhash/sdk` by providing APIs as expected by such frameworks. For now, we only support react at this level, with [`@fxhash/client-react`](../packages/client-react/README.md).
 
 ## Navigating this doc
 
