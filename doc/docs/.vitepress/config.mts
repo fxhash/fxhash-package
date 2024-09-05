@@ -37,13 +37,31 @@ export default withMermaid(
         {
           text: "Use cases",
           link: "/use-cases",
-          items: [],
+          items: [
+            {
+              text: "Project showcase",
+              link: "/use-cases/project-showcase",
+            },
+            {
+              text: "Customized minting page",
+              link: "/use-cases/customized-minting-page",
+            },
+            {
+              text: "Scrap data",
+              link: "/use-cases/scrap-data",
+            },
+            {
+              text: "Nodejs minter",
+              link: "/use-cases/nodejs-minter",
+            },
+          ],
         },
         {
           text: "Concepts",
           items: [
             {
               text: "Wallet options",
+              link: "/concepts/wallet-options",
             },
             {
               text: "Cross-environment",
