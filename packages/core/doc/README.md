@@ -1,1 +1,3 @@
-Hello world!
+# `@fxhash/core`
+
+Hello !

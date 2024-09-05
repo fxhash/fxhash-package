@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { defineConfig } from "vitepress"
-import { PACKAGES } from "../../manifest"
+import { PACKAGES } from "../../scripts/manifest"
 import { DefaultTheme } from "vitepress"
 import { withMermaid } from "vitepress-plugin-mermaid"
 
