@@ -56,3 +56,5 @@ $ pnpm build
 ## Important notes
 
 If the watcher is running and you update the table of contents of a package documentation, it will not reflect automatically on the doc website. You can save the [`./docs/.vitepress/config.mts`](./docs/.vitepress/config.mts) file to propagate the changes.
+
+Relative links to other packages are altered in such a way: `../../{package}/doc/{path}` -> `../../{package}/{path}` during the aggregation.

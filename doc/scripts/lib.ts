@@ -7,6 +7,7 @@ import { NavigationItem } from "typedoc-plugin-markdown"
 import remarkParse from "remark-parse"
 import remarkStringify from "remark-stringify"
 import { unified } from "unified"
+import { visit } from "unist-util-visit"
 import { Heading, List, ListItem, Root } from "mdast"
 import { DefaultTheme } from "vitepress"
 
@@ -79,7 +80,10 @@ export async function generatePackage(pkg: string) {
     try {
       const parsing = parseReadmeToc(pkgDocReadmeTree)
       pkgDocSidebar = parsing[1]
-      pkgDocReadmeParsed = unified().use(remarkStringify).stringify(parsing[0])
+      pkgDocReadmeParsed = replaceRelativeLinksToPackages(
+        "README.md",
+        unified().use(remarkStringify).stringify(parsing[0])
+      )
     } catch (err: any) {
       throw Error(
         `Error when parsing ${chalk.bold(PACKAGE)} table of contents: ${err?.message}`
@@ -96,8 +100,18 @@ export async function generatePackage(pkg: string) {
         )
       )
         continue
+
+      const rootRelativePath = filePath.replace(pkgDocPath + "/", "")
       if ([".md", ".mdx"].includes(path.extname(filePath))) {
-        const rootRelativePath = filePath.replace(pkgDocPath + "/", "")
+        fs.writeFileSync(
+          path.join(pkgOutputPath, rootRelativePath),
+          replaceRelativeLinksToPackages(
+            rootRelativePath,
+            fs.readFileSync(filePath, "utf-8")
+          ),
+          "utf-8"
+        )
+      } else {
         fs.cpSync(filePath, path.join(pkgOutputPath, rootRelativePath))
       }
     }
@@ -266,6 +280,42 @@ function parseReadmeToc(tree: Root): [Root, SidebarItem[]] {
   }
 
   return [removeTocNodesFromTree(tree), toc.list ? parseList(toc.list) : []]
+}
+
+/**
+ * Replaces the relative link hrefs pointing to other packages. Because we want
+ * each package documentation to still work on Github, we need to alter such
+ * links from `../../` to `../` because of how the doc is structure.
+ */
+function replaceRelativeLinksToPackages(
+  filePath: string,
+  content: string
+): string {
+  const depth = filePath.split(path.sep).length - 1
+  const tree = unified().use(remarkParse).parse(content)
+  const relativeBackRegex = new RegExp(`^(\\.\\.\\/){${depth + 2}}(?!\\.\\.)`)
+
+  visit(tree, node => {
+    if (node.type === "link") {
+      const url = node.url
+      // check if the url points another package using a relative link, if so
+      // move it up 1 time
+      if (relativeBackRegex.test(url)) {
+        node.url = node.url.replace(
+          Array(depth + 2)
+            .fill("../")
+            .join(""),
+          Array(depth + 1)
+            .fill("../")
+            .join("")
+        )
+        // this approach is a bit naïve but for our scope should be fine
+        node.url = node.url.replace("/doc/", "/")
+      }
+    }
+  })
+
+  return unified().use(remarkStringify).stringify(tree)
 }
 
 function normalizePath(pt: string): string {
