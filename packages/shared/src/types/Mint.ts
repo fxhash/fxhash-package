@@ -92,14 +92,14 @@ export interface GenTokConstrains {
   paramsConstraints?: string[] | null
 }
 
+export interface ExplorationSettigns extends GenTokConstrains {
+  enabled: boolean
+}
+
 export interface GenTokenSettings {
   exploration?: {
-    preMint?: {
-      enabled: boolean
-    } & GenTokConstrains
-    postMint?: {
-      enabled: boolean
-    } & GenTokConstrains
+    preMint?: ExplorationSettigns
+    postMint?: ExplorationSettigns
   }
 }
 
