@@ -7,7 +7,6 @@ import { NavigationItem } from "typedoc-plugin-markdown"
 import remarkParse from "remark-parse"
 import remarkStringify from "remark-stringify"
 import { unified } from "unified"
-import { visit } from "unist-util-visit"
 import { Heading, List, ListItem, Root } from "mdast"
 import { DefaultTheme } from "vitepress"
 
@@ -103,7 +102,7 @@ export async function generatePackage(pkg: string) {
 
       const rootRelativePath = filePath.replace(pkgDocPath + "/", "")
       if ([".md", ".mdx"].includes(path.extname(filePath))) {
-        fs.writeFileSync(
+        writeFile(
           path.join(pkgOutputPath, rootRelativePath),
           replaceRelativeLinksToPackages(
             rootRelativePath,
@@ -316,4 +315,13 @@ function replaceRelativeLinksToPackages(
 
 function normalizePath(pt: string): string {
   return `/${path.normalize(pt)}`
+}
+
+const writeFile: typeof fs.writeFileSync = (file, data, encoding) => {
+  if (typeof file !== "string") throw Error("Unsupported")
+  const dir = path.dirname(file)
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
+  return fs.writeFileSync(file, data, encoding)
 }
