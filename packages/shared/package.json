@@ -1,0 +1,36 @@
+{
+  "name": "@fxhash/shared",
+  "version": "0.0.0",
+  "author": "fxhash",
+  "dependencies": {
+    "jwt-decode": "4.0.0",
+    "@fxhash/utils": "0.0.2"
+  },
+  "devDependencies": {
+    "tslib": "2.6.2",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3",
+    "@fxhash/tsconfig": "1.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  }
+}
