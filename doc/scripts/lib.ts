@@ -292,30 +292,26 @@ function replaceRelativeLinksToPackages(
   content: string
 ): string {
   const depth = filePath.split(path.sep).length - 1
-  const tree = unified().use(remarkParse).parse(content)
-  const relativeBackRegex = new RegExp(`^(\\.\\.\\/){${depth + 2}}(?!\\.\\.)`)
+  const ddsReg = `(\\.\\.\\/){${depth + 2}}(?!\\.\\.)`
+  const lnkReg = new RegExp(
+    `\\[(.+)\\]\\((${ddsReg}[-a-zA-Z0-9+&@#\\/%?=~_|!:,.;]+)\\)`,
+    "g"
+  )
 
-  visit(tree, node => {
-    if (node.type === "link") {
-      const url = node.url
-      // check if the url points another package using a relative link, if so
-      // move it up 1 time
-      if (relativeBackRegex.test(url)) {
-        node.url = node.url.replace(
-          Array(depth + 2)
-            .fill("../")
-            .join(""),
-          Array(depth + 1)
-            .fill("../")
-            .join("")
-        )
-        // this approach is a bit naïve but for our scope should be fine
-        node.url = node.url.replace("/doc/", "/")
-      }
-    }
+  content = content.replace(lnkReg, (_, text, url) => {
+    url = url.replace(
+      Array(depth + 2)
+        .fill("../")
+        .join(""),
+      Array(depth + 1)
+        .fill("../")
+        .join("")
+    )
+    url = url.replace("/doc/", "/")
+    return `[${text}](${url})`
   })
 
-  return unified().use(remarkStringify).stringify(tree)
+  return content
 }
 
 function normalizePath(pt: string): string {

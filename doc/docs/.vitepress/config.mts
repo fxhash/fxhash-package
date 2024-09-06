@@ -29,6 +29,10 @@ export default withMermaid(
               link: "/introduction/getting-started",
             },
             {
+              text: "Usage",
+              link: "/introduction/usage",
+            },
+            {
               text: "Features",
               link: "/introduction/features",
             },
@@ -59,6 +63,10 @@ export default withMermaid(
         {
           text: "Concepts",
           items: [
+            {
+              text: "User account & authentication",
+              link: "/concepts/user-account-authentication",
+            },
             {
               text: "Wallet options",
               link: "/concepts/wallet-options",
@@ -93,6 +101,12 @@ export default withMermaid(
     rewrites: {
       "README.md": "index.md",
       "(.*)/README.md": "(.*)/index.md",
+    },
+
+    mermaid: {
+      sequence: {
+        showSequenceNumbers: true,
+      },
     },
   })
 )
