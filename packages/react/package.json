@@ -4,17 +4,16 @@
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.2.2",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
     "@taquito/utils": "17.3.1",
     "autonomy-irl-js": "1.0.0",
     "ethers": "6.13.1",
-    "rxjs": "7.8.1"
+    "rxjs": "7.8.1",
+    "@fxhash/eth": "0.0.9",
+    "@fxhash/tez": "0.0.9",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@taquito/beacon-wallet": "19.2.1",
     "@taquito/taquito": "17.3.1",
     "@types/react": "18.3.3",
@@ -23,7 +22,8 @@
     "tsup": "8.0.1",
     "typescript": "5.3.3",
     "viem": "2.19.4",
-    "wagmi": "2.12.5"
+    "wagmi": "2.12.5",
+    "@fxhash/tsconfig": "1.0.0"
   },
   "exports": {
     ".": {
@@ -51,10 +51,10 @@
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

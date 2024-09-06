@@ -7,7 +7,6 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/client-preset": "4.3.3",
     "@graphql-codegen/introspection": "4.0.3",
@@ -20,7 +19,8 @@
     "chokidar-cli": "3.0.0",
     "graphql": "16.7.1",
     "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "@fxhash/tsconfig": "1.0.0"
   },
   "exports": {
     ".": {
@@ -39,6 +39,8 @@
   "peerDependencies": {
     "graphql": "16.7.1"
   },
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "codegen": "npm run codegen:schema && npm run codegen:typescript",
@@ -46,7 +48,5 @@
     "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
     "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
     "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

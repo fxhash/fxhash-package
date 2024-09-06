@@ -4,15 +4,15 @@
   "version": "0.0.9",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/utils": "workspace:*",
-    "@taquito/utils": "17.3.1"
+    "@taquito/utils": "17.3.1",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "tslib": "2.6.0",
     "tsup": "8.0.1",
     "typescript": "5.3.3",
-    "vitest": "0.34.6"
+    "vitest": "0.34.6",
+    "@fxhash/tsconfig": "1.0.0"
   },
   "exports": {
     ".": {
@@ -29,11 +29,11 @@
   "module": "./dist/index.js",
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

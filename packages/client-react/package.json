@@ -7,14 +7,14 @@
     "input-otp": "1.2.4"
   },
   "devDependencies": {
-    "@fxhash/sdk": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.2.18",
     "esbuild-css-modules-plugin": "2.7.1",
     "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "@fxhash/tsconfig": "1.0.0",
+    "@fxhash/utils-browser": "0.0.2",
+    "@fxhash/sdk": "0.0.1"
   },
   "exports": {
     ".": {
@@ -30,20 +30,20 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "peerDependencies": {
-    "@fxhash/sdk": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@react-oauth/google": "0.12.1",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-otp-input": "3.1.1",
-    "solid-js": "^1.8.0"
+    "solid-js": "^1.8.0",
+    "@fxhash/sdk": "0.0.1",
+    "@fxhash/utils-browser": "0.0.2"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

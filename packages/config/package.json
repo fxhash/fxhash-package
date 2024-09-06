@@ -3,15 +3,15 @@
   "version": "0.0.9",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@fxhash/utils": "0.0.2",
+    "@fxhash/errors": "0.0.9"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tslib": "2.6.2",
     "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "@fxhash/tsconfig": "1.0.0"
   },
   "exports": {
     ".": {
@@ -30,10 +30,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

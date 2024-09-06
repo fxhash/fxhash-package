@@ -5,21 +5,19 @@
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.2.2",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/core": "workspace:*",
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@tanstack/react-query": "5.28.8",
     "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1"
+    "@taquito/taquito": "17.3.1",
+    "@fxhash/config": "0.0.9",
+    "@fxhash/core": "0.0.1",
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/tez": "0.0.9",
+    "@fxhash/utils": "0.0.2",
+    "@fxhash/eth": "0.0.9",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/utils-browser": "0.0.2"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.2.18",
@@ -33,7 +31,9 @@
     "typescript": "5.3.3",
     "viem": "2.19.4",
     "vitest": "0.34.6",
-    "wagmi": "2.12.5"
+    "wagmi": "2.12.5",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/tsconfig": "1.0.0"
   },
   "exports": {
     ".": {
@@ -61,12 +61,12 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:local": "FXHASH_ENV=local vitest"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

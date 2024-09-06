@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
-    "graphql": "16.7.1"
+    "graphql": "16.7.1",
+    "@fxhash/config": "0.0.9"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "20.11.30",
     "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "@fxhash/tsconfig": "1.0.0"
   },
   "exports": {
     ".": {
@@ -29,10 +29,10 @@
   "module": "./dist/index.js",
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }
