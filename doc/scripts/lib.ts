@@ -93,14 +93,10 @@ export async function generatePackage(pkg: string) {
     // move {package}/doc .md/.mdx files inside this doc and update sidebar
     // with links to this doc
     for (const filePath of walkSync(pkgDocPath)) {
-      if (
-        ["readme.md", "readme.mdx"].includes(
-          path.basename(filePath).toLowerCase()
-        )
-      )
+      const rootRelativePath = filePath.replace(pkgDocPath + "/", "")
+      if (["readme.md", "readme.mdx"].includes(rootRelativePath.toLowerCase()))
         continue
 
-      const rootRelativePath = filePath.replace(pkgDocPath + "/", "")
       if ([".md", ".mdx"].includes(path.extname(filePath))) {
         writeFile(
           path.join(pkgOutputPath, rootRelativePath),
