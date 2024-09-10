@@ -12,8 +12,11 @@ import {
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { IReserveConsumption } from "@/types/Reserve"
-import { EReserveMethod, GenerativeToken } from "@fxhash/shared"
+import {
+  IReserveConsumption,
+  EReserveMethod,
+  GenerativeToken,
+} from "@fxhash/shared"
 
 export type TMintV3OperationParams = {
   token: GenerativeToken

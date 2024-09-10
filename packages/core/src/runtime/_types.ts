@@ -1,6 +1,5 @@
-import { BlockchainType } from "@fxhash/shared"
+import { BlockchainType, RawTokenFeatures } from "@fxhash/shared"
 import { FxParamDefinition, FxParamType, FxParamsData } from "@fxhash/params"
-import { RawTokenFeatures } from "@fxhash/tez"
 
 export type RuntimeConnector = (iframe: HTMLIFrameElement) => {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) => string
