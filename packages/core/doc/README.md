@@ -2,17 +2,20 @@
 
 A set of low level modules focused on **user wallets and accounts**, designed using an event-driven approach and a modular architecture, allowing various kinds of wallet/account sources to be connected together to provide tailored experiences to users.
 
-::: info
-All the `@fxhash/core` modules can be instanciated in any environment without throwing, however some modules are [restricted to some environments](./limitations.md), in which case a warning will be issued to devs.
+::: warning
+This package is quite low level. We recommend looking into [**`@fxhash/client`**](../../client/doc/) or [**`@fxhash/client-react`**](../../client-react/doc/) first and only look into this package if these packages don't fit your use-case.
 :::
 
 ## Contents
 
 - [Drivers](./drivers.md)
-- [User sources](./user-sources)
-  - [Wallets](./user-sources/wallets.ts)
-  - [Accounts](./user-sources/wallets.ts)
-  - [Multiple sources](./user-sources/multiple-sources.ts)
+- [User sources](./user-sources/)
+  - [Wallets](./user-sources/wallets/)
+    - [Window](./user-sources/wallets/window.md)
+    - [Private Key](./user-sources/wallets/private-key.md)
+    - [Web3Auth](./user-sources/wallets/web3auth.md)
+  - [Accounts](./user-sources/accounts.md)
+  - [Multiple sources](./user-sources/multiple-sources.md)
 
 ## Installation
 
@@ -52,7 +55,7 @@ This package was designed following some key principles:
   - GraphQL Wrapper
   - Storage drivers
   - Credential drivers
-- **User sources**: Learn about user sources (wallet/account sources) and how to implement various scenarios
+- [**User sources**](./user-sources/): Learn about user sources (wallet/account sources) and how to implement various scenarios
   - Wallet sources
   - Account sources
   - State reconciliation
