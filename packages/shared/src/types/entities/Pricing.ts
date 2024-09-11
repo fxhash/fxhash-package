@@ -1,6 +1,11 @@
 export interface IPricingFixed<GNumber = number, GDate = Date> {
+  id?: string
   price: GNumber
   opensAt?: GDate | null
+  frameMinting?: {
+    enabled?: boolean
+    mintsPerFid?: number
+  }
 }
 
 export interface IPricingDutchAuction<N = number> {
@@ -9,6 +14,6 @@ export interface IPricingDutchAuction<N = number> {
   restingPrice?: number
   finalPrice?: number
   decrementDuration: N
-  opensAt: Date
+  opensAt?: Date | null
   refundable: boolean
 }

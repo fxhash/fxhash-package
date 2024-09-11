@@ -4,6 +4,7 @@ import { GenerativeTokenMetadata } from "./Metadata"
 import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
 import { ISplit } from "./entities/Split"
 import { IReserve } from "./entities/Reserve"
+import { Vec2 } from "./Math"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -27,12 +28,11 @@ export enum CaptureMode {
 export const CaptureModeList = Object.values(CaptureMode)
 
 export interface CaptureSettings {
-  mode: CaptureMode | null
-  triggerMode: CaptureTriggerMode | null
+  mode?: CaptureMode
+  triggerMode?: CaptureTriggerMode
   canvasSelector?: string
-  delay: number
-  resX?: number
-  resY?: number
+  delay?: number
+  resolution?: Vec2
   gpu?: boolean
 }
 
@@ -149,6 +149,7 @@ export interface GenTokDistributionForm<N> {
 export interface GenTokenInformationsForm {
   name: string
   description: string
+  mintingInstructions: string
   childrenDescription: string
   tags: string
   labels: GenTokLabel[]

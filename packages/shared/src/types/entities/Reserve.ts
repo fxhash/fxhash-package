@@ -26,15 +26,14 @@ export type ReserveMintPass<T = number> = {
   data: string
   amount: T
 }
-export function isReserveMintPass(
-  reserve: IReserve
-): reserve is ReserveMintPass {
+
+export function isReserveMintPass<T = number>(
+  reserve: IReserve<T>
+): reserve is ReserveMintPass<T> {
   return reserve.method === EReserveMethod.MINT_PASS
 }
 
-export type IReserve<GNumber = number> =
-  | ReserveWhiteList<GNumber>
-  | ReserveMintPass<GNumber>
+export type IReserve<T = number> = ReserveWhiteList<T> | ReserveMintPass<T>
 
 export interface IReserveMintInput {
   method: EReserveMethod
