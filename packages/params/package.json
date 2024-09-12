@@ -28,6 +28,13 @@
     "tsup": "8.2.4",
     "typescript": "5.3.3"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -41,18 +48,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
+  "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "repository": "fxhash/fxhash-package",
   "type": "module",
   "types": "dist/index.d.ts",
   "typesVersions": {
