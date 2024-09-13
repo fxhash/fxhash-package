@@ -85,6 +85,8 @@ export interface MintGenerativeData<N = string> {
   snippetVersion?: string | null
 }
 
+export type ConstraintVariant = [string, string, number, string]
+
 export interface GenTokConstrains {
   hashConstraints?: string[] | null
   minterConstraints?: string[] | null
