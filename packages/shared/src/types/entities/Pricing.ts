@@ -14,6 +14,6 @@ export interface IPricingDutchAuction<N = number> {
   restingPrice?: number
   finalPrice?: number
   decrementDuration: N
-  opensAt?: Date | null
+  opensAt: Date
   refundable: boolean
 }
