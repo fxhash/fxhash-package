@@ -43,6 +43,7 @@ export const useRuntimeController: UseRuntimeController = ({
     controller.init(iframeRef.current)
 
     setRuntime(controller.runtime)
+    setControls(controller.controls)
     return () => {
       controller.release()
     }
