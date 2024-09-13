@@ -5,6 +5,7 @@ import {
   RuntimeControls,
   RuntimeControlsEventEmitter,
 } from "./_interfaces.js"
+import { serializeParamsOrNull } from "@fxhash/params"
 
 const DEFAULT_CONTROL_STATE: ControlState = {
   params: {
@@ -44,6 +45,11 @@ export function runtimeControls(
       state: _controls,
       update,
       emitter,
+      getInputBytes: () =>
+        serializeParamsOrNull(
+          _controls.params.values || {},
+          _controls.params.definition || []
+        ),
     }
   }
 

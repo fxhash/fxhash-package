@@ -57,6 +57,7 @@ export interface RuntimeControls {
     definition?: FxParamDefinition<FxParamType>[] | null
   ) => RuntimeControls
   emitter: RuntimeControlsEventEmitter
+  getInputBytes: () => string | null
 }
 
 export interface RuntimeContext {
