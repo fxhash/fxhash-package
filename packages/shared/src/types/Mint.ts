@@ -115,7 +115,9 @@ export interface GenTokPricingForm<N> {
   pricingFixed: Partial<IPricingFixed<N>>
   pricingDutchAuction: Partial<IPricingDutchAuction<N>>
   lockForReserves?: boolean
-  frameMinting?: FrameMintingFormValues
+  royalties?: N
+  splitsPrimary: ISplit[]
+  splitsSecondary: ISplit[]
 }
 
 export enum GenTokEditions {
@@ -139,13 +141,10 @@ export type GenTokEditionsForm<N> = {
 
 export interface GenTokDistributionForm<N> {
   editions: GenTokEditionsForm<N>
-  pricing: GenTokPricingForm<N>
-  royalties?: N
   enabled: boolean
-  splitsPrimary: ISplit[]
-  splitsSecondary: ISplit[]
   reserves: IReserve<N>[]
   gracingPeriod?: N
+  frameMinting?: FrameMintingFormValues
 }
 
 export interface GenTokenInformationsForm {
