@@ -24,13 +24,13 @@ import {
   IBaseContracts,
 } from "./contracts/base"
 import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
-import { getConfigForEnv } from "./utils"
 import {
   AlgoliaConfig,
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
 import { fxAppEnvMetadata, IAppMetadata } from "./config/metadata"
+import { getConfigForEnv } from "./helpers"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
