@@ -84,7 +84,7 @@ describe("iframeConnector", () => {
 
   test("getUrl generates correct URL", () => {
     const result = connector.getUrl(PROJECT_STATE)
-    expect(result).toContain(`http://proxy.test/${MOCKED_CID}?`)
+    expect(result).toContain(`http://proxy.test/${MOCKED_CID}/?`)
     expect(result).toContain(`fxhash=${MOCKED_HASH}`)
     expect(result).toContain(`#0x${MOCKED_INPUT_BYTES}`)
   })
