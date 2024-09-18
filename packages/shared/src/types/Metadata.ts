@@ -1,5 +1,5 @@
-import { Vec2 } from "./Math"
-import { CaptureMode, CaptureTriggerMode, GenTokenSettings } from "./Mint"
+import { CaptureSettings, GenTokenSettings } from "./Mint"
+import { ISplit } from "./entities"
 
 export interface TokenMetadata {
   "": string
@@ -15,15 +15,6 @@ export interface HistoryMetadata {
 export interface TokenFormat {
   uri: string
   mimeType: string
-}
-
-export interface CaptureSettings {
-  mode: CaptureMode
-  triggerMode: CaptureTriggerMode
-  resolution?: Vec2
-  delay?: number
-  canvasSelector?: string
-  gpu?: boolean
 }
 
 // token features as they can be exported by a Token
@@ -63,6 +54,7 @@ export interface GenerativeTokenMetadata {
   name: string
   description: string
   childrenDescription: string
+  mintingInstructions: string
   tags: string[]
   // link to the fixed hash project
   artifactUri: string
@@ -80,6 +72,7 @@ export interface GenerativeTokenMetadata {
   // ADDED STARTING FROM v0.2
   // a fake transaction hash used for the preview
   previewHash?: string
+  previewIteration?: number
   previewMinter?: string
   previewInputBytes?: string
   version?: string
@@ -88,10 +81,37 @@ export interface GenerativeTokenMetadata {
     definition: any
     inputBytesSize: number
   }
+  snippetVersion: string
+  // ADDED STARTING FROM v0.4
+  primarySplits: ISplit[]
+  // ADDED starting from v0.5 (ENTANGLED?)
+  chain: string
 }
 
 export interface ObjktMetadata extends GenerativeTokenMetadata {
   features?: TokenMetadataFeature[] | null
+}
+
+//
+// ETH SPECIFIC
+//
+export interface Eth721ContractMetadata {
+  name: string
+  description: string
+  image: string
+  external_link: string
+  collaborators?: string[]
+  ipfsBackupUri?: string
+}
+
+export interface Eth721TokenMetadata {
+  name: string
+  description: string
+  image: string
+  external_url: string
+  animation_url?: string
+  collaborators?: string[]
+  ipfsBackupUri?: string
 }
 
 //
@@ -114,4 +134,10 @@ export interface ArticleMetadata {
   thumbnailUri: string
   thumbnailCaption?: string
   platforms?: string[]
+}
+
+export interface ExternalMarketplaceMetadata {
+  external: boolean
+  source: string
+  hasRoyalties: boolean
 }

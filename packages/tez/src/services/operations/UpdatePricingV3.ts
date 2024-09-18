@@ -7,12 +7,11 @@ import {
   FxhashCollabFactoryCalls,
   FxhashContracts,
 } from "../../types/Contracts"
-import { GenTokPricingForm } from "../../types/Mint"
 import { packPricing } from "../../utils/pack/pricing"
 import { transformPricingFormToNumbers } from "../../utils/transformers/pricing"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { GenerativeToken, UserType } from "@fxhash/shared"
+import { GenerativeToken, UserType, GenTokPricingForm } from "@fxhash/shared"
 
 export type TUpdatePricingV3OperationParams = {
   data: GenTokPricingForm<string>

@@ -1,4 +1,4 @@
-import { EReserveMethod } from "@fxhash/shared"
+import { EReserveMethod } from "./entities"
 
 export interface IReserveConsumption {
   method: EReserveMethod

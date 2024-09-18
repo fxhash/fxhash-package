@@ -4,6 +4,7 @@ import { GenerativeTokenMetadata } from "./Metadata"
 import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
 import { ISplit } from "./entities/Split"
 import { IReserve } from "./entities/Reserve"
+import { Vec2 } from "./Math"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -27,12 +28,11 @@ export enum CaptureMode {
 export const CaptureModeList = Object.values(CaptureMode)
 
 export interface CaptureSettings {
-  mode: CaptureMode | null
-  triggerMode: CaptureTriggerMode | null
+  mode?: CaptureMode
+  triggerMode?: CaptureTriggerMode
   canvasSelector?: string
-  delay: number
-  resX?: number
-  resY?: number
+  delay?: number
+  resolution?: Vec2
   gpu?: boolean
 }
 
@@ -85,19 +85,29 @@ export interface MintGenerativeData<N = string> {
   snippetVersion?: string | null
 }
 
+export type ConstraintVariant = [string, string, number, string]
+
+export interface GenTokConstrains {
+  hashConstraints?: string[] | null
+  minterConstraints?: string[] | null
+  iterationConstraints?: number[] | null
+  paramsConstraints?: string[] | null
+}
+
+export interface ExplorationSettings extends GenTokConstrains {
+  enabled: boolean
+}
+
 export interface GenTokenSettings {
   exploration?: {
-    preMint?: {
-      enabled: boolean
-      hashConstraints?: string[] | null
-      paramsConstraints?: string[] | null
-    }
-    postMint?: {
-      enabled: boolean
-      hashConstraints?: string[] | null
-      paramsConstraints?: string[] | null
-    }
+    preMint?: ExplorationSettings
+    postMint?: ExplorationSettings
   }
+}
+
+export type FrameMintingFormValues = {
+  enabled: boolean
+  mintsPerFid: number
 }
 
 export interface GenTokPricingForm<N> {
@@ -105,6 +115,9 @@ export interface GenTokPricingForm<N> {
   pricingFixed: Partial<IPricingFixed<N>>
   pricingDutchAuction: Partial<IPricingDutchAuction<N>>
   lockForReserves?: boolean
+  royalties?: N
+  splitsPrimary: ISplit[]
+  splitsSecondary: ISplit[]
 }
 
 export enum GenTokEditions {
@@ -126,27 +139,18 @@ export type GenTokEditionsForm<N> = {
   opened: GenTokOpenEditionsForm
 }
 
-export interface GenTokPricingForm<N> {
-  pricingMethod?: GenTokPricing
-  pricingFixed: Partial<IPricingFixed<N>>
-  pricingDutchAuction: Partial<IPricingDutchAuction<N>>
-  lockForReserves?: boolean
-}
-
 export interface GenTokDistributionForm<N> {
   editions: GenTokEditionsForm<N>
-  pricing: GenTokPricingForm<N>
-  royalties?: N
   enabled: boolean
-  splitsPrimary: ISplit[]
-  splitsSecondary: ISplit[]
   reserves: IReserve<N>[]
   gracingPeriod?: N
+  frameMinting?: FrameMintingFormValues
 }
 
 export interface GenTokenInformationsForm {
   name: string
   description: string
+  mintingInstructions: string
   childrenDescription: string
   tags: string
   labels: GenTokLabel[]
