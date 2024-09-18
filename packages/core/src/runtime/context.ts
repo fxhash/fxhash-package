@@ -1,4 +1,4 @@
-import { merge, cloneDeep } from "lodash"
+import { cloneDeep } from "lodash"
 import sha1 from "sha1"
 import { BlockchainType } from "@fxhash/shared"
 import {
@@ -12,7 +12,11 @@ import {
   RuntimeWholeState,
   TUpdateStateFn,
 } from "./_types.js"
-import { hashRuntimeHardState, hashRuntimeState } from "./utils.js"
+import {
+  hashRuntimeHardState,
+  hashRuntimeState,
+  mergeWithKeepingUint8ArrayType,
+} from "./utils.js"
 import { RuntimeContext, RuntimeContextEventEmitter } from "./_interfaces.js"
 
 export interface RuntimeParams {
@@ -58,7 +62,10 @@ export function runtimeContext(initial: RuntimeParams): RuntimeContext {
     RuntimeState,
     RuntimeContext
   > = newState => {
-    _runtime.state = merge(cloneDeep(_runtime.state), newState)
+    _runtime.state = mergeWithKeepingUint8ArrayType(
+      cloneDeep(_runtime.state),
+      newState
+    )
     const res = getFullContext()
     emitter.emit("context-changed", res)
     return res
@@ -68,14 +75,17 @@ export function runtimeContext(initial: RuntimeParams): RuntimeContext {
     RuntimeDefinition,
     RuntimeContext
   > = newDefinition => {
-    _runtime.definition = merge(cloneDeep(_runtime.definition), newDefinition)
+    _runtime.definition = mergeWithKeepingUint8ArrayType(
+      cloneDeep(_runtime.definition),
+      newDefinition
+    )
     const res = getFullContext()
     emitter.emit("context-changed", res)
     return res
   }
 
   const update: TUpdateStateFn<RuntimeWholeState, RuntimeContext> = data => {
-    _runtime = merge(cloneDeep(_runtime), data)
+    _runtime = mergeWithKeepingUint8ArrayType(cloneDeep(_runtime), data)
     const res = getFullContext()
     emitter.emit("context-changed", res)
     return res

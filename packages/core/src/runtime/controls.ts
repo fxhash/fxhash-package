@@ -1,11 +1,12 @@
-import { FxParamDefinition, FxParamType, FxParamsData } from "@fxhash/params"
-import { cloneDeep, merge } from "lodash"
+import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
+import { cloneDeep } from "lodash"
 import {
   ControlState,
   RuntimeControls,
   RuntimeControlsEventEmitter,
 } from "./_interfaces.js"
 import { serializeParamsOrNull } from "@fxhash/params"
+import { mergeWithKeepingUint8ArrayType } from "./utils.js"
 
 const DEFAULT_CONTROL_STATE: ControlState = {
   params: {
@@ -27,9 +28,9 @@ export function runtimeControls(
 
   function update(
     update: Partial<FxParamsData>,
-    definition?: FxParamDefinition<FxParamType>[] | null
+    definition?: FxParamDefinitions | null
   ) {
-    _controls = merge(cloneDeep(_controls), {
+    _controls = mergeWithKeepingUint8ArrayType(cloneDeep(_controls), {
       params: {
         values: update,
         definition: definition || _controls.params.definition,
