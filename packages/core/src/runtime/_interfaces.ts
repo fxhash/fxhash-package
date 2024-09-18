@@ -6,12 +6,7 @@ import {
   TUpdateStateFn,
   TUpdateableState,
 } from "./_types.js"
-import {
-  FxParamDefinition,
-  FxParamDefinitions,
-  FxParamType,
-  FxParamsData,
-} from "@fxhash/params"
+import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
 
 export type RuntimeContextEventsTypemap = {
   "context-changed": RuntimeContext
@@ -39,7 +34,10 @@ export interface RuntimeController {
   release: () => void
   getUrl: () => string
   hardSync: () => void
-  updateControls: (update: Partial<FxParamsData>, forceRefresh: boolean) => void
+  updateControls: (
+    update: Partial<FxParamsData>,
+    forceRefresh?: boolean
+  ) => void
   emitter: RuntimeControllerEventEmitter
 }
 
@@ -54,7 +52,7 @@ export interface RuntimeControls {
   state: ControlState
   update: (
     update: Partial<FxParamsData>,
-    definition?: FxParamDefinition<FxParamType>[] | null
+    definition?: FxParamDefinitions | null
   ) => RuntimeControls
   emitter: RuntimeControlsEventEmitter
   getInputBytes: () => string | null
