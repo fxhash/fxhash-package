@@ -1,7 +1,10 @@
 import {
+  Result,
+  failure,
   invariant,
   mockBlockchainAddress,
   mockTransactionHash,
+  success,
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
 import { BlockchainNetwork, BlockchainType } from "@fxhash/shared"
@@ -83,7 +86,7 @@ export interface RuntimeControllerParams {
  * The runtime controller is the main controller for the runtime.
  * It holds the state of the runtime and the controls.
  * @param params - initial state of the runtime and options
- * @returns RuntimeController - Which exoses the runtime, controls, init, release, getUrl, hardSync, updateControls and an event emitter
+ * @returns RuntimeController - Which exposes the runtime, controls, init, release, getUrl, hardSync, updateControls and an event emitter
  */
 
 export function createRuntimeController(
@@ -111,7 +114,6 @@ export function createRuntimeController(
   _runtime.emitter.on("context-changed", runtime => {
     // If definition or state hash changed, sync the iframe
     if (runtime.details.stateHash.hard !== _runtime.details.stateHash.hard) {
-      console.log("sync")
       syncIframe(runtime)
     }
     if (
@@ -147,6 +149,18 @@ export function createRuntimeController(
   }
 
   function updateControls(update: Partial<FxParamsData>, forceRefresh = false) {
+    // make sure definition exists and check if the key
+    // of the update have a corresponding definition
+    invariant(
+      _controls.state.params.definition !== null,
+      "Definition is required"
+    )
+    invariant(
+      Object.keys(update).every(id =>
+        _controls.state.params.definition?.find(d => d.id === id)
+      ),
+      "Unknown parameter"
+    )
     // find the params which have changed and are "synced"
     const changed = Object.keys(update)
       .filter(id => _controls.state.params.values[id] !== update[id])
@@ -204,7 +218,7 @@ export function createRuntimeController(
     handleOldSnippetEvents(e, _runtime)
   }
 
-  function handleWindowMessages() {
+  function _registerWindowMessageListeners() {
     invariant(window, "window is required")
     window.addEventListener("message", onMessage, false)
     return () => window.removeEventListener("message", onMessage, false)
@@ -218,7 +232,7 @@ export function createRuntimeController(
     _iframe.contentWindow?.postMessage("fxhash_getHash", "*")
   }
 
-  function handleIframeLoad() {
+  function _registerIframeOnLoadListener() {
     invariant(_iframe, "_iframe is required")
     _iframe.addEventListener("load", onIframeLoad, true)
     return () => _iframe?.removeEventListener("load", onIframeLoad, true)
@@ -250,8 +264,8 @@ export function createRuntimeController(
     init: (iframe: HTMLIFrameElement) => {
       invariant(iframe, "iframe is required")
       _iframe = iframe
-      handleWindowMessages()
-      handleIframeLoad()
+      _registerWindowMessageListeners()
+      _registerIframeOnLoadListener()
       syncIframe(_runtime)
     },
     release: () => {
@@ -259,8 +273,12 @@ export function createRuntimeController(
       _iframe.removeEventListener("load", onIframeLoad, true)
       window.removeEventListener("message", onMessage, false)
     },
-    runtime: _runtime,
-    controls: _controls,
+    get runtime() {
+      return _runtime
+    },
+    get controls() {
+      return _controls
+    },
     getUrl: () => getUrl(_runtime),
     hardSync: () => {
       _runtime.update({
