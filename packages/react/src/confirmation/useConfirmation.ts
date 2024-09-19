@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { ConfirmationContext } from "./Confirmation"
-import { invariant } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 /**
  * This hook allows to setup modal-confirmation synchronous flow for when user

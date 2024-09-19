@@ -11,12 +11,10 @@ import { EthereumWalletManager } from "@fxhash/eth"
 import {
   BlockchainType,
   PendingSigningRequestError,
-  PromiseResult,
   UserRejectedError,
   WalletConnectionError,
-  invariant,
-  success,
 } from "@fxhash/shared"
+import { type PromiseResult, invariant, success } from "@fxhash/utils"
 import { useModal } from "connectkit"
 import { Subject } from "rxjs"
 import { first } from "rxjs/operators"

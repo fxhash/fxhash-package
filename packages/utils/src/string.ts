@@ -26,3 +26,22 @@ export function truncateMiddle(
 
   return `${start}${ellipsis}${end}`
 }
+
+/**
+ * Generates a *unique* string ID, using `Date.now()` and `Math.random()`. IDs
+ * may not have the same length.
+ *
+ * **Warning: not cryptographically secure!**
+ *
+ * @returns A *unique* string ID
+ */
+export function uniqueId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2)
+}
+
+/**
+ * Splits a string in 2 sections at a given index, and returns these 2 sections.
+ */
+export function splitStringAt(str: string, index: number): [string, string] {
+  return [str.slice(0, index), str.slice(index)]
+}

@@ -3,9 +3,6 @@ import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   InsufficientFundsError,
   TransactionRevertedError,
   TransactionReceiptError,
@@ -14,8 +11,8 @@ import {
   BlockchainType,
   WalletConnectionErrorReason,
   WalletConnectionError,
-  invariant,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success, invariant } from "@fxhash/utils"
 import {
   Account,
   Chain,
@@ -56,6 +53,8 @@ import {
 } from "@wagmi/core"
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 */
+
+export type { PrivateKeyAccount }
 
 export function clientToSigner(
   client: Client<Transport, Chain, Account>
@@ -230,7 +229,6 @@ export class EthereumWalletManager extends WalletManager {
       return failure(new PendingSigningRequestError())
     }
     this.signingInProgress = true
-
     try {
       let signature
       if (this.ethersAdapterForSafe) {
@@ -456,6 +454,8 @@ export class EthereumWalletManager extends WalletManager {
       })
       return success()
     } catch (error) {
+      console.log("error when switching chains:")
+      console.log(error)
       // Do nothing as we return an error below
     }
     return failure(

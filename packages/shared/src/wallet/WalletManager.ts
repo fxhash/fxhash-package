@@ -1,4 +1,4 @@
-import { PromiseResult, success } from "../Result"
+import { PromiseResult, success } from "@fxhash/utils"
 import { BlockchainType, TContractOperation } from "./ContractOperation"
 import { WalletCache } from "./WalletCache"
 
