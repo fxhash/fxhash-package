@@ -1,0 +1,40 @@
+{
+  "name": "@fxhash/errors",
+  "description": "Application-wide errors which are exposed and used by different parts of our stack.",
+  "version": "0.0.9",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/utils": "workspace:*",
+    "@urql/core": "4.1.4"
+  },
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/node": "18.7.13",
+    "tslib": "2.6.2",
+    "tsup": "8.2.4",
+    "typescript": "5.3.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

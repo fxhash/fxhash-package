@@ -53,6 +53,7 @@ export {
   fxhashConfig,
   devConfig,
   prdConfig,
+  localConfig,
   config,
   setConfig,
   type IEthApis,
@@ -70,5 +71,7 @@ export {
 
 export * from "./types"
 export * from "./helpers"
+
+export { type IAppMetadata, isAppMetadataValid } from "./config/metadata"
 
 export default fxhashConfig

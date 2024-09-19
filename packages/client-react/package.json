@@ -1,0 +1,49 @@
+{
+  "name": "@fxhash/client-react",
+  "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "input-otp": "1.2.4"
+  },
+  "devDependencies": {
+    "@fxhash/sdk": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.2.18",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "tsup": "8.2.4",
+    "typescript": "5.3.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "peerDependencies": {
+    "@fxhash/sdk": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@react-oauth/google": "0.12.1",
+    "react": "18.2.0",
+    "react-dom": "^18.2.0",
+    "react-otp-input": "3.1.1",
+    "solid-js": "^1.8.0"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

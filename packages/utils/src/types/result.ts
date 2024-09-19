@@ -65,7 +65,7 @@ class Failure<E> {
   }
 }
 
-export type { Success, Failure }
+export { Success, Failure }
 
 /**
  * An `IEquatableError` is an error that can be compared by name.

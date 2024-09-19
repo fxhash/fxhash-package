@@ -288,6 +288,23 @@ input AccountStatus_comparison_exp {
 }
 
 """
+aggregated selection of "Account"
+"""
+type Account_aggregate {
+  aggregate: Account_aggregate_fields
+  nodes: [Account!]!
+}
+
+"""
+aggregate fields of "Account"
+"""
+type Account_aggregate_fields {
+  count(columns: [Account_select_column!], distinct: Boolean): Int!
+  max: Account_max_fields
+  min: Account_min_fields
+}
+
+"""
 Boolean expression to filter rows from the table "Account". All fields are combined with a logical 'AND'.
 """
 input Account_bool_exp {
@@ -304,6 +321,24 @@ input Account_bool_exp {
   status: AccountStatus_comparison_exp
   username: String_comparison_exp
   wallets: Wallet_bool_exp
+}
+
+"""
+aggregate max on columns
+"""
+type Account_max_fields {
+  id: uuid
+  status: AccountStatus
+  username: String
+}
+
+"""
+aggregate min on columns
+"""
+type Account_min_fields {
+  id: uuid
+  status: AccountStatus
+  username: String
 }
 
 """
@@ -517,6 +552,11 @@ input AuthenticationInput {
 type AuthenticationResult {
   accessToken: String!
   refreshToken: String!
+}
+
+input AuthenticationWeb3AuthInput {
+  compressedPublicKey: String!
+  token: String!
 }
 
 scalar BlockchainNetwork
@@ -787,6 +827,22 @@ enum EWalletOperatorState {
   INITIALIZING
   PREPARING
   WAITING_CONFIRMATION
+}
+
+type EstimateEvmTransactionError {
+  message: String!
+  revertReason: String
+}
+
+input EstimateEvmTransactionInput {
+  chainId: String!
+  transactions: [EvmTransactionInput!]!
+}
+
+type EstimateEvmTransactionOutput {
+  changes: [EvmTransactionChanges!]!
+  error: EstimateEvmTransactionError
+  gasUsed: String
 }
 
 """
@@ -1212,6 +1268,23 @@ input EventStatus_comparison_exp {
 }
 
 """
+aggregated selection of "Event"
+"""
+type Event_aggregate {
+  aggregate: Event_aggregate_fields
+  nodes: [Event!]!
+}
+
+"""
+aggregate fields of "Event"
+"""
+type Event_aggregate_fields {
+  count(columns: [Event_select_column!], distinct: Boolean): Int!
+  max: Event_max_fields
+  min: Event_min_fields
+}
+
+"""
 Boolean expression to filter rows from the table "Event". All fields are combined with a logical 'AND'.
 """
 input Event_bool_exp {
@@ -1242,6 +1315,52 @@ input Event_bool_exp {
   thumbnailMedia: Media_bool_exp
   thumbnailMediaId: uuid_comparison_exp
   updatedAt: timestamp_comparison_exp
+}
+
+"""
+aggregate max on columns
+"""
+type Event_max_fields {
+  availabilities: [EventAvailability!]
+  createdAt: timestamp
+  description: String
+  endsAt: timestamp
+  headerMediaId: uuid
+  id: String
+  imageUrl: String
+  labelIds: [Int!]
+  location: String
+  mintPageUrl: String
+  name: String
+  partnerMediaId: uuid
+  projectIds: [String!]
+  startsAt: timestamp
+  status: EventStatus
+  thumbnailMediaId: uuid
+  updatedAt: timestamp
+}
+
+"""
+aggregate min on columns
+"""
+type Event_min_fields {
+  availabilities: [EventAvailability!]
+  createdAt: timestamp
+  description: String
+  endsAt: timestamp
+  headerMediaId: uuid
+  id: String
+  imageUrl: String
+  labelIds: [Int!]
+  location: String
+  mintPageUrl: String
+  name: String
+  partnerMediaId: uuid
+  projectIds: [String!]
+  startsAt: timestamp
+  status: EventStatus
+  thumbnailMediaId: uuid
+  updatedAt: timestamp
 }
 
 """
@@ -1406,6 +1525,31 @@ input Event_stream_cursor_value_input {
   status: EventStatus
   thumbnailMediaId: uuid
   updatedAt: timestamp
+}
+
+type EvmTransactionChanges {
+  amount: String
+  assetType: String
+  changeType: String!
+  contractAddress: String!
+  decimals: Int
+  from: String!
+  name: String
+  rawAmount: String!
+  symbol: String
+  to: String!
+  tokenId: String
+}
+
+input EvmTransactionInput {
+  data: String
+  from: String!
+  gas: String
+  gasPrice: String
+  maxFeePerGas: String
+  maxPriorityFeePerGas: String
+  to: String
+  value: String
 }
 
 """
@@ -3375,9 +3519,7 @@ input String_comparison_exp {
 }
 
 input UnlinkWalletInput {
-  id: String!
-  publicKey: String
-  signature: String!
+  address: String!
 }
 
 """
@@ -3579,6 +3721,30 @@ input Wallet_stream_cursor_value_input {
   accountId: uuid
   address: String
   network: BlockchainNetwork
+}
+
+input Web3AuthEmailAuthOTPInput {
+  email: String!
+  otp: String!
+}
+
+type Web3AuthEmailAuthOTPOutput {
+  idToken: String!
+}
+
+type Web3AuthEmailRequestOTPOutput {
+  attemptsLeft: Int!
+  email: String!
+  expires: String!
+}
+
+input Web3AuthOAuthInput {
+  provider: String!
+  token: String!
+}
+
+type Web3AuthOAuthOutput {
+  idToken: String!
 }
 
 """
@@ -3869,6 +4035,11 @@ type action {
   """
   issuer: user
   issuer_id: String
+
+  """
+  An object relationship
+  """
+  issuer_wallet: foreign_wallet
   metadata(
     """
     JSON select path
@@ -3994,6 +4165,7 @@ input action_bool_exp {
   id: uuid_comparison_exp
   issuer: user_bool_exp
   issuer_id: String_comparison_exp
+  issuer_wallet: foreign_wallet_bool_exp
   metadata: jsonb_comparison_exp
   numeric_value: numeric_comparison_exp
   objkt: objkt_bool_exp
@@ -4104,6 +4276,7 @@ input action_order_by {
   id: order_by
   issuer: user_order_by
   issuer_id: order_by
+  issuer_wallet: foreign_wallet_order_by
   metadata: order_by
   numeric_value: order_by
   objkt: objkt_order_by
@@ -4478,6 +4651,36 @@ type article {
   ): [article_ledger!]!
 
   """
+  An aggregate relationship
+  """
+  article_ledgers_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   An array relationship
   """
   article_revisions(
@@ -4639,6 +4842,11 @@ type article {
   An object relationship
   """
   user: user!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
 }
 
 """
@@ -4739,6 +4947,7 @@ input article_bool_exp {
   actions_aggregate: action_aggregate_bool_exp
   article_generative_tokens: article_generative_token_bool_exp
   article_ledgers: article_ledger_bool_exp
+  article_ledgers_aggregate: article_ledger_aggregate_bool_exp
   article_revisions: article_revision_bool_exp
   artifact_uri: String_comparison_exp
   author_id: String_comparison_exp
@@ -4769,6 +4978,7 @@ input article_bool_exp {
   title: String_comparison_exp
   transactions: transaction_bool_exp
   user: user_bool_exp
+  wallet: foreign_wallet_bool_exp
 }
 
 scalar article_flag_enum
@@ -4978,6 +5188,47 @@ type article_ledger {
   An object relationship
   """
   user: user!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
+}
+
+"""
+aggregated selection of "article_ledger"
+"""
+type article_ledger_aggregate {
+  aggregate: article_ledger_aggregate_fields
+  nodes: [article_ledger!]!
+}
+
+input article_ledger_aggregate_bool_exp {
+  count: article_ledger_aggregate_bool_exp_count
+}
+
+input article_ledger_aggregate_bool_exp_count {
+  arguments: [article_ledger_select_column!]
+  distinct: Boolean
+  filter: article_ledger_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "article_ledger"
+"""
+type article_ledger_aggregate_fields {
+  avg: article_ledger_avg_fields
+  count(columns: [article_ledger_select_column!], distinct: Boolean): Int!
+  max: article_ledger_max_fields
+  min: article_ledger_min_fields
+  stddev: article_ledger_stddev_fields
+  stddev_pop: article_ledger_stddev_pop_fields
+  stddev_samp: article_ledger_stddev_samp_fields
+  sum: article_ledger_sum_fields
+  var_pop: article_ledger_var_pop_fields
+  var_samp: article_ledger_var_samp_fields
+  variance: article_ledger_variance_fields
 }
 
 """
@@ -4995,6 +5246,14 @@ input article_ledger_aggregate_order_by {
   var_pop: article_ledger_var_pop_order_by
   var_samp: article_ledger_var_samp_order_by
   variance: article_ledger_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type article_ledger_avg_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5017,6 +5276,16 @@ input article_ledger_bool_exp {
   article_id: Int_comparison_exp
   owner_id: String_comparison_exp
   user: user_bool_exp
+  wallet: foreign_wallet_bool_exp
+}
+
+"""
+aggregate max on columns
+"""
+type article_ledger_max_fields {
+  amount: bigint
+  article_id: Int
+  owner_id: String
 }
 
 """
@@ -5026,6 +5295,15 @@ input article_ledger_max_order_by {
   amount: order_by
   article_id: order_by
   owner_id: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type article_ledger_min_fields {
+  amount: bigint
+  article_id: Int
+  owner_id: String
 }
 
 """
@@ -5046,6 +5324,7 @@ input article_ledger_order_by {
   article_id: order_by
   owner_id: order_by
   user: user_order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -5069,6 +5348,14 @@ enum article_ledger_select_column {
 }
 
 """
+aggregate stddev on columns
+"""
+type article_ledger_stddev_fields {
+  amount: Float
+  article_id: Float
+}
+
+"""
 order by stddev() on columns of table "article_ledger"
 """
 input article_ledger_stddev_order_by {
@@ -5077,11 +5364,27 @@ input article_ledger_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type article_ledger_stddev_pop_fields {
+  amount: Float
+  article_id: Float
+}
+
+"""
 order by stddev_pop() on columns of table "article_ledger"
 """
 input article_ledger_stddev_pop_order_by {
   amount: order_by
   article_id: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type article_ledger_stddev_samp_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5117,11 +5420,27 @@ input article_ledger_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type article_ledger_sum_fields {
+  amount: bigint
+  article_id: Int
+}
+
+"""
 order by sum() on columns of table "article_ledger"
 """
 input article_ledger_sum_order_by {
   amount: order_by
   article_id: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type article_ledger_var_pop_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5133,11 +5452,27 @@ input article_ledger_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type article_ledger_var_samp_fields {
+  amount: Float
+  article_id: Float
+}
+
+"""
 order by var_samp() on columns of table "article_ledger"
 """
 input article_ledger_var_samp_order_by {
   amount: order_by
   article_id: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type article_ledger_variance_fields {
+  amount: Float
+  article_id: Float
 }
 
 """
@@ -5293,6 +5628,7 @@ input article_order_by {
   title: order_by
   transactions_aggregate: transaction_aggregate_order_by
   user: user_order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -5804,6 +6140,99 @@ input article_variance_order_by {
   editions: order_by
   id: order_by
   royalties: order_by
+}
+
+"""
+columns and relationships of "artist"
+"""
+type artist {
+  """
+  An object relationship
+  """
+  account: foreign_account
+  id: uuid
+}
+
+"""
+aggregated selection of "artist"
+"""
+type artist_aggregate {
+  aggregate: artist_aggregate_fields
+  nodes: [artist!]!
+}
+
+"""
+aggregate fields of "artist"
+"""
+type artist_aggregate_fields {
+  count(columns: [artist_select_column!], distinct: Boolean): Int!
+  max: artist_max_fields
+  min: artist_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "artist". All fields are combined with a logical 'AND'.
+"""
+input artist_bool_exp {
+  _and: [artist_bool_exp!]
+  _not: artist_bool_exp
+  _or: [artist_bool_exp!]
+  account: foreign_account_bool_exp
+  id: uuid_comparison_exp
+}
+
+"""
+aggregate max on columns
+"""
+type artist_max_fields {
+  id: uuid
+}
+
+"""
+aggregate min on columns
+"""
+type artist_min_fields {
+  id: uuid
+}
+
+"""
+Ordering options when selecting data from "artist".
+"""
+input artist_order_by {
+  account: foreign_account_order_by
+  id: order_by
+}
+
+"""
+select columns of table "artist"
+"""
+enum artist_select_column {
+  """
+  column name
+  """
+  id
+}
+
+"""
+Streaming cursor of the table "artist"
+"""
+input artist_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: artist_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input artist_stream_cursor_value_input {
+  id: uuid
 }
 
 """
@@ -6488,6 +6917,89 @@ input auction_variance_order_by {
   min_duration: order_by
   reserve_price: order_by
   version: order_by
+}
+
+"""
+columns and relationships of "squid_processor_base.status"
+"""
+type base_indexer {
+  hash: String
+  height: Int!
+  id: Int!
+  nonce: Int
+}
+
+"""
+Boolean expression to filter rows from the table "squid_processor_base.status". All fields are combined with a logical 'AND'.
+"""
+input base_indexer_bool_exp {
+  _and: [base_indexer_bool_exp!]
+  _not: base_indexer_bool_exp
+  _or: [base_indexer_bool_exp!]
+  hash: String_comparison_exp
+  height: Int_comparison_exp
+  id: Int_comparison_exp
+  nonce: Int_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "squid_processor_base.status".
+"""
+input base_indexer_order_by {
+  hash: order_by
+  height: order_by
+  id: order_by
+  nonce: order_by
+}
+
+"""
+select columns of table "squid_processor_base.status"
+"""
+enum base_indexer_select_column {
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  height
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  nonce
+}
+
+"""
+Streaming cursor of the table "base_indexer"
+"""
+input base_indexer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: base_indexer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input base_indexer_stream_cursor_value_input {
+  hash: String
+  height: Int
+  id: Int
+  nonce: Int
 }
 
 scalar bigint
@@ -7956,6 +8468,212 @@ input float8_comparison_exp {
 }
 
 """
+columns and relationships of "foreign_account"
+"""
+type foreign_account {
+  """
+  A computed field, executes function "get_account_flag"
+  """
+  flag: String
+  id: uuid
+  username: String
+
+  """
+  An array relationship
+  """
+  wallets(
+    """
+    distinct select on columns
+    """
+    distinct_on: [foreign_wallet_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [foreign_wallet_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: foreign_wallet_bool_exp
+  ): [foreign_wallet!]!
+}
+
+"""
+Boolean expression to filter rows from the table "foreign_account". All fields are combined with a logical 'AND'.
+"""
+input foreign_account_bool_exp {
+  _and: [foreign_account_bool_exp!]
+  _not: foreign_account_bool_exp
+  _or: [foreign_account_bool_exp!]
+  flag: String_comparison_exp
+  id: uuid_comparison_exp
+  username: String_comparison_exp
+  wallets: foreign_wallet_bool_exp
+}
+
+"""
+Ordering options when selecting data from "foreign_account".
+"""
+input foreign_account_order_by {
+  flag: order_by
+  id: order_by
+  username: order_by
+  wallets_aggregate: foreign_wallet_aggregate_order_by
+}
+
+"""
+select columns of table "foreign_account"
+"""
+enum foreign_account_select_column {
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  username
+}
+
+"""
+Streaming cursor of the table "foreign_account"
+"""
+input foreign_account_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: foreign_account_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input foreign_account_stream_cursor_value_input {
+  id: uuid
+  username: String
+}
+
+"""
+columns and relationships of "foreign_wallet"
+"""
+type foreign_wallet {
+  """
+  An object relationship
+  """
+  account: foreign_account
+  accountId: uuid
+  address: String
+
+  """
+  An object relationship
+  """
+  user: user
+}
+
+"""
+order by aggregate values of table "foreign_wallet"
+"""
+input foreign_wallet_aggregate_order_by {
+  count: order_by
+  max: foreign_wallet_max_order_by
+  min: foreign_wallet_min_order_by
+}
+
+"""
+Boolean expression to filter rows from the table "foreign_wallet". All fields are combined with a logical 'AND'.
+"""
+input foreign_wallet_bool_exp {
+  _and: [foreign_wallet_bool_exp!]
+  _not: foreign_wallet_bool_exp
+  _or: [foreign_wallet_bool_exp!]
+  account: foreign_account_bool_exp
+  accountId: uuid_comparison_exp
+  address: String_comparison_exp
+  user: user_bool_exp
+}
+
+"""
+order by max() on columns of table "foreign_wallet"
+"""
+input foreign_wallet_max_order_by {
+  accountId: order_by
+  address: order_by
+}
+
+"""
+order by min() on columns of table "foreign_wallet"
+"""
+input foreign_wallet_min_order_by {
+  accountId: order_by
+  address: order_by
+}
+
+"""
+Ordering options when selecting data from "foreign_wallet".
+"""
+input foreign_wallet_order_by {
+  account: foreign_account_order_by
+  accountId: order_by
+  address: order_by
+  user: user_order_by
+}
+
+"""
+select columns of table "foreign_wallet"
+"""
+enum foreign_wallet_select_column {
+  """
+  column name
+  """
+  accountId
+
+  """
+  column name
+  """
+  address
+}
+
+"""
+Streaming cursor of the table "foreign_wallet"
+"""
+input foreign_wallet_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: foreign_wallet_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input foreign_wallet_stream_cursor_value_input {
+  accountId: uuid
+  address: String
+}
+
+"""
 columns and relationships of "generative_token"
 """
 type generative_token {
@@ -8591,7 +9309,7 @@ type generative_token {
   """
   An array relationship
   """
-  splits(
+  splits_primary(
     """
     distinct select on columns
     """
@@ -8621,7 +9339,7 @@ type generative_token {
   """
   An array relationship
   """
-  splitsByGenerativeTokenPrimaryId(
+  splits_secondary(
     """
     distinct select on columns
     """
@@ -8687,6 +9405,11 @@ type generative_token {
   """
   user: user
   version: generative_token_version!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
 }
 
 """
@@ -8850,8 +9573,8 @@ input generative_token_bool_exp {
   reserves: reserve_bool_exp
   royalties: Int_comparison_exp
   slug: String_comparison_exp
-  splits: split_bool_exp
-  splitsByGenerativeTokenPrimaryId: split_bool_exp
+  splits_primary: split_bool_exp
+  splits_secondary: split_bool_exp
   supply: numeric_comparison_exp
   tags: String_array_comparison_exp
   thumbnail_uri: String_comparison_exp
@@ -8859,6 +9582,7 @@ input generative_token_bool_exp {
   updated_at: timestamptz_comparison_exp
   user: user_bool_exp
   version: generative_token_version_comparison_exp
+  wallet: foreign_wallet_bool_exp
 }
 
 """
@@ -9374,8 +10098,8 @@ input generative_token_order_by {
   reserves_aggregate: reserve_aggregate_order_by
   royalties: order_by
   slug: order_by
-  splitsByGenerativeTokenPrimaryId_aggregate: split_aggregate_order_by
-  splits_aggregate: split_aggregate_order_by
+  splits_primary_aggregate: split_aggregate_order_by
+  splits_secondary_aggregate: split_aggregate_order_by
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
@@ -9383,6 +10107,7 @@ input generative_token_order_by {
   updated_at: order_by
   user: user_order_by
   version: order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -13084,6 +13809,13 @@ mutation root
 """
 type mutation_root {
   authenticate(input: AuthenticationInput!): AuthenticationResult
+
+  """
+  Authenticate using a Web3Auth idToken
+  """
+  authenticate_web3auth(
+    input: AuthenticationWeb3AuthInput!
+  ): AuthenticationResult
   generate_challenge(input: ChallengeInput!): ChallengeResult
   link_wallet_to_account(input: LinkWalletInput): Boolean!
 
@@ -13107,6 +13839,23 @@ type mutation_root {
   """
   set_whitelist(whitelist: jsonb!): SetWhitelistOutput
   unlink_wallet_from_account(input: UnlinkWalletInput): Boolean!
+
+  """
+  Use an OTP with an email to issue a JWT for web3auth custom provider validation
+  """
+  web3auth_email_auth_otp(
+    input: Web3AuthEmailAuthOTPInput!
+  ): Web3AuthEmailAuthOTPOutput
+
+  """
+  Request an OTP verification for email verification
+  """
+  web3auth_email_request_otp(input: String!): Web3AuthEmailRequestOTPOutput
+
+  """
+  Use a provider oauth id token to issue a JWT for web3auth custom provider validation
+  """
+  web3auth_oauth(input: Web3AuthOAuthInput!): Web3AuthOAuthOutput
 }
 
 scalar numeric
@@ -13487,6 +14236,11 @@ type objkt {
   ): [transaction!]!
   updated_at: timestamptz
   version: Int!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
 }
 
 """
@@ -13703,6 +14457,7 @@ input objkt_bool_exp {
   transactions: transaction_bool_exp
   updated_at: timestamptz_comparison_exp
   version: Int_comparison_exp
+  wallet: foreign_wallet_bool_exp
 }
 
 """
@@ -13861,6 +14616,7 @@ input objkt_order_by {
   transactions_aggregate: transaction_aggregate_order_by
   updated_at: order_by
   version: order_by
+  wallet: foreign_wallet_order_by
 }
 
 """
@@ -14685,6 +15441,36 @@ type offchain_query {
   AccountRole_by_pk(value: String!): AccountRole
 
   """
+  fetch aggregated fields from the table: "Account"
+  """
+  Account_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Account_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Account_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Account_bool_exp
+  ): Account_aggregate!
+
+  """
   fetch data from the table: "Account" using primary key columns
   """
   Account_by_pk(id: uuid!): Account
@@ -14864,6 +15650,36 @@ type offchain_query {
   fetch data from the table: "EventOnboarding" using primary key columns
   """
   EventOnboarding_by_pk(id: Int!): EventOnboarding
+
+  """
+  fetch aggregated fields from the table: "Event"
+  """
+  Event_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Event_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Event_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Event_bool_exp
+  ): Event_aggregate!
 
   """
   fetch data from the table: "Event" using primary key columns
@@ -15404,6 +16220,36 @@ type offchain_subscription {
   ): [AccountRole!]!
 
   """
+  fetch aggregated fields from the table: "Account"
+  """
+  Account_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Account_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Account_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Account_bool_exp
+  ): Account_aggregate!
+
+  """
   fetch data from the table: "Account" using primary key columns
   """
   Account_by_pk(id: uuid!): Account
@@ -15683,6 +16529,36 @@ type offchain_subscription {
     """
     where: EventOnboarding_bool_exp
   ): [EventOnboarding!]!
+
+  """
+  fetch aggregated fields from the table: "Event"
+  """
+  Event_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Event_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Event_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Event_bool_exp
+  ): Event_aggregate!
 
   """
   fetch data from the table: "Event" using primary key columns
@@ -16909,6 +17785,36 @@ type onchain_query {
   ): [article_ledger!]!
 
   """
+  fetch aggregated fields from the table: "article_ledger"
+  """
+  article_ledger_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   fetch data from the table: "article_ledger" using primary key columns
   """
   article_ledger_by_pk(article_id: Int!, owner_id: String!): article_ledger
@@ -16950,6 +17856,66 @@ type onchain_query {
     article_id: Int!
     iteration: smallint!
   ): article_revision
+
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """
+    distinct select on columns
+    """
+    distinct_on: [artist_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [artist_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [artist_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [artist_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: artist_bool_exp
+  ): artist_aggregate!
 
   """
   fetch data from the table: "auction"
@@ -17055,6 +18021,41 @@ type onchain_query {
   fetch data from the table: "auction" using primary key columns
   """
   auction_by_pk(id: Int!, version: Int!): auction
+
+  """
+  fetch data from the table: "squid_processor_base.status"
+  """
+  base_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [base_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [base_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: base_indexer_bool_exp
+  ): [base_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor_base.status" using primary key columns
+  """
+  base_indexer_by_pk(id: Int!): base_indexer
 
   """
   fetch data from the table: "codex"
@@ -17404,6 +18405,66 @@ type onchain_query {
   fetch data from the table: "eth_user_proceeds" using primary key columns
   """
   eth_user_proceeds_by_pk(id: String!): eth_user_proceeds
+
+  """
+  fetch data from the table: "foreign_account"
+  """
+  foreign_account(
+    """
+    distinct select on columns
+    """
+    distinct_on: [foreign_account_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [foreign_account_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: foreign_account_bool_exp
+  ): [foreign_account!]!
+
+  """
+  fetch data from the table: "foreign_wallet"
+  """
+  foreign_wallet(
+    """
+    distinct select on columns
+    """
+    distinct_on: [foreign_wallet_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [foreign_wallet_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: foreign_wallet_bool_exp
+  ): [foreign_wallet!]!
 
   """
   fetch data from the table: "generative_token"
@@ -18706,6 +19767,36 @@ type onchain_subscription {
   ): [article_ledger!]!
 
   """
+  fetch aggregated fields from the table: "article_ledger"
+  """
+  article_ledger_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   fetch data from the table: "article_ledger" using primary key columns
   """
   article_ledger_by_pk(article_id: Int!, owner_id: String!): article_ledger
@@ -18807,6 +19898,86 @@ type onchain_subscription {
     """
     where: article_bool_exp
   ): [article!]!
+
+  """
+  fetch data from the table: "artist"
+  """
+  artist(
+    """
+    distinct select on columns
+    """
+    distinct_on: [artist_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [artist_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: artist_bool_exp
+  ): [artist!]!
+
+  """
+  fetch aggregated fields from the table: "artist"
+  """
+  artist_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [artist_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [artist_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: artist_bool_exp
+  ): artist_aggregate!
+
+  """
+  fetch data from the table in a streaming manner: "artist"
+  """
+  artist_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [artist_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: artist_bool_exp
+  ): [artist!]!
 
   """
   fetch data from the table: "auction"
@@ -18972,6 +20143,61 @@ type onchain_subscription {
     """
     where: auction_bool_exp
   ): [auction!]!
+
+  """
+  fetch data from the table: "squid_processor_base.status"
+  """
+  base_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [base_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [base_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: base_indexer_bool_exp
+  ): [base_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor_base.status" using primary key columns
+  """
+  base_indexer_by_pk(id: Int!): base_indexer
+
+  """
+  fetch data from the table in a streaming manner: "squid_processor_base.status"
+  """
+  base_indexer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [base_indexer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: base_indexer_bool_exp
+  ): [base_indexer!]!
 
   """
   fetch data from the table: "codex"
@@ -19521,6 +20747,106 @@ type onchain_subscription {
     """
     where: eth_user_proceeds_bool_exp
   ): [eth_user_proceeds!]!
+
+  """
+  fetch data from the table: "foreign_account"
+  """
+  foreign_account(
+    """
+    distinct select on columns
+    """
+    distinct_on: [foreign_account_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [foreign_account_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: foreign_account_bool_exp
+  ): [foreign_account!]!
+
+  """
+  fetch data from the table in a streaming manner: "foreign_account"
+  """
+  foreign_account_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [foreign_account_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: foreign_account_bool_exp
+  ): [foreign_account!]!
+
+  """
+  fetch data from the table: "foreign_wallet"
+  """
+  foreign_wallet(
+    """
+    distinct select on columns
+    """
+    distinct_on: [foreign_wallet_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [foreign_wallet_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: foreign_wallet_bool_exp
+  ): [foreign_wallet!]!
+
+  """
+  fetch data from the table in a streaming manner: "foreign_wallet"
+  """
+  foreign_wallet_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [foreign_wallet_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: foreign_wallet_bool_exp
+  ): [foreign_wallet!]!
 
   """
   fetch data from the table: "generative_token"
@@ -21574,6 +22900,12 @@ input pricing_fixed_variance_order_by {
 }
 
 type query_root {
+  """
+  Simulates an EVM transaction and returns the simulation results.
+  """
+  estimate_evm_transaction(
+    input: EstimateEvmTransactionInput!
+  ): EstimateEvmTransactionOutput
   mailTemplates: [MailTemplate!]!
   managedWalletState(publicKey: String!): EWalletOperatorState!
   mediaFullUrl(s3key: String!): String!
@@ -23306,6 +24638,36 @@ type user {
   ): [article_ledger!]!
 
   """
+  An aggregate relationship
+  """
+  article_ledgers_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [article_ledger_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [article_ledger_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: article_ledger_bool_exp
+  ): article_ledger_aggregate!
+
+  """
   An array relationship
   """
   articles(
@@ -23991,6 +25353,7 @@ input user_bool_exp {
   actionsByIssuerId_aggregate: action_aggregate_bool_exp
   actions_aggregate: action_aggregate_bool_exp
   article_ledgers: article_ledger_bool_exp
+  article_ledgers_aggregate: article_ledger_aggregate_bool_exp
   articles: article_bool_exp
   articles_aggregate: article_aggregate_bool_exp
   auction_bids: auction_bid_bool_exp
