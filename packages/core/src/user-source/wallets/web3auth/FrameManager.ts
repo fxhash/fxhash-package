@@ -48,6 +48,8 @@ export type Web3AuthFrameConfig = {
 type TMessages = Web3AuthFrameMessageTypes
 
 /**
+ * @internal
+ *
  * Responsible for managing the `<iframe>` which holds the fxhash wallet. Acts
  * as a high level interface to send/receives message to/from the fxhash wallet.
  *

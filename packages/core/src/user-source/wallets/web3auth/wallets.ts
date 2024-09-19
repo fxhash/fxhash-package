@@ -12,14 +12,12 @@ import {
   type IWeb3AuthWalletsSource,
   type IWeb3AuthWalletUtil,
 } from "./_interfaces.js"
-import { cleanup, failure, intialization, success } from "@fxhash/utils"
+import { cleanup, intialization } from "@fxhash/utils"
 import { type IGraphqlWrapper, UserSourceEventEmitter } from "@/index.js"
 import { Mu_Web3AuthEmailRequestOTP } from "@fxhash/gql"
 import {
   EmailOTPRequestErrors,
-  UnexpectedRichError,
   richResultFromGraphQLResponse,
-  typedRichErrorFromGraphQLError,
 } from "@fxhash/errors"
 
 type Options = {
