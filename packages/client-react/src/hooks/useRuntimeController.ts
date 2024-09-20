@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useMemo, useRef, useState } from "react"
 import {
   ProjectState,
-  RuntimeControllerOptions,
+  IRuntimeControllerOptions,
   IRuntimeContext,
   IRuntimeController,
   createRuntimeController,
@@ -11,7 +11,7 @@ import {
 type UseRuntimeController = (params: {
   iframeRef: RefObject<HTMLIFrameElement>
   state: ProjectState
-  options?: RuntimeControllerOptions
+  options?: IRuntimeControllerOptions
 }) => {
   controller: IRuntimeController
   runtime?: IRuntimeContext

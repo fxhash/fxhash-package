@@ -74,9 +74,8 @@ export type Either<T, U> = Only<T, U> | Only<U, T>
  *
  * type PartialPerson = DeepPartial<Person>;
  *
- * const update: DeepPartial<Person> = { address: { city: "New York" } } // ok
- * const update: DeepPartial<Person> = { address: { city: "New York" }, name: "John" } // ok
- * const update: DeepPartial<Person> = { address: { city: "New York" }, name: "John", age: 30, unknown: true } // Error: Object literal may only specify known properties, and 'unknown' does not exist in type 'DeepPartial<Person>'.
+ * const valid_update: DeepPartial<Person> = { address: { city: "New York" }, name: "John" } // ok
+ * const invalid_update: DeepPartial<Person> = { address: { city: "New York" }, name: "John", age: 30, unknown: true } // Error: Object literal may only specify known properties, and 'unknown' does not exist in type 'DeepPartial<Person>'.
  *```
  */
 

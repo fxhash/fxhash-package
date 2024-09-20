@@ -55,25 +55,26 @@ const DEFAULT_RUNTIME_OPTIONS = {
   connector: iframeConnector,
 }
 
-export interface RuntimeControllerOptions {
+export interface IRuntimeControllerOptions {
   autoRefresh?: boolean
   connector?: RuntimeConnector
 }
 
-export interface RuntimeControllerParams {
+export interface IRuntimeControllerParams {
   state: ProjectState
-  options?: RuntimeControllerOptions
+  options?: IRuntimeControllerOptions
 }
 
 /**
  * The runtime controller is the main controller for the runtime.
- * It holds the state of the runtime and the controls and keeps the iframe in sync with the state.
+ * It holds the state of the runtime and the controls and keeps
+ * iframe in sync with the state.
  * @param params - initial state of the runtime and options
- * @returns RuntimeController - Which exposes the runtime, controls, init, release, getUrl, hardSync, updateControls and an event emitter
+ * @returns RuntimeController - Which exposes the runtime, controls, init,
+ * release, getUrl, hardSync, updateControls and an event emitter
  */
-
 export function createRuntimeController(
-  params: RuntimeControllerParams
+  params: IRuntimeControllerParams
 ): IRuntimeController {
   const clean = cleanup()
 
