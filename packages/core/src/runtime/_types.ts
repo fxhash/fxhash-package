@@ -1,5 +1,6 @@
 import { BlockchainType, RawTokenFeatures } from "@fxhash/shared"
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
+import { DeepPartial } from "@fxhash/utils"
 
 export type RuntimeConnector = () => {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) => string
@@ -42,13 +43,7 @@ export type RuntimeWholeState = {
   definition: RuntimeDefinition
 }
 
-export type DeepPartialState<T> = T extends object
-  ? {
-      [P in keyof T]?: DeepPartialState<T[P]>
-    }
-  : T
-
-export type TUpdateStateFn<T, R> = (data: DeepPartialState<T>) => R
+export type TUpdateStateFn<T, R> = (data: DeepPartial<T>) => R
 
 export type TUpdateableState<T, R> = T & {
   update: TUpdateStateFn<T, R>

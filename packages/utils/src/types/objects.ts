@@ -53,3 +53,35 @@ type Only<T, U> = {
  * ```
  */
 export type Either<T, U> = Only<T, U> | Only<U, T>
+
+/**
+ * Creates a deep partial type from a given type T.
+ *
+ * This type recursively makes all properties of T optional, including nested objects.
+ * For non-object types, it returns the original type.
+ *
+ * @example
+ *
+ * ```ts
+ * type Person = {
+ *   name: string;
+ *   age: number;
+ *   address: {
+ *     street: string;
+ *     city: string;
+ *   };
+ * };
+ *
+ * type PartialPerson = DeepPartial<Person>;
+ *
+ * const update: DeepPartial<Person> = { address: { city: "New York" } } // ok
+ * const update: DeepPartial<Person> = { address: { city: "New York" }, name: "John" } // ok
+ * const update: DeepPartial<Person> = { address: { city: "New York" }, name: "John", age: 30, unknown: true } // Error: Object literal may only specify known properties, and 'unknown' does not exist in type 'DeepPartial<Person>'.
+ *```
+ */
+
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>
+    }
+  : T
