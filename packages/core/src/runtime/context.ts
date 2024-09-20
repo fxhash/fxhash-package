@@ -17,7 +17,7 @@ import {
   hashRuntimeState,
   mergeWithKeepingUint8ArrayType,
 } from "./utils.js"
-import { RuntimeContext, RuntimeContextEventEmitter } from "./_interfaces.js"
+import { IRuntimeContext, RuntimeContextEventEmitter } from "./_interfaces.js"
 
 export interface RuntimeParams {
   state?: Partial<RuntimeState>
@@ -30,7 +30,7 @@ export interface RuntimeParams {
  * @returns RuntimeContext - Which exoses the state, definition, update method and an event emitter
  */
 
-export function runtimeContext(initial: RuntimeParams): RuntimeContext {
+export function runtimeContext(initial: RuntimeParams): IRuntimeContext {
   const emitter = new RuntimeContextEventEmitter()
 
   let _runtime: RuntimeWholeState = {
@@ -60,7 +60,7 @@ export function runtimeContext(initial: RuntimeParams): RuntimeContext {
 
   const updateState: TUpdateStateFn<
     RuntimeState,
-    RuntimeContext
+    IRuntimeContext
   > = newState => {
     _runtime.state = mergeWithKeepingUint8ArrayType(
       cloneDeep(_runtime.state),
@@ -73,7 +73,7 @@ export function runtimeContext(initial: RuntimeParams): RuntimeContext {
 
   const updateDefinition: TUpdateStateFn<
     RuntimeDefinition,
-    RuntimeContext
+    IRuntimeContext
   > = newDefinition => {
     _runtime.definition = mergeWithKeepingUint8ArrayType(
       cloneDeep(_runtime.definition),
@@ -84,7 +84,7 @@ export function runtimeContext(initial: RuntimeParams): RuntimeContext {
     return res
   }
 
-  const update: TUpdateStateFn<RuntimeWholeState, RuntimeContext> = data => {
+  const update: TUpdateStateFn<RuntimeWholeState, IRuntimeContext> = data => {
     _runtime = mergeWithKeepingUint8ArrayType(cloneDeep(_runtime), data)
     const res = getFullContext()
     emitter.emit("context-changed", res)
@@ -124,7 +124,7 @@ export function runtimeContext(initial: RuntimeParams): RuntimeContext {
     }
   }
 
-  function getFullContext(): RuntimeContext {
+  function getFullContext(): IRuntimeContext {
     return {
       state: {
         ...getState(),

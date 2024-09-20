@@ -9,10 +9,10 @@ import { iframeConnector } from "./connectors.js"
 import { ProjectState, RuntimeConnector } from "./_types.js"
 import { FxParamsData, buildParamsObject } from "@fxhash/params"
 import {
-  RuntimeContext,
-  RuntimeController,
+  IRuntimeContext,
+  IRuntimeController,
   RuntimeControllerEventEmitter,
-  RuntimeControls,
+  IRuntimeControls,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import { debounce } from "lodash"
@@ -21,7 +21,7 @@ import { debounce } from "lodash"
  * This function is used to handle old snippet events
  */
 
-function handleOldSnippetEvents(e: any, runtime: RuntimeContext) {
+function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
   if (e.data) {
     if (e.data.id === "fxhash_getHash") {
       if (e.data.data) {
@@ -86,7 +86,7 @@ export interface RuntimeControllerParams {
 
 export function createRuntimeController(
   params: RuntimeControllerParams
-): RuntimeController {
+): IRuntimeController {
   const clean = cleanup()
 
   const { options, state } = params
@@ -111,7 +111,7 @@ export function createRuntimeController(
 
   _runtime.emitter.on("context-changed", _handleContextChange)
 
-  function _handleContextChange(runtime: RuntimeContext) {
+  function _handleContextChange(runtime: IRuntimeContext) {
     // If definition or state hash changed, sync the iframe
     if (runtime.details.stateHash.hard !== _runtime.details.stateHash.hard) {
       syncIframe(runtime)
@@ -133,7 +133,7 @@ export function createRuntimeController(
 
   _controls.emitter.on("controls-changed", _handleControlsChange)
 
-  function _handleControlsChange(controls: RuntimeControls) {
+  function _handleControlsChange(controls: IRuntimeControls) {
     _controls = controls
     emitter.emit("controls-changed", controls)
   }
@@ -245,7 +245,7 @@ export function createRuntimeController(
     return runtimeOptions.connector()
   }
 
-  function getUrl(runtime: RuntimeContext) {
+  function getUrl(runtime: IRuntimeContext) {
     return getConnector().getUrl({
       cid: state.cid,
       hash: runtime.state.hash,
@@ -258,7 +258,7 @@ export function createRuntimeController(
     })
   }
 
-  function syncIframe(runtime: RuntimeContext) {
+  function syncIframe(runtime: IRuntimeContext) {
     invariant(_iframe, "_iframe is required")
     getConnector().useSync(_iframe, getUrl(runtime))
   }

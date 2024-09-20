@@ -2,10 +2,10 @@ import { RefObject, useEffect, useMemo, useRef, useState } from "react"
 import {
   ProjectState,
   RuntimeControllerOptions,
-  RuntimeContext,
-  RuntimeController,
+  IRuntimeContext,
+  IRuntimeController,
   createRuntimeController,
-  RuntimeControls,
+  IRuntimeControls,
 } from "@fxhash/sdk"
 
 type UseRuntimeController = (params: {
@@ -13,9 +13,9 @@ type UseRuntimeController = (params: {
   state: ProjectState
   options?: RuntimeControllerOptions
 }) => {
-  controller: RuntimeController
-  runtime?: RuntimeContext
-  controls?: RuntimeControls
+  controller: IRuntimeController
+  runtime?: IRuntimeContext
+  controls?: IRuntimeControls
   restart: (iframe: HTMLIFrameElement) => void
 }
 
@@ -24,7 +24,7 @@ export const useRuntimeController: UseRuntimeController = ({
   state,
   options,
 }) => {
-  const controllerRef = useRef<RuntimeController>(
+  const controllerRef = useRef<IRuntimeController>(
     createRuntimeController({
       state,
       options: {
@@ -32,8 +32,8 @@ export const useRuntimeController: UseRuntimeController = ({
       },
     })
   )
-  const [runtime, setRuntime] = useState<RuntimeContext>()
-  const [controls, setControls] = useState<RuntimeControls>()
+  const [runtime, setRuntime] = useState<IRuntimeContext>()
+  const [controls, setControls] = useState<IRuntimeControls>()
 
   useEffect(() => {
     if (!iframeRef.current) return

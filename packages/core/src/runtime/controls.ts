@@ -1,12 +1,9 @@
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
 import { cloneDeep } from "lodash"
-import {
-  ControlState,
-  RuntimeControls,
-  RuntimeControlsEventEmitter,
-} from "./_interfaces.js"
+import { IRuntimeControls, RuntimeControlsEventEmitter } from "./_interfaces.js"
 import { serializeParamsOrNull } from "@fxhash/params"
 import { mergeWithKeepingUint8ArrayType } from "./utils.js"
+import { ControlState } from "./_types.js"
 
 const DEFAULT_CONTROL_STATE: ControlState = {
   params: {
@@ -22,7 +19,7 @@ const DEFAULT_CONTROL_STATE: ControlState = {
  */
 export function runtimeControls(
   initial: ControlState = DEFAULT_CONTROL_STATE
-): RuntimeControls {
+): IRuntimeControls {
   const emitter = new RuntimeControlsEventEmitter()
   let _controls: ControlState = initial
 
@@ -41,7 +38,7 @@ export function runtimeControls(
     return res
   }
 
-  function getRuntimeControl(): RuntimeControls {
+  function getRuntimeControl(): IRuntimeControls {
     return {
       state: _controls,
       update,

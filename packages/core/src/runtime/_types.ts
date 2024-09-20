@@ -28,6 +28,13 @@ export type ProjectState = {
   context?: ExecutionContext
 }
 
+export type ControlState = {
+  params: {
+    definition: FxParamDefinitions | null
+    values: FxParamsData
+  }
+}
+
 export type RuntimeState = Omit<ProjectState, "cid" | "snippetVersion"> & {
   params: FxParamsData
 }
