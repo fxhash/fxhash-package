@@ -22,46 +22,34 @@ import { debounce } from "lodash"
  */
 
 function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
-  if (e.data) {
-    if (e.data.id === "fxhash_getHash") {
+  if (!e.data || !e.data.id) return
+
+  switch (e.data.id) {
+    case "fxhash_getHash":
       if (e.data.data) {
         runtime.state.update({ hash: e.data.data })
       }
-    }
-    if (e.data.id === "fxhash_getFeatures") {
-      if (e.data.data) {
-        runtime.definition.update({ features: e.data.data })
-      } else {
-        runtime.definition.update({ features: null })
-      }
-    }
-    if (e.data.id === "fxhash_getParams") {
-      if (e.data.data) {
-        const { definitions, values } = e.data.data
-        if (definitions) {
-          runtime.update({
-            state: {
-              params: values,
-            },
-            definition: {
-              params: definitions,
-            },
-          })
-        }
+      break
+
+    case "fxhash_getFeatures":
+      runtime.definition.update({ features: e.data.data || null })
+      break
+
+    case "fxhash_getParams":
+      if (e.data.data?.definitions) {
+        runtime.update({
+          state: { params: e.data.data.values },
+          definition: { params: e.data.data.definitions },
+        })
       } else {
         runtime.update({
-          state: {
-            params: {},
-          },
-          definition: {
-            params: null,
-          },
+          state: { params: {} },
+          definition: { params: null },
         })
       }
-    }
+      break
   }
 }
-
 const DEFAULT_RUNTIME_OPTIONS = {
   autoRefresh: false,
   connector: iframeConnector,
