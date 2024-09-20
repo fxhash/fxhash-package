@@ -43,7 +43,7 @@ export function getURLSearchParams(
   return paramsString
 }
 
-export const iframeConnector: RuntimeConnector = iframe => ({
+export const iframeConnector: RuntimeConnector = () => ({
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) => {
     const { cid, snippetVersion, ...projectState } = state
     const baseUrl = proxyUrl(cid)
@@ -51,25 +51,25 @@ export const iframeConnector: RuntimeConnector = iframe => ({
       additionalParams: urlParams,
       fxParamsAsQueryParams: fxParamsAsQueryParams(snippetVersion),
     })
-    return `${baseUrl}?${params}`
+    return `${baseUrl}/?${params}`
   },
-  useSync: (runtimeUrl: string) => {
+  useSync: (iframe: HTMLIFrameElement, runtimeUrl: string) => {
     iframe.contentWindow?.location.replace(runtimeUrl)
   },
 })
 
-export const fsEmulatorConnector: RuntimeConnector = iframe => ({
+export const fsEmulatorConnector: RuntimeConnector = () => ({
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) => {
     const { cid, snippetVersion, ...projectState } = state
-    const baseUrl = `${config.apis.fsEmulator}/resolve/${cid}/`
+    const baseUrl = `${config.apis.fsEmulator}/resolve/${cid}`
     const params = getURLSearchParams(projectState, {
       additionalParams: urlParams,
       fxParamsAsQueryParams: fxParamsAsQueryParams(snippetVersion),
     })
 
-    return `${baseUrl}?${params}`
+    return `${baseUrl}/?${params}`
   },
-  useSync: (runtimeUrl: string) => {
+  useSync: (iframe: HTMLIFrameElement, runtimeUrl: string) => {
     iframe.contentWindow?.location.replace(runtimeUrl)
   },
 })

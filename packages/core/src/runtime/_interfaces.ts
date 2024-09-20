@@ -32,6 +32,7 @@ export interface RuntimeController {
   controls: RuntimeControls
   init: (iframe: HTMLIFrameElement) => void
   release: () => void
+  restart: (iframe: HTMLIFrameElement) => void
   getUrl: () => string
   hardSync: () => void
   updateControls: (

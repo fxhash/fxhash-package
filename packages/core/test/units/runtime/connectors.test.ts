@@ -79,18 +79,8 @@ describe("getURLSearchParams", () => {
   })
 })
 
-const createMockIframe = () => ({
-  contentWindow: {
-    location: {
-      replace: vi.fn(),
-    },
-  },
-})
-
 describe("iframeConnector", () => {
-  const mockIframe = createMockIframe() as any
-
-  const connector = iframeConnector(mockIframe)
+  const connector = iframeConnector()
 
   test("getUrl generates correct URL", () => {
     const result = connector.getUrl(PROJECT_STATE)
@@ -101,9 +91,7 @@ describe("iframeConnector", () => {
 })
 
 describe("fsEmulatorConnector", () => {
-  const mockIframe = createMockIframe() as any
-
-  const connector = fsEmulatorConnector(mockIframe)
+  const connector = fsEmulatorConnector()
 
   test("getUrl generates correct URL", () => {
     const result = connector.getUrl(PROJECT_STATE)

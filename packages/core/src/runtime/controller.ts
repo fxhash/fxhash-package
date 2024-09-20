@@ -1,13 +1,10 @@
 import {
-  Result,
-  failure,
+  cleanup,
   invariant,
   mockBlockchainAddress,
   mockTransactionHash,
-  success,
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
-import { BlockchainNetwork, BlockchainType } from "@fxhash/shared"
 import { iframeConnector } from "./connectors.js"
 import { ProjectState, RuntimeConnector } from "./_types.js"
 import { FxParamsData, buildParamsObject } from "@fxhash/params"
@@ -68,13 +65,11 @@ function handleOldSnippetEvents(e: any, runtime: RuntimeContext) {
 const DEFAULT_RUNTIME_OPTIONS = {
   autoRefresh: false,
   connector: iframeConnector,
-  chain: BlockchainNetwork.ETHEREUM,
 }
 
 export interface RuntimeControllerOptions {
   autoRefresh?: boolean
   connector?: RuntimeConnector
-  chain?: BlockchainType
 }
 
 export interface RuntimeControllerParams {
@@ -84,7 +79,7 @@ export interface RuntimeControllerParams {
 
 /**
  * The runtime controller is the main controller for the runtime.
- * It holds the state of the runtime and the controls.
+ * It holds the state of the runtime and the controls and keeps the iframe in sync with the state.
  * @param params - initial state of the runtime and options
  * @returns RuntimeController - Which exposes the runtime, controls, init, release, getUrl, hardSync, updateControls and an event emitter
  */
@@ -92,16 +87,19 @@ export interface RuntimeControllerParams {
 export function createRuntimeController(
   params: RuntimeControllerParams
 ): RuntimeController {
+  const clean = cleanup()
+
   const { options, state } = params
   const runtimeOptions = { ...DEFAULT_RUNTIME_OPTIONS, ...options }
   const emitter = new RuntimeControllerEventEmitter()
 
   let _iframe: HTMLIFrameElement
   let _controls = runtimeControls()
+
   let _runtime = runtimeContext({
     state: {
-      hash: state.hash || mockTransactionHash(runtimeOptions.chain),
-      minter: state.minter || mockBlockchainAddress(runtimeOptions.chain),
+      hash: state.hash || mockTransactionHash(state.chain),
+      minter: state.minter || mockBlockchainAddress(state.chain),
       iteration: state.iteration || 1,
       context: state.context,
       chain: state.chain,
@@ -111,7 +109,9 @@ export function createRuntimeController(
     },
   })
 
-  _runtime.emitter.on("context-changed", runtime => {
+  _runtime.emitter.on("context-changed", _handleContextChange)
+
+  function _handleContextChange(runtime: RuntimeContext) {
     // If definition or state hash changed, sync the iframe
     if (runtime.details.stateHash.hard !== _runtime.details.stateHash.hard) {
       syncIframe(runtime)
@@ -129,19 +129,21 @@ export function createRuntimeController(
     }
     _runtime = runtime
     emitter.emit("runtime-changed", _runtime)
-  })
+  }
 
-  _controls.emitter.on("controls-changed", (controls: RuntimeControls) => {
+  _controls.emitter.on("controls-changed", _handleControlsChange)
+
+  function _handleControlsChange(controls: RuntimeControls) {
     _controls = controls
     emitter.emit("controls-changed", controls)
-  })
+  }
 
   const _updateParamsDebounced = debounce(_runtime.state.update, 200)
 
   function softUpdateParams(params: FxParamsData) {
     invariant(_controls.state.params.definition, "definition is required")
     _updateParamsDebounced({ params })
-    // TODO: make enum for events
+    // TODO: refactor message event handling
     _iframe.contentWindow?.postMessage(
       { id: "fxhash_params:update", data: { params } },
       "*"
@@ -195,7 +197,7 @@ export function createRuntimeController(
   }
 
   function onMessage(e: MessageEvent) {
-    // TODO: make enum for events
+    // TODO: refactor message event handling
     if (e.data.id === "fxhash_getInfo") {
       const {
         version,
@@ -209,7 +211,7 @@ export function createRuntimeController(
         definition: { params: definitions, features, version },
       })
     }
-    // TODO: make enum for events
+    // TODO: refactor message event handling
     if (e.data.id === "fxhash_emit:params:update") {
       const { params } = e.data.data
       updateControls(params)
@@ -221,11 +223,12 @@ export function createRuntimeController(
   function _registerWindowMessageListeners() {
     invariant(window, "window is required")
     window.addEventListener("message", onMessage, false)
-    return () => window.removeEventListener("message", onMessage, false)
+    clean.add(() => window.removeEventListener("message", onMessage, false))
   }
 
   function onIframeLoad() {
     invariant(_iframe, "_iframe is required")
+    // TODO: refactor message event handling
     _iframe.contentWindow?.postMessage("fxhash_getInfo", "*")
     _iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
     _iframe.contentWindow?.postMessage("fxhash_getParams", "*")
@@ -235,12 +238,11 @@ export function createRuntimeController(
   function _registerIframeOnLoadListener() {
     invariant(_iframe, "_iframe is required")
     _iframe.addEventListener("load", onIframeLoad, true)
-    return () => _iframe?.removeEventListener("load", onIframeLoad, true)
+    clean.add(() => _iframe?.removeEventListener("load", onIframeLoad, true))
   }
 
   function getConnector() {
-    invariant(_iframe, "_iframe is required")
-    return runtimeOptions.connector(_iframe)
+    return runtimeOptions.connector()
   }
 
   function getUrl(runtime: RuntimeContext) {
@@ -257,21 +259,35 @@ export function createRuntimeController(
   }
 
   function syncIframe(runtime: RuntimeContext) {
-    getConnector().useSync(getUrl(runtime))
+    invariant(_iframe, "_iframe is required")
+    getConnector().useSync(_iframe, getUrl(runtime))
+  }
+
+  function _init(iframe: HTMLIFrameElement) {
+    invariant(iframe, "iframe is required")
+    _iframe = iframe
+    _registerWindowMessageListeners()
+    _registerIframeOnLoadListener()
+    syncIframe(_runtime)
   }
 
   return {
     init: (iframe: HTMLIFrameElement) => {
-      invariant(iframe, "iframe is required")
-      _iframe = iframe
-      _registerWindowMessageListeners()
-      _registerIframeOnLoadListener()
-      syncIframe(_runtime)
+      _init(iframe)
     },
     release: () => {
-      invariant(_iframe, "_iframe is required")
-      _iframe.removeEventListener("load", onIframeLoad, true)
-      window.removeEventListener("message", onMessage, false)
+      clean.clear()
+    },
+    restart: (iframe: HTMLIFrameElement) => {
+      clean.clear()
+      _init(iframe)
+      _runtime.state.update({
+        hash: state.hash || mockTransactionHash(state.chain),
+        minter: state.minter || mockBlockchainAddress(state.chain),
+        iteration: state.iteration || 1,
+        context: state.context,
+        chain: state.chain,
+      })
     },
     get runtime() {
       return _runtime

@@ -1,9 +1,13 @@
 import { BlockchainType, RawTokenFeatures } from "@fxhash/shared"
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
 
-export type RuntimeConnector = (iframe: HTMLIFrameElement) => {
+export type RuntimeConnector = () => {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) => string
-  useSync: (runtimeUrl: string, controlsUrl?: string) => void
+  useSync: (
+    iframe: HTMLIFrameElement,
+    runtimeUrl: string,
+    controlsUrl?: string
+  ) => void
 }
 
 export enum ExecutionContext {
@@ -23,10 +27,7 @@ export type ProjectState = {
   context?: ExecutionContext
 }
 
-export type RuntimeState = Omit<
-  ProjectState,
-  "inputBytes" | "cid" | "snippetVersion"
-> & {
+export type RuntimeState = Omit<ProjectState, "cid" | "snippetVersion"> & {
   params: FxParamsData
 }
 
