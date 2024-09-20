@@ -11,11 +11,7 @@ export type RuntimeConnector = () => {
   ) => void
 }
 
-export enum ExecutionContext {
-  MINTING = "minting",
-  STANDALONE = "standalone",
-  CAPTURE = "capture",
-}
+export type ExecutionContext = "minting" | "standalone" | "capture"
 
 export type ProjectState = {
   cid: string
