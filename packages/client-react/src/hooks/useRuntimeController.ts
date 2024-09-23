@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useRef, useState } from "react"
+import { RefObject, useEffect, useMemo, useState } from "react"
 import {
   ProjectState,
   IRuntimeControllerOptions,
@@ -24,22 +24,21 @@ export const useRuntimeController: UseRuntimeController = ({
   state,
   options,
 }) => {
-  const controllerRef = useRef<IRuntimeController>(
-    createRuntimeController({
-      state,
-      options: {
-        ...options,
-      },
-    })
+  const controller = useMemo<IRuntimeController>(
+    () =>
+      createRuntimeController({
+        state,
+        options: {
+          ...options,
+        },
+      }),
+    []
   )
   const [runtime, setRuntime] = useState<IRuntimeContext>()
   const [controls, setControls] = useState<IRuntimeControls>()
 
   useEffect(() => {
     if (!iframeRef.current) return
-
-    const controller = controllerRef.current
-
     controller.emitter.on("runtime-changed", setRuntime)
     controller.emitter.on("controls-changed", setControls)
     controller.init(iframeRef.current)
@@ -52,14 +51,14 @@ export const useRuntimeController: UseRuntimeController = ({
       controller.emitter.off("controls-changed", setControls)
       controller.release()
     }
-  }, [iframeRef])
+  }, [])
 
   return {
-    controller: controllerRef.current!,
+    controller,
     runtime,
     controls,
     restart: (iframe: HTMLIFrameElement) => {
-      controllerRef.current.restart(iframe)
+      controller.restart(iframe)
     },
   }
 }
