@@ -56,7 +56,6 @@ type BaseGenerativeTokenMetadata = {
   name: string
   description: string
   childrenDescription: string
-  mintingInstructions: string
   tags: string[]
   artifactUri: string
   displayUri: string
@@ -66,7 +65,7 @@ type BaseGenerativeTokenMetadata = {
   capture: CaptureSettings
   settings?: GenTokenSettings | null
   symbol: string
-  version: GenerativeTokenMetadataVersion
+  version?: GenerativeTokenMetadataVersion
 }
 
 export type GenerativeTokenMetadataV1 = BaseGenerativeTokenMetadata
@@ -76,6 +75,7 @@ export type GenerativeTokenMetadataV2 = GenerativeTokenMetadataV1 & {
   previewIteration?: number
   previewMinter?: string
   previewInputBytes?: string
+  mintingInstructions: string
 }
 
 export type GenerativeTokenMetadataV3 = GenerativeTokenMetadataV2 & {
@@ -95,7 +95,7 @@ export type GenerativeTokenMetadataV5 = GenerativeTokenMetadataV4 & {
 }
 
 export type GenerativeTokenMetadata =
-  | (GenerativeTokenMetadataV1 & { version: "0.1" })
+  | GenerativeTokenMetadataV1
   | (GenerativeTokenMetadataV2 & { version: "0.2" })
   | (GenerativeTokenMetadataV3 & { version: "0.3" })
   | (GenerativeTokenMetadataV4 & { version: "0.4" })
