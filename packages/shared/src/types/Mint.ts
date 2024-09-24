@@ -85,6 +85,14 @@ export interface MintGenerativeData<N = string> {
   snippetVersion?: string | null
 }
 
+/**
+ * This type describes the constraints that can be applied to the minting of a generative token
+ * The different types in order are:
+ * hash: the hash of the project
+ * minter: the minter of the project
+ * iteration: the iteration of the project
+ * inputBytes: the serialized input bytes of the project
+ */
 export type ConstraintVariant = [string, string, number, string]
 
 export interface GenTokConstrains {
