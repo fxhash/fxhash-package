@@ -9,6 +9,12 @@ import { RuntimeState } from "./_types.js"
 import semver from "semver"
 import { mergeWith } from "lodash"
 
+/**
+ * Returns a boolean based on the provided snippet version. The boolean
+ * determines if the inputBytes of fx(params) should be passed as query
+ * params the the project url or not. Start from versions larger than 3.2.0,
+ * the inputBytes should be passed as hash to the url.
+ */
 export function fxParamsAsQueryParams(snippetVersion: string): boolean {
   return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.2.0")
 }
