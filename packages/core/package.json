@@ -14,8 +14,7 @@
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "lodash": "4.17.21",
-    "semver": "7.6.0",
-    "sha1": "1.1.1"
+    "semver": "7.6.0"
   },
   "devDependencies": {
     "@fxhash/config": "workspace:*",
