@@ -4,10 +4,11 @@ import {
   FxParamsData,
   jsonStringifyBigint,
 } from "@fxhash/params"
-import sha1 from "sha1"
 import { RuntimeState } from "./_types.js"
 import semver from "semver"
 import { mergeWith } from "lodash"
+import { float2hex } from "../../../../utils/dist/float.js"
+import { xorshiftString } from "../../../../utils/dist/bytes.js"
 
 /**
  * Returns a boolean based on the provided snippet version. The boolean
@@ -20,10 +21,11 @@ export function fxParamsAsQueryParams(snippetVersion: string): boolean {
 }
 
 /**
- * Hashes a runtime state using sha1
+ * Hashes a runtime state using float2hex and xorshiftString.
+ * @internal
  */
 export function hashRuntimeState(state: RuntimeState) {
-  return sha1(jsonStringifyBigint(state))
+  return float2hex(xorshiftString(jsonStringifyBigint(state)))
 }
 
 /**
@@ -31,6 +33,7 @@ export function hashRuntimeState(state: RuntimeState) {
  * - hash
  * - minter address
  * - params in update mode "page-reload"
+ * @internal
  */
 export function hashRuntimeHardState(
   state: RuntimeState,
@@ -57,5 +60,12 @@ function mergeCustomizer(_: any, source: any) {
   return undefined
 }
 
+/**
+ * Merges two objects, but keeps Uint8Array types.
+ * @param object - The object to merge into
+ * @param source - The source object
+ * @returns The merged object
+ * @internal
+ */
 export const mergeWithKeepingUint8ArrayType = (object: any, source: any) =>
   mergeWith(object, source, mergeCustomizer)

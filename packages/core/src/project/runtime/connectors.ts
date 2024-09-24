@@ -1,8 +1,8 @@
-import sha1 from "sha1"
 import { ProjectState } from "./_types.js"
 import { config, proxyUrl } from "@fxhash/config"
 import { fxParamsAsQueryParams } from "./utils.js"
 import { RuntimeConnector } from "./_interfaces.js"
+import { float2hex, xorshiftString } from "@fxhash/utils"
 
 const QUERY_KEYS: Record<string, string> = {
   hash: "fxhash",
@@ -36,7 +36,7 @@ export function getURLSearchParams(
       paramsString += `&fxparams=${inputBytes}`
     } else {
       if (!options.noFxParamsUpdateQuery) {
-        paramsString += `&fxparamsUpdate=${sha1(inputBytes)}`
+        paramsString += `&fxparamsUpdate=${float2hex(xorshiftString(inputBytes))}`
       }
       paramsString += `#0x${inputBytes}`
     }
