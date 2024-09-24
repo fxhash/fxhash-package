@@ -2,15 +2,6 @@ import { BlockchainType, RawTokenFeatures } from "@fxhash/shared"
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
 import { DeepPartial } from "@fxhash/utils"
 
-export type RuntimeConnector = () => {
-  getUrl: (state: ProjectState, urlParams?: URLSearchParams) => string
-  useSync: (
-    iframe: HTMLIFrameElement,
-    runtimeUrl: string,
-    controlsUrl?: string
-  ) => void
-}
-
 /**
  * The execution context of the runtime
  * - standalone: The runtime is used for standalone display

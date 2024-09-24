@@ -5,14 +5,15 @@ import {
   mockTransactionHash,
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
-import { iframeConnector } from "./connectors.js"
-import { ProjectState, RuntimeConnector } from "./_types.js"
+import { proxyConnector } from "./connectors.js"
+import { ProjectState } from "./_types.js"
 import { FxParamsData, buildParamsObject } from "@fxhash/params"
 import {
   IRuntimeContext,
   IRuntimeController,
   RuntimeControllerEventEmitter,
   IRuntimeControls,
+  RuntimeConnector,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import { debounce } from "lodash"
@@ -52,7 +53,7 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
 }
 const DEFAULT_RUNTIME_OPTIONS = {
   autoRefresh: false,
-  connector: iframeConnector,
+  connector: proxyConnector,
 }
 
 export interface IRuntimeControllerOptions {
@@ -81,6 +82,7 @@ export function createRuntimeController(
   const { options, state } = params
   const runtimeOptions = { ...DEFAULT_RUNTIME_OPTIONS, ...options }
   const emitter = new RuntimeControllerEventEmitter()
+  const _connector = runtimeOptions.connector
 
   let _iframe: HTMLIFrameElement
   let _controls = runtimeControls()
@@ -230,12 +232,8 @@ export function createRuntimeController(
     clean.add(() => _iframe?.removeEventListener("load", onIframeLoad, true))
   }
 
-  function getConnector() {
-    return runtimeOptions.connector()
-  }
-
   function getUrl(runtime: IRuntimeContext) {
-    return getConnector().getUrl({
+    return _connector.getUrl({
       cid: state.cid,
       hash: runtime.state.hash,
       minter: runtime.state.minter,
@@ -249,7 +247,7 @@ export function createRuntimeController(
 
   function syncIframe(runtime: IRuntimeContext) {
     invariant(_iframe, "_iframe is required")
-    getConnector().useSync(_iframe, getUrl(runtime))
+    _iframe.contentWindow?.location.replace(getUrl(runtime))
   }
 
   function _init(iframe: HTMLIFrameElement) {

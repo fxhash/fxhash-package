@@ -1,6 +1,7 @@
 import { EventEmitter } from "@fxhash/utils"
 import {
   ControlState,
+  ProjectState,
   RuntimeDefinition,
   RuntimeState,
   RuntimeWholeState,
@@ -182,3 +183,11 @@ export type RuntimeContextEventsTypemap = {
   "context-changed": IRuntimeContext
 }
 export class RuntimeContextEventEmitter extends EventEmitter<RuntimeContextEventsTypemap> {}
+
+/**
+ * An interface for the runtime connector.
+ * The runtime connector is responsible for generating URLs for the runtime.
+ */
+export interface RuntimeConnector {
+  getUrl: (state: ProjectState, urlParams?: URLSearchParams) => string
+}

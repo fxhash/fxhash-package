@@ -1,7 +1,8 @@
 import sha1 from "sha1"
-import { ProjectState, RuntimeConnector } from "./_types.js"
+import { ProjectState } from "./_types.js"
 import { config, proxyUrl } from "@fxhash/config"
 import { fxParamsAsQueryParams } from "./utils.js"
+import { RuntimeConnector } from "./_interfaces.js"
 
 const QUERY_KEYS: Record<string, string> = {
   hash: "fxhash",
@@ -43,33 +44,29 @@ export function getURLSearchParams(
   return paramsString
 }
 
-export const iframeConnector: RuntimeConnector = () => ({
-  getUrl: (state: ProjectState, urlParams?: URLSearchParams) => {
-    const { cid, snippetVersion, ...projectState } = state
-    const baseUrl = proxyUrl(cid)
-    const params = getURLSearchParams(projectState, {
-      additionalParams: urlParams,
-      fxParamsAsQueryParams: fxParamsAsQueryParams(snippetVersion),
-    })
-    return `${baseUrl}/?${params}`
-  },
-  useSync: (iframe: HTMLIFrameElement, runtimeUrl: string) => {
-    iframe.contentWindow?.location.replace(runtimeUrl)
-  },
-})
+export const getProjectUrl = (
+  baseUrl: string,
+  state: ProjectState,
+  urlParams?: URLSearchParams
+) => {
+  const { snippetVersion, ...projectState } = state
+  const params = getURLSearchParams(projectState, {
+    additionalParams: urlParams,
+    fxParamsAsQueryParams: fxParamsAsQueryParams(snippetVersion),
+  })
+  return `${baseUrl}/?${params}`
+}
 
-export const fsEmulatorConnector: RuntimeConnector = () => ({
-  getUrl: (state: ProjectState, urlParams?: URLSearchParams) => {
-    const { cid, snippetVersion, ...projectState } = state
-    const baseUrl = `${config.apis.fsEmulator}/resolve/${cid}`
-    const params = getURLSearchParams(projectState, {
-      additionalParams: urlParams,
-      fxParamsAsQueryParams: fxParamsAsQueryParams(snippetVersion),
-    })
+export const proxyConnector: RuntimeConnector = {
+  getUrl: (state: ProjectState, urlParams?: URLSearchParams) =>
+    getProjectUrl(proxyUrl(state.cid), state, urlParams),
+}
 
-    return `${baseUrl}/?${params}`
-  },
-  useSync: (iframe: HTMLIFrameElement, runtimeUrl: string) => {
-    iframe.contentWindow?.location.replace(runtimeUrl)
-  },
-})
+export const fsEmulatorConnector: RuntimeConnector = {
+  getUrl: (state: ProjectState, urlParams?: URLSearchParams) =>
+    getProjectUrl(
+      `${config.apis.fsEmulator}/resolve/${state.cid}`,
+      state,
+      urlParams
+    ),
+}
