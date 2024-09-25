@@ -6,10 +6,6 @@ import {
   RESERVOIR_ORDER_KIND,
 } from "@/services/Reservoir.js"
 import { TransactionType } from "@fxhash/shared"
-import {
-  getProjectRoyalties,
-  processOverridenRoyalties,
-} from "@/utils/royalties.js"
 
 export type TMakeCollectionOfferEthV1OperationParams = {
   orders: {
@@ -45,8 +41,6 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
           },
         }
       }
-      const royalties = await getProjectRoyalties(order.token)
-      if (!royalties) throw new Error("Royalties not found")
       args.push({
         collection: order.token,
         weiPrice: (
@@ -55,8 +49,7 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
-        automatedRoyalties: false,
-        customRoyalties: processOverridenRoyalties(royalties, this.chain),
+        automatedRoyalties: true,
         options: options,
       })
     }
