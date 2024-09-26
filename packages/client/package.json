@@ -29,8 +29,8 @@
     "@wagmi/core": "2.13.4",
     "connectkit": "1.8.2",
     "eslint": "8.45.0",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
+    "tsup": "8.2.4",
+    "typescript": "5.5.4",
     "viem": "2.19.4",
     "vitest": "0.34.6",
     "wagmi": "2.12.5"

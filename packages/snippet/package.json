@@ -11,8 +11,8 @@
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "tsup": "8.2.4",
+    "typescript": "5.5.4"
   },
   "exports": {
     ".": {
