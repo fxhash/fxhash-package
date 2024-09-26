@@ -33,7 +33,7 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
       break
 
     case "fxhash_getFeatures":
-      runtime.updateDefinition({ features: e.data.data || null })
+      runtime.updateOutput({ features: e.data.data || null })
       break
 
     case "fxhash_getParams":
@@ -202,7 +202,8 @@ export function createRuntimeController(
       } = e.data.data
       _runtime.update({
         state: { hash, minter, params: values },
-        definition: { params: definitions, features, version },
+        definition: { params: definitions, version },
+        output: { features },
       })
     }
     // TODO: refactor message event handling

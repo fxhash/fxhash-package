@@ -8,6 +8,7 @@ import {
 import {
   RuntimeDefinition,
   RuntimeDetails,
+  RuntimeOutput,
   RuntimeState,
   RuntimeWholeState,
 } from "./_types.js"
@@ -49,6 +50,10 @@ const DEFAULT_RUNTIME_DETAILS: RuntimeDetails = Object.freeze({
   },
 })
 
+const DEFAULT_RUNTIME_OUTPUT: RuntimeOutput = Object.freeze({
+  features: null,
+})
+
 export interface RuntimeParams {
   state?: Partial<RuntimeState>
   definition?: Partial<RuntimeDefinition>
@@ -67,6 +72,7 @@ export function runtimeContext(initial: RuntimeParams): IRuntimeContext {
       ...initial?.definition,
     },
     details: DEFAULT_RUNTIME_DETAILS,
+    output: DEFAULT_RUNTIME_OUTPUT,
   }
 
   _runtime.definition = enhanceRuntimeDefinition(_runtime)
@@ -110,6 +116,15 @@ export function runtimeContext(initial: RuntimeParams): IRuntimeContext {
       )
       _runtime.definition = enhanceRuntimeDefinition(_runtime)
       _runtime.details = getDetails()
+      emitter.emit("context-changed", _runtime)
+      return _runtime
+    },
+    output: () => _runtime.output,
+    updateOutput: (newOutput: Partial<RuntimeOutput>) => {
+      _runtime.output = mergeWithKeepingUint8ArrayType(
+        cloneDeep(_runtime.output),
+        newOutput
+      )
       emitter.emit("context-changed", _runtime)
       return _runtime
     },

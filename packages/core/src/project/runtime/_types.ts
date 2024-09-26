@@ -44,11 +44,21 @@ export type RuntimeState = Omit<ProjectState, "cid" | "snippetVersion"> & {
 }
 
 /**
- * The definition of the runtime
+ * The RuntimeDefinition of the project cosists of static declarations
+ * that are retrieved when a project is loaded. The definition will be the same
+ * regardsless of the state of the project.
  */
 export type RuntimeDefinition = {
   params: FxParamDefinitions | null
   version: string | null
+}
+
+/**
+ * The runtime output consists of dynamic delarations that are retrieved when
+ * a project is loaded. The output will change depending on the state
+ * of the project.
+ */
+export type RuntimeOutput = {
   features: RawTokenFeatures | null
 }
 
@@ -96,4 +106,5 @@ export type RuntimeWholeState = {
   state: RuntimeState
   definition: RuntimeDefinition
   details: RuntimeDetails
+  output: RuntimeOutput
 }

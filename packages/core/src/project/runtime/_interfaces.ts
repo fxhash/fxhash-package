@@ -4,6 +4,7 @@ import {
   ProjectState,
   RuntimeDefinition,
   RuntimeDetails,
+  RuntimeOutput,
   RuntimeState,
   RuntimeWholeState,
 } from "./_types.js"
@@ -153,6 +154,18 @@ export interface IRuntimeContext {
    * @returns the updated runtime whole state
    * */
   updateDefinition: (update: Partial<RuntimeDefinition>) => RuntimeWholeState
+
+  /**
+   * Retrieve the latest output of the runtime context
+   */
+  output: () => RuntimeOutput
+
+  /**
+   * Update the output of the runtime
+   * @param update
+   * @returns the updated runtime whole state
+   */
+  updateOutput: (update: Partial<RuntimeOutput>) => RuntimeWholeState
 
   /**
    * Extra details that are derived from the state and definition.
