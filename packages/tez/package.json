@@ -22,7 +22,7 @@
     "@taquito/taquito": "17.3.1",
     "onchfs": "workspace:*",
     "tslib": "2.6.0",
-    "tsup": "8.2.4",
+    "tsup": "8.0.1",
     "typescript": "5.3.3",
     "vitest": "0.34.6"
   },

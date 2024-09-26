@@ -24,7 +24,7 @@ import {
   IBaseContracts,
 } from "./contracts/base"
 import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
-import { getConfigForEnv } from "./helpers"
+import { getConfigForEnv } from "./utils"
 import {
   AlgoliaConfig,
   algoliaConfigDev,

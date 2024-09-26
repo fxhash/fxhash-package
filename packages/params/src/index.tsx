@@ -1,7 +1,3 @@
-export * from "./BaseInput"
-export * from "./utils"
-export * from "./hooks"
-export * from "./types"
-export * from "./validation"
-export * from "./Context"
-export * from "./Controls"
+import { BaseInput } from "./BaseInput"
+
+export { BaseInput }

@@ -4,5 +4,3 @@ export * from "@/generated/index"
 export * from "@/generated/graphql"
 // crafted queries
 export * from "@/gql/index"
-// utilities
-export * from "@/util"

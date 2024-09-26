@@ -7,10 +7,11 @@ import {
   FxhashCollabFactoryCalls,
   FxhashContracts,
 } from "../../types/Contracts"
+import { UpdateIssuerForm } from "../../types/UpdateIssuer"
 import { transformUpdateIssuerFormToNumbers } from "../../utils/transformers/update-issuer"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { GenerativeToken, UserType, UpdateIssuerForm } from "@fxhash/shared"
+import { GenerativeToken, UserType } from "@fxhash/shared"
 
 export type TUpdateIssuerV3OperationParams = {
   token: GenerativeToken

@@ -1,9 +1,13 @@
-import { Collaboration } from "./entities/User"
-import { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
+import {
+  Collaboration,
+  GenTokLabel,
+  GenTokPricing,
+  IPricingDutchAuction,
+  IPricingFixed,
+  IReserve,
+  ISplit,
+} from "@fxhash/shared"
 import { GenerativeTokenMetadata } from "./Metadata"
-import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
-import { ISplit } from "./entities/Split"
-import { IReserve } from "./entities/Reserve"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -112,7 +116,7 @@ export enum GenTokEditions {
   OPENED = "OPENED",
 }
 
-export type GenTokOpenEditionsForm = {
+export type GenTokOpenEditionsForm<N> = {
   closesAt?: Date | null
 }
 
@@ -123,7 +127,7 @@ export type GenTokFixedEditionsForm<N> = {
 export type GenTokEditionsForm<N> = {
   type: GenTokEditions
   fixed: GenTokFixedEditionsForm<N>
-  opened: GenTokOpenEditionsForm
+  opened: GenTokOpenEditionsForm<N>
 }
 
 export interface GenTokPricingForm<N> {

@@ -25,8 +25,15 @@
     "node-sass": "9.0.0",
     "postcss": "8.4.38",
     "tslib": "2.6.0",
-    "tsup": "8.2.4",
+    "tsup": "8.0.1",
     "typescript": "5.3.3"
+  },
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs"
+    }
   },
   "files": [
     "dist"
@@ -41,18 +48,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
+  "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "repository": "fxhash/fxhash-package",
   "type": "module",
   "types": "dist/index.d.ts",
   "typesVersions": {
