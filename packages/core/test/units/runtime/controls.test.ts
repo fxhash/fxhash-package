@@ -8,7 +8,7 @@ import {
 describe("runtimeControls", () => {
   test("initializes with default state when no initial state provided", () => {
     const controls = runtimeControls()
-    expect(controls.state).toEqual({
+    expect(controls.state()).toEqual({
       params: {
         definition: null,
         values: {},
@@ -24,19 +24,21 @@ describe("runtimeControls", () => {
       },
     }
     const controls = runtimeControls(initialState)
-    expect(controls.state).toEqual(initialState)
+    expect(controls.state()).toEqual(initialState)
   })
 
   test("update function updates values correctly", () => {
     const controls = runtimeControls()
-    const updatedControls = controls.update({ newParam: 10 })
-    expect(updatedControls.state.params.values).toEqual({ newParam: 10 })
+    const update = controls.update({ newParam: 10 })
+    expect(update.params.values).toEqual({ newParam: 10 })
+    expect(controls.state().params.values).toEqual({ newParam: 10 })
   })
 
   test("update function updates definition correctly", () => {
     const controls = runtimeControls()
-    const updatedControls = controls.update({}, PARAMS_DEFINITION)
-    expect(updatedControls.state.params.definition).toEqual(PARAMS_DEFINITION)
+    const update = controls.update({}, PARAMS_DEFINITION)
+    expect(update.params.definition).toEqual(PARAMS_DEFINITION)
+    expect(controls.state().params.definition).toEqual(PARAMS_DEFINITION)
   })
 
   test("update function merges new values with existing ones", () => {
@@ -48,7 +50,7 @@ describe("runtimeControls", () => {
     }
     const controls = runtimeControls(initialState)
     const updatedControls = controls.update({ newParam: 10 })
-    expect(updatedControls.state.params.values).toEqual({
+    expect(updatedControls.params.values).toEqual({
       existingParam: 5,
       newParam: 10,
     })
@@ -62,10 +64,8 @@ describe("runtimeControls", () => {
     expect(mockFn).toHaveBeenCalledTimes(1)
     expect(mockFn).toHaveBeenCalledWith(
       expect.objectContaining({
-        state: expect.objectContaining({
-          params: expect.objectContaining({
-            values: expect.objectContaining({ newParam: 10 }),
-          }),
+        params: expect.objectContaining({
+          values: expect.objectContaining({ newParam: 10 }),
         }),
       })
     )
@@ -87,16 +87,6 @@ describe("runtimeControls", () => {
     expect(controls.getInputBytes()).not.toBeNull()
   })
 
-  test("multiple updates produce new control instances", () => {
-    const controls = runtimeControls()
-    const updated1 = controls.update({ param1: 1 })
-    const updated2 = updated1.update({ param2: 2 })
-
-    expect(controls).not.toBe(updated1)
-    expect(updated1).not.toBe(updated2)
-    expect(updated2.state.params.values).toEqual({ param1: 1, param2: 2 })
-  })
-
   test("update preserves unmodified properties", () => {
     const initialState = {
       params: {
@@ -105,10 +95,8 @@ describe("runtimeControls", () => {
       },
     }
     const controls = runtimeControls(initialState)
-    const updated = controls.update(PARAMS_VALUES_B)
-    expect(updated.state.params.values.string).toBe(PARAMS_VALUES_B.string)
-    expect(updated.state.params.definition).toEqual(
-      initialState.params.definition
-    )
+    const update = controls.update(PARAMS_VALUES_B)
+    expect(update.params.values.string).toBe(PARAMS_VALUES_B.string)
+    expect(update.params.definition).toEqual(initialState.params.definition)
   })
 })

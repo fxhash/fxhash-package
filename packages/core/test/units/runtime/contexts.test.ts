@@ -1,4 +1,4 @@
-import { RuntimeContext, RuntimeParams, runtimeContext } from "@/index.js"
+import { IRuntimeContext, RuntimeParams, runtimeContext } from "@/index.js"
 import {
   BYTE_VALUE_B,
   PARAMS_DEFINITION,
@@ -25,29 +25,30 @@ const INITIAL_B: RuntimeParams = {
 }
 
 describe("runtimeContext", () => {
-  let context: RuntimeContext
+  let context: IRuntimeContext
 
   beforeEach(() => {
     context = runtimeContext(INITIAL)
   })
 
   test("initializes with correct values", () => {
-    expect(context.state.minter).toBe(RUNTIME_STATE.minter)
-    expect(context.state.iteration).toBe(RUNTIME_STATE.iteration)
-    expect(context.state.chain).toBe(RUNTIME_STATE.chain)
-    expect(context.definition.version).toBe(SNIPPET_VERSION)
+    const state = context.state()
+    const definition = context.definition()
+    expect(state.minter).toBe(RUNTIME_STATE.minter)
+    expect(state.iteration).toBe(RUNTIME_STATE.iteration)
+    expect(state.chain).toBe(RUNTIME_STATE.chain)
+    expect(definition.version).toBe(SNIPPET_VERSION)
   })
 
   test("updates state correctly", () => {
-    const newContext = context.state.update({ iteration: 3 })
-    expect(newContext.state.iteration).toBe(3)
-    expect(context.state.iteration).toBe(RUNTIME_STATE.iteration)
-    expect(newContext.state.minter).toBe(RUNTIME_STATE.minter)
+    const update = context.updateState({ iteration: 3 })
+    expect(update.state.iteration).toBe(3)
+    expect(update.state.minter).toBe(RUNTIME_STATE.minter)
   })
 
   test("updates definition correctly", () => {
-    const newContext = context.definition.update({ version: "2.0" })
-    expect(newContext.definition.version).toBe("2.0")
+    const update = context.updateDefinition({ version: "2.0" })
+    expect(update.definition.version).toBe("2.0")
   })
 })
 
@@ -56,11 +57,11 @@ describe("hash generation", () => {
     const context1 = runtimeContext(INITIAL)
     const context2 = runtimeContext(INITIAL)
 
-    expect(context1.details.stateHash.soft).toBe(
-      context2.details.stateHash.soft
+    expect(context1.details().stateHash.soft).toBe(
+      context2.details().stateHash.soft
     )
-    expect(context1.details.stateHash.hard).toBe(
-      context2.details.stateHash.hard
+    expect(context1.details().stateHash.hard).toBe(
+      context2.details().stateHash.hard
     )
   })
 
@@ -68,24 +69,23 @@ describe("hash generation", () => {
     const context1 = runtimeContext(INITIAL)
     const context2 = runtimeContext(INITIAL_B)
 
-    expect(context1.details.stateHash.soft).not.toBe(
-      context2.details.stateHash.soft
+    expect(context1.details().stateHash.soft).not.toBe(
+      context2.details().stateHash.soft
     )
-    expect(context1.details.stateHash.hard).not.toBe(
-      context2.details.stateHash.hard
+    expect(context1.details().stateHash.hard).not.toBe(
+      context2.details().stateHash.hard
     )
   })
 
   test("only updates soft hash when code-driven param changes", () => {
-    const context1 = runtimeContext(INITIAL)
-    const context2 = context1.state.update({ params: { bytes: BYTE_VALUE_B } })
-
-    expect(context1.details.stateHash.soft).not.toBe(
-      context2.details.stateHash.soft
-    )
-    expect(context1.details.stateHash.hard).toBe(
-      context2.details.stateHash.hard
-    )
+    const context = runtimeContext(INITIAL)
+    const softHash1 = context.details().stateHash.soft
+    const hardHash1 = context.details().stateHash.hard
+    context.updateState({ params: { bytes: BYTE_VALUE_B } })
+    const softHash2 = context.details().stateHash.soft
+    const hardHash2 = context.details().stateHash.hard
+    expect(softHash1).not.toBe(softHash2)
+    expect(hardHash1).toBe(hardHash2)
   })
 })
 
@@ -98,8 +98,8 @@ describe("param serialization", () => {
       },
     })
 
-    expect(context.details.params.inputBytes).toBeTruthy()
-    expect(context.details.params.bytesSize).toBeGreaterThan(0)
+    expect(context.details().params.inputBytes).toBeTruthy()
+    expect(context.details().params.bytesSize).toBeGreaterThan(0)
   })
 
   test("handles null params correctly", () => {
@@ -108,34 +108,8 @@ describe("param serialization", () => {
       definition: { params: null },
     })
 
-    expect(context.details.params.inputBytes).toBeNull()
-    expect(context.details.params.bytesSize).toBe(0)
-  })
-})
-
-describe("immutability", () => {
-  test("update returns new context without mutating original", () => {
-    const originalContext = runtimeContext(INITIAL)
-
-    const updatedContext = originalContext.state.update({ iteration: 2 })
-
-    expect(originalContext.state.iteration).toBe(1)
-    expect(updatedContext.state.iteration).toBe(2)
-    expect(updatedContext).not.toBe(originalContext)
-  })
-
-  test("multiple updates produce distinct contexts", () => {
-    const originalContext = runtimeContext(INITIAL)
-
-    const updatedContext1 = originalContext.state.update({ iteration: 2 })
-    const updatedContext2 = updatedContext1.state.update({ iteration: 3 })
-
-    expect(originalContext.state.iteration).toBe(1)
-    expect(updatedContext1.state.iteration).toBe(2)
-    expect(updatedContext2.state.iteration).toBe(3)
-
-    expect(originalContext).not.toBe(updatedContext1)
-    expect(updatedContext1).not.toBe(updatedContext2)
+    expect(context.details().params.inputBytes).toBeNull()
+    expect(context.details().params.bytesSize).toBe(0)
   })
 })
 
@@ -145,7 +119,7 @@ describe("event emission", () => {
     const mockFn = vi.fn()
     context.emitter.on("context-changed", mockFn)
 
-    context.state.update({ iteration: 2 })
+    context.updateState({ iteration: 2 })
 
     expect(mockFn).toHaveBeenCalledTimes(1)
     expect(mockFn).toHaveBeenCalledWith(

@@ -6,20 +6,20 @@ import {
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
 import { proxyConnector } from "./connectors.js"
-import { ProjectState } from "./_types.js"
+import { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
 import { FxParamsData, buildParamsObject } from "@fxhash/params"
 import {
   IRuntimeContext,
   IRuntimeController,
   RuntimeControllerEventEmitter,
-  IRuntimeControls,
   RuntimeConnector,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import { debounce } from "lodash"
 
-/*
- * This function is used to handle old snippet events
+/**
+ * This function is used to handle old snippet events for projects
+ * that use < v3.3.0 of the @fxhash/project-sdk
  */
 
 function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
@@ -28,12 +28,12 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
   switch (e.data.id) {
     case "fxhash_getHash":
       if (e.data.data) {
-        runtime.state.update({ hash: e.data.data })
+        runtime.updateState({ hash: e.data.data })
       }
       break
 
     case "fxhash_getFeatures":
-      runtime.definition.update({ features: e.data.data || null })
+      runtime.updateDefinition({ features: e.data.data || null })
       break
 
     case "fxhash_getParams":
@@ -51,14 +51,15 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
       break
   }
 }
-const DEFAULT_RUNTIME_OPTIONS = {
-  autoRefresh: false,
-  connector: proxyConnector,
-}
 
 export interface IRuntimeControllerOptions {
   autoRefresh?: boolean
   connector?: RuntimeConnector
+}
+
+const DEFAULT_RUNTIME_OPTIONS: IRuntimeControllerOptions = {
+  autoRefresh: false,
+  connector: proxyConnector,
 }
 
 export interface IRuntimeControllerParams {
@@ -78,38 +79,41 @@ export function createRuntimeController(
   params: IRuntimeControllerParams
 ): IRuntimeController {
   const clean = cleanup()
+  const options = params.options
+  const _initial = params.state
 
-  const { options, state } = params
   const runtimeOptions = { ...DEFAULT_RUNTIME_OPTIONS, ...options }
   const emitter = new RuntimeControllerEventEmitter()
   const _connector = runtimeOptions.connector
 
-  let _iframe: HTMLIFrameElement
-  let _controls = runtimeControls()
-
-  let _runtime = runtimeContext({
+  const _controls = runtimeControls()
+  const _runtime = runtimeContext({
     state: {
-      hash: state.hash || mockTransactionHash(state.chain),
-      minter: state.minter || mockBlockchainAddress(state.chain),
-      iteration: state.iteration || 1,
-      context: state.context,
-      chain: state.chain,
+      hash: _initial.hash || mockTransactionHash(_initial.chain),
+      minter: _initial.minter || mockBlockchainAddress(_initial.chain),
+      iteration: _initial.iteration || 1,
+      context: _initial.context,
+      chain: _initial.chain,
     },
     definition: {
-      version: state.snippetVersion,
+      version: _initial.snippetVersion,
     },
   })
 
-  _runtime.emitter.on("context-changed", _handleContextChange)
+  let _iframe: HTMLIFrameElement | null = null
 
-  function _handleContextChange(runtime: IRuntimeContext) {
+  let _prevRuntime: RuntimeWholeState | null = null
+  _runtime.emitter.on("context-changed", _handleContextChange)
+  function _handleContextChange(runtime: RuntimeWholeState) {
     // If definition or state hash changed, sync the iframe
-    if (runtime.details.stateHash.hard !== _runtime.details.stateHash.hard) {
-      syncIframe(runtime)
+    if (
+      runtime.details.stateHash.hard !== _prevRuntime?.details.stateHash.hard
+    ) {
+      _syncIframe()
     }
     if (
       runtime.details.definitionHash.params !==
-      _runtime.details.definitionHash.params
+      _prevRuntime?.details.definitionHash.params
     ) {
       _controls.update(
         runtime.definition.params
@@ -118,21 +122,19 @@ export function createRuntimeController(
         runtime.definition.params
       )
     }
-    _runtime = runtime
-    emitter.emit("runtime-changed", _runtime)
+    emitter.emit("runtime-changed", runtime)
+    _prevRuntime = { ...runtime }
   }
 
   _controls.emitter.on("controls-changed", _handleControlsChange)
-
-  function _handleControlsChange(controls: IRuntimeControls) {
-    _controls = controls
+  function _handleControlsChange(controls: ControlState) {
     emitter.emit("controls-changed", controls)
   }
 
-  const _updateParamsDebounced = debounce(_runtime.state.update, 200)
+  const _updateParamsDebounced = debounce(_runtime.updateState, 200)
 
   function softUpdateParams(params: FxParamsData) {
-    invariant(_controls.state.params.definition, "definition is required")
+    invariant(_iframe, "_iframe is required")
     _updateParamsDebounced({ params })
     // TODO: refactor message event handling
     _iframe.contentWindow?.postMessage(
@@ -142,22 +144,23 @@ export function createRuntimeController(
   }
 
   function updateControls(update: Partial<FxParamsData>, forceRefresh = false) {
+    const controlsState = _controls.state()
     // make sure definition exists and check if the key
     // of the update have a corresponding definition
     invariant(
-      _controls.state.params.definition !== null,
+      controlsState.params.definition !== null,
       "Definition is required"
     )
     invariant(
       Object.keys(update).every(id =>
-        _controls.state.params.definition?.find(d => d.id === id)
+        controlsState.params.definition?.find(d => d.id === id)
       ),
       "Unknown parameter"
     )
     // find the params which have changed and are "synced"
     const changed = Object.keys(update)
-      .filter(id => _controls.state.params.values[id] !== update[id])
-      .map(id => _controls.state.params.definition?.find(d => d.id === id))
+      .filter(id => controlsState.params.values[id] !== update[id])
+      .map(id => controlsState.params.definition?.find(d => d.id === id))
     // when there are no changes we don't need to do anything
     // e.g. when artworks call emit in a draw loop this should
     // catch too many updates that are actually not needed
@@ -181,7 +184,7 @@ export function createRuntimeController(
         })
       }
     } else {
-      _runtime.state.update({ params: update })
+      _runtime.updateState({ params: update })
     }
     // in any case, refresh the control state
     _controls.update(update)
@@ -233,21 +236,25 @@ export function createRuntimeController(
   }
 
   function getUrl(runtime: IRuntimeContext) {
+    invariant(_connector, "_connector is required")
+    const runtimeState = runtime.state()
+    const runtimeDefinition = runtime.definition()
+    const runtimeDetails = runtime.details()
     return _connector.getUrl({
-      cid: state.cid,
-      hash: runtime.state.hash,
-      minter: runtime.state.minter,
-      iteration: runtime.state.iteration,
-      inputBytes: runtime.details.params.inputBytes || state.inputBytes,
-      context: runtime.state.context,
-      snippetVersion: runtime.definition.version || "",
-      chain: runtime.state.chain,
+      cid: _initial.cid,
+      hash: runtimeState.hash,
+      minter: runtimeState.minter,
+      iteration: runtimeState.iteration,
+      inputBytes: runtimeDetails.params.inputBytes || _initial.inputBytes,
+      context: runtimeState.context,
+      snippetVersion: runtimeDefinition.version || "",
+      chain: runtimeState.chain,
     })
   }
 
-  function syncIframe(runtime: IRuntimeContext) {
+  function _syncIframe() {
     invariant(_iframe, "_iframe is required")
-    _iframe.contentWindow?.location.replace(getUrl(runtime))
+    _iframe.contentWindow?.location.replace(getUrl(_runtime))
   }
 
   function _init(iframe: HTMLIFrameElement) {
@@ -255,7 +262,7 @@ export function createRuntimeController(
     _iframe = iframe
     _registerWindowMessageListeners()
     _registerIframeOnLoadListener()
-    syncIframe(_runtime)
+    _syncIframe()
   }
 
   return {
@@ -268,28 +275,24 @@ export function createRuntimeController(
     restart: (iframe: HTMLIFrameElement) => {
       clean.clear()
       _init(iframe)
-      _runtime.state.update({
-        hash: state.hash || mockTransactionHash(state.chain),
-        minter: state.minter || mockBlockchainAddress(state.chain),
-        iteration: state.iteration || 1,
-        context: state.context,
-        chain: state.chain,
+      _runtime.updateState({
+        hash: _initial.hash || mockTransactionHash(_initial.chain),
+        minter: _initial.minter || mockBlockchainAddress(_initial.chain),
+        iteration: _initial.iteration || 1,
+        context: _initial.context,
+        chain: _initial.chain,
       })
     },
-    get runtime() {
-      return _runtime
-    },
-    get controls() {
-      return _controls
-    },
+    runtime: () => _runtime,
+    controls: () => _controls,
     getUrl: () => getUrl(_runtime),
     hardSync: () => {
       _runtime.update({
         state: {
-          params: _controls.state.params.values,
+          params: _controls.state().params.values,
         },
       })
-      syncIframe(_runtime)
+      _syncIframe()
     },
     updateControls,
     emitter,

@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash"
-import sha1 from "sha1"
 import { BlockchainType } from "@fxhash/shared"
+import { DeepPartial } from "@fxhash/utils"
 import {
   sumBytesParams,
   jsonStringifyBigint,
@@ -8,137 +8,120 @@ import {
 } from "@fxhash/params"
 import {
   RuntimeDefinition,
+  RuntimeDetails,
   RuntimeState,
   RuntimeWholeState,
-  TUpdateStateFn,
 } from "./_types.js"
 import {
+  enhanceRuntimeDefinition,
   hashRuntimeHardState,
   hashRuntimeState,
   mergeWithKeepingUint8ArrayType,
+  quickHash,
 } from "./utils.js"
 import { IRuntimeContext, RuntimeContextEventEmitter } from "./_interfaces.js"
+
+const DEFAULT_RUNTIME_STATE: RuntimeState = Object.freeze({
+  hash: "",
+  minter: "",
+  iteration: 1,
+  params: {},
+  chain: BlockchainType.ETHEREUM,
+})
+
+const DEFAULT_RUNTIME_DEFINITION: RuntimeDefinition = Object.freeze({
+  params: null,
+  version: null,
+  features: null,
+})
+
+const DEFAULT_RUNTIME_DETAILS: RuntimeDetails = Object.freeze({
+  params: {
+    inputBytes: null,
+    bytesSize: 0,
+  },
+  stateHash: {
+    soft: "",
+    hard: "",
+  },
+  definitionHash: {
+    params: "",
+  },
+})
 
 export interface RuntimeParams {
   state?: Partial<RuntimeState>
   definition?: Partial<RuntimeDefinition>
 }
 
-/**
- * The runtime context holds all informations about a project that defines its state
- * @param initial - initial state of the project devided in state and definition
- * @returns RuntimeContext - Which exoses the state, definition, update method and an event emitter
- */
-
 export function runtimeContext(initial: RuntimeParams): IRuntimeContext {
   const emitter = new RuntimeContextEventEmitter()
 
   let _runtime: RuntimeWholeState = {
     state: {
-      hash: "",
-      minter: "",
-      iteration: 1,
-      params: {},
-      chain: BlockchainType.ETHEREUM,
+      ...DEFAULT_RUNTIME_STATE,
       ...initial?.state,
     },
     definition: {
-      params: null,
-      version: null,
-      features: null,
+      ...DEFAULT_RUNTIME_DEFINITION,
       ...initial?.definition,
     },
+    details: DEFAULT_RUNTIME_DETAILS,
   }
 
-  function getState() {
-    return _runtime.state
-  }
-
-  function getDefinition() {
-    return _runtime.definition
-  }
-
-  const updateState: TUpdateStateFn<
-    RuntimeState,
-    IRuntimeContext
-  > = newState => {
-    _runtime.state = mergeWithKeepingUint8ArrayType(
-      cloneDeep(_runtime.state),
-      newState
-    )
-    const res = getFullContext()
-    emitter.emit("context-changed", res)
-    return res
-  }
-
-  const updateDefinition: TUpdateStateFn<
-    RuntimeDefinition,
-    IRuntimeContext
-  > = newDefinition => {
-    _runtime.definition = mergeWithKeepingUint8ArrayType(
-      cloneDeep(_runtime.definition),
-      newDefinition
-    )
-    const res = getFullContext()
-    emitter.emit("context-changed", res)
-    return res
-  }
-
-  const update: TUpdateStateFn<RuntimeWholeState, IRuntimeContext> = data => {
-    _runtime = mergeWithKeepingUint8ArrayType(cloneDeep(_runtime), data)
-    const res = getFullContext()
-    emitter.emit("context-changed", res)
-    return res
-  }
-
-  function getDefinitionEnhanced() {
-    const definition = getDefinition()
-    return {
-      ...definition,
-      params:
-        definition.params?.map(p => ({
-          ...p,
-          ...(definition.version && { version: definition.version }),
-        })) || null,
-    }
-  }
+  _runtime.definition = enhanceRuntimeDefinition(_runtime)
+  _runtime.details = getDetails()
 
   function getDetails() {
-    const state = getState()
-    const definitionEnhanced = getDefinitionEnhanced()
     return {
       params: {
         inputBytes: serializeParamsOrNull(
-          state.params || {},
-          definitionEnhanced.params || []
+          _runtime.state.params || {},
+          _runtime.definition.params || []
         ),
-        bytesSize: sumBytesParams(definitionEnhanced.params || []),
+        bytesSize: sumBytesParams(_runtime.definition.params || []),
       },
       stateHash: {
-        soft: hashRuntimeState(state),
-        hard: hashRuntimeHardState(state, definitionEnhanced.params),
+        soft: hashRuntimeState(_runtime.state),
+        hard: hashRuntimeHardState(_runtime.state, _runtime.definition.params),
       },
       definitionHash: {
-        params: sha1(jsonStringifyBigint(definitionEnhanced.params)),
+        params: quickHash(jsonStringifyBigint(_runtime.definition.params)),
       },
     }
   }
 
-  function getFullContext(): IRuntimeContext {
-    return {
-      state: {
-        ...getState(),
-        update: updateState,
-      },
-      definition: {
-        ...getDefinitionEnhanced(),
-        update: updateDefinition,
-      },
-      update,
-      details: getDetails(),
-      emitter,
-    }
+  return {
+    state: () => _runtime.state,
+    updateState: (newState: Partial<RuntimeState>) => {
+      _runtime.state = mergeWithKeepingUint8ArrayType(
+        cloneDeep(_runtime.state),
+        newState
+      )
+      _runtime.details = getDetails()
+      emitter.emit("context-changed", _runtime)
+      return _runtime
+    },
+    definition: () => _runtime.definition,
+    updateDefinition: (newDefinition: Partial<RuntimeDefinition>) => {
+      _runtime.definition = mergeWithKeepingUint8ArrayType(
+        cloneDeep(_runtime.definition),
+        newDefinition
+      )
+      _runtime.definition = enhanceRuntimeDefinition(_runtime)
+      _runtime.details = getDetails()
+      emitter.emit("context-changed", _runtime)
+      return _runtime
+    },
+    whole: () => _runtime,
+    update: (data: DeepPartial<RuntimeWholeState>) => {
+      _runtime = mergeWithKeepingUint8ArrayType(cloneDeep(_runtime), data)
+      _runtime.definition = enhanceRuntimeDefinition(_runtime)
+      _runtime.details = getDetails()
+      emitter.emit("context-changed", _runtime)
+      return _runtime
+    },
+    details: () => _runtime.details,
+    emitter,
   }
-
-  return getFullContext()
 }

@@ -4,7 +4,7 @@ import {
   FxParamsData,
   jsonStringifyBigint,
 } from "@fxhash/params"
-import { RuntimeState } from "./_types.js"
+import { RuntimeDefinition, RuntimeState, RuntimeWholeState } from "./_types.js"
 import semver from "semver"
 import { mergeWith } from "lodash"
 import { float2hex } from "../../../../utils/dist/float.js"
@@ -21,11 +21,43 @@ export function fxParamsAsQueryParams(snippetVersion: string): boolean {
 }
 
 /**
+ * Enhances the runtime definition with the version of the runtime.
+ * Adding the version number to each control definition can be useful for
+ * granular control of the runtime controls.
+ * @param runtime - The runtime
+ * @returns The enhanced runtime definition
+ */
+export function enhanceRuntimeDefinition(
+  runtime: RuntimeWholeState
+): RuntimeDefinition {
+  return {
+    ...runtime.definition,
+    params:
+      runtime.definition.params?.map(p => ({
+        ...p,
+        ...(runtime.definition.version && {
+          version: runtime.definition.version,
+        }),
+      })) || null,
+  }
+}
+
+/**
+ * Hashes a string using float2hex and xorshiftString.
+ * @param data
+ * @returns The hashed string
+ * @internal
+ */
+export function quickHash(data: string): string {
+  return float2hex(xorshiftString(data))
+}
+
+/**
  * Hashes a runtime state using float2hex and xorshiftString.
  * @internal
  */
 export function hashRuntimeState(state: RuntimeState) {
-  return float2hex(xorshiftString(jsonStringifyBigint(state)))
+  return quickHash(jsonStringifyBigint(state))
 }
 
 /**
@@ -52,6 +84,11 @@ export function hashRuntimeHardState(
     params: staticParams,
   })
 }
+
+/**
+ * Lodash mergeWith customizer that keeps Uint8Array types alive.
+ * @internal
+ */
 
 function mergeCustomizer(_: any, source: any) {
   if (source instanceof Uint8Array) {

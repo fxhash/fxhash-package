@@ -53,22 +53,47 @@ export type RuntimeDefinition = {
 }
 
 /**
+ * The runtime details are derived from the state and definition.
+ * This includes the inputbytes of the fx(params), aswell as a soft and hard
+ * hash of the state and definition.
+ */
+export type RuntimeDetails = {
+  params: {
+    /**
+     * The input bytes of the fx(params)
+     * or null if there is no data
+     */
+    inputBytes: string | null
+    /**
+     * The size of the input bytes. Will be 0 if there is fx(params) data.
+     */
+    bytesSize: number
+  }
+  stateHash: {
+    /**
+     * hash of the whole state as it is
+     */
+    soft: string
+    /**
+     * hash of the hard-refresh properties of the state
+     * it excludes all fx(params) that are not in update mode "page-reload"
+     */
+    hard: string
+  }
+  definitionHash: {
+    /**
+     * hash of the current state of the fx(params)
+     */
+    params: string
+  }
+}
+
+/**
  * The whole state of the runtime consists of the runtime state
  * and the runtime definition
  */
 export type RuntimeWholeState = {
   state: RuntimeState
   definition: RuntimeDefinition
-}
-
-/**
- * Generic update function for a state
- */
-export type TUpdateStateFn<T, R> = (data: DeepPartial<T>) => R
-
-/**
- * Generic state that can be updated
- */
-export type TUpdateableState<T, R> = T & {
-  update: TUpdateStateFn<T, R>
+  details: RuntimeDetails
 }

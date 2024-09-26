@@ -5,12 +5,12 @@ import { serializeParamsOrNull } from "@fxhash/params"
 import { mergeWithKeepingUint8ArrayType } from "./utils.js"
 import { ControlState } from "./_types.js"
 
-const DEFAULT_CONTROL_STATE: ControlState = {
+const DEFAULT_CONTROL_STATE: ControlState = Object.freeze({
   params: {
     definition: null,
     values: {},
   },
-}
+})
 /**
  * The runtime controls hold the state of the fx(params).
  * @param initial - initial state of the controls
@@ -22,34 +22,27 @@ export function runtimeControls(
 ): IRuntimeControls {
   const emitter = new RuntimeControlsEventEmitter()
   let _controls: ControlState = initial
-
-  function update(
-    update: Partial<FxParamsData>,
-    definition?: FxParamDefinitions | null
-  ) {
-    _controls = mergeWithKeepingUint8ArrayType(cloneDeep(_controls), {
-      params: {
-        values: update,
-        definition: definition || _controls.params.definition,
-      },
-    })
-    const res = getRuntimeControl()
-    emitter.emit("controls-changed", res)
-    return res
+  return {
+    state: () => _controls,
+    update(
+      update: Partial<FxParamsData>,
+      definition?: FxParamDefinitions | null
+    ) {
+      _controls = mergeWithKeepingUint8ArrayType(cloneDeep(_controls), {
+        params: {
+          values: update,
+          definition: definition || _controls.params.definition,
+        },
+      })
+      emitter.emit("controls-changed", _controls)
+      return _controls
+    },
+    emitter,
+    getInputBytes() {
+      return serializeParamsOrNull(
+        _controls.params.values || {},
+        _controls.params.definition || []
+      )
+    },
   }
-
-  function getRuntimeControl(): IRuntimeControls {
-    return {
-      state: _controls,
-      update,
-      emitter,
-      getInputBytes: () =>
-        serializeParamsOrNull(
-          _controls.params.values || {},
-          _controls.params.definition || []
-        ),
-    }
-  }
-
-  return getRuntimeControl()
 }

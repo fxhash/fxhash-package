@@ -1,12 +1,11 @@
-import { EventEmitter } from "@fxhash/utils"
+import { DeepPartial, EventEmitter } from "@fxhash/utils"
 import {
   ControlState,
   ProjectState,
   RuntimeDefinition,
+  RuntimeDetails,
   RuntimeState,
   RuntimeWholeState,
-  TUpdateStateFn,
-  TUpdateableState,
 } from "./_types.js"
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
 
@@ -19,12 +18,12 @@ export interface IRuntimeController {
   /**
    * Holds a reference to the current runtime context.
    */
-  runtime: IRuntimeContext
+  runtime: () => IRuntimeContext
 
   /**
    * Holds a reference to the current fx(params) runtime controls.
    */
-  controls: IRuntimeControls
+  controls: () => IRuntimeControls
 
   /**
    * Initializes the runtime controller.
@@ -73,8 +72,8 @@ export interface IRuntimeController {
   emitter: RuntimeControllerEventEmitter
 }
 export type RuntimeControllerEventsTypemap = {
-  "runtime-changed": IRuntimeContext
-  "controls-changed": IRuntimeControls
+  "runtime-changed": RuntimeWholeState
+  "controls-changed": ControlState
 }
 export class RuntimeControllerEventEmitter extends EventEmitter<RuntimeControllerEventsTypemap> {}
 
@@ -94,7 +93,7 @@ export interface IRuntimeControls {
    * The current state of the runtime controls.
    * This includes the current values of the fx(params) and the definition.
    */
-  state: ControlState
+  state: () => ControlState
 
   /**
    * Updates the runtime controls with new data.
@@ -105,7 +104,7 @@ export interface IRuntimeControls {
   update: (
     update: Partial<FxParamsData>,
     definition?: FxParamDefinitions | null
-  ) => IRuntimeControls
+  ) => ControlState
 
   /**
    * Gets the input bytes of the runtime controls.
@@ -115,7 +114,7 @@ export interface IRuntimeControls {
   getInputBytes: () => string | null
 }
 export type RuntimeControlsEventsTypemap = {
-  "controls-changed": IRuntimeControls
+  "controls-changed": ControlState
 }
 export class RuntimeControlsEventEmitter extends EventEmitter<RuntimeControlsEventsTypemap> {}
 
@@ -127,60 +126,50 @@ export class RuntimeControlsEventEmitter extends EventEmitter<RuntimeControlsEve
  */
 export interface IRuntimeContext {
   /**
-   * The state of the project.
+   * Retrieve the latest whole state of the runtime context
    */
-  state: TUpdateableState<RuntimeState, IRuntimeContext>
+  whole: () => RuntimeWholeState
 
   /**
-   * The definition of the fx(params).
+   * Retrieve the latest state
    */
-  definition: TUpdateableState<RuntimeDefinition, IRuntimeContext>
+  state: () => RuntimeState
+
+  /**
+   * Update the state of the runtime context
+   * @param update
+   * @returns the updated runtime whole state
+   */
+  updateState: (update: Partial<RuntimeState>) => RuntimeWholeState
+
+  /**
+   * Retrieve the latest definition of the runtime context.
+   */
+  definition: () => RuntimeDefinition
+
+  /**
+   * Update the definition of the runtime
+   * @param update
+   * @returns the updated runtime whole state
+   * */
+  updateDefinition: (update: Partial<RuntimeDefinition>) => RuntimeWholeState
 
   /**
    * Extra details that are derived from the state and definition.
    * This includes the inputbytes of the fx(params), aswell as a soft and hard
    * hash of the state and definition.
    */
-  details: {
-    params: {
-      /**
-       * The input bytes of the fx(params)
-       * or null if there is no data
-       */
-      inputBytes: string | null
-      /**
-       * The size of the input bytes. Will be 0 if there is fx(params) data.
-       */
-      bytesSize: number
-    }
-    stateHash: {
-      /**
-       * hash of the whole state as it is
-       */
-      soft: string
-      /**
-       * hash of the hard-refresh properties of the state
-       * it excludes all fx(params) that are not in update mode "page-reload"
-       */
-      hard: string
-    }
-    definitionHash: {
-      /**
-       * hash of the current state of the fx(params)
-       */
-      params: string
-    }
-  }
+  details: () => RuntimeDetails
   /**
    * Updates the runtime context with new data.
    * @param data - The data to apply
-   * @returns The updated runtime context
+   * @returns The updated runtime whole state
    */
-  update: TUpdateStateFn<RuntimeWholeState, IRuntimeContext>
+  update: (update: DeepPartial<RuntimeWholeState>) => RuntimeWholeState
   emitter: RuntimeContextEventEmitter
 }
 export type RuntimeContextEventsTypemap = {
-  "context-changed": IRuntimeContext
+  "context-changed": RuntimeWholeState
 }
 export class RuntimeContextEventEmitter extends EventEmitter<RuntimeContextEventsTypemap> {}
 
