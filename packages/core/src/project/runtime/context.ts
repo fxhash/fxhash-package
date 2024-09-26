@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash"
 import { BlockchainType } from "@fxhash/shared"
 import { DeepPartial } from "@fxhash/utils"
 import {
@@ -20,6 +19,7 @@ import {
   quickHash,
 } from "./utils.js"
 import { IRuntimeContext, RuntimeContextEventEmitter } from "./_interfaces.js"
+import cloneDeep from "lodash.clonedeep"
 
 const DEFAULT_RUNTIME_STATE: RuntimeState = Object.freeze({
   hash: "",

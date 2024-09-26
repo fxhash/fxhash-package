@@ -6,9 +6,9 @@ import {
 } from "@fxhash/params"
 import { RuntimeDefinition, RuntimeState, RuntimeWholeState } from "./_types.js"
 import semver from "semver"
-import { mergeWith } from "lodash"
 import { float2hex } from "../../../../utils/dist/float.js"
 import { xorshiftString } from "../../../../utils/dist/bytes.js"
+import mergeWith from "lodash.mergewith"
 
 /**
  * Returns a boolean based on the provided snippet version. The boolean

@@ -15,7 +15,7 @@ import {
   RuntimeConnector,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
-import { debounce } from "lodash"
+import debounce from "lodash.debounce"
 
 /**
  * This function is used to handle old snippet events for projects

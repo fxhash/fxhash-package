@@ -1,9 +1,9 @@
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
-import { cloneDeep } from "lodash"
 import { IRuntimeControls, RuntimeControlsEventEmitter } from "./_interfaces.js"
 import { serializeParamsOrNull } from "@fxhash/params"
 import { mergeWithKeepingUint8ArrayType } from "./utils.js"
 import { ControlState } from "./_types.js"
+import cloneDeep from "lodash.clonedeep"
 
 const DEFAULT_CONTROL_STATE: ControlState = Object.freeze({
   params: {
