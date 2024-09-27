@@ -1,6 +1,5 @@
 import { BlockchainType, RawTokenFeatures } from "@fxhash/shared"
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
-import { DeepPartial } from "@fxhash/utils"
 
 /**
  * The execution context of the runtime
@@ -11,7 +10,8 @@ import { DeepPartial } from "@fxhash/utils"
 export type ExecutionContext = "minting" | "standalone" | "capture"
 
 /**
- * The state of a project
+ * The state of the project that is needed to connect a project
+ * with the runtime.
  */
 export type ProjectState = {
   cid: string

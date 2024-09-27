@@ -1,16 +1,32 @@
 import { ProjectState } from "./_types.js"
 import { config, proxyUrl } from "@fxhash/config"
 import { fxParamsAsQueryParams, quickHash } from "./utils.js"
-import { RuntimeConnector } from "./_interfaces.js"
+import { IRuntimeConnector } from "./_interfaces.js"
 
-const QUERY_KEYS: Record<string, string> = {
+/**
+ * A static map of the project state properties to their respective
+ * url parameter query key.
+ */
+const QUERY_KEYS: Record<string, string> = Object.freeze({
   hash: "fxhash",
   chain: "fxchain",
   minter: "fxminter",
   iteration: "fxiteration",
   context: "fxcontext",
-}
+})
 
+/**
+ * Get the URLSearchParams from a project given its state.
+ * @param state - The project state
+ * @param options
+ * @param options.fxParamsAsQueryParams - If the fx(params)
+ * should be passed as query params
+ * @param options.noFxParamsUpdateQuery - If the fx(params)
+ * should not be updated in the query
+ * @param options.additionalParams - Additional params
+ * to be added to the URLSearchParams
+ * @returns The URLSearchParams string
+ */
 export function getURLSearchParams(
   state: Omit<ProjectState, "cid" | "snippetVersion">,
   options: {
@@ -28,9 +44,9 @@ export function getURLSearchParams(
     ...Object.fromEntries(options.additionalParams || []),
   })
   let paramsString = urlSearchParams.toString()
-  // I older version params where query params
-  // in newer version they are in hash
   if (inputBytes) {
+    // I older version params where query params
+    // in newer version they are in hash
     if (options.fxParamsAsQueryParams) {
       paramsString += `&fxparams=${inputBytes}`
     } else {
@@ -42,6 +58,14 @@ export function getURLSearchParams(
   }
   return paramsString
 }
+
+/**
+ * Given a base url and a project state, return the project URL.
+ * @param baseUrl - The base URL of the project
+ * @param state - The project state
+ * @param urlParams - Additional URLSearchParams
+ * @returns The project URL
+ */
 
 export const getProjectUrl = (
   baseUrl: string,
@@ -56,12 +80,18 @@ export const getProjectUrl = (
   return `${baseUrl}/?${params}`
 }
 
-export const proxyConnector: RuntimeConnector = {
+/**
+ * A connector for the proxy environment.
+ */
+export const proxyConnector: IRuntimeConnector = {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) =>
     getProjectUrl(proxyUrl(state.cid), state, urlParams),
 }
 
-export const fsEmulatorConnector: RuntimeConnector = {
+/**
+ * A connector for the fs emulator environment.
+ */
+export const fsEmulatorConnector: IRuntimeConnector = {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) =>
     getProjectUrl(
       `${config.apis.fsEmulator}/resolve/${state.cid}`,

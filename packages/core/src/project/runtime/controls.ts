@@ -1,9 +1,14 @@
 import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
-import { IRuntimeControls, RuntimeControlsEventEmitter } from "./_interfaces.js"
+import {
+  IRuntimeControls,
+  RuntimeControlsEventEmitter,
+  RuntimeControlsUpdateOptions,
+} from "./_interfaces.js"
 import { serializeParamsOrNull } from "@fxhash/params"
 import { mergeWithKeepingUint8ArrayType } from "./utils.js"
 import { ControlState } from "./_types.js"
 import cloneDeep from "lodash.clonedeep"
+import { invariant } from "@fxhash/utils"
 
 const DEFAULT_CONTROL_STATE: ControlState = Object.freeze({
   params: {
@@ -26,16 +31,24 @@ export function runtimeControls(
     state: () => _controls,
     update(
       update: Partial<FxParamsData>,
-      definition?: FxParamDefinitions | null
+      definition?: FxParamDefinitions | null,
+      options?: RuntimeControlsUpdateOptions
     ) {
+      invariant(
+        Object.keys(update).every(id =>
+          (definition || _controls.params.definition)?.find(d => d.id === id)
+        ),
+        "Unknown parameter. Please provide the definition for each parameter."
+      )
       _controls = mergeWithKeepingUint8ArrayType(cloneDeep(_controls), {
         params: {
           values: update,
           definition: definition || _controls.params.definition,
         },
       })
-      emitter.emit("controls-changed", _controls)
-      return _controls
+      const payload = { update, state: _controls, options }
+      emitter.emit("controls-changed", payload)
+      return payload
     },
     emitter,
     getInputBytes() {

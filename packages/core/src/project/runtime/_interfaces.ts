@@ -27,6 +27,11 @@ export interface IRuntimeController {
   controls: () => IRuntimeControls
 
   /**
+   * Whether the runtime controller has been initialized.
+   */
+  initialized: () => boolean
+
+  /**
    * Initializes the runtime controller.
    * @param iframe - The iframe element to use for the runtime.
    */
@@ -57,16 +62,6 @@ export interface IRuntimeController {
   hardSync: () => void
 
   /**
-   * Updates the fx(params) runtime controls.
-   * @param update - The data to apply
-   * @param forceRefresh - Whether to force a refresh of the runtime context
-   */
-  updateControls: (
-    update: Partial<FxParamsData>,
-    forceRefresh?: boolean
-  ) => void
-
-  /**
    * Reference to the runtime controller event emitter which broadcasts events
    * when the runtime controller changes.
    */
@@ -74,7 +69,7 @@ export interface IRuntimeController {
 }
 export type RuntimeControllerEventsTypemap = {
   "runtime-changed": RuntimeWholeState
-  "controls-changed": ControlState
+  "controls-changed": ControlsChangedEventPayload
 }
 export class RuntimeControllerEventEmitter extends EventEmitter<RuntimeControllerEventsTypemap> {}
 
@@ -100,12 +95,14 @@ export interface IRuntimeControls {
    * Updates the runtime controls with new data.
    * @param update - The data to apply
    * @param definition - The definition to apply
+   * @param options - The options for the update function
    * @returns The updated runtime controls
    */
   update: (
     update: Partial<FxParamsData>,
-    definition?: FxParamDefinitions | null
-  ) => ControlState
+    definition?: FxParamDefinitions | null,
+    options?: RuntimeControlsUpdateOptions
+  ) => ControlsChangedEventPayload
 
   /**
    * Gets the input bytes of the runtime controls.
@@ -114,8 +111,28 @@ export interface IRuntimeControls {
    */
   getInputBytes: () => string | null
 }
+
+/**
+ * Options that can be passed to the runtime controls update function
+ * - forceRefresh: If true, the runtime will be forced to refresh
+ *   all fx(params) regardless of their update mode.
+ */
+export type RuntimeControlsUpdateOptions = {
+  forceRefresh?: boolean
+}
+
+/**
+ * The payload of the controls-changed event.
+ * The event is emitted when the runtime controls change.
+ */
+export type ControlsChangedEventPayload = {
+  update: Partial<FxParamsData>
+  state: ControlState
+  options?: RuntimeControlsUpdateOptions
+}
+
 export type RuntimeControlsEventsTypemap = {
-  "controls-changed": ControlState
+  "controls-changed": ControlsChangedEventPayload
 }
 export class RuntimeControlsEventEmitter extends EventEmitter<RuntimeControlsEventsTypemap> {}
 
@@ -173,12 +190,18 @@ export interface IRuntimeContext {
    * hash of the state and definition.
    */
   details: () => RuntimeDetails
+
   /**
    * Updates the runtime context with new data.
    * @param data - The data to apply
    * @returns The updated runtime whole state
    */
   update: (update: DeepPartial<RuntimeWholeState>) => RuntimeWholeState
+
+  /**
+   * A reference to the runtime context event emitter which broadcasts events
+   * when the runtime context changes.
+   */
   emitter: RuntimeContextEventEmitter
 }
 export type RuntimeContextEventsTypemap = {
@@ -190,6 +213,6 @@ export class RuntimeContextEventEmitter extends EventEmitter<RuntimeContextEvent
  * An interface for the runtime connector.
  * The runtime connector is responsible for generating URLs for the runtime.
  */
-export interface RuntimeConnector {
+export interface IRuntimeConnector {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) => string
 }

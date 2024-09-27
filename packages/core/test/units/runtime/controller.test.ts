@@ -120,28 +120,6 @@ describe("createRuntimeController", () => {
     )
   })
 
-  test("cannot update when no definitions", () => {
-    expect(() => controller.updateControls(PARAMS_VALUES_A)).toThrowError()
-  })
-
-  test("updateControls updates control state", () => {
-    simulateIframeLoad()
-    windowMessageHandler?.(
-      new MessageEvent("message", {
-        data: {
-          id: "fxhash_getParams",
-          data: { definitions: PARAMS_DEFINITION, values: {} },
-        },
-      })
-    )
-    const oldValues = controller.controls().state().params.values
-    controller.updateControls(PARAMS_VALUES_A)
-    expect(controller.controls().state().params.values).toEqual(
-      expect.objectContaining(PARAMS_VALUES_A)
-    )
-    expect(controller.controls().state().params.values).not.toBe(oldValues)
-  })
-
   test("cannot update unknown parameter", () => {
     simulateIframeLoad()
     windowMessageHandler?.(
@@ -152,7 +130,9 @@ describe("createRuntimeController", () => {
         },
       })
     )
-    expect(() => controller.updateControls({ unknown: "value" })).toThrowError()
+    expect(() =>
+      controller.controls().update({ unknown: "value" })
+    ).toThrowError()
   })
 
   test("emits events on runtime changes", () => {

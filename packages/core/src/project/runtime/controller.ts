@@ -1,5 +1,6 @@
 import {
   cleanup,
+  intialization,
   invariant,
   mockBlockchainAddress,
   mockTransactionHash,
@@ -12,7 +13,8 @@ import {
   IRuntimeContext,
   IRuntimeController,
   RuntimeControllerEventEmitter,
-  RuntimeConnector,
+  IRuntimeConnector,
+  ControlsChangedEventPayload,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import debounce from "lodash.debounce"
@@ -54,7 +56,7 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
 
 export interface IRuntimeControllerOptions {
   autoRefresh?: boolean
-  connector?: RuntimeConnector
+  connector?: IRuntimeConnector
 }
 
 const DEFAULT_RUNTIME_OPTIONS: IRuntimeControllerOptions = {
@@ -72,21 +74,21 @@ export interface IRuntimeControllerParams {
  * It holds the state of the runtime and the controls and keeps
  * iframe in sync with the state.
  * @param params - initial state of the runtime and options
- * @returns RuntimeController - Which exposes the runtime, controls, init,
- * release, getUrl, hardSync, updateControls and an event emitter
+ * @returns IRuntimeController
  */
 export function createRuntimeController(
   params: IRuntimeControllerParams
 ): IRuntimeController {
   const clean = cleanup()
+  const init = intialization()
   const options = params.options
-  const _initial = params.state
 
   const runtimeOptions = { ...DEFAULT_RUNTIME_OPTIONS, ...options }
   const emitter = new RuntimeControllerEventEmitter()
   const _connector = runtimeOptions.connector
 
   const _controls = runtimeControls()
+  const _initial = params.state
   const _runtime = runtimeContext({
     state: {
       hash: _initial.hash || mockTransactionHash(_initial.chain),
@@ -111,6 +113,7 @@ export function createRuntimeController(
     ) {
       _syncIframe()
     }
+    // If the definition changed and params are defined, update the controls
     if (
       runtime.details.definitionHash.params !==
       _prevRuntime?.details.definitionHash.params
@@ -127,8 +130,42 @@ export function createRuntimeController(
   }
 
   _controls.emitter.on("controls-changed", _handleControlsChange)
-  function _handleControlsChange(controls: ControlState) {
-    emitter.emit("controls-changed", controls)
+  function _handleControlsChange(eventData: ControlsChangedEventPayload) {
+    try {
+      const { update, state } = eventData
+      // find the params that actually changed
+      const changed = Object.keys(update)
+        .filter(id => state.params.values[id] !== update[id])
+        .map(id => state.params.definition?.find(d => d.id === id))
+      // when there are no changes we don't need to do anything
+      // e.g. when artworks call emit in a draw loop this should
+      // catch too many updates that are actually not needed
+      if (changed.length === 0) return
+      // find params that are update mode "sync" via window.postMessage API
+      const synced = changed.filter(
+        (def): def is NonNullable<typeof def> => def?.update === "sync"
+      )
+      // if at least one change, soft refresh "sync" params
+      if (Object.keys(synced).length > 0) {
+        softUpdateParams(
+          Object.fromEntries(synced.map(def => [def.id, update[def.id]]))
+        )
+      }
+      if (!eventData.options?.forceRefresh) {
+        // if auto-refresh is defined, we update params on the runtime
+        if (options?.autoRefresh) {
+          _updateParamsDebounced({
+            params: update,
+          })
+        }
+      } else {
+        _runtime.updateState({ params: update })
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      emitter.emit("controls-changed", eventData)
+    }
   }
 
   const _updateParamsDebounced = debounce(_runtime.updateState, 200)
@@ -143,54 +180,7 @@ export function createRuntimeController(
     )
   }
 
-  function updateControls(update: Partial<FxParamsData>, forceRefresh = false) {
-    const controlsState = _controls.state()
-    // make sure definition exists and check if the key
-    // of the update have a corresponding definition
-    invariant(
-      controlsState.params.definition !== null,
-      "Definition is required"
-    )
-    invariant(
-      Object.keys(update).every(id =>
-        controlsState.params.definition?.find(d => d.id === id)
-      ),
-      "Unknown parameter"
-    )
-    // find the params which have changed and are "synced"
-    const changed = Object.keys(update)
-      .filter(id => controlsState.params.values[id] !== update[id])
-      .map(id => controlsState.params.definition?.find(d => d.id === id))
-    // when there are no changes we don't need to do anything
-    // e.g. when artworks call emit in a draw loop this should
-    // catch too many updates that are actually not needed
-    if (changed.length === 0) return
-    // params that are "synced"
-    const synced = changed.filter(
-      (def): def is NonNullable<typeof def> => def?.update === "sync"
-    )
-    // if at least a change, soft refresh
-    if (Object.keys(synced).length > 0) {
-      softUpdateParams(
-        Object.fromEntries(synced.map(def => [def.id, update[def.id]]))
-      )
-    }
-    if (!forceRefresh) {
-      // if auto-refresh is defined, we update params on the runtime (will only)
-      // reload the hard params
-      if (options?.autoRefresh) {
-        _updateParamsDebounced({
-          params: update,
-        })
-      }
-    } else {
-      _runtime.updateState({ params: update })
-    }
-    // in any case, refresh the control state
-    _controls.update(update)
-  }
-
-  function onMessage(e: MessageEvent) {
+  function _onMessage(e: MessageEvent) {
     // TODO: refactor message event handling
     if (e.data.id === "fxhash_getInfo") {
       const {
@@ -209,7 +199,7 @@ export function createRuntimeController(
     // TODO: refactor message event handling
     if (e.data.id === "fxhash_emit:params:update") {
       const { params } = e.data.data
-      updateControls(params)
+      _controls.update(params)
     }
     // handle deprecated events from old snippet
     handleOldSnippetEvents(e, _runtime)
@@ -217,11 +207,11 @@ export function createRuntimeController(
 
   function _registerWindowMessageListeners() {
     invariant(window, "window is required")
-    window.addEventListener("message", onMessage, false)
-    clean.add(() => window.removeEventListener("message", onMessage, false))
+    window.addEventListener("message", _onMessage, false)
+    clean.add(() => window.removeEventListener("message", _onMessage, false))
   }
 
-  function onIframeLoad() {
+  function _onIframeLoad() {
     invariant(_iframe, "_iframe is required")
     // TODO: refactor message event handling
     _iframe.contentWindow?.postMessage("fxhash_getInfo", "*")
@@ -232,8 +222,8 @@ export function createRuntimeController(
 
   function _registerIframeOnLoadListener() {
     invariant(_iframe, "_iframe is required")
-    _iframe.addEventListener("load", onIframeLoad, true)
-    clean.add(() => _iframe?.removeEventListener("load", onIframeLoad, true))
+    _iframe.addEventListener("load", _onIframeLoad, true)
+    clean.add(() => _iframe?.removeEventListener("load", _onIframeLoad, true))
   }
 
   function getUrl(runtime: IRuntimeContext) {
@@ -267,8 +257,15 @@ export function createRuntimeController(
   }
 
   return {
+    initialized: () => init.finished,
     init: (iframe: HTMLIFrameElement) => {
-      _init(iframe)
+      try {
+        init.start()
+        _init(iframe)
+        init.finish()
+      } catch (err) {
+        throw init.fail(err)
+      }
     },
     release: () => {
       clean.clear()
@@ -276,6 +273,7 @@ export function createRuntimeController(
     restart: (iframe: HTMLIFrameElement) => {
       clean.clear()
       _init(iframe)
+      // Reset the runtime state to the initial state
       _runtime.updateState({
         hash: _initial.hash || mockTransactionHash(_initial.chain),
         minter: _initial.minter || mockBlockchainAddress(_initial.chain),
@@ -295,7 +293,6 @@ export function createRuntimeController(
       })
       _syncIframe()
     },
-    updateControls,
     emitter,
   }
 }
