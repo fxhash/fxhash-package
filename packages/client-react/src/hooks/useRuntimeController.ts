@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useState } from "react"
+import { RefCallback, useCallback, useEffect, useMemo, useState } from "react"
 import {
   ProjectState,
   IRuntimeControllerOptions,
@@ -7,20 +7,22 @@ import {
   RuntimeWholeState,
   ControlState,
 } from "@fxhash/sdk"
+import { ControlsChangedEventPayload } from "@fxhash/sdk"
 
-type UseRuntimeController = (params: {
-  iframeRef: RefObject<HTMLIFrameElement>
-  state: ProjectState
-  options?: IRuntimeControllerOptions
-}) => {
+export interface IUseRuntimeControllerReturn {
   controller: IRuntimeController
   runtime?: RuntimeWholeState
   controls?: ControlState
   restart: (iframe: HTMLIFrameElement) => void
+  ref: RefCallback<HTMLIFrameElement>
 }
 
+export type UseRuntimeController = (params: {
+  state: ProjectState
+  options?: IRuntimeControllerOptions
+}) => IUseRuntimeControllerReturn
+
 export const useRuntimeController: UseRuntimeController = ({
-  iframeRef,
   state,
   options,
 }) => {
@@ -32,23 +34,35 @@ export const useRuntimeController: UseRuntimeController = ({
           ...options,
         },
       }),
-    []
+    [options]
   )
+
   const [runtime, setRuntime] = useState<RuntimeWholeState>()
   const [controls, setControls] = useState<ControlState>()
 
-  useEffect(() => {
-    if (!iframeRef.current) return
-    controller.emitter.on("runtime-changed", setRuntime)
-    controller.emitter.on("controls-changed", setControls)
-    controller.init(iframeRef.current)
+  const ref = useCallback(
+    (iframe: HTMLIFrameElement) => {
+      if (iframe) {
+        if (!controller.initialized()) {
+          controller.init(iframe)
+        } else {
+          controller.restart(iframe)
+        }
+      }
+    },
+    [controller]
+  )
 
-    setRuntime(controller.runtime().whole())
-    setControls(controller.controls().state())
+  useEffect(() => {
+    function onControlsChange({ state }: ControlsChangedEventPayload) {
+      setControls(state)
+    }
+    controller.emitter.on("runtime-changed", setRuntime)
+    controller.emitter.on("controls-changed", onControlsChange)
 
     return () => {
       controller.emitter.off("runtime-changed", setRuntime)
-      controller.emitter.off("controls-changed", setControls)
+      controller.emitter.off("controls-changed", onControlsChange)
       controller.release()
     }
   }, [])
@@ -60,5 +74,6 @@ export const useRuntimeController: UseRuntimeController = ({
     restart: (iframe: HTMLIFrameElement) => {
       controller.restart(iframe)
     },
+    ref,
   }
 }
