@@ -71,7 +71,6 @@ export {
 
 export * from "./types"
 export * from "./helpers"
-export * from "./utils"
 
 export { type IAppMetadata, isAppMetadataValid } from "./config/metadata"
 

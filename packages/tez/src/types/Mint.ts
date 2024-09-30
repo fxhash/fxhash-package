@@ -1,9 +1,13 @@
-import { Collaboration } from "./entities/User"
-import { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
+import {
+  Collaboration,
+  GenTokLabel,
+  GenTokPricing,
+  IPricingDutchAuction,
+  IPricingFixed,
+  IReserve,
+  ISplit,
+} from "@fxhash/shared"
 import { GenerativeTokenMetadata } from "./Metadata"
-import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
-import { ISplit } from "./entities/Split"
-import { IReserve } from "./entities/Reserve"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -85,23 +89,18 @@ export interface MintGenerativeData<N = string> {
   snippetVersion?: string | null
 }
 
-export type ConstraintVariant = [string, string, number, string]
-
-export interface GenTokConstrains {
-  hashConstraints?: string[] | null
-  minterConstraints?: string[] | null
-  iterationConstraints?: number[] | null
-  paramsConstraints?: string[] | null
-}
-
-export interface ExplorationSettings extends GenTokConstrains {
-  enabled: boolean
-}
-
 export interface GenTokenSettings {
   exploration?: {
-    preMint?: ExplorationSettings
-    postMint?: ExplorationSettings
+    preMint?: {
+      enabled: boolean
+      hashConstraints?: string[] | null
+      paramsConstraints?: string[] | null
+    }
+    postMint?: {
+      enabled: boolean
+      hashConstraints?: string[] | null
+      paramsConstraints?: string[] | null
+    }
   }
 }
 
@@ -110,9 +109,6 @@ export interface GenTokPricingForm<N> {
   pricingFixed: Partial<IPricingFixed<N>>
   pricingDutchAuction: Partial<IPricingDutchAuction<N>>
   lockForReserves?: boolean
-  royalties?: N
-  splitsPrimary: ISplit[]
-  splitsSecondary: ISplit[]
 }
 
 export enum GenTokEditions {
@@ -120,7 +116,7 @@ export enum GenTokEditions {
   OPENED = "OPENED",
 }
 
-export type GenTokOpenEditionsForm = {
+export type GenTokOpenEditionsForm<N> = {
   closesAt?: Date | null
 }
 
@@ -131,7 +127,7 @@ export type GenTokFixedEditionsForm<N> = {
 export type GenTokEditionsForm<N> = {
   type: GenTokEditions
   fixed: GenTokFixedEditionsForm<N>
-  opened: GenTokOpenEditionsForm
+  opened: GenTokOpenEditionsForm<N>
 }
 
 export interface GenTokPricingForm<N> {
@@ -143,10 +139,13 @@ export interface GenTokPricingForm<N> {
 
 export interface GenTokDistributionForm<N> {
   editions: GenTokEditionsForm<N>
+  pricing: GenTokPricingForm<N>
+  royalties?: N
   enabled: boolean
+  splitsPrimary: ISplit[]
+  splitsSecondary: ISplit[]
   reserves: IReserve<N>[]
   gracingPeriod?: N
-  frameMinting?: FrameMintingFormValues
 }
 
 export interface GenTokenInformationsForm {

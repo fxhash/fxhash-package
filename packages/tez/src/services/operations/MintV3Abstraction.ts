@@ -7,6 +7,7 @@ import {
   WalletParamsWithKind,
 } from "@taquito/taquito"
 import { FxhashContracts } from "@/types/Contracts"
+import { IReserveConsumption } from "@/types/Reserve"
 import { genTokCurrentPrice } from "@/utils/genTokCurrentPrice"
 import { isTicketOwner, isTicketUsed } from "@/services/Blockchain"
 import { prepareReserveConsumption } from "@/utils/pack/reserves"
@@ -15,11 +16,7 @@ import {
   EBuildableParams,
   buildParameters,
 } from "../parameters-builder/BuildParameters"
-import {
-  EReserveMethod,
-  GenerativeToken,
-  IReserveConsumption,
-} from "@fxhash/shared"
+import { EReserveMethod, GenerativeToken } from "@fxhash/shared"
 
 const isValidTicket = async (
   pkh: string,

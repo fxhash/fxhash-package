@@ -11,31 +11,8 @@ export interface ProfileUploadResponse {
   metadataUri: string
 }
 
-export enum AvatarUploadError {
-  UNKNOWN = "UNKNOWN",
-  NO_FILE = "NO_FILE",
-  WRONG_FORMAT = "WRONG_FORMAT",
-  IPFS_UPLOAD_FAILED = "IPFS_UPLOAD_FAILED",
-}
-
-export interface AvatarUploadResponse {
-  avatarUri: string
-}
-
 export interface MintGenUploadProjectResponse {
   cidParams: string
-  authenticationHash: string
-}
-
-export interface TempGenUploadProjectResponse {
-  zipKey: string
-  projectCid: string
-  authenticationHash: string
-}
-
-export interface MintGenUploadProjectResponse {
-  zipKey: string
-  projectCid: string
   authenticationHash: string
 }
 
@@ -109,16 +86,10 @@ export interface TestPreviewErrorResponse {
 export enum MetadataError {
   UNKNOWN = "UNKNOWN",
   IPFS_ERROR = "IPFS_ERROR",
-  UPLOAD_ERROR = "UPLOAD_ERROR",
-  METADATA_EXISTS = "METADATA_EXISTS",
 }
 
 export interface MetadataResponse {
   cid: string
-}
-
-export interface MetadataEthResponse {
-  key: string
 }
 
 export enum MintError {
