@@ -55,11 +55,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "fxhash/fxhash-package",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
+  "repository": "fxhash/fxhash-package",
   "type": "module",
   "types": "dist/index.d.ts",
   "typesVersions": {

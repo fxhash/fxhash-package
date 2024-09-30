@@ -14,7 +14,8 @@
     "@fxhash/params": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/params": "workspace:*"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
