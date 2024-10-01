@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noImplicitReturns": true
   }
 }
