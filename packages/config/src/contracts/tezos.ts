@@ -86,7 +86,7 @@ export const tezosMainnetContracts: ITezosContracts = {
   articles: "KT1GtbuswcNMGhHF2TSuH1Yfaqn16do8Qtva",
   card_proxy: "KT1DQGSRsgHcf2TPdKGc4qm5AT9JprJCAo7j",
   collaboration_factory: "KT1JrUPSCt1r2MB2J7Lk2KwiWSYr3Mr414ck",
-  consumable_database: "KT1Wm3zZqRd6JBbZWuatKYZCmnqUMy2Y79BL",
+  consumable_database: "KT1Mbfkqh5EhebWuMvqAfUPTpgiBPwmQCDSD",
   cycles: "KT1BgD9SPfysnMz3vkfm6ZEaGFKCVcE5ay91",
   gentk_v1: "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE",
   gentk_v1_data: "KT1WRpPyXHSCbTfDQFWVXbMpxxvf7Y7KChxc",
