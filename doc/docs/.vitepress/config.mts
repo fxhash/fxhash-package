@@ -94,6 +94,8 @@ export default withMermaid(
      */
     cleanUrls: true,
 
+    ignoreDeadLinks: true,
+
     /**
      * Allows README.md files to be considered as index files
      * (for integration with github & cleaner URLs)
