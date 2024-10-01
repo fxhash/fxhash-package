@@ -309,7 +309,8 @@ export const fxhashConfig: IFxhashConfig = {
   },
 }
 
-export const localConfig = getConfigForEnv("local")
-export const localDockerConfig = getConfigForEnv("localDocker")
-export const devConfig = getConfigForEnv("dev")
-export const prdConfig = getConfigForEnv("prd")
+export const localConfig: IFxhashConfigSingleEnv = getConfigForEnv("local")
+export const localDockerConfig: IFxhashConfigSingleEnv =
+  getConfigForEnv("localDocker")
+export const devConfig: IFxhashConfigSingleEnv = getConfigForEnv("dev")
+export const prdConfig: IFxhashConfigSingleEnv = getConfigForEnv("prd")
