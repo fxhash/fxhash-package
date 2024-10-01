@@ -6,10 +6,6 @@ import {
 } from "@/services/Reservoir.js"
 import { listToken } from "../Marketplace.js"
 import { TransactionType } from "@fxhash/shared"
-import {
-  getProjectRoyalties,
-  processOverridenRoyalties,
-} from "@/utils/royalties.js"
 
 export type TListTokenEthV1OperationParams = {
   orders: {
@@ -45,17 +41,14 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
           },
         }
       }
-      const royalties = await getProjectRoyalties(order.token)
-      if (!royalties) throw new Error("Royalties not found")
       args.push({
         token: `${order.token}:${order.tokenId}`,
         weiPrice: order.price,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
-        automatedRoyalties: false,
+        automatedRoyalties: true,
         expirationTime: order.expiration ? order.expiration : undefined,
-        customRoyalties: processOverridenRoyalties(royalties, this.chain),
       })
     }
     const transactionHash = await listToken(args, this.manager, this.chain)
