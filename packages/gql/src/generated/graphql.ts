@@ -5631,6 +5631,62 @@ export type Eth_Frame_Data_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** columns and relationships of "squid_processor.status" */
+export type Eth_Indexer = {
+  __typename?: 'eth_indexer';
+  hash?: Maybe<Scalars['String']['output']>;
+  height: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  nonce?: Maybe<Scalars['Int']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "squid_processor.status". All fields are combined with a logical 'AND'. */
+export type Eth_Indexer_Bool_Exp = {
+  _and?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
+  _not?: InputMaybe<Eth_Indexer_Bool_Exp>;
+  _or?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
+  hash?: InputMaybe<String_Comparison_Exp>;
+  height?: InputMaybe<Int_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  nonce?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "squid_processor.status". */
+export type Eth_Indexer_Order_By = {
+  hash?: InputMaybe<Order_By>;
+  height?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  nonce?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "squid_processor.status" */
+export enum Eth_Indexer_Select_Column {
+  /** column name */
+  Hash = 'hash',
+  /** column name */
+  Height = 'height',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Nonce = 'nonce'
+}
+
+/** Streaming cursor of the table "eth_indexer" */
+export type Eth_Indexer_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Eth_Indexer_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Eth_Indexer_Stream_Cursor_Value_Input = {
+  hash?: InputMaybe<Scalars['String']['input']>;
+  height?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  nonce?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /** columns and relationships of "eth_minter_proceeds" */
 export type Eth_Minter_Proceeds = {
   __typename?: 'eth_minter_proceeds';
@@ -6071,6 +6127,8 @@ export type Generative_Token = {
   created_at: Scalars['timestamptz']['output'];
   display_uri?: Maybe<Scalars['String']['output']>;
   enabled: Scalars['Boolean']['output'];
+  /** A computed field, executes function "get_features_for_generative_token" */
+  features?: Maybe<Scalars['jsonb']['output']>;
   flag: Scalars['generative_token_flag_enum']['output'];
   /** An array relationship */
   generative_token_articles: Array<Article_Generative_Token>;
@@ -6200,6 +6258,12 @@ export type Generative_TokenCollectors_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Generative_Token_Collected_Order_By>>;
   where?: InputMaybe<Generative_Token_Collected_Bool_Exp>;
+};
+
+
+/** columns and relationships of "generative_token" */
+export type Generative_TokenFeaturesArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -6483,6 +6547,7 @@ export type Generative_Token_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   display_uri?: InputMaybe<String_Comparison_Exp>;
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
+  features?: InputMaybe<Jsonb_Comparison_Exp>;
   flag?: InputMaybe<Generative_Token_Flag_Enum_Comparison_Exp>;
   generative_token_articles?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   generative_uri?: InputMaybe<String_Comparison_Exp>;
@@ -6927,6 +6992,7 @@ export type Generative_Token_Order_By = {
   created_at?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
   enabled?: InputMaybe<Order_By>;
+  features?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
   generative_token_articles_aggregate?: InputMaybe<Article_Generative_Token_Aggregate_Order_By>;
   generative_uri?: InputMaybe<Order_By>;
@@ -9808,7 +9874,7 @@ export type Objkt = {
   created_at: Scalars['timestamptz']['output'];
   display_uri?: Maybe<Scalars['bpchar']['output']>;
   duplicate?: Maybe<Scalars['Boolean']['output']>;
-  features?: Maybe<Scalars['json']['output']>;
+  features?: Maybe<Scalars['jsonb']['output']>;
   generation_hash?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   generative_token: Generative_Token;
@@ -10135,7 +10201,7 @@ export type Objkt_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   display_uri?: InputMaybe<Bpchar_Comparison_Exp>;
   duplicate?: InputMaybe<Boolean_Comparison_Exp>;
-  features?: InputMaybe<Json_Comparison_Exp>;
+  features?: InputMaybe<Jsonb_Comparison_Exp>;
   generation_hash?: InputMaybe<String_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   gentk_assign?: InputMaybe<Gentk_Assign_Bool_Exp>;
@@ -10502,7 +10568,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   display_uri?: InputMaybe<Scalars['bpchar']['input']>;
   duplicate?: InputMaybe<Scalars['Boolean']['input']>;
-  features?: InputMaybe<Scalars['json']['input']>;
+  features?: InputMaybe<Scalars['jsonb']['input']>;
   generation_hash?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
@@ -11957,6 +12023,10 @@ export type Onchain_Query = {
   eth_frame_data: Array<Eth_Frame_Data>;
   /** fetch data from the table: "eth_frame_data" using primary key columns */
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
+  /** fetch data from the table: "squid_processor.status" */
+  eth_indexer: Array<Eth_Indexer>;
+  /** fetch data from the table: "squid_processor.status" using primary key columns */
+  eth_indexer_by_pk?: Maybe<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
   /** fetch data from the table: "eth_minter_proceeds" using primary key columns */
@@ -12335,6 +12405,20 @@ export type Onchain_QueryEth_Frame_DataArgs = {
 
 export type Onchain_QueryEth_Frame_Data_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type Onchain_QueryEth_IndexerArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Indexer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Indexer_Order_By>>;
+  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
+};
+
+
+export type Onchain_QueryEth_Indexer_By_PkArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -12918,6 +13002,12 @@ export type Onchain_Subscription = {
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
   /** fetch data from the table in a streaming manner: "eth_frame_data" */
   eth_frame_data_stream: Array<Eth_Frame_Data>;
+  /** fetch data from the table: "squid_processor.status" */
+  eth_indexer: Array<Eth_Indexer>;
+  /** fetch data from the table: "squid_processor.status" using primary key columns */
+  eth_indexer_by_pk?: Maybe<Eth_Indexer>;
+  /** fetch data from the table in a streaming manner: "squid_processor.status" */
+  eth_indexer_stream: Array<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
   /** fetch data from the table: "eth_minter_proceeds" using primary key columns */
@@ -13467,6 +13557,27 @@ export type Onchain_SubscriptionEth_Frame_Data_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Eth_Frame_Data_Stream_Cursor_Input>>;
   where?: InputMaybe<Eth_Frame_Data_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_IndexerArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Indexer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Indexer_Order_By>>;
+  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_Indexer_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Onchain_SubscriptionEth_Indexer_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Eth_Indexer_Stream_Cursor_Input>>;
+  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
 };
 
 

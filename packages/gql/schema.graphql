@@ -6662,6 +6662,73 @@ input eth_frame_data_stream_cursor_value_input {
 }
 
 """
+columns and relationships of "squid_processor.status"
+"""
+type eth_indexer {
+  hash: String
+  height: Int!
+  id: Int!
+  nonce: Int
+}
+
+"""
+Boolean expression to filter rows from the table "squid_processor.status". All fields are combined with a logical 'AND'.
+"""
+input eth_indexer_bool_exp {
+  _and: [eth_indexer_bool_exp!]
+  _not: eth_indexer_bool_exp
+  _or: [eth_indexer_bool_exp!]
+  hash: String_comparison_exp
+  height: Int_comparison_exp
+  id: Int_comparison_exp
+  nonce: Int_comparison_exp
+}
+
+"""Ordering options when selecting data from "squid_processor.status"."""
+input eth_indexer_order_by {
+  hash: order_by
+  height: order_by
+  id: order_by
+  nonce: order_by
+}
+
+"""
+select columns of table "squid_processor.status"
+"""
+enum eth_indexer_select_column {
+  """column name"""
+  hash
+
+  """column name"""
+  height
+
+  """column name"""
+  id
+
+  """column name"""
+  nonce
+}
+
+"""
+Streaming cursor of the table "eth_indexer"
+"""
+input eth_indexer_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: eth_indexer_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input eth_indexer_stream_cursor_value_input {
+  hash: String
+  height: Int
+  id: Int
+  nonce: Int
+}
+
+"""
 columns and relationships of "eth_minter_proceeds"
 """
 type eth_minter_proceeds {
@@ -7290,6 +7357,14 @@ type generative_token {
   created_at: timestamptz!
   display_uri: String
   enabled: Boolean!
+
+  """
+  A computed field, executes function "get_features_for_generative_token"
+  """
+  features(
+    """JSON select path"""
+    path: String
+  ): jsonb
   flag: generative_token_flag_enum!
 
   """An array relationship"""
@@ -7743,6 +7818,7 @@ input generative_token_bool_exp {
   created_at: timestamptz_comparison_exp
   display_uri: String_comparison_exp
   enabled: Boolean_comparison_exp
+  features: jsonb_comparison_exp
   flag: generative_token_flag_enum_comparison_exp
   generative_token_articles: article_generative_token_bool_exp
   generative_uri: String_comparison_exp
@@ -8225,6 +8301,7 @@ input generative_token_order_by {
   created_at: order_by
   display_uri: order_by
   enabled: order_by
+  features: order_by
   flag: order_by
   generative_token_articles_aggregate: article_generative_token_aggregate_order_by
   generative_uri: order_by
@@ -11528,7 +11605,7 @@ type objkt {
   features(
     """JSON select path"""
     path: String
-  ): json
+  ): jsonb
   generation_hash: String
 
   """An object relationship"""
@@ -11864,7 +11941,7 @@ input objkt_bool_exp {
   created_at: timestamptz_comparison_exp
   display_uri: bpchar_comparison_exp
   duplicate: Boolean_comparison_exp
-  features: json_comparison_exp
+  features: jsonb_comparison_exp
   generation_hash: String_comparison_exp
   generative_token: generative_token_bool_exp
   gentk_assign: gentk_assign_bool_exp
@@ -12301,7 +12378,7 @@ input objkt_stream_cursor_value_input {
   created_at: timestamptz
   display_uri: bpchar
   duplicate: Boolean
-  features: json
+  features: jsonb
   generation_hash: String
   id: String
   input_bytes: String
@@ -14617,6 +14694,31 @@ type onchain_query {
   eth_frame_data_by_pk(id: String!): eth_frame_data
 
   """
+  fetch data from the table: "squid_processor.status"
+  """
+  eth_indexer(
+    """distinct select on columns"""
+    distinct_on: [eth_indexer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_indexer_order_by!]
+
+    """filter the rows returned"""
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor.status" using primary key columns
+  """
+  eth_indexer_by_pk(id: Int!): eth_indexer
+
+  """
   fetch data from the table: "eth_minter_proceeds"
   """
   eth_minter_proceeds(
@@ -16106,6 +16208,45 @@ type onchain_subscription {
     """filter the rows returned"""
     where: eth_frame_data_bool_exp
   ): [eth_frame_data!]!
+
+  """
+  fetch data from the table: "squid_processor.status"
+  """
+  eth_indexer(
+    """distinct select on columns"""
+    distinct_on: [eth_indexer_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [eth_indexer_order_by!]
+
+    """filter the rows returned"""
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor.status" using primary key columns
+  """
+  eth_indexer_by_pk(id: Int!): eth_indexer
+
+  """
+  fetch data from the table in a streaming manner: "squid_processor.status"
+  """
+  eth_indexer_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [eth_indexer_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
 
   """
   fetch data from the table: "eth_minter_proceeds"
