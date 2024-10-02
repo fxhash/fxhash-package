@@ -1,7 +1,7 @@
 import { RedeemableDetails } from "@fxhash/shared"
 
 export function redeemTotalCost(
-  redeemable: RedeemableDetails,
+  redeemable: Pick<RedeemableDetails, "amount" | "options">,
   options: (number | null)[]
 ): number {
   let cost = redeemable.amount
