@@ -23,7 +23,7 @@ import {
 } from "./config"
 import { isLocal, isProd, isDockerLocal } from "./helpers"
 
-let config = isProd
+let config: IFxhashConfigSingleEnv = isProd
   ? prdConfig
   : isLocal
     ? isDockerLocal

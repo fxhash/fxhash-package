@@ -47,6 +47,7 @@ export interface IFxhashNetworkConfig {
     primary: number
     secondary: number
   }
+  royaltyBasisPoint: number
   splitBasisPoint: number
 }
 
@@ -154,6 +155,7 @@ export const fxhashConfig: IFxhashConfig = {
           ethFeeReceiver: "0x",
           wertRelayer: "tz1T2uyYTshSGrEg13VGJFqsWwbi2H175hZb",
           fxhashFees: tezosFees,
+          royaltyBasisPoint: 1000,
           splitBasisPoint: 1000,
         },
         apis: tezosTestnetApis,
@@ -166,6 +168,7 @@ export const fxhashConfig: IFxhashConfig = {
           ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
           fxhashFees: ethFees,
+          royaltyBasisPoint: 10_000,
           splitBasisPoint: 1_000_000,
         },
         apis: ethTestnetApis,
@@ -178,6 +181,7 @@ export const fxhashConfig: IFxhashConfig = {
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
           fxhashFees: baseFees,
+          royaltyBasisPoint: 10_000,
           splitBasisPoint: 1_000_000,
         },
         apis: baseTestnetApis,
@@ -192,6 +196,7 @@ export const fxhashConfig: IFxhashConfig = {
           ethFeeReceiver: "0x",
           wertRelayer: "tz1KkPS1TWFyDWfQwrdvmTmsCLUNMegDrrSi",
           fxhashFees: tezosFees,
+          royaltyBasisPoint: 1000,
           splitBasisPoint: 1000,
         },
         apis: tezosMainnetApis,
@@ -204,6 +209,7 @@ export const fxhashConfig: IFxhashConfig = {
           ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
           fxhashFees: ethFees,
+          royaltyBasisPoint: 10_000,
           splitBasisPoint: 1_000_000,
         },
         apis: ethMainnetApis,
@@ -216,6 +222,7 @@ export const fxhashConfig: IFxhashConfig = {
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
           fxhashFees: baseFees,
+          royaltyBasisPoint: 10_000,
           splitBasisPoint: 1_000_000,
         },
         apis: baseMainnetApis,
@@ -302,7 +309,8 @@ export const fxhashConfig: IFxhashConfig = {
   },
 }
 
-export const localConfig = getConfigForEnv("local")
-export const localDockerConfig = getConfigForEnv("localDocker")
-export const devConfig = getConfigForEnv("dev")
-export const prdConfig = getConfigForEnv("prd")
+export const localConfig: IFxhashConfigSingleEnv = getConfigForEnv("local")
+export const localDockerConfig: IFxhashConfigSingleEnv =
+  getConfigForEnv("localDocker")
+export const devConfig: IFxhashConfigSingleEnv = getConfigForEnv("dev")
+export const prdConfig: IFxhashConfigSingleEnv = getConfigForEnv("prd")

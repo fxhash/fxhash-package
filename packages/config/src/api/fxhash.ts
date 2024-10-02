@@ -191,6 +191,6 @@ const fxEnvToApisMap: Record<TEnv, IFxhashApis> = {
 /**
  * Given some env, returns the associated APIs config.
  */
-export function fxApisByEnv(env: TEnv) {
+export function fxApisByEnv(env: TEnv): IFxhashApis {
   return fxEnvToApisMap[env]
 }

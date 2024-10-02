@@ -12,7 +12,7 @@ export function getDockerInternalUrl(url: string): string {
   return url.replace(HOST_LOCAL, HOST_DOCKER_INTERNAL)
 }
 
-export const isProd = (() => {
+export const isProd: boolean = (() => {
   // We can't destructure process.envs
   // https://nextjs.org/docs/pages/api-reference/next-config-js/env
   return (
@@ -27,7 +27,7 @@ export const isProd = (() => {
   )
 })()
 
-export const isLocal = (() => {
+export const isLocal: boolean = (() => {
   // We can't destructure process.envs
   // https://nextjs.org/docs/pages/api-reference/next-config-js/env
   return (
@@ -38,7 +38,7 @@ export const isLocal = (() => {
   )
 })()
 
-export const isDockerLocal = (() => {
+export const isDockerLocal: boolean = (() => {
   const isBrowser = typeof window !== "undefined"
   if (isBrowser) return false
   let fs

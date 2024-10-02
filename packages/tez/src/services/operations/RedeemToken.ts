@@ -8,8 +8,8 @@ import { TezosContractOperation } from "./ContractOperation"
 import { Objkt, RedeemableDetails } from "@fxhash/shared"
 
 export type TRedeemTokenParams = {
-  redeemable: RedeemableDetails
-  token: Objkt
+  redeemable: Pick<RedeemableDetails, "address" | "name" | "options" | "amount">
+  token: Pick<Objkt, "name">
   payload: {
     consumer: string
     options: number[]
