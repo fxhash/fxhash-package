@@ -1,4 +1,4 @@
-import { type IEquatableError } from "@fxhash/utils"
+import type { IEquatableError } from "@fxhash/utils"
 
 /**
  * Rich Error Messages are messages with extra data for a better usage of errors
@@ -85,15 +85,15 @@ export class RichError extends Error implements IRichError, IEquatableError {
     )
   }
 
-  get message() {
+  get message(): string {
     return this._message("dev")
   }
 
-  get userMessage() {
+  get userMessage(): string {
     return this._message("user")
   }
 
-  get code() {
+  get code(): string {
     return this.name
   }
 
@@ -135,7 +135,9 @@ export class RichError extends Error implements IRichError, IEquatableError {
    * Returns a new instance of {@link UnexpectedRichError}
    * @param messagesOverride Optional overrides of default unexpected messages
    */
-  static Unexpected(messagesOverride?: IRichErrorMessages) {
+  static Unexpected(
+    messagesOverride?: IRichErrorMessages
+  ): UnexpectedRichError {
     return new UnexpectedRichError(messagesOverride)
   }
 }
@@ -154,7 +156,7 @@ export interface IRichErrorSerialized {
  */
 export class UnexpectedRichError extends RichError {
   name = "UnexpectedRichError" as const
-  messages = UnexpectedRichErrorMessages
+  messages: typeof UnexpectedRichErrorMessages = UnexpectedRichErrorMessages
 }
 
 /**

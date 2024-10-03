@@ -4,9 +4,11 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": "src",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "outDir": "dist"
+    "outDir": "dist",
+    "isolatedDeclarations": true,
+    "declaration": true,
+    "module": "node16",
+    "target": "es2022",
+    "moduleResolution": "node16"
   }
 }
