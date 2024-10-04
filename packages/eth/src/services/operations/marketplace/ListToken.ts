@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirListingParams } from "@/services/reservoir/types.js"
+import type { ReservoirListingParams } from "@/services/reservoir/types.js"
 import {
   RESERVOIR_ORDERBOOK,
   RESERVOIR_ORDER_KIND,
@@ -24,7 +24,7 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
-    const args: ReservoirListingParams[] = []
+    const args: ReservoirListingParams = []
     for (const order of this.params.orders) {
       let options = {}
       if (order.orderIdToReplace) {

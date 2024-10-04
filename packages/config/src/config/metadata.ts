@@ -1,11 +1,11 @@
-import { fxApisByEnv } from "../api/fxhash"
-import { TEnv } from "../config"
-import { Result, failure, success } from "@fxhash/utils"
+import { fxApisByEnv } from "../api/fxhash.js"
+import type { TEnv } from "../config.js"
+import { type Result, failure, success } from "@fxhash/utils"
 import {
-  AppMetadataError,
+  type AppMetadataError,
   AppMetadataInvalidTypeError,
   AppMetadataMissingPropertiesError,
-} from "../errors/metadata"
+} from "../errors/metadata.js"
 
 /**
  * Meta info about the application. Can be used by wallets to scope the
