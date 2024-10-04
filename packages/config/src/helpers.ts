@@ -1,9 +1,4 @@
-import {
-  TEnv,
-  fxhashConfig,
-  TBlockchainNetwork,
-  IFxhashConfigSingleEnv,
-} from "./config"
+import { TEnv } from "./types.js"
 
 const HOST_LOCAL = "localhost"
 const HOST_DOCKER_INTERNAL = "host.docker.internal"
@@ -51,14 +46,10 @@ export const isDockerLocal: boolean = (() => {
   return isLocal && fs.existsSync("/.dockerenv")
 })()
 
-export function getBlockchainNetworkForEnv(env: TEnv): TBlockchainNetwork {
-  return env === "prd" ? "mainnet" : "testnet"
-}
-
-export function getConfigForEnv(env: TEnv): IFxhashConfigSingleEnv {
-  const blockchainNetwork = getBlockchainNetworkForEnv(env)
-  return {
-    ...fxhashConfig.networks[blockchainNetwork],
-    ...fxhashConfig.envs[env],
+export function getEnv(): TEnv {
+  if (isProd) return "prd"
+  if (isLocal) {
+    return isDockerLocal ? "localDocker" : "local"
   }
+  return "dev"
 }

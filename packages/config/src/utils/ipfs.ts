@@ -1,4 +1,4 @@
-import { config } from ".."
+import { config } from "../config.js"
 
 export enum EGatewayIpfs {
   FXHASH = "FXHASH",
