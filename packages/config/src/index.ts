@@ -1,27 +1,31 @@
-import { IEthApis, ethTestnetApis } from "./api/eth"
-import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "./api/tezos"
-import { IFxhashApis, fxhashDevApis, fxhashPrdApis } from "./api/fxhash"
+import { type IEthApis, ethTestnetApis } from "./api/eth.js"
 import {
-  ITezosContracts,
+  type ITezosApis,
+  tezosTestnetApis,
+  tezosMainnetApis,
+} from "./api/tezos.js"
+import { type IFxhashApis, fxhashDevApis, fxhashPrdApis } from "./api/fxhash.js"
+import {
+  type ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
-} from "./contracts/tezos"
-import { IEthContracts, ethTestnetContracts } from "./contracts/eth"
+} from "./contracts/tezos.js"
+import { type IEthContracts, ethTestnetContracts } from "./contracts/eth.js"
 import {
-  IFxhashEnvConfig,
-  IFxhashNetworkConfig,
-  TBlockchain,
-  TBlockchainNetwork,
-  TEnv,
-  IFxhashConfig,
+  type IFxhashEnvConfig,
+  type IFxhashNetworkConfig,
+  type TBlockchain,
+  type TBlockchainNetwork,
+  type TEnv,
+  type IFxhashConfig,
   fxhashConfig,
   prdConfig,
   devConfig,
-  IFxhashConfigSingleEnv,
+  type IFxhashConfigSingleEnv,
   localConfig,
   localDockerConfig,
-} from "./config"
-import { isLocal, isProd, isDockerLocal } from "./helpers"
+} from "./config.js"
+import { isLocal, isProd, isDockerLocal } from "./helpers.js"
 
 let config: IFxhashConfigSingleEnv = isProd
   ? prdConfig
@@ -69,9 +73,9 @@ export {
   type IFxhashConfig,
 }
 
-export * from "./types"
-export * from "./helpers"
+export * from "./types.js"
+export * from "./helpers.js"
 
-export { type IAppMetadata, isAppMetadataValid } from "./config/metadata"
+export { type IAppMetadata, isAppMetadataValid } from "./config/metadata.js"
 
 export default fxhashConfig

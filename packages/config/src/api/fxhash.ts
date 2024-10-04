@@ -1,5 +1,5 @@
-import { TEnv } from "../config"
-import { getDockerInternalUrl } from "../helpers"
+import type { TEnv } from "../config.js"
+import { getDockerInternalUrl } from "../helpers.js"
 
 export interface IFxhashApis {
   website: string

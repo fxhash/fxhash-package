@@ -1,36 +1,40 @@
-import { ethMainnetApis, ethTestnetApis, IEthApis } from "./api/eth"
-import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "./api/tezos"
+import { ethMainnetApis, ethTestnetApis, type IEthApis } from "./api/eth.js"
 import {
-  IFxhashApis,
+  type ITezosApis,
+  tezosTestnetApis,
+  tezosMainnetApis,
+} from "./api/tezos.js"
+import {
+  type IFxhashApis,
   fxhashDevApis,
   fxhashLocalApis,
   fxhashLocalDockerApis,
   fxhashPrdApis,
-} from "./api/fxhash"
+} from "./api/fxhash.js"
 import {
-  ITezosContracts,
+  type ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
-} from "./contracts/tezos"
-import { BlockchainIdentifier, BlockchainIdentifiers } from "./types"
+} from "./contracts/tezos.js"
+import { type BlockchainIdentifier, BlockchainIdentifiers } from "./types.js"
 import {
   ethMainnetContracts,
   ethTestnetContracts,
-  IEthContracts,
-} from "./contracts/eth"
+  type IEthContracts,
+} from "./contracts/eth.js"
 import {
   baseMainnetContracts,
   baseTestnetContracts,
-  IBaseContracts,
-} from "./contracts/base"
-import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
-import { getConfigForEnv } from "./utils"
+  type IBaseContracts,
+} from "./contracts/base.js"
+import { baseMainnetApis, baseTestnetApis, type IBaseApis } from "./api/base.js"
+import { getConfigForEnv } from "./utils/index.js"
 import {
-  AlgoliaConfig,
+  type AlgoliaConfig,
   algoliaConfigDev,
   algoliaConfigProd,
-} from "./config/algolia"
-import { fxAppEnvMetadata, IAppMetadata } from "./config/metadata"
+} from "./config/algolia.js"
+import { fxAppEnvMetadata, type IAppMetadata } from "./config/metadata.js"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
