@@ -1,52 +1,5 @@
-import type { TEnv } from "../config.js"
 import { getDockerInternalUrl } from "../helpers.js"
-
-export interface IFxhashApis {
-  website: string
-  docs: string
-  main: string
-  hasura: string
-  hasuraGql: string
-  file: string
-  fileInternal: string
-  walletInternal: string
-  fsEmulator: string
-  extract: string
-  extractInternal: string
-  media: string
-  ethMetadata: string
-  ipfsInternal: string
-  ipfsGateway: string
-  ipfsGatewaySafe: string
-  ipfsGatewayInternal: string
-  onchfsProxy: string
-  opensea: string
-  authority: {
-    api: string
-  }
-  capture: {
-    lambdas: {
-      small: string
-      medium: string
-      large: string
-    }
-    proxy: {
-      ipfs: string
-      onchfs: string
-    }
-  }
-  dashboard: {
-    backend: string
-  }
-  events: {
-    liveBackend: string
-  }
-  indexer: {
-    tez: string
-    eth: string
-    base: string
-  }
-}
+import { IFxhashApis, TEnv } from "../types.js"
 
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {

@@ -1,129 +1,29 @@
-import { ethMainnetApis, ethTestnetApis, type IEthApis } from "./api/eth.js"
+import { baseMainnetApis, baseTestnetApis } from "./api/base.js"
+import { ethMainnetApis, ethTestnetApis } from "./api/eth.js"
+import { tezosMainnetApis, tezosTestnetApis } from "./api/tezos.js"
 import {
-  type ITezosApis,
-  tezosTestnetApis,
-  tezosMainnetApis,
-} from "./api/tezos.js"
-import {
-  type IFxhashApis,
   fxhashDevApis,
   fxhashLocalApis,
   fxhashLocalDockerApis,
   fxhashPrdApis,
 } from "./api/fxhash.js"
+import { fxAppEnvMetadata } from "./config/metadata.js"
+import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
 import {
-  type ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
 } from "./contracts/tezos.js"
-import { type BlockchainIdentifier, BlockchainIdentifiers } from "./types.js"
+import { ethMainnetContracts, ethTestnetContracts } from "./contracts/eth.js"
+import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
+import { getEnv } from "./helpers.js"
 import {
-  ethMainnetContracts,
-  ethTestnetContracts,
-  type IEthContracts,
-} from "./contracts/eth.js"
-import {
-  baseMainnetContracts,
-  baseTestnetContracts,
-  type IBaseContracts,
-} from "./contracts/base.js"
-import { baseMainnetApis, baseTestnetApis, type IBaseApis } from "./api/base.js"
-import { getConfigForEnv } from "./utils/index.js"
-import {
-  type AlgoliaConfig,
-  algoliaConfigDev,
-  algoliaConfigProd,
-} from "./config/algolia.js"
-import { fxAppEnvMetadata, type IAppMetadata } from "./config/metadata.js"
-
-// the variations supported by the config
-export type TBlockchain = "tez" | "eth" | "base"
-export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd" | "local" | "localDocker"
-export type TEnvName = "development" | "production" | "local" | "localDocker"
-
-export interface IFxhashNetworkConfig {
-  network: string
-  chainId: BlockchainIdentifier
-  ethFeeReceiver: `0x${string}`
-  wertRelayer: string
-  fxhashFees: {
-    primary: number
-    secondary: number
-  }
-  royaltyBasisPoint: number
-  splitBasisPoint: number
-}
-
-export interface IFxhashEnvConfig {
-  envName: TEnvName
-  metadata: IAppMetadata
-  gtMinPrice: string
-  walletConnectId: string
-  splitsApiKey: string
-  projectLockTime: number
-  referrerShare: number
-  cloudflareTurnstileSiteKey: string
-  cloudflareTurnstileSiteKeyV2: string
-  syndicateProjectId: string
-  awsS3Bucket: string
-  awsS3Region: string
-  openTelemetryTarget: string
-  algolia: AlgoliaConfig
-}
-
-type TBlockchainContacts = {
-  [B in TBlockchain]: {
-    tez: ITezosContracts
-    eth: IEthContracts
-    base: IBaseContracts
-  }[B]
-}
-
-type TBlockchainApis = {
-  [B in TBlockchain]: {
-    tez: ITezosApis
-    eth: IEthApis
-    base: IBaseApis
-  }[B]
-}
-
-type TNetworkBlockchainConfig = {
-  [B in TBlockchain]: {
-    tez: IFxhashNetworkConfig
-    eth: IFxhashNetworkConfig
-    base: IFxhashNetworkConfig
-  }[B]
-}
-
-export type IFxhashConfig = {
-  networks: {
-    [N in TBlockchainNetwork]: {
-      [B in TBlockchain]: {
-        contracts: TBlockchainContacts[B]
-        config: TNetworkBlockchainConfig[B]
-        apis: TBlockchainApis[B]
-      }
-    }
-  }
-  envs: {
-    [K in TEnv]: {
-      apis: IFxhashApis
-      config: IFxhashEnvConfig
-    }
-  }
-}
-
-export type IFxhashConfigSingleEnv = {
-  [B in TBlockchain]: {
-    contracts: TBlockchainContacts[B]
-    config: TNetworkBlockchainConfig[B]
-    apis: TBlockchainApis[B]
-  }
-} & {
-  apis: IFxhashApis
-  config: IFxhashEnvConfig
-}
+  BlockchainIdentifiers,
+  IFxhashConfig,
+  IFxhashConfigSingleEnv,
+  TBlockchainNetwork,
+  TEnv,
+} from "./types.js"
+// Import other necessary types and configurations
 
 /**
  * ! Beware ! Changing these values will result in current
@@ -148,7 +48,7 @@ const baseFees = {
  * --------------------------------------------------------
  */
 
-export const fxhashConfig: IFxhashConfig = {
+const fxhashConfig: IFxhashConfig = {
   networks: {
     testnet: {
       tez: {
@@ -313,8 +213,35 @@ export const fxhashConfig: IFxhashConfig = {
   },
 }
 
+export function getBlockchainNetworkForEnv(env: TEnv): TBlockchainNetwork {
+  return env === "prd" ? "mainnet" : "testnet"
+}
+
+export function getConfigForEnv(env: TEnv): IFxhashConfigSingleEnv {
+  const blockchainNetwork = getBlockchainNetworkForEnv(env)
+  return {
+    ...fxhashConfig.networks[blockchainNetwork],
+    ...fxhashConfig.envs[env],
+  }
+}
+
 export const localConfig: IFxhashConfigSingleEnv = getConfigForEnv("local")
 export const localDockerConfig: IFxhashConfigSingleEnv =
   getConfigForEnv("localDocker")
 export const devConfig: IFxhashConfigSingleEnv = getConfigForEnv("dev")
 export const prdConfig: IFxhashConfigSingleEnv = getConfigForEnv("prd")
+
+const currentEnv = getEnv()
+let config: IFxhashConfigSingleEnv = getConfigForEnv(currentEnv)
+
+function setConfig(
+  userConfig: Partial<IFxhashConfigSingleEnv>
+): IFxhashConfigSingleEnv {
+  config = {
+    ...config,
+    ...userConfig,
+  }
+  return config
+}
+
+export { fxhashConfig, config, setConfig }
