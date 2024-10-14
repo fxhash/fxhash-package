@@ -1,5 +1,6 @@
 export * from "./useAccount.js"
 export * from "./useClient.js"
+export * from "./useContractOperation.js"
 export * from "./useUserError.js"
 export * from "./useWallets.js"
 export * from "./useRuntimeController.js"
