@@ -1,5 +1,5 @@
-import { CaptureSettings, GenTokenSettings } from "./Mint"
-import { ISplit } from "./entities"
+import type { ISplit } from "./entities"
+import type { CaptureSettings, GenTokenSettings } from "./Mint"
 
 export interface TokenMetadata {
   "": string
@@ -149,8 +149,8 @@ export interface ArticleMetadata {
   platforms?: string[]
 }
 
-export interface ExternalMarketplaceMetadata {
+export interface MarketplaceMetadataEvm {
   external: boolean
-  source: string
+  source?: string
   hasRoyalties: boolean
 }

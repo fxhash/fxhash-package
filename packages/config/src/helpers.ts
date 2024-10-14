@@ -1,9 +1,4 @@
-import {
-  TEnv,
-  fxhashConfig,
-  TBlockchainNetwork,
-  IFxhashConfigSingleEnv,
-} from "./config"
+import { TEnv } from "./types.js"
 
 const HOST_LOCAL = "localhost"
 const HOST_DOCKER_INTERNAL = "host.docker.internal"
@@ -12,7 +7,7 @@ export function getDockerInternalUrl(url: string): string {
   return url.replace(HOST_LOCAL, HOST_DOCKER_INTERNAL)
 }
 
-export const isProd = (() => {
+export const isProd: boolean = (() => {
   // We can't destructure process.envs
   // https://nextjs.org/docs/pages/api-reference/next-config-js/env
   return (
@@ -27,7 +22,7 @@ export const isProd = (() => {
   )
 })()
 
-export const isLocal = (() => {
+export const isLocal: boolean = (() => {
   // We can't destructure process.envs
   // https://nextjs.org/docs/pages/api-reference/next-config-js/env
   return (
@@ -38,7 +33,7 @@ export const isLocal = (() => {
   )
 })()
 
-export const isDockerLocal = (() => {
+export const isDockerLocal: boolean = (() => {
   const isBrowser = typeof window !== "undefined"
   if (isBrowser) return false
   let fs
@@ -51,14 +46,10 @@ export const isDockerLocal = (() => {
   return isLocal && fs.existsSync("/.dockerenv")
 })()
 
-export function getBlockchainNetworkForEnv(env: TEnv): TBlockchainNetwork {
-  return env === "prd" ? "mainnet" : "testnet"
-}
-
-export function getConfigForEnv(env: TEnv): IFxhashConfigSingleEnv {
-  const blockchainNetwork = getBlockchainNetworkForEnv(env)
-  return {
-    ...fxhashConfig.networks[blockchainNetwork],
-    ...fxhashConfig.envs[env],
+export function getEnv(): TEnv {
+  if (isProd) return "prd"
+  if (isLocal) {
+    return isDockerLocal ? "localDocker" : "local"
   }
+  return "dev"
 }

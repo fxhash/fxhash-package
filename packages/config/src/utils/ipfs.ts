@@ -1,4 +1,4 @@
-import { config } from ".."
+import { config } from "../config.js"
 
 export enum EGatewayIpfs {
   FXHASH = "FXHASH",
@@ -50,7 +50,7 @@ export function ipfsGatewayUrl(
  * given a URI (either ipfs://<CID>, onchfs://<CID> or temp://<CID>),
  * returns the URL to the resource
  */
-export const proxyUrl = (uri: string) => {
+export function proxyUrl(uri: string): string {
   const [protocol, cid] = uri.split("://")
   switch (protocol) {
     case "https":

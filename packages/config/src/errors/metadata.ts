@@ -1,7 +1,7 @@
 import {
-  IRichErrorMessages,
+  type IRichErrorMessages,
   RichError,
-  RichErrorUnion,
+  type RichErrorUnion,
   isRichErrorMessages,
 } from "@fxhash/errors"
 
@@ -28,8 +28,8 @@ export class AppMetadataMissingPropertiesError extends RichError {
   }
 }
 
-export const AppMetadataErrors = [
-  AppMetadataInvalidTypeError,
-  AppMetadataMissingPropertiesError,
-]
+export const AppMetadataErrors: (
+  | typeof AppMetadataInvalidTypeError
+  | typeof AppMetadataMissingPropertiesError
+)[] = [AppMetadataInvalidTypeError, AppMetadataMissingPropertiesError]
 export type AppMetadataError = RichErrorUnion<typeof AppMetadataErrors>

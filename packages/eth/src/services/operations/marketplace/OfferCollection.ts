@@ -1,25 +1,23 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
+import type { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
 import { placeBid } from "../Marketplace.js"
 import {
   RESERVOIR_ORDERBOOK,
   RESERVOIR_ORDER_KIND,
 } from "@/services/Reservoir.js"
 import { TransactionType } from "@fxhash/shared"
-import {
-  getProjectRoyalties,
-  processOverridenRoyalties,
-} from "@/utils/royalties.js"
 
-export type TMakeCollectionOfferEthV1OperationParams = {
-  orders: {
-    token: string
-    amount: number
-    pricePerItem: string
-    expiration?: string
-    orderIdToReplace?: string
-  }[]
+type CollectionOffer = {
+  token: string
+  amount: number
+  price: bigint
+  expiration?: string
+  orderIdToReplace?: string
 }
+
+export type TMakeCollectionOfferEthV1OperationParams =
+  | CollectionOffer
+  | CollectionOffer[]
 
 /**
  * Create a collection offer for a token through Reservoir
@@ -29,7 +27,11 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
     const args: ReservoirPlaceBidParams = []
-    for (const order of this.params.orders) {
+    const orders: CollectionOffer[] =
+      typeof this.params === "object"
+        ? [this.params as CollectionOffer]
+        : this.params
+    for (const order of orders) {
       let options = {}
       if (order.orderIdToReplace) {
         options = {
@@ -45,18 +47,13 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
           },
         }
       }
-      const royalties = await getProjectRoyalties(order.token)
-      if (!royalties) throw new Error("Royalties not found")
       args.push({
         collection: order.token,
-        weiPrice: (
-          BigInt(order.pricePerItem) * BigInt(order.amount)
-        ).toString(),
+        weiPrice: (order.price * BigInt(order.amount)).toString(),
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
-        automatedRoyalties: false,
-        customRoyalties: processOverridenRoyalties(royalties, this.chain),
+        automatedRoyalties: true,
         options: options,
       })
     }
@@ -69,6 +66,6 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
   }
 
   success(): string {
-    return `You successfully placed a collection offer`
+    return "You successfully placed a collection offer"
   }
 }

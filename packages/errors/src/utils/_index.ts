@@ -1,1 +1,1 @@
-export * from "./rich-error"
+export * from "./rich-error.js"
