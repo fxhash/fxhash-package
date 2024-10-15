@@ -6,7 +6,7 @@ import {
   RichError,
   UnexpectedRichError,
   WithGqlErrors,
-} from ".."
+} from "../index.js"
 import { IEquatableError, Result, failure, success } from "@fxhash/utils"
 
 export type TypeOfRichError<T extends RichError> = {

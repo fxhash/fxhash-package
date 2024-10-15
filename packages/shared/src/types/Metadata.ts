@@ -1,5 +1,4 @@
-import { Vec2 } from "./Math"
-import { CaptureMode, CaptureTriggerMode, GenTokenSettings } from "./Mint"
+import type { CaptureSettings, GenTokenSettings } from "./Mint"
 
 export interface TokenMetadata {
   "": string
@@ -15,15 +14,6 @@ export interface HistoryMetadata {
 export interface TokenFormat {
   uri: string
   mimeType: string
-}
-
-export interface CaptureSettings {
-  mode: CaptureMode
-  triggerMode: CaptureTriggerMode
-  resolution?: Vec2
-  delay?: number
-  canvasSelector?: string
-  gpu?: boolean
 }
 
 // token features as they can be exported by a Token
@@ -114,4 +104,10 @@ export interface ArticleMetadata {
   thumbnailUri: string
   thumbnailCaption?: string
   platforms?: string[]
+}
+
+export interface MarketplaceMetadataEvm {
+  external: boolean
+  source?: string
+  hasRoyalties: boolean
 }

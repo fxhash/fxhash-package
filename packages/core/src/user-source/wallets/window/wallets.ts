@@ -87,7 +87,7 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
         isBrowser(),
         "Window wallets can only be initialised in a browser context"
       )
-      wallets.init()
+      await wallets.init()
     },
     requestConnection(network) {
       const wallet = wallets.getWallet(network)
