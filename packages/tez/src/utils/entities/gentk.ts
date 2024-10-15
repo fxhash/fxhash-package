@@ -11,6 +11,6 @@ export function getGentkLocalID(id: string): string {
   return id
 }
 
-export function getGentkLocalIDFromObjkt(token: Objkt): string {
+export function getGentkLocalIDFromObjkt(token: Pick<Objkt, "id">): string {
   return getGentkLocalID(token.id)
 }
