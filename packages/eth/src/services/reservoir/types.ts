@@ -1,4 +1,4 @@
-import { paths } from "@reservoir0x/reservoir-sdk"
+import type { paths } from "@reservoir0x/reservoir-sdk"
 
 /**
  * The types defined in this file are used as placeholders
@@ -31,37 +31,35 @@ export type ReservoirExecuteBuyParams =
  * @typedef {Object} ReservoirListingParams
  * Represents the specific 'params' section within the body for a listing operation.
  */
-export type ReservoirListingParams =
-  // TODO: TS says that it does not exist but it actually does
-  //@ts-ignore
-  paths["/execute/list/v5"]["post"]["parameters"]["body"]["body"]["params"]
+export type ReservoirListingParams = NonNullable<
+  NonNullable<
+    paths["/execute/list/v5"]["post"]["parameters"]["body"]["body"]
+  >["params"]
+>
 
 /**
  * @typedef {Object} ReservoirBuyTokenParams
  * Represents the 'items' section within the body parameters for a buy operation.
  */
-export type ReservoirBuyTokenParams =
-  // TODO: TS says that it does not exist but it actually does
-  //@ts-ignore
-  paths["/execute/buy/v7"]["post"]["parameters"]["body"]["body"]["items"]
+export type ReservoirBuyTokenParams = NonNullable<
+  paths["/execute/buy/v7"]["post"]["parameters"]["body"]["body"]
+>["items"]
 
 /**
  * @typedef {Object} ReservoirPlaceBidParams
  * Represents the 'params' section within the body parameters for a bid operation.
  */
-export type ReservoirPlaceBidParams =
-  // TODO: TS says that it does not exist but it actually does
-  //@ts-ignore
-  paths["/execute/bid/v5"]["post"]["parameters"]["body"]["body"]["params"]
+export type ReservoirPlaceBidParams = NonNullable<
+  paths["/execute/bid/v5"]["post"]["parameters"]["body"]["body"]
+>["params"]
 
 /**
  * @typedef {Object} ReservoirAcceptOfferParams
  * Represents the 'items' section within the body parameters for accepting an offer.
  */
-export type ReservoirAcceptOfferParams =
-  // TODO: TS says that it does not exist but it actually does
-  //@ts-ignore
-  paths["/execute/sell/v7"]["post"]["parameters"]["body"]["body"]["items"]
+export type ReservoirAcceptOfferParams = NonNullable<
+  paths["/execute/sell/v7"]["post"]["parameters"]["body"]["body"]
+>["items"]
 
 /**
  * @typedef {Object} ReservoirGetCollectionParams

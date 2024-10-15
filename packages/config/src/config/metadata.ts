@@ -1,5 +1,5 @@
-import { fxApisByEnv } from "../api/fxhash.js"
 import { type Result, failure, success } from "@fxhash/utils"
+import { fxApisByEnv } from "../api/fxhash.js"
 import {
   type AppMetadataError,
   AppMetadataInvalidTypeError,

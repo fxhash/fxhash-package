@@ -2305,7 +2305,7 @@ type PrepareRedemptionPayload {
   consumer: String!
   options: jsonb!
   salt: String!
-  token_id: String!
+  token_id: Int!
 }
 
 """
@@ -4074,11 +4074,6 @@ type action {
   An object relationship
   """
   user: user
-
-  """
-  An object relationship
-  """
-  userByIssuerId: user
 }
 
 """
@@ -4179,7 +4174,6 @@ input action_bool_exp {
   token_id: String_comparison_exp
   type: action_type_enum_comparison_exp
   user: user_bool_exp
-  userByIssuerId: user_bool_exp
 }
 
 """
@@ -4290,7 +4284,6 @@ input action_order_by {
   token_id: order_by
   type: order_by
   user: user_order_by
-  userByIssuerId: user_order_by
 }
 
 """
@@ -8922,7 +8915,7 @@ type generative_token {
   generative_uri: String
   id: String!
   input_bytes_size: Int!
-  is_frame: Boolean
+  is_frame: Boolean!
   iterations_count: numeric
   labels: [Int!]!
   lock_end: timestamptz!
@@ -22498,7 +22491,7 @@ type pricing_dutch_auction {
   id: String!
   levels: [numeric!]!
   opens_at: timestamptz
-  refundable: Boolean
+  refundable: Boolean!
   resting_price: String!
   token_id: String
 }
@@ -22985,6 +22978,7 @@ type redeemable {
   address: String!
   base_amount: numeric!
   created_at: timestamptz!
+  details: Consumable
   fa2: String!
 
   """
@@ -23922,8 +23916,8 @@ type split {
   """
   An object relationship
   """
-  user: user
-  user_id: String
+  user: user!
+  user_id: String!
 }
 
 """

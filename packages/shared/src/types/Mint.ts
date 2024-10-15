@@ -1,9 +1,9 @@
-import { Collaboration } from "./entities/User"
-import { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
-import { GenerativeTokenMetadata } from "./Metadata"
-import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
-import { ISplit } from "./entities/Split"
-import { IReserve } from "./entities/Reserve"
+import type { Collaboration } from "./entities/User"
+import type { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
+import type { GenerativeTokenMetadata } from "./Metadata"
+import type { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
+import type { ISplit } from "./entities/Split"
+import type { IReserve } from "./entities/Reserve"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata

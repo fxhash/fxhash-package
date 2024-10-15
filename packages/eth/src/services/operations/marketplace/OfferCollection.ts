@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
+import type { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
 import { placeBid } from "../Marketplace.js"
 import {
   RESERVOIR_ORDERBOOK,
@@ -7,15 +7,17 @@ import {
 } from "@/services/Reservoir.js"
 import { TransactionType } from "@fxhash/shared"
 
-export type TMakeCollectionOfferEthV1OperationParams = {
-  orders: {
-    token: string
-    amount: number
-    pricePerItem: string
-    expiration?: string
-    orderIdToReplace?: string
-  }[]
+type CollectionOffer = {
+  token: string
+  amount: number
+  price: bigint
+  expiration?: string
+  orderIdToReplace?: string
 }
+
+export type TMakeCollectionOfferEthV1OperationParams =
+  | CollectionOffer
+  | CollectionOffer[]
 
 /**
  * Create a collection offer for a token through Reservoir
@@ -25,7 +27,11 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
     const args: ReservoirPlaceBidParams = []
-    for (const order of this.params.orders) {
+    const orders: CollectionOffer[] =
+      typeof this.params === "object"
+        ? [this.params as CollectionOffer]
+        : this.params
+    for (const order of orders) {
       let options = {}
       if (order.orderIdToReplace) {
         options = {
@@ -43,9 +49,7 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
       }
       args.push({
         collection: order.token,
-        weiPrice: (
-          BigInt(order.pricePerItem) * BigInt(order.amount)
-        ).toString(),
+        weiPrice: (order.price * BigInt(order.amount)).toString(),
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
@@ -62,6 +66,6 @@ export class MakeCollectionOfferEthV1Operation extends EthereumContractOperation
   }
 
   success(): string {
-    return `You successfully placed a collection offer`
+    return "You successfully placed a collection offer"
   }
 }

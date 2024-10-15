@@ -1,20 +1,20 @@
-import { fxAppEnvMetadata } from "./config/metadata.js"
-import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
-import {
-  tezosMainnetContracts,
-  tezosTestnetContracts,
-} from "./contracts/tezos.js"
-import { tezosMainnetApis, tezosTestnetApis } from "./api/tezos.js"
-import { ethMainnetContracts, ethTestnetContracts } from "./contracts/eth.js"
-import { ethMainnetApis, ethTestnetApis } from "./api/eth.js"
-import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
 import { baseMainnetApis, baseTestnetApis } from "./api/base.js"
+import { ethMainnetApis, ethTestnetApis } from "./api/eth.js"
+import { tezosMainnetApis, tezosTestnetApis } from "./api/tezos.js"
 import {
   fxhashDevApis,
   fxhashLocalApis,
   fxhashLocalDockerApis,
   fxhashPrdApis,
 } from "./api/fxhash.js"
+import { fxAppEnvMetadata } from "./config/metadata.js"
+import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
+import {
+  tezosMainnetContracts,
+  tezosTestnetContracts,
+} from "./contracts/tezos.js"
+import { ethMainnetContracts, ethTestnetContracts } from "./contracts/eth.js"
+import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
 import { getEnv } from "./helpers.js"
 import {
   BlockchainIdentifiers,
