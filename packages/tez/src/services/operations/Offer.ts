@@ -1,13 +1,16 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
+import type {
+  ContractAbstraction,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { getGentkLocalIDFromObjkt } from "@/utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
-import { displayMutez } from "../../utils/units"
 import { TezosContractOperation } from "./ContractOperation"
-import { Objkt } from "@fxhash/shared"
+import type { Objkt } from "@fxhash/shared"
 
 export type TOfferOperationParams = {
-  token: Objkt
-  price: number
+  token: Pick<Objkt, "id" | "version">
+  price: bigint
 }
 
 /**
@@ -27,21 +30,21 @@ export class OfferOperation extends TezosContractOperation<TOfferOperationParams
     // part only for these recent tokens
     const id = getGentkLocalIDFromObjkt(this.params.token)
 
-    return this.marketplaceContract!.methodsObject.offer({
-      gentk: {
-        id: id,
-        version: this.params.token.version,
-      },
-      price: this.params.price,
-    }).send({
-      mutez: true,
-      amount: this.params.price,
-    })
+    return this.marketplaceContract.methodsObject
+      .offer({
+        gentk: {
+          id: id,
+          version: this.params.token.version,
+        },
+        price: this.params.price,
+      })
+      .send({
+        mutez: true,
+        amount: Number(this.params.price),
+      })
   }
 
   success(): string {
-    return `You have made an offer of ${displayMutez(
-      this.params.price
-    )} tez on ${this.params.token.name}`
+    return "your collection offer has been placed!"
   }
 }

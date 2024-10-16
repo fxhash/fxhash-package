@@ -11,7 +11,7 @@ export type TListTokenEthV1OperationParams = {
   orders: {
     token: string
     tokenId: string
-    price: string
+    price: bigint
     expiration?: string
     orderIdToReplace?: string
   }[]
@@ -43,7 +43,7 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
       }
       args.push({
         token: `${order.token}:${order.tokenId}`,
-        weiPrice: order.price,
+        weiPrice: order.price.toString(),
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
@@ -59,6 +59,6 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
   }
 
   success(): string {
-    return `You listed successfully`
+    return "your listing has been created!"
   }
 }
