@@ -7,12 +7,16 @@ import type { TezosWalletManager } from "@fxhash/tez"
  * Is thrown whenever a wallet is connected but such wallet doesn't belong
  * to the account which is authenticated.
  */
-export class WalletDoesntBelongAccountError extends Error {
+export class WalletDoesntBelongAccountError<
+  Network extends BlockchainNetwork,
+> extends Error {
+  network: Network
   name = "WalletDoesntBelongAccountError" as const
-  constructor(wallet: IWalletConnected<BlockchainNetwork>) {
+  constructor(wallet: IWalletConnected<Network>, network: Network) {
     super(
       `The wallet "${wallet.info.address}" doesn't belong to the currently authenticated user.`
     )
+    this.network = network
   }
 }
 
@@ -38,6 +42,6 @@ export class AccountAuthenticatedButNoWalletConnectedError extends Error {
 }
 
 export type UserConsistencyError =
-  | WalletDoesntBelongAccountError
+  | WalletDoesntBelongAccountError<BlockchainNetwork>
   | WalletConnectedButNoAccountAuthenticatedError
   | AccountAuthenticatedButNoWalletConnectedError

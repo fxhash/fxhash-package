@@ -48,7 +48,7 @@ export function isUserStateConsistent(
     const wallet = wallets[net]?.connected || null
     if (!wallet) continue
     if (!account.wallets.find(w => w.address === wallet.info.address)) {
-      return failure(new WalletDoesntBelongAccountError(wallet))
+      return failure(new WalletDoesntBelongAccountError(wallet, net))
     }
   }
 
