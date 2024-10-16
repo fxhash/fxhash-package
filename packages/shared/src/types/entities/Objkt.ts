@@ -11,7 +11,7 @@ import { Redeemable } from "./Redeemable"
 
 export interface Objkt {
   id: string
-  version: 0 | 1
+  version: number
   issuer: GenerativeToken
   owner?: User | null
   minter?: User | null

@@ -36,7 +36,7 @@ export const fakeGentk: DeepPartial<Objkt> = {
   duplicate: false,
 }
 
-export function getGentkFA2Contract(gentk: Objkt): string {
+export function getGentkFA2Contract(gentk: Pick<Objkt, "version">): string {
   if (gentk.version === 0) {
     return FxhashContracts.GENTK_V1
   } else if (gentk.version === 1) {
