@@ -3,7 +3,7 @@ import { User } from "./User"
 import { NFTArticle } from "./Article"
 
 export interface Listing {
-  id: number
+  id: string
   version: number
   amount: number
   issuer: User
