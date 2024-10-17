@@ -1,6 +1,6 @@
 import { Objkt } from "@fxhash/shared"
 import { FxhashContracts } from "../types/Contracts"
-import { DeepPartial } from "../types/DeepPartial"
+import { DeepPartial } from "@fxhash/utils"
 
 export function getGentkUrl(gentk: Objkt): string {
   return gentk.slug ? `/gentk/slug/${gentk.slug}` : `/gentk/${gentk.id}`

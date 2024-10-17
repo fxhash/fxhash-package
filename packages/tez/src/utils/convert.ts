@@ -2,7 +2,7 @@ import {
   ProcessRawTokenFeatureErrorType,
   ProcessRawTokenFeatureErrorTypes,
   TokenFeature,
-} from "@/types/Metadata"
+} from "@fxhash/shared"
 
 export function bytesToString(byteArray: number[]): string {
   return Array.from(byteArray, function (byte) {
