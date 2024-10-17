@@ -8,14 +8,17 @@ import {
   FxhashCollabFactoryCalls,
   FxhashContracts,
 } from "../../types/Contracts"
-import { GenerativeTokenMetadata } from "../../types/Metadata"
-import { GenTokEditions, MintGenerativeData } from "../../types/Mint"
 import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { packPricing } from "../../utils/pack/pricing"
 import { packReserveData } from "../../utils/pack/reserves"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
 import { TezosContractOperation } from "./ContractOperation"
 import Onchfs, { Inscription } from "onchfs"
+import {
+  GenTokEditions,
+  GenerativeTokenMetadata,
+  MintGenerativeData,
+} from "@fxhash/shared"
 
 export type TMintIssuerV3OperationParams = {
   data: MintGenerativeData<string>

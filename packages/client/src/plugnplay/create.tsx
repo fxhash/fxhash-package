@@ -190,10 +190,7 @@ export function createClientPlugnPlay({
         client.userSource.emitter.pipe("account-changed", emitter),
         client.userSource.emitter.pipe("wallets-changed", emitter),
         client.userSource.emitter.pipe("user-changed", emitter),
-        client.userSource.emitter.on("error", err => {
-          // todo: handle error here
-          console.log(err)
-        })
+        client.userSource.emitter.pipe("error", emitter)
       )
       await client.userSource.init()
       init.finish()
