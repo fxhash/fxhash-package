@@ -57,7 +57,7 @@ export const MOCKED_HASH = "mocked-hash"
 export const MOCKED_MINTER = "mocked-minter"
 export const MOCKED_CHAIN = BlockchainType.ETHEREUM
 export const MOCKED_ITERATION = 1
-export const MOCKED_CONTEXT = ExecutionContext.STANDALONE
+export const MOCKED_CONTEXT: ExecutionContext = "standalone"
 
 const BASE_STATE = {
   chain: MOCKED_CHAIN,

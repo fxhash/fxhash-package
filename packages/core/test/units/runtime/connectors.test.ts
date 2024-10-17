@@ -1,6 +1,6 @@
 import {
   getURLSearchParams,
-  iframeConnector,
+  proxyConnector,
   fsEmulatorConnector,
 } from "@/index.js"
 import {
@@ -79,19 +79,19 @@ describe("getURLSearchParams", () => {
   })
 })
 
-describe("iframeConnector", () => {
-  const connector = iframeConnector()
+describe("proxyConnector", () => {
+  const connector = proxyConnector
 
   test("getUrl generates correct URL", () => {
     const result = connector.getUrl(PROJECT_STATE)
-    expect(result).toContain(`http://proxy.test/${MOCKED_CID}?`)
+    expect(result).toContain(`http://proxy.test/${MOCKED_CID}/?`)
     expect(result).toContain(`fxhash=${MOCKED_HASH}`)
     expect(result).toContain(`#0x${MOCKED_INPUT_BYTES}`)
   })
 })
 
 describe("fsEmulatorConnector", () => {
-  const connector = fsEmulatorConnector()
+  const connector = fsEmulatorConnector
 
   test("getUrl generates correct URL", () => {
     const result = connector.getUrl(PROJECT_STATE)

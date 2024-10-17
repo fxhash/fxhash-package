@@ -8,7 +8,7 @@ import {
 describe("runtimeControls", () => {
   test("initializes with default state when no initial state provided", () => {
     const controls = runtimeControls()
-    expect(controls.state).toEqual({
+    expect(controls.state()).toEqual({
       params: {
         definition: null,
         values: {},
@@ -24,51 +24,65 @@ describe("runtimeControls", () => {
       },
     }
     const controls = runtimeControls(initialState)
-    expect(controls.state).toEqual(initialState)
+    expect(controls.state()).toEqual(initialState)
   })
 
   test("update function updates values correctly", () => {
-    const controls = runtimeControls()
-    const updatedControls = controls.update({ newParam: 10 })
-    expect(updatedControls.state.params.values).toEqual({ newParam: 10 })
+    const initialState = {
+      params: {
+        definition: PARAMS_DEFINITION,
+        values: PARAMS_VALUES_A,
+      },
+    }
+    const controls = runtimeControls(initialState)
+    const update = controls.update(PARAMS_VALUES_B)
+    expect(update.state.params.values).toEqual(PARAMS_VALUES_B)
+    expect(controls.state().params.values).toEqual(PARAMS_VALUES_B)
   })
 
   test("update function updates definition correctly", () => {
     const controls = runtimeControls()
-    const updatedControls = controls.update({}, PARAMS_DEFINITION)
-    expect(updatedControls.state.params.definition).toEqual(PARAMS_DEFINITION)
+    const update = controls.update({}, PARAMS_DEFINITION)
+    expect(update.state.params.definition).toEqual(PARAMS_DEFINITION)
+    expect(controls.state().params.definition).toEqual(PARAMS_DEFINITION)
   })
 
   test("update function merges new values with existing ones", () => {
     const initialState = {
       params: {
-        definition: null,
-        values: { existingParam: 5 },
+        definition: PARAMS_DEFINITION,
+        values: PARAMS_VALUES_A,
       },
     }
     const controls = runtimeControls(initialState)
-    const updatedControls = controls.update({ newParam: 10 })
+    const updatedControls = controls.update({ string: PARAMS_VALUES_B.string })
     expect(updatedControls.state.params.values).toEqual({
-      existingParam: 5,
-      newParam: 10,
+      ...PARAMS_VALUES_A,
+      string: PARAMS_VALUES_B.string,
+    })
+    expect(controls.state().params.values).toEqual({
+      ...PARAMS_VALUES_A,
+      string: PARAMS_VALUES_B.string,
     })
   })
 
   test("emits event on update", () => {
-    const controls = runtimeControls()
+    const initialState = {
+      params: {
+        definition: PARAMS_DEFINITION,
+        values: PARAMS_VALUES_A,
+      },
+    }
+    const controls = runtimeControls(initialState)
     const mockFn = vi.fn()
     controls.emitter.on("controls-changed", mockFn)
-    controls.update({ newParam: 10 })
+    controls.update(PARAMS_VALUES_B)
     expect(mockFn).toHaveBeenCalledTimes(1)
-    expect(mockFn).toHaveBeenCalledWith(
-      expect.objectContaining({
-        state: expect.objectContaining({
-          params: expect.objectContaining({
-            values: expect.objectContaining({ newParam: 10 }),
-          }),
-        }),
-      })
-    )
+  })
+
+  test("cannot update param without definition", () => {
+    const controls = runtimeControls()
+    expect(() => controls.update({ string: "value" })).toThrowError()
   })
 
   test("getInputBytes returns null when definition is null", () => {
@@ -87,16 +101,6 @@ describe("runtimeControls", () => {
     expect(controls.getInputBytes()).not.toBeNull()
   })
 
-  test("multiple updates produce new control instances", () => {
-    const controls = runtimeControls()
-    const updated1 = controls.update({ param1: 1 })
-    const updated2 = updated1.update({ param2: 2 })
-
-    expect(controls).not.toBe(updated1)
-    expect(updated1).not.toBe(updated2)
-    expect(updated2.state.params.values).toEqual({ param1: 1, param2: 2 })
-  })
-
   test("update preserves unmodified properties", () => {
     const initialState = {
       params: {
@@ -105,9 +109,9 @@ describe("runtimeControls", () => {
       },
     }
     const controls = runtimeControls(initialState)
-    const updated = controls.update(PARAMS_VALUES_B)
-    expect(updated.state.params.values.string).toBe(PARAMS_VALUES_B.string)
-    expect(updated.state.params.definition).toEqual(
+    const update = controls.update(PARAMS_VALUES_B)
+    expect(update.state.params.values.string).toBe(PARAMS_VALUES_B.string)
+    expect(update.state.params.definition).toEqual(
       initialState.params.definition
     )
   })

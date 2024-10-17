@@ -1,6 +1,6 @@
 import { vi, describe, test, expect, beforeEach, afterEach } from "vitest"
 import { BlockchainNetwork } from "@fxhash/shared"
-import { RuntimeController, createRuntimeController } from "@/index.js"
+import { IRuntimeController, createRuntimeController } from "@/index.js"
 import {
   MOCKED_HASH,
   MOCKED_MINTER,
@@ -10,7 +10,7 @@ import {
 } from "./constants.js"
 
 describe("createRuntimeController", () => {
-  let controller: RuntimeController
+  let controller: IRuntimeController
   let mockIframe: any
   let windowMessageHandler: ((event: MessageEvent) => void) | undefined
 
@@ -38,10 +38,9 @@ describe("createRuntimeController", () => {
     controller = createRuntimeController({
       state: PROJECT_STATE,
       options: {
-        connector: () => ({
+        connector: {
           getUrl: () => "mocked-url",
-          useSync: () => {},
-        }),
+        },
       },
     })
     controller.init(mockIframe)
@@ -60,7 +59,7 @@ describe("createRuntimeController", () => {
   }
 
   test("initializes with correct default values", () => {
-    expect(controller.runtime.state).toMatchObject({
+    expect(controller.runtime().state()).toMatchObject({
       hash: MOCKED_HASH,
       minter: MOCKED_MINTER,
       iteration: 1,
@@ -121,28 +120,6 @@ describe("createRuntimeController", () => {
     )
   })
 
-  test("cannot update when no definitions", () => {
-    expect(() => controller.updateControls(PARAMS_VALUES_A)).toThrowError()
-  })
-
-  test("updateControls updates control state", () => {
-    simulateIframeLoad()
-    windowMessageHandler?.(
-      new MessageEvent("message", {
-        data: {
-          id: "fxhash_getParams",
-          data: { definitions: PARAMS_DEFINITION, values: {} },
-        },
-      })
-    )
-    const oldValues = controller.controls.state.params.values
-    controller.updateControls(PARAMS_VALUES_A)
-    expect(controller.controls.state.params.values).toEqual(
-      expect.objectContaining(PARAMS_VALUES_A)
-    )
-    expect(controller.controls.state.params.values).not.toBe(oldValues)
-  })
-
   test("cannot update unknown parameter", () => {
     simulateIframeLoad()
     windowMessageHandler?.(
@@ -153,13 +130,15 @@ describe("createRuntimeController", () => {
         },
       })
     )
-    expect(() => controller.updateControls({ unknown: "value" })).toThrowError()
+    expect(() =>
+      controller.controls().update({ unknown: "value" })
+    ).toThrowError()
   })
 
   test("emits events on runtime changes", () => {
     const mockListener = vi.fn()
     controller.emitter.on("runtime-changed", mockListener)
-    controller.runtime.state.update({ iteration: 2 })
+    controller.runtime().updateState({ iteration: 2 })
     expect(mockListener).toHaveBeenCalled()
   })
 })

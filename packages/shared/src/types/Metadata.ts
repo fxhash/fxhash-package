@@ -50,46 +50,82 @@ export type ProcessRawTokenFeatureError = {
   extra?: string
 }
 
-export interface GenerativeTokenMetadata {
+type GenerativeTokenMetadataVersion = "0.1" | "0.2" | "0.3" | "0.4" | "0.5"
+
+type BaseGenerativeTokenMetadata = {
   name: string
   description: string
   childrenDescription: string
   mintingInstructions: string
   tags: string[]
-  // link to the fixed hash project
   artifactUri: string
-  // link to the HQ preview image
   displayUri: string
-  // link to the thumbnail image
   thumbnailUri: string
-  // link to the generative URL project
   generativeUri: string
-  // an authenticity hash given by the backend
   authenticityHash: string
   capture: CaptureSettings
   settings?: GenTokenSettings | null
   symbol: string
-  // ADDED STARTING FROM v0.2
-  // a fake transaction hash used for the preview
+  version?: GenerativeTokenMetadataVersion
+}
+
+export type GenerativeTokenMetadataV1 = BaseGenerativeTokenMetadata
+
+export type GenerativeTokenMetadataV2 = GenerativeTokenMetadataV1 & {
   previewHash?: string
   previewIteration?: number
   previewMinter?: string
   previewInputBytes?: string
-  version?: string
-  // ADDED STARTING FROM v0.3
+  mintingInstructions: string
+}
+
+export type GenerativeTokenMetadataV3 = GenerativeTokenMetadataV2 & {
   params: {
     definition: any
     inputBytesSize: number
   }
   snippetVersion: string
-  // ADDED STARTING FROM v0.4
+}
+
+export type GenerativeTokenMetadataV4 = GenerativeTokenMetadataV3 & {
   primarySplits: ISplit[]
-  // ADDED starting from v0.5 (ENTANGLED?)
+}
+
+export type GenerativeTokenMetadataV5 = GenerativeTokenMetadataV4 & {
   chain: string
 }
 
-export interface ObjktMetadata extends GenerativeTokenMetadata {
+export type GenerativeTokenMetadata =
+  | GenerativeTokenMetadataV1
+  | (GenerativeTokenMetadataV2 & { version: "0.2" })
+  | (GenerativeTokenMetadataV3 & { version: "0.3" })
+  | (GenerativeTokenMetadataV4 & { version: "0.4" })
+  | (GenerativeTokenMetadataV5 & { version: "0.5" })
+
+export type ObjktMetadata = {
   features?: TokenMetadataFeature[] | null
+} & GenerativeTokenMetadata
+
+//
+// ETH SPECIFIC
+//
+export interface Eth721ContractMetadata {
+  name: string
+  description: string
+  image: string
+  external_link: string
+  collaborators?: string[]
+  ipfsBackupUri?: string
+}
+
+export interface Eth721TokenMetadata {
+  name: string
+  description: string
+  image: string
+  external_url: string
+  animation_url?: string
+  collaborators?: string[]
+  ipfsBackupUri?: string
 }
 
 //
