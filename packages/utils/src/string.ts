@@ -45,3 +45,41 @@ export function uniqueId() {
 export function splitStringAt(str: string, index: number): [string, string] {
   return [str.slice(0, index), str.slice(index)]
 }
+/**
+ * convert a string of tags separated by commas into an array of tags
+ * @param str String of tags separated by commas
+ * @returns Array<string> of tags
+ */
+
+export function tagsFromString(str: string): string[] {
+  return str
+    .split(",")
+    .map(tag => tag.trim())
+    .filter(tag => tag.length > 0)
+}
+
+/**
+ * convert an array of bytes into a string
+ * @param byteArray Array of numbers to
+ * @returns String
+ */
+
+export function bytesToString(byteArray: number[]): string {
+  return Array.from(byteArray, function (byte) {
+    return ("0" + (byte & 0xff).toString(16)).slice(-2)
+  }).join("")
+}
+
+/**
+ * convert string to byte string
+ * @param str String to convert
+ * @returns Byte string
+ */
+
+export function stringToByteString(str: string): string {
+  const bytes = []
+  for (let i = 0; i < str.length; i++) {
+    bytes.push(str.charCodeAt(i))
+  }
+  return bytesToString(bytes)
+}

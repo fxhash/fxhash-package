@@ -6,6 +6,7 @@ import {
   type WalletsMap,
   type WalletsSourceMap,
 } from "../../_types.js"
+import { GetSingleUserAccountResult } from "@/user-source/_index.js"
 
 /**
  * Simple reusable util to derive a list of supported networks (and the
@@ -28,10 +29,16 @@ export function walletsNetworks(wallets: WalletsSourceMap) {
  * considered active if not null)
  */
 export function anyActiveManager(
-  wallets: WalletsMap
+  wallets: WalletsMap,
+  account?: GetSingleUserAccountResult | null
 ): EthereumWalletManager | TezosWalletManager | null {
   const managers = deriveManagersMap(wallets)
   return BlockchainNetworks.map(net => managers[net])
+    .filter(man => {
+      if (!account) return true
+      if (man === null) return true
+      return account.wallets.find(w => w.address === man?.address)
+    })
     .map(man => man || null)
     .reduce((prev, curr) => prev || curr, null)
 }
