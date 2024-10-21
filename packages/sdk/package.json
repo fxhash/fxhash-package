@@ -11,6 +11,7 @@
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
+    "@fxhash/params": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*"

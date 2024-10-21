@@ -1,18 +1,18 @@
-import { OpKind, WalletOperation } from "@taquito/taquito"
+import { OpKind, type WalletOperation } from "@taquito/taquito"
 import { getGentkLocalIDFromObjkt } from "@/utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { getGentkFA2Contract } from "../../utils/gentk"
-import { displayMutez } from "../../utils/units"
 import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { Objkt } from "@fxhash/shared"
+import type { Objkt, User } from "@fxhash/shared"
 
 export type TListingOperationParams = {
-  token: Objkt
-  price: number
+  token: Pick<Objkt, "id" | "version">
+  owner: Pick<User, "id">
+  price: bigint
 }
 
 /**
@@ -29,7 +29,7 @@ export class ListingOperation extends TezosContractOperation<TListingOperationPa
     const updateOperatorsParams = [
       {
         add_operator: {
-          owner: this.params.token.owner!.id,
+          owner: this.params.owner.id,
           operator: FxhashContracts.MARKETPLACE_V2,
           token_id: id,
         },
@@ -41,7 +41,7 @@ export class ListingOperation extends TezosContractOperation<TListingOperationPa
         id: id,
         version: this.params.token.version,
       },
-      price: this.params.price,
+      price: Number(this.params.price),
     }
 
     return this.manager.tezosToolkit.wallet
@@ -75,8 +75,6 @@ export class ListingOperation extends TezosContractOperation<TListingOperationPa
   }
 
   success(): string {
-    return `You have listed ${this.params.token.name} for ${displayMutez(
-      this.params.price
-    )} tez`
+    return "your listing has been created!"
   }
 }
