@@ -1,7 +1,6 @@
 import { config } from "@fxhash/config"
 import { TzktOperation } from "../types/Tzkt"
-import { fetchRetry } from "../utils/fetchRetry"
-import { sleep } from "../utils/sleep"
+import { sleep, fetchRetry } from "@fxhash/utils"
 
 export const API_BLOCKCHAIN_CONTRACT_STORAGE = (address: string) =>
   `${config.tez.apis.tzkt}contracts/${address}/storage`

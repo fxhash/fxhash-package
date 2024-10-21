@@ -167,19 +167,21 @@ export type WalletChangedEventData = WalletChangedPayload[]
 export interface AccountUpdatedEventData {
   account: GetSingleUserAccountResult | null
 }
+export type UserSourceErrorEvents = {
+  error:
+    | AuthenticationError
+    | UserConsistencyError
+    | WithGqlErrors<LinkWalletError>
+    // todo: these should be factorized
+    | PendingSigningRequestError
+    | UserRejectedError
+    | WalletConnectionError
+}
+
 export type UserSourceEventsTypemap = {
   "wallets-changed": WalletChangedEventData
   "account-changed": AccountUpdatedEventData
   "user-changed": void
-  error: {
-    error:
-      | AuthenticationError
-      | UserConsistencyError
-      | WithGqlErrors<LinkWalletError>
-      // todo: these should be factorized
-      | PendingSigningRequestError
-      | UserRejectedError
-      | WalletConnectionError
-  }
+  error: UserSourceErrorEvents
 }
 export class UserSourceEventEmitter extends EventEmitter<UserSourceEventsTypemap> {}

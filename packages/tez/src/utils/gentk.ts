@@ -1,6 +1,6 @@
 import { Objkt } from "@fxhash/shared"
 import { FxhashContracts } from "../types/Contracts"
-import { DeepPartial } from "../types/DeepPartial"
+import { DeepPartial } from "@fxhash/utils"
 
 export function getGentkUrl(gentk: Objkt): string {
   return gentk.slug ? `/gentk/slug/${gentk.slug}` : `/gentk/${gentk.id}`
@@ -36,7 +36,7 @@ export const fakeGentk: DeepPartial<Objkt> = {
   duplicate: false,
 }
 
-export function getGentkFA2Contract(gentk: Objkt): string {
+export function getGentkFA2Contract(gentk: Pick<Objkt, "version">): string {
   if (gentk.version === 0) {
     return FxhashContracts.GENTK_V1
   } else if (gentk.version === 1) {

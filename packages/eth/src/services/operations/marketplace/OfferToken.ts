@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
+import type { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
 import { placeBid } from "../Marketplace.js"
 import {
   RESERVOIR_ORDERBOOK,
@@ -12,7 +12,7 @@ export type TMakeOfferEthV1OperationParams = {
     token: string
     tokenId: string
     amount: number
-    price: string
+    price: bigint
     expiration?: string
     orderIdToReplace?: string
   }[]
@@ -44,7 +44,7 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
       }
       args.push({
         token: `${order.token}:${order.tokenId}`,
-        weiPrice: order.price,
+        weiPrice: order.price.toString(),
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
@@ -61,6 +61,6 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   }
 
   success(): string {
-    return `You successfully placed an offer`
+    return "your collection offer has been placed!"
   }
 }

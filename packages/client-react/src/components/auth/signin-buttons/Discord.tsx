@@ -59,8 +59,8 @@ export function SignInButtonDiscord({}: Props) {
       menubar: false,
       scrollbars: true,
     })
-    const ID = setInterval(() => {
-      if (popup?.closed) clearInterval(ID)
+    const ID = window.setInterval(() => {
+      if (popup?.closed) window.clearInterval(ID)
       const close = () => {
         popup?.close()
         clearInterval(ID)
