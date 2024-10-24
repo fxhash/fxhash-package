@@ -55,7 +55,7 @@ export class MintOperation extends TezosContractOperation<TMintOperationParams> 
         case EReserveMethod.MINT_PASS: {
           // first we need to ask the backend to sign the payload
           const { reserveInput, payloadPacked, payloadSignature } =
-            await prepareReserveConsumption(this.params.consumeReserve)
+            await prepareReserveConsumption(consume)
           this.reserveInput = reserveInput
           this.payloadPacked = payloadPacked
           this.payloadSignature = payloadSignature
