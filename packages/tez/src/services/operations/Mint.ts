@@ -16,15 +16,17 @@ import {
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
 import {
-  IReserveConsumption,
+  type IReserveConsumption,
   EReserveMethod,
-  GenerativeToken,
+  type GenerativeToken,
 } from "@fxhash/shared"
 
 export type TMintOperationParams = {
-  token: GenerativeToken
+  token: Pick<GenerativeToken, "id" | "version">
   price: number
   consumeReserve: IReserveConsumption | null
+  createTicket: boolean
+  inputBytes: string
 }
 
 /**
@@ -70,7 +72,7 @@ export class MintOperation extends TezosContractOperation<TMintOperationParams> 
     if (this.params.consumeReserve?.method === EReserveMethod.MINT_PASS) {
       ops.push({
         kind: OpKind.TRANSACTION,
-        to: this.params.consumeReserve!.data.reserveData,
+        to: this.params.consumeReserve.data.reserveData,
         amount: 0,
         parameter: {
           entrypoint: "consume_pass",
@@ -122,6 +124,6 @@ export class MintOperation extends TezosContractOperation<TMintOperationParams> 
   }
 
   success(): string {
-    return `Minted your unique iteration of ${this.params.token.name}`
+    return "Minted your unique iteration"
   }
 }
