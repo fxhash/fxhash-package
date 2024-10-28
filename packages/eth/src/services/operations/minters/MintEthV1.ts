@@ -8,7 +8,7 @@ import { TransactionType } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
 
 export type TMintEthV1OperationParams = {
-  token: `0x${string}`
+  token: `0x${string}` | string
   to: string | null
   qty: bigint
   whitelist: boolean
