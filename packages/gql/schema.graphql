@@ -3396,6 +3396,44 @@ input RefreshInput {
   refreshToken: String!
 }
 
+input RequestMintInput {
+  createTicket: Boolean
+  eventId: String!
+  inputBytes: String
+  projectId: Int!
+  recipient: String!
+  token: String!
+}
+
+type RequestMintResult {
+  hash: String!
+}
+
+type SearchEntity {
+  id: String!
+  score: Int!
+  title: String!
+  type: String!
+}
+
+type SearchEntityResult {
+  hits: [SearchEntity!]!
+  nbHits: Int!
+  type: String!
+}
+
+input SearchInput {
+  hitsPerPage: Int
+  page: Int
+  query: String!
+}
+
+type SearchOutput {
+  accounts: SearchEntityResult!
+  articles: SearchEntityResult!
+  projects: SearchEntityResult!
+}
+
 input SetFarcasterHandleInput {
   id: String!
   message: String!
@@ -11767,6 +11805,172 @@ input market_stats_history_bool_exp {
 }
 
 """
+columns and relationships of "market_stats_history_daily"
+"""
+type market_stats_history_daily {
+  floor: numeric
+  timestamp: timestamptz
+  token_id: String
+  total_volume: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "market_stats_history_daily". All fields are combined with a logical 'AND'.
+"""
+input market_stats_history_daily_bool_exp {
+  _and: [market_stats_history_daily_bool_exp!]
+  _not: market_stats_history_daily_bool_exp
+  _or: [market_stats_history_daily_bool_exp!]
+  floor: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  token_id: String_comparison_exp
+  total_volume: numeric_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "market_stats_history_daily".
+"""
+input market_stats_history_daily_order_by {
+  floor: order_by
+  timestamp: order_by
+  token_id: order_by
+  total_volume: order_by
+}
+
+"""
+select columns of table "market_stats_history_daily"
+"""
+enum market_stats_history_daily_select_column {
+  """
+  column name
+  """
+  floor
+
+  """
+  column name
+  """
+  timestamp
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  total_volume
+}
+
+"""
+Streaming cursor of the table "market_stats_history_daily"
+"""
+input market_stats_history_daily_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: market_stats_history_daily_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input market_stats_history_daily_stream_cursor_value_input {
+  floor: numeric
+  timestamp: timestamptz
+  token_id: String
+  total_volume: numeric
+}
+
+"""
+columns and relationships of "market_stats_history_hourly"
+"""
+type market_stats_history_hourly {
+  floor: numeric
+  timestamp: timestamptz
+  token_id: String
+  total_volume: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "market_stats_history_hourly". All fields are combined with a logical 'AND'.
+"""
+input market_stats_history_hourly_bool_exp {
+  _and: [market_stats_history_hourly_bool_exp!]
+  _not: market_stats_history_hourly_bool_exp
+  _or: [market_stats_history_hourly_bool_exp!]
+  floor: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  token_id: String_comparison_exp
+  total_volume: numeric_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "market_stats_history_hourly".
+"""
+input market_stats_history_hourly_order_by {
+  floor: order_by
+  timestamp: order_by
+  token_id: order_by
+  total_volume: order_by
+}
+
+"""
+select columns of table "market_stats_history_hourly"
+"""
+enum market_stats_history_hourly_select_column {
+  """
+  column name
+  """
+  floor
+
+  """
+  column name
+  """
+  timestamp
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  total_volume
+}
+
+"""
+Streaming cursor of the table "market_stats_history_hourly"
+"""
+input market_stats_history_hourly_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: market_stats_history_hourly_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input market_stats_history_hourly_stream_cursor_value_input {
+  floor: numeric
+  timestamp: timestamptz
+  token_id: String
+  total_volume: numeric
+}
+
+"""
 order by max() on columns of table "market_stats_history"
 """
 input market_stats_history_max_order_by {
@@ -13819,6 +14023,7 @@ type mutation_root {
   offchain: offchain_mutation_frontend
   prepare_redemption(input: PrepareRedemptionInput!): PrepareRedemptionOutput!
   refresh(input: RefreshInput!): AuthenticationResult
+  request_mint(input: RequestMintInput!): [RequestMintResult!]
 
   """
   given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile
@@ -18895,6 +19100,66 @@ type onchain_query {
   market_stats_history_by_pk(id: Int!): market_stats_history
 
   """
+  fetch data from the table: "market_stats_history_daily"
+  """
+  market_stats_history_daily(
+    """
+    distinct select on columns
+    """
+    distinct_on: [market_stats_history_daily_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [market_stats_history_daily_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: market_stats_history_daily_bool_exp
+  ): [market_stats_history_daily!]!
+
+  """
+  fetch data from the table: "market_stats_history_hourly"
+  """
+  market_stats_history_hourly(
+    """
+    distinct select on columns
+    """
+    distinct_on: [market_stats_history_hourly_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [market_stats_history_hourly_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: market_stats_history_hourly_bool_exp
+  ): [market_stats_history_hourly!]!
+
+  """
   fetch data from the table: "media_image"
   """
   media_image(
@@ -21437,6 +21702,106 @@ type onchain_subscription {
   market_stats_history_by_pk(id: Int!): market_stats_history
 
   """
+  fetch data from the table: "market_stats_history_daily"
+  """
+  market_stats_history_daily(
+    """
+    distinct select on columns
+    """
+    distinct_on: [market_stats_history_daily_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [market_stats_history_daily_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: market_stats_history_daily_bool_exp
+  ): [market_stats_history_daily!]!
+
+  """
+  fetch data from the table in a streaming manner: "market_stats_history_daily"
+  """
+  market_stats_history_daily_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [market_stats_history_daily_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: market_stats_history_daily_bool_exp
+  ): [market_stats_history_daily!]!
+
+  """
+  fetch data from the table: "market_stats_history_hourly"
+  """
+  market_stats_history_hourly(
+    """
+    distinct select on columns
+    """
+    distinct_on: [market_stats_history_hourly_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [market_stats_history_hourly_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: market_stats_history_hourly_bool_exp
+  ): [market_stats_history_hourly!]!
+
+  """
+  fetch data from the table in a streaming manner: "market_stats_history_hourly"
+  """
+  market_stats_history_hourly_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [market_stats_history_hourly_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: market_stats_history_hourly_bool_exp
+  ): [market_stats_history_hourly!]!
+
+  """
   fetch data from the table in a streaming manner: "market_stats_history"
   """
   market_stats_history_stream(
@@ -22904,6 +23269,7 @@ type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+  search(input: SearchInput!): SearchOutput!
   walletRpcs: [WalletRpc!]
 }
 

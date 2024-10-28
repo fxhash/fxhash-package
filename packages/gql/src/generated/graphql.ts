@@ -2371,6 +2371,48 @@ export type RefreshInput = {
   refreshToken: Scalars['String']['input'];
 };
 
+export type RequestMintInput = {
+  createTicket?: InputMaybe<Scalars['Boolean']['input']>;
+  eventId: Scalars['String']['input'];
+  inputBytes?: InputMaybe<Scalars['String']['input']>;
+  projectId: Scalars['Int']['input'];
+  recipient: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+export type RequestMintResult = {
+  __typename?: 'RequestMintResult';
+  hash: Scalars['String']['output'];
+};
+
+export type SearchEntity = {
+  __typename?: 'SearchEntity';
+  id: Scalars['String']['output'];
+  score: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type SearchEntityResult = {
+  __typename?: 'SearchEntityResult';
+  hits: Array<SearchEntity>;
+  nbHits: Scalars['Int']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type SearchInput = {
+  hitsPerPage?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  query: Scalars['String']['input'];
+};
+
+export type SearchOutput = {
+  __typename?: 'SearchOutput';
+  accounts: SearchEntityResult;
+  articles: SearchEntityResult;
+  projects: SearchEntityResult;
+};
+
 export type SetFarcasterHandleInput = {
   id: Scalars['String']['input'];
   message: Scalars['String']['input'];
@@ -8248,6 +8290,118 @@ export type Market_Stats_History_Bool_Exp = {
   total_volume_nb?: InputMaybe<Int_Comparison_Exp>;
 };
 
+/** columns and relationships of "market_stats_history_daily" */
+export type Market_Stats_History_Daily = {
+  __typename?: 'market_stats_history_daily';
+  floor?: Maybe<Scalars['numeric']['output']>;
+  timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  token_id?: Maybe<Scalars['String']['output']>;
+  total_volume?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "market_stats_history_daily". All fields are combined with a logical 'AND'. */
+export type Market_Stats_History_Daily_Bool_Exp = {
+  _and?: InputMaybe<Array<Market_Stats_History_Daily_Bool_Exp>>;
+  _not?: InputMaybe<Market_Stats_History_Daily_Bool_Exp>;
+  _or?: InputMaybe<Array<Market_Stats_History_Daily_Bool_Exp>>;
+  floor?: InputMaybe<Numeric_Comparison_Exp>;
+  timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
+  token_id?: InputMaybe<String_Comparison_Exp>;
+  total_volume?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "market_stats_history_daily". */
+export type Market_Stats_History_Daily_Order_By = {
+  floor?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+  token_id?: InputMaybe<Order_By>;
+  total_volume?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "market_stats_history_daily" */
+export enum Market_Stats_History_Daily_Select_Column {
+  /** column name */
+  Floor = 'floor',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  TokenId = 'token_id',
+  /** column name */
+  TotalVolume = 'total_volume'
+}
+
+/** Streaming cursor of the table "market_stats_history_daily" */
+export type Market_Stats_History_Daily_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Market_Stats_History_Daily_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Market_Stats_History_Daily_Stream_Cursor_Value_Input = {
+  floor?: InputMaybe<Scalars['numeric']['input']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
+  token_id?: InputMaybe<Scalars['String']['input']>;
+  total_volume?: InputMaybe<Scalars['numeric']['input']>;
+};
+
+/** columns and relationships of "market_stats_history_hourly" */
+export type Market_Stats_History_Hourly = {
+  __typename?: 'market_stats_history_hourly';
+  floor?: Maybe<Scalars['numeric']['output']>;
+  timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  token_id?: Maybe<Scalars['String']['output']>;
+  total_volume?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "market_stats_history_hourly". All fields are combined with a logical 'AND'. */
+export type Market_Stats_History_Hourly_Bool_Exp = {
+  _and?: InputMaybe<Array<Market_Stats_History_Hourly_Bool_Exp>>;
+  _not?: InputMaybe<Market_Stats_History_Hourly_Bool_Exp>;
+  _or?: InputMaybe<Array<Market_Stats_History_Hourly_Bool_Exp>>;
+  floor?: InputMaybe<Numeric_Comparison_Exp>;
+  timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
+  token_id?: InputMaybe<String_Comparison_Exp>;
+  total_volume?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "market_stats_history_hourly". */
+export type Market_Stats_History_Hourly_Order_By = {
+  floor?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+  token_id?: InputMaybe<Order_By>;
+  total_volume?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "market_stats_history_hourly" */
+export enum Market_Stats_History_Hourly_Select_Column {
+  /** column name */
+  Floor = 'floor',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  TokenId = 'token_id',
+  /** column name */
+  TotalVolume = 'total_volume'
+}
+
+/** Streaming cursor of the table "market_stats_history_hourly" */
+export type Market_Stats_History_Hourly_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Market_Stats_History_Hourly_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Market_Stats_History_Hourly_Stream_Cursor_Value_Input = {
+  floor?: InputMaybe<Scalars['numeric']['input']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
+  token_id?: InputMaybe<Scalars['String']['input']>;
+  total_volume?: InputMaybe<Scalars['numeric']['input']>;
+};
+
 /** order by max() on columns of table "market_stats_history" */
 export type Market_Stats_History_Max_Order_By = {
   floor?: InputMaybe<Order_By>;
@@ -9738,6 +9892,7 @@ export type Mutation_Root = {
   offchain?: Maybe<Offchain_Mutation_Frontend>;
   prepare_redemption: PrepareRedemptionOutput;
   refresh?: Maybe<AuthenticationResult>;
+  request_mint?: Maybe<Array<RequestMintResult>>;
   /** given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile */
   set_farcaster_handle?: Maybe<SetFarcasterHandleResult>;
   /** updates the smart contract tied to a consumable */
@@ -9791,6 +9946,12 @@ export type Mutation_RootPrepare_RedemptionArgs = {
 /** mutation root */
 export type Mutation_RootRefreshArgs = {
   input: RefreshInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootRequest_MintArgs = {
+  input: RequestMintInput;
 };
 
 
@@ -12091,6 +12252,10 @@ export type Onchain_Query = {
   market_stats_history: Array<Market_Stats_History>;
   /** fetch data from the table: "market_stats_history" using primary key columns */
   market_stats_history_by_pk?: Maybe<Market_Stats_History>;
+  /** fetch data from the table: "market_stats_history_daily" */
+  market_stats_history_daily: Array<Market_Stats_History_Daily>;
+  /** fetch data from the table: "market_stats_history_hourly" */
+  market_stats_history_hourly: Array<Market_Stats_History_Hourly>;
   /** fetch data from the table: "media_image" */
   media_image: Array<Media_Image>;
   /** fetch data from the table: "media_image" using primary key columns */
@@ -12659,6 +12824,24 @@ export type Onchain_QueryMarket_Stats_History_By_PkArgs = {
 };
 
 
+export type Onchain_QueryMarket_Stats_History_DailyArgs = {
+  distinct_on?: InputMaybe<Array<Market_Stats_History_Daily_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Market_Stats_History_Daily_Order_By>>;
+  where?: InputMaybe<Market_Stats_History_Daily_Bool_Exp>;
+};
+
+
+export type Onchain_QueryMarket_Stats_History_HourlyArgs = {
+  distinct_on?: InputMaybe<Array<Market_Stats_History_Hourly_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Market_Stats_History_Hourly_Order_By>>;
+  where?: InputMaybe<Market_Stats_History_Hourly_Bool_Exp>;
+};
+
+
 export type Onchain_QueryMedia_ImageArgs = {
   distinct_on?: InputMaybe<Array<Media_Image_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -13100,6 +13283,14 @@ export type Onchain_Subscription = {
   market_stats_history: Array<Market_Stats_History>;
   /** fetch data from the table: "market_stats_history" using primary key columns */
   market_stats_history_by_pk?: Maybe<Market_Stats_History>;
+  /** fetch data from the table: "market_stats_history_daily" */
+  market_stats_history_daily: Array<Market_Stats_History_Daily>;
+  /** fetch data from the table in a streaming manner: "market_stats_history_daily" */
+  market_stats_history_daily_stream: Array<Market_Stats_History_Daily>;
+  /** fetch data from the table: "market_stats_history_hourly" */
+  market_stats_history_hourly: Array<Market_Stats_History_Hourly>;
+  /** fetch data from the table in a streaming manner: "market_stats_history_hourly" */
+  market_stats_history_hourly_stream: Array<Market_Stats_History_Hourly>;
   /** fetch data from the table in a streaming manner: "market_stats_history" */
   market_stats_history_stream: Array<Market_Stats_History>;
   /** fetch data from the table in a streaming manner: "market_stats" */
@@ -13916,6 +14107,38 @@ export type Onchain_SubscriptionMarket_Stats_History_By_PkArgs = {
 };
 
 
+export type Onchain_SubscriptionMarket_Stats_History_DailyArgs = {
+  distinct_on?: InputMaybe<Array<Market_Stats_History_Daily_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Market_Stats_History_Daily_Order_By>>;
+  where?: InputMaybe<Market_Stats_History_Daily_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionMarket_Stats_History_Daily_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Market_Stats_History_Daily_Stream_Cursor_Input>>;
+  where?: InputMaybe<Market_Stats_History_Daily_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionMarket_Stats_History_HourlyArgs = {
+  distinct_on?: InputMaybe<Array<Market_Stats_History_Hourly_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Market_Stats_History_Hourly_Order_By>>;
+  where?: InputMaybe<Market_Stats_History_Hourly_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionMarket_Stats_History_Hourly_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Market_Stats_History_Hourly_Stream_Cursor_Input>>;
+  where?: InputMaybe<Market_Stats_History_Hourly_Bool_Exp>;
+};
+
+
 export type Onchain_SubscriptionMarket_Stats_History_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Market_Stats_History_Stream_Cursor_Input>>;
@@ -14621,6 +14844,7 @@ export type Query_Root = {
   mediaFullUrl: Scalars['String']['output'];
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
+  search: SearchOutput;
   walletRpcs?: Maybe<Array<WalletRpc>>;
 };
 
@@ -14637,6 +14861,11 @@ export type Query_RootManagedWalletStateArgs = {
 
 export type Query_RootMediaFullUrlArgs = {
   s3key: Scalars['String']['input'];
+};
+
+
+export type Query_RootSearchArgs = {
+  input: SearchInput;
 };
 
 export type Random_Objkts_Generative_Token_Args = {
