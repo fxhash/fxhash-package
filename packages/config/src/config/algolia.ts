@@ -5,6 +5,7 @@ export type AlgoliaConfig = {
   indexOffers: string
   indexUsers: string
   indexArticles: string
+  indexAccounts: string
 }
 
 const algoliaConfig = {
@@ -13,6 +14,7 @@ const algoliaConfig = {
   indexOffers: "listings",
   indexUsers: "users",
   indexArticles: "articles",
+  indexAccounts: "accounts",
 }
 
 export const algoliaConfigDev: AlgoliaConfig = {
