@@ -85,10 +85,18 @@ export function multipleUserSources({
     },
 
     init: initOnce(init, async () => {
-      _hookEvents()
-      // `allSettled` because this module should fail initialization if some of
-      // it sources is failing init
-      await Promise.allSettled(sources.map(source => source.init()))
+      try {
+        _hookEvents()
+        await Promise.all(
+          sources.map(source => {
+            console.log("source init", source)
+            return source.init()
+          })
+        )
+      } catch (err) {
+        console.log(err)
+        throw err
+      }
     }),
 
     release: () => {
