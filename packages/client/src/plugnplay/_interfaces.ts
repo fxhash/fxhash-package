@@ -69,9 +69,9 @@ export type ClientPlugnPlayOptions = {
   credentials?: "jwt" | "cookie"
 
   /**
-   * Set this key if you want support for Web3Auth wallets.
+   * Set this key if you want support for login via socials.
    */
-  web3Auth?: boolean
+  socialLogin?: boolean
 
   /**
    * In case your application would alter the content of `document.body`

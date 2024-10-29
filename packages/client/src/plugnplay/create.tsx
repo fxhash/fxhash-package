@@ -55,7 +55,7 @@ const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
 export function createClientPlugnPlay({
   metadata,
   wallets,
-  web3Auth,
+  socialLogin,
   safeDomWrapper,
   credentials = "jwt",
 }: ClientPlugnPlayOptions): IClientPlugnPlay {
@@ -96,7 +96,7 @@ export function createClientPlugnPlay({
           }
         : undefined,
     },
-    web3auth: web3Auth
+    web3auth: socialLogin
       ? safeDomWrapper
         ? { safeDomWrapper }
         : true
