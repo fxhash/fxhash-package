@@ -37,12 +37,17 @@ const documents = {
     "\n  mutation CreateProject($object: Project_insert_input!) {\n    offchain {\n      insert_Project_one(object: $object) {\n        projectMedias {\n          index\n          media {\n            id\n            name\n          }\n        }\n        id\n        description\n        author {\n          id\n        }\n        title\n        state\n        releaseAt\n      }\n    }\n  }\n": types.CreateProjectDocument,
     "\n  mutation Update_Project(\n    $projectId: uuid!\n    $projectData: Project_set_input\n    $projectMedias: [ProjectMedia_insert_input!]!\n    $projectCollaborators: [ProjectCollaborator_insert_input!]!\n  ) {\n    offchain {\n      delete_ProjectMedia(where: { projectId: { _eq: $projectId } }) {\n        affected_rows\n      }\n      delete_ProjectCollaborator(where: { projectId: { _eq: $projectId } }) {\n        affected_rows\n      }\n      update_Project(where: { id: { _eq: $projectId } }, _set: $projectData) {\n        affected_rows\n      }\n      insert_ProjectMedia(objects: $projectMedias) {\n        affected_rows\n      }\n      insert_ProjectCollaborator(objects: $projectCollaborators) {\n        affected_rows\n      }\n    }\n  }\n": types.Update_ProjectDocument,
     "\n  mutation PrepareRedemption($input: PrepareRedemptionInput!) {\n    prepare_redemption(input: $input) {\n      payload {\n        consumer\n        token_id\n        options\n        salt\n      }\n      signature\n    }\n  }\n": types.PrepareRedemptionDocument,
+    "\n  fragment User_BaseDetails on user {\n    id\n    name\n  }\n": types.User_BaseDetailsFragmentDoc,
     "\n  fragment Wallet_BaseDetails on Wallet {\n    address\n    network\n    accountId\n    walletUser {\n      flag\n    }\n  }\n": types.Wallet_BaseDetailsFragmentDoc,
     "\n  mutation LinkWalletToAccount($input: LinkWalletInput!) {\n    link_wallet_to_account(input: $input)\n  }\n": types.LinkWalletToAccountDocument,
     "\n  mutation UnlinkWalletFromAccount($input: UnlinkWalletInput) {\n    unlink_wallet_from_account(input: $input)\n  }\n": types.UnlinkWalletFromAccountDocument,
     "\n  fragment WhitelistEntries on Whitelist {\n    entries {\n      walletAddress\n      whitelistIndex\n    }\n  }\n": types.WhitelistEntriesFragmentDoc,
     "\n  query GetWhitelists($where: Whitelist_bool_exp = {}) {\n    offchain {\n      Whitelist(where: $where) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistsDocument,
     "\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n": types.GetWhitelistDocument,
+    "\n  fragment Article_BaseDetails on article {\n    id\n    created_at\n    slug\n    title\n    description\n    user {\n      ...User_BaseDetails\n    }\n    thumbnail_uri\n    thumbnail_caption\n    media_image {\n      id\n      width\n      height\n      placeholder\n    }\n    display_uri\n  }\n": types.Article_BaseDetailsFragmentDoc,
+    "\n  fragment Article_FullDetails on article {\n    ...Article_BaseDetails\n    body\n    tags\n    language\n    editions\n    royalties\n    metadata_uri\n    metadata\n    flag\n    moderation_reason {\n      id\n      reason\n    }\n    splits {\n      pct\n      user {\n        ...User_BaseDetails\n      }\n    }\n    article_revisions {\n      iteration\n      metadata_uri\n      created_at\n      op_hash\n    }\n  }\n": types.Article_FullDetailsFragmentDoc,
+    "\n  query GetFullArticleById($id: Int!) {\n    onchain {\n      article_by_pk(id: $id) {\n        ...Article_FullDetails\n      }\n    }\n  }\n": types.GetFullArticleByIdDocument,
+    "\n  query GetFullArticleBySlug($slug: String!) {\n    onchain {\n      article(where: { slug: { _eq: $slug } }) {\n        ...Article_FullDetails\n      }\n    }\n  }\n": types.GetFullArticleBySlugDocument,
     "\n  query GetEthPrimarySplits($where: eth_primary_splits_bool_exp = {}) {\n    onchain {\n      __typename\n      eth_primary_splits {\n        id\n        receiver\n        receivers\n        allocations\n        chain\n      }\n    }\n  }\n": types.GetEthPrimarySplitsDocument,
     "\n  query GetEthSecondarySplits($id: String!) {\n    onchain {\n      eth_secondary_splits_by_pk(id: $id) {\n        allocations\n        basis_points\n        chain\n        id\n        receiver\n        receivers\n      }\n    }\n  }\n": types.GetEthSecondarySplitsDocument,
     "\n  query GetFrameData($id: String = \"\") {\n    onchain {\n      eth_frame_data_by_pk(id: $id) {\n        id\n        frame_minter_data\n      }\n    }\n  }\n": types.GetFrameDataDocument,
@@ -166,6 +171,10 @@ export function graphql(source: "\n  mutation PrepareRedemption($input: PrepareR
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment User_BaseDetails on user {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment User_BaseDetails on user {\n    id\n    name\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  fragment Wallet_BaseDetails on Wallet {\n    address\n    network\n    accountId\n    walletUser {\n      flag\n    }\n  }\n"): (typeof documents)["\n  fragment Wallet_BaseDetails on Wallet {\n    address\n    network\n    accountId\n    walletUser {\n      flag\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -187,6 +196,22 @@ export function graphql(source: "\n  query GetWhitelists($where: Whitelist_bool_
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWhitelist($merkleRoot: String = \"\") {\n    offchain {\n      Whitelist_by_pk(merkleRoot: $merkleRoot) {\n        merkleRoot\n        ...WhitelistEntries\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment Article_BaseDetails on article {\n    id\n    created_at\n    slug\n    title\n    description\n    user {\n      ...User_BaseDetails\n    }\n    thumbnail_uri\n    thumbnail_caption\n    media_image {\n      id\n      width\n      height\n      placeholder\n    }\n    display_uri\n  }\n"): (typeof documents)["\n  fragment Article_BaseDetails on article {\n    id\n    created_at\n    slug\n    title\n    description\n    user {\n      ...User_BaseDetails\n    }\n    thumbnail_uri\n    thumbnail_caption\n    media_image {\n      id\n      width\n      height\n      placeholder\n    }\n    display_uri\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment Article_FullDetails on article {\n    ...Article_BaseDetails\n    body\n    tags\n    language\n    editions\n    royalties\n    metadata_uri\n    metadata\n    flag\n    moderation_reason {\n      id\n      reason\n    }\n    splits {\n      pct\n      user {\n        ...User_BaseDetails\n      }\n    }\n    article_revisions {\n      iteration\n      metadata_uri\n      created_at\n      op_hash\n    }\n  }\n"): (typeof documents)["\n  fragment Article_FullDetails on article {\n    ...Article_BaseDetails\n    body\n    tags\n    language\n    editions\n    royalties\n    metadata_uri\n    metadata\n    flag\n    moderation_reason {\n      id\n      reason\n    }\n    splits {\n      pct\n      user {\n        ...User_BaseDetails\n      }\n    }\n    article_revisions {\n      iteration\n      metadata_uri\n      created_at\n      op_hash\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetFullArticleById($id: Int!) {\n    onchain {\n      article_by_pk(id: $id) {\n        ...Article_FullDetails\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetFullArticleById($id: Int!) {\n    onchain {\n      article_by_pk(id: $id) {\n        ...Article_FullDetails\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetFullArticleBySlug($slug: String!) {\n    onchain {\n      article(where: { slug: { _eq: $slug } }) {\n        ...Article_FullDetails\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetFullArticleBySlug($slug: String!) {\n    onchain {\n      article(where: { slug: { _eq: $slug } }) {\n        ...Article_FullDetails\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
