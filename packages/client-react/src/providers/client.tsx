@@ -62,6 +62,7 @@ export function ClientPlugnPlayProvider({
   children,
   config,
   safeDomContainer,
+  web3Auth,
 }: PropsWithChildren<IReactClientPlugnPlayProviderProps>) {
   // parse the provided config, verify if it matches requirements and provide
   // default values where missing
@@ -102,6 +103,7 @@ export function ClientPlugnPlayProvider({
       wallets: config.wallets,
       credentials: config.credentials,
       safeDomWrapper: safeDomContainer,
+      web3Auth: web3Auth,
     }))
   }, [])
 
@@ -114,8 +116,6 @@ export function ClientPlugnPlayProvider({
   const once = useRef(false)
 
   useEffect(() => {
-    invariant(safeDomContainer, "wrapper not available")
-
     const clean = cleanup()
     clean.add(
       client.emitter.on("error", err => {

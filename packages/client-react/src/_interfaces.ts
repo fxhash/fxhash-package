@@ -54,5 +54,6 @@ export interface IReactClientPlugnPlayConfig
 
 export interface IReactClientPlugnPlayProviderProps {
   config: IReactClientPlugnPlayConfig
-  safeDomContainer: HTMLElement
+  safeDomContainer?: HTMLElement
+  web3Auth?: boolean
 }
