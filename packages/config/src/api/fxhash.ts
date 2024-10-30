@@ -3,7 +3,7 @@ import { IFxhashApis, TEnv } from "../types.js"
 
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {
-  website: "https://dev.fxhash-dev.xyz",
+  website: "https://beta.fxhash-dev.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.dev.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
@@ -79,7 +79,7 @@ export const fxhashLocalDockerApis: IFxhashApis = {
 
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
-  website: "https://fxhash.xyz",
+  website: "https://beta.fxhash.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
