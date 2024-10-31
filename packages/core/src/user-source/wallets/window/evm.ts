@@ -7,6 +7,7 @@ import {
   getAccount,
   getPublicClient,
   getWalletClient,
+  switchChain,
   watchAccount,
   connect,
   disconnect,
@@ -22,9 +23,11 @@ import {
 } from "@fxhash/utils"
 import { createEvmWalletManager, walletSource } from "../common/_private.js"
 import {
+  EvmClientsChainMissmatchError,
   EvmClientsNotAvailableError,
   EvmViemClientGenerationError,
 } from "@/index.js"
+import { chains } from "@fxhash/eth"
 
 type Options = {
   wagmiConfig: Config
@@ -138,11 +141,26 @@ export function eip1193WalletSource({
           const connection = wagmiConfig.state.connections.get(
             wagmiConfig.state.current!
           )
-          if (connection && (connection.connector as any).getChainId) break
+          if (connection && (connection.connector as any)?.getChainId) break
           await sleep(100)
         }
       }
-      const walletClient = await getWalletClient(wagmiConfig)
+
+      let walletClient = await getWalletClient(wagmiConfig)
+      // The client can possiblly be connected to a different chain in that
+      // (e.g. by changin the chain in the wallet extension). In that case the
+      // walletClient.chain will be undefined, so we attempt to switch to
+      // expected the chain if it doesnt work we return an error.
+      if (!walletClient.chain) {
+        try {
+          await switchChain(wagmiConfig, { chainId: chains.ETHEREUM.id })
+          walletClient = await getWalletClient(wagmiConfig)
+          if (!walletClient.chain) throw new Error()
+        } catch (err) {
+          return failure(new EvmClientsChainMissmatchError())
+        }
+      }
+
       const publicClient = getPublicClient(wagmiConfig)
 
       if (!walletClient || !publicClient) {
