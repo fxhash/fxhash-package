@@ -1,0 +1,73 @@
+{
+  "name": "@fxhash/text",
+  "description": "Low-level fx(text) implementation.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@types/mdast": "4.0.4",
+    "gray-matter": "4.0.3",
+    "hast": "1.0.0",
+    "hast-util-sanitize": "4.1.0",
+    "hast-util-to-jsx-runtime": "2.3.2",
+    "hastscript": "7.2.0",
+    "mdast-util-find-and-replace": "3.0.0",
+    "rehype-katex": "6.0.3",
+    "rehype-prism": "2.2.2",
+    "rehype-react": "7.2.0",
+    "rehype-sanitize": "5.0.1",
+    "rehype-stringify": "9.0.3",
+    "remark-directive": "2.0.1",
+    "remark-gfm": "3.0.1",
+    "remark-math": "5.1.1",
+    "remark-parse": "10.0.2",
+    "remark-rehype": "10.1.0",
+    "remark-slate-transformer": "0.6.9",
+    "remark-unwrap-images": "3.0.1",
+    "unified": "10.1.2",
+    "unist-builder": "3.0.1",
+    "unist-util-visit": "4.1.2"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/eslint": "8.44.0",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.2.18",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint": "8.45.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tsup": "8.2.4",
+    "typescript": "5.6.2",
+    "vitest": "0.34.6"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:local": "FXHASH_ENV=local vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}
