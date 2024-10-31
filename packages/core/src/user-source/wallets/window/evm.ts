@@ -137,7 +137,7 @@ export function eip1193WalletSource({
        */
       let connection = null
       {
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
           if (!wagmiConfig.state.current!) break // shoudn't happen
           connection = wagmiConfig.state.connections.get(
             wagmiConfig.state.current!
