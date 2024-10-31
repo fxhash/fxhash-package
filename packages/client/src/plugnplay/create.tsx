@@ -39,6 +39,7 @@ type EvmConfigOptions = {
 const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
   return createConfig(
     getDefaultConfig({
+      coinbaseWalletPreference: "smartWalletOnly",
       chains: supportedEvmChains,
       transports: viemSimpleTransports,
       walletConnectProjectId: projectId,
