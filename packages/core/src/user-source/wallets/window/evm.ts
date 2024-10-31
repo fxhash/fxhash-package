@@ -135,10 +135,11 @@ export function eip1193WalletSource({
        * the versionned API, so there might be undocumented breaking changes
        * here.
        */
+      let connection = null
       {
         for (let i = 0; i < 20; i++) {
           if (!wagmiConfig.state.current!) break // shoudn't happen
-          const connection = wagmiConfig.state.connections.get(
+          connection = wagmiConfig.state.connections.get(
             wagmiConfig.state.current!
           )
           if (connection && (connection.connector as any)?.getChainId) break
@@ -174,6 +175,7 @@ export function eip1193WalletSource({
             public: publicClient,
             wallet: walletClient,
           },
+          connector: connection?.connector,
         })
       )
     },
