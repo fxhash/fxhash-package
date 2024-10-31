@@ -12,6 +12,7 @@ import {
   connect,
   disconnect,
   injected,
+  getConnections,
 } from "@wagmi/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import {
@@ -137,11 +138,9 @@ export function eip1193WalletSource({
        */
       let connection = null
       {
-        for (let i = 0; i < 50; i++) {
-          if (!wagmiConfig.state.current!) break // shoudn't happen
-          connection = wagmiConfig.state.connections.get(
-            wagmiConfig.state.current!
-          )
+        for (let i = 0; i < 20; i++) {
+          const connections = getConnections(wagmiConfig)
+          connection = connections[0]
           if (connection && (connection.connector as any)?.getChainId) break
           await sleep(100)
         }
