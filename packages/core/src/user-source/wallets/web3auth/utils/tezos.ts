@@ -1,8 +1,4 @@
-import {
-  WalletProvider,
-  type Signer,
-  WalletTransferParams,
-} from "@taquito/taquito"
+import type { WalletProvider } from "@taquito/taquito"
 import { type Web3AuthFrameManager } from "../FrameManager.js"
 import {
   TezosWalletRpcEndpoint,
@@ -13,11 +9,6 @@ import { BlockchainNetwork } from "@fxhash/shared"
 import { type IWalletConnected, type IWalletInfo } from "@/index.js"
 import { createTezosWalletManager } from "../../common/_private.js"
 import { bytesToHex } from "viem"
-import {
-  BeaconError,
-  BeaconErrorType,
-  BeaconMessageType,
-} from "@airgap/beacon-sdk"
 
 type Options = Web3AuthFrameManager
 
@@ -98,9 +89,12 @@ function frameManagerTezosWalletProvider(
       if (res.isSuccess()) {
         const response =
           res.value as TezosWalletRpcEndpoint<"tez_sendOperations">["res"]
+        const BeaconMessageType = (await import("@airgap/beacon-sdk"))
+          .BeaconMessageType
         if (response.type === BeaconMessageType.OperationResponse) {
           return response.transactionHash
         }
+        const BeaconError = (await import("@airgap/beacon-sdk")).BeaconError
         throw BeaconError.getError(response.errorType, null)
       }
       throw res.error
@@ -120,9 +114,12 @@ function frameManagerTezosWalletProvider(
       console.log(res)
       if (res.isSuccess()) {
         const response = res.value as TezosWalletRpcEndpoint<"tez_sign">["res"]
+        const BeaconMessageType = (await import("@airgap/beacon-sdk"))
+          .BeaconMessageType
         if (response.type === BeaconMessageType.SignPayloadResponse) {
           return response.signature
         }
+        const BeaconError = (await import("@airgap/beacon-sdk")).BeaconError
         throw BeaconError.getError(response.errorType, null)
       }
       throw res.error

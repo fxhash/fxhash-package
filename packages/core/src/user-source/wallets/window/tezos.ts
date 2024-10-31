@@ -1,10 +1,6 @@
 import { DefaultBeaconWalletConfig } from "@fxhash/tez"
-import {
-  type DAppClientOptions,
-  type AccountInfo,
-  BeaconEvent,
-} from "@airgap/beacon-sdk"
-import { BeaconWallet } from "@taquito/beacon-wallet"
+import type { DAppClientOptions, AccountInfo } from "@airgap/beacon-sdk"
+import type { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { failure, success } from "@fxhash/utils"
 import { IWindowWalletsSource } from "./_interfaces.js"
@@ -45,11 +41,13 @@ export function tzip10WalletSource({
         _init.start()
         const _handleAccountSet = (account?: AccountInfo) =>
           wallet.utils.update(account || null)
-
         /**
          * Note: BeaconWallet uses getDAppClientInstance() under the hood, ensuring
          * there's only a single Beacon Wallet instance in all times.
          */
+        const BeaconWallet = (await import("@taquito/beacon-wallet"))
+          .BeaconWallet
+        const BeaconEvent = (await import("@airgap/beacon-sdk")).BeaconEvent
         _beaconWallet = new BeaconWallet(_beaconConfig)
         _beaconWallet.client.subscribeToEvent(
           BeaconEvent.ACTIVE_ACCOUNT_SET,
