@@ -36,8 +36,7 @@ type EvmConfigOptions = {
   projectId: string
 }
 
-co nst createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
-
+const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
   return createConfig(
     getDefaultConfig({
       coinbaseWalletPreference: "smartWalletOnly",
