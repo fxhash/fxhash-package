@@ -18,10 +18,12 @@ import { TezosWalletManager } from "@fxhash/tez"
 import { type IWalletInfo } from "../../_interfaces.js"
 import { type AtLeastOne } from "@fxhash/utils"
 import { type MapNetworkToWalletManager } from "../../_types.js"
+import { type Connector } from "wagmi"
 
 interface IWalletManagerCreateParams<Net extends BlockchainNetwork> {
   info: IWalletInfo<Net>
   source: MapNetworkToWalletManagerCreateSourceInput<Net>
+  connector?: Connector
 }
 
 type MapNetworkToWalletManagerCreateSourceInput<Net extends BlockchainNetwork> =
@@ -50,7 +52,7 @@ type FnCreateWalletManager<Net extends BlockchainNetwork> = (
  */
 export const createEvmWalletManager: FnCreateWalletManager<
   BlockchainNetwork.ETHEREUM
-> = ({ info, source }) => {
+> = ({ info, source, connector }) => {
   return new EthereumWalletManager({
     walletClient: source.wallet,
     publicClient: source.public,
@@ -58,6 +60,7 @@ export const createEvmWalletManager: FnCreateWalletManager<
     address: info.address,
     signer: source.signer || clientToSigner(source.wallet),
     ethersAdapterForSafe: source.ethersAdapterForSafe,
+    connectorName: connector?.id || undefined,
   })
 }
 

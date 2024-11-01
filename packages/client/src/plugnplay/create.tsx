@@ -39,6 +39,7 @@ type EvmConfigOptions = {
 const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
   return createConfig(
     getDefaultConfig({
+      coinbaseWalletPreference: "smartWalletOnly",
       chains: supportedEvmChains,
       transports: viemSimpleTransports,
       walletConnectProjectId: projectId,
@@ -55,6 +56,7 @@ const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
 export function createClientPlugnPlay({
   metadata,
   wallets,
+  socialLogin,
   safeDomWrapper,
   credentials = "jwt",
 }: ClientPlugnPlayOptions): IClientPlugnPlay {
@@ -95,9 +97,11 @@ export function createClientPlugnPlay({
           }
         : undefined,
     },
-    web3auth: {
-      safeDomWrapper,
-    },
+    web3auth: socialLogin
+      ? safeDomWrapper
+        ? { safeDomWrapper }
+        : true
+      : undefined,
   }
 
   const gql = new GraphqlWrapper()

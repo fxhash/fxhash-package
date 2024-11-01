@@ -207,6 +207,7 @@ export function accountUtils({
    */
   const _logout = async () => {
     try {
+      console.log("logout")
       const account = await getAccountFromStorage()
       invariant(account, "no account authenticated")
       await logout(credentialsDriver.getLogoutPayload(account.credentials), {
