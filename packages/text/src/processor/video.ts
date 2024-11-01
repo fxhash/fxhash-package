@@ -4,6 +4,7 @@ export const videoProcessor: IArticleElementProcessor = {
   transformMdhastToComponent: (node, properties) => {
     return {
       src: properties.src || "",
+      controls: true,
     }
   },
   transformMarkdownMdhastToSlate: node => {

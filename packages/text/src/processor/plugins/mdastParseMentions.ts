@@ -5,6 +5,9 @@ import { Transformer } from "unified"
 
 export function mdastParseMentions(): Transformer<CustomNode, CustomNode> {
   return ast => {
+    // TODO:
+    // - testing addresses should be done via @fxhash/utils package
+    // - add support for ethereum
     findAndReplace(ast, [
       [
         /@(tz[1-3][1-9a-zA-Z]{33})/g,

@@ -1,18 +1,6 @@
-import { ITezosStoragePointer } from "@/processor/_interfaces"
-
-export type TezosStorageProps = ITezosStoragePointer
-
-export interface MentionProps {
-  tzAddress: string
-}
-
-export interface EmbedProps {
-  href?: string
-  children?: React.ReactNode
-  editable?: boolean
-  slateAttributes?: any
-  slateElement?: any
-}
+import { MentionProps } from "./mention/Display"
+import { TezosStorageProps } from "./tezos-storage-pointer/Display"
+import { EmbedProps } from "./embed/Display"
 
 export interface FxArticleComponentsMap {
   "tezos-storage-pointer": TezosStorageProps

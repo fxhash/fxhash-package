@@ -2,7 +2,22 @@ import { h } from "hastscript"
 import { visit } from "unist-util-visit"
 import { CustomNode } from "./_interfaces"
 import { Transformer } from "unified"
-import { customElements } from "./customElements"
+import { audioProcessor } from "../audio"
+import { embedProcessor } from "../embed"
+import { tezosStorageProcessor } from "../tezosStorage"
+import { videoProcessor } from "../video"
+import { CustomArticleElementsByType } from "./_interfaces"
+
+export const customElements: CustomArticleElementsByType = {
+  leafDirective: {
+    "tezos-storage-pointer": tezosStorageProcessor,
+    "embed-media": embedProcessor,
+    video: videoProcessor,
+    audio: audioProcessor,
+  },
+  textDirective: {},
+  containerDirective: {},
+}
 
 export function remarkFxHashCustom(): Transformer<CustomNode, CustomNode> {
   return (tree: any) => {

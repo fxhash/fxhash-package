@@ -17,33 +17,13 @@ import {
   mdastFlattenListItemParagraphs,
   mdastParseMentions,
   remarkFxHashCustom,
+  remarkIpfsUrlParser,
   remarkMentions,
 } from "./processor/_index"
 import { FxTextComponents } from "./components/_types"
-
-function TestComp() {
-  return <div>hi</div>
-}
-
-const defaultComponents: FxTextComponents = {
-  // custom
-  "tezos-storage-pointer": TestComp,
-  "embed-media": TestComp,
-  mention: TestComp,
-  // standard html
-  img: TestComp,
-  video: TestComp,
-  audio: TestComp,
-  pre: TestComp,
-  hr: TestComp,
-  a: TestComp,
-}
-
-const settingsRehypeReact = {
-  createElement,
-  Fragment,
-  components: defaultComponents,
-}
+import { fxTextDefaultDisplay } from "./components/settings"
+import { Components } from "hast-util-to-jsx-runtime"
+import rehypeShiki from "@shikijs/rehype"
 
 interface GetJsxFromMarkdownOptions {
   components?: FxTextComponents
@@ -70,15 +50,26 @@ export async function getJsxFromMarkdown(
       .use(remarkUnwrapImages)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
+      .use(remarkIpfsUrlParser)
       .use(remarkMentions)
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeSanitize, articleSchemaSanitize)
+      //@ts-ignore
       .use(rehypeKatex)
+      //@ts-ignore
+      .use(rehypeShiki, {
+        inline: "tailing-curly-colon",
+        theme: "github-dark",
+      })
       .use(rehypeStringify)
       .use(rehypeReact, {
-        ...settingsRehypeReact,
-        components: { ...settingsRehypeReact, ...components },
+        createElement,
+        Fragment,
+        components: {
+          ...fxTextDefaultDisplay,
+          ...components,
+        } as Partial<Components>,
       })
       .process(matterResult.content)
 
