@@ -20,21 +20,7 @@ export const EmbedCodepen = memo<EmbedElementProps>(({ href }) => {
           height="auto"
           loading="lazy"
           allow="transparency; fullscreen"
-        >
-          See the{" "}
-          <a contentEditable={false} href={href}>
-            Pen
-          </a>{" "}
-          by{" "}
-          <a contentEditable={false} href={`https://codepen.io/${data.author}`}>
-            @{data.author}
-          </a>
-          on{" "}
-          <a contentEditable={false} href="https://codepen.io">
-            CodePen
-          </a>
-          .
-        </iframe>
+        />
       ) : (
         <>CodePen can&apos;t be load.</>
       )}
