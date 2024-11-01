@@ -54,5 +54,19 @@ export interface IReactClientPlugnPlayConfig
 
 export interface IReactClientPlugnPlayProviderProps {
   config: IReactClientPlugnPlayConfig
-  safeDomContainer: HTMLElement
+
+  /**
+   * Set this key if you want support for login via socials.
+   */
+  socialLogin?: boolean
+
+  /**
+   * In case your application would alter the content of `document.body`
+   * such that it removes the <iframe> this module adds to
+   * `document.body`, you should provide such wrapper here. It should be
+   * a safe html element in which the <iframe> can be appended.
+   *
+   * @default document.body
+   */
+  safeDomContainer?: HTMLElement
 }

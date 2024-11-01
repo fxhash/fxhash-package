@@ -6,7 +6,7 @@
 import { BlockchainNetwork } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
 import { type Config as WagmiConfig } from "@wagmi/core"
-import { type DAppClientOptions as BeaconConfig } from "@airgap/beacon-sdk"
+import type { DAppClientOptions as BeaconConfig } from "@airgap/beacon-sdk"
 import { eip1193WalletSource } from "./evm.js"
 import { tzip10WalletSource } from "./tezos.js"
 import { type IWindowWalletsSource } from "./_interfaces.js"

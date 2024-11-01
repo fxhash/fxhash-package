@@ -69,12 +69,12 @@
     "@taquito/signer": "17.3.1",
     "@taquito/taquito": "17.3.1",
     "@taquito/utils": "17.3.1",
-    "@wagmi/connectors": "5.1.5",
-    "@wagmi/core": "2.13.4",
-    "ethers": "6.8.1",
+    "@wagmi/connectors": "5.3.3",
+    "@wagmi/core": "2.14.1",
+    "ethers": "6.13.4",
     "jwt-decode": "4.0.0",
     "viem": "2.19.4",
-    "wagmi": "2.12.5"
+    "wagmi": "2.12.25"
   },
   "publishConfig": {
     "access": "public"
