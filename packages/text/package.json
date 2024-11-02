@@ -9,7 +9,6 @@
     "@fxhash/shared": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
-    "@shikijs/rehype": "1.22.2",
     "@types/mdast": "4.0.4",
     "gray-matter": "4.0.3",
     "hast": "1.0.0",
@@ -18,6 +17,7 @@
     "hastscript": "7.2.0",
     "mdast-util-find-and-replace": "3.0.0",
     "react-tweet": "3.2.1",
+    "rehype-highlight": "5.0.2",
     "rehype-katex": "6.0.3",
     "rehype-prism": "2.2.2",
     "rehype-react": "7.2.0",
@@ -51,7 +51,6 @@
     "vitest": "0.34.6"
   },
   "peerDependencies": {
-    "shiki": "^1.22.0",
     "katex": "^0.12.0"
   },
   "exports": {

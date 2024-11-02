@@ -12,6 +12,7 @@ import rehypePrism from "rehype-prism"
 import rehypeStringify from "rehype-stringify"
 import rehypeReact from "rehype-react"
 import rehypeSanitize from "rehype-sanitize"
+import rehypeHighlight from "rehype-highlight"
 import {
   articleSchemaSanitize,
   mdastFlattenListItemParagraphs,
@@ -23,7 +24,6 @@ import {
 import { FxTextComponents } from "./components/_types"
 import { fxTextDefaultDisplay } from "./components/settings"
 import { Components } from "hast-util-to-jsx-runtime"
-import rehypeShiki from "@shikijs/rehype"
 
 interface GetJsxFromMarkdownOptions {
   components?: FxTextComponents
@@ -55,13 +55,9 @@ export async function getJsxFromMarkdown(
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeSanitize, articleSchemaSanitize)
-      //@ts-ignore
       .use(rehypeKatex)
-      //@ts-ignore
-      /*.use(rehypeShiki, {
-        inline: "tailing-curly-colon",
-        theme: "github-dark",
-      })*/
+      .use(rehypeHighlight)
+
       .use(rehypeStringify)
       .use(rehypeReact, {
         createElement,
