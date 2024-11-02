@@ -22,7 +22,6 @@
     "rehype-prism": "2.2.2",
     "rehype-react": "7.2.0",
     "rehype-sanitize": "5.0.1",
-    "rehype-starry-night": "2.2.0",
     "rehype-stringify": "9.0.3",
     "remark-directive": "2.0.1",
     "remark-gfm": "3.0.1",
@@ -60,7 +59,7 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./katex.min.css": "./dist/katex.min.css"
+    "./github-dark.min.css": "./dist/github-dark.min.css"
   },
   "files": [
     "dist"

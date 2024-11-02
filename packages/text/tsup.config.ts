@@ -12,4 +12,5 @@ export default defineConfig((options: Options) => ({
   clean: !options.watch,
   dts: true,
   bundle: true,
+  publicDir: "./static",
 }))
