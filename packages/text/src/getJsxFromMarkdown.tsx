@@ -58,10 +58,10 @@ export async function getJsxFromMarkdown(
       //@ts-ignore
       .use(rehypeKatex)
       //@ts-ignore
-      .use(rehypeShiki, {
+      /*.use(rehypeShiki, {
         inline: "tailing-curly-colon",
         theme: "github-dark",
-      })
+      })*/
       .use(rehypeStringify)
       .use(rehypeReact, {
         createElement,
