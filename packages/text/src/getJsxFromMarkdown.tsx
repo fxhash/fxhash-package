@@ -12,7 +12,7 @@ import rehypePrism from "rehype-prism"
 import rehypeStringify from "rehype-stringify"
 import rehypeReact from "rehype-react"
 import rehypeSanitize from "rehype-sanitize"
-import rehypeHighlight from "rehype-highlight"
+import rehypeStarryNight from "rehype-starry-night"
 import {
   articleSchemaSanitize,
   mdastFlattenListItemParagraphs,
@@ -56,8 +56,7 @@ export async function getJsxFromMarkdown(
       .use(rehypePrism)
       .use(rehypeSanitize, articleSchemaSanitize)
       .use(rehypeKatex)
-      .use(rehypeHighlight)
-
+      .use(rehypeStarryNight)
       .use(rehypeStringify)
       .use(rehypeReact, {
         createElement,
