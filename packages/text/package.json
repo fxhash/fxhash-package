@@ -51,17 +51,14 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./github-dark.min.css": "./dist/github-dark.min.css"
+      "import": "./dist/index.js"
+    }
   },
   "files": [
     "dist"
   ],
-  "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "^18.2.0"
@@ -75,7 +72,5 @@
     "dev": "tsup --watch",
     "test": "vitest",
     "test:local": "FXHASH_ENV=local vitest"
-  },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }
