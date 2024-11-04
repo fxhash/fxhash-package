@@ -14,6 +14,7 @@
     "hast-util-sanitize": "4.1.0",
     "hast-util-to-jsx-runtime": "2.3.2",
     "hastscript": "7.2.0",
+    "mdast": "3.0.0",
     "mdast-util-find-and-replace": "3.0.0",
     "react-tweet": "3.2.1",
     "rehype-highlight": "5.0.2",
