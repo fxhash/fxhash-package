@@ -4,7 +4,7 @@ import { MentionDisplay } from "./mention/Display"
 import { TezosStoragePointerDisplay } from "./tezos-storage-pointer/Display"
 
 export const fxTextDefaultDisplay: FxTextComponents = {
-  // custom markdown
+  // fx(text) custom markdown
   mention: MentionDisplay,
   "tezos-storage-pointer": TezosStoragePointerDisplay,
   "embed-media": EmbedDisplay,

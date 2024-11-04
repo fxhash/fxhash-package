@@ -1,21 +1,32 @@
 import { ITezosStoragePointer } from "@/processor/_interfaces"
-import { TezosStorageFactory } from "./Factory"
-
-export type TezosStorageProps = ITezosStoragePointer
+import { getTezosStoratePointerPayload } from "./useTezosStoragePointer"
+import { ITezosStoragePointerProps } from "./_types"
 
 export function TezosStoragePointerDisplay({
   contract,
   path,
-}: TezosStorageProps) {
+}: ITezosStoragePointerProps) {
   const pointer: ITezosStoragePointer = {
     contract,
     path,
   }
-  const Comp = TezosStorageFactory(pointer)
-  const props = Comp.getPropsFromPointer(pointer)
+  const { type, props } = getTezosStoratePointerPayload(pointer)
+
   return (
-    <div>
-      <Comp {...props} />
-    </div>
+    <figure>
+      <ul>
+        <li>
+          <b>Tezos Storate Pointer</b>
+        </li>
+        <li>
+          type: <b>{type}</b>
+        </li>
+        {(Object.entries(props) as [string, unknown][]).map(([key, value]) => (
+          <li key={key}>
+            {key}: <b>{String(value)}</b>
+          </li>
+        ))}
+      </ul>
+    </figure>
   )
 }
