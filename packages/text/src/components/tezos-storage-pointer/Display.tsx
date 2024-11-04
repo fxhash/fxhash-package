@@ -16,7 +16,7 @@ export function TezosStoragePointerDisplay({
     <figure>
       <ul>
         <li>
-          <b>Tezos Storate Pointer</b>
+          <b>Tezos Storage Pointer</b>
         </li>
         <li>
           type: <b>{type}</b>
