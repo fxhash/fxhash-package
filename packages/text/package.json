@@ -9,7 +9,6 @@
     "@fxhash/shared": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
-    "@types/mdast": "4.0.4",
     "gray-matter": "4.0.3",
     "hast": "1.0.0",
     "hast-util-sanitize": "4.1.0",
@@ -63,9 +62,8 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "peerDependencies": {
-    "katex": "^0.12.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "^18.2.0"
   },
   "publishConfig": {
     "access": "public"
