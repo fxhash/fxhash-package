@@ -1,56 +1,9 @@
-import { TEnv } from "../config"
-import { getDockerInternalUrl } from "../helpers"
-
-export interface IFxhashApis {
-  website: string
-  docs: string
-  main: string
-  hasura: string
-  hasuraGql: string
-  file: string
-  fileInternal: string
-  walletInternal: string
-  fsEmulator: string
-  extract: string
-  extractInternal: string
-  media: string
-  ethMetadata: string
-  ipfsInternal: string
-  ipfsGateway: string
-  ipfsGatewaySafe: string
-  ipfsGatewayInternal: string
-  onchfsProxy: string
-  opensea: string
-  authority: {
-    api: string
-  }
-  capture: {
-    lambdas: {
-      small: string
-      medium: string
-      large: string
-    }
-    proxy: {
-      ipfs: string
-      onchfs: string
-    }
-  }
-  dashboard: {
-    backend: string
-  }
-  events: {
-    liveBackend: string
-  }
-  indexer: {
-    tez: string
-    eth: string
-    base: string
-  }
-}
+import { getDockerInternalUrl } from "../helpers.js"
+import { IFxhashApis, TEnv } from "../types.js"
 
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {
-  website: "https://dev.fxhash-dev.xyz",
+  website: "https://beta.fxhash-dev.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.dev.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
@@ -126,7 +79,7 @@ export const fxhashLocalDockerApis: IFxhashApis = {
 
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
-  website: "https://fxhash.xyz",
+  website: "https://beta.fxhash.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
@@ -191,6 +144,6 @@ const fxEnvToApisMap: Record<TEnv, IFxhashApis> = {
 /**
  * Given some env, returns the associated APIs config.
  */
-export function fxApisByEnv(env: TEnv) {
+export function fxApisByEnv(env: TEnv): IFxhashApis {
   return fxEnvToApisMap[env]
 }

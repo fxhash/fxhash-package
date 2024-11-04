@@ -1,4 +1,4 @@
-import { BeaconWallet } from "@taquito/beacon-wallet"
+import type { BeaconWallet } from "@taquito/beacon-wallet"
 import {
   ContractAbstraction,
   Signer,
@@ -8,12 +8,7 @@ import {
   WalletProvider,
 } from "@taquito/taquito"
 import { InMemorySigner } from "@taquito/signer"
-import {
-  AbortedBeaconError,
-  DAppClientOptions,
-  NetworkType,
-  SigningType,
-} from "@airgap/beacon-sdk"
+import type { DAppClientOptions, NetworkType } from "@airgap/beacon-sdk"
 import {
   PendingSigningRequestError,
   UserRejectedError,
@@ -154,6 +149,7 @@ export class TezosWalletManager extends WalletManager {
         const provider = this.wallet.wallet
         // special case for BeaconWallet, requires calling requestSignPayload
         if (isBeaconWallet(provider)) {
+          const SigningType = (await import("@airgap/beacon-sdk")).SigningType
           const res = await provider.client.requestSignPayload({
             signingType: SigningType.MICHELINE,
             payload: payloadBytes,
@@ -170,6 +166,8 @@ export class TezosWalletManager extends WalletManager {
       }
       return success(signature)
     } catch (error) {
+      const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
+        .AbortedBeaconError
       if (error instanceof AbortedBeaconError) {
         return failure(new UserRejectedError())
       }
@@ -213,6 +211,8 @@ export class TezosWalletManager extends WalletManager {
           hash: operation.opHash,
         })
       } catch (error) {
+        const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
+          .AbortedBeaconError
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
         if (error instanceof AbortedBeaconError) {
           return failure(new UserRejectedError())
@@ -350,6 +350,7 @@ export class TezosWalletManager extends WalletManager {
     wallet?: BeaconWallet
     tezosToolkit?: TezosToolkit
   }) {
+    const BeaconWallet = (await import("@taquito/beacon-wallet")).BeaconWallet
     // init beacon wallet
     const wallet =
       options?.wallet || new BeaconWallet(DefaultBeaconWalletConfig)

@@ -43,3 +43,23 @@ export function arrayIndexOf<T>(arr: T[], test: (item: T) => boolean): number {
   }
   return idx
 }
+
+export type TArrayCompareFn<T = any> = (a: T, b: T) => boolean
+export type TArrayCopyFn<T = any> = (array: T[]) => T[]
+
+export function arrayRemoveDuplicates<T = any>(
+  array: T[],
+  isSame: TArrayCompareFn<T> = (a, b) => a === b,
+  arrayCopy: TArrayCopyFn<T> = arr => arr
+): T[] {
+  const ret = arrayCopy(array)
+  for1: for (let i = array.length - 1; i >= 1; i--) {
+    for (let j = i - 1; j >= 0; j--) {
+      if (isSame(array[i], array[j])) {
+        ret.splice(i, 1)
+        continue for1
+      }
+    }
+  }
+  return ret
+}

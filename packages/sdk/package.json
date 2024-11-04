@@ -11,6 +11,7 @@
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
+    "@fxhash/params": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*"
@@ -22,8 +23,8 @@
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "eslint": "8.45.0",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
+    "tsup": "8.2.4",
+    "typescript": "5.6.2",
     "vitest": "0.34.6"
   },
   "exports": {

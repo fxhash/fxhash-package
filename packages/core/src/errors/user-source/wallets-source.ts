@@ -22,9 +22,16 @@ export class EvmViemClientGenerationError extends Error {
   message = "an error occured when attempting to generate the viem clients."
 }
 
+export class EvmClientsChainMissmatchError extends Error {
+  name = "EvmClientsChainMissmatchError" as const
+  message =
+    "it appears the connected EVM client is using a different chain than the dapp"
+}
+
 export type EvmWalletSourceError =
   | EvmClientsNotAvailableError
   | EvmViemClientGenerationError
+  | EvmClientsChainMissmatchError
 
 export type WalletSourceErrorTypemap = {
   [BlockchainNetwork.TEZOS]: TezosWalletSourceError

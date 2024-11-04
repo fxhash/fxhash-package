@@ -1,17 +1,14 @@
-import {
+import type {
   ContractAbstraction,
-  OpKind,
   Wallet,
   WalletOperation,
 } from "@taquito/taquito"
 import { getListingAcceptEp, getListingFA2Contract } from "../../utils/listing"
-import { displayMutez } from "../../utils/units"
 import { TezosContractOperation } from "./ContractOperation"
-import { Listing, Objkt } from "@fxhash/shared"
+import type { Listing } from "@fxhash/shared"
 
 export type TListingAcceptOperationParams = {
-  listing: Listing
-  objkt: Objkt
+  listing: Pick<Listing, "id" | "version" | "price">
 }
 
 /**
@@ -29,7 +26,7 @@ export class ListingAcceptOperation extends TezosContractOperation<TListingAccep
   }
 
   async call(): Promise<WalletOperation> {
-    return this.marketplaceContract!.methods[this.entrypoint!](
+    return this.marketplaceContract.methods[this.entrypoint](
       this.params.listing.id
     ).send({
       amount: this.params.listing.price,
@@ -38,8 +35,6 @@ export class ListingAcceptOperation extends TezosContractOperation<TListingAccep
   }
 
   success(): string {
-    return `You have bought ${this.params.objkt.name} for ${displayMutez(
-      this.params.listing.price
-    )} tez`
+    return "You have collected this token !"
   }
 }

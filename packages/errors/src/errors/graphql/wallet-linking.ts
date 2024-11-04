@@ -1,5 +1,5 @@
-import { isRichErrorMessages } from "@/utils/rich-error"
-import { IRichErrorMessages, RichError, RichErrorUnion } from "../common"
+import { isRichErrorMessages } from "../../utils/rich-error.js"
+import { IRichErrorMessages, RichError, RichErrorUnion } from "../common.js"
 
 export class WalletAlreadyOtherAccountMainWalletError extends RichError {
   name = "WalletAlreadyOtherAccountMainWalletError" as const
@@ -33,7 +33,11 @@ export class AccountAlreadyLinkedOnNetworkError extends RichError {
   }
 }
 
-export const LinkWalletErrors = [
+export const LinkWalletErrors: (
+  | typeof WalletAlreadyOtherAccountMainWalletError
+  | typeof WalletAlreadyLinkedError
+  | typeof AccountAlreadyLinkedOnNetworkError
+)[] = [
   WalletAlreadyOtherAccountMainWalletError,
   WalletAlreadyLinkedError,
   AccountAlreadyLinkedOnNetworkError,
@@ -56,8 +60,8 @@ export class MainWalletCannotBeUnlinkedError extends RichError {
   }
 }
 
-export const UnlinkWalletErrors = [
-  WalletNotLinkedToAccountError,
-  MainWalletCannotBeUnlinkedError,
-]
+export const UnlinkWalletErrors: (
+  | typeof WalletNotLinkedToAccountError
+  | typeof MainWalletCannotBeUnlinkedError
+)[] = [WalletNotLinkedToAccountError, MainWalletCannotBeUnlinkedError]
 export type UnlinkWalletError = RichErrorUnion<typeof UnlinkWalletErrors>

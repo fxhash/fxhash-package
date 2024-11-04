@@ -2,7 +2,7 @@ import { Hex } from "viem"
 import { EventEmitter, PromiseResult } from "@fxhash/utils"
 import { Web3AuthEmailRequestOtpOutput } from "@fxhash/gql"
 import { BlockchainNetwork } from "@fxhash/shared"
-import { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
+import type { BeaconErrorType, BeaconMessageType } from "@airgap/beacon-sdk"
 import {
   EmailOTPRequestError,
   Web3AuthFrameError,

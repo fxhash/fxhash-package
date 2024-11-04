@@ -1,10 +1,10 @@
-import { TypeOfRichError, isRichErrorMessages } from ".."
+import { TypeOfRichError, isRichErrorMessages } from "../index.js"
 import {
   IRichErrorMessages,
   RichError,
   RichErrorUnion,
   UnexpectedRichErrorMessages,
-} from "./common"
+} from "./common.js"
 
 export class Web3AuthFrameNotLoading extends RichError {
   name = "Web3AuthFrameNotLoading" as const
@@ -87,13 +87,25 @@ export class Web3AuthInitializationFailedError extends RichError {
 
 export class Web3AuthFrameUnknownError extends RichError {
   name = "Web3AuthFrameUnknownError" as const
-  messages = {
+  messages: {
+    dev: string
+    user: string
+  } = {
     dev: "An unexpected error was raised using Web3Auth",
     user: UnexpectedRichErrorMessages.user,
   }
 }
 
-export const Web3AuthFrameErrors = {
+export const Web3AuthFrameErrors: {
+  init: (typeof Web3AuthInitializationFailedError)[]
+  getSessionDetails: (typeof Web3AuthFrameAuthenticationError)[]
+  login: (
+    | typeof Web3AuthFrameAuthenticationError
+    | typeof Web3AuthFrameFxhashAuthenticationError
+    | typeof Web3AuthFrameUnknownError
+  )[]
+  logout: (typeof Web3AuthFrameLogoutFailedError)[]
+} = {
   init: [Web3AuthInitializationFailedError],
   getSessionDetails: [Web3AuthFrameAuthenticationError],
   login: [
@@ -113,7 +125,7 @@ export type Web3AuthFrameError = {
 export type AllWeb3AuthFrameError = TypeOfRichError<
   Web3AuthFrameError[keyof Web3AuthFrameError]
 >
-export const AllWeb3AuthFrameErrors =
+export const AllWeb3AuthFrameErrors: AllWeb3AuthFrameError[] =
   Array<AllWeb3AuthFrameError>().concat.apply(
     [],
     Object.values(Web3AuthFrameErrors) as any

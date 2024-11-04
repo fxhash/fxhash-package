@@ -1,5 +1,5 @@
-import { isRichErrorMessages } from "@/utils/rich-error"
-import { IRichErrorMessages, RichError, RichErrorUnion } from "../common"
+import { isRichErrorMessages } from "../../utils/rich-error.js"
+import { IRichErrorMessages, RichError, RichErrorUnion } from "../common.js"
 import { capitalize } from "@fxhash/utils"
 
 type OAuthProvider = "google" | "discord"
@@ -41,5 +41,8 @@ export class OAuthMissingInfoError extends RichError {
   }
 }
 
-export const OAuthErrors = [OAuthTokenVerificationError, OAuthMissingInfoError]
+export const OAuthErrors: (
+  | typeof OAuthTokenVerificationError
+  | typeof OAuthMissingInfoError
+)[] = [OAuthTokenVerificationError, OAuthMissingInfoError]
 export type OAuthError = RichErrorUnion<typeof OAuthErrors>

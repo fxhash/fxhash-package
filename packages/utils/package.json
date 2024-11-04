@@ -3,11 +3,14 @@
   "description": "A general-purpose nodejs/browser compatible utility package related to fxhash applications.",
   "version": "0.0.2",
   "author": "fxhash",
+  "dependencies": {
+    "bs58check": "4.0.0"
+  },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
+    "tsup": "8.2.4",
+    "typescript": "5.6.2",
     "vitest": "0.34.6"
   },
   "exports": {

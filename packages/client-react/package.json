@@ -13,8 +13,8 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.2.18",
     "esbuild-css-modules-plugin": "2.7.1",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3"
+    "tsup": "8.2.4",
+    "typescript": "5.6.2"
   },
   "exports": {
     ".": {
@@ -36,7 +36,7 @@
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-otp-input": "3.1.1",
-    "solid-js": "^1.8.0"
+    "solid-js": "^1.9.3"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
