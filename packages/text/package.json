@@ -57,8 +57,6 @@
   "files": [
     "dist"
   ],
-  "type": "module",
-  "types": "./dist/index.d.ts",
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -72,5 +70,7 @@
     "dev": "tsup --watch",
     "test": "vitest",
     "test:local": "FXHASH_ENV=local vitest"
-  }
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }
