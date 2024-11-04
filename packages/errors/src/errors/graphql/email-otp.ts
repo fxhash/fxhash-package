@@ -1,4 +1,4 @@
-import { RichError, RichErrorUnion } from "../common"
+import { RichError, RichErrorUnion } from "../common.js"
 
 export class EmailOTPLockedError extends RichError {
   name = "EmailOTPLockedError" as const
@@ -8,7 +8,9 @@ export class EmailOTPLockedError extends RichError {
   }
 }
 
-export const EmailOTPRequestErrors = [EmailOTPLockedError]
+export const EmailOTPRequestErrors: (typeof EmailOTPLockedError)[] = [
+  EmailOTPLockedError,
+]
 export type EmailOTPRequestError = RichErrorUnion<typeof EmailOTPRequestErrors>
 
 export class EmailOTPInvalidError extends RichError {
@@ -27,11 +29,11 @@ export class EmailOTPExpiredError extends RichError {
   }
 }
 
-export const EmailOTPVerificationErrors = [
-  EmailOTPInvalidError,
-  EmailOTPExpiredError,
-  EmailOTPLockedError,
-]
+export const EmailOTPVerificationErrors: (
+  | typeof EmailOTPLockedError
+  | typeof EmailOTPInvalidError
+  | typeof EmailOTPExpiredError
+)[] = [EmailOTPInvalidError, EmailOTPExpiredError, EmailOTPLockedError]
 export type EmailOTPVerificationError = RichErrorUnion<
   typeof EmailOTPVerificationErrors
 >

@@ -1,4 +1,4 @@
-import { RichError } from "./common"
+import { RichError } from "./common.js"
 
 export class NetworkRichError extends RichError {
   name = "NetworkRichError" as const

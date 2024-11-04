@@ -12,11 +12,14 @@ import {
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { IReserveConsumption } from "@/types/Reserve"
-import { EReserveMethod, GenerativeToken } from "@fxhash/shared"
+import {
+  IReserveConsumption,
+  EReserveMethod,
+  GenerativeToken,
+} from "@fxhash/shared"
 
 export type TMintV3OperationParams = {
-  token: GenerativeToken
+  token: Pick<GenerativeToken, "id" | "version">
   price: number
   consumeReserve: IReserveConsumption | null
   createTicket: boolean
@@ -50,7 +53,7 @@ export class MintV3Operation extends TezosContractOperation<TMintV3OperationPara
     if (this.params.consumeReserve?.method === EReserveMethod.MINT_PASS) {
       ops.push({
         kind: OpKind.TRANSACTION,
-        to: this.params.consumeReserve!.data.reserveData,
+        to: this.params.consumeReserve.data.reserveData,
         amount: 0,
         parameter: {
           entrypoint: "consume_pass",
@@ -105,6 +108,6 @@ export class MintV3Operation extends TezosContractOperation<TMintV3OperationPara
   }
 
   success(): string {
-    return `Minted your unique iteration of ${this.params.token.name}`
+    return "Minted your unique iteration"
   }
 }

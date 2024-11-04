@@ -1,45 +1,32 @@
-import { IEthApis, ethTestnetApis } from "./api/eth"
-import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "./api/tezos"
-import { IFxhashApis, fxhashDevApis, fxhashPrdApis } from "./api/fxhash"
+import { type IEthApis, ethTestnetApis } from "./api/eth.js"
 import {
-  ITezosContracts,
+  type ITezosApis,
+  tezosTestnetApis,
+  tezosMainnetApis,
+} from "./api/tezos.js"
+import { fxhashDevApis, fxhashPrdApis } from "./api/fxhash.js"
+import {
+  type ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
-} from "./contracts/tezos"
-import { IEthContracts, ethTestnetContracts } from "./contracts/eth"
+} from "./contracts/tezos.js"
+import { type IEthContracts, ethTestnetContracts } from "./contracts/eth.js"
 import {
-  IFxhashEnvConfig,
-  IFxhashNetworkConfig,
-  TBlockchain,
-  TBlockchainNetwork,
-  TEnv,
-  IFxhashConfig,
   fxhashConfig,
   prdConfig,
   devConfig,
-  IFxhashConfigSingleEnv,
   localConfig,
-  localDockerConfig,
-} from "./config"
-import { isLocal, isProd, isDockerLocal } from "./helpers"
-
-let config: IFxhashConfigSingleEnv = isProd
-  ? prdConfig
-  : isLocal
-    ? isDockerLocal
-      ? localDockerConfig
-      : localConfig
-    : devConfig
-
-function setConfig(
-  userConfig: Partial<IFxhashConfigSingleEnv>
-): IFxhashConfigSingleEnv {
-  config = {
-    ...config,
-    ...userConfig,
-  }
-  return config
-}
+  config,
+  setConfig,
+} from "./config.js"
+import {
+  type IFxhashEnvConfig,
+  type IFxhashNetworkConfig,
+  type TBlockchain,
+  type TBlockchainNetwork,
+  type TEnv,
+  type IFxhashConfig,
+} from "./types.js"
 
 export {
   ethTestnetApis,
@@ -58,7 +45,6 @@ export {
   setConfig,
   type IEthApis,
   type ITezosApis,
-  type IFxhashApis,
   type ITezosContracts,
   type IEthContracts,
   type IFxhashEnvConfig,
@@ -69,9 +55,10 @@ export {
   type IFxhashConfig,
 }
 
-export * from "./types"
-export * from "./helpers"
+export * from "./types.js"
+export * from "./helpers.js"
+export * from "./utils/index.js"
 
-export { type IAppMetadata, isAppMetadataValid } from "./config/metadata"
+export { isAppMetadataValid } from "./config/metadata.js"
 
 export default fxhashConfig

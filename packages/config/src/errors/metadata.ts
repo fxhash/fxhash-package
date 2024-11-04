@@ -1,7 +1,7 @@
 import {
-  IRichErrorMessages,
+  type IRichErrorMessages,
   RichError,
-  RichErrorUnion,
+  type RichErrorUnion,
   isRichErrorMessages,
 } from "@fxhash/errors"
 

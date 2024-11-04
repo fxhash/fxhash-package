@@ -1,5 +1,5 @@
+import { fetchRetry } from "@fxhash/utils"
 import { TzktOperation } from "../../types/Tzkt"
-import { fetchRetry } from "../../utils/fetchRetry"
 import {
   API_BLOCKCHAIN_CONTRACT_DETAILS,
   API_BLOCKCHAIN_CONTRACT_OPERATIONS,

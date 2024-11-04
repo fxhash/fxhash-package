@@ -14,6 +14,7 @@ import {
   AuthenticationError,
   IStorageDriver,
   generateChallenge,
+  WalletDoesntBelongAccountError,
 } from "@/index.js"
 import { config as fxConfig } from "@fxhash/config"
 import type {
@@ -206,6 +207,7 @@ export function accountUtils({
    */
   const _logout = async () => {
     try {
+      console.log("logout")
       const account = await getAccountFromStorage()
       invariant(account, "no account authenticated")
       await logout(credentialsDriver.getLogoutPayload(account.credentials), {
@@ -332,6 +334,20 @@ export function authWithWallets<AuthError extends IEquatableError>({
           }
         } else {
           walletsSource.disconnectAllWallets()
+          return
+        }
+      }
+
+      // if we are during the initialization, and wallet doesn't belong to
+      // the account, disconnect the wallet and propagate the state
+      if (consistency.error instanceof WalletDoesntBelongAccountError) {
+        if (init.state === Init.STARTED) {
+          const network = consistency.error.network
+          const wallet = walletsSource.getWallet(network)
+          if (wallet) {
+            await walletsSource.disconnectWallet(network)
+          }
+          emitter.emit("user-changed")
           return
         }
       }
