@@ -8,7 +8,6 @@ import remarkUnwrapImages from "remark-unwrap-images"
 import remarkDirective from "remark-directive"
 import remarkRehype from "remark-rehype"
 import rehypeKatex from "rehype-katex"
-import rehypePrism from "rehype-prism"
 import rehypeStringify from "rehype-stringify"
 import rehypeReact from "rehype-react"
 import rehypeSanitize from "rehype-sanitize"
@@ -53,10 +52,12 @@ export async function getJsxFromMarkdown(
       .use(remarkIpfsUrlParser)
       .use(remarkMentions)
       .use(remarkRehype)
-      .use(rehypePrism)
       .use(rehypeSanitize, articleSchemaSanitize)
       .use(rehypeKatex)
-      .use(rehypeHighlight)
+      .use(rehypeHighlight, {
+        ignoreMissing: true,
+        aliases: { markdown: "plain" },
+      })
       .use(rehypeStringify)
       .use(rehypeReact, {
         createElement,

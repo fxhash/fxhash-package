@@ -19,7 +19,6 @@
     "react-tweet": "3.2.1",
     "rehype-highlight": "5.0.2",
     "rehype-katex": "6.0.3",
-    "rehype-prism": "2.2.2",
     "rehype-react": "7.2.0",
     "rehype-sanitize": "5.0.1",
     "rehype-stringify": "9.0.3",
