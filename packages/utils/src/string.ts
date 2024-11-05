@@ -48,9 +48,8 @@ export function splitStringAt(str: string, index: number): [string, string] {
 /**
  * convert a string of tags separated by commas into an array of tags
  * @param str String of tags separated by commas
- * @returns Array<string> of tags
+ * @returns Array\<string> of tags
  */
-
 export function tagsFromString(str: string): string[] {
   return str
     .split(",")
