@@ -22,7 +22,7 @@ export const ethTestnetApis: IEthApis = {
 
 export const ethMainnetApis: IEthApis = {
   rpcs: [
-    "https://base-sepolia.g.alchemy.com/v2/xTtlsglqRKcFwSkg2bilqp7U2smOt3g9",
+    "https://eth-mainnet.g.alchemy.com/v2/xTtlsglqRKcFwSkg2bilqp7U2smOt3g9",
   ],
   reservoir: "https://api.reservoir.tools",
   safe: "https://safe-transaction-mainnet.safe.global/",
