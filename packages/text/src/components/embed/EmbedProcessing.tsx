@@ -1,6 +1,6 @@
 import { memo } from "react"
-import { getOpenProcessingIdFromUrl } from "./utils"
-import { EmbedElementProps } from "./Media"
+import { getOpenProcessingIdFromUrl } from "./utils.js"
+import { EmbedElementProps } from "./Media.js"
 
 export const EmbedOpenProcessing = memo<EmbedElementProps>(({ href }) => {
   const id = getOpenProcessingIdFromUrl(href)

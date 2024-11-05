@@ -1,4 +1,4 @@
-import { IArticleElementProcessor } from "./_interfaces"
+import { IArticleElementProcessor } from "./_interfaces.js"
 
 export const embedProcessor: IArticleElementProcessor = {
   htmlTagName: "embed-media",

@@ -2,11 +2,11 @@ import { h } from "hastscript"
 import { visit } from "unist-util-visit"
 import { CustomNode } from "./_interfaces"
 import { Transformer } from "unified"
-import { audioProcessor } from "../audio"
-import { embedProcessor } from "../embed"
-import { tezosStorageProcessor } from "../tezosStorage"
-import { videoProcessor } from "../video"
-import { CustomArticleElementsByType } from "./_interfaces"
+import { audioProcessor } from "../audio.js"
+import { embedProcessor } from "../embed.js"
+import { tezosStorageProcessor } from "../tezosStorage.js"
+import { videoProcessor } from "../video.js"
+import { CustomArticleElementsByType } from "./_interfaces.js"
 
 export const customElements: CustomArticleElementsByType = {
   leafDirective: {

@@ -1,6 +1,6 @@
 import { memo } from "react"
-import { EmbedElementProps } from "./Media"
-import { getTweetIdFromUrl } from "./utils"
+import { EmbedElementProps } from "./Media.js"
+import { getTweetIdFromUrl } from "./utils.js"
 import { Tweet } from "react-tweet"
 
 export const EmbedTwitter = memo<EmbedElementProps>(({ href }) => {

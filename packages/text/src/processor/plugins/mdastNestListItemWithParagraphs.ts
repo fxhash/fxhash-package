@@ -1,7 +1,7 @@
 import { visit } from "unist-util-visit"
 import { u } from "unist-builder"
-import { CustomNode } from "./_interfaces"
 import { Transformer } from "unified"
+import { CustomNode } from "./_interfaces.js"
 
 export function mdastNestListItemWithParagraphs(): Transformer<
   CustomNode,

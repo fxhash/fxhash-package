@@ -1,5 +1,5 @@
 import { findAndReplace } from "mdast-util-find-and-replace"
-import { CustomNode } from "./_interfaces"
+import { CustomNode } from "./_interfaces.js"
 import { u } from "unist-builder"
 import { Transformer } from "unified"
 

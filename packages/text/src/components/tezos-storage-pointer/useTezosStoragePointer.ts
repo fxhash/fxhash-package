@@ -1,13 +1,13 @@
-import { ITezosStoragePointer } from "@/processor/_interfaces"
 import { config, getObjktIdFromContract } from "@fxhash/config"
 import { isEthereumAddressValid } from "@fxhash/utils"
 import { useMemo } from "react"
+import { ITezosStoragePointer } from "@/processor/_interfaces.js"
 import {
   IPointerPropsIteration,
   IPointerPropsProject,
   IUseTezosStroagePointerPayload,
-} from "./_interfaces"
-import { TezosStorageType } from "./_types"
+} from "./_interfaces.js"
+import { TezosStorageType } from "./_types.js"
 
 /**
  * Check if the pointer is an iteration pointer

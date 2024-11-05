@@ -1,6 +1,6 @@
 import { visit } from "unist-util-visit"
-import { CustomNode } from "./_interfaces"
 import { Transformer } from "unified"
+import { CustomNode } from "./_interfaces.js"
 
 export function mdastFlattenListItemParagraphs(): Transformer<
   CustomNode,

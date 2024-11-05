@@ -1,6 +1,6 @@
 import { ITezosStoragePointer } from "@/processor/_interfaces"
-import { getTezosStoratePointerPayload } from "./useTezosStoragePointer"
-import { ITezosStoragePointerProps } from "./_types"
+import { getTezosStoratePointerPayload } from "./useTezosStoragePointer.js"
+import { ITezosStoragePointerProps } from "./_types.js"
 
 export function TezosStoragePointerDisplay({
   contract,

@@ -1,6 +1,6 @@
 import { memo } from "react"
-import { EmbedElementProps } from "./Media"
-import { getCodepenFromUrl } from "./utils"
+import { EmbedElementProps } from "./Media.js"
+import { getCodepenFromUrl } from "./utils.js"
 
 export const EmbedCodepen = memo<EmbedElementProps>(({ href }) => {
   const codepen = getCodepenFromUrl(href)

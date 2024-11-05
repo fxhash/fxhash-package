@@ -1,4 +1,4 @@
-import { ITezosStoragePointer } from "@/processor/_interfaces"
+import { ITezosStoragePointer } from "@/processor/_interfaces.js"
 import {
   IPointerPropsProject,
   IPointerPropsIteration,

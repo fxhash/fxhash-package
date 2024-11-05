@@ -1,15 +1,15 @@
+import { NamedExoticComponent } from "react"
 import {
   getCodepenFromUrl,
   getOpenProcessingIdFromUrl,
   getYoutubeCodeFromUrl,
   getTweetIdFromUrl,
-} from "./utils"
-import { EmbedTwitter } from "./EmbedTwitter"
-import { NamedExoticComponent } from "react"
-import { EmbedCodepen } from "./EmbedCodepen"
-import { EmbedOpenProcessing } from "./EmbedProcessing"
-import { EmbedSpotify } from "./EmbedSpotify"
-import { EmbedYoutube } from "./EmbedYoutube"
+} from "./utils.js"
+import { EmbedTwitter } from "./EmbedTwitter.js"
+import { EmbedCodepen } from "./EmbedCodepen.js"
+import { EmbedOpenProcessing } from "./EmbedProcessing.js"
+import { EmbedSpotify } from "./EmbedSpotify.js"
+import { EmbedYoutube } from "./EmbedYoutube.js"
 
 export interface EmbedElementProps {
   href: string

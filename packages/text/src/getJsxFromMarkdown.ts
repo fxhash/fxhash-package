@@ -19,9 +19,9 @@ import {
   remarkFxHashCustom,
   remarkIpfsUrlParser,
   remarkMentions,
-} from "./processor/_index"
-import { FxTextComponents } from "./components/_types"
-import { fxTextDefaultDisplay } from "./components/settings"
+} from "./processor/_index.js"
+import { FxTextComponents } from "./components/_types.js"
+import { fxTextDefaultDisplay } from "./components/settings.js"
 import { Components } from "hast-util-to-jsx-runtime"
 
 interface GetJsxFromMarkdownOptions {

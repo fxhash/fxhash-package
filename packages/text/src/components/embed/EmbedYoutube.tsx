@@ -1,6 +1,6 @@
 import { memo } from "react"
-import { EmbedElementProps } from "./Media"
-import { getYoutubeCodeFromUrl } from "./utils"
+import { EmbedElementProps } from "./Media.js"
+import { getYoutubeCodeFromUrl } from "./utils.js"
 
 export const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
   const code = getYoutubeCodeFromUrl(href)

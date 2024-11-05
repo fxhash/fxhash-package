@@ -1,5 +1,5 @@
-import { ITezosStoragePointer } from "@/processor/_interfaces"
-import { TezosStorageType, StorageTypeProps } from "./_types"
+import { ITezosStoragePointer } from "@/processor/_interfaces.js"
+import { TezosStorageType, StorageTypeProps } from "./_types.js"
 
 export interface IPointerPropsProject {
   id: string

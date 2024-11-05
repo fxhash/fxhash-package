@@ -1,7 +1,7 @@
 import { ipfsGatewayUrl } from "@fxhash/config"
-import { CustomNode } from "./_interfaces"
 import { Transformer } from "unified"
 import { visit } from "unist-util-visit"
+import { CustomNode } from "./_interfaces.js"
 
 interface RemarkIpfsUrlParserOptions {
   nodeTypes?: string[]

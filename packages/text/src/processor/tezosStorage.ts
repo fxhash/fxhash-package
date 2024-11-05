@@ -2,7 +2,7 @@ import {
   OptionalTezosStoragePointerKeys,
   ITezosStoragePointer,
   IArticleElementProcessor,
-} from "./_interfaces"
+} from "./_interfaces.js"
 
 export const tezosStorageProcessor: IArticleElementProcessor = {
   htmlTagName: "tezos-storage-pointer",

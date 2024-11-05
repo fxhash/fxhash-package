@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { EmbedElementProps } from "./Media"
+import { EmbedElementProps } from "./Media.js"
 
 export const EmbedSpotify = memo<EmbedElementProps>(({ href }) => {
   const [_, path] = href.split("https://open.spotify.com/")

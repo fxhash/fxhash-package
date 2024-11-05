@@ -1,4 +1,4 @@
-import { EmbedMediaDisplay } from "./Media"
+import { EmbedMediaDisplay } from "./Media.js"
 
 export interface EmbedProps {
   href?: string

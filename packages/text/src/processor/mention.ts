@@ -1,4 +1,4 @@
-import { IArticleElementProcessor } from "./_interfaces"
+import { IArticleElementProcessor } from "./_interfaces.js"
 
 export const mentionProcessor: IArticleElementProcessor = {
   htmlAttributes: ["tzAddress"],

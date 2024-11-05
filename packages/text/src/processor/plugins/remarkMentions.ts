@@ -1,7 +1,7 @@
 import { h } from "hastscript"
 import { visit } from "unist-util-visit"
-import { CustomNode } from "./_interfaces"
-import { mentionProcessor } from "../mention"
+import { CustomNode } from "./_interfaces.js"
+import { mentionProcessor } from "../mention.js"
 import { Transformer } from "unified"
 
 export function remarkMentions(): Transformer<CustomNode, CustomNode> {
