@@ -4,9 +4,9 @@ import { unified } from "unified"
 import remarkParse from "remark-parse"
 import remarkMath from "remark-math"
 import remarkGfm from "remark-gfm"
-import remarkUnwrapImages from "remark-unwrap-images"
 import remarkDirective from "remark-directive"
 import remarkRehype from "remark-rehype"
+import rehypeUnwrapImages from "rehype-unwrap-images"
 import rehypeKatex from "rehype-katex"
 import rehypeStringify from "rehype-stringify"
 import rehypeReact from "rehype-react"
@@ -46,7 +46,6 @@ export async function getJsxFromMarkdown(
       .use(mdastParseMentions)
       .use(remarkMath)
       .use(remarkGfm)
-      .use(remarkUnwrapImages)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkIpfsUrlParser)
@@ -58,6 +57,7 @@ export async function getJsxFromMarkdown(
         ignoreMissing: true,
         aliases: { markdown: "plain" },
       })
+      .use(rehypeUnwrapImages)
       .use(rehypeStringify)
       .use(rehypeReact, {
         Fragment: prod.Fragment,
