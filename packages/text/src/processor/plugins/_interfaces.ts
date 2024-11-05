@@ -1,5 +1,5 @@
-import { type Root } from "mdast"
-import { IArticleElementProcessor } from "../_interfaces.js"
+import type { Root } from "mdast"
+import type { IArticleElementProcessor } from "../_interfaces.js"
 
 export interface CustomArticleElementsByType {
   leafDirective: Record<string, IArticleElementProcessor>
@@ -10,10 +10,10 @@ export interface CustomArticleElementsByType {
 // Define a custom Node interface that satisfies the constraints expected by unist-util-visit
 export interface CustomNode extends Root {
   data: {
-    [key: string]: unknown
+    [key: string]: any
     hName?: string
     hProperties?: {
-      [key: string]: unknown
+      [key: string]: any
       class?: string
     }
   }

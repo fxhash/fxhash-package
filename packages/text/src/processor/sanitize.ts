@@ -1,5 +1,5 @@
 import { defaultSchema } from "rehype-sanitize"
-import { Schema } from "hast-util-sanitize/lib"
+import type { Schema } from "hast-util-sanitize"
 import { embedProcessor } from "./embed.js"
 import { mentionProcessor } from "./mention.js"
 import { tezosStorageProcessor } from "./tezosStorage.js"

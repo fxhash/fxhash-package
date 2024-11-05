@@ -1,7 +1,7 @@
 import { findAndReplace } from "mdast-util-find-and-replace"
-import { CustomNode } from "./_interfaces.js"
+import type { CustomNode } from "./_interfaces.js"
 import { u } from "unist-builder"
-import { Transformer } from "unified"
+import type { Transformer } from "unified"
 
 export function mdastParseMentions(): Transformer<CustomNode, CustomNode> {
   return ast => {

@@ -1,4 +1,4 @@
-import { createElement, Fragment } from "react"
+import * as prod from "react/jsx-runtime"
 import matter from "gray-matter"
 import { unified } from "unified"
 import remarkParse from "remark-parse"
@@ -20,9 +20,9 @@ import {
   remarkIpfsUrlParser,
   remarkMentions,
 } from "./processor/_index.js"
-import { FxTextComponents } from "./components/_types.js"
+import type { FxTextComponents } from "./components/_types.js"
 import { fxTextDefaultDisplay } from "./components/settings.js"
-import { Components } from "hast-util-to-jsx-runtime"
+import type { Components } from "hast-util-to-jsx-runtime"
 
 interface GetJsxFromMarkdownOptions {
   components?: FxTextComponents
@@ -60,8 +60,9 @@ export async function getJsxFromMarkdown(
       })
       .use(rehypeStringify)
       .use(rehypeReact, {
-        createElement,
-        Fragment,
+        Fragment: prod.Fragment,
+        jsx: prod.jsx,
+        jsxs: prod.jsxs,
         components: {
           ...fxTextDefaultDisplay,
           ...components,
