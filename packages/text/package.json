@@ -1,61 +1,65 @@
 {
-  "name": "@fxhash/client",
-  "description": "Medium-level APIs to instanciate low-level @fxhash/core modules easily.",
+  "name": "@fxhash/text",
+  "description": "Low-level fx(text) implementation.",
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2",
     "@fxhash/config": "workspace:*",
-    "@fxhash/core": "workspace:*",
     "@fxhash/errors": "workspace:*",
-    "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
-    "@tanstack/react-query": "5.28.8",
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1"
+    "gray-matter": "4.0.3",
+    "hast": "1.0.0",
+    "hast-util-sanitize": "5.0.2",
+    "hast-util-to-jsx-runtime": "2.3.2",
+    "hastscript": "7.2.0",
+    "mdast": "3.0.0",
+    "mdast-util-find-and-replace": "3.0.1",
+    "react-tweet": "3.2.1",
+    "rehype-highlight": "7.0.1",
+    "rehype-katex": "7.0.1",
+    "rehype-react": "8.0.0",
+    "rehype-sanitize": "6.0.0",
+    "rehype-stringify": "10.0.1",
+    "rehype-unwrap-images": "1.0.0",
+    "remark-directive": "3.0.0",
+    "remark-gfm": "4.0.0",
+    "remark-math": "6.0.0",
+    "remark-parse": "11.0.0",
+    "remark-rehype": "11.1.1",
+    "remark-slate-transformer": "0.6.9",
+    "unified": "11.0.5",
+    "unist-builder": "4.0.0",
+    "unist-util-visit": "5.0.0"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
+    "@types/mdast": "4.0.0",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.2.18",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
-    "@wagmi/connectors": "5.3.3",
-    "@wagmi/core": "2.14.1",
-    "connectkit": "1.8.2",
+    "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.45.0",
     "tsup": "8.2.4",
     "typescript": "5.6.2",
-    "viem": "2.19.4",
-    "vitest": "0.34.6",
-    "wagmi": "2.12.25"
+    "vitest": "0.34.6"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
-  "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
-    "@wagmi/connectors": "5.3.3",
-    "@wagmi/core": "2.14.1",
-    "connectkit": "1.8.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "viem": "2.19.4",
-    "wagmi": "2.12.25"
+    "react-dom": "^18.2.0"
   },
   "publishConfig": {
     "access": "public"
