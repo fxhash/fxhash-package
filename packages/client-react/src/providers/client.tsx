@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { useModal } from "connectkit"
 import {
   IClientPlugnPlay,
   createClientPlugnPlay,
@@ -95,17 +96,39 @@ export function ClientPlugnPlayProvider({
   }, [config])
 
   const clientRef = useRef<IClientPlugnPlay | null>(null)
+  const openConnectKitModalRef = useRef<(() => void) | null>(null)
 
   const client = useMemo(() => {
     if (clientRef.current) return clientRef.current
-    return (clientRef.current = createClientPlugnPlay({
+    const client = (clientRef.current = createClientPlugnPlay({
       metadata: config.metadata,
       wallets: config.wallets,
       credentials: config.credentials,
       safeDomWrapper: safeDomContainer,
       socialLogin,
     }))
+
+    // Override the ConnectKit initialization for React context
+    client.setConnectKitInit(async () => {
+      return new Promise<void>(resolve => {
+        // Will be called during client.init()
+        // Modal opener will be available by then
+        resolve()
+      })
+    })
+
+    return client
   }, [])
+
+  // Capture the modal opener
+  const ConnectKitDriver = () => {
+    const modal = useModal()
+    useEffect(() => {
+      openConnectKitModalRef.current = modal.setOpen.bind(null, true)
+      client.setConnectKitModal(() => openConnectKitModalRef.current?.())
+    }, [modal])
+    return null
+  }
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
@@ -149,6 +172,7 @@ export function ClientPlugnPlayProvider({
   return (
     <Wrapper config={_config} client={state.client}>
       <ClientPlugnPlayContext.Provider value={state}>
+        {client.config.wagmi && <ConnectKitDriver />}
         {children}
       </ClientPlugnPlayContext.Provider>
     </Wrapper>
