@@ -11,8 +11,8 @@ import { ControlsChangedEventPayload } from "@fxhash/sdk"
 
 export interface IUseRuntimeControllerReturn {
   controller: IRuntimeController
-  runtime?: RuntimeWholeState
-  controls?: ControlState
+  runtime: RuntimeWholeState
+  controls: ControlState
   restart: (iframe: HTMLIFrameElement) => void
   ref: RefCallback<HTMLIFrameElement>
 }
@@ -34,11 +34,15 @@ export const useRuntimeController: UseRuntimeController = ({
           ...options,
         },
       }),
-    [options]
+    []
   )
 
-  const [runtime, setRuntime] = useState<RuntimeWholeState>()
-  const [controls, setControls] = useState<ControlState>()
+  const [runtime, setRuntime] = useState<RuntimeWholeState>(() =>
+    controller.runtime().whole()
+  )
+  const [controls, setControls] = useState<ControlState>(() =>
+    controller.controls().state()
+  )
 
   const ref = useCallback(
     (iframe: HTMLIFrameElement) => {
@@ -55,17 +59,19 @@ export const useRuntimeController: UseRuntimeController = ({
 
   useEffect(() => {
     function onControlsChange({ state }: ControlsChangedEventPayload) {
-      setControls(state)
+      setControls({ ...state })
     }
-    controller.emitter.on("runtime-changed", setRuntime)
+    function onRuntimeChange(_runtime: RuntimeWholeState) {
+      setRuntime({ ..._runtime })
+    }
+    controller.emitter.on("runtime-changed", onRuntimeChange)
     controller.emitter.on("controls-changed", onControlsChange)
-
     return () => {
-      controller.emitter.off("runtime-changed", setRuntime)
+      controller.emitter.off("runtime-changed", onRuntimeChange)
       controller.emitter.off("controls-changed", onControlsChange)
       controller.release()
     }
-  }, [])
+  }, [controller])
 
   return {
     controller,
