@@ -3,10 +3,10 @@ import { useFxTextEditor } from "./useFxTextEditor"
 import { IFxTextEditorProps } from "./_interfaces"
 
 export function FxTextEditor(props: IFxTextEditorProps) {
-  const { value, onMediasUpdate } = props
+  const { value, onMediasUpdate, onChange } = props
   const { editor } = useFxTextEditor({ onMediasUpdate })
   return (
-    <Slate editor={editor} value={value}>
+    <Slate editor={editor} initialValue={value} onChange={onChange}>
       <Editable />
     </Slate>
   )

@@ -3,11 +3,11 @@ import remarkDirective from "remark-directive"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import remarkParse from "remark-parse"
-import { remarkToSlate } from "remark-slate-transformer"
-import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
+import { remarkToSlate, RemarkToSlateOptions } from "remark-slate-transformer"
 import { Descendant } from "slate"
 import { unified } from "unified"
 import {
+  IDirectiveNodeProps,
   mathProcessor,
   mdastFlattenListItemParagraphs,
   mdastParseMentions,
@@ -18,10 +18,6 @@ import { mentionProcessor } from "./processor/mention"
 import { videoProcessor } from "./processor/video"
 import remarkUnwrapImages from "./processor/plugins/remarkUnwrapImages"
 import { imageProcessor } from "./processor/image"
-
-interface DirectiveNodeProps {
-  [key: string]: any
-}
 
 const directives: Record<string, (node: any) => object> = {
   video: videoProcessor.transformMarkdownMdhastToSlate!,
@@ -38,9 +34,9 @@ function createDirectiveNode(
   }
 
   // extract only defined props to avoid error serialization of undefined
-  const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(
+  const propertiesWithoutUndefined: IDirectiveNodeProps = Object.keys(
     hProperties
-  ).reduce((acc: DirectiveNodeProps, key: string) => {
+  ).reduce((acc: IDirectiveNodeProps, key: string) => {
     const value = hProperties[key]
     if (value) {
       acc[key] = value
@@ -55,7 +51,7 @@ function createDirectiveNode(
   const instanciateNode = directives[newNode.type]
   return instanciateNode ? instanciateNode(newNode) : newNode
 }
-const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
+const remarkSlateTransformerOverrides: RemarkToSlateOptions["overrides"] = {
   textDirective: createDirectiveNode,
   leafDirective: createDirectiveNode,
   containerDirective: createDirectiveNode,

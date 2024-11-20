@@ -1,3 +1,4 @@
+import isHotkey from "is-hotkey"
 import { useEffect } from "react"
 
 export function useHotkey(
