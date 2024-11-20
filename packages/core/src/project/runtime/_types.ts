@@ -20,8 +20,9 @@ export type ProjectState = {
   hash?: string
   iteration?: number
   minter?: string
-  inputBytes?: string
   context?: ExecutionContext
+  inputBytes?: string
+  definition?: FxParamDefinitions
 }
 
 /**
