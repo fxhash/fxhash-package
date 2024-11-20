@@ -4,4 +4,9 @@ export * from "./connectors.js"
 export * from "./context.js"
 export * from "./controller.js"
 export * from "./controls.js"
-export { fxParamsAsQueryParams, enhanceRuntimeDefinition } from "./utils.js"
+export {
+  fxParamsAsQueryParams,
+  enhanceRuntimeDefinition,
+  isValidSnippetVersionInVersion,
+  getSnippetVersionFromProject,
+} from "./utils.js"

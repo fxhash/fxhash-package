@@ -16,8 +16,43 @@ import mergeWith from "lodash.mergewith"
  * params the the project url or not. Start from versions larger than 3.2.0,
  * the inputBytes should be passed as hash to the url.
  */
-export function fxParamsAsQueryParams(snippetVersion: string): boolean {
-  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.2.0")
+export function fxParamsAsQueryParams(
+  snippetVersion: string | undefined
+): boolean {
+  return (
+    !semver.valid(snippetVersion) ||
+    (!!snippetVersion && semver.lte(snippetVersion, "3.2.0"))
+  )
+}
+
+/**
+ * This is a helper function that checks if the snippet version is valid for the
+ * case that we accidentally saved the snippet version in the version field of
+ * the token metadata.
+ */
+export function isValidSnippetVersionInVersion(
+  snippetVersion: string
+): boolean {
+  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.0.0")
+}
+
+/**
+ * Given a project with its metadata this function will return the
+ * snippetVersion if it exists.
+ *
+ * Why is this relevant? Starting with version 3.0.0 we actually expect to pass
+ * the snippetVersion to the runtime because before version 3.0.0 there was
+ * a max of 64 characters on byte params. therefore to compute the right
+ * inputbytes from the actual params we need to pass the snippeVersion
+ * to the runtime.
+ */
+export function getSnippetVersionFromProject(project: {
+  metadata: Record<string, any>
+}): string | undefined {
+  if (project.metadata.snippetVersion) return project.metadata.snippetVersion
+  if (isValidSnippetVersionInVersion(project.metadata.version))
+    return project.metadata.version
+  return undefined
 }
 
 /**

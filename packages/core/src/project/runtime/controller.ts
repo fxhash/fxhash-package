@@ -7,8 +7,12 @@ import {
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
 import { proxyConnector } from "./connectors.js"
-import { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
-import { FxParamsData, buildParamsObject } from "@fxhash/params"
+import { ProjectState, RuntimeWholeState } from "./_types.js"
+import {
+  FxParamsData,
+  buildParamsObject,
+  deserializeParams,
+} from "@fxhash/params"
 import {
   IRuntimeContext,
   IRuntimeController,
@@ -89,16 +93,24 @@ export function createRuntimeController(
 
   const _controls = runtimeControls()
   const _initial = params.state
+  const _initialRuntimeState = {
+    hash: _initial.hash || mockTransactionHash(_initial.chain),
+    minter: _initial.minter || mockBlockchainAddress(_initial.chain),
+    iteration: _initial.iteration || 1,
+    context: _initial.context,
+    chain: _initial.chain,
+    params:
+      (_initial.definition &&
+        _initial.inputBytes &&
+        deserializeParams(_initial.inputBytes, _initial.definition, {})) ||
+      {},
+  }
+
   const _runtime = runtimeContext({
-    state: {
-      hash: _initial.hash || mockTransactionHash(_initial.chain),
-      minter: _initial.minter || mockBlockchainAddress(_initial.chain),
-      iteration: _initial.iteration || 1,
-      context: _initial.context,
-      chain: _initial.chain,
-    },
+    state: _initialRuntimeState,
     definition: {
       version: _initial.snippetVersion,
+      params: _initial.definition,
     },
   })
 
@@ -274,13 +286,7 @@ export function createRuntimeController(
       clean.clear()
       _init(iframe)
       // Reset the runtime state to the initial state
-      _runtime.updateState({
-        hash: _initial.hash || mockTransactionHash(_initial.chain),
-        minter: _initial.minter || mockBlockchainAddress(_initial.chain),
-        iteration: _initial.iteration || 1,
-        context: _initial.context,
-        chain: _initial.chain,
-      })
+      _runtime.updateState(_initialRuntimeState)
     },
     runtime: () => _runtime,
     controls: () => _controls,
