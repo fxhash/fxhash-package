@@ -15,8 +15,8 @@ export type ExecutionContext = "minting" | "standalone" | "capture"
  */
 export type ProjectState = {
   cid: string
-  snippetVersion: string
   chain: BlockchainType
+  snippetVersion?: string
   hash?: string
   iteration?: number
   minter?: string
