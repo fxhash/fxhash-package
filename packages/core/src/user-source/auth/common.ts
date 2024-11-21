@@ -453,6 +453,7 @@ export function authWithWallets<AuthError extends IEquatableError>({
   return {
     emitter,
     getAccount: _account.get,
+    refetchAccount: _account.sync,
     authenticated: () => !!_account.get(),
     initialized: () => init.finished,
     logoutAccount: _account.logoutAccount,
