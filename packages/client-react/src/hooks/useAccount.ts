@@ -9,6 +9,7 @@ import { useMemo } from "react"
 
 export type UseAccount = {
   account: GetSingleUserAccountResult | null
+  refetch: () => Promise<GetSingleUserAccountResult> | null
   authenticated: boolean
 }
 
@@ -17,7 +18,11 @@ export type UseAccount = {
  */
 export function useAccount(): UseAccount {
   const client = useClient()
-  return { account: client.account, authenticated: !!client.account }
+  return {
+    account: client.account,
+    refetch: client.refetchAccount,
+    authenticated: !!client.account,
+  }
 }
 
 /**

@@ -67,6 +67,10 @@ export function multipleUserSources({
     initialized: () => init.finished,
 
     getAccount: () => _activeSource?.getAccount() || null,
+    refetchAccount: () => {
+      if (!_activeSource) return null
+      return _activeSource?.refetchAccount()
+    },
     logoutAccount: async () => {
       if (!_activeSource) return
       return _activeSource.logoutAccount()

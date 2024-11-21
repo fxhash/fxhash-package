@@ -37,6 +37,7 @@ export type ClientBasicState = {
   config: IReactClientPlugnPlayConfig
   client: IClientPlugnPlay
   account: GetSingleUserAccountResult | null
+  refetchAccount: () => Promise<GetSingleUserAccountResult> | null
   managers: WalletManagersMap
   userError: UserSourceEventsTypemap["error"]["error"] | null
 }
@@ -50,6 +51,7 @@ const defaultContext: ClientBasicState = {
   config: null as any, // a bit dirty but OK
   client: null as any, // a bit dirty but OK
   account: null,
+  refetchAccount: () => null,
   managers: defaultActiveManagers,
   userError: null,
 }
@@ -150,6 +152,7 @@ export function ClientPlugnPlayProvider({
           ...st,
           userError: null,
           account: client.source.getAccount(),
+          refetchAccount: client.source.refetchAccount,
           managers: wallets
             ? deriveManagersMap(wallets)
             : defaultActiveManagers,
