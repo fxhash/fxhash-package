@@ -268,7 +268,7 @@ export function useContractOperation<
       // if there's no user synced, we request a sync
       if (!connected[blockchainType]) {
         try {
-          await client?.connectWalletAsync(
+          await client?.connectWallet(
             blockchainType === BlockchainType.TEZOS
               ? BlockchainNetwork.TEZOS
               : BlockchainNetwork.ETHEREUM

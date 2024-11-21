@@ -186,14 +186,16 @@ export function createClientPlugnPlay({
 
     source: client.userSource,
     emitter,
-    connectWallet: requestConnection,
-    connectWalletAsync: async (network: BlockchainNetwork) => {
+    connectWallet: async (
+      network: BlockchainNetwork,
+      connectionTimeout = 5 * 60 * 1000 // 5 minutes
+    ) => {
       requestConnection(network)
       return new Promise((resolve, reject) => {
         // Set a timeout to avoid infinite waiting
         const timeout = setTimeout(() => {
           reject(new Error("Wallet connection timeout"))
-        }, 300000) // 5 minutes timeout
+        }, connectionTimeout)
 
         // Check wallet connection status
         const checkConnection = () => {

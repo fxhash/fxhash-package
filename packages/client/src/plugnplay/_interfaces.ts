@@ -109,18 +109,15 @@ export interface IClientPlugnPlay {
 
   /**
    * Can be called to trigger events for connecting a wallet on a given network.
-   *
    * @param network Network on which a connection attempt should be made.
-   */
-  connectWallet: (network: BlockchainNetwork) => void
-
-  /**
-   * Can be called to trigger events for connecting a wallet on a given network
-   * asynchronously.
-   * @param network Network on which a connection attempt should be made.
+   * @param connectionTimeout Optional timeout in milliseconds after which the
+   * connection attempt should be considered as failed. Default is 5 minutes.
    * @returns A promise which resolves to the address of the connected wallet.
    */
-  connectWalletAsync: (network: BlockchainNetwork) => Promise<string>
+  connectWallet: (
+    network: BlockchainNetwork,
+    connectionTimeout?: number
+  ) => Promise<string>
 
   /**
    * Initialize the whole client. Must be called before using any of the client
