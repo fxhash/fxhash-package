@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const paragraphDefinition: IArticleBlockDefinition<any> = {
+export const paragraphDefinition: IFxTextBlockDefinition<any> = {
   name: "Paragraph",
   icon: <i className="fa-solid fa-paragraph" aria-hidden />,
   buttonInstantiable: true,

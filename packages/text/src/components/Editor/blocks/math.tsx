@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const mathDefinition: IArticleBlockDefinition<any> = {
+export const mathDefinition: IFxTextBlockDefinition<any> = {
   name: "Math",
   icon: <i className="fa-solid fa-function" aria-hidden />,
   buttonInstantiable: true,
@@ -17,7 +17,7 @@ export const mathDefinition: IArticleBlockDefinition<any> = {
   }),
 }
 
-export const inlineMathDefinition: IArticleBlockDefinition<any> = {
+export const inlineMathDefinition: IFxTextBlockDefinition<any> = {
   name: "Math",
   icon: <i className="fa-solid fa-function" aria-hidden />,
   render: ({ attributes, element, children }) => (

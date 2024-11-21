@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const embedDefinition: IArticleBlockDefinition<any> = {
+export const embedDefinition: IFxTextBlockDefinition<any> = {
   name: "Embed media",
   icon: <i className="fa-brands fa-youtube" aria-hidden />,
   buttonInstantiable: true,

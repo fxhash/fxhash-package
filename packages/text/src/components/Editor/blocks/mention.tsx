@@ -1,10 +1,10 @@
 import { useSelected, useFocused } from "slate-react"
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
 interface InstanciateMentionOpts {
   tzAddress?: string
 }
-export const mentionDefinition: IArticleBlockDefinition<InstanciateMentionOpts> =
+export const mentionDefinition: IFxTextBlockDefinition<InstanciateMentionOpts> =
   {
     name: "Mention",
     icon: <i className="fa-solid fa-at" aria-hidden />,

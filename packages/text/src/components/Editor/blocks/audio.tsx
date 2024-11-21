@@ -1,10 +1,10 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition, IFxTextBlockDefinition } from "./_interfaces"
 
 interface InstanciateAudioOpts {
   src?: string
   caption?: string
 }
-export const audioDefinition: IArticleBlockDefinition<InstanciateAudioOpts> = {
+export const audioDefinition: IFxTextBlockDefinition<InstanciateAudioOpts> = {
   name: "Audio",
   icon: <i className="fa-solid fa-music" aria-hidden />,
   buttonInstantiable: true,

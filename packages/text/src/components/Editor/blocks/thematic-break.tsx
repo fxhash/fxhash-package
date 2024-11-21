@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const thematicBreakDefinition: IArticleBlockDefinition<any> = {
+export const thematicBreakDefinition: IFxTextBlockDefinition<any> = {
   name: "Horizontal break",
   icon: <i className="fa-solid fa-horizontal-rule" aria-hidden />,
   render: () => <hr />,

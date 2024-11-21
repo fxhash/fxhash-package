@@ -1,7 +1,7 @@
 import { SlateTable } from "../plugins/table/plugin"
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const tableDefinition: IArticleBlockDefinition<null> = {
+export const tableDefinition: IFxTextBlockDefinition<null> = {
   name: "Table",
   icon: <i className="fa-regular fa-table" aria-hidden />,
   buttonInstantiable: true,
@@ -12,7 +12,7 @@ export const tableDefinition: IArticleBlockDefinition<null> = {
   preventAutofocusTrigger: true,
 }
 
-export const tableRowDefinition: IArticleBlockDefinition<null> = {
+export const tableRowDefinition: IFxTextBlockDefinition<null> = {
   name: "Table row",
   icon: <i className="fa-regular fa-table" aria-hidden />,
   render: ({ attributes, element, children }) => {
@@ -21,7 +21,7 @@ export const tableRowDefinition: IArticleBlockDefinition<null> = {
   hasUtilityWrapper: false,
 }
 
-export const tableCellDefinition: IArticleBlockDefinition<null> = {
+export const tableCellDefinition: IFxTextBlockDefinition<null> = {
   name: "Table cell",
   icon: <i className="fa-regular fa-table" aria-hidden />,
   render: ({ attributes, element, children }) => {

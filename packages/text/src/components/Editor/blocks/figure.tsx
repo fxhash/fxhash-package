@@ -1,5 +1,5 @@
 import { Transforms, Node } from "slate"
-import { TEditAttributeComp, IArticleBlockDefinition } from "./_interfaces"
+import { TEditAttributeComp, IFxTextBlockDefinition } from "./_interfaces"
 import { RenderElementProps, useSelected } from "slate-react"
 
 const medias = ["image", "video", "audio"]
@@ -19,7 +19,7 @@ export function FigureElement({
   return <figure {...attributes}>{children}</figure>
 }
 
-export const figureDefinition: IArticleBlockDefinition<null> = {
+export const figureDefinition: IFxTextBlockDefinition<null> = {
   name: "Figure",
   icon: null,
   render: FigureElement,
@@ -68,7 +68,7 @@ export function FigcaptionElement({
     </figcaption>
   )
 }
-export const figcaptionDefinition: IArticleBlockDefinition<null> = {
+export const figcaptionDefinition: IFxTextBlockDefinition<null> = {
   name: "Caption",
   icon: null,
   render: FigcaptionElement,

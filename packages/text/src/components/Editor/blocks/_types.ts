@@ -1,6 +1,19 @@
-import { Editor, Path } from "slate"
+import { type FunctionComponent, type PropsWithChildren } from "react"
+import { type Editor, type Path } from "slate"
+import {
+  type IEditAttributeProps,
+  type IAttributesEditorWrapperProps,
+} from "./_interfaces"
 
-export enum EArticleBlocks {
+export type EditAttributeComp = FunctionComponent<
+  PropsWithChildren<IEditAttributeProps>
+>
+
+export type AttributesEditorWrapper = FunctionComponent<
+  PropsWithChildren<IAttributesEditorWrapperProps>
+>
+
+export enum EFxTextBlocks {
   "embed-media" = "embed-media",
   "tezos-storage-pointer" = "tezos-storage-pointer",
   "paragraph" = "paragraph",
@@ -27,6 +40,33 @@ export enum EArticleBlocks {
   "mention" = "mention",
   "audio" = "audio",
 }
+
+export type FxTextBlockType =
+  | "embed-media"
+  | "tezos-storage-pointer"
+  | "paragraph"
+  | "heading"
+  | "thematicBreak"
+  | "blockquote"
+  | "list"
+  | "listItem"
+  | "table"
+  | "tableRow"
+  | "tableCell"
+  | "html"
+  | "inlineMath"
+  | "math"
+  | "code"
+  | "yaml"
+  | "toml"
+  | "break"
+  | "link"
+  | "figure"
+  | "figcaption"
+  | "image"
+  | "video"
+  | "mention"
+  | "audio"
 
 // a function which updates a node based on some update fields
 export type TEditNodeFn = (update: any) => void

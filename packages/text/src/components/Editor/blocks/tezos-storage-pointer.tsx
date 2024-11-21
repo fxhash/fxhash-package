@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const tezosStoragePointerDefinition: IArticleBlockDefinition<any> = {
+export const tezosStoragePointerDefinition: IFxTextBlockDefinition<any> = {
   name: "Tezos content",
   icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden />,
   buttonInstantiable: true,

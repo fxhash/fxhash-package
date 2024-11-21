@@ -1,8 +1,15 @@
-import { BaseEditor, BaseElement } from "slate"
-import { HistoryEditor } from "slate-history"
-import { ReactEditor } from "slate-react"
-import { ITezosStoragePointerProps } from "../_index"
-import { EditableProps } from "slate-react/dist/components/editable"
+import { type BaseEditor, type BaseElement } from "slate"
+import { type HistoryEditor } from "slate-history"
+import { type ReactEditor } from "slate-react"
+import { type ITezosStoragePointerProps } from "../_index"
+import { type EditableProps } from "slate-react/dist/components/editable"
+import { type IFxTextBlockDefinition } from "./blocks/_interfaces"
+import { type FxTextBlockType } from "./blocks/_types"
+
+export type FxTextBlockDefinitions = Record<
+  FxTextBlockType,
+  IFxTextBlockDefinition<any>
+>
 
 export type FxTextSlateEditableProps = Pick<
   EditableProps,
@@ -53,6 +60,7 @@ export interface FxTextEditorMediaFile {
 export type FxTextEditorExtension = {
   updateMediaUrl: (target: FxTextEditorMediaFile, uri: string) => void
   getUploadedMedias: () => FxTextEditorMediaFile[]
+  getBlockDefinition: (type: string) => IFxTextBlockDefinition<unknown>
 }
 
 export type FxTextEditor = BaseEditor &

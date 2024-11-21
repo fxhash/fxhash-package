@@ -1,10 +1,10 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
 interface InstanciateVideoOpts {
   src?: string
   caption?: string
 }
-export const videoDefinition: IArticleBlockDefinition<InstanciateVideoOpts> = {
+export const videoDefinition: IFxTextBlockDefinition<InstanciateVideoOpts> = {
   name: "Video",
   icon: <i className="fa-solid fa-video" aria-hidden />,
   buttonInstantiable: true,

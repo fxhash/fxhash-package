@@ -1,10 +1,10 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
 interface InstanciateImageOpts {
   url?: string
   caption?: string
 }
-export const imageDefinition: IArticleBlockDefinition<InstanciateImageOpts> = {
+export const imageDefinition: IFxTextBlockDefinition<InstanciateImageOpts> = {
   name: "Image",
   icon: <i className="fa-solid fa-image" aria-hidden />,
   buttonInstantiable: true,

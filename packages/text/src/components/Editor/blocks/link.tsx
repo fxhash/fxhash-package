@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const linkDefinition: IArticleBlockDefinition<any> = {
+export const linkDefinition: IFxTextBlockDefinition<any> = {
   name: "Link",
   icon: <i className="fa-solid fa-link" aria-hidden />,
   render: ({ attributes, element, children }) => {

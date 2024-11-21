@@ -1,7 +1,6 @@
 import { NodeEntry, Path, Transforms, Node } from "slate"
 import { EnhanceEditorWith, FxTextEditor } from "../../_types"
 import { lookupElementAtSelection } from "../../utils/lookupElementAtSelection"
-import { getFxTextBlockDefinition } from "../../getFxTextBlockDefinition"
 
 export enum EBreakBehavior {
   "default" = "default",
@@ -49,7 +48,7 @@ export const withBreaks: EnhanceEditorWith = editor => {
     const nodeEntry = lookupElementAtSelection(editor, selection)
     if (nodeEntry) {
       const [node] = nodeEntry
-      const definition = getFxTextBlockDefinition(node.type)
+      const definition = editor.getBlockDefinition(node.type)
       const behavior = definition.insertBreakBehavior
       if (behavior) {
         const insertBreakFunction =

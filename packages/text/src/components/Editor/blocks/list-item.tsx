@@ -1,7 +1,7 @@
 import { Path, Editor, Transforms, Node, Range, Element } from "slate"
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const listDefinition: IArticleBlockDefinition<any> = {
+export const listDefinition: IFxTextBlockDefinition<any> = {
   name: "List",
   icon: <i className="fa-solid fa-list" aria-hidden />,
   buttonInstantiable: true,
@@ -29,7 +29,7 @@ export const listDefinition: IArticleBlockDefinition<any> = {
   }),
 }
 
-export const listItemDefinition: IArticleBlockDefinition<any> = {
+export const listItemDefinition: IFxTextBlockDefinition<any> = {
   name: "List Item",
   icon: <i className="fa-solid fa-list" aria-hidden />,
   render: ({ attributes, element, children }) => (

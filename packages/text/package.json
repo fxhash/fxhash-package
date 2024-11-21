@@ -16,6 +16,7 @@
     "hast-util-whitespace": "3.0.0",
     "hastscript": "7.2.0",
     "is-hotkey": "0.2.0",
+    "lodash.mergewith": "4.6.2",
     "mdast": "3.0.0",
     "mdast-util-find-and-replace": "3.0.1",
     "react-tweet": "3.2.1",

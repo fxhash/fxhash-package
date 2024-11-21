@@ -1,5 +1,6 @@
-import { IArticleBlockDefinition } from "./blocks/_interfaces"
-import { EArticleBlocks } from "./blocks/_types"
+import { FxTextBlockDefinitions } from "./_types"
+import { IFxTextBlockDefinition } from "./blocks/_interfaces"
+import { EFxTextBlocks } from "./blocks/_types"
 import { audioDefinition } from "./blocks/audio"
 import { blockquoteDefinition } from "./blocks/blockquote"
 import { codeDefinition } from "./blocks/code"
@@ -22,30 +23,27 @@ import { thematicBreakDefinition } from "./blocks/thematic-break"
 import { videoDefinition } from "./blocks/video"
 import { EBreakBehavior } from "./plugins/_types"
 
-export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
-  EArticleBlocks
-) as (keyof EArticleBlocks)[]
+export const ArticleBlocksList: (keyof EFxTextBlocks)[] = Object.keys(
+  EFxTextBlocks
+) as (keyof EFxTextBlocks)[]
 
-export const InstantiableArticleBlocksList: EArticleBlocks[] = [
-  EArticleBlocks.paragraph,
-  EArticleBlocks.heading,
-  EArticleBlocks.thematicBreak,
-  EArticleBlocks["tezos-storage-pointer"],
-  EArticleBlocks.image,
-  EArticleBlocks.video,
-  EArticleBlocks.audio,
-  EArticleBlocks["embed-media"],
-  EArticleBlocks.math,
-  EArticleBlocks.table,
-  EArticleBlocks.list,
-  EArticleBlocks.code,
-  EArticleBlocks.blockquote,
+export const InstantiableArticleBlocksList: EFxTextBlocks[] = [
+  EFxTextBlocks.paragraph,
+  EFxTextBlocks.heading,
+  EFxTextBlocks.thematicBreak,
+  EFxTextBlocks["tezos-storage-pointer"],
+  EFxTextBlocks.image,
+  EFxTextBlocks.video,
+  EFxTextBlocks.audio,
+  EFxTextBlocks["embed-media"],
+  EFxTextBlocks.math,
+  EFxTextBlocks.table,
+  EFxTextBlocks.list,
+  EFxTextBlocks.code,
+  EFxTextBlocks.blockquote,
 ]
 
-export const BlockDefinitions: Record<
-  EArticleBlocks,
-  IArticleBlockDefinition<any>
-> = {
+export const defaultFxTextEditorBlockDefinition: FxTextBlockDefinitions = {
   "embed-media": embedDefinition,
   "tezos-storage-pointer": tezosStoragePointerDefinition,
   paragraph: paragraphDefinition,
@@ -108,7 +106,7 @@ export const BlockDefinitions: Record<
   },
 }
 
-export const DefaultBlockDefinition: IArticleBlockDefinition<null> = {
+export const fxTextBlockDefinitionFallback: IFxTextBlockDefinition<null> = {
   name: "NONE",
   icon: null,
   render: ({ attributes, element, children }) => (
@@ -116,13 +114,4 @@ export const DefaultBlockDefinition: IArticleBlockDefinition<null> = {
   ),
   hasUtilityWrapper: false,
   insertBreakBehavior: EBreakBehavior.default,
-}
-/**
- * Given the type of an element, outputs their corresponding BlockDefinition or
- * the default one if the one is not defined.
- */
-export function getFxTextBlockDefinition(
-  type: string
-): IArticleBlockDefinition<any> {
-  return BlockDefinitions[type as EArticleBlocks] || DefaultBlockDefinition
 }

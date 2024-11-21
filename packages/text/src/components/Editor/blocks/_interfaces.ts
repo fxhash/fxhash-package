@@ -1,7 +1,11 @@
 import { FunctionComponent, PropsWithChildren, ReactNode } from "react"
 import { RenderElementProps } from "slate-react"
 import { Element } from "slate"
-import { TEditNodeFnFactory } from "./_types"
+import {
+  AttributesEditorWrapper,
+  EditAttributeComp,
+  TEditNodeFnFactory,
+} from "./_types"
 import { EBreakBehavior, InsertBreakFunction } from "../plugins/_types"
 
 /**
@@ -12,23 +16,17 @@ export interface IEditAttributeProps {
   element: any
   onEdit: (element: any) => void
 }
-export type TEditAttributeComp = FunctionComponent<
-  PropsWithChildren<IEditAttributeProps>
->
 
 /**
  * The attribute edition can be rendered in a contextual menu or in a modal
  * popin. This type provides a generic interface to define such components.
  */
-export type TAttributesEditorWrapperProps = {
+export interface IAttributesEditorWrapperProps {
   onClose: () => void
   className: string
 }
-export type TAttributesEditorWrapper = FunctionComponent<
-  PropsWithChildren<TAttributesEditorWrapperProps>
->
 
-export interface IArticleBlockDefinition<InstanciateOpts> {
+export interface IFxTextBlockDefinition<InstanciateOpts> {
   name: string
   icon: ReactNode
   buttonInstantiable?: boolean
@@ -36,8 +34,8 @@ export interface IArticleBlockDefinition<InstanciateOpts> {
   hasUtilityWrapper: boolean
   inlineMenu?: undefined | null | Array<string>
   instanciateElement?: (opts?: InstanciateOpts) => Element
-  editAttributeComp?: TEditAttributeComp
-  editAttributeWrapper?: TAttributesEditorWrapper
+  editAttributeComp?: EditAttributeComp
+  editAttributeWrapper?: AttributesEditorWrapper
   // the definition can specify a function which can be called to output a
   // function which will be called to update a node. This is useful if the
   // default editNode function doesn't support certain edge cases

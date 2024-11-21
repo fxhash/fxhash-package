@@ -1,7 +1,7 @@
 import { EBreakBehavior } from "../plugins/_types"
-import { IArticleBlockDefinition, TEditAttributeComp } from "./_interfaces"
+import { IFxTextBlockDefinition, TEditAttributeComp } from "./_interfaces"
 
-export const headingDefinition: IArticleBlockDefinition<any> = {
+export const headingDefinition: IFxTextBlockDefinition<any> = {
   name: "Heading",
   icon: <i className="fa-solid fa-heading" aria-hidden />,
   buttonInstantiable: true,

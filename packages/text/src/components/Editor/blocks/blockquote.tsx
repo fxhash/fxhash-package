@@ -1,6 +1,6 @@
-import { IArticleBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces"
 
-export const blockquoteDefinition: IArticleBlockDefinition<any> = {
+export const blockquoteDefinition: IFxTextBlockDefinition<any> = {
   name: "Quote",
   icon: <i className="fa-solid fa-quotes" aria-hidden />,
   buttonInstantiable: true,
