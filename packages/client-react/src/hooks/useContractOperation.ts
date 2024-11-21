@@ -234,13 +234,25 @@ export function useContractOperation<
     txHash: undefined,
   })
 
+  // Add mounted ref to track component lifecycle
+  const isMounted = useRef(true)
+
+  // Store the wallet managers in refs to avoid stale closures
   const tezosWalletManagerRef = useRef(tezosWalletManager)
   const ethereumWalletManagerRef = useRef(ethereumWalletManager)
 
+  // Update wallet manager refs when they change
   useEffect(() => {
     tezosWalletManagerRef.current = tezosWalletManager
     ethereumWalletManagerRef.current = ethereumWalletManager
   }, [tezosWalletManager, ethereumWalletManager])
+
+  // Handle cleanup on unmount
+  useEffect(() => {
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const execute = useCallback(
     async <TBlockchain extends BlockchainType>(
@@ -261,8 +273,13 @@ export function useContractOperation<
               ? BlockchainNetwork.TEZOS
               : BlockchainNetwork.ETHEREUM
           )
+
+          // Check if still mounted after async operation
+          if (!isMounted.current) return
         } catch (err) {
-          setState({
+          if (!isMounted.current) return
+
+          setState(() => ({
             status: ContractOperationStatus.ERROR,
             called: false,
             loading: false,
@@ -270,7 +287,7 @@ export function useContractOperation<
             error: new NoWalletConnectedError() as TError,
             params,
             txHash: undefined,
-          })
+          }))
           return
         }
       }
@@ -313,6 +330,8 @@ export function useContractOperation<
           blockchainType
         )
 
+        if (!isMounted.current) return
+
         if (sendTransactionResult.isFailure()) {
           setState({
             status: ContractOperationStatus.ERROR,
@@ -342,9 +361,13 @@ export function useContractOperation<
             params,
             txHash: undefined,
           })
+
           confirmationResult = await walletManager.waitForTransaction({
             hash: sendTransactionResult.value.hash,
           })
+
+          if (!isMounted.current) return
+
           if (confirmationResult.isFailure()) {
             setState({
               status: ContractOperationStatus.ERROR,
@@ -373,42 +396,44 @@ export function useContractOperation<
         })
         return sendTransactionResult
       } finally {
-        setState(({ data, error, txHash }) => {
-          if (data !== undefined) {
+        if (isMounted.current) {
+          setState(({ data, error, txHash }) => {
+            if (data !== undefined) {
+              return {
+                status: ContractOperationStatus.INJECTED,
+                called: true,
+                data,
+                error: undefined,
+                loading: false,
+                params,
+                txHash: txHash!,
+              }
+            }
+            if (error) {
+              return {
+                status: ContractOperationStatus.ERROR,
+                called: true,
+                data: undefined,
+                error,
+                loading: false,
+                params,
+                txHash,
+              }
+            }
             return {
-              status: ContractOperationStatus.INJECTED,
-              called: true,
-              data,
+              status: ContractOperationStatus.NONE,
+              called: false,
+              data: undefined,
               error: undefined,
               loading: false,
-              params,
-              txHash: txHash!,
+              params: undefined,
+              txHash: undefined,
             }
-          }
-          if (error) {
-            return {
-              status: ContractOperationStatus.ERROR,
-              called: true,
-              data: undefined,
-              error,
-              loading: false,
-              params,
-              txHash,
-            }
-          }
-          return {
-            status: ContractOperationStatus.NONE,
-            called: false,
-            data: undefined,
-            error: undefined,
-            loading: false,
-            params: undefined,
-            txHash: undefined,
-          }
-        })
+          })
+        }
       }
     },
-    [operations, tezosWalletManager, ethereumWalletManager]
+    [operations, client, isEthereumConnected, isTezosConnected]
   )
 
   /**
