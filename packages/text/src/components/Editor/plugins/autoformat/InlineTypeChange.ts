@@ -1,5 +1,7 @@
-import { Editor, NodeEntry, Transforms, Path } from "slate"
+import { Editor, NodeEntry, Transforms, Path, Node, Range } from "slate"
 import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor"
+import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types"
+import { escapeRegExp } from "./utils"
 
 function getSelectionAccrossNodes(
   editor: Editor,

@@ -1,5 +1,6 @@
-import { Editor, Point, Transforms } from "slate"
+import { Editor, Point, Transforms, Range } from "slate"
 import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor"
+import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types"
 
 export class InlineTypeCreate implements AutoFormatChange {
   shortcut: string | string[]

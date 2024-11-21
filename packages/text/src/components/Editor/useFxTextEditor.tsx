@@ -2,31 +2,20 @@ import { useMemo } from "react"
 import { createEditor } from "slate"
 import { withReact } from "slate-react"
 import {
-  IUseFxTextEditorProps,
+  type IUseFxTextEditorProps,
   type IUseFxTextEditorPayload,
 } from "./_interfaces"
-import { type EnhanceEditorWith } from "./_types"
+import { type FxTextSlateEditableProps, type EnhanceEditorWith } from "./_types"
 import { withHistory } from "slate-history"
-import {
-  EditableProps,
-  RenderLeafProps,
-} from "slate-react/dist/components/editable"
+import { renderLeaf } from "./renderLeaf.js"
+import { renderElement } from "./renderElement.js"
+import { withBreaks } from "./plugins/breaks/plugin"
+import { withAutoFormat } from "./plugins/_index"
+import { withTables } from "./plugins/table/plugin"
 
-export const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
-  if (leaf.strong) {
-    children = <strong>{children}</strong>
-  }
-  if (leaf.emphasis) {
-    children = <em>{children}</em>
-  }
-  if (leaf.inlineCode) {
-    children = <code>{children}</code>
-  }
-  return <span {...attributes}>{children}</span>
-}
-
-export const DefaultFxTextSlateEditableProps: EditableProps = {
+export const DefaultFxTextSlateEditableProps: FxTextSlateEditableProps = {
   renderLeaf,
+  renderElement,
   disableDefaultStyles: true,
 }
 
@@ -38,6 +27,9 @@ export function useFxTextEditor(
     const plugins: Array<{ f: EnhanceEditorWith; args?: any }> = [
       { f: withReact },
       { f: withHistory },
+      { f: withAutoFormat },
+      { f: withBreaks },
+      { f: withTables },
     ]
     const enhancedEditor = plugins.reduce((e, plugin) => {
       return plugin.f(e, ...Object.values(plugin.args || {}))

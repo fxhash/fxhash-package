@@ -2,6 +2,12 @@ import { BaseEditor, BaseElement } from "slate"
 import { HistoryEditor } from "slate-history"
 import { ReactEditor } from "slate-react"
 import { ITezosStoragePointerProps } from "../_index"
+import { EditableProps } from "slate-react/dist/components/editable"
+
+export type FxTextSlateEditableProps = Pick<
+  EditableProps,
+  "renderElement" | "renderLeaf" | "disableDefaultStyles"
+>
 
 // elements
 export type TypeElement = BaseElement & {
