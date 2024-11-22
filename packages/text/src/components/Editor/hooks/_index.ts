@@ -1,1 +1,6 @@
+export * from "./_interfaces.js"
+export * from "./_types.js"
+export * from "./useElementAtSelection.js"
 export * from "./useHotkey.js"
+export * from "./useInlineStyleMenu.js"
+export * from "./useTextFormatButton.js"

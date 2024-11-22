@@ -1,7 +1,4 @@
-import {
-  IFxTextBlockDefinition,
-  IFxTextBlockDefinition,
-} from "./_interfaces.js"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 interface InstanciateAudioOpts {
   src?: string

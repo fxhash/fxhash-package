@@ -7,6 +7,7 @@ import {
   type FxTextSlateEditableProps,
 } from "./_types"
 import { type FxTextBlockType } from "./blocks/_types"
+import { PropsWithChildren } from "react"
 
 export interface IUseFxTextEditorProps {
   inlineElements?: FxTextBlockType[]
@@ -20,7 +21,7 @@ export interface IUseFxTextEditorPayload {
   editableProps: FxTextSlateEditableProps
 }
 
-export interface IFxTextEditorProps {
+export interface IFxTextEditorProps extends PropsWithChildren {
   className?: string
   value: Node[]
   onChange: (value: Node[]) => void

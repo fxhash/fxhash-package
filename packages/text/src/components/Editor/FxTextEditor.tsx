@@ -2,7 +2,7 @@ import { Editable, Slate } from "slate-react"
 import { useFxTextEditor } from "./useFxTextEditor.js"
 import { IFxTextEditorProps } from "./_interfaces.js"
 
-export function FxTextEditor(props: IFxTextEditorProps) {
+export function FxTextSlate(props: IFxTextEditorProps) {
   const {
     value,
     onMediasUpdate,
@@ -10,6 +10,7 @@ export function FxTextEditor(props: IFxTextEditorProps) {
     placeholder,
     className,
     blockDefinitions,
+    children,
   } = props
   const { editor, editableProps: defaultEditableProps } = useFxTextEditor({
     onMediasUpdate,
@@ -22,6 +23,7 @@ export function FxTextEditor(props: IFxTextEditorProps) {
         placeholder={placeholder}
         className={className}
       />
+      {children}
     </Slate>
   )
 }

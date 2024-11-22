@@ -39,9 +39,9 @@ export type CustomElement = HeadlineElement | TezosStorageElement | ImageEditor
 // text
 
 export const ALL_TEXT_FORMATS = ["strong", "emphasis", "inlineCode"] as const
-export type TextFormatKey = (typeof ALL_TEXT_FORMATS)[number]
+export type TextFormat = (typeof ALL_TEXT_FORMATS)[number]
 
-export type TextFormats = { [key in TextFormatKey]: boolean }
+export type TextFormats = { [key in TextFormat]: boolean }
 
 export type FormattedText = {
   text: string
