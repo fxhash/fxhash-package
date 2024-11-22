@@ -1,16 +1,17 @@
 import { useMemo } from "react"
 import { lookupElementAtSelection } from "../utils/lookupElementAtSelection"
-import { useSlate } from "slate-react"
+import { useSlateSelection, useSlateStatic } from "slate-react"
 import { Location, Element } from "slate"
 
 export function useElementAtSelection(): Element | null {
-  const editor = useSlate()
+  const editor = useSlateStatic()
+  const selection = useSlateSelection()
 
   const element = useMemo(() => {
     const [elementUnderCursor] =
-      lookupElementAtSelection(editor, editor.selection as Location) || []
+      lookupElementAtSelection(editor, selection as Location) || []
     return elementUnderCursor
-  }, [editor])
+  }, [selection])
 
   return element
 }

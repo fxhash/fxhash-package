@@ -64,7 +64,7 @@ export function FigcaptionElement({
 
   return (
     <figcaption {...attributes}>
-      {text === "" && <div contentEditable={false}>Image caption...</div>}
+      {text === "" && <span contentEditable={false}>image caption...</span>}
       {children}
     </figcaption>
   )

@@ -15,15 +15,17 @@ export function useInlineStyleMenu(): UseInlineStyleMenuPayload {
     elementAtSelection?.type as FxTextBlockType
   )?.inlineMenu
 
-  const blockDoesntSupportInlineStyles = validInlineStyles === null
+  const noInlineStyleSupport = validInlineStyles === null
+
+  console.log(elementAtSelection, noInlineStyleSupport)
 
   const isHidden = useMemo(() => {
     const { selection } = editor
-    if (!blockDoesntSupportInlineStyles) {
+    if (!noInlineStyleSupport) {
       if (selection && !Range.isCollapsed(selection)) return false
     }
     return true
-  }, [editor.selection, blockDoesntSupportInlineStyles])
+  }, [editor.selection, noInlineStyleSupport])
 
   // Position the menu
   const ref = useRef<HTMLDivElement>(null)
