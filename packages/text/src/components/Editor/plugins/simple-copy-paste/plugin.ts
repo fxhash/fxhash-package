@@ -1,5 +1,5 @@
 import { Path, Transforms, Range, Node, Text } from "slate"
-import { EnhanceEditorWith } from "../../_types"
+import { EnhanceEditorWith } from "../../_types.js"
 
 const clipboardEncode = (data: any) =>
   window.btoa(encodeURIComponent(JSON.stringify(data)))

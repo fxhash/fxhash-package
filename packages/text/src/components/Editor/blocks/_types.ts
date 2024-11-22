@@ -3,7 +3,7 @@ import { type Editor, type Path } from "slate"
 import {
   type IEditAttributeProps,
   type IAttributesEditorWrapperProps,
-} from "./_interfaces"
+} from "./_interfaces.js"
 
 export type EditAttributeComp = FunctionComponent<
   PropsWithChildren<IEditAttributeProps>

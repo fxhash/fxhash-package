@@ -1,5 +1,5 @@
 import { useSelected, useFocused } from "slate-react"
-import { IFxTextBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 interface InstanciateMentionOpts {
   tzAddress?: string

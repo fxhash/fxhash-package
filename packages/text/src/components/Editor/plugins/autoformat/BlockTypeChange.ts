@@ -1,7 +1,7 @@
 import { Editor, Transforms } from "slate"
-import { getRangeFromBlockStartToCursor } from "../../utils/getRangeFromBlockStartToCursor"
-import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor"
-import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types"
+import { getRangeFromBlockStartToCursor } from "../../utils/getRangeFromBlockStartToCursor.js"
+import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor.js"
+import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types.js"
 
 export class BlockTypeChange implements AutoFormatChange {
   shortcut: string | string[]

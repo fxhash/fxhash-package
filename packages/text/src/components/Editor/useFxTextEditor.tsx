@@ -13,14 +13,15 @@ import {
 import { withHistory } from "slate-history"
 import { renderLeaf } from "./renderLeaf.js"
 import { renderElement } from "./renderElement.js"
-import { withBreaks } from "./plugins/breaks/plugin"
-import { withAutoFormat } from "./plugins/_index"
-import { withTables } from "./plugins/table/plugin"
-import { withConstraints } from "./plugins/constraints/plugin"
-import { withCustomBlockDefinitions } from "./plugins/block-defintions/plugin"
-import { defaultFxTextEditorBlockDefinition } from "./blockDefinitions"
+import { withBreaks } from "./plugins/breaks/plugin.js"
+import { withAutoFormat } from "./plugins/_index.js"
+import { withTables } from "./plugins/table/plugin.js"
+import { withConstraints } from "./plugins/constraints/plugin.js"
+import { withCustomBlockDefinitions } from "./plugins/block-defintions/plugin.js"
+import { defaultFxTextEditorBlockDefinition } from "./blockDefinitions.js"
 import mergeWith from "lodash.mergewith"
-import { FxTextBlockType } from "./blocks/_types"
+import { FxTextBlockType } from "./blocks/_types.js"
+import { withMediaSupport } from "./plugins/media/plugin.js"
 
 export const DEFAULT_INLINE_ELEMENTS: readonly FxTextBlockType[] =
   Object.freeze(["inlineMath", "link", "mention"])
@@ -64,6 +65,7 @@ export function useFxTextEditor(
       { f: withHistory },
       { f: withCustomBlockDefinitions, args: { definitions } },
       { f: withAutoFormat },
+      { f: withMediaSupport, args: { onMediasUpdate } },
       { f: withTables },
       { f: withConstraints },
       { f: withBreaks },

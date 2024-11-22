@@ -1,7 +1,7 @@
 import { Editor, NodeEntry, Transforms, Path, Node, Range } from "slate"
-import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor"
-import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types"
-import { escapeRegExp } from "./utils"
+import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor.js"
+import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types.js"
+import { escapeRegExp } from "./utils.js"
 
 function getSelectionAccrossNodes(
   editor: Editor,

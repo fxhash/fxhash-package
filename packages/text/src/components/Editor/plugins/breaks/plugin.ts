@@ -1,19 +1,8 @@
-import { NodeEntry, Path, Transforms, Node } from "slate"
-import { EnhanceEditorWith, FxTextEditor } from "../../_types"
-import { lookupElementAtSelection } from "../../utils/lookupElementAtSelection"
+import { Path, Transforms, Node } from "slate"
+import { lookupElementAtSelection } from "../../utils/lookupElementAtSelection.js"
+import { EBreakBehavior, InsertBreakFunction } from "./_types.js"
+import { EnhanceEditorWith } from "../../_types.js"
 
-export enum EBreakBehavior {
-  "default" = "default",
-  "insertParagraph" = "insertParagraph",
-  "insertParagraphIfEmpty" = "insertParagraphIfEmpty",
-  "nothing" = "nothing",
-}
-
-export type ShouldDefaultInsertBreak = boolean
-export type InsertBreakFunction = (
-  editor: FxTextEditor,
-  element: NodeEntry
-) => ShouldDefaultInsertBreak | void
 export const breakBehaviors: Record<EBreakBehavior, InsertBreakFunction> = {
   default: () => true,
   insertParagraph: (editor, element) => {
@@ -33,6 +22,7 @@ export const breakBehaviors: Record<EBreakBehavior, InsertBreakFunction> = {
     const text = Node.string(node)
     if (text) return true
     breakBehaviors.insertParagraph(editor, element)
+    return undefined
   },
   nothing: () => {},
 }

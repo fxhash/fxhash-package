@@ -1,9 +1,10 @@
 import { Transforms, Node } from "slate"
-import { TEditAttributeComp, IFxTextBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 import { RenderElementProps, useSelected } from "slate-react"
+import { EditAttributeComp } from "./_types.js"
 
 const medias = ["image", "video", "audio"]
-const mediaAttributeSettings: Record<string, TEditAttributeComp> = {
+const mediaAttributeSettings: Record<string, EditAttributeComp> = {
   //  image: ImageAttributeSettings,
   //  video: VideoAttributeSettings,
   //  audio: AudioAttributeSettings,

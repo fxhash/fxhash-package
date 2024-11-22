@@ -6,7 +6,7 @@ import {
   EditAttributeComp,
   TEditNodeFnFactory,
 } from "./_types"
-import { EBreakBehavior, InsertBreakFunction } from "../plugins/_types"
+import { EBreakBehavior, InsertBreakFunction } from "../plugins/_index"
 
 /**
  * The Instanciation Component can be displayed to enter informations about a

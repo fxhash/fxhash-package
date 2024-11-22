@@ -1,4 +1,4 @@
-import { IFxTextBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const mathDefinition: IFxTextBlockDefinition<any> = {
   name: "Math",

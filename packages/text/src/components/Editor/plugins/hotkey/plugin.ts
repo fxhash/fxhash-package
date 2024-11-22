@@ -1,7 +1,7 @@
 import isHotkey from "is-hotkey"
 import { Editor } from "slate"
-import { TextFormatKey } from "../../_types"
-import { toggleFormat } from "../../utils/toggleFormat"
+import { TextFormatKey } from "../../_types.js"
+import { toggleFormat } from "../../utils/toggleFormat.js"
 
 const HOTKEYS: { [key: string]: TextFormatKey } = {
   "mod+b": "strong",

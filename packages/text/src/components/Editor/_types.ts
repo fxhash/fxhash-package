@@ -1,10 +1,10 @@
 import { type BaseEditor, type BaseElement } from "slate"
 import { type HistoryEditor } from "slate-history"
 import { type ReactEditor } from "slate-react"
-import { type ITezosStoragePointerProps } from "../_index"
+import { type ITezosStoragePointerProps } from "../_index.js"
 import { type EditableProps } from "slate-react/dist/components/editable"
-import { type IFxTextBlockDefinition } from "./blocks/_interfaces"
-import { type FxTextBlockType } from "./blocks/_types"
+import { type IFxTextBlockDefinition } from "./blocks/_interfaces.js"
+import { type FxTextBlockType } from "./blocks/_types.js"
 
 export type FxTextBlockDefinitions = Record<
   FxTextBlockType,
@@ -52,7 +52,7 @@ export type CustomText = FormattedText
 // editor
 export type FxTextEditorMediaType = "image" | "video" | "audio"
 
-export interface FxTextEditorMediaFile {
+export type FxTextEditorMediaFile = {
   uri: string
   type: FxTextEditorMediaType
 }

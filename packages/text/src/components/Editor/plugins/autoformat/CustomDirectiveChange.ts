@@ -1,7 +1,7 @@
 import { Editor, Point, Transforms, Range } from "slate"
-import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor"
-import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types"
-import { customElements } from "@/processor/_index"
+import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor.js"
+import { AutoFormatChange, AutoFormatChangeType, ChangeData } from "./_types.js"
+import { customElements } from "@/processor/_index.js"
 
 function parseAttributes(attributes: string | undefined): {
   [key: string]: any

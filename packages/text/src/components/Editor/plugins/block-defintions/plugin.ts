@@ -1,6 +1,6 @@
-import { EnhanceEditorWith } from "../../_types"
-import { fxTextBlockDefinitionFallback } from "../../blockDefinitions"
-import { EFxTextBlocks } from "../../blocks/_types"
+import { EnhanceEditorWith } from "../../_types.js"
+import { fxTextBlockDefinitionFallback } from "../../blockDefinitions.js"
+import { EFxTextBlocks } from "../../blocks/_types.js"
 
 export const withCustomBlockDefinitions: EnhanceEditorWith = (
   editor,

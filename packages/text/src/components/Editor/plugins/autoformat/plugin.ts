@@ -1,8 +1,8 @@
 import { Editor, Range } from "slate"
-import { AutoFormatChange } from "./_types"
-import { BlockTypeChange } from "./BlockTypeChange"
-import { CustomDirectiveChange } from "./CustomDirectiveChange"
-import { InlineTypeChange } from "./InlineTypeChange"
+import { AutoFormatChange } from "./_types.js"
+import { BlockTypeChange } from "./BlockTypeChange.js"
+import { CustomDirectiveChange } from "./CustomDirectiveChange.js"
+import { InlineTypeChange } from "./InlineTypeChange.js"
 
 const changeWithSpaceValidation: AutoFormatChange[] = [
   // Create formats for h1-h6
@@ -40,6 +40,7 @@ export const withAutoFormat = (editor: Editor) => {
       if (handled) return true
     }
     insertText(text)
+    return undefined
   }
 
   return editor

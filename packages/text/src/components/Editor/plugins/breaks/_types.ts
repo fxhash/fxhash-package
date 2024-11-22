@@ -1,14 +1,13 @@
 import { NodeEntry } from "slate"
-import { FxTextEditor } from "../_types"
+import { FxTextEditor } from "../../_types"
 
+export type ShouldDefaultInsertBreak = boolean
 export enum EBreakBehavior {
   "default" = "default",
   "insertParagraph" = "insertParagraph",
   "insertParagraphIfEmpty" = "insertParagraphIfEmpty",
   "nothing" = "nothing",
 }
-
-export type ShouldDefaultInsertBreak = boolean
 
 export type InsertBreakFunction = (
   editor: FxTextEditor,

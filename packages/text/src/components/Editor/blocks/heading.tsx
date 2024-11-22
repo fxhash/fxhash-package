@@ -1,5 +1,5 @@
-import { EBreakBehavior } from "../plugins/_types"
-import { IFxTextBlockDefinition, TEditAttributeComp } from "./_interfaces"
+import { EBreakBehavior } from "../plugins/_index.js"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const headingDefinition: IFxTextBlockDefinition<any> = {
   name: "Heading",

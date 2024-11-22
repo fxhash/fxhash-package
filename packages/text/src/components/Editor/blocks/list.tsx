@@ -1,5 +1,5 @@
 import { Path, Editor, Transforms, Range, Element, Node } from "slate"
-import { IFxTextBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const listDefinition: IFxTextBlockDefinition<any> = {
   name: "List",

@@ -1,9 +1,9 @@
 import { Editor, Path, Transforms, Point, Node, Element, Range } from "slate"
 import { ReactEditor } from "slate-react"
-import { EnhanceEditorWith } from "../../_types"
-import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor"
-import { getTextFromCursorToBlockEnd } from "../../utils/getTextFromCursorToBlockEnd"
-import { lookupElementByType } from "../../utils/lookupElementByType"
+import { EnhanceEditorWith } from "../../_types.js"
+import { getTextFromBlockStartToCursor } from "../../utils/getTextFromBlockStartToCursor.js"
+import { getTextFromCursorToBlockEnd } from "../../utils/getTextFromCursorToBlockEnd.js"
+import { lookupElementByType } from "../../utils/lookupElementByType.js"
 
 export const SlateTable = {
   getNextRowCellPath(

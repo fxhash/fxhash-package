@@ -1,4 +1,4 @@
-import { IFxTextBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const blockquoteDefinition: IFxTextBlockDefinition<any> = {
   name: "Quote",

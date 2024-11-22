@@ -1,5 +1,5 @@
-import { SlateTable } from "../plugins/table/plugin"
-import { IFxTextBlockDefinition } from "./_interfaces"
+import { SlateTable } from "../plugins/table/plugin.js"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const tableDefinition: IFxTextBlockDefinition<null> = {
   name: "Table",

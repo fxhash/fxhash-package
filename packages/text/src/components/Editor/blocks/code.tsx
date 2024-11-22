@@ -1,4 +1,4 @@
-import { IFxTextBlockDefinition } from "./_interfaces"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 interface InstanciateCodeOpts {
   lang?: string

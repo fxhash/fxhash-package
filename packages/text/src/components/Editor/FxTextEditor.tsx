@@ -1,6 +1,6 @@
 import { Editable, Slate } from "slate-react"
-import { useFxTextEditor } from "./useFxTextEditor"
-import { IFxTextEditorProps } from "./_interfaces"
+import { useFxTextEditor } from "./useFxTextEditor.js"
+import { IFxTextEditorProps } from "./_interfaces.js"
 
 export function FxTextEditor(props: IFxTextEditorProps) {
   const {
