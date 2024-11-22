@@ -59,6 +59,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./getJsxFromMarkdown": {
+      "types": "./dist/getJsxFromMarkdown.d.ts",
+      "import": "./dist/getJsxFromMarkdown.js"
     }
   },
   "files": [
