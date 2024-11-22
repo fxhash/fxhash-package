@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { Fragment, useCallback, useMemo } from "react"
 import { createEditor } from "slate"
 import { withReact } from "slate-react"
 import {
@@ -12,7 +12,7 @@ import {
 } from "./_types"
 import { withHistory } from "slate-history"
 import { renderLeaf } from "./renderLeaf.js"
-import { renderElement } from "./renderElement.js"
+import { renderFxTextElement } from "./renderElement.js"
 import { withBreaks } from "./plugins/breaks/plugin.js"
 import { withAutoFormat } from "./plugins/_index.js"
 import { withTables } from "./plugins/table/plugin.js"
@@ -34,14 +34,13 @@ export const DEFAULT_VOID_ELEMENTS: readonly FxTextBlockType[] = Object.freeze([
 
 export const DefaultFxTextSlateEditableProps: FxTextSlateEditableProps = {
   renderLeaf,
-  renderElement,
   disableDefaultStyles: true,
 }
 
 export function useFxTextEditor(
   props: IUseFxTextEditorProps
 ): IUseFxTextEditorPayload {
-  const { onMediasUpdate } = props
+  const { onMediasUpdate, nodeMenu = Fragment } = props
 
   const inlineElements = useMemo(
     () => [...DEFAULT_INLINE_ELEMENTS, ...(props?.inlineElements || [])],
@@ -82,5 +81,12 @@ export function useFxTextEditor(
     return enhancedEditor
   }, [onMediasUpdate])
 
-  return { editor, editableProps: { ...DefaultFxTextSlateEditableProps } }
+  const renderElement = useCallback(renderFxTextElement({ nodeMenu }), [
+    nodeMenu,
+  ])
+
+  return {
+    editor,
+    editableProps: { ...DefaultFxTextSlateEditableProps, renderElement },
+  }
 }

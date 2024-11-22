@@ -1,19 +1,37 @@
-import { type Node } from "slate"
+import { type Element, type Node } from "slate"
 import { type EditableProps } from "slate-react/dist/components/editable"
 import {
+  type FxTextNodeMenuComponentType,
   type FxTextBlockDefinitions,
   type FxTextEditor,
   type FxTextEditorMediaFile,
   type FxTextSlateEditableProps,
 } from "./_types"
 import { type FxTextBlockType } from "./blocks/_types"
-import { PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
+import { IFxTextBlockDefinition } from "./blocks/_interfaces"
+import { defaultInstantiableBlockTypes } from "./blockDefinitions"
+
+export interface IUseInstantiableBlocksPayload {
+  instantiableBlocks: IFxTextBlockDefinition<
+    typeof defaultInstantiableBlockTypes
+  >[]
+}
+
+export interface IFxTextNodeMenuProps extends PropsWithChildren {
+  element: Element
+}
+
+export interface IRenderFxTextElementProps {
+  nodeMenu: FxTextNodeMenuComponentType
+}
 
 export interface IUseFxTextEditorProps {
   inlineElements?: FxTextBlockType[]
   voidElements?: FxTextBlockType[]
   blockDefinitions?: Partial<FxTextBlockDefinitions>
   onMediasUpdate: (medias: FxTextEditorMediaFile[]) => void
+  nodeMenu?: FxTextNodeMenuComponentType
 }
 
 export interface IUseFxTextEditorPayload {
@@ -28,4 +46,5 @@ export interface IFxTextEditorProps extends PropsWithChildren {
   onMediasUpdate: (medias: FxTextEditorMediaFile[]) => void
   placeholder?: EditableProps["placeholder"]
   blockDefinitions?: Partial<FxTextBlockDefinitions>
+  nodeMenu?: FxTextNodeMenuComponentType
 }

@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { lookupElementAtSelection } from "../utils/lookupElementAtSelection"
 import { useSlate } from "slate-react"
-import { Location, NodeEntry, Element } from "slate"
+import { Location, Element } from "slate"
 
 export function useElementAtSelection(): Element | null {
   const editor = useSlate()

@@ -1,6 +1,6 @@
 import { FxTextBlockDefinitions } from "./_types.js"
 import { IFxTextBlockDefinition } from "./blocks/_interfaces.js"
-import { EFxTextBlocks } from "./blocks/_types.js"
+import { EFxTextBlocks, FxTextBlockType } from "./blocks/_types.js"
 import { audioDefinition } from "./blocks/audio.js"
 import { blockquoteDefinition } from "./blocks/blockquote.js"
 import { codeDefinition } from "./blocks/code.js"
@@ -27,20 +27,20 @@ export const ArticleBlocksList: (keyof EFxTextBlocks)[] = Object.keys(
   EFxTextBlocks
 ) as (keyof EFxTextBlocks)[]
 
-export const InstantiableArticleBlocksList: EFxTextBlocks[] = [
-  EFxTextBlocks.paragraph,
-  EFxTextBlocks.heading,
-  EFxTextBlocks.thematicBreak,
-  EFxTextBlocks["tezos-storage-pointer"],
-  EFxTextBlocks.image,
-  EFxTextBlocks.video,
-  EFxTextBlocks.audio,
-  EFxTextBlocks["embed-media"],
-  EFxTextBlocks.math,
-  EFxTextBlocks.table,
-  EFxTextBlocks.list,
-  EFxTextBlocks.code,
-  EFxTextBlocks.blockquote,
+export const defaultInstantiableBlockTypes: FxTextBlockType[] = [
+  "paragraph",
+  "heading",
+  "thematicBreak",
+  "tezos-storage-pointer",
+  "image",
+  "video",
+  "audio",
+  "embed-media",
+  "math",
+  "table",
+  "list",
+  "code",
+  "blockquote",
 ]
 
 export const defaultFxTextEditorBlockDefinition: FxTextBlockDefinitions = {

@@ -1,10 +1,16 @@
 import { type BaseEditor, type BaseElement } from "slate"
 import { type HistoryEditor } from "slate-history"
 import { type ReactEditor } from "slate-react"
-import { type ITezosStoragePointerProps } from "../_index.js"
+import {
+  type IFxTextNodeMenuProps,
+  type ITezosStoragePointerProps,
+} from "../_index.js"
 import { type EditableProps } from "slate-react/dist/components/editable"
 import { type IFxTextBlockDefinition } from "./blocks/_interfaces.js"
 import { type FxTextBlockType } from "./blocks/_types.js"
+
+export type FxTextNodeMenuComponentType =
+  React.ComponentType<IFxTextNodeMenuProps>
 
 export type FxTextBlockDefinitions = Record<
   FxTextBlockType,

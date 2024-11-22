@@ -11,10 +11,12 @@ export function FxTextSlate(props: IFxTextEditorProps) {
     className,
     blockDefinitions,
     children,
+    nodeMenu,
   } = props
   const { editor, editableProps: defaultEditableProps } = useFxTextEditor({
     onMediasUpdate,
     blockDefinitions,
+    nodeMenu,
   })
   return (
     <Slate editor={editor} initialValue={value} onChange={onChange}>

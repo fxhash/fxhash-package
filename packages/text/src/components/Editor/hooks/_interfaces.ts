@@ -1,4 +1,6 @@
+import { Element } from "slate"
 import { TextFormat } from "../_types"
+import { TEditNodeFn } from "../blocks/_types"
 
 export interface UseInlineStyleMenuPayload {
   isHidden: boolean
@@ -14,4 +16,14 @@ export interface UseTextFormatButtonProps {
 export interface UseTextFormatButtonPayload {
   isActive: boolean
   onClick: () => void
+}
+
+export interface IUseNodeMenuProps {
+  element: Element
+}
+
+export interface IUseNodeMenuPayload {
+  addNode: (element: Element) => void
+  deleteNode: () => void
+  editNode: TEditNodeFn
 }
