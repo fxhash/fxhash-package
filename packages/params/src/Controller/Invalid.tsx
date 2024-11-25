@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { FxParamDefinition, FxParamType } from "../types"
-import { ZodError, ZodIssue } from "zod"
+import type { FxParamDefinition, FxParamType } from "../types"
+import type { ZodError, ZodIssue } from "zod"
 import classes from "./Invalid.module.scss"
 import cx from "classnames"
 
@@ -30,9 +30,7 @@ function Attribute(props: AttributeProps) {
   if (!definition[id]) return null
   return (
     <h4>
-      <>
-        {id}: {definition[id]}
-      </>
+      {id}: {String(definition[id])}
     </h4>
   )
 }
