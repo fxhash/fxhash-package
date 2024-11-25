@@ -6,12 +6,11 @@ interface InstanciateVideoOpts {
 }
 export const videoDefinition: IFxTextBlockDefinition<InstanciateVideoOpts> = {
   name: "Video",
-  icon: <i className="fa-solid fa-video" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) => {
-    return <>{children}</>
+  isInstantiable: true,
+  hasNodeMenu: false,
+  renderElement: ({ attributes, children }) => {
+    return <div {...attributes}>{children}</div>
   },
-  hasUtilityWrapper: false,
   instanciateElement: (opts = { src: "", caption: "" }) => ({
     type: "figure",
     children: [

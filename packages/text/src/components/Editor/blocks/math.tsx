@@ -2,10 +2,11 @@ import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const mathDefinition: IFxTextBlockDefinition<any> = {
   name: "Math",
-  icon: <i className="fa-solid fa-function" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) => <div>{children}</div>,
-  hasUtilityWrapper: true,
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ attributes, children }) => (
+    <div {...attributes}>{children}</div>
+  ),
   instanciateElement: () => ({
     type: "math",
     math: "",
@@ -19,9 +20,10 @@ export const mathDefinition: IFxTextBlockDefinition<any> = {
 
 export const inlineMathDefinition: IFxTextBlockDefinition<any> = {
   name: "Math",
-  icon: <i className="fa-solid fa-function" aria-hidden />,
-  render: ({ attributes, element, children }) => (
-    <span contentEditable={false}>inline math</span>
+  hasNodeMenu: false,
+  renderElement: ({ attributes }) => (
+    <span {...attributes} contentEditable={false}>
+      inline math
+    </span>
   ),
-  hasUtilityWrapper: false,
 }

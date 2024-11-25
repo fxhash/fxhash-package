@@ -1,6 +1,6 @@
-import { FxTextBlockDefinitions } from "./_types.js"
-import { IFxTextBlockDefinition } from "./blocks/_interfaces.js"
-import { EFxTextBlocks, FxTextBlockType } from "./blocks/_types.js"
+import { type FxTextBlockDefinitions } from "./_types.js"
+import { type IFxTextBlockDefinition } from "./blocks/_interfaces.js"
+import { type FxTextBlockType } from "./blocks/_types.js"
 import { audioDefinition } from "./blocks/audio.js"
 import { blockquoteDefinition } from "./blocks/blockquote.js"
 import { codeDefinition } from "./blocks/code.js"
@@ -22,10 +22,6 @@ import { tezosStoragePointerDefinition } from "./blocks/tezos-storage-pointer.js
 import { thematicBreakDefinition } from "./blocks/thematic-break.js"
 import { videoDefinition } from "./blocks/video.js"
 import { EBreakBehavior } from "./plugins/_index.js"
-
-export const ArticleBlocksList: (keyof EFxTextBlocks)[] = Object.keys(
-  EFxTextBlocks
-) as (keyof EFxTextBlocks)[]
 
 export const defaultInstantiableBlockTypes: FxTextBlockType[] = [
   "paragraph",
@@ -67,8 +63,8 @@ export const defaultFxTextEditorBlockDefinition: FxTextBlockDefinitions = {
   mention: mentionDefinition,
   html: {
     name: "HTML",
-    icon: <i className="fa-brands fa-html5" aria-hidden />,
-    render: ({ attributes, element, children }) => (
+    hasNodeMenu: true,
+    renderElement: ({ attributes, element }) => (
       <div
         {...attributes}
         dangerouslySetInnerHTML={{
@@ -76,42 +72,37 @@ export const defaultFxTextEditorBlockDefinition: FxTextBlockDefinitions = {
         }}
       />
     ),
-    hasUtilityWrapper: true,
   },
   yaml: {
     name: "YAML",
-    icon: <i className="fa-solid fa-code" aria-hidden />,
-    render: ({ attributes, element, children }) => (
+    hasNodeMenu: true,
+    renderElement: ({ attributes, children }) => (
       <pre>
         <code {...attributes}>{children}</code>
       </pre>
     ),
-    hasUtilityWrapper: true,
   },
   toml: {
     name: "TOML",
-    icon: <i className="fa-solid fa-code" aria-hidden />,
-    render: ({ attributes, element, children }) => (
+    hasNodeMenu: true,
+    renderElement: ({ attributes, children }) => (
       <pre>
         <code {...attributes}>{children}</code>
       </pre>
     ),
-    hasUtilityWrapper: true,
   },
   break: {
     name: "Break",
-    icon: null,
-    render: ({ attributes, element, children }) => <br />,
-    hasUtilityWrapper: false,
+    hasNodeMenu: false,
+    renderElement: ({ attributes }) => <br {...attributes} />,
   },
 }
 
 export const fxTextBlockDefinitionFallback: IFxTextBlockDefinition<null> = {
   name: "NONE",
-  icon: null,
-  render: ({ attributes, element, children }) => (
+  renderElement: ({ attributes, children }) => (
     <div {...attributes}>{children}</div>
   ),
-  hasUtilityWrapper: false,
+  hasNodeMenu: false,
   insertBreakBehavior: EBreakBehavior.default,
 }

@@ -8,7 +8,7 @@ export function useInstantiableBlocks(): IUseInstantiableBlocksPayload {
   const instantiableBlocks = useMemo(() => {
     return defaultInstantiableBlockTypes
       .map(type => editor.getBlockDefinition(type))
-      .filter(definition => !!definition.buttonInstantiable)
+      .filter(definition => !!definition.isInstantiable)
   }, [])
 
   return { instantiableBlocks }

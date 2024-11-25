@@ -2,10 +2,11 @@ import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const tezosStoragePointerDefinition: IFxTextBlockDefinition<any> = {
   name: "Tezos content",
-  icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) => <div>{children}</div>,
-  hasUtilityWrapper: true,
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ children, attributes }) => (
+    <div {...attributes}>{children}</div>
+  ),
   instanciateElement: () => ({
     type: "tezos-storage-pointer",
     contract: undefined,

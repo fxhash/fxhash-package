@@ -1,9 +1,10 @@
-import { FunctionComponent, PropsWithChildren, ReactNode } from "react"
+import { ReactNode } from "react"
 import { RenderElementProps } from "slate-react"
 import { Element } from "slate"
 import {
   AttributesEditorWrapper,
   EditAttributeComp,
+  TEditNodeFn,
   TEditNodeFnFactory,
 } from "./_types"
 import { EBreakBehavior, InsertBreakFunction } from "../plugins/_index"
@@ -13,8 +14,8 @@ import { EBreakBehavior, InsertBreakFunction } from "../plugins/_index"
  * block, so that non-empty blocks aren't inserted by default
  */
 export interface IEditAttributeProps {
-  element: any
-  onEdit: (element: any) => void
+  element: Element
+  onEdit: TEditNodeFn
 }
 
 /**
@@ -28,11 +29,13 @@ export interface IAttributesEditorWrapperProps {
 
 export interface IFxTextBlockDefinition<InstanciateOpts> {
   name: string
-  icon: ReactNode
-  buttonInstantiable?: boolean
-  render: (props: RenderElementProps) => ReactNode
-  hasUtilityWrapper: boolean
-  inlineMenu?: undefined | null | Array<string>
+  isInstantiable?: boolean
+  // - undefined = use defaults
+  // - null = hide inline style menu
+  // - [] = custom set of inline styles
+  inlineMenu?: null | Array<string>
+  renderElement: (props: RenderElementProps) => ReactNode
+  hasNodeMenu: boolean
   instanciateElement?: (opts?: InstanciateOpts) => Element
   editAttributeComp?: EditAttributeComp
   editAttributeWrapper?: AttributesEditorWrapper

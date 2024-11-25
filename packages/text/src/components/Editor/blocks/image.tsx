@@ -6,10 +6,11 @@ interface InstanciateImageOpts {
 }
 export const imageDefinition: IFxTextBlockDefinition<InstanciateImageOpts> = {
   name: "Image",
-  icon: <i className="fa-solid fa-image" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ children }) => <div>{children}</div>,
-  hasUtilityWrapper: false,
+  isInstantiable: true,
+  hasNodeMenu: false,
+  renderElement: ({ children, attributes }) => (
+    <div {...attributes}>{children}</div>
+  ),
   instanciateElement: (opts = { url: "", caption: "" }) => ({
     type: "figure",
     children: [

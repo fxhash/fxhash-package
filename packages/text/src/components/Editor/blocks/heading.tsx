@@ -3,9 +3,9 @@ import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const headingDefinition: IFxTextBlockDefinition<any> = {
   name: "Heading",
-  icon: <i className="fa-solid fa-heading" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) => {
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ attributes, element, children }) => {
     switch (element.depth) {
       case 1:
         return <h1 {...attributes}>{children}</h1>
@@ -20,11 +20,10 @@ export const headingDefinition: IFxTextBlockDefinition<any> = {
       case 6:
         return <h6 {...attributes}>{children}</h6>
       default:
-        break
+        return <div {...attributes}>unhandled headline type</div>
     }
   },
   insertBreakBehavior: EBreakBehavior.insertParagraph,
-  hasUtilityWrapper: true,
   instanciateElement: () => ({
     type: "heading",
     depth: 1,

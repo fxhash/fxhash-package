@@ -10,21 +10,14 @@ const mediaAttributeSettings: Record<string, EditAttributeComp> = {
   //  audio: AudioAttributeSettings,
 }
 
-export function FigureElement({
-  attributes,
-  element,
-  children,
-}: RenderElementProps) {
-  const selected = useSelected()
-
+export function FigureElement({ attributes, children }: RenderElementProps) {
   return <figure {...attributes}>{children}</figure>
 }
 
 export const figureDefinition: IFxTextBlockDefinition<null> = {
   name: "Figure",
-  icon: null,
-  render: FigureElement,
-  hasUtilityWrapper: true,
+  renderElement: FigureElement,
+  hasNodeMenu: true,
   hasDeleteBehaviorRemoveBlock: true,
   editAttributeComp: ({ element, onEdit }) => {
     const children = Node.elements(element)
@@ -71,8 +64,7 @@ export function FigcaptionElement({
 }
 export const figcaptionDefinition: IFxTextBlockDefinition<null> = {
   name: "Caption",
-  icon: null,
-  render: FigcaptionElement,
-  hasUtilityWrapper: false,
+  hasNodeMenu: false,
+  renderElement: FigcaptionElement,
   inlineMenu: null,
 }

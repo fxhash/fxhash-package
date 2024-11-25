@@ -10,9 +10,11 @@ export const renderFxTextElement =
       () => editor.getBlockDefinition(props.element.type),
       [props.element.type, editor]
     )
-    return definition.hasUtilityWrapper ? (
-      <NodeMenu element={props.element}>{definition.render(props)}</NodeMenu>
+    return definition.hasNodeMenu ? (
+      <NodeMenu element={props.element}>
+        {definition.renderElement(props)}
+      </NodeMenu>
     ) : (
-      <>{definition.render(props)}</>
+      <>{definition.renderElement(props)}</>
     )
   }

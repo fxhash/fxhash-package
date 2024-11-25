@@ -6,12 +6,11 @@ interface InstanciateAudioOpts {
 }
 export const audioDefinition: IFxTextBlockDefinition<InstanciateAudioOpts> = {
   name: "Audio",
-  icon: <i className="fa-solid fa-music" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) => {
-    return <div>{children}</div>
+  isInstantiable: true,
+  hasNodeMenu: false,
+  renderElement: ({ children, attributes }) => {
+    return <div {...attributes}>{children}</div>
   },
-  hasUtilityWrapper: false,
   instanciateElement: (opts = { src: "", caption: "" }) => ({
     type: "figure",
     children: [

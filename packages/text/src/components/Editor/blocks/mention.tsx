@@ -7,10 +7,8 @@ interface InstanciateMentionOpts {
 export const mentionDefinition: IFxTextBlockDefinition<InstanciateMentionOpts> =
   {
     name: "Mention",
-    icon: <i className="fa-solid fa-at" aria-hidden />,
-    render: ({ attributes, children, element }) => {
-      const selected = useSelected()
-      const focused = useFocused()
+    hasNodeMenu: false,
+    renderElement: ({ attributes, children }) => {
       return (
         <span {...attributes} contentEditable={false}>
           {children}
@@ -18,7 +16,6 @@ export const mentionDefinition: IFxTextBlockDefinition<InstanciateMentionOpts> =
         </span>
       )
     },
-    hasUtilityWrapper: false,
     inlineMenu: null,
     instanciateElement: ({ tzAddress } = { tzAddress: "" }) => ({
       type: "mention",

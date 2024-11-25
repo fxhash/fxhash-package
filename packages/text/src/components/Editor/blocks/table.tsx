@@ -3,10 +3,9 @@ import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const tableDefinition: IFxTextBlockDefinition<null> = {
   name: "Table",
-  icon: <i className="fa-regular fa-table" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) => <table>{children}</table>,
-  hasUtilityWrapper: true,
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ children }) => <table>{children}</table>,
   hasDeleteBehaviorRemoveBlock: true,
   instanciateElement: () => SlateTable.createTable(2, 2),
   preventAutofocusTrigger: true,
@@ -14,19 +13,17 @@ export const tableDefinition: IFxTextBlockDefinition<null> = {
 
 export const tableRowDefinition: IFxTextBlockDefinition<null> = {
   name: "Table row",
-  icon: <i className="fa-regular fa-table" aria-hidden />,
-  render: ({ attributes, element, children }) => {
+  hasNodeMenu: false,
+  renderElement: ({ attributes, children }) => {
     return <tr {...attributes}>{children}</tr>
   },
-  hasUtilityWrapper: false,
 }
 
 export const tableCellDefinition: IFxTextBlockDefinition<null> = {
   name: "Table cell",
-  icon: <i className="fa-regular fa-table" aria-hidden />,
-  render: ({ attributes, element, children }) => {
+  hasNodeMenu: false,
+  renderElement: ({ attributes, children }) => {
     return <td {...attributes}>{children}</td>
   },
-  hasUtilityWrapper: false,
   inlineMenu: ["strong", "emphasis"],
 }

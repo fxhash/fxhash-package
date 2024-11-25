@@ -5,12 +5,11 @@ interface InstanciateCodeOpts {
 }
 export const codeDefinition: IFxTextBlockDefinition<InstanciateCodeOpts> = {
   name: "Code",
-  icon: <i className="fa-solid fa-code" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ children }) => {
-    return <div>{children}</div>
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ children, attributes }) => {
+    return <div {...attributes}>{children}</div>
   },
-  hasUtilityWrapper: true,
   instanciateElement: (opts = { lang: "js" }) => ({
     type: "code",
     lang: opts.lang,

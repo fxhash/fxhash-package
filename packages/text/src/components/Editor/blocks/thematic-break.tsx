@@ -2,8 +2,9 @@ import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const thematicBreakDefinition: IFxTextBlockDefinition<any> = {
   name: "Horizontal break",
-  icon: <i className="fa-solid fa-horizontal-rule" aria-hidden />,
-  render: () => <hr />,
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ attributes }) => <hr {...attributes} />,
   instanciateElement: () => ({
     type: "thematicBreak",
     children: [
@@ -12,6 +13,4 @@ export const thematicBreakDefinition: IFxTextBlockDefinition<any> = {
       },
     ],
   }),
-  buttonInstantiable: true,
-  hasUtilityWrapper: true,
 }

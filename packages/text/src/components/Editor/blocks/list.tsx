@@ -3,15 +3,14 @@ import { IFxTextBlockDefinition } from "./_interfaces.js"
 
 export const listDefinition: IFxTextBlockDefinition<any> = {
   name: "List",
-  icon: <i className="fa-solid fa-list" aria-hidden />,
-  buttonInstantiable: true,
-  render: ({ attributes, element, children }) =>
+  isInstantiable: true,
+  hasNodeMenu: true,
+  renderElement: ({ attributes, element, children }) =>
     element.ordered ? (
       <ol {...attributes}>{children}</ol>
     ) : (
       <ul {...attributes}>{children}</ul>
     ),
-  hasUtilityWrapper: true,
   instanciateElement: () => ({
     type: "list",
     ordered: false,
@@ -31,8 +30,8 @@ export const listDefinition: IFxTextBlockDefinition<any> = {
 
 export const listItemDefinition: IFxTextBlockDefinition<any> = {
   name: "List Item",
-  icon: <i className="fa-solid fa-list" aria-hidden />,
-  render: ({ attributes, element, children }) => (
+  hasNodeMenu: false,
+  renderElement: ({ attributes, element, children }) => (
     <li {...attributes}>
       {element.checked === true ? (
         <input type="checkbox" readOnly checked />
@@ -72,5 +71,4 @@ export const listItemDefinition: IFxTextBlockDefinition<any> = {
       to: next,
     })
   },
-  hasUtilityWrapper: false,
 }
