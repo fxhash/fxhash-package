@@ -18,6 +18,7 @@ import { mentionProcessor } from "./processor/mention"
 import { videoProcessor } from "./processor/video"
 import remarkUnwrapImages from "./processor/plugins/remarkUnwrapImages"
 import { imageProcessor } from "./processor/image"
+import { blockquoteProcessor } from "./processor/blockquote"
 
 const directives: Record<
   string,
@@ -62,6 +63,7 @@ const remarkSlateTransformerOverrides: RemarkToSlateOptions["overrides"] = {
   math: mathProcessor.transformMarkdownMdhastToSlate,
   image: imageProcessor.transformMarkdownMdhastToSlate,
   mention: mentionProcessor.transformMarkdownMdhastToSlate,
+  blockquote: blockquoteProcessor.transformMarkdownMdhastToSlate,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
