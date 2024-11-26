@@ -18,7 +18,10 @@ export type FxTextBlockDefinitions = Record<
 >
 
 export type FxTextBlockDefinitionOverrides = Partial<
-  Record<FxTextBlockType, Pick<IFxTextBlockDefinition<any>, "renderElement">>
+  Record<
+    FxTextBlockType,
+    Pick<IFxTextBlockDefinition<any>, "renderElement" | "editAttributeComp">
+  >
 >
 
 export type FxTextSlateEditableProps = Pick<

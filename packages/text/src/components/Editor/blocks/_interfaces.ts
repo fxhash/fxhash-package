@@ -16,6 +16,8 @@ import { EBreakBehavior, InsertBreakFunction } from "../plugins/_index"
 export interface IEditAttributeProps {
   element: Element
   onEdit: TEditNodeFn
+  onClose: () => void
+  isOpen: boolean
 }
 
 /**

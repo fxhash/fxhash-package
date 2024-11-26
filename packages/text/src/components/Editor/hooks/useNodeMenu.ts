@@ -68,5 +68,6 @@ export function useNodeMenu(props: IUseNodeMenuProps): IUseNodeMenuPayload {
     },
     editNode,
     isFocused,
+    definition: elementDefinition,
   }
 }

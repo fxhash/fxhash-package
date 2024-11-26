@@ -1,6 +1,7 @@
 import { Element, Node } from "slate"
 import { TextFormat } from "../_types"
 import { TEditNodeFn } from "../blocks/_types"
+import { IFxTextBlockDefinition } from "../_index"
 
 export interface UseInlineStyleMenuPayload {
   isHidden: boolean
@@ -27,6 +28,7 @@ export interface IUseNodeMenuPayload {
   deleteNode: () => void
   editNode: TEditNodeFn
   isFocused: boolean
+  definition: IFxTextBlockDefinition<any>
 }
 
 export interface IUseUpdateElementProps {

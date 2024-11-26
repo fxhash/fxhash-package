@@ -19,12 +19,19 @@ export const figureDefinition: IFxTextBlockDefinition<null> = {
   renderElement: FigureElement,
   hasNodeMenu: true,
   hasDeleteBehaviorRemoveBlock: true,
-  editAttributeComp: ({ element, onEdit }) => {
+  editAttributeComp: ({ element, onEdit, onClose, isOpen }) => {
     const children = Node.elements(element)
     for (const [child] of children) {
       if (medias.indexOf(child.type) > -1) {
         const AttributeSettings = mediaAttributeSettings[child.type]
-        return <AttributeSettings element={child} onEdit={onEdit} />
+        return (
+          <AttributeSettings
+            element={child}
+            onEdit={onEdit}
+            onClose={onClose}
+            isOpen={isOpen}
+          />
+        )
       }
     }
     return null
