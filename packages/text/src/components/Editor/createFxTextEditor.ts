@@ -20,6 +20,8 @@ export const DEFAULT_VOID_ELEMENTS: readonly FxTextBlockType[] = Object.freeze([
   "inlineMath",
   "math",
   "mention",
+  // since v2
+  "embed-media",
 ])
 
 export function createFxEditor({

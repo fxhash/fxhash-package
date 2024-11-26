@@ -40,7 +40,7 @@ export function useFxTextEditor(
       inlineElements,
       voidElements,
     })
-  }, [onMediasUpdate])
+  }, [onMediasUpdate, blockDefinitions, inlineElements, voidElements])
 
   const renderElement = useCallback(renderFxTextElement({ nodeMenu }), [
     nodeMenu,
