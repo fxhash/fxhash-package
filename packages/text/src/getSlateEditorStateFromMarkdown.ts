@@ -19,7 +19,10 @@ import { videoProcessor } from "./processor/video"
 import remarkUnwrapImages from "./processor/plugins/remarkUnwrapImages"
 import { imageProcessor } from "./processor/image"
 
-const directives: Record<string, (node: any) => object> = {
+const directives: Record<
+  string,
+  (node: any, next: (children: any[]) => any) => object
+> = {
   video: videoProcessor.transformMarkdownMdhastToSlate!,
   audio: audioProcessor.transformMarkdownMdhastToSlate!,
 }
@@ -49,7 +52,7 @@ function createDirectiveNode(
     ...propertiesWithoutUndefined,
   }
   const instanciateNode = directives[newNode.type]
-  return instanciateNode ? instanciateNode(newNode) : newNode
+  return instanciateNode ? instanciateNode(newNode, next) : newNode
 }
 const remarkSlateTransformerOverrides: RemarkToSlateOptions["overrides"] = {
   textDirective: createDirectiveNode,

@@ -17,8 +17,6 @@ export function useInlineStyleMenu(): UseInlineStyleMenuPayload {
 
   const noInlineStyleSupport = validInlineStyles === null
 
-  console.log(elementAtSelection, noInlineStyleSupport)
-
   const isHidden = useMemo(() => {
     const { selection } = editor
     if (!noInlineStyleSupport) {
@@ -44,7 +42,7 @@ export function useInlineStyleMenu(): UseInlineStyleMenuPayload {
       }px`
       menuElement.style.left = `${
         rect.left +
-        window.scrollY -
+        window.scrollX -
         menuElement.offsetWidth / 2 +
         rect.width / 2
       }px`

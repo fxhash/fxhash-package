@@ -17,6 +17,10 @@ export type FxTextBlockDefinitions = Record<
   IFxTextBlockDefinition<any>
 >
 
+export type FxTextBlockDefinitionOverrides = Partial<
+  Record<FxTextBlockType, Pick<IFxTextBlockDefinition<any>, "renderElement">>
+>
+
 export type FxTextSlateEditableProps = Pick<
   EditableProps,
   "renderElement" | "renderLeaf" | "disableDefaultStyles"

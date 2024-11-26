@@ -17,6 +17,17 @@ export function useNodeMenu(props: IUseNodeMenuProps): IUseNodeMenuPayload {
   const elementPath = ReactEditor.findPath(editor, element)
   const elementDefinition = editor.getBlockDefinition(element.type)
 
+  // when the selection changes, we check if the focus is inside this block
+  const isFocused = useMemo(() => {
+    if (editor.selection) {
+      // the first element in any path is the top-most element
+      if (editor.selection.focus.path[0] === elementPath[0]) {
+        return true
+      }
+    }
+    return false
+  }, [editor.selection, elementPath])
+
   // create the edit node function based on the element definition
   // (use the definition's one or the default one if none is given)
   const editNode = useMemo<TEditNodeFn>(() => {
@@ -55,5 +66,6 @@ export function useNodeMenu(props: IUseNodeMenuProps): IUseNodeMenuPayload {
       })
     },
     editNode,
+    isFocused,
   }
 }

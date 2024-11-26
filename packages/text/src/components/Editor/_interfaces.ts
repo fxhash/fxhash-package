@@ -2,10 +2,10 @@ import { type Element, type Node } from "slate"
 import { type EditableProps } from "slate-react/dist/components/editable"
 import {
   type FxTextNodeMenuComponentType,
-  type FxTextBlockDefinitions,
   type FxTextEditor,
   type FxTextEditorMediaFile,
   type FxTextSlateEditableProps,
+  type FxTextBlockDefinitionOverrides,
 } from "./_types"
 import { type FxTextBlockType } from "./blocks/_types"
 import { type PropsWithChildren } from "react"
@@ -29,7 +29,7 @@ export interface IRenderFxTextElementProps {
 export interface IUseFxTextEditorProps {
   inlineElements?: FxTextBlockType[]
   voidElements?: FxTextBlockType[]
-  blockDefinitions?: Partial<FxTextBlockDefinitions>
+  blockDefinitions?: FxTextBlockDefinitionOverrides
   onMediasUpdate: (medias: FxTextEditorMediaFile[]) => void
   nodeMenu?: FxTextNodeMenuComponentType
 }
@@ -45,6 +45,6 @@ export interface IFxTextEditorProps extends PropsWithChildren {
   onChange: (value: Node[]) => void
   onMediasUpdate: (medias: FxTextEditorMediaFile[]) => void
   placeholder?: EditableProps["placeholder"]
-  blockDefinitions?: Partial<FxTextBlockDefinitions>
+  blockDefinitions?: FxTextBlockDefinitionOverrides
   nodeMenu?: FxTextNodeMenuComponentType
 }

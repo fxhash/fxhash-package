@@ -26,4 +26,5 @@ export interface IUseNodeMenuPayload {
   addNode: (element: Element) => void
   deleteNode: () => void
   editNode: TEditNodeFn
+  isFocused: boolean
 }

@@ -13,7 +13,10 @@ export interface IArticleElementProcessor {
     node: unknown,
     next: (children: any[]) => any
   ) => object | undefined
-  transformMarkdownMdhastToSlate?: (node: any) => object
+  transformMarkdownMdhastToSlate?: (
+    node: any,
+    next: (children: any[]) => any
+  ) => object
 }
 
 /*

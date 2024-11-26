@@ -70,5 +70,6 @@ export const listItemDefinition: IFxTextBlockDefinition<any> = {
       at: pathListItem,
       to: next,
     })
+    return
   },
 }
