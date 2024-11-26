@@ -55,6 +55,13 @@ export interface IUserSource {
   getAccount: () => GetSingleUserAccountResult | null
 
   /**
+   * Will refetch the account currently authenticated. This is useful when the
+   * account has been updated and the source needs to be refreshed.
+   * @returns The latest account data
+   */
+  refetchAccount: () => Promise<GetSingleUserAccountResult> | null
+
+  /**
    * Logout from the account currently authenticated. Has no effect on sources
    * where there isn't any account management (such as wallet sources.)
    */

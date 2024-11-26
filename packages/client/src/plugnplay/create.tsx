@@ -121,6 +121,7 @@ export function createClientPlugnPlay({
   })
 
   let _openConnectKitModal: (() => void) | null = null
+  let _initConnectKitOverride: (() => Promise<void>) | null = null
 
   /**
    * ConnectKit is a great interface for handling wallet connections, however
@@ -136,6 +137,10 @@ export function createClientPlugnPlay({
    * <https://github.com/family/connectkit/blob/3db9c7538eadf29ad266c0fe4819b9bc15c42f05/packages/connectkit/src/components/Common/Modal/index.tsx#L640>
    */
   const _initConnectKit = () => {
+    // If we have an override (from React context), use that instead
+    if (_initConnectKitOverride) {
+      return _initConnectKitOverride()
+    }
     return new Promise<void>(resolve => {
       invariant(_manageConnectKit, "should be true")
       invariant(walletsConfig.window?.evm?.wagmiConfig, "should be defined")
@@ -239,6 +244,14 @@ export function createClientPlugnPlay({
     async requestEmailOTP(email: string) {
       invariant(client.walletSources.web3auth, "no web3auth wallet configured")
       return client.walletSources.web3auth.emailRequestOTP(email)
+    },
+
+    setConnectKitInit(initFn: () => Promise<void>) {
+      _initConnectKitOverride = initFn
+    },
+
+    setConnectKitModal(openFn: () => void) {
+      _openConnectKitModal = openFn
     },
   }
 }
