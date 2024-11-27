@@ -51,6 +51,9 @@ export function ipfsGatewayUrl(
  * returns the URL to the resource
  */
 export function proxyUrl(uri: string): string {
+  // let blobs be blobs
+  if (uri.startsWith("blob:")) return uri
+
   const [protocol, cid] = uri.split("://")
   switch (protocol) {
     case "https":

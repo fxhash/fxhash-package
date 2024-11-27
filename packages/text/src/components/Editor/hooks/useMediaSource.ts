@@ -4,8 +4,13 @@ import { IUseMediaSourcePayload, IUseMediaSourceProps } from "./_interfaces"
 
 export const AUDIO_EXTENSIONS = ["ogg", "mp3", "mpeg", "wav", "flac"]
 export const VIDEO_EXTENSIONS = ["ogg", "webm", "mp4"]
+export const MEDIA_EXTENSIONS = {
+  audio: AUDIO_EXTENSIONS,
+  video: VIDEO_EXTENSIONS,
+}
 
 export function useMediaSource({
+  type,
   src,
 }: IUseMediaSourceProps): IUseMediaSourcePayload {
   const [error, setError] = useState<Error | null>(null)
@@ -17,6 +22,7 @@ export function useMediaSource({
   const onCanPlay = useCallback<ReactEventHandler<HTMLVideoElement>>(() => {
     setError(null)
   }, [])
+
   const url = useMemo(() => proxyUrl(src), [src])
 
   const extension = useMemo(() => {
@@ -26,13 +32,11 @@ export function useMediaSource({
     return splittedUrl[splittedUrl.length - 1]
   }, [url])
 
-  const media = useMemo(() => {
+  const sourceType = useMemo(() => {
     if (!extension) return undefined
     try {
-      if (AUDIO_EXTENSIONS.indexOf(extension) > -1)
-        return { type: "audio" as const, sourceType: `audio/${extension}` }
-      if (VIDEO_EXTENSIONS.indexOf(extension) > -1)
-        return { type: "video" as const, sourceType: `video/${extension}` }
+      if (MEDIA_EXTENSIONS[type].indexOf(extension) > -1)
+        return `${type}/${extension}`
       return undefined
     } catch (e) {
       return undefined
@@ -40,8 +44,8 @@ export function useMediaSource({
   }, [extension])
 
   return {
-    type: media?.type,
-    sourceType: media?.sourceType,
+    type,
+    sourceType,
     extension,
     url,
     error,

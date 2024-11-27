@@ -1,7 +1,7 @@
 import { Transforms, Node } from "slate"
 import { IFxTextBlockDefinition } from "./_interfaces.js"
 import { RenderElementProps, useSelected } from "slate-react"
-import { EditAttributeComp } from "./_types.js"
+import { EditAttributeComp, FxTextFigureDefinition } from "./_types.js"
 
 const medias = ["image", "video", "audio"]
 const mediaAttributeSettings: Record<string, EditAttributeComp> = {
@@ -14,7 +14,7 @@ export function FigureElement({ attributes, children }: RenderElementProps) {
   return <figure {...attributes}>{children}</figure>
 }
 
-export const figureDefinition: IFxTextBlockDefinition<null> = {
+export const figureDefinition: FxTextFigureDefinition = {
   name: "Figure",
   renderElement: FigureElement,
   hasNodeMenu: true,

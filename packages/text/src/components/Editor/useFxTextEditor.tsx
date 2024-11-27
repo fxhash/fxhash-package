@@ -1,9 +1,13 @@
-import { Fragment, useCallback, useMemo } from "react"
+import { Fragment, useCallback, useMemo, useRef } from "react"
 import {
   type IUseFxTextEditorProps,
   type IUseFxTextEditorPayload,
 } from "./_interfaces"
-import { type FxTextSlateEditableProps, FxTextBlockDefinitions } from "./_types"
+import {
+  type FxTextSlateEditableProps,
+  FxTextBlockDefinitions,
+  FxTextEditor,
+} from "./_types"
 import { renderLeaf } from "./renderLeaf.js"
 import { renderFxTextElement } from "./renderElement.js"
 import { defaultFxTextEditorBlockDefinition } from "./blockDefinitions.js"
@@ -33,14 +37,16 @@ export function useFxTextEditor(
     return _definitions
   }, [props.blockDefinitions])
 
-  const editor = useMemo(() => {
-    return createFxEditor({
+  const editorRef = useRef<FxTextEditor>()
+  if (!editorRef.current) {
+    editorRef.current = createFxEditor({
       blockDefinitions,
       onMediasUpdate,
       inlineElements,
       voidElements,
     })
-  }, [onMediasUpdate, blockDefinitions, inlineElements, voidElements])
+  }
+  const editor = editorRef.current
 
   const renderElement = useCallback(renderFxTextElement({ nodeMenu }), [
     nodeMenu,

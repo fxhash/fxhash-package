@@ -42,6 +42,7 @@ export interface IUseUpdateElementPayload {
 
 export interface IUseMediaSourceProps {
   src: string
+  type: "audio" | "video"
 }
 
 export interface IUseMediaSourcePayload {

@@ -47,4 +47,5 @@ export interface IFxTextEditorProps extends PropsWithChildren {
   placeholder?: EditableProps["placeholder"]
   blockDefinitions?: FxTextBlockDefinitionOverrides
   nodeMenu?: FxTextNodeMenuComponentType
+  onInit?: (editor: FxTextEditor) => void
 }

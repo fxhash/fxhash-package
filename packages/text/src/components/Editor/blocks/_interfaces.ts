@@ -29,6 +29,11 @@ export interface IAttributesEditorWrapperProps {
   className: string
 }
 
+export interface IRenderEditElementButtonProps {
+  element: Element
+  onEdit: TEditNodeFn
+}
+
 export interface IFxTextBlockDefinition<InstanciateOpts> {
   name: string
   isInstantiable?: boolean
@@ -38,6 +43,7 @@ export interface IFxTextBlockDefinition<InstanciateOpts> {
   inlineMenu?: null | Array<string>
   renderElement: (props: RenderElementProps) => ReactNode
   hasNodeMenu: boolean
+  renderEditElementButton?: (props: IRenderEditElementButtonProps) => ReactNode
   instanciateElement?: (opts?: InstanciateOpts) => Element
   editAttributeComp?: EditAttributeComp
   editAttributeWrapper?: AttributesEditorWrapper

@@ -7,7 +7,10 @@ import {
 } from "../_index.js"
 import { type EditableProps } from "slate-react/dist/components/editable"
 import { type IFxTextBlockDefinition } from "./blocks/_interfaces.js"
-import { type FxTextBlockType } from "./blocks/_types.js"
+import {
+  FxTextBlockDefinitionOverride,
+  type FxTextBlockType,
+} from "./blocks/_types.js"
 
 export type FxTextNodeMenuComponentType =
   React.ComponentType<IFxTextNodeMenuProps>
@@ -20,7 +23,7 @@ export type FxTextBlockDefinitions = Record<
 export type FxTextBlockDefinitionOverrides = Partial<
   Record<
     FxTextBlockType,
-    Pick<IFxTextBlockDefinition<any>, "renderElement" | "editAttributeComp">
+    FxTextBlockDefinitionOverride<IFxTextBlockDefinition<any>>
   >
 >
 

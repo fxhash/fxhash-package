@@ -3,7 +3,9 @@ import { Element, type Editor, type Path } from "slate"
 import {
   type IEditAttributeProps,
   type IAttributesEditorWrapperProps,
+  IFxTextBlockDefinition,
 } from "./_interfaces.js"
+import { T } from "vitest/dist/reporters-5f784f42.js"
 
 export type EditAttributeComp = FunctionComponent<
   PropsWithChildren<IEditAttributeProps>
@@ -49,3 +51,17 @@ export type TEditNodeFnFactory = (
   element: Element,
   path: Path
 ) => TEditNodeFn
+
+export type FxTextBlockDefinitionOverride<
+  T extends IFxTextBlockDefinition<any>,
+> = Pick<
+  T,
+  | "renderElement"
+  | "editAttributeComp"
+  | "renderEditElementButton"
+  | "onEditNodeFactory"
+>
+
+export type FxTextFigureDefinition = IFxTextBlockDefinition<null>
+export type FxTextFigureDefinitionOverride =
+  FxTextBlockDefinitionOverride<FxTextFigureDefinition>
