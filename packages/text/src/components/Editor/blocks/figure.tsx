@@ -19,23 +19,6 @@ export const figureDefinition: IFxTextBlockDefinition<null> = {
   renderElement: FigureElement,
   hasNodeMenu: true,
   hasDeleteBehaviorRemoveBlock: true,
-  editAttributeComp: ({ element, onEdit, onClose, isOpen }) => {
-    const children = Node.elements(element)
-    for (const [child] of children) {
-      if (medias.indexOf(child.type) > -1) {
-        const AttributeSettings = mediaAttributeSettings[child.type]
-        return (
-          <AttributeSettings
-            element={child}
-            onEdit={onEdit}
-            onClose={onClose}
-            isOpen={isOpen}
-          />
-        )
-      }
-    }
-    return null
-  },
   //  editAttributeWrapper: BlockParamsModal,
   // when the AttributeSettings fires onEdit, we need to update the media
   // child component instead of the figure element
