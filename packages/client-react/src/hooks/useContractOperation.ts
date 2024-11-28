@@ -339,7 +339,18 @@ export function useContractOperation<
 
       try {
         const walletManager = getWalletManager(network)
-        invariant(!!walletManager, "Wallet manager must be defined")
+        if (!walletManager) {
+          setState(() => ({
+            status: ContractOperationStatus.ERROR,
+            called: false,
+            loading: false,
+            data: undefined,
+            error: new ReactClientNoWalletConnectedError() as TError,
+            params,
+            txHash: undefined,
+          }))
+          return
+        }
 
         const sendTransactionResult = await walletManager.sendTransaction(
           operations[blockchainType],
