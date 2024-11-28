@@ -31,10 +31,8 @@ export const withAutoFormat = (editor: Editor) => {
   editor.insertText = text => {
     const { selection } = editor
     let handled = false
-    console.log("??")
     if (selection && Range.isCollapsed(selection)) {
       if (text === " ") {
-        console.log("space")
         handled = changeWithSpaceValidation.some(change => change.apply(editor))
       }
       if (handled) return true

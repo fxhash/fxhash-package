@@ -52,8 +52,19 @@ export function useFxTextEditor(
     nodeMenu,
   ])
 
+  const onKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      editor?.onKeyDown?.(event)
+    },
+    [editor]
+  )
+
   return {
     editor,
-    editableProps: { ...DefaultFxTextSlateEditableProps, renderElement },
+    editableProps: {
+      ...DefaultFxTextSlateEditableProps,
+      renderElement,
+      onKeyDown,
+    },
   }
 }

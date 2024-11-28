@@ -15,7 +15,10 @@ export function FxTextSlate(props: IFxTextEditorProps) {
     nodeMenu,
     onInit,
   } = props
-  const { editor, editableProps: defaultEditableProps } = useFxTextEditor({
+  const {
+    editor,
+    editableProps: { onKeyDown, ...defaultEditableProps },
+  } = useFxTextEditor({
     onMediasUpdate,
     blockDefinitions,
     nodeMenu,
@@ -23,10 +26,12 @@ export function FxTextSlate(props: IFxTextEditorProps) {
   useEffect(() => {
     onInit?.(editor)
   }, [editor])
+
   return (
     <Slate editor={editor} initialValue={value} onChange={onChange}>
       <Editable
         {...defaultEditableProps}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         className={className}
       />

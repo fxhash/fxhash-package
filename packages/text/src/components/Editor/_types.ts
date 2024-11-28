@@ -29,7 +29,7 @@ export type FxTextBlockDefinitionOverrides = Partial<
 
 export type FxTextSlateEditableProps = Pick<
   EditableProps,
-  "renderElement" | "renderLeaf" | "disableDefaultStyles"
+  "renderElement" | "renderLeaf" | "disableDefaultStyles" | "onKeyDown"
 >
 
 // elements
@@ -74,6 +74,7 @@ export type FxTextEditorMediaFile = {
 }
 
 export type FxTextEditorExtension = {
+  onKeyDown?: (event: React.KeyboardEvent) => void
   updateMediaUrl: (target: FxTextEditorMediaFile, uri: string) => void
   getUploadedMedias: () => FxTextEditorMediaFile[]
   getBlockDefinition: (type: string) => IFxTextBlockDefinition<unknown>

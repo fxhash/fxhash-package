@@ -198,72 +198,6 @@ export const SlateTable = {
   },
 }
 
-export const onKeyDownTablePlugin = (
-  editor: Editor,
-  event: React.KeyboardEvent
-) => {
-  switch (event.key) {
-    /**
-     * Tab goes to next cell in a row, at the end of line, goes to next row first cell
-     * Shift+Tab goes to previous cell in a row, at the start of line, goes to previous row last cell
-     */
-    case "Tab": {
-      const cell = lookupElementByType(editor, "tableCell")
-      if (!cell) return
-      event.preventDefault()
-      const [, pathCell] = cell
-      const pathToMove = event.shiftKey
-        ? SlateTable.getPrevCell(editor, pathCell)
-        : SlateTable.getNextCell(editor, pathCell)
-      if (pathToMove) {
-        const end = Editor.end(editor, pathToMove)
-        Transforms.select(editor, end)
-      }
-      break
-    }
-    /**
-     * Move a cell up in a table
-     */
-    case "ArrowUp": {
-      const cell = lookupElementByType(editor, "tableCell")
-      if (!cell) return
-      const [, pathCell] = cell
-      const text = getTextFromBlockStartToCursor(editor)
-      if (text.indexOf("\n") > -1) return
-      event.preventDefault()
-      const pathPrevRowCell = SlateTable.getPrevRowCellPath(
-        editor,
-        pathCell,
-        "keep"
-      )
-      if (!pathPrevRowCell) return
-      const end = Editor.end(editor, pathPrevRowCell)
-      Transforms.select(editor, end)
-      break
-    }
-    /**
-     * Move a cell down in a table
-     */
-    case "ArrowDown": {
-      const cell = lookupElementByType(editor, "tableCell")
-      if (!cell) return
-      const [, pathCell] = cell
-      const text = getTextFromCursorToBlockEnd(editor)
-      if (text.indexOf("\n") > -1) return
-      event.preventDefault()
-      const pathNextRowCell = SlateTable.getNextRowCellPath(
-        editor,
-        pathCell,
-        "keep"
-      )
-      if (!pathNextRowCell) return
-      const end = Editor.end(editor, pathNextRowCell)
-      Transforms.select(editor, end)
-      break
-    }
-  }
-}
-
 /**
  * Add utility functions to the editor to support manipulation of <table/>
  */
@@ -275,7 +209,72 @@ export const withTables: EnhanceEditorWith = editor => {
     insertSoftBreak,
     normalizeNode,
     insertFragmentData,
+    onKeyDown,
   } = editor
+
+  editor.onKeyDown = event => {
+    switch (event.key) {
+      /**
+       * Tab goes to next cell in a row, at the end of line, goes to next row first cell
+       * Shift+Tab goes to previous cell in a row, at the start of line, goes to previous row last cell
+       */
+      case "Tab": {
+        const cell = lookupElementByType(editor, "tableCell")
+        if (!cell) return
+        event.preventDefault()
+        const [, pathCell] = cell
+        const pathToMove = event.shiftKey
+          ? SlateTable.getPrevCell(editor, pathCell)
+          : SlateTable.getNextCell(editor, pathCell)
+        if (pathToMove) {
+          const end = Editor.end(editor, pathToMove)
+          Transforms.select(editor, end)
+        }
+        break
+      }
+      /**
+       * Move a cell up in a table
+       */
+      case "ArrowUp": {
+        const cell = lookupElementByType(editor, "tableCell")
+        if (!cell) return
+        const [, pathCell] = cell
+        const text = getTextFromBlockStartToCursor(editor)
+        if (text.indexOf("\n") > -1) return
+        event.preventDefault()
+        const pathPrevRowCell = SlateTable.getPrevRowCellPath(
+          editor,
+          pathCell,
+          "keep"
+        )
+        if (!pathPrevRowCell) return
+        const end = Editor.end(editor, pathPrevRowCell)
+        Transforms.select(editor, end)
+        break
+      }
+      /**
+       * Move a cell down in a table
+       */
+      case "ArrowDown": {
+        const cell = lookupElementByType(editor, "tableCell")
+        if (!cell) return
+        const [, pathCell] = cell
+        const text = getTextFromCursorToBlockEnd(editor)
+        if (text.indexOf("\n") > -1) return
+        event.preventDefault()
+        const pathNextRowCell = SlateTable.getNextRowCellPath(
+          editor,
+          pathCell,
+          "keep"
+        )
+        if (!pathNextRowCell) return
+        const end = Editor.end(editor, pathNextRowCell)
+        Transforms.select(editor, end)
+        break
+      }
+    }
+    onKeyDown?.(event)
+  }
 
   /**
    * Deleting at the start of cell doesn't remove the cell

@@ -1,4 +1,4 @@
-import { Element, Node } from "slate"
+import { Element, Node, Range } from "slate"
 import { TextFormat } from "../_types"
 import { TEditNodeFn } from "../blocks/_types"
 import { IFxTextBlockDefinition } from "../_index"
@@ -53,4 +53,9 @@ export interface IUseMediaSourcePayload {
   error: Error | null
   onCanPlay: ReactEventHandler<HTMLVideoElement | HTMLAudioElement>
   onError: ReactEventHandler<HTMLVideoElement | HTMLAudioElement>
+}
+
+export interface IUseMentionMatchPayload {
+  range: Range
+  text: string
 }
