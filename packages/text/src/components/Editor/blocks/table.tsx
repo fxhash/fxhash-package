@@ -1,29 +1,25 @@
 import { SlateTable } from "../plugins/table/plugin.js"
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition, DefaultSlateElement } from "./_definition.js"
 
-export const tableDefinition: IFxTextBlockDefinition<null> = {
+export const tableDefinition = blockDefinition({
   name: "Table",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: ({ children }) => <table>{children}</table>,
+  renderElement: DefaultSlateElement("table"),
   hasDeleteBehaviorRemoveBlock: true,
   instanciateElement: () => SlateTable.createTable(2, 2),
   preventAutofocusTrigger: true,
-}
+})
 
-export const tableRowDefinition: IFxTextBlockDefinition<null> = {
+export const tableRowDefinition = blockDefinition<null>({
   name: "Table row",
   hasNodeMenu: false,
-  renderElement: ({ attributes, children }) => {
-    return <tr {...attributes}>{children}</tr>
-  },
-}
+  renderElement: DefaultSlateElement("tr"),
+})
 
-export const tableCellDefinition: IFxTextBlockDefinition<null> = {
+export const tableCellDefinition = blockDefinition<null>({
   name: "Table cell",
   hasNodeMenu: false,
-  renderElement: ({ attributes, children }) => {
-    return <td {...attributes}>{children}</td>
-  },
+  renderElement: DefaultSlateElement("td"),
   inlineMenu: ["strong", "emphasis"],
-}
+})

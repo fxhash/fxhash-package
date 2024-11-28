@@ -1,16 +1,12 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition } from "./_definition.js"
 
 interface InstanciateImageOpts {
   url?: string
   caption?: string
 }
-export const imageDefinition: IFxTextBlockDefinition<InstanciateImageOpts> = {
+export const imageDefinition = blockDefinition<InstanciateImageOpts>({
   name: "Image",
   isInstantiable: true,
-  hasNodeMenu: false,
-  renderElement: ({ children, attributes }) => (
-    <div {...attributes}>{children}</div>
-  ),
   instanciateElement: (opts = { url: "", caption: "" }) => ({
     type: "figure",
     children: [
@@ -33,4 +29,4 @@ export const imageDefinition: IFxTextBlockDefinition<InstanciateImageOpts> = {
       },
     ],
   }),
-}
+})

@@ -1,16 +1,13 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition } from "./_definition.js"
 
 interface InstanciateAudioOpts {
   src?: string
   caption?: string
 }
-export const audioDefinition: IFxTextBlockDefinition<InstanciateAudioOpts> = {
+
+export const audioDefinition = blockDefinition<InstanciateAudioOpts>({
   name: "Audio",
   isInstantiable: true,
-  hasNodeMenu: false,
-  renderElement: ({ children, attributes }) => {
-    return <div {...attributes}>{children}</div>
-  },
   instanciateElement: (opts = { src: "", caption: "" }) => ({
     type: "figure",
     children: [
@@ -33,4 +30,4 @@ export const audioDefinition: IFxTextBlockDefinition<InstanciateAudioOpts> = {
       },
     ],
   }),
-}
+})

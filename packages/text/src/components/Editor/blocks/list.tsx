@@ -1,7 +1,8 @@
 import { Path, Editor, Transforms, Range, Element, Node } from "slate"
 import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition } from "./_definition.js"
 
-export const listDefinition: IFxTextBlockDefinition<any> = {
+export const listDefinition = blockDefinition<null>({
   name: "List",
   isInstantiable: true,
   hasNodeMenu: true,
@@ -26,11 +27,10 @@ export const listDefinition: IFxTextBlockDefinition<any> = {
       },
     ],
   }),
-}
+})
 
-export const listItemDefinition: IFxTextBlockDefinition<any> = {
+export const listItemDefinition = blockDefinition<null>({
   name: "List Item",
-  hasNodeMenu: false,
   renderElement: ({ attributes, element, children }) => (
     <li {...attributes}>
       {element.checked === true ? (
@@ -72,4 +72,4 @@ export const listItemDefinition: IFxTextBlockDefinition<any> = {
     })
     return
   },
-}
+})

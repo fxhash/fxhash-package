@@ -1,12 +1,9 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition, DefaultSlateElement } from "./_definition.js"
 
-export const mathDefinition: IFxTextBlockDefinition<any> = {
+export const mathDefinition = blockDefinition({
   name: "Math",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: ({ attributes, children }) => (
-    <div {...attributes}>{children}</div>
-  ),
   instanciateElement: () => ({
     type: "math",
     math: "",
@@ -16,14 +13,11 @@ export const mathDefinition: IFxTextBlockDefinition<any> = {
       },
     ],
   }),
-}
+})
 
-export const inlineMathDefinition: IFxTextBlockDefinition<any> = {
+export const inlineMathDefinition = blockDefinition({
   name: "Math",
-  hasNodeMenu: false,
-  renderElement: ({ attributes }) => (
-    <span {...attributes} contentEditable={false}>
-      inline math
-    </span>
-  ),
-}
+  renderElement: DefaultSlateElement("span", () => ({
+    contentEditable: false,
+  })),
+})

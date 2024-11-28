@@ -1,12 +1,10 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition, DefaultSlateElement } from "./_definition.js"
 
-export const paragraphDefinition: IFxTextBlockDefinition<any> = {
+export const paragraphDefinition = blockDefinition({
   name: "Paragraph",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: ({ attributes, children }) => (
-    <p {...attributes}>{children}</p>
-  ),
+  renderElement: DefaultSlateElement("p"),
   instanciateElement: (text?: string) => ({
     type: "paragraph",
     children: [
@@ -15,4 +13,4 @@ export const paragraphDefinition: IFxTextBlockDefinition<any> = {
       },
     ],
   }),
-}
+})

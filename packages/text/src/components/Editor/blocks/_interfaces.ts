@@ -35,21 +35,27 @@ export interface IRenderEditElementButtonProps {
 }
 
 export interface IFxTextBlockDefinition<InstanciateOpts> {
+  // name of the element
   name: string
-  isInstantiable?: boolean
+  // should this element display the nodeMenu?
+  hasNodeMenu: boolean
+  // render your element
+  renderElement: (props: RenderElementProps) => ReactNode
+  // use this to render a button that triggers some ui to edit the element
+  renderEditElementButton?: (props: IRenderEditElementButtonProps) => ReactNode
+  // is the element instanciable through the nodeMenu ?
+  isInstantiable: boolean
+  // how do you instantiate the element ?
+  instanciateElement?: (opts?: InstanciateOpts) => Element
   // - undefined = use defaults
   // - null = hide inline style menu
   // - [] = custom set of inline styles
   inlineMenu?: null | Array<string>
-  renderElement: (props: RenderElementProps) => ReactNode
-  hasNodeMenu: boolean
-  renderEditElementButton?: (props: IRenderEditElementButtonProps) => ReactNode
-  instanciateElement?: (opts?: InstanciateOpts) => Element
-  editAttributeComp?: EditAttributeComp
-  editAttributeWrapper?: AttributesEditorWrapper
   // the definition can specify a function which can be called to output a
   // function which will be called to update a node. This is useful if the
   // default editNode function doesn't support certain edge cases
+  // e.g. the figure being the responsbile elemeht for its children
+  // image, audio, video
   onEditNodeFactory?: TEditNodeFnFactory
   // should the settings menu be hidden after node is update
   hideSettingsAfterUpdate?: boolean

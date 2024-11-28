@@ -1,16 +1,14 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition, DefaultSlateElement } from "./_definition.js"
 
 interface InstanciateVideoOpts {
   src?: string
   caption?: string
 }
-export const videoDefinition: IFxTextBlockDefinition<InstanciateVideoOpts> = {
+export const videoDefinition = blockDefinition<InstanciateVideoOpts>({
   name: "Video",
   isInstantiable: true,
   hasNodeMenu: false,
-  renderElement: ({ attributes, children }) => {
-    return <div {...attributes}>{children}</div>
-  },
+  renderElement: DefaultSlateElement("div"),
   instanciateElement: (opts = { src: "", caption: "" }) => ({
     type: "figure",
     children: [
@@ -33,4 +31,4 @@ export const videoDefinition: IFxTextBlockDefinition<InstanciateVideoOpts> = {
       },
     ],
   }),
-}
+})

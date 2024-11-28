@@ -1,12 +1,10 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition, DefaultSlateElement } from "./_definition.js"
 
-export const blockquoteDefinition: IFxTextBlockDefinition<any> = {
+export const blockquoteDefinition = blockDefinition<null>({
   name: "Quote",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: ({ children, attributes }) => (
-    <blockquote {...attributes}>{children}</blockquote>
-  ),
+  renderElement: DefaultSlateElement("blockquote"),
   instanciateElement: () => ({
     type: "blockquote",
     children: [
@@ -15,4 +13,4 @@ export const blockquoteDefinition: IFxTextBlockDefinition<any> = {
       },
     ],
   }),
-}
+})

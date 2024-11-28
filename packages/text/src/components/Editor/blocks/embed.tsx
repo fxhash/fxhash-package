@@ -1,21 +1,9 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition } from "./_definition.js"
 
-export const embedDefinition: IFxTextBlockDefinition<any> = {
+export const embedDefinition = blockDefinition<null>({
   name: "Embed media",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: ({ children, attributes }) => (
-    <div
-      // Embed
-      // slateElement={element}
-      // slateAttributes={attributes}
-      // href={element.href}
-      // editable
-      {...attributes}
-    >
-      {children}
-    </div>
-  ),
   instanciateElement: () => ({
     type: "embed-media",
     href: "",
@@ -26,4 +14,4 @@ export const embedDefinition: IFxTextBlockDefinition<any> = {
     ],
   }),
   preventAutofocusTrigger: true,
-}
+})

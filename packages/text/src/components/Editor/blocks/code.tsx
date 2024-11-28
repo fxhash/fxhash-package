@@ -1,15 +1,12 @@
-import { IFxTextBlockDefinition } from "./_interfaces.js"
+import { blockDefinition } from "./_definition.js"
 
 interface InstanciateCodeOpts {
   lang?: string
 }
-export const codeDefinition: IFxTextBlockDefinition<InstanciateCodeOpts> = {
+export const codeDefinition = blockDefinition<InstanciateCodeOpts>({
   name: "Code",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: ({ children, attributes }) => {
-    return <div {...attributes}>{children}</div>
-  },
   instanciateElement: (opts = { lang: "js" }) => ({
     type: "code",
     lang: opts.lang,
@@ -19,4 +16,4 @@ export const codeDefinition: IFxTextBlockDefinition<InstanciateCodeOpts> = {
       },
     ],
   }),
-}
+})

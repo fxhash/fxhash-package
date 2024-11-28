@@ -54,13 +54,7 @@ export type TEditNodeFnFactory = (
 
 export type FxTextBlockDefinitionOverride<
   T extends IFxTextBlockDefinition<any>,
-> = Pick<
-  T,
-  | "renderElement"
-  | "editAttributeComp"
-  | "renderEditElementButton"
-  | "onEditNodeFactory"
->
+> = Pick<T, "renderElement" | "renderEditElementButton" | "onEditNodeFactory">
 
 export type FxTextFigureDefinition = IFxTextBlockDefinition<null>
 export type FxTextFigureDefinitionOverride =
