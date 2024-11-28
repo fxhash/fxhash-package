@@ -1,5 +1,9 @@
 import { DefaultBeaconWalletConfig } from "@fxhash/tez"
-import type { DAppClientOptions, AccountInfo } from "@airgap/beacon-sdk"
+import {
+  type DAppClientOptions,
+  type AccountInfo,
+  AbortedBeaconError,
+} from "@airgap/beacon-sdk"
 import type { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { failure, success } from "@fxhash/utils"
@@ -7,6 +11,10 @@ import { IWindowWalletsSource } from "./_interfaces.js"
 import { TezosClientNotAvailableError } from "@/index.js"
 import { createTezosWalletManager, walletSource } from "../common/_private.js"
 import { intialization } from "@fxhash/utils"
+import {
+  WalletSourceRequestConnectionUnknownError,
+  WalletSourceRequestConnectionRejectedError,
+} from "@fxhash/errors"
 
 type Options = {
   beaconConfig: DAppClientOptions
@@ -83,8 +91,16 @@ export function tzip10WalletSource({
 
   return {
     ...wallet.source,
-    requestConnection: () => {
-      _beaconWallet?.requestPermissions()
+    requestConnection: async () => {
+      try {
+        return await _beaconWallet?.requestPermissions()
+      } catch (e) {
+        if (e instanceof AbortedBeaconError)
+          throw new WalletSourceRequestConnectionRejectedError()
+        throw new WalletSourceRequestConnectionUnknownError(
+          (e as Error).message ?? "Unknown error"
+        )
+      }
     },
   }
 }

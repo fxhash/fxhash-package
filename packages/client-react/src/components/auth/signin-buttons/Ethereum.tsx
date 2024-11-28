@@ -9,9 +9,7 @@ export function SignInButtonEthereum() {
   return (
     <AuthButton
       icon={icon}
-      onClick={() =>
-        client.connectWallet.bind(null, BlockchainNetwork.ETHEREUM)
-      }
+      onClick={client.connectWallet.bind(null, BlockchainNetwork.ETHEREUM)}
     >
       Ethereum wallet
     </AuthButton>

@@ -8,6 +8,7 @@ export interface IWindowWalletsSource extends IWalletsSource {
    * making such request with what's available.
    *
    * @param network The network on which a connection should be requested
+   * @returns A promise that resolves when the connection request is complete.
    */
-  requestConnection: (network: BlockchainNetwork) => void
+  requestConnection: (network: BlockchainNetwork) => Promise<void>
 }

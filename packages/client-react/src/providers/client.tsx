@@ -96,7 +96,6 @@ export function ClientPlugnPlayProvider({
   }, [config])
 
   const clientRef = useRef<IClientPlugnPlay | null>(null)
-  const openConnectKitModalRef = useRef<(() => void) | null>(null)
 
   const client = useMemo(() => {
     if (clientRef.current) return clientRef.current
@@ -122,11 +121,27 @@ export function ClientPlugnPlayProvider({
 
   // Capture the modal opener
   const ConnectKitDriver = () => {
-    const modal = useModal()
+    const isConnected = useRef(false)
+    const modal = useModal({
+      onConnect: () => {
+        isConnected.current = true
+      },
+      onDisconnect: () => {
+        isConnected.current = false
+      },
+    })
+
     useEffect(() => {
-      openConnectKitModalRef.current = modal.setOpen.bind(null, true)
-      client.setConnectKitModal(() => openConnectKitModalRef.current?.())
+      client.setConnectKitModal(
+        // Open function
+        modal.setOpen.bind(null, true),
+        // IsConnected function
+        () => isConnected.current,
+        // IsOpen function
+        () => modal.open
+      )
     }, [modal])
+
     return null
   }
 

@@ -13,6 +13,7 @@ import {
   disconnect,
   injected,
 } from "@wagmi/core"
+import { UserRejectedRequestError } from "viem"
 import { BlockchainNetwork } from "@fxhash/shared"
 import {
   intialization,
@@ -28,6 +29,10 @@ import {
   EvmViemClientGenerationError,
 } from "@/index.js"
 import { chains } from "@fxhash/eth"
+import {
+  WalletSourceRequestConnectionUnknownError,
+  WalletSourceRequestConnectionRejectedError,
+} from "@fxhash/errors"
 
 type Options = {
   wagmiConfig: Config
@@ -188,10 +193,18 @@ export function eip1193WalletSource({
   return {
     ...wallet.source,
     release: () => _unwatchAccount?.(),
-    requestConnection: () => {
-      _init.check()
-      // todo: wassup with connect: injected() is this the right way ?
-      return connect(wagmiConfig, { connector: injected() })
+    requestConnection: async () => {
+      try {
+        _init.check()
+        // todo: wassup with connect: injected() is this the right way ?
+        await connect(wagmiConfig, { connector: injected() })
+      } catch (e) {
+        if (e instanceof UserRejectedRequestError)
+          throw new WalletSourceRequestConnectionRejectedError()
+        throw new WalletSourceRequestConnectionUnknownError(
+          (e as Error).message ?? "Unknown error"
+        )
+      }
     },
   }
 }

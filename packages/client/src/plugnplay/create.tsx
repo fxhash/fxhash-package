@@ -122,6 +122,45 @@ export function createClientPlugnPlay({
 
   let _openConnectKitModal: (() => void) | null = null
   let _initConnectKitOverride: (() => Promise<void>) | null = null
+  let _isConnectKitConnected: (() => boolean) | null = null
+  let _isConnectKitOpen: (() => boolean) | null = null
+
+  const _connectWithConnectKitModal = () => {
+    return new Promise<void>((resolve, reject) => {
+      invariant(
+        _openConnectKitModal && _isConnectKitOpen,
+        "ConnectKit modal functions not initialized"
+      )
+
+      // Check if already connected
+      // TODO: ensure we want to resolve if already connected
+      if (client.userSource.getWallet(BlockchainNetwork.ETHEREUM)?.connected) {
+        resolve()
+        return
+      }
+
+      // Open the modal
+      _openConnectKitModal()
+
+      // Poll for either successful connection or modal closure
+      const checkInterval = setInterval(() => {
+        // Check if connected successfully
+        if (
+          client.userSource.getWallet(BlockchainNetwork.ETHEREUM)?.connected
+        ) {
+          clearInterval(checkInterval)
+          resolve()
+          return
+        }
+
+        // Check if modal was closed without connecting
+        if (!_isConnectKitOpen?.() && !_isConnectKitConnected?.()) {
+          clearInterval(checkInterval)
+          reject(new Error("Modal closed without connecting"))
+        }
+      }, 500)
+    })
+  }
 
   /**
    * ConnectKit is a great interface for handling wallet connections, however
@@ -168,13 +207,14 @@ export function createClientPlugnPlay({
       client.walletSources.window,
       "cannot request connection if no window wallets"
     )
+
     // on EVM use connectKit, need to bypass call to wallets source
     if (network === BlockchainNetwork.ETHEREUM && _manageConnectKit) {
-      _openConnectKitModal?.()
-      return
+      return _connectWithConnectKitModal()
     }
+
     // otherwise use native requestConnection from SDK
-    client.walletSources.window.requestConnection(network)
+    return client.walletSources.window.requestConnection(network)
   }
 
   return {
@@ -186,30 +226,9 @@ export function createClientPlugnPlay({
 
     source: client.userSource,
     emitter,
-    connectWallet: async (
-      network: BlockchainNetwork,
-      connectionTimeout = 5 * 60 * 1000 // 5 minutes
-    ) => {
-      requestConnection(network)
-      return new Promise((resolve, reject) => {
-        // Set a timeout to avoid infinite waiting
-        const timeout = setTimeout(() => {
-          reject(new Error("Wallet connection timeout"))
-        }, connectionTimeout)
 
-        // Check wallet connection status
-        const checkConnection = () => {
-          const wallet = client.userSource.getWallet(network)
-          if (wallet?.connected?.manager.address) {
-            clearTimeout(timeout)
-            resolve(wallet.connected.manager.address)
-          } else {
-            setTimeout(checkConnection, 1000) // Check every second
-          }
-        }
-
-        checkConnection()
-      })
+    async connectWallet(network: BlockchainNetwork) {
+      return requestConnection(network)
     },
 
     async init() {
@@ -274,8 +293,14 @@ export function createClientPlugnPlay({
       _initConnectKitOverride = initFn
     },
 
-    setConnectKitModal(openFn: () => void) {
+    setConnectKitModal(
+      openFn: () => void,
+      isConnectedFn: () => boolean,
+      isOpenFn: () => boolean
+    ) {
       _openConnectKitModal = openFn
+      _isConnectKitConnected = isConnectedFn
+      _isConnectKitOpen = isOpenFn
     },
   }
 }

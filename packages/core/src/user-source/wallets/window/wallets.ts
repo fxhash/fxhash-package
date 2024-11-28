@@ -89,10 +89,12 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
       )
       await wallets.init()
     },
-    requestConnection(network) {
+    async requestConnection(network) {
       const wallet = wallets.getWallet(network)
       wallet &&
-        (wallet.source as IWindowWalletsSource).requestConnection(network)
+        (await (wallet.source as IWindowWalletsSource).requestConnection(
+          network
+        ))
     },
     requirements() {
       return {
