@@ -1,9 +1,12 @@
-import { blockDefinition } from "./_definition.js"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
-export const tezosStoragePointerDefinition = blockDefinition<null>({
+export const tezosStoragePointerDefinition: IFxTextBlockDefinition<any> = {
   name: "Tezos content",
   isInstantiable: true,
   hasNodeMenu: true,
+  renderElement: ({ children, attributes }) => (
+    <div {...attributes}>{children}</div>
+  ),
   instanciateElement: () => ({
     type: "tezos-storage-pointer",
     contract: undefined,
@@ -17,6 +20,8 @@ export const tezosStoragePointerDefinition = blockDefinition<null>({
       },
     ],
   }),
+  //  editAttributeComp: TezosStorageSettings,
+  //  editAttributeWrapper: BlockParamsModal,
   hideSettingsAfterUpdate: true,
   preventAutofocusTrigger: true,
-})
+}

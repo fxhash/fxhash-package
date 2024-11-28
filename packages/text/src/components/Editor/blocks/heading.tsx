@@ -1,7 +1,7 @@
 import { EBreakBehavior } from "../plugins/_index.js"
-import { blockDefinition } from "./_definition.js"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
-export const headingDefinition = blockDefinition<null>({
+export const headingDefinition: IFxTextBlockDefinition<any> = {
   name: "Heading",
   isInstantiable: true,
   hasNodeMenu: true,
@@ -23,6 +23,7 @@ export const headingDefinition = blockDefinition<null>({
         return <div {...attributes}>unhandled headline type</div>
     }
   },
+  insertBreakBehavior: EBreakBehavior.insertParagraph,
   instanciateElement: () => ({
     type: "heading",
     depth: 1,
@@ -32,5 +33,5 @@ export const headingDefinition = blockDefinition<null>({
       },
     ],
   }),
-  insertBreakBehavior: EBreakBehavior.insertParagraph,
-})
+  // editAttributeComp: HeadingAttributeSettings,
+}

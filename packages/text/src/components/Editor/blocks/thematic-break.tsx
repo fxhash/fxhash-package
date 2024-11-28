@@ -1,10 +1,10 @@
-import { blockDefinition, DefaultSlateElement } from "./_definition.js"
+import { IFxTextBlockDefinition } from "./_interfaces.js"
 
-export const thematicBreakDefinition = blockDefinition<null>({
+export const thematicBreakDefinition: IFxTextBlockDefinition<any> = {
   name: "Horizontal break",
   isInstantiable: true,
   hasNodeMenu: true,
-  renderElement: DefaultSlateElement("hr"),
+  renderElement: ({ attributes }) => <hr {...attributes} />,
   instanciateElement: () => ({
     type: "thematicBreak",
     children: [
@@ -13,4 +13,4 @@ export const thematicBreakDefinition = blockDefinition<null>({
       },
     ],
   }),
-})
+}

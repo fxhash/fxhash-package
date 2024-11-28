@@ -1,4 +1,3 @@
-export * from "./_definition.js"
 export * from "./_interfaces.js"
 export * from "./_types.js"
 export * from "./audio.js"
