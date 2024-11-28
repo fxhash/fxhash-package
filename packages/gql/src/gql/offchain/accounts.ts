@@ -10,6 +10,8 @@ export const Frag_AccountBaseDetails = graphql(`
     profile {
       picture
       description
+      website
+      location
     }
     wallets {
       ...Wallet_BaseDetails
@@ -80,6 +82,18 @@ export const Qu_GetMyAccount = graphql(`
           ...Account_Wallets
         }
       }
+    }
+  }
+`)
+
+/**
+ * Update the account's profile details.
+ */
+export const Mu_UpdateAccount = graphql(`
+  mutation UpdateAccount($input: UpdateAccountInput!) {
+    update_account(input: $input) {
+      id
+      username
     }
   }
 `)

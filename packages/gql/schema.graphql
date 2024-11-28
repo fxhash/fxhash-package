@@ -2316,6 +2316,7 @@ type Profile {
   description: String
   farcaster: String
   instagram: String
+  location: String
   picture: String
   twitter: String
   website: String
@@ -2332,6 +2333,7 @@ input Profile_bool_exp {
   description: String_comparison_exp
   farcaster: String_comparison_exp
   instagram: String_comparison_exp
+  location: String_comparison_exp
   picture: String_comparison_exp
   twitter: String_comparison_exp
   website: String_comparison_exp
@@ -2360,6 +2362,7 @@ input Profile_order_by {
   description: order_by
   farcaster: order_by
   instagram: order_by
+  location: order_by
   picture: order_by
   twitter: order_by
   website: order_by
@@ -2395,6 +2398,11 @@ enum Profile_select_column {
   column name
   """
   instagram
+
+  """
+  column name
+  """
+  location
 
   """
   column name
@@ -2446,6 +2454,7 @@ input Profile_stream_cursor_value_input {
   description: String
   farcaster: String
   instagram: String
+  location: String
   picture: String
   twitter: String
   website: String
@@ -2796,7 +2805,7 @@ unique or primary key constraints on table "ProjectMedia"
 """
 enum ProjectMedia_constraint {
   """
-  unique or primary key constraint on columns "index", "mediaId", "projectId"
+  unique or primary key constraint on columns "mediaId", "index", "projectId"
   """
   ProjectMedia_index_projectId_mediaId_key
 }
@@ -3558,6 +3567,31 @@ input String_comparison_exp {
 
 input UnlinkWalletInput {
   address: String!
+}
+
+input UpdateAccountInput {
+  profile: UpdateProfileInput
+  username: String
+}
+
+type UpdateAccountOutput {
+  id: String!
+  profile: UpdateProfileOutput
+  username: String!
+}
+
+input UpdateProfileInput {
+  description: String
+  location: String
+  picture: String
+  website: String
+}
+
+type UpdateProfileOutput {
+  description: String
+  location: String
+  picture: String
+  website: String
 }
 
 """
@@ -4555,6 +4589,265 @@ order by variance() on columns of table "action"
 input action_variance_order_by {
   article_id: order_by
   numeric_value: order_by
+}
+
+"""
+columns and relationships of "any_offer"
+"""
+type any_offer {
+  """
+  An object relationship
+  """
+  buyer: user
+  buyer_id: String
+  created_at: timestamptz
+
+  """
+  An object relationship
+  """
+  generative_token: generative_token
+  id: String
+
+  """
+  An object relationship
+  """
+  objkt: objkt
+  objkt_id: String
+  original_id: String
+  price: numeric
+  status: String
+  token_id: String
+  type: String
+}
+
+"""
+aggregated selection of "any_offer"
+"""
+type any_offer_aggregate {
+  aggregate: any_offer_aggregate_fields
+  nodes: [any_offer!]!
+}
+
+"""
+aggregate fields of "any_offer"
+"""
+type any_offer_aggregate_fields {
+  avg: any_offer_avg_fields
+  count(columns: [any_offer_select_column!], distinct: Boolean): Int!
+  max: any_offer_max_fields
+  min: any_offer_min_fields
+  stddev: any_offer_stddev_fields
+  stddev_pop: any_offer_stddev_pop_fields
+  stddev_samp: any_offer_stddev_samp_fields
+  sum: any_offer_sum_fields
+  var_pop: any_offer_var_pop_fields
+  var_samp: any_offer_var_samp_fields
+  variance: any_offer_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type any_offer_avg_fields {
+  price: Float
+}
+
+"""
+Boolean expression to filter rows from the table "any_offer". All fields are combined with a logical 'AND'.
+"""
+input any_offer_bool_exp {
+  _and: [any_offer_bool_exp!]
+  _not: any_offer_bool_exp
+  _or: [any_offer_bool_exp!]
+  buyer: user_bool_exp
+  buyer_id: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  generative_token: generative_token_bool_exp
+  id: String_comparison_exp
+  objkt: objkt_bool_exp
+  objkt_id: String_comparison_exp
+  original_id: String_comparison_exp
+  price: numeric_comparison_exp
+  status: String_comparison_exp
+  token_id: String_comparison_exp
+  type: String_comparison_exp
+}
+
+"""
+aggregate max on columns
+"""
+type any_offer_max_fields {
+  buyer_id: String
+  created_at: timestamptz
+  id: String
+  objkt_id: String
+  original_id: String
+  price: numeric
+  status: String
+  token_id: String
+  type: String
+}
+
+"""
+aggregate min on columns
+"""
+type any_offer_min_fields {
+  buyer_id: String
+  created_at: timestamptz
+  id: String
+  objkt_id: String
+  original_id: String
+  price: numeric
+  status: String
+  token_id: String
+  type: String
+}
+
+"""
+Ordering options when selecting data from "any_offer".
+"""
+input any_offer_order_by {
+  buyer: user_order_by
+  buyer_id: order_by
+  created_at: order_by
+  generative_token: generative_token_order_by
+  id: order_by
+  objkt: objkt_order_by
+  objkt_id: order_by
+  original_id: order_by
+  price: order_by
+  status: order_by
+  token_id: order_by
+  type: order_by
+}
+
+"""
+select columns of table "any_offer"
+"""
+enum any_offer_select_column {
+  """
+  column name
+  """
+  buyer_id
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  objkt_id
+
+  """
+  column name
+  """
+  original_id
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  status
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  type
+}
+
+"""
+aggregate stddev on columns
+"""
+type any_offer_stddev_fields {
+  price: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type any_offer_stddev_pop_fields {
+  price: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type any_offer_stddev_samp_fields {
+  price: Float
+}
+
+"""
+Streaming cursor of the table "any_offer"
+"""
+input any_offer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: any_offer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input any_offer_stream_cursor_value_input {
+  buyer_id: String
+  created_at: timestamptz
+  id: String
+  objkt_id: String
+  original_id: String
+  price: numeric
+  status: String
+  token_id: String
+  type: String
+}
+
+"""
+aggregate sum on columns
+"""
+type any_offer_sum_fields {
+  price: numeric
+}
+
+"""
+aggregate var_pop on columns
+"""
+type any_offer_var_pop_fields {
+  price: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type any_offer_var_samp_fields {
+  price: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type any_offer_variance_fields {
+  price: Float
 }
 
 """
@@ -6181,6 +6474,7 @@ type artist {
   An object relationship
   """
   account: foreign_account
+  flag: user_flag_enum
   id: uuid
 }
 
@@ -6209,6 +6503,7 @@ input artist_bool_exp {
   _not: artist_bool_exp
   _or: [artist_bool_exp!]
   account: foreign_account_bool_exp
+  flag: user_flag_enum_comparison_exp
   id: uuid_comparison_exp
 }
 
@@ -6216,6 +6511,7 @@ input artist_bool_exp {
 aggregate max on columns
 """
 type artist_max_fields {
+  flag: user_flag_enum
   id: uuid
 }
 
@@ -6223,6 +6519,7 @@ type artist_max_fields {
 aggregate min on columns
 """
 type artist_min_fields {
+  flag: user_flag_enum
   id: uuid
 }
 
@@ -6231,6 +6528,7 @@ Ordering options when selecting data from "artist".
 """
 input artist_order_by {
   account: foreign_account_order_by
+  flag: order_by
   id: order_by
 }
 
@@ -6238,6 +6536,11 @@ input artist_order_by {
 select columns of table "artist"
 """
 enum artist_select_column {
+  """
+  column name
+  """
+  flag
+
   """
   column name
   """
@@ -6263,6 +6566,7 @@ input artist_stream_cursor_input {
 Initial value of the column from where the streaming should start
 """
 input artist_stream_cursor_value_input {
+  flag: user_flag_enum
   id: uuid
 }
 
@@ -8502,10 +8806,6 @@ input float8_comparison_exp {
 columns and relationships of "foreign_account"
 """
 type foreign_account {
-  """
-  A computed field, executes function "get_account_flag"
-  """
-  flag: String
   id: uuid
   username: String
 
@@ -8547,7 +8847,6 @@ input foreign_account_bool_exp {
   _and: [foreign_account_bool_exp!]
   _not: foreign_account_bool_exp
   _or: [foreign_account_bool_exp!]
-  flag: String_comparison_exp
   id: uuid_comparison_exp
   username: String_comparison_exp
   wallets: foreign_wallet_bool_exp
@@ -8557,7 +8856,6 @@ input foreign_account_bool_exp {
 Ordering options when selecting data from "foreign_account".
 """
 input foreign_account_order_by {
-  flag: order_by
   id: order_by
   username: order_by
   wallets_aggregate: foreign_wallet_aggregate_order_by
@@ -14037,6 +14335,7 @@ type mutation_root {
   """
   set_whitelist(whitelist: jsonb!): SetWhitelistOutput
   unlink_wallet_from_account(input: UnlinkWalletInput): Boolean!
+  update_account(input: UpdateAccountInput!): UpdateAccountOutput
 
   """
   Use an OTP with an email to issue a JWT for web3auth custom provider validation
@@ -14301,6 +14600,36 @@ type objkt {
     """
     where: offer_bool_exp
   ): [offer!]!
+
+  """
+  An aggregate relationship
+  """
+  offers_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: offer_bool_exp
+  ): offer_aggregate!
 
   """
   An object relationship
@@ -14642,6 +14971,7 @@ input objkt_bool_exp {
   minter_id: String_comparison_exp
   name: String_comparison_exp
   offers: offer_bool_exp
+  offers_aggregate: offer_aggregate_bool_exp
   owner: user_bool_exp
   owner_id: String_comparison_exp
   rarity: float8_comparison_exp
@@ -17523,6 +17853,58 @@ type offer {
 }
 
 """
+aggregated selection of "offer"
+"""
+type offer_aggregate {
+  aggregate: offer_aggregate_fields
+  nodes: [offer!]!
+}
+
+input offer_aggregate_bool_exp {
+  bool_and: offer_aggregate_bool_exp_bool_and
+  bool_or: offer_aggregate_bool_exp_bool_or
+  count: offer_aggregate_bool_exp_count
+}
+
+input offer_aggregate_bool_exp_bool_and {
+  arguments: offer_select_column_offer_aggregate_bool_exp_bool_and_arguments_columns!
+  distinct: Boolean
+  filter: offer_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input offer_aggregate_bool_exp_bool_or {
+  arguments: offer_select_column_offer_aggregate_bool_exp_bool_or_arguments_columns!
+  distinct: Boolean
+  filter: offer_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input offer_aggregate_bool_exp_count {
+  arguments: [offer_select_column!]
+  distinct: Boolean
+  filter: offer_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "offer"
+"""
+type offer_aggregate_fields {
+  avg: offer_avg_fields
+  count(columns: [offer_select_column!], distinct: Boolean): Int!
+  max: offer_max_fields
+  min: offer_min_fields
+  stddev: offer_stddev_fields
+  stddev_pop: offer_stddev_pop_fields
+  stddev_samp: offer_stddev_samp_fields
+  sum: offer_sum_fields
+  var_pop: offer_var_pop_fields
+  var_samp: offer_var_samp_fields
+  variance: offer_variance_fields
+}
+
+"""
 order by aggregate values of table "offer"
 """
 input offer_aggregate_order_by {
@@ -17537,6 +17919,14 @@ input offer_aggregate_order_by {
   var_pop: offer_var_pop_order_by
   var_samp: offer_var_samp_order_by
   variance: offer_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type offer_avg_fields {
+  price: Float
+  version: Float
 }
 
 """
@@ -17570,6 +17960,21 @@ input offer_bool_exp {
 }
 
 """
+aggregate max on columns
+"""
+type offer_max_fields {
+  accepted_at: timestamptz
+  buyer_id: String
+  cancelled_at: timestamptz
+  created_at: timestamptz
+  id: String
+  objkt_id: String
+  price: numeric
+  status: offer_status_enum
+  version: Int
+}
+
+"""
 order by max() on columns of table "offer"
 """
 input offer_max_order_by {
@@ -17582,6 +17987,21 @@ input offer_max_order_by {
   price: order_by
   status: order_by
   version: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type offer_min_fields {
+  accepted_at: timestamptz
+  buyer_id: String
+  cancelled_at: timestamptz
+  created_at: timestamptz
+  id: String
+  objkt_id: String
+  price: numeric
+  status: offer_status_enum
+  version: Int
 }
 
 """
@@ -17678,6 +18098,26 @@ enum offer_select_column {
   version
 }
 
+"""
+select "offer_aggregate_bool_exp_bool_and_arguments_columns" columns of table "offer"
+"""
+enum offer_select_column_offer_aggregate_bool_exp_bool_and_arguments_columns {
+  """
+  column name
+  """
+  is_inactive
+}
+
+"""
+select "offer_aggregate_bool_exp_bool_or_arguments_columns" columns of table "offer"
+"""
+enum offer_select_column_offer_aggregate_bool_exp_bool_or_arguments_columns {
+  """
+  column name
+  """
+  is_inactive
+}
+
 scalar offer_status_enum
 
 """
@@ -17696,6 +18136,14 @@ input offer_status_enum_comparison_exp {
 }
 
 """
+aggregate stddev on columns
+"""
+type offer_stddev_fields {
+  price: Float
+  version: Float
+}
+
+"""
 order by stddev() on columns of table "offer"
 """
 input offer_stddev_order_by {
@@ -17704,11 +18152,27 @@ input offer_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type offer_stddev_pop_fields {
+  price: Float
+  version: Float
+}
+
+"""
 order by stddev_pop() on columns of table "offer"
 """
 input offer_stddev_pop_order_by {
   price: order_by
   version: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type offer_stddev_samp_fields {
+  price: Float
+  version: Float
 }
 
 """
@@ -17752,11 +18216,27 @@ input offer_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type offer_sum_fields {
+  price: numeric
+  version: Int
+}
+
+"""
 order by sum() on columns of table "offer"
 """
 input offer_sum_order_by {
   price: order_by
   version: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type offer_var_pop_fields {
+  price: Float
+  version: Float
 }
 
 """
@@ -17768,11 +18248,27 @@ input offer_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type offer_var_samp_fields {
+  price: Float
+  version: Float
+}
+
+"""
 order by var_samp() on columns of table "offer"
 """
 input offer_var_samp_order_by {
   price: order_by
   version: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type offer_variance_fields {
+  price: Float
+  version: Float
 }
 
 """
@@ -17848,6 +18344,66 @@ type onchain_query {
   fetch data from the table: "action" using primary key columns
   """
   action_by_pk(id: uuid!): action
+
+  """
+  fetch data from the table: "any_offer"
+  """
+  any_offer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [any_offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [any_offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: any_offer_bool_exp
+  ): [any_offer!]!
+
+  """
+  fetch aggregated fields from the table: "any_offer"
+  """
+  any_offer_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [any_offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [any_offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: any_offer_bool_exp
+  ): any_offer_aggregate!
 
   """
   fetch data from the table: "article"
@@ -19430,6 +19986,36 @@ type onchain_query {
   ): [offer!]!
 
   """
+  fetch aggregated fields from the table: "offer"
+  """
+  offer_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: offer_bool_exp
+  ): offer_aggregate!
+
+  """
   fetch data from the table: "offer" using primary key columns
   """
   offer_by_pk(id: String!, version: Int!): offer
@@ -19870,6 +20456,86 @@ type onchain_subscription {
     """
     where: action_bool_exp
   ): [action!]!
+
+  """
+  fetch data from the table: "any_offer"
+  """
+  any_offer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [any_offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [any_offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: any_offer_bool_exp
+  ): [any_offer!]!
+
+  """
+  fetch aggregated fields from the table: "any_offer"
+  """
+  any_offer_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [any_offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [any_offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: any_offer_bool_exp
+  ): any_offer_aggregate!
+
+  """
+  fetch data from the table in a streaming manner: "any_offer"
+  """
+  any_offer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [any_offer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: any_offer_bool_exp
+  ): [any_offer!]!
 
   """
   fetch data from the table: "article"
@@ -22230,6 +22896,36 @@ type onchain_subscription {
     """
     where: offer_bool_exp
   ): [offer!]!
+
+  """
+  fetch aggregated fields from the table: "offer"
+  """
+  offer_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: offer_bool_exp
+  ): offer_aggregate!
 
   """
   fetch data from the table: "offer" using primary key columns
@@ -25594,6 +26290,36 @@ type user {
   ): [offer!]!
 
   """
+  An aggregate relationship
+  """
+  offers_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [offer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [offer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: offer_bool_exp
+  ): offer_aggregate!
+
+  """
   An array relationship
   """
   redemptions(
@@ -25745,6 +26471,7 @@ input user_bool_exp {
   objktsByOwnerId_aggregate: objkt_aggregate_bool_exp
   objkts_aggregate: objkt_aggregate_bool_exp
   offers: offer_bool_exp
+  offers_aggregate: offer_aggregate_bool_exp
   redemptions: redemption_bool_exp
   reports: report_bool_exp
   splits: split_bool_exp
