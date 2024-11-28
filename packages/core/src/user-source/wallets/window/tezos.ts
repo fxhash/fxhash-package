@@ -1,9 +1,5 @@
 import { DefaultBeaconWalletConfig } from "@fxhash/tez"
-import {
-  type DAppClientOptions,
-  type AccountInfo,
-  AbortedBeaconError,
-} from "@airgap/beacon-sdk"
+import { type DAppClientOptions, type AccountInfo } from "@airgap/beacon-sdk"
 import type { BeaconWallet } from "@taquito/beacon-wallet"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { failure, success } from "@fxhash/utils"
@@ -95,6 +91,8 @@ export function tzip10WalletSource({
       try {
         return await _beaconWallet?.requestPermissions()
       } catch (e) {
+        const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
+          .AbortedBeaconError
         if (e instanceof AbortedBeaconError)
           throw new WalletSourceRequestConnectionRejectedError()
         throw new WalletSourceRequestConnectionUnknownError(
