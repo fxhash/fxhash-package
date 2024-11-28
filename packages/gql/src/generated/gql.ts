@@ -23,11 +23,12 @@ const documents = {
     "\n  mutation MyMutation($input: Web3AuthEmailAuthOTPInput!) {\n    web3auth_email_auth_otp(input: $input) {\n      idToken\n    }\n  }\n": types.MyMutationDocument,
     "\n  mutation Refresh($input: RefreshInput!) {\n    refresh(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshDocument,
     "\n  mutation Logout($input: LogoutInput!) {\n    logout(input: $input) {\n      success\n    }\n  }\n": types.LogoutDocument,
-    "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_BaseDetailsFragmentDoc,
+    "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n      website\n      location\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_BaseDetailsFragmentDoc,
     "\n  fragment Account_Wallets on Account {\n    wallets {\n      ...Wallet_BaseDetails\n    }\n    mainWallet {\n      ...Wallet_BaseDetails\n    }\n  }\n": types.Account_WalletsFragmentDoc,
     "\n  query GetAccounts($where: Account_bool_exp = {}) {\n    offchain {\n      Account(where: $where) {\n        ...Account_BaseDetails\n      }\n    }\n  }\n": types.GetAccountsDocument,
     "\n  query GetAccountWallets($where: Account_bool_exp = {}) {\n    offchain {\n      Account(where: $where) {\n        ...Account_BaseDetails\n        ...Account_Wallets\n      }\n    }\n  }\n": types.GetAccountWalletsDocument,
     "\n  query GetMyAccount {\n    offchain {\n      UserAccount {\n        account {\n          ...Account_BaseDetails\n          ...Account_Wallets\n        }\n      }\n    }\n  }\n": types.GetMyAccountDocument,
+    "\n  mutation UpdateAccount($input: UpdateAccountInput!) {\n    update_account(input: $input) {\n      id\n      username\n    }\n  }\n": types.UpdateAccountDocument,
     "\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n": types.SetFarcasterHandleDocument,
     "\n  fragment Project_BaseDetails on Project {\n    id\n    title\n    description\n    tokenId\n    releaseAt\n    blockchain\n    storage\n    pricing\n    curator {\n      id\n      status\n      username\n      wallets {\n        ...Wallet_BaseDetails\n      }\n    }\n    author {\n      ...Account_BaseDetails\n    }\n    collaborators {\n      account {\n        ...Account_BaseDetails\n      }\n    }\n    collaborators {\n      account {\n        ...Account_BaseDetails\n      }\n    }\n    projectMedias {\n      index\n      media {\n        id\n        url\n      }\n    }\n  }\n": types.Project_BaseDetailsFragmentDoc,
     "\n  fragment Project_UserSecrets on Project {\n    state\n  }\n": types.Project_UserSecretsFragmentDoc,
@@ -115,7 +116,7 @@ export function graphql(source: "\n  mutation Logout($input: LogoutInput!) {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n"): (typeof documents)["\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n"];
+export function graphql(source: "\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n      website\n      location\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n"): (typeof documents)["\n  fragment Account_BaseDetails on Account {\n    id\n    username\n    profile {\n      picture\n      description\n      website\n      location\n    }\n    wallets {\n      ...Wallet_BaseDetails\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -132,6 +133,10 @@ export function graphql(source: "\n  query GetAccountWallets($where: Account_boo
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetMyAccount {\n    offchain {\n      UserAccount {\n        account {\n          ...Account_BaseDetails\n          ...Account_Wallets\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetMyAccount {\n    offchain {\n      UserAccount {\n        account {\n          ...Account_BaseDetails\n          ...Account_Wallets\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateAccount($input: UpdateAccountInput!) {\n    update_account(input: $input) {\n      id\n      username\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateAccount($input: UpdateAccountInput!) {\n    update_account(input: $input) {\n      id\n      username\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
