@@ -12,7 +12,10 @@ import {
   invariant,
   BlockchainType,
   BlockchainNetwork,
+  setIntervalCapped,
+  RichError,
 } from "@fxhash/sdk"
+import { ReactClientNoWalletConnectedError } from "@fxhash/errors"
 import {
   useEvmWallet,
   useEvmWalletConnected,
@@ -162,14 +165,11 @@ type TBlockchainContractOperation = {
 // Extract the error type from WalletManager.sendTransaction
 type ExtractPendingOrRejectedError<T> =
   T extends Success<unknown> ? never : T extends Failure<infer U> ? U : never
-type TError = ExtractPendingOrRejectedError<
-  Awaited<ReturnType<InstanceType<typeof WalletManager>["sendTransaction"]>>
->
-
-class NoWalletConnectedError extends Error {
-  name = "NoWalletConnectedError"
-  message = "Wallet needs to be synced to run operations"
-}
+type TError =
+  | ExtractPendingOrRejectedError<
+      Awaited<ReturnType<InstanceType<typeof WalletManager>["sendTransaction"]>>
+    >
+  | RichError
 
 export function useContractOperation<
   TBlockchain extends BlockchainType,
@@ -254,6 +254,14 @@ export function useContractOperation<
     }
   }, [])
 
+  const getWalletManager = (network: BlockchainNetwork) => {
+    return {
+      [BlockchainType.BASE]: ethereumWalletManagerRef.current,
+      [BlockchainType.ETHEREUM]: ethereumWalletManagerRef.current,
+      [BlockchainType.TEZOS]: tezosWalletManagerRef.current,
+    }[network]
+  }
+
   const execute = useCallback(
     async <TBlockchain extends BlockchainType>(
       blockchainType: TBlockchain,
@@ -263,20 +271,34 @@ export function useContractOperation<
         [BlockchainType.BASE]: isEthereumConnected,
         [BlockchainType.ETHEREUM]: isEthereumConnected,
         [BlockchainType.TEZOS]: isTezosConnected,
-      }
+      }[blockchainType]
+
+      const network =
+        blockchainType === BlockchainType.TEZOS
+          ? BlockchainNetwork.TEZOS
+          : BlockchainNetwork.ETHEREUM
 
       // if there's no user synced, we request a sync
-      if (!connected[blockchainType]) {
+      if (!connected) {
         try {
-          await client?.connectWallet(
-            blockchainType === BlockchainType.TEZOS
-              ? BlockchainNetwork.TEZOS
-              : BlockchainNetwork.ETHEREUM
+          await client?.connectWallet(network)
+
+          // wait for wallet manager to be ready
+          await setIntervalCapped(
+            () => {
+              if (getWalletManager(network)) return true
+              return
+            },
+            {
+              delay: 100,
+              maxSteps: 20,
+            }
           )
 
           // Check if still mounted after async operation
           if (!isMounted.current) return
         } catch (err) {
+          console.log("error connecting wallet", err)
           if (!isMounted.current) return
 
           setState(() => ({
@@ -284,7 +306,7 @@ export function useContractOperation<
             called: false,
             loading: false,
             data: undefined,
-            error: new NoWalletConnectedError() as TError,
+            error: new ReactClientNoWalletConnectedError() as TError,
             params,
             txHash: undefined,
           }))
@@ -315,13 +337,8 @@ export function useContractOperation<
         }
       })
 
-      let walletManager = {
-        [BlockchainType.BASE]: ethereumWalletManagerRef.current,
-        [BlockchainType.ETHEREUM]: ethereumWalletManagerRef.current,
-        [BlockchainType.TEZOS]: tezosWalletManagerRef.current,
-      }[blockchainType]
-
       try {
+        const walletManager = getWalletManager(network)
         invariant(!!walletManager, "Wallet manager must be defined")
 
         const sendTransactionResult = await walletManager.sendTransaction(
