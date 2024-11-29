@@ -1,13 +1,16 @@
 import { Element, Node, Range } from "slate"
 import { TextFormat } from "../_types"
 import { TEditNodeFn } from "../blocks/_types"
-import { IFxTextBlockDefinition } from "../_index"
-import { ReactEventHandler } from "react"
+import { IFxTextBlockDefinition, InlineServiceTypes } from "../_index"
+import { ReactEventHandler, ReactNode } from "react"
 
-export interface UseInlineStyleMenuPayload {
+export interface IUseInlineStyleMenuPayload {
   isHidden: boolean
   menuRef: React.RefObject<HTMLDivElement>
+  overrideContent: ReactNode
+  setOverrideContent: (content: ReactNode) => void
   onMouseDown: (e: React.MouseEvent) => void
+  validInlineStyles: InlineServiceTypes[]
 }
 
 export interface UseTextFormatButtonProps {
@@ -58,4 +61,9 @@ export interface IUseMediaSourcePayload {
 export interface IUseMentionMatchPayload {
   range: Range
   text: string
+}
+
+export interface IUseElementAtSelectionPayload {
+  element: Element
+  definition: IFxTextBlockDefinition<any>
 }

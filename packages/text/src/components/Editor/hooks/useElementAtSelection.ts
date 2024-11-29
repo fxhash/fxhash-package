@@ -1,9 +1,10 @@
 import { useMemo } from "react"
 import { lookupElementAtSelection } from "../utils/lookupElementAtSelection"
 import { useSlateSelection, useSlateStatic } from "slate-react"
-import { Location, Element } from "slate"
+import { Location } from "slate"
+import { IUseElementAtSelectionPayload } from "./_interfaces"
 
-export function useElementAtSelection(): Element | null {
+export function useElementAtSelection(): IUseElementAtSelectionPayload | null {
   const editor = useSlateStatic()
   const selection = useSlateSelection()
 
@@ -13,5 +14,6 @@ export function useElementAtSelection(): Element | null {
     return elementUnderCursor
   }, [selection])
 
-  return element
+  if (!element) return null
+  return { element, definition: editor.getBlockDefinition(element.type) }
 }

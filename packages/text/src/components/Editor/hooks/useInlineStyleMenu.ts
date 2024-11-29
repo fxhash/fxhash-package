@@ -1,19 +1,17 @@
 import { useSlate } from "slate-react"
 import { Range } from "slate"
 import { useElementAtSelection } from "./useElementAtSelection"
-import { FxTextBlockType } from "../blocks/_types"
-import { UseInlineStyleMenuPayload } from "./_interfaces"
-import { useLayoutEffect, useMemo, useRef } from "react"
+import { IUseInlineStyleMenuPayload } from "./_interfaces"
+import { ReactNode, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { ALL_TEXT_FORMATS } from "../_types"
 
-export const defaultInlineFormats = Object.freeze([...ALL_TEXT_FORMATS, "link"])
+export const defaultInlineFormats = [...ALL_TEXT_FORMATS, "link"]
 
-export function useInlineStyleMenu(): UseInlineStyleMenuPayload {
+export function useInlineStyleMenu(): IUseInlineStyleMenuPayload {
+  const [overrideContent, setOverrideContent] = useState<ReactNode | null>(null)
   const editor = useSlate()
   const elementAtSelection = useElementAtSelection()
-  const validInlineStyles = editor.getBlockDefinition(
-    elementAtSelection?.type as FxTextBlockType
-  )?.inlineMenu
+  const validInlineStyles = elementAtSelection?.definition.inlineMenu
 
   const noInlineStyleSupport = validInlineStyles === null
 
@@ -54,10 +52,17 @@ export function useInlineStyleMenu(): UseInlineStyleMenuPayload {
   return {
     isHidden,
     menuRef: ref,
+    overrideContent,
+    setOverrideContent,
     // Add this handler to your div the ref is applied to to prevent
     // taking the focus away from the editor when interacting with the menu
     onMouseDown: e => {
       e.preventDefault()
     },
+    validInlineStyles: noInlineStyleSupport
+      ? []
+      : validInlineStyles === undefined
+        ? defaultInlineFormats
+        : validInlineStyles,
   }
 }

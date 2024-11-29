@@ -1,4 +1,5 @@
 export * from "./hooks/_index.js"
+export * from "./utils/_index.js"
 export * from "./blocks/_index.js"
 export * from "./FxTextEditor.js"
 export * from "./useFxTextEditor.js"

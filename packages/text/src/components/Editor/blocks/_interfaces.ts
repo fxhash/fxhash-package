@@ -8,6 +8,7 @@ import {
   TEditNodeFnFactory,
 } from "./_types"
 import { EBreakBehavior, InsertBreakFunction } from "../plugins/_index"
+import { InlineServiceTypes } from "../_index"
 
 /**
  * The Instanciation Component can be displayed to enter informations about a
@@ -40,7 +41,7 @@ export interface IFxTextBlockDefinition<InstanciateOpts> {
   // - undefined = use defaults
   // - null = hide inline style menu
   // - [] = custom set of inline styles
-  inlineMenu?: null | Array<string>
+  inlineMenu?: null | InlineServiceTypes[]
   renderElement: (props: RenderElementProps) => ReactNode
   hasNodeMenu: boolean
   renderEditElementButton?: (props: IRenderEditElementButtonProps) => ReactNode
