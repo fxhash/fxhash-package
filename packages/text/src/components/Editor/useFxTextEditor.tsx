@@ -16,7 +16,7 @@ import { createFxEditor } from "./createFxTextEditor"
 
 export const DefaultFxTextSlateEditableProps: FxTextSlateEditableProps = {
   renderLeaf,
-  disableDefaultStyles: true,
+  disableDefaultStyles: false,
 }
 
 export function useFxTextEditor(
