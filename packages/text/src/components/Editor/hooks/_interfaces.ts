@@ -1,8 +1,18 @@
 import { Element, Node, Range } from "slate"
 import { TextFormat } from "../_types"
 import { TEditNodeFn } from "../blocks/_types"
-import { IFxTextBlockDefinition, InlineServiceTypes } from "../_index"
-import { ReactEventHandler, ReactNode } from "react"
+import {
+  IFxTextBlockDefinition,
+  InlineServiceTypes,
+  ToggleFxTextTableColAlignment,
+} from "../_index"
+import {
+  EventHandler,
+  MouseEventHandler,
+  ReactEventHandler,
+  ReactNode,
+  SyntheticEvent,
+} from "react"
 
 export interface IUseInlineStyleMenuPayload {
   isHidden: boolean
@@ -66,4 +76,17 @@ export interface IUseMentionMatchPayload {
 export interface IUseElementAtSelectionPayload {
   element: Element
   definition: IFxTextBlockDefinition<any>
+}
+
+export interface IUseSlateTableProps {
+  element: Element
+}
+export interface IUseSlateTablePayload {
+  addCol: EventHandler<SyntheticEvent>
+  addRow: EventHandler<SyntheticEvent>
+  deleteCol: EventHandler<SyntheticEvent>
+  deleteRow: EventHandler<SyntheticEvent>
+  setColAlignment: ToggleFxTextTableColAlignment
+  selectedPos: { row: number; col: number } | null
+  info: { rows: number; cols: number }
 }

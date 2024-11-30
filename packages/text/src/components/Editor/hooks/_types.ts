@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { MouseEventHandler, ReactNode } from "react"
 import { defaultInlineFormats } from "./useInlineStyleMenu"
 
 export type InlineServiceTypes = (typeof defaultInlineFormats)[number]
@@ -10,3 +10,8 @@ export type InlineServiceConfig = {
     setOverrideContent: () => void
   }) => ReactNode
 }
+
+export type FxTextTableColAlignment = "left" | "center" | "right"
+export type ToggleFxTextTableColAlignment = (
+  newAlign: FxTextTableColAlignment
+) => MouseEventHandler<HTMLButtonElement>
