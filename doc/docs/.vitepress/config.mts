@@ -64,6 +64,10 @@ export default withMermaid(
           text: "Concepts",
           items: [
             {
+              text: "Error management",
+              link: "/concepts/error-management",
+            },
+            {
               text: "User account & authentication",
               link: "/concepts/user-account-authentication",
             },
