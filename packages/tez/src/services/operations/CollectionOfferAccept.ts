@@ -3,7 +3,6 @@ import { getGentkLocalID } from "@/utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
-import { displayMutez } from "../../utils/units"
 import {
   buildParameters,
   EBuildableParams,
@@ -12,7 +11,7 @@ import { TezosContractOperation } from "./ContractOperation"
 import { CollectionOffer, Objkt } from "@fxhash/shared"
 
 export type TCollectionOfferAcceptOperationParams = {
-  offer: CollectionOffer
+  offer: Pick<CollectionOffer, "id">
   tokens: Objkt[]
   price: number
 }
@@ -96,11 +95,6 @@ export class CollectionOfferAcceptOperation extends TezosContractOperation<TColl
   }
 
   success(): string {
-    const [token] = this.params.tokens
-    const totalTokens = this.params.tokens.length
-    const price = this.params.price * totalTokens
-    return `You have accepted the offer on ${token.name} for ${displayMutez(
-      price
-    )} tez`
+    return "You have accepted the collection offer"
   }
 }
