@@ -12,7 +12,7 @@ export interface IArticleElementProcessor {
   transformSlateToMarkdownMdhast?: (
     node: unknown,
     next: (children: any[]) => any
-  ) => object | undefined
+  ) => object
   transformMarkdownMdhastToSlate?: (
     node: any,
     next: (children: any[]) => any

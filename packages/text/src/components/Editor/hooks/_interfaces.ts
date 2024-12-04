@@ -90,3 +90,11 @@ export interface IUseSlateTablePayload {
   selectedPos: { row: number; col: number } | null
   info: { rows: number; cols: number }
 }
+
+export interface IUseFocusElementProps {
+  element: Element
+}
+
+export interface IUseFocusElementPayload {
+  focusElement: () => void
+}
