@@ -2,7 +2,7 @@ import { IArticleElementProcessor } from "./_interfaces"
 
 export const blockquoteProcessor: IArticleElementProcessor = {
   transformMarkdownMdhastToSlate: (node: any, next: any) => {
-    const children = next(node.children)
+    let children = next(node.children)
 
     // If the only child is a paragraph, lift its children
     if (children.length === 1 && children[0].type === "paragraph") {
@@ -10,6 +10,10 @@ export const blockquoteProcessor: IArticleElementProcessor = {
         type: "blockquote",
         children: children[0].children,
       }
+    }
+
+    if (children.length === 0) {
+      children = [{ text: "" }]
     }
 
     return {

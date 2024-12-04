@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import remarkParse from "remark-parse"
 import { remarkToSlate, RemarkToSlateOptions } from "remark-slate-transformer"
-import { Descendant } from "slate"
+import { Descendant, Node } from "slate"
 import { unified } from "unified"
 import {
   IDirectiveNodeProps,
@@ -68,7 +68,7 @@ const remarkSlateTransformerOverrides: RemarkToSlateOptions["overrides"] = {
 
 interface PayloadSlateEditorStateFromMarkdown {
   [p: string]: any
-  editorState: Descendant[]
+  editorState: Node[]
 }
 
 export async function getSlateEditorStateFromMarkdown(
