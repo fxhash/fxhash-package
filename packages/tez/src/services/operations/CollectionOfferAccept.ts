@@ -8,11 +8,11 @@ import {
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { CollectionOffer, Objkt } from "@fxhash/shared"
+import type { CollectionOffer, Objkt } from "@fxhash/shared"
 
 export type TCollectionOfferAcceptOperationParams = {
   offer: Pick<CollectionOffer, "id">
-  tokens: Objkt[]
+  tokens: Pick<Objkt, "id" | "version" | "owner" | "activeListing">[]
   price: number
 }
 
@@ -27,7 +27,7 @@ export class CollectionOfferAcceptOperation extends TezosContractOperation<TColl
       const updateOperatorsParams = [
         {
           add_operator: {
-            owner: token.owner!.id,
+            owner: token.owner.id,
             operator: FxhashContracts.MARKETPLACE_V2,
             token_id: getGentkLocalID(token.id),
           },
