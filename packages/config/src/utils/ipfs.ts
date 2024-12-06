@@ -52,7 +52,7 @@ export function ipfsGatewayUrl(
  */
 export function proxyUrl(uri: string): string {
   // let blobs be blobs
-  if (uri.startsWith("blob:")) return uri
+  if (uri.startsWith("blob:") || uri.startsWith("data:")) return uri
 
   const [protocol, cid] = uri.split("://")
   switch (protocol) {
