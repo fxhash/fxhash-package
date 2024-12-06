@@ -30,7 +30,7 @@ export interface IUseFxTextEditorProps {
   inlineElements?: FxTextBlockType[]
   voidElements?: FxTextBlockType[]
   blockDefinitions?: FxTextBlockDefinitionOverrides
-  onMediasUpdate: (medias: FxTextEditorMediaFile[]) => void
+  onMediasUpdate?: (medias: FxTextEditorMediaFile[]) => void
   nodeMenu?: FxTextNodeMenuComponentType
 }
 
@@ -43,7 +43,7 @@ export interface IFxTextEditorProps extends PropsWithChildren {
   className?: string
   value: Node[]
   onChange: (value: Node[]) => void
-  onMediasUpdate: (medias: FxTextEditorMediaFile[]) => void
+  onMediasUpdate?: (medias: FxTextEditorMediaFile[]) => void
   placeholder?: EditableProps["placeholder"]
   blockDefinitions?: FxTextBlockDefinitionOverrides
   nodeMenu?: FxTextNodeMenuComponentType

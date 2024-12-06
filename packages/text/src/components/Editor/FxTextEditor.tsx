@@ -1,41 +1,46 @@
 import { Editable, Slate } from "slate-react"
 import { useFxTextEditor } from "./useFxTextEditor.js"
-import { IFxTextEditorProps } from "./_interfaces.js"
-import { useEffect } from "react"
+import { type IFxTextEditorProps } from "./_interfaces.js"
+import { forwardRef, useEffect, useImperativeHandle } from "react"
+import { FxTextEditor } from "./_types.js"
 
-export function FxTextSlate(props: IFxTextEditorProps) {
-  const {
-    value,
-    onMediasUpdate,
-    onChange,
-    placeholder,
-    className,
-    blockDefinitions,
-    children,
-    nodeMenu,
-    onInit,
-  } = props
-  const {
-    editor,
-    editableProps: { onKeyDown, ...defaultEditableProps },
-  } = useFxTextEditor({
-    onMediasUpdate,
-    blockDefinitions,
-    nodeMenu,
-  })
-  useEffect(() => {
-    onInit?.(editor)
-  }, [editor])
+export const FxTextSlate = forwardRef<FxTextEditor, IFxTextEditorProps>(
+  (props: IFxTextEditorProps, ref) => {
+    const {
+      value,
+      onMediasUpdate,
+      onChange,
+      placeholder,
+      className,
+      blockDefinitions,
+      children,
+      nodeMenu,
+      onInit,
+    } = props
+    const {
+      editor,
+      editableProps: { onKeyDown, ...defaultEditableProps },
+    } = useFxTextEditor({
+      onMediasUpdate,
+      blockDefinitions,
+      nodeMenu,
+    })
+    useEffect(() => {
+      onInit?.(editor)
+    }, [editor])
 
-  return (
-    <Slate editor={editor} initialValue={value} onChange={onChange}>
-      <Editable
-        {...defaultEditableProps}
-        onKeyDown={onKeyDown}
-        placeholder={placeholder}
-        className={className}
-      />
-      {children}
-    </Slate>
-  )
-}
+    useImperativeHandle(ref, () => editor, [editor])
+
+    return (
+      <Slate editor={editor} initialValue={value} onChange={onChange}>
+        <Editable
+          {...defaultEditableProps}
+          onKeyDown={onKeyDown}
+          placeholder={placeholder}
+          className={className}
+        />
+        {children}
+      </Slate>
+    )
+  }
+)
