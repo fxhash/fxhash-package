@@ -11,7 +11,7 @@ import {
 import {
   IWalletConnected,
   IWalletsSource,
-  Web3AuthFrameManager,
+  type Web3AuthFrameManager,
 } from "@/index.js"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
