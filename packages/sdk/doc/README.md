@@ -1,3 +1,3 @@
-# Use-cases
+# @fxhash/sdk
 
 Hello world!
