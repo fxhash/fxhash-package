@@ -8,11 +8,8 @@ import {
   Web3AuthFrameError,
   WithGqlErrors,
 } from "@fxhash/errors"
-import {
-  IWalletConnected,
-  IWalletsSource,
-  type Web3AuthFrameManager,
-} from "@/index.js"
+import { IWalletConnected, IWalletsSource } from "@/index.js"
+import { Web3AuthFrameManager } from "./FrameManager.js"
 
 export interface IWeb3AuthWalletUtil<Net extends BlockchainNetwork> {
   update: (detais: SessionDetails | null) => void
