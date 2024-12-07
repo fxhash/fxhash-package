@@ -21,8 +21,8 @@
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.2.18",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "@wagmi/connectors": "5.3.3",
@@ -30,7 +30,7 @@
     "connectkit": "1.8.2",
     "eslint": "8.45.0",
     "tsup": "8.2.4",
-    "typescript": "5.6.2",
+    "typescript": "5.7.2",
     "viem": "2.19.4",
     "vitest": "0.34.6",
     "wagmi": "2.12.25"
@@ -52,7 +52,7 @@
     "@wagmi/connectors": "5.3.3",
     "@wagmi/core": "2.14.1",
     "connectkit": "1.8.2",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "viem": "2.19.4",
     "wagmi": "2.12.25"

@@ -176,4 +176,15 @@ export interface IClientPlugnPlay {
    * Once called the client cannot be used anymore.
    */
   release: () => void
+
+  /**
+   * Override the function to initialize the ConnectKit. This function will be called
+   * when the client is initialized.
+   */
+  setConnectKitInit(initFn: () => Promise<void>): void
+
+  /**
+   * Override the function to open the ConnectKit modal.
+   */
+  setConnectKitModal(openFn: () => void): void
 }

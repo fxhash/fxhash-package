@@ -14,7 +14,7 @@ export interface Offer {
 }
 
 export interface CollectionOffer {
-  id: number
+  id: string
   version: number
   buyer: User
   token: GenerativeToken

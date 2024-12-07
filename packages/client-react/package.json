@@ -4,17 +4,21 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
+    "connectkit": "1.8.2",
     "input-otp": "1.2.4"
   },
   "devDependencies": {
     "@fxhash/sdk": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.2.18",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@wagmi/connectors": "5.3.3",
+    "@wagmi/core": "2.14.1",
     "esbuild-css-modules-plugin": "2.7.1",
     "tsup": "8.2.4",
-    "typescript": "5.6.2"
+    "typescript": "5.7.2",
+    "viem": "2.19.4"
   },
   "exports": {
     ".": {
@@ -33,7 +37,7 @@
     "@fxhash/sdk": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "@react-oauth/google": "0.12.1",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-otp-input": "3.1.1",
     "solid-js": "^1.9.3"

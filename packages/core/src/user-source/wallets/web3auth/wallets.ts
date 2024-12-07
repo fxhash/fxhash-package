@@ -81,6 +81,7 @@ export function web3AuthWallets({
     emitter,
     initialized: () => _init.finished,
     getAccount: () => null,
+    refetchAccount: () => null,
     supports: network =>
       [BlockchainNetwork.ETHEREUM, BlockchainNetwork.TEZOS].includes(network),
     requirements: () => ({
