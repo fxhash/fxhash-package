@@ -7,11 +7,11 @@ hero:
   tagline: Build all kinds of applications on top of fxhash using our versatile sdk
   actions:
     - theme: brand
+      text: Getting started
+      link: /introduction/getting-started
+    - theme: alt
       text: Discover use-cases
       link: /use-cases
-    - theme: alt
-      text: Getting started
-      link: /getting-started
 
 features:
   - title: Low-to-High level APIs
