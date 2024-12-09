@@ -27,6 +27,7 @@ export const FxTextSlate = forwardRef<FxTextEditor, IFxTextEditorProps>(
     })
     useEffect(() => {
       onInit?.(editor)
+      onChange?.(value)
     }, [editor])
 
     useImperativeHandle(ref, () => editor, [editor])
