@@ -1,58 +1,121 @@
 import fs from "node:fs"
 import path from "node:path"
 import { defineConfig } from "vitepress"
-import { PACKAGES } from "../../manifest"
+import { PACKAGES } from "../../scripts/manifest"
 import { DefaultTheme } from "vitepress"
+import { withMermaid } from "vitepress-plugin-mermaid"
 
 type SidebarItem = DefaultTheme.SidebarItem
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
-  title: "fxhash sdk",
-  description:
-    "Build all kinds of applications on top of fxhash using our versatile sdk",
-  themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: "Home", link: "/" },
-      { text: "Getting started", link: "/getting-started" },
-    ],
+export default withMermaid(
+  defineConfig({
+    title: "fxhash sdk",
+    description:
+      "Build all kinds of applications on top of fxhash using our versatile sdk",
+    themeConfig: {
+      // https://vitepress.dev/reference/default-theme-config
+      nav: [
+        { text: "Home", link: "/" },
+        { text: "Getting started", link: "/introduction/getting-started" },
+      ],
 
-    sidebar: [
-      {
-        text: "Introduction",
-        items: [
-          {
-            text: "Use cases",
-            link: "/use-cases",
-          },
-          {
-            text: "Getting started",
-            link: "/getting-started",
-          },
-        ],
-      },
-      {
-        text: "Concepts",
-        items: [],
-      },
-      {
-        text: "Packages",
-        items: PACKAGES.map(pkg => pkgSidebarItem(pkg)),
-      },
-    ],
+      sidebar: [
+        {
+          text: "Introduction",
+          items: [
+            {
+              text: "Getting started",
+              link: "/introduction/getting-started",
+            },
+            {
+              text: "Usage",
+              link: "/introduction/usage",
+            },
+            {
+              text: "Features",
+              link: "/introduction/features",
+            },
+          ],
+        },
+        {
+          text: "Use cases",
+          link: "/use-cases",
+          items: [
+            {
+              text: "Project showcase",
+              link: "/use-cases/project-showcase",
+            },
+            {
+              text: "Customized minting page",
+              link: "/use-cases/customized-minting-page",
+            },
+            {
+              text: "Scrap data",
+              link: "/use-cases/scrap-data",
+            },
+            {
+              text: "Nodejs minter",
+              link: "/use-cases/nodejs-minter",
+            },
+          ],
+        },
+        {
+          text: "Concepts",
+          items: [
+            {
+              text: "Error management",
+              link: "/concepts/error-management",
+            },
+            {
+              text: "User account & authentication",
+              link: "/concepts/user-account-authentication",
+            },
+            {
+              text: "Wallet options",
+              link: "/concepts/wallet-options",
+            },
+            {
+              text: "Cross-environment",
+              link: "/concepts/cross-environment",
+            },
+          ],
+        },
+        {
+          text: "Packages",
+          items: PACKAGES.map(pkg => pkgSidebarItem(pkg)),
+        },
+      ],
 
-    socialLinks: [
-      { icon: "github", link: "https://github.com/fxhash/fxhash-package" },
-    ],
-  },
+      socialLinks: [
+        { icon: "github", link: "https://github.com/fxhash/fxhash-package" },
+      ],
+    },
 
-  /**
-   * Removes `.html` extension at the end of URLs
-   * https://vitepress.dev/guide/routing#generating-clean-url
-   */
-  cleanUrls: true,
-})
+    /**
+     * Removes `.html` extension at the end of URLs
+     * https://vitepress.dev/guide/routing#generating-clean-url
+     */
+    cleanUrls: true,
+
+    ignoreDeadLinks: true,
+
+    /**
+     * Allows README.md files to be considered as index files
+     * (for integration with github & cleaner URLs)
+     */
+    rewrites: {
+      "README.md": "index.md",
+      "(.*)/README.md": "(.*)/index.md",
+    },
+
+    mermaid: {
+      sequence: {
+        showSequenceNumbers: true,
+      },
+    },
+  })
+)
 
 /**
  * Generates a package sidebar item using the package `sidebar.json` file.
@@ -63,7 +126,7 @@ function pkgSidebarItem(pkg: string): SidebarItem {
   ) as SidebarItem[]
   const out: SidebarItem = {
     text: `@fxhash/${pkg}`,
-    link: `/packages/${pkg}/README`,
+    link: `/packages/${pkg}/`,
     collapsed: true,
     items: sidebarLinks(pkgSidebar, `/packages/${pkg}`),
   }
