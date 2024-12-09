@@ -12,7 +12,10 @@ import type { CollectionOffer, Objkt } from "@fxhash/shared"
 
 export type TCollectionOfferAcceptOperationParams = {
   offer: Pick<CollectionOffer, "id">
-  tokens: Pick<Objkt, "id" | "version" | "owner" | "activeListing">[]
+  tokens: (Pick<Objkt, "id" | "version"> & {
+    activeListing: Pick<Objkt["activeListing"], "id" | "version">
+    owner_id: string
+  })[]
   price: number
 }
 
@@ -27,7 +30,7 @@ export class CollectionOfferAcceptOperation extends TezosContractOperation<TColl
       const updateOperatorsParams = [
         {
           add_operator: {
-            owner: token.owner.id,
+            owner: token.owner_id,
             operator: FxhashContracts.MARKETPLACE_V2,
             token_id: getGentkLocalID(token.id),
           },
