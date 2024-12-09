@@ -48,6 +48,7 @@ export type Web3AuthFrameConfig = {
 type TMessages = Web3AuthFrameMessageTypes
 
 /**
+ *
  * Responsible for managing the `<iframe>` which holds the fxhash wallet. Acts
  * as a high level interface to send/receives message to/from the fxhash wallet.
  *
@@ -101,7 +102,7 @@ export class Web3AuthFrameManager extends IframeBDCommHost<
     void,
     Web3AuthFrameNotLoading | Web3AuthFrameNotResponding
   > {
-    return new Promise(async resolve => {
+    return new Promise(resolve => {
       // Check if another instance already exists, if so we can just recover the
       // state from this existing instance.
       const existingDiv = document.querySelector(".__fxhash__wallet")

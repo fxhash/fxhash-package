@@ -18,7 +18,7 @@ export const isProd: boolean = (() => {
     process.env.REACT_APP_FXHASH_ENV === "prd" ||
     process.env.REACT_APP_FXHASH_ENV === "production" ||
     process.env.VITE_FXHASH_ENV === "prd" ||
-    process.env.VITE_APP_FXHASH_ENV === "production"
+    process.env.VITE_FXHASH_ENV === "production"
   )
 })()
 
