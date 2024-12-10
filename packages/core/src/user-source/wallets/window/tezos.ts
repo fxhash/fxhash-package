@@ -89,16 +89,19 @@ export function tzip10WalletSource({
     ...wallet.source,
     requestConnection: async () => {
       try {
-        return await _beaconWallet?.requestPermissions()
+        await _beaconWallet?.requestPermissions()
       } catch (e) {
         const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
           .AbortedBeaconError
         if (e instanceof AbortedBeaconError)
-          throw new WalletSourceRequestConnectionRejectedError()
-        throw new WalletSourceRequestConnectionUnknownError(
-          (e as Error).message ?? "Unknown error"
+          return failure(new WalletSourceRequestConnectionRejectedError())
+        return failure(
+          new WalletSourceRequestConnectionUnknownError(
+            (e as Error).message ?? "Unknown error"
+          )
         )
       }
+      return success()
     },
   }
 }

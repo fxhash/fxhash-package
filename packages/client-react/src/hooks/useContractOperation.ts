@@ -15,7 +15,7 @@ import {
   setIntervalCapped,
   RichError,
 } from "@fxhash/sdk"
-import { ReactClientNoWalletConnectedError } from "@fxhash/errors"
+import { NoWalletConnectedForNetworkError } from "@fxhash/errors"
 import {
   useEvmWallet,
   useEvmWalletConnected,
@@ -306,7 +306,7 @@ export function useContractOperation<
             called: false,
             loading: false,
             data: undefined,
-            error: new ReactClientNoWalletConnectedError() as TError,
+            error: new NoWalletConnectedForNetworkError(network) as TError,
             params,
             txHash: undefined,
           }))
@@ -345,7 +345,7 @@ export function useContractOperation<
             called: false,
             loading: false,
             data: undefined,
-            error: new ReactClientNoWalletConnectedError() as TError,
+            error: new NoWalletConnectedForNetworkError(network) as TError,
             params,
             txHash: undefined,
           }))

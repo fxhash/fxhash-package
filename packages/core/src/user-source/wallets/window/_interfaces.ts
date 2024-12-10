@@ -1,5 +1,7 @@
 import { IWalletsSource } from "@/index.js"
 import { BlockchainNetwork } from "@fxhash/shared"
+import { PromiseResult } from "@fxhash/utils"
+import { WalletSourceRequestConnectionError } from "@fxhash/errors"
 
 export interface IWindowWalletsSource extends IWalletsSource {
   /**
@@ -10,5 +12,7 @@ export interface IWindowWalletsSource extends IWalletsSource {
    * @param network The network on which a connection should be requested
    * @returns A promise that resolves when the connection request is complete.
    */
-  requestConnection: (network: BlockchainNetwork) => Promise<void>
+  requestConnection: (
+    network: BlockchainNetwork
+  ) => PromiseResult<void, WalletSourceRequestConnectionError>
 }

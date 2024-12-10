@@ -8,7 +8,8 @@ import type {
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
-import { AtLeastOne } from "@fxhash/utils"
+import { AtLeastOne, PromiseResult } from "@fxhash/utils"
+import { WalletSourceRequestConnectionError } from "@fxhash/errors"
 
 /**
  * Options for creating a Client PlugnPlay
@@ -112,7 +113,9 @@ export interface IClientPlugnPlay {
    * @param network Network on which a connection attempt should be made.
    * @returns A promise which resolves when the connection attempt is complete.
    */
-  connectWallet: (network: BlockchainNetwork) => Promise<void>
+  connectWallet: (
+    network: BlockchainNetwork
+  ) => PromiseResult<void, WalletSourceRequestConnectionError>
 
   /**
    * Initialize the whole client. Must be called before using any of the client

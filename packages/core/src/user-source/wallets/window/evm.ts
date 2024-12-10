@@ -200,11 +200,14 @@ export function eip1193WalletSource({
         await connect(wagmiConfig, { connector: injected() })
       } catch (e) {
         if (e instanceof UserRejectedRequestError)
-          throw new WalletSourceRequestConnectionRejectedError()
-        throw new WalletSourceRequestConnectionUnknownError(
-          (e as Error).message ?? "Unknown error"
+          return failure(new WalletSourceRequestConnectionRejectedError())
+        return failure(
+          new WalletSourceRequestConnectionUnknownError(
+            (e as Error).message ?? "Unknown error"
+          )
         )
       }
+      return success()
     },
   }
 }
