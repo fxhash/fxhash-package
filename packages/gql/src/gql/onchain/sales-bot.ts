@@ -30,6 +30,7 @@ export const Qu_GetActionSalesBot = graphql(`
         }
         objkt {
           id
+          slug
           name
           metadata
           thumbnail_uri
