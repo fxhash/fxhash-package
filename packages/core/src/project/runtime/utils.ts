@@ -56,6 +56,25 @@ export function getSnippetVersionFromProject(project: {
 }
 
 /**
+ * Given a project with its metadata this function will return the
+ * cid of the project.
+ *
+ * Why is this relevant? Although its in general prefered
+ * to use the genrative_uri for the source of an artwork generator.
+ * Early projects do not store the previewHash in their metadata. Therefore
+ * it is required to use the actual artifactUri in the runtime in order to
+ * reconstruct the preview image.
+ */
+export function getCidFromProject(project: {
+  generative_uri: string
+  metadata: Record<string, any>
+}): string {
+  if (!project.metadata.previewHash && project.metadata.artifactUri)
+    return project.metadata.artifactUri
+  return project.generative_uri
+}
+
+/**
  * Enhances the runtime definition with the version of the runtime.
  * Adding the version number to each control definition can be useful for
  * granular control of the runtime controls.
