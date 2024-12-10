@@ -4,7 +4,7 @@
  */
 
 import { createClient, ICreateClientParams } from "@/basic/_index.js"
-import { cleanup, intialization, invariant } from "@fxhash/utils"
+import { cleanup, intialization, invariant, success } from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
@@ -133,32 +133,31 @@ export function createClientPlugnPlay({
       )
 
       // Check if already connected
-      // TODO: ensure we want to resolve if already connected
       if (client.userSource.getWallet(BlockchainNetwork.ETHEREUM)?.connected) {
         resolve()
         return
       }
 
-      // Open the modal
-      _openConnectKitModal()
-
-      // Poll for either successful connection or modal closure
+      // Poll for modal closure
       const checkInterval = setInterval(() => {
-        // Check if connected successfully
-        if (
-          client.userSource.getWallet(BlockchainNetwork.ETHEREUM)?.connected
-        ) {
-          clearInterval(checkInterval)
-          resolve()
-          return
-        }
-
         // Check if modal was closed without connecting
         if (!_isConnectKitOpen?.() && !_isConnectKitConnected?.()) {
           clearInterval(checkInterval)
           reject(new Error("Modal closed without connecting"))
         }
       }, 500)
+
+      // Listen for user-changed event
+      clean.add(
+        client.userSource.emitter.on("user-changed", () => {
+          clearInterval(checkInterval)
+          resolve()
+          return
+        })
+      )
+
+      // Open the modal
+      _openConnectKitModal()
     })
   }
 
@@ -228,7 +227,8 @@ export function createClientPlugnPlay({
     emitter,
 
     async connectWallet(network: BlockchainNetwork) {
-      return requestConnection(network)
+      await requestConnection(network)
+      return success()
     },
 
     async init() {
