@@ -3419,10 +3419,22 @@ type RequestMintResult {
 }
 
 type SearchEntity {
+  account: SearchEntityAccount
+  height: Int
   id: String!
+  media: String
+  placeholder: String
   score: Int!
+  slug: String
   title: String!
   type: String!
+  width: Int
+}
+
+type SearchEntityAccount {
+  media: String
+  username: String!
+  verified: Boolean!
 }
 
 type SearchEntityResult {
@@ -4600,6 +4612,11 @@ type any_offer {
   """
   buyer: user
   buyer_id: String
+
+  """
+  An object relationship
+  """
+  collection_offer: collection_offer
   created_at: timestamptz
 
   """
@@ -4661,6 +4678,7 @@ input any_offer_bool_exp {
   _or: [any_offer_bool_exp!]
   buyer: user_bool_exp
   buyer_id: String_comparison_exp
+  collection_offer: collection_offer_bool_exp
   created_at: timestamptz_comparison_exp
   generative_token: generative_token_bool_exp
   id: String_comparison_exp
@@ -4709,6 +4727,7 @@ Ordering options when selecting data from "any_offer".
 input any_offer_order_by {
   buyer: user_order_by
   buyer_id: order_by
+  collection_offer: collection_offer_order_by
   created_at: order_by
   generative_token: generative_token_order_by
   id: order_by
@@ -7803,6 +7822,11 @@ type collaboration {
   An object relationship
   """
   userByCollaboratorId: user!
+
+  """
+  An object relationship
+  """
+  wallet: foreign_wallet
 }
 
 """
@@ -7825,6 +7849,7 @@ input collaboration_bool_exp {
   collaborator_id: String_comparison_exp
   user: user_bool_exp
   userByCollaboratorId: user_bool_exp
+  wallet: foreign_wallet_bool_exp
 }
 
 """
@@ -7851,6 +7876,7 @@ input collaboration_order_by {
   collaborator_id: order_by
   user: user_order_by
   userByCollaboratorId: user_order_by
+  wallet: foreign_wallet_order_by
 }
 
 """

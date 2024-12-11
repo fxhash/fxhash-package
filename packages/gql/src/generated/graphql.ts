@@ -2393,10 +2393,23 @@ export type RequestMintResult = {
 
 export type SearchEntity = {
   __typename?: 'SearchEntity';
+  account?: Maybe<SearchEntityAccount>;
+  height?: Maybe<Scalars['Int']['output']>;
   id: Scalars['String']['output'];
+  media?: Maybe<Scalars['String']['output']>;
+  placeholder?: Maybe<Scalars['String']['output']>;
   score: Scalars['Int']['output'];
+  slug?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   type: Scalars['String']['output'];
+  width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type SearchEntityAccount = {
+  __typename?: 'SearchEntityAccount';
+  media?: Maybe<Scalars['String']['output']>;
+  username: Scalars['String']['output'];
+  verified: Scalars['Boolean']['output'];
 };
 
 export type SearchEntityResult = {
@@ -3269,6 +3282,8 @@ export type Any_Offer = {
   /** An object relationship */
   buyer?: Maybe<User>;
   buyer_id?: Maybe<Scalars['String']['output']>;
+  /** An object relationship */
+  collection_offer?: Maybe<Collection_Offer>;
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   /** An object relationship */
   generative_token?: Maybe<Generative_Token>;
@@ -3326,6 +3341,7 @@ export type Any_Offer_Bool_Exp = {
   _or?: InputMaybe<Array<Any_Offer_Bool_Exp>>;
   buyer?: InputMaybe<User_Bool_Exp>;
   buyer_id?: InputMaybe<String_Comparison_Exp>;
+  collection_offer?: InputMaybe<Collection_Offer_Bool_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
@@ -3370,6 +3386,7 @@ export type Any_Offer_Min_Fields = {
 export type Any_Offer_Order_By = {
   buyer?: InputMaybe<User_Order_By>;
   buyer_id?: InputMaybe<Order_By>;
+  collection_offer?: InputMaybe<Collection_Offer_Order_By>;
   created_at?: InputMaybe<Order_By>;
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   id?: InputMaybe<Order_By>;
@@ -5552,6 +5569,8 @@ export type Collaboration = {
   user: User;
   /** An object relationship */
   userByCollaboratorId: User;
+  /** An object relationship */
+  wallet?: Maybe<Foreign_Wallet>;
 };
 
 /** order by aggregate values of table "collaboration" */
@@ -5570,6 +5589,7 @@ export type Collaboration_Bool_Exp = {
   collaborator_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   userByCollaboratorId?: InputMaybe<User_Bool_Exp>;
+  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
 };
 
 /** order by max() on columns of table "collaboration" */
@@ -5590,6 +5610,7 @@ export type Collaboration_Order_By = {
   collaborator_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   userByCollaboratorId?: InputMaybe<User_Order_By>;
+  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
 };
 
 /** select columns of table "collaboration" */
