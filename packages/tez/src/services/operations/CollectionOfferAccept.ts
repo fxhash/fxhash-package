@@ -3,17 +3,19 @@ import { getGentkLocalID } from "@/utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
-import { displayMutez } from "../../utils/units"
 import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { CollectionOffer, Objkt } from "@fxhash/shared"
+import type { CollectionOffer, Objkt } from "@fxhash/shared"
 
 export type TCollectionOfferAcceptOperationParams = {
-  offer: CollectionOffer
-  tokens: Objkt[]
+  offer: Pick<CollectionOffer, "id">
+  tokens: (Pick<Objkt, "id" | "version"> & {
+    activeListing: Pick<Objkt["activeListing"], "id" | "version">
+    owner_id: string
+  })[]
   price: number
 }
 
@@ -28,7 +30,7 @@ export class CollectionOfferAcceptOperation extends TezosContractOperation<TColl
       const updateOperatorsParams = [
         {
           add_operator: {
-            owner: token.owner!.id,
+            owner: token.owner_id,
             operator: FxhashContracts.MARKETPLACE_V2,
             token_id: getGentkLocalID(token.id),
           },
@@ -96,11 +98,6 @@ export class CollectionOfferAcceptOperation extends TezosContractOperation<TColl
   }
 
   success(): string {
-    const [token] = this.params.tokens
-    const totalTokens = this.params.tokens.length
-    const price = this.params.price * totalTokens
-    return `You have accepted the offer on ${token.name} for ${displayMutez(
-      price
-    )} tez`
+    return "You have accepted the collection offer"
   }
 }
