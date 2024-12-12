@@ -227,4 +227,4 @@ export const FX_ROLE_REGISTRY_ABI = [
     ],
     anonymous: false,
   },
-]
+] as const

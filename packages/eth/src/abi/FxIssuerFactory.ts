@@ -602,4 +602,4 @@ export const FX_ISSUER_FACTORY_ABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
-]
+] as const

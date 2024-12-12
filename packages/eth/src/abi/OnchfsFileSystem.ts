@@ -229,4 +229,4 @@ export const ONCHFS_FILE_SYSTEM_ABI = [
     stateMutability: "view",
     type: "function",
   },
-]
+] as const

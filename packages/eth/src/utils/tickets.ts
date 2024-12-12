@@ -1,7 +1,7 @@
 import { FX_TICKETS_ABI } from "@/abi/FxTicket.js"
-import { PublicClient, getContract } from "viem"
+import { getContract } from "viem"
 import { EthereumWalletManager } from ".."
-import { BlockchainType } from "@fxhash/shared"
+import type { BlockchainType } from "@fxhash/shared"
 
 export async function getBalance(
   walletManager: EthereumWalletManager,
@@ -13,7 +13,7 @@ export async function getBalance(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: walletManager.publicClient,
+    client: walletManager.publicClient,
   })
   const dailyTax = await contract.read.balances([user])
   return dailyTax as bigint
@@ -29,7 +29,7 @@ export async function getDailyTax(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: walletManager.publicClient,
+    client: walletManager.publicClient,
   })
   const dailyTax = await contract.read.getDailyTax([price])
   return dailyTax as bigint
@@ -45,7 +45,7 @@ export async function isForeclosed(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: walletManager.publicClient,
+    client: walletManager.publicClient,
   })
   const isForeclosed = await contract.read.isForeclosed([tokenId])
   return isForeclosed as boolean
@@ -62,7 +62,7 @@ export async function getAuctionPrice(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: walletManager.publicClient,
+    client: walletManager.publicClient,
   })
   const auctionPrice = await contract.read.getAuctionPrice([
     price,
@@ -81,7 +81,7 @@ export async function getTaxInfo(
   const contract = getContract({
     address: ticket,
     abi: FX_TICKETS_ABI,
-    publicClient: walletManager.publicClient,
+    client: walletManager.publicClient,
   })
   const taxInfo = (await contract.read.taxes([tokenId])) as unknown as bigint[]
   return {
@@ -118,7 +118,6 @@ export async function getMinimumClaimValueForNewPrice(
       chain
     )
     return auctionPrice + newDailyTax
-  } else {
-    return taxInfo.currentPrice + newDailyTax
   }
+  return taxInfo.currentPrice + newDailyTax
 }

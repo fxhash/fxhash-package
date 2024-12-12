@@ -73,4 +73,4 @@ export const ONCHFS_CONTENT_STORE = [
     stateMutability: "view",
     type: "function",
   },
-]
+] as const

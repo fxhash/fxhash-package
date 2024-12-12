@@ -1062,4 +1062,4 @@ export const RESERVOIR_SEAPORT_MODULE_ABI = [
     type: "function",
   },
   { stateMutability: "payable", type: "receive" },
-]
+] as const

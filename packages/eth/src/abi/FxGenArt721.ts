@@ -1945,4 +1945,4 @@ export const FX_GEN_ART_721_ABI = [
     name: "WriteError",
     inputs: [],
   },
-]
+] as const

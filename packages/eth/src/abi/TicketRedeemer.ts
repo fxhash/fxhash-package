@@ -343,4 +343,4 @@ export const TICKET_REDEEMER_ABI = [
     name: "ZeroAddress",
     inputs: [],
   },
-]
+] as const
