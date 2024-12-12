@@ -33,9 +33,9 @@ import {
 import { invariant } from "@fxhash/utils"
 
 export enum MintTypes {
-  FIXED_PRICE = 0,
-  DUTCH_AUCTION = 1,
-  TICKET = 2,
+  FIXED_PRICE,
+  DUTCH_AUCTION,
+  TICKET,
 }
 
 //Type definition for the primary and royalties receivers
