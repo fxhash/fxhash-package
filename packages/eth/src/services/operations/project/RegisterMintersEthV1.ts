@@ -3,14 +3,14 @@ import { encodeFunctionData, getAddress } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import { FX_TICKETS_ABI } from "@/abi/FxTicket.js"
 import {
-  DutchAuctionMintInfoArgs,
-  FixedPriceMintInfoArgs,
+  type DutchAuctionMintInfoArgs,
+  type FixedPriceMintInfoArgs,
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
-  TicketMintInfoArgs,
+  type SimulateAndExecuteContractRequest,
+  type TicketMintInfoArgs,
 } from "@/services/operations/EthCommon.js"
 import { proposeSafeTransaction } from "@/services/Safe.js"
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { processAndFormatMintInfos } from "@/utils/minters.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
@@ -59,23 +59,24 @@ export class RegisterMintersEthV1Operation extends EthereumContractOperation<TRe
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      const args: SimulateAndExecuteContractRequest = {
-        address: this.params.token,
-        abi: this.params.isTicket ? FX_TICKETS_ABI : FX_GEN_ART_721_ABI,
-        functionName: "registerMinters",
-        args: [payloadArgs],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        args
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    const abi = this.params.isTicket ? FX_TICKETS_ABI : FX_GEN_ART_721_ABI
+    const args: SimulateAndExecuteContractRequest<
+      typeof abi,
+      "registerMinters"
+    > = {
+      address: this.params.token,
+      abi: abi,
+      functionName: "registerMinters",
+      args: [payloadArgs],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 
