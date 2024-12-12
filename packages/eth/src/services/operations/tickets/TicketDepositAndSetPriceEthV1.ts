@@ -3,7 +3,7 @@ import { FX_TICKETS_ABI } from "@/abi/FxTicket.js"
 import { getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
@@ -23,7 +23,10 @@ export class TicketDepositAndSetPriceEthV1Operation extends EthereumContractOper
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_TICKETS_ABI,
+      "depositAndSetPrice"
+    > = {
       address: this.params.ticket as `0x${string}`,
       abi: FX_TICKETS_ABI,
       functionName: "depositAndSetPrice",
