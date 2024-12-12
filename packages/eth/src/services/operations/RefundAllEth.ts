@@ -2,7 +2,7 @@ import { EthereumContractOperation } from "./contractOperation.js"
 import { encodeFunctionData } from "viem"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
@@ -30,7 +30,11 @@ export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllE
       data: encodeFunctionData({
         abi: DUTCH_AUCTION_MINTER_ABI,
         functionName: "refund",
-        args: [this.params.token, reserveId, this.params.minter],
+        args: [
+          this.params.token as `0x${string}`,
+          BigInt(reserveId),
+          this.params.minter as `0x${string}`,
+        ],
       }),
     }))
 
@@ -39,7 +43,10 @@ export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllE
       callData: call.data,
     }))
 
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof MULTICALL3_ABI,
+      "aggregate"
+    > = {
       address: config.eth.contracts.multicall3,
       abi: MULTICALL3_ABI,
       functionName: "aggregate",

@@ -231,9 +231,13 @@ export async function handleContractError(error: any): Promise<string> {
  */
 export async function simulateAndExecuteContract<
   abi extends Abi | readonly unknown[] = Abi,
+  functionName extends ContractFunctionName<
+    abi,
+    "nonpayable" | "payable"
+  > = ContractFunctionName<abi, "nonpayable" | "payable">,
 >(
   walletManager: EthereumWalletManager,
-  args: SimulateAndExecuteContractRequest<abi>
+  args: SimulateAndExecuteContractRequest<abi, functionName>
 ): Promise<string> {
   //fetch the account from the wallet
   const account = walletManager.walletClient.account
@@ -304,7 +308,7 @@ export async function predictFxContractAddress(
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
     functionName:
       factoryType === "ticket" ? "getTicketAddress" : "getTokenAddress",
-    args: [nonceAddress],
+    args: [nonceAddress as `0x${string}`],
   })
   return address as `0x${string}`
 }
@@ -455,19 +459,4 @@ export function revertReceiversFee(
   }
 
   return originalReceivers
-}
-
-export async function generateOnchainDataHash(
-  bytes: `0x${string}`,
-  walletManager: EthereumWalletManager,
-  chain: BlockchainType
-) {
-  const currentConfig = getConfigForChain(chain)
-  await walletManager.prepareSigner({ blockchainType: chain })
-  return await walletManager.publicClient.readContract({
-    address: currentConfig.contracts.gen_art_token_impl_v1,
-    abi: FX_GEN_ART_721_ABI,
-    functionName: "generateOnchainDataHash",
-    args: [bytes],
-  })
 }
