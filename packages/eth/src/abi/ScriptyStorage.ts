@@ -352,4 +352,4 @@ export const SCRIPTY_STORAGE_ABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
-]
+] as const

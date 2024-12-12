@@ -1103,4 +1103,4 @@ export const DUTCH_AUCTION_MINTER_ABI = [
     name: "Unauthorized",
     inputs: [],
   },
-]
+] as const
