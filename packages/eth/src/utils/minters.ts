@@ -644,7 +644,7 @@ export const fetchTokenReserveId = async (
 export async function getFirstValidReserve(
   minter: `0x${string}`,
   publicClient: PublicClient,
-  abi: unknown[],
+  abi: any[],
   token: `0x${string}`
 ): Promise<bigint> {
   if (token === "0x914cf2d92b087C9C01a062111392163c3B35B60e") return BigInt(1)

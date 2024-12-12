@@ -3,7 +3,7 @@ import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
@@ -45,16 +45,19 @@ export class MintFixedPriceWhitelistEthV1Operation extends EthereumContractOpera
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FIXED_PRICE_MINTER_ABI,
+      "buyAllowlist"
+    > = {
       address: currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buyAllowlist",
       args: [
-        this.params.token,
-        this.params.reserveId,
-        this.params.to,
-        this.params.index,
-        this.params.proof,
+        this.params.token as `0x${string}`,
+        BigInt(this.params.reserveId),
+        this.params.to as `0x${string}`,
+        this.params.index.map(BigInt),
+        this.params.proof as `0x${string}`[][],
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
