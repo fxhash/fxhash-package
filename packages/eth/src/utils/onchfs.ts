@@ -93,7 +93,7 @@ export function ethOnchfsInscriptionCallData(
           args: Object.keys(ins.files)
             .sort()
             .map(key => [key, ins.files[key]])
-            .reduce<[string[], string[]]>(
+            .reduce<[string[], `0x${string}`[]]>(
               (acc, [name, content]) => [
                 [...acc[0], name as string],
                 [...acc[1], bytesToHex(content as Uint8Array)],
