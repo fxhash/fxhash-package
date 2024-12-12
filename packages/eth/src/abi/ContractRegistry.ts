@@ -412,4 +412,4 @@ export const CONTRACT_REGISTRY_ABI = [
     stateMutability: "payable",
     type: "function",
   },
-]
+] as const
