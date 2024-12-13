@@ -234,6 +234,7 @@ export const withMediaSupport: EnhanceEditorWith = (
           }
         }
       }
+      return
     }
 
     // fallback to regular normalization
