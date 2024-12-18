@@ -1,4 +1,5 @@
 export * from "./common.js"
 export * from "./graphql/_index.js"
 export * from "./network.js"
+export * from "./wallet-api.js"
 export * from "./web3auth.js"

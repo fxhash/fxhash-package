@@ -1,10 +1,14 @@
-import { getClient, Execute, adaptViemWallet } from "@reservoir0x/reservoir-sdk"
+import {
+  getClient,
+  type Execute,
+  adaptViemWallet,
+} from "@reservoir0x/reservoir-sdk"
 import {
   decodeFunctionData,
   encodeFunctionData,
   TransactionExecutionError,
 } from "viem"
-import {
+import type {
   ReservoirAcceptOfferParams,
   ReservoirBuyTokenParams,
   ReservoirExecuteBidParams,
@@ -17,11 +21,11 @@ import { getBidSteps, getBuySteps, getListingSteps } from "../reservoir/api.js"
 import { RESERVOIR_ABI } from "@/abi/Reservoir.js"
 import { RESERVOIR_SEAPORT_MODULE_ABI } from "@/abi/ReservoirSeaportModule.js"
 import {
-  EthereumWalletManager,
+  type EthereumWalletManager,
   getConfigForChain,
   getCurrentChain,
 } from "../Wallet.js"
-import { BlockchainType, UserRejectedError } from "@fxhash/shared"
+import { type BlockchainType, UserRejectedError } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
 import { RESERVOIR_API_URLS } from "../Reservoir.js"
 

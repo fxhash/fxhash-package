@@ -437,4 +437,4 @@ export const MULTICALL3_ABI = [
     stateMutability: "payable",
     type: "function",
   },
-]
+] as const

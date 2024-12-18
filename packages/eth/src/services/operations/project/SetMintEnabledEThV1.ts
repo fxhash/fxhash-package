@@ -3,10 +3,10 @@ import { encodeFunctionData, getAddress } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { proposeSafeTransaction } from "@/services/Safe.js"
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 
@@ -43,23 +43,23 @@ export class SetMintEnabledEthV1Operation extends EthereumContractOperation<TSet
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      const args: SimulateAndExecuteContractRequest = {
-        address: this.params.token,
-        abi: FX_GEN_ART_721_ABI,
-        functionName: "setMintEnabled",
-        args: [this.params.enabled],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        args
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_GEN_ART_721_ABI,
+      "setMintEnabled"
+    > = {
+      address: this.params.token,
+      abi: FX_GEN_ART_721_ABI,
+      functionName: "setMintEnabled",
+      args: [this.params.enabled],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 

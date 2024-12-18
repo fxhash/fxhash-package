@@ -719,4 +719,4 @@ export const FARCASTER_FRAME_FIXED_PRICE_MINTER = [
     name: "ZeroAddress",
     inputs: [],
   },
-]
+] as const

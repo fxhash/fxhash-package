@@ -2,11 +2,11 @@ import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import { EthereumContractOperation } from "../contractOperation.js"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
-  DutchAuctionMintInfoArgs,
-  FixedPriceMintInfoArgs,
+  type DutchAuctionMintInfoArgs,
+  type FixedPriceMintInfoArgs,
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
-  TicketMintInfoArgs,
+  type SimulateAndExecuteContractRequest,
+  type TicketMintInfoArgs,
 } from "@/services/operations/EthCommon.js"
 import { processAndFormatMintInfos } from "@/utils/minters.js"
 import { TransactionType } from "@fxhash/shared"
@@ -37,13 +37,16 @@ export class CreateTicketEthV1Operation extends EthereumContractOperation<TCreat
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_TICKETS_FACTORY_ABI,
+      "createTicket"
+    > = {
       address: currentConfig.contracts.mint_ticket_factory_v1,
       abi: FX_TICKETS_FACTORY_ABI,
       functionName: "createTicket",
       args: [
-        this.manager.address,
-        this.params.token,
+        this.manager.address as `0x${string}`,
+        this.params.token as `0x${string}`,
         currentConfig.contracts.ticket_redeemer_v1,
         currentConfig.contracts.ipfs_renderer_v1,
         this.params.gracePeriod,
