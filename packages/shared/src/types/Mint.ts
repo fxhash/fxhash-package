@@ -34,6 +34,10 @@ export interface CaptureSettings {
   delay?: number
   resolution?: Vec2
   gpu?: boolean
+  gif?: boolean
+  frameCount?: number
+  captureInterval?: number
+  playbackFps?: number
 }
 
 // object defining the fx(params) when minting a Generative Token
