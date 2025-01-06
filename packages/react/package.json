@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2",
+    "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2",
     "@types/react": "18.3.12",
     "@wagmi/connectors": "5.3.3",
     "@wagmi/core": "2.14.1",
@@ -39,8 +39,8 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "peerDependencies": {
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "^17.3.1",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2",
     "@wagmi/connectors": "5.3.3",
     "@wagmi/core": "2.14.1",
     "connectkit": "1.8.2",

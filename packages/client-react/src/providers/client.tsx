@@ -169,6 +169,14 @@ export function ClientPlugnPlayProvider({
     )
 
     if (!once.current) {
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
       client.init()
       once.current = true
     }
