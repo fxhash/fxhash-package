@@ -28,6 +28,7 @@ import {
 } from "@/_interfaces.js"
 import { isProviderCustomConfigValid } from "@/utils/validate.js"
 import { Wrapper } from "./Wrapper.js"
+import { isBrowser } from "@fxhash/utils-browser"
 
 const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
   email: true,
@@ -124,6 +125,7 @@ export function ClientPlugnPlayProvider({
 
   // Capture the modal opener
   const ConnectKitDriver = () => {
+    if (!isBrowser()) return null
     const modal = useModal()
     useEffect(() => {
       openConnectKitModalRef.current = modal.setOpen.bind(null, true)
