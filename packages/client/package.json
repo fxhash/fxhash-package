@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2",
+    "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/config": "workspace:*",
     "@fxhash/core": "workspace:*",
     "@fxhash/errors": "workspace:*",
@@ -14,8 +14,8 @@
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "@tanstack/react-query": "5.28.8",
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1"
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
