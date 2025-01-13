@@ -7,7 +7,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["vitest/globals"],
     "outDir": "dist",
     "stripInternal": true
   }
