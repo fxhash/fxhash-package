@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "author": "",
   "dependencies": {
-    "@tsconfig/create-react-app": "2.0.2",
-    "@tsconfig/node18": "18.2.2",
-    "@tsconfig/recommended": "1.0.3"
+    "@tsconfig/create-react-app": "2.0.5",
+    "@tsconfig/node22": "22.0.0",
+    "@tsconfig/recommended": "1.0.8"
   },
   "exports": {
     "./tsconfig.base.json": "./tsconfig.base.json",
