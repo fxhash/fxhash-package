@@ -15,7 +15,6 @@ export default defineConfig((options: Options) => ({
     {
       name: "text-loader",
       setup(build) {
-        // Handle .txt files
         build.onLoad({ filter: /\.lib$/ }, async args => {
           const text = readFileSync(args.path, "utf8")
           return {
