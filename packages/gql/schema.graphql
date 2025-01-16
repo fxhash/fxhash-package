@@ -7221,11 +7221,11 @@ type collaboration {
   collaboration_contract_id: String!
 
   """An object relationship"""
-  collaborator: user
+  collaborator: user!
   collaborator_id: String!
 
   """An object relationship"""
-  contract: user
+  contract: user!
 
   """An object relationship"""
   user: user!

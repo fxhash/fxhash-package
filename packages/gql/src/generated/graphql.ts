@@ -6225,10 +6225,10 @@ export type Collaboration = {
   __typename?: 'collaboration';
   collaboration_contract_id: Scalars['String']['output'];
   /** An object relationship */
-  collaborator?: Maybe<User>;
+  collaborator: User;
   collaborator_id: Scalars['String']['output'];
   /** An object relationship */
-  contract?: Maybe<User>;
+  contract: User;
   /** An object relationship */
   user: User;
   /** An object relationship */
