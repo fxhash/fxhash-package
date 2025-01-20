@@ -29,6 +29,24 @@ import {
 import { isProviderCustomConfigValid } from "@/utils/validate.js"
 import { Wrapper } from "./Wrapper.js"
 
+interface ConnectKitDriverProps {
+  openConnectKitModalRef: React.MutableRefObject<(() => void) | null>
+  client: IClientPlugnPlay
+}
+
+// Capture the modal opener
+const ConnectKitDriver = ({
+  openConnectKitModalRef,
+  client,
+}: ConnectKitDriverProps) => {
+  const modal = useModal()
+  useEffect(() => {
+    openConnectKitModalRef.current = modal.setOpen.bind(null, true)
+    client.setConnectKitModal(() => openConnectKitModalRef.current?.())
+  }, [modal, client])
+  return null
+}
+
 const defaultWeb2SignInOptions: IClientPlugnPlayProviderWeb2SignInOptions = {
   email: true,
 }
@@ -122,16 +140,6 @@ export function ClientPlugnPlayProvider({
     return client
   }, [])
 
-  // Capture the modal opener
-  const ConnectKitDriver = () => {
-    const modal = useModal()
-    useEffect(() => {
-      openConnectKitModalRef.current = modal.setOpen.bind(null, true)
-      client.setConnectKitModal(() => openConnectKitModalRef.current?.())
-    }, [modal])
-    return null
-  }
-
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
     config: _config,
@@ -161,6 +169,14 @@ export function ClientPlugnPlayProvider({
     )
 
     if (!once.current) {
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
+      console.log("INIT")
       client.init()
       once.current = true
     }
@@ -172,10 +188,21 @@ export function ClientPlugnPlayProvider({
     }
   }, [])
 
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    if (mounted) return
+    setMounted(true)
+  }, [mounted])
+
   return (
     <Wrapper config={_config} client={state.client}>
       <ClientPlugnPlayContext.Provider value={state}>
-        {client.config.wagmi && <ConnectKitDriver />}
+        {mounted && client.config.wagmi && (
+          <ConnectKitDriver
+            client={client}
+            openConnectKitModalRef={openConnectKitModalRef}
+          />
+        )}
         {children}
       </ClientPlugnPlayContext.Provider>
     </Wrapper>
