@@ -22,6 +22,7 @@ import {
   localDockerConfig,
 } from "./config"
 import { isLocal, isProd, isDockerLocal } from "./helpers"
+import { GPURenderingConfig } from "./config/gpu"
 
 let config = isProd
   ? prdConfig
@@ -66,6 +67,7 @@ export {
   type TBlockchainNetwork,
   type TEnv,
   type IFxhashConfig,
+  type GPURenderingConfig,
 }
 
 export * from "./types"

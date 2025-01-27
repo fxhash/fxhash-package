@@ -30,6 +30,11 @@ import {
   algoliaConfigDev,
   algoliaConfigProd,
 } from "./config/algolia"
+import {
+  GPURenderingConfig,
+  gpuRenderingConfigDev,
+  gpuRenderingConfigProd,
+} from "./config/gpu"
 
 // the variations supported by the config
 export type TBlockchain = "tez" | "eth" | "base"
@@ -59,6 +64,7 @@ export interface IFxhashEnvConfig {
   awsS3Region: string
   openTelemetryTarget: string
   algolia: AlgoliaConfig
+  gpu: GPURenderingConfig
 }
 
 type TBlockchainContacts = {
@@ -204,6 +210,7 @@ export const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
       },
     },
     localDocker: {
@@ -228,6 +235,7 @@ export const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
       },
     },
     dev: {
@@ -252,6 +260,7 @@ export const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
       },
     },
     prd: {
@@ -276,6 +285,7 @@ export const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
+        gpu: gpuRenderingConfigProd,
       },
     },
   },
