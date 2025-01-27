@@ -24,8 +24,7 @@
     "@typescript-eslint/parser": "5.62.0",
     "eslint": "8.45.0",
     "tsup": "8.2.4",
-    "typescript": "5.7.2",
-    "vitest": "0.34.6"
+    "typescript": "5.7.2"
   },
   "exports": {
     ".": {
@@ -46,9 +45,7 @@
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest",
-    "test:local": "FXHASH_ENV=local vitest"
+    "dev": "tsup --watch"
   },
   "type": "module",
   "types": "./dist/index.d.ts"

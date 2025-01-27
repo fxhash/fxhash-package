@@ -35,7 +35,7 @@ export type LibraryVersion = {
   /**
    * The raw textual content of the library.
    */
-  content: string
+  content: () => Promise<string>
 
   /**
    * On which blockchains the library is available (identified by chain ids)
