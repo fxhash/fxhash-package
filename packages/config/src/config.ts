@@ -9,11 +9,7 @@ import {
 } from "./api/fxhash.js"
 import { fxAppEnvMetadata } from "./config/metadata.js"
 import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
-import {
-  GPURenderingConfig,
-  gpuRenderingConfigDev,
-  gpuRenderingConfigProd,
-} from "./config/gpu"
+import { gpuRenderingConfigDev, gpuRenderingConfigProd } from "./config/gpu.js"
 import {
   tezosMainnetContracts,
   tezosTestnetContracts,

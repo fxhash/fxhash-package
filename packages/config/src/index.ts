@@ -11,7 +11,7 @@ import {
   tezosTestnetContracts,
 } from "./contracts/tezos.js"
 import { type IEthContracts, ethTestnetContracts } from "./contracts/eth.js"
-import { GPURenderingConfig } from "./config/gpu"
+import { type GPURenderingConfig } from "./config/gpu.js"
 import {
   fxhashConfig,
   prdConfig,

@@ -2,6 +2,7 @@ import { IBaseApis } from "./api/base.js"
 import { IEthApis } from "./api/eth.js"
 import { ITezosApis } from "./api/tezos.js"
 import { AlgoliaConfig } from "./config/algolia.js"
+import { GPURenderingConfig } from "./config/gpu.js"
 import { IBaseContracts } from "./contracts/base.js"
 import { IEthContracts } from "./contracts/eth.js"
 import { ITezosContracts } from "./contracts/tezos.js"
@@ -140,6 +141,7 @@ export interface IFxhashEnvConfig {
   awsS3Region: string
   openTelemetryTarget: string
   algolia: AlgoliaConfig
+  gpu: GPURenderingConfig
 }
 
 type TBlockchainContacts = {
