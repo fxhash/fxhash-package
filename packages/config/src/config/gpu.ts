@@ -42,11 +42,11 @@ const createEnvConfig = (
 
 // Environment configs
 export const gpuRenderingConfigDev = createEnvConfig({
-  v111: "",
-  v132: "",
+  v111: "arn:aws:batch:us-east-1:409089350506:job-definition/fxhash-batch-dev-fxhash-extract-chrome-v111",
+  v132: "arn:aws:batch:us-east-1:409089350506:job-definition/fxhash-batch-dev-fxhash-extract-chrome-v132",
 })
 
 export const gpuRenderingConfigProd = createEnvConfig({
-  v111: "arn:aws:batch:...",
+  v111: "arn:aws:batch:us-east-1:759392670381:job-definition/fxhash-batch-prd-fxhash-extract",
   v132: "arn:aws:batch:...",
 })
