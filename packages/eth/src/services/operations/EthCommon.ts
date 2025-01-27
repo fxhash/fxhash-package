@@ -2,19 +2,26 @@ import { config } from "@fxhash/config"
 import {
   BaseError,
   ContractFunctionRevertedError,
-  TransactionReceipt,
+  type TransactionReceipt,
   ContractFunctionExecutionError,
   InsufficientFundsError as InsufficientFundsErrorViem,
   TransactionExecutionError,
-  Chain,
+  type Chain,
+  type Abi,
+  type ContractFunctionName,
+  type ContractFunctionArgs,
+  type ContractFunctionParameters,
 } from "viem"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
   ALLOCATION_BASE,
   MAX_UINT_64,
-  MerkleTreeWhitelist,
+  type MerkleTreeWhitelist,
 } from "@/utils/index.js"
-import { EthereumWalletManager, getConfigForChain } from "@/services/Wallet.js"
+import {
+  type EthereumWalletManager,
+  getConfigForChain,
+} from "@/services/Wallet.js"
 import { getOpenChainError } from "@/services/Openchain.js"
 import { FX_GEN_ART_721_ABI, FX_ISSUER_FACTORY_ABI } from "@/abi/index.js"
 import {
@@ -22,8 +29,8 @@ import {
   InsufficientFundsError,
   TransactionRevertedError,
   UserRejectedError,
-  invariant,
 } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -37,16 +44,26 @@ export interface ReceiverEntry {
   pct: number
 }
 
-//Type definition of the parameters for the simulateContract function
-export interface SimulateAndExecuteContractRequest {
-  address: `0x${string}`
-  abi: any[]
-  functionName: string
-  args: any[]
+// Type definition of the parameters for the simulateContract function
+export type SimulateAndExecuteContractRequest<
+  abi extends Abi | readonly unknown[],
+  functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
+  args extends ContractFunctionArgs<
+    abi,
+    "nonpayable" | "payable",
+    functionName
+  > = ContractFunctionArgs<abi, "nonpayable" | "payable", functionName>,
+  chain extends Chain | undefined = Chain | undefined,
+> = {
   account: `0x${string}`
+  chain: chain
   value?: bigint
-  chain: Chain
-}
+} & ContractFunctionParameters<
+  abi,
+  "nonpayable" | "payable",
+  functionName,
+  args
+>
 
 export interface MintInfo {
   minter: `0x${string}`
@@ -141,8 +158,8 @@ export interface ConfigInfo {
  * static and instanciated at runtime from the config.
  */
 export const onchainConfig: ConfigInfo = {
-  secondaryFeeAllocation: config.config.fxhashSecondaryFee,
-  primaryFeeAllocation: config.config.fxhashPrimaryFee,
+  secondaryFeeAllocation: config.eth.config.fxhashFees.secondary,
+  primaryFeeAllocation: config.eth.config.fxhashFees.primary,
   lockTime: config.config.projectLockTime,
   referrerShare: BigInt(config.config.referrerShare),
   defaultMetadataURI: config.apis.ethMetadata,
@@ -191,7 +208,7 @@ export async function handleContractError(error: any): Promise<string> {
         throw new TransactionRevertedError(errorName)
       }
       console.log("error: ", error)
-      return "Failed: " + errorName
+      return `Failed: ${errorName}`
     }
   }
   throw error // Re-throwing error if it's not an instance of BaseError.
@@ -212,9 +229,15 @@ export async function handleContractError(error: any): Promise<string> {
  * the contract address, the contract method to call, and any arguments required for the method.
  * @returns a Promise that resolves to the submitted hash.
  */
-export async function simulateAndExecuteContract(
+export async function simulateAndExecuteContract<
+  abi extends Abi | readonly unknown[] = Abi,
+  functionName extends ContractFunctionName<
+    abi,
+    "nonpayable" | "payable"
+  > = ContractFunctionName<abi, "nonpayable" | "payable">,
+>(
   walletManager: EthereumWalletManager,
-  args: SimulateAndExecuteContractRequest
+  args: SimulateAndExecuteContractRequest<abi, functionName>
 ): Promise<string> {
   //fetch the account from the wallet
   const account = walletManager.walletClient.account
@@ -223,7 +246,9 @@ export async function simulateAndExecuteContract(
 
   try {
     //simulate the contract call
-    const { request } = await walletManager.publicClient.simulateContract(args)
+    const { request } = await walletManager.publicClient.simulateContract(
+      args as any
+    )
 
     //execute the contract call
     const hash = await walletManager.walletClient.writeContract({
@@ -283,7 +308,7 @@ export async function predictFxContractAddress(
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
     functionName:
       factoryType === "ticket" ? "getTicketAddress" : "getTokenAddress",
-    args: [nonceAddress],
+    args: [nonceAddress as `0x${string}`],
   })
   return address as `0x${string}`
 }
@@ -434,19 +459,4 @@ export function revertReceiversFee(
   }
 
   return originalReceivers
-}
-
-export async function generateOnchainDataHash(
-  bytes: `0x${string}`,
-  walletManager: EthereumWalletManager,
-  chain: BlockchainType
-) {
-  const currentConfig = getConfigForChain(chain)
-  await walletManager.prepareSigner({ blockchainType: chain })
-  return await walletManager.publicClient.readContract({
-    address: currentConfig.contracts.gen_art_token_impl_v1,
-    abi: FX_GEN_ART_721_ABI,
-    functionName: "generateOnchainDataHash",
-    args: [bytes],
-  })
 }

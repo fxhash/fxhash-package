@@ -1125,4 +1125,4 @@ export const SCRIPTY_BUILDER_ABI = [
     stateMutability: "pure",
     type: "function",
   },
-]
+] as const

@@ -1,22 +1,18 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
+import type { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
 import { placeBid } from "../Marketplace.js"
 import {
   RESERVOIR_ORDERBOOK,
   RESERVOIR_ORDER_KIND,
 } from "@/services/Reservoir.js"
 import { TransactionType } from "@fxhash/shared"
-import {
-  getProjectRoyalties,
-  processOverridenRoyalties,
-} from "@/utils/royalties.js"
 
 export type TMakeOfferEthV1OperationParams = {
   orders: {
     token: string
     tokenId: string
     amount: number
-    price: string
+    price: bigint
     expiration?: string
     orderIdToReplace?: string
   }[]
@@ -46,17 +42,14 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
           },
         }
       }
-      const royalties = await getProjectRoyalties(order.token)
-      if (!royalties) throw new Error("Royalties not found")
       args.push({
         token: `${order.token}:${order.tokenId}`,
-        weiPrice: order.price,
+        weiPrice: order.price.toString(),
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
-        automatedRoyalties: false,
-        customRoyalties: processOverridenRoyalties(royalties, this.chain),
+        automatedRoyalties: true,
       })
     }
 
@@ -68,6 +61,6 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   }
 
   success(): string {
-    return `You successfully placed an offer`
+    return "your collection offer has been placed!"
   }
 }

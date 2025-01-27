@@ -1,4 +1,3 @@
-import { char2Bytes } from "@taquito/utils"
 import { AuthToken } from "@/types/auth-token"
 import { AuthRole } from "@/types/roles"
 import jwt from "jsonwebtoken"
@@ -94,22 +93,3 @@ export function signAuthToken(
 }
 
 export const VALID_FOR = 24 * 60 * 60 * 1000 // 24 hours
-
-const TEZOS_SIGNING_PREFIX = "0501" // 05 for 'micheline expression', 01 for 'string'.
-
-// 4 bytes (8 chars in the hex-encoding) for the size of the subsequent string
-const encodeSizePrefix = (payload: string): string => {
-  const hex = payload.length.toString(16)
-  return hex.padStart(8, "0")
-}
-
-/**
- * Encodes the sign-in payload into the format expected by the Tezos wallet
- * @param {string} payload - The payload to encode.
- * @return {string} - The encoded payload.
- */
-export function encodeTezosPayload(payload: string): string {
-  const bytes = char2Bytes(payload)
-  const sizePrefix = encodeSizePrefix(payload)
-  return TEZOS_SIGNING_PREFIX + sizePrefix + bytes
-}

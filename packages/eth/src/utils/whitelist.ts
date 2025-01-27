@@ -7,7 +7,7 @@ import {
   Qu_GetWhitelists,
   GetTokenPricingsAndReservesQuery,
 } from "@fxhash/gql"
-import { invariant } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 /**
  * High level wrapper time for the whitelist for easier use in the UI

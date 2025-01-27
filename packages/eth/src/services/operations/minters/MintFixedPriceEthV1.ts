@@ -2,7 +2,7 @@ import { EthereumContractOperation } from "../contractOperation.js"
 import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
@@ -25,7 +25,7 @@ export type TMintFixedPriceEthV1OperationParams = {
   price: bigint
   reserveId: number
   amount: bigint
-  to: string | null
+  to: string
   isFrame: boolean
 }
 
@@ -45,17 +45,25 @@ export class MintFixedPriceEthV1Operation extends EthereumContractOperation<TMin
       ? await getFirstValidReserve(
           currentConfig.contracts.farcaster_frame_fixed_price_minter_v1,
           this.manager.publicClient,
-          FARCASTER_FRAME_FIXED_PRICE_MINTER,
+          FARCASTER_FRAME_FIXED_PRICE_MINTER as any,
           this.params.token as `0x${string}`
         )
       : this.params.reserveId
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FIXED_PRICE_MINTER_ABI,
+      "buy"
+    > = {
       address: this.params.isFrame
         ? currentConfig.contracts.farcaster_frame_fixed_price_minter_v1
         : currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buy",
-      args: [this.params.token, reserveId, this.params.amount, this.params.to],
+      args: [
+        this.params.token as `0x${string}`,
+        BigInt(reserveId),
+        this.params.amount,
+        this.params.to as `0x${string}`,
+      ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,
       chain: getCurrentChain(this.chain),

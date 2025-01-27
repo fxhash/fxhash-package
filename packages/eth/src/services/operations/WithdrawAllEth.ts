@@ -1,24 +1,21 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { encodeFunctionData } from "viem"
-
+import { dutchAuctionV2Abi } from "@/__generated__/wagmi.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { Qu_GetEthMinterProceeds } from "@fxhash/gql"
 import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
-import {
-  FIXED_PRICE_MINTER_ABI,
-  DUTCH_AUCTION_MINTER_ABI,
-} from "@/abi/index.js"
+import { FIXED_PRICE_MINTER_ABI } from "@/abi/index.js"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits.js"
-import { CallData } from "@0xsplits/splits-sdk"
+import type { CallData } from "@0xsplits/splits-sdk"
 import {
   TransactionUnknownError,
   TransactionType,
-  invariant,
   BlockchainType,
 } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { getConfigForChain, getCurrentChain } from "../Wallet.js"
 import gqlClient from "@fxhash/gql-client"
 
@@ -40,6 +37,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
+    const chainId = getCurrentChain(this.chain).id
     //First we need to fetch the proceeds for the address
     const proceeds = await gqlClient.query(Qu_GetEthMinterProceeds, {
       where: {
@@ -63,7 +61,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
 
     const withdrawableProceeds =
       proceeds.data.onchain.eth_minter_proceeds.filter(
-        (proceed: any) => proceed.amount > 0
+        proceed => proceed.amount > 0
       )
 
     //we loop on the all the minters, to prepare the withdraw operations
@@ -71,12 +69,13 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       const isDutchAuction =
         minterProceeds.minter_address ===
         currentConfig.contracts.dutch_auction_minter_v1
-      const abi = isDutchAuction
-        ? DUTCH_AUCTION_MINTER_ABI
-        : FIXED_PRICE_MINTER_ABI
+      const abi = isDutchAuction ? dutchAuctionV2Abi : FIXED_PRICE_MINTER_ABI
       const args = isDutchAuction
-        ? [minterProceeds.token_address, minterProceeds.reserve_id]
-        : [minterProceeds.token_address]
+        ? ([
+            minterProceeds.token_address as `0x${string}`,
+            minterProceeds.reserve_id,
+          ] as const)
+        : ([minterProceeds.token_address as `0x${string}`] as const)
 
       const multicallPayload = {
         address: minterProceeds.minter_address as `0x${string}`,
@@ -110,13 +109,16 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
 
     //we fetch all the splits related to the user
     //we get the current user splits having money
-    const userSplits = await splitsClient.getUserEarningsByContract({
-      userAddress: this.params.address,
-    })
+    const userSplits = await splitsClient.dataClient?.getUserEarningsByContract(
+      {
+        userAddress: this.params.address,
+        chainId: chainId,
+      }
+    )
 
     //we transform the list of splits into a list of split addresses
     const filteredUserSplits = splitsWithEarnings.concat(
-      Object.keys(userSplits.activeBalances)
+      Object.keys(userSplits?.activeBalances || {})
     )
 
     //we remove duplicates
@@ -125,7 +127,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //before withdrawing, we first need to distribute the funds
     const distributeCalls = await Promise.all(
       [...splitSet].map(async split => {
-        return await splitsClient.callData.distributeToken({
+        return await splitsClient.splitV1!.callData.distributeToken({
           splitAddress: split,
           token: SPLITS_ETHER_TOKEN,
         })
@@ -136,17 +138,22 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //now that this is done we can finally withdraw them
     for (const split of splitsWithEarnings) {
       //we fetch the splits recipient
-      const { recipients } = await splitsClient.getSplitMetadata({
+      const splitMetadata = await splitsClient.dataClient?.getSplitMetadata({
+        chainId: chainId,
         splitAddress: split,
       })
+      if (!splitMetadata) {
+        throw new Error("Split metadata not found")
+      }
+
       //format the list to be easily usable
-      const recipientAddresses = recipients.map(
+      const recipientAddresses = splitMetadata.recipients.map(
         recipient => recipient.recipient.address
       )
       //now we prepare the withdraw calls
       const withdrawCalls = await Promise.all(
         recipientAddresses.map(async address => {
-          return await splitsClient.callData.withdrawFunds({
+          return await splitsClient.splitV1!.callData.withdrawFunds({
             address: address,
             tokens: [SPLITS_ETHER_TOKEN],
           })
@@ -158,14 +165,17 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //we properly format the payload for multicall
     const callRequests = multicallArgs.map(call => {
       return {
-        target: call.address,
+        target: call.address as `0x${string}`,
         callData: call.data,
       }
     })
 
     //if we have anything to do, we trigger the call, otherwise return undefined
     if (callRequests.length > 0) {
-      const args: SimulateAndExecuteContractRequest = {
+      const args: SimulateAndExecuteContractRequest<
+        typeof MULTICALL3_ABI,
+        "aggregate"
+      > = {
         address: currentConfig.contracts.multicall3 as `0x${string}`,
         abi: MULTICALL3_ABI,
         functionName: "aggregate",
@@ -181,11 +191,10 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         type: TransactionType.ONCHAIN,
         hash: transactionHash,
       }
-    } else {
-      throw new TransactionUnknownError("Nothing to withdraw")
     }
+    throw new TransactionUnknownError("Nothing to withdraw")
   }
   success(): string {
-    return `Successfully withdrew all eth from minters and splits`
+    return "Successfully withdrew all eth from minters and splits"
   }
 }

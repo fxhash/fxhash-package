@@ -1,11 +1,14 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
+import type {
+  ContractAbstraction,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
 import { TezosContractOperation } from "./ContractOperation"
-import { Listing, Objkt } from "@fxhash/shared"
+import type { Listing } from "@fxhash/shared"
 
 export type TListingCancelOperationParams = {
-  listing: Listing
-  objkt: Objkt
+  listing: Pick<Listing, "id" | "version">
 }
 
 /**
@@ -23,10 +26,10 @@ export class ListingCancelOperation extends TezosContractOperation<TListingCance
   }
 
   async call(): Promise<WalletOperation> {
-    return this.contract!.methodsObject[this.ep](this.params.listing.id).send()
+    return this.contract.methodsObject[this.ep](this.params.listing.id).send()
   }
 
   success(): string {
-    return `You have cancelled your listing for ${this.params.objkt.name}`
+    return "You have cancelled your listing"
   }
 }

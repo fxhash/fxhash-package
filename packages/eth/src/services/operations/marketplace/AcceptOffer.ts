@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirAcceptOfferParams } from "@/services/reservoir/types.js"
+import type { ReservoirAcceptOfferParams } from "@/services/reservoir/types.js"
 import { acceptOffer } from "../Marketplace.js"
 import { TransactionType, TransactionUnknownError } from "@fxhash/shared"
 import { extractReservoirError } from "@/utils/index.js"

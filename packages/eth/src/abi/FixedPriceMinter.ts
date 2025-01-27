@@ -921,4 +921,4 @@ export const FIXED_PRICE_MINTER_ABI = [
     name: "Unauthorized",
     inputs: [],
   },
-]
+] as const

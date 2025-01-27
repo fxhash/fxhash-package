@@ -2,37 +2,43 @@
   "name": "@fxhash/config",
   "version": "0.0.9",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
+  "dependencies": {
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public"
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/node": "18.7.13",
+    "tsup": "8.3.0",
+    "typescript": "5.7.2",
+    "unplugin-isolated-decl": "0.6.4"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "require": "./dist/index.cjs"
+      }
     }
   },
   "files": [
     "dist"
   ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc --noEmit",
     "dev": "tsup --watch"
   },
-  "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
-    "@types/node": "18.7.13",
-    "tslib": "2.6.2",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3"
-  }
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

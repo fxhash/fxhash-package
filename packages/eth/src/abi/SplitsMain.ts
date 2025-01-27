@@ -495,4 +495,4 @@ export const SPLITS_MAIN_ABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
-]
+] as const

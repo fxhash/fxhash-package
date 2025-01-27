@@ -3,10 +3,10 @@ import { encodeFunctionData } from "viem"
 import { FX_ROLE_REGISTRY_ABI } from "@/abi/FxRoleRegistry.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
-import { ETH_ROLES, ETH_ROLES_MAP } from "@/utils/roles.js"
-import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
+import { type ETH_ROLES, ETH_ROLES_MAP } from "@/utils/roles.js"
+import type { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe.js"
 import { TransactionType } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
@@ -48,23 +48,23 @@ export class GrantOrRevokeRoleEthV1Operation extends EthereumContractOperation<T
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      const args: SimulateAndExecuteContractRequest = {
-        address: currentConfig.contracts.role_registry_v1,
-        abi: FX_ROLE_REGISTRY_ABI,
-        functionName: functionName,
-        args: [ETH_ROLES_MAP[this.params.role], this.params.user],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        args
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_ROLE_REGISTRY_ABI,
+      typeof functionName
+    > = {
+      address: currentConfig.contracts.role_registry_v1,
+      abi: FX_ROLE_REGISTRY_ABI,
+      functionName: functionName,
+      args: [ETH_ROLES_MAP[this.params.role], this.params.user],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 

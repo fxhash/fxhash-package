@@ -1,9 +1,29 @@
+import { enumKeys } from "@fxhash/utils"
 import { WalletManager } from "./WalletManager"
+
+/**
+ * A Blockchain Environment is based on the classification of the "blockchain
+ * engine".
+ * TODO: should decide between BlockchainEnv & BlockchainNetwork and harmonize
+ */
+export enum BlockchainEnv {
+  EVM = "EVM",
+  TEZOS = "TEZOS",
+}
+
+/**
+ * An array of all the `BlockchainEnv` enum values.
+ */
+export const BlockchainEnvs = Object.values(BlockchainEnv)
 
 export enum BlockchainNetwork {
   TEZOS = "TEZOS",
   ETHEREUM = "ETHEREUM",
 }
+
+export const BlockchainNetworks = Object.keys(
+  BlockchainNetwork
+) as BlockchainNetwork[]
 
 export enum TransactionType {
   OFFCHAIN = "OFFCHAIN",
@@ -14,6 +34,59 @@ export enum BlockchainType {
   ETHEREUM = "ETHEREUM",
   TEZOS = "TEZOS",
   BASE = "BASE",
+}
+export type Blockchain = keyof typeof BlockchainType
+export const BlockchainTypes = enumKeys(BlockchainType)
+
+export type ChainNetworkToChainTypemap = {
+  [T in BlockchainNetwork]: {
+    [BlockchainNetwork.ETHEREUM]: BlockchainType.ETHEREUM
+    [BlockchainNetwork.TEZOS]: BlockchainType.TEZOS
+  }[T]
+}
+
+const chainNetworkToChainMap: ChainNetworkToChainTypemap = {
+  [BlockchainNetwork.ETHEREUM]: BlockchainType.ETHEREUM,
+  [BlockchainNetwork.TEZOS]: BlockchainType.TEZOS,
+}
+
+/**
+ * Given a BlockchainNetwork, returns an associated BlockchainType of preference
+ */
+export function networkToChain<N extends BlockchainNetwork>(
+  network: N
+): ChainNetworkToChainTypemap[N] {
+  return chainNetworkToChainMap[network]
+}
+
+export type ChainToChainEnvTypemap = {
+  [T in BlockchainType]: {
+    [BlockchainType.BASE]: BlockchainEnv.EVM
+    [BlockchainType.ETHEREUM]: BlockchainEnv.EVM
+    [BlockchainType.TEZOS]: BlockchainEnv.TEZOS
+  }[T]
+}
+
+export const chainToChainEnvMap: {
+  [K in BlockchainType]: ChainToChainEnvTypemap[K]
+} = {
+  [BlockchainType.BASE]: BlockchainEnv.EVM,
+  [BlockchainType.ETHEREUM]: BlockchainEnv.EVM,
+  [BlockchainType.TEZOS]: BlockchainEnv.TEZOS,
+}
+
+export type ChainEnvToChainTypemap = {
+  [E in BlockchainEnv]: {
+    [BlockchainEnv.EVM]: BlockchainType.ETHEREUM
+    [BlockchainEnv.TEZOS]: BlockchainType.TEZOS
+  }[E]
+}
+
+export const chainEnvToChainMap: {
+  [E in BlockchainEnv]: ChainEnvToChainTypemap[E]
+} = {
+  [BlockchainEnv.EVM]: BlockchainType.ETHEREUM,
+  [BlockchainEnv.TEZOS]: BlockchainType.TEZOS,
 }
 
 /**

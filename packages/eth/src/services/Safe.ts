@@ -19,7 +19,8 @@ import {
 import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { EthereumWalletManager, getChainIdForChain } from "./Wallet.js"
 import { getAddress } from "viem"
-import { BlockchainType, UserRejectedError, invariant } from "@fxhash/shared"
+import { BlockchainType, UserRejectedError } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 /**
  * The function `getSafeSDK` returns a Promise that resolves to an instance of the Safe SDK, given a
@@ -101,6 +102,7 @@ export function getEthersAdapterForSafe(
     // TODO: hack because of esm/cjs confusion with ethers
   } as unknown as EthersAdapterConfig)
 }
+export { EthersAdapter }
 
 /**
  * The function proposes a safe transaction by creating a transaction, signing it, and then sending it
@@ -139,7 +141,11 @@ export async function proposeSafeTransaction(
     }
     throw error
   }
-  const userSignature = safeTransaction.signatures.get(walletManager.address)
+
+  const signatures = new Map(
+    [...safeTransaction.signatures].map(([k, v]) => [getAddress(k), v])
+  )
+  const userSignature = signatures.get(getAddress(walletManager.address))
   if (!userSignature) {
     throw new Error("User signature not found")
   }

@@ -1,11 +1,11 @@
 import {
-  PublicClient,
+  type PublicClient,
   decodeAbiParameters,
   encodeAbiParameters,
   encodePacked,
 } from "viem"
 import {
-  MerkleTreeWhitelist,
+  type MerkleTreeWhitelist,
   getAvailableIndexesAndProofsForUser,
   getWhitelist,
   getWhitelistTree,
@@ -14,26 +14,28 @@ import { EMPTY_BYTES_32, MAX_UINT_256, ZERO_ADDRESS } from "./constants.js"
 
 import { sign } from "viem/accounts"
 import {
-  DutchAuctionMintInfoArgs,
-  FarcasterFrameFixedPriceMintParams,
-  FixedPriceMintInfoArgs,
-  FixedPriceParams,
-  MintInfo,
+  type DutchAuctionMintInfoArgs,
+  type FarcasterFrameFixedPriceMintParams,
+  type FixedPriceMintInfoArgs,
+  type FixedPriceParams,
+  type MintInfo,
   MintTypes,
-  ReserveInfo,
-  TicketMintInfoArgs,
+  type ReserveInfo,
+  type TicketMintInfoArgs,
   defineReserveInfo,
   predictFxContractAddress,
 } from "@/services/operations/index.js"
 import {
-  GetTokenPricingsAndReservesQuery,
+  type GetTokenPricingsAndReservesQuery,
   Qu_GetTokenPricingsAndReserves,
 } from "@fxhash/gql"
-import { BlockchainType, invariant } from "@fxhash/shared"
+import { BlockchainType } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { config } from "@fxhash/config"
-import { EthereumWalletManager } from "@/services/Wallet.js"
-import { IEthContracts } from "@fxhash/config"
+import type { EthereumWalletManager } from "@/services/Wallet.js"
+import type { IEthContracts } from "@fxhash/config"
 import gqlClient from "@fxhash/gql-client"
+import { FARCASTER_FRAME_FIXED_PRICE_MINTER } from "@/abi/FarcasterFrameFixedPriceMinter.js"
 
 /**
  * The `FixedPriceMintParams` type represents the parameters required for a fixed price mint operation.
@@ -614,7 +616,7 @@ export const prepareMintParams = async (
 
 export const fetchTokenReserveId = async (
   tokenId: string,
-  useWhitelist: boolean = false
+  useWhitelist = false
 ) => {
   const tokenPricingsAndReserves = await gqlClient.query(
     Qu_GetTokenPricingsAndReserves,
@@ -642,7 +644,7 @@ export const fetchTokenReserveId = async (
 export async function getFirstValidReserve(
   minter: `0x${string}`,
   publicClient: PublicClient,
-  abi: unknown[],
+  abi: any[],
   token: `0x${string}`
 ): Promise<bigint> {
   if (token === "0x914cf2d92b087C9C01a062111392163c3B35B60e") return BigInt(1)
@@ -652,5 +654,22 @@ export async function getFirstValidReserve(
     functionName: "getFirstValidReserve",
     args: [token],
   })
-  return reserveId as bigint
+  return reserveId as unknown as bigint
+}
+
+export async function getTotalMinted(
+  publicClient: PublicClient,
+  chain: BlockchainType,
+  token: `0x${string}`,
+  fid: number
+): Promise<number> {
+  const currentConfig =
+    chain === BlockchainType.ETHEREUM ? config.eth : config.base
+  const totalMinted = await publicClient.readContract({
+    address: currentConfig.contracts.farcaster_frame_fixed_price_minter_v1,
+    abi: FARCASTER_FRAME_FIXED_PRICE_MINTER,
+    functionName: "totalMinted",
+    args: [BigInt(fid), token],
+  })
+  return Number(totalMinted)
 }

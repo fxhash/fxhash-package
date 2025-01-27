@@ -3,7 +3,7 @@ import { FX_TICKETS_ABI } from "@/abi/FxTicket.js"
 import { getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
@@ -24,11 +24,18 @@ export class ClaimTicketEthV1Operation extends EthereumContractOperation<TClaimT
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_TICKETS_ABI,
+      "claim"
+    > = {
       address: this.params.ticket as `0x${string}`,
       abi: FX_TICKETS_ABI,
       functionName: "claim",
-      args: [this.params.tokenId, this.params.maxPrice, this.params.newPrice],
+      args: [
+        BigInt(this.params.tokenId),
+        this.params.maxPrice,
+        this.params.newPrice,
+      ],
       account: this.manager.address as `0x${string}`,
       value: this.params.value,
       chain: getCurrentChain(this.chain),

@@ -1,9 +1,5 @@
-import {
-  BlockchainType,
-  SignMessageOptions,
-  invariant,
-  success,
-} from "@fxhash/shared"
+import { BlockchainType, SignMessageOptions } from "@fxhash/shared"
+import { invariant, success } from "@fxhash/utils"
 import { useDeferredTask } from "../utils/useDeferredTask"
 import { useEthereumUserContext } from "./EthereumUser"
 import { useTezosUserContext } from "./TezosUser"

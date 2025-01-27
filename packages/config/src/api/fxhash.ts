@@ -1,67 +1,22 @@
-import { getDockerInternalUrl } from "../helpers"
-
-export interface IFxhashApis {
-  website: string
-  docs: string
-  main: string
-  hasura: string
-  hasuraGql: string
-  file: string
-  fileInternal: string
-  fsEmulator: string
-  extract: string
-  extractInternal: string
-  media: string
-  ethMetadata: string
-  ipfsInternal: string
-  ipfsGateway: string
-  ipfsGatewaySafe: string
-  ipfsGatewayInternal: string
-  onchfsProxy: string
-  onchfsProxyInternal: string
-  opensea: string
-  authority: {
-    api: string
-  }
-  capture: {
-    lambdas: {
-      small: string
-      medium: string
-      large: string
-    }
-    proxy: {
-      ipfs: string
-      onchfs: string
-    }
-  }
-  dashboard: {
-    backend: string
-    aggregator: string
-  }
-  events: {
-    liveBackend: string
-  }
-  indexer: {
-    tez: string
-    eth: string
-    base: string
-  }
-}
+import { getDockerInternalUrl } from "../helpers.js"
+import { IFxhashApis, TEnv } from "../types.js"
 
 // list of APIs dev leverages
 export const fxhashDevApis: IFxhashApis = {
-  website: "https://dev.fxhash-dev.xyz",
+  website: "https://beta.fxhash-dev.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.dev.fxhash-dev.xyz/graphql",
   hasura: "https://api.v2.dev.fxhash-dev.xyz",
   hasuraGql: "https://api.v2.dev.fxhash-dev.xyz/v1/graphql",
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
-    "http://fxhash-dev-testnet-file-api.fxhash-dev-testnet.svc.cluster.local:4004",
-  fsEmulator: "https://fs-emulator.fxhash-dev.xyz",
+    "http://fxhash-multichain-dev-testnet-file-api.fxhash-multichain-dev-testnet.svc.cluster.local:4004",
+  walletInternal:
+    "http://fxhash-multichain-dev-testnet-wallet-api.fxhash-multichain-dev-testnet.svc.cluster.local:3208",
+  fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
-    " http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
+    "http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsInternal:
@@ -71,9 +26,7 @@ export const fxhashDevApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-dev-testnet-ipfs-cluster-gateway.fxhash-dev-testnet.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash-dev2.xyz",
-  onchfsProxyInternal:
-    "http://fxhash-dev-testnet-onchfs-proxy.fxhash-dev-testnet.svc.cluster.local:4004",
-  opensea: "https://testnets-api.opensea.io/api/v2/chain/sepolia",
+  opensea: "https://testnets-api.opensea.io/api/v2",
   authority: {
     api: "NONE",
   },
@@ -94,7 +47,6 @@ export const fxhashDevApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://live-minting.fxhash-dev.xyz",
-    aggregator: "_NONE",
   },
   events: {
     liveBackend: "_NONE",
@@ -116,7 +68,7 @@ export const fxhashLocalApis: IFxhashApis = {
   hasuraGql: "http://localhost:8888/v1/graphql",
   fileInternal: fxhashDevApis.file,
   ipfsGatewayInternal: fxhashDevApis.ipfsGateway,
-  onchfsProxyInternal: fxhashDevApis.onchfsProxy,
+  walletInternal: "http://host.docker.internal:3208",
 }
 
 export const fxhashLocalDockerApis: IFxhashApis = {
@@ -127,14 +79,17 @@ export const fxhashLocalDockerApis: IFxhashApis = {
 
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
-  website: "https://fxhash.xyz",
+  website: "https://beta.fxhash.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
   hasuraGql: "https://api.v2.fxhash.xyz/v1/graphql",
   file: "https://file-api.fxhash.xyz",
-  fileInternal: "http://fxhash-prd-file-api.fxhash-prd.svc.cluster.local:4004",
-  fsEmulator: "https://fs-emulator.fxhash2.xyz",
+  fileInternal:
+    "http://fxhash-multichain-prd-file-api.fxhash-multichain-prd.svc.cluster.local:4004",
+  walletInternal:
+    "http://fxhash-multichain-prd-wallet-api.fxhash-multichain-prd.svc.cluster.local:3208",
+  fsEmulator: "https://file-api.fxhash.xyz/fs",
   extract: "https://extract.fxhash.xyz",
   extractInternal:
     "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
@@ -147,9 +102,7 @@ export const fxhashPrdApis: IFxhashApis = {
   ipfsGatewayInternal:
     "http://fxhash-prd-ipfs-cluster-gateway.fxhash-prd.svc.cluster.local:8080",
   onchfsProxy: "https://onchfs.fxhash2.xyz",
-  onchfsProxyInternal:
-    "http://fxhash-prd-onchfs-proxy.fxhash-prd.svc.cluster.local:4004",
-  opensea: "https://api.opensea.io/api/v2/chain/ethereum",
+  opensea: "https://api.opensea.io/api/v2",
   authority: {
     api: "NONE",
   },
@@ -170,7 +123,6 @@ export const fxhashPrdApis: IFxhashApis = {
   },
   dashboard: {
     backend: "https://events.fxhash.xyz",
-    aggregator: "NONE",
   },
   events: {
     liveBackend: "_NONE",
@@ -180,4 +132,18 @@ export const fxhashPrdApis: IFxhashApis = {
     eth: "http://fxhash-multichain-prd-eth-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
     base: "http://fxhash-multichain-prd-base-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
   },
+}
+
+const fxEnvToApisMap: Record<TEnv, IFxhashApis> = {
+  local: fxhashLocalApis,
+  localDocker: fxhashLocalDockerApis,
+  dev: fxhashDevApis,
+  prd: fxhashPrdApis,
+}
+
+/**
+ * Given some env, returns the associated APIs config.
+ */
+export function fxApisByEnv(env: TEnv): IFxhashApis {
+  return fxEnvToApisMap[env]
 }

@@ -1,9 +1,9 @@
 import { EthereumContractOperation } from "../contractOperation.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
-import { type Inscription } from "onchfs"
+import type { Inscription } from "onchfs"
 import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
 import { ethOnchfsInscriptionCallData } from "@/utils/index.js"
 import { TransactionType } from "@fxhash/shared"
@@ -26,13 +26,16 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
       .map(ins => ethOnchfsInscriptionCallData(ins, this.chain))
       .map(call => {
         return {
-          target: call.address,
+          target: call.address as `0x${string}`,
           callData: call.data,
         }
       })
 
     if (callRequests.length > 0) {
-      const args: SimulateAndExecuteContractRequest = {
+      const args: SimulateAndExecuteContractRequest<
+        typeof MULTICALL3_ABI,
+        "aggregate"
+      > = {
         address: contracts.multicall3,
         abi: MULTICALL3_ABI,
         functionName: "aggregate",
@@ -48,11 +51,11 @@ export class OnchfsWriteEthOperation extends EthereumContractOperation<TOnchfsWr
         type: TransactionType.ONCHAIN,
         hash: transactionHash,
       }
-    } else {
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: "",
-      }
+    }
+
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: "",
     }
   }
 

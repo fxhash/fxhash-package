@@ -3,10 +3,10 @@ import { encodeFunctionData, getAddress } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { proposeSafeTransaction } from "@/services/Safe.js"
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 
@@ -42,23 +42,23 @@ export class PauseEthV1Operation extends EthereumContractOperation<TPauseEthV1Op
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      const args: SimulateAndExecuteContractRequest = {
-        address: this.params.token,
-        abi: FX_GEN_ART_721_ABI,
-        functionName: "pause",
-        args: [],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        args
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_GEN_ART_721_ABI,
+      "pause"
+    > = {
+      address: this.params.token,
+      abi: FX_GEN_ART_721_ABI,
+      functionName: "pause",
+      args: [],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 

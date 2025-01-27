@@ -1,58 +1,60 @@
 {
   "name": "@fxhash/react",
-  "private": true,
   "version": "0.0.1",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
+  "dependencies": {
+    "@airgap/beacon-sdk": "4.3.1",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@taquito/utils": "17.3.1",
+    "autonomy-irl-js": "1.0.0",
+    "ethers": "6.13.4",
+    "rxjs": "7.8.1"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2",
+    "@types/react": "18.3.12",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
+    "tsup": "8.2.4",
+    "typescript": "5.7.2",
+    "viem": "2.22.5",
+    "wagmi": "2.14.7"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
     "dist"
   ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "peerDependencies": {
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
+    "connectkit": "1.8.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "viem": "2.22.5",
+    "wagmi": "2.14.7"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2-beta.3",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@taquito/utils": "17.3.1",
-    "autonomy-irl-js": "1.0.0",
-    "ethers": "6.8.1",
-    "rxjs": "7.8.1"
-  },
-  "peerDependencies": {
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
-    "@taquito/taquito": "^17.3.1",
-    "connectkit": "^1.7.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "viem": "^1.21.4",
-    "wagmi": "^1.4.5"
-  },
-  "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "19.2.1-beta.1",
-    "@taquito/taquito": "17.3.1",
-    "@types/react": "18.2.48",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
-    "viem": "2.9.2",
-    "wagmi": "2.5.12"
-  }
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

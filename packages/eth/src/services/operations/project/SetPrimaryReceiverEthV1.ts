@@ -2,12 +2,12 @@ import { EthereumContractOperation } from "../contractOperation.js"
 import { encodeFunctionData, getAddress } from "viem"
 import {
   prepareReceivers,
-  ReceiverEntry,
+  type ReceiverEntry,
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { proposeSafeTransaction } from "@/services/Safe.js"
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
@@ -53,26 +53,26 @@ export class SetPrimaryReceiversEthV1Operation extends EthereumContractOperation
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      const args: SimulateAndExecuteContractRequest = {
-        address: getAddress(this.params.token) as `0x${string}`,
-        abi: FX_GEN_ART_721_ABI,
-        functionName: "setPrimaryReceivers",
-        args: [
-          preparedPrimaryReceivers.map(r => r.address),
-          preparedPrimaryReceivers.map(r => r.pct),
-        ],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        args
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_GEN_ART_721_ABI,
+      "setPrimaryReceivers"
+    > = {
+      address: getAddress(this.params.token) as `0x${string}`,
+      abi: FX_GEN_ART_721_ABI,
+      functionName: "setPrimaryReceivers",
+      args: [
+        preparedPrimaryReceivers.map(r => r.address),
+        preparedPrimaryReceivers.map(r => r.pct),
+      ],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 

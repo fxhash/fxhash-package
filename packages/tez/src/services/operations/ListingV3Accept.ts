@@ -1,12 +1,10 @@
 import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
-import { displayMutez } from "../../utils/units"
 import { TezosContractOperation } from "./ContractOperation"
-import { Listing, NFTArticle } from "@fxhash/shared"
+import type { Listing } from "@fxhash/shared"
 
 export type TListingV3AcceptOperationParams = {
-  listing: Listing
-  article: NFTArticle
+  listing: Pick<Listing, "id" | "price">
   amount: number
 }
 
@@ -23,19 +21,19 @@ export class TezosListingV3AcceptOperation extends TezosContractOperation<TListi
   }
 
   async call(): Promise<WalletOperation> {
-    return this.marketplaceContract!.methodsObject.listing_accept({
-      listing_id: this.params.listing.id,
-      amount: this.params.amount,
-      referrers: null,
-    }).send({
-      amount: this.params.listing.price * this.params.amount,
-      mutez: true,
-    })
+    return this.marketplaceContract.methodsObject
+      .listing_accept({
+        listing_id: this.params.listing.id,
+        amount: this.params.amount,
+        referrers: null,
+      })
+      .send({
+        amount: this.params.listing.price * this.params.amount,
+        mutez: true,
+      })
   }
 
   success(): string {
-    return `You have bought ${this.params.amount} edition of ${
-      this.params.article.title
-    } for ${displayMutez(this.params.listing.price)} tez`
+    return "you have successfully collected one edition"
   }
 }

@@ -1,31 +1,32 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { TransactionReceipt, encodeFunctionData, getAddress } from "viem"
+import { type TransactionReceipt, encodeFunctionData, getAddress } from "viem"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/FxIssuerFactory.js"
 
 import {
-  DutchAuctionMintInfoArgs,
-  FixedPriceMintInfoArgs,
-  InitInfo,
-  MetadataInfo,
-  MintInfo,
+  type DutchAuctionMintInfoArgs,
+  type FixedPriceMintInfoArgs,
+  type InitInfo,
+  type MetadataInfo,
+  type MintInfo,
   MintTypes,
   predictFxContractAddress,
   prepareReceivers,
-  ProjectInfo,
-  ReceiverEntry,
+  type ProjectInfo,
+  type ReceiverEntry,
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
-  TicketMintInfoArgs,
+  type SimulateAndExecuteContractRequest,
+  type TicketMintInfoArgs,
 } from "@/services/operations/EthCommon.js"
 import { ZERO_ADDRESS, processAndFormatMintInfos } from "@/utils/index.js"
 import { proposeSafeTransaction } from "@/services/Safe.js"
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { getHashFromIPFSCID } from "@/utils/ipfs.js"
 import {
   encodeProjectFactoryArgs,
   encodeTicketFactoryArgs,
 } from "@/utils/factories.js"
-import { TransactionType, invariant } from "@fxhash/shared"
+import { TransactionType } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 
 export type ScriptyHTMLTag = {
@@ -212,7 +213,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     })
 
     let args: unknown[]
-    let functionName: string
+    let functionName: "createProjectWithTicket" | "createProjectWithParams"
     if (hasTicketMintInfo && !this.params.ticketInfo) {
       throw Error("Ticket mint info required")
     } else if (hasTicketMintInfo && this.params.ticketInfo) {
@@ -273,7 +274,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         data: encodeFunctionData({
           abi: FX_ISSUER_FACTORY_ABI,
           functionName: functionName,
-          args: args,
+          args: args as any,
         }),
         value: "0",
       }
@@ -287,25 +288,28 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      //prepare the actual request to be able to simulate the transaction outcome
-      const contractArgs: SimulateAndExecuteContractRequest = {
-        address: currentConfig.contracts.project_factory_v1,
-        abi: FX_ISSUER_FACTORY_ABI,
-        functionName: functionName,
-        args: args,
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      //simulate the transaction and execute it, will throw an error if it fails
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        contractArgs
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    //prepare the actual request to be able to simulate the transaction outcome
+    const contractArgs: SimulateAndExecuteContractRequest<
+      typeof FX_ISSUER_FACTORY_ABI,
+      typeof functionName
+    > = {
+      address: currentConfig.contracts.project_factory_v1,
+      abi: FX_ISSUER_FACTORY_ABI,
+      functionName: functionName,
+      args: args as any,
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    //simulate the transaction and execute it, will throw an error if it fails
+    const transactionHash = await simulateAndExecuteContract(
+      this.manager,
+      contractArgs
+    )
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 
