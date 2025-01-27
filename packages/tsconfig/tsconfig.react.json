@@ -2,5 +2,8 @@
   "extends": [
     "@tsconfig/create-react-app/tsconfig.json",
     "./tsconfig.compiler.options.json"
-  ]
+  ],
+  "compilerOptions": {
+    "target": "ES2017"
+  }
 }
