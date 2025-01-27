@@ -11,6 +11,7 @@ import {
   tezosTestnetContracts,
 } from "./contracts/tezos.js"
 import { type IEthContracts, ethTestnetContracts } from "./contracts/eth.js"
+import { type GPURenderingConfig } from "./config/gpu.js"
 import {
   fxhashConfig,
   prdConfig,
@@ -53,6 +54,7 @@ export {
   type TBlockchainNetwork,
   type TEnv,
   type IFxhashConfig,
+  type GPURenderingConfig,
 }
 
 export * from "./types.js"
