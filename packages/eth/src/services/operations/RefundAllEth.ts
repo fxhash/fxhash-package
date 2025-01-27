@@ -1,3 +1,4 @@
+import { dutchAuctionV2Abi } from "@/__generated__/wagmi.js"
 import { EthereumContractOperation } from "./contractOperation.js"
 import { encodeFunctionData } from "viem"
 import {
@@ -6,7 +7,6 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { config } from "@fxhash/config"
 import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/index.js"
 import { TransactionType } from "@fxhash/shared"
 import { getConfigForChain, getCurrentChain } from "../Wallet.js"
 
@@ -28,7 +28,7 @@ export class RefundAllEthOperation extends EthereumContractOperation<TRefundAllE
     const multicallArgs = this.params.reserveIds.map(reserveId => ({
       address: currentConfig.contracts.dutch_auction_minter_v1,
       data: encodeFunctionData({
-        abi: DUTCH_AUCTION_MINTER_ABI,
+        abi: dutchAuctionV2Abi,
         functionName: "refund",
         args: [
           this.params.token as `0x${string}`,
