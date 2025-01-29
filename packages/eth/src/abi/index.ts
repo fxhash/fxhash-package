@@ -1,4 +1,3 @@
-export * from "./DutchAuctionMinter.js"
 export * from "./FixedPriceMinter.js"
 export * from "./FxGenArt721.js"
 export * from "./FxIssuerFactory.js"
