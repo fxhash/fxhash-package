@@ -21,7 +21,7 @@ const gpuRenderingConfigShared: GPURenderingConfigShared = {
   },
   v132: {
     date: "2025-01-14",
-    version: "132.0.6834.83",
+    version: "132.0.6834.110",
   },
 }
 
