@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
+    "@fxhash/config": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "jwt-decode": "4.0.0"
   },
