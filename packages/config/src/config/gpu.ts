@@ -21,7 +21,7 @@ const gpuRenderingConfigShared: GPURenderingConfigShared = {
   },
   v132: {
     date: "2025-01-14",
-    version: "132.0.6834.83",
+    version: "132.0.6834.110",
   },
 }
 
@@ -47,6 +47,6 @@ export const gpuRenderingConfigDev: GPURenderingConfig = createEnvConfig({
 })
 
 export const gpuRenderingConfigProd: GPURenderingConfig = createEnvConfig({
-  v111: "arn:aws:batch:us-east-1:759392670381:job-definition/fxhash-batch-prd-fxhash-extract",
-  v132: "arn:aws:batch:...",
+  v111: "arn:aws:batch:us-east-1:759392670381:job-definition/fxhash-batch-prd-fxhash-extract-chrome-v111",
+  v132: "arn:aws:batch:us-east-1:759392670381:job-definition/fxhash-batch-prd-fxhash-extract-chrome-v132",
 })

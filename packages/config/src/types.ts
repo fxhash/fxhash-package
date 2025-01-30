@@ -41,9 +41,6 @@ export interface IFxhashApis {
       onchfs: string
     }
   }
-  dashboard: {
-    backend: string
-  }
   events: {
     liveBackend: string
   }
