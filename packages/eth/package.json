@@ -12,14 +12,14 @@
     "@safe-global/api-kit": "2.1.0",
     "@safe-global/protocol-kit": "3.0.0",
     "@safe-global/safe-core-sdk-types": "4.0.0",
-    "@wagmi/connectors": "5.3.3",
-    "@wagmi/core": "2.14.1",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
     "dotenv": "16.3.1",
     "ethers": "6.13.4",
     "multiformats": "13.1.0",
     "onchfs": "workspace:*",
     "path": "0.12.7",
-    "viem": "2.19.4"
+    "viem": "2.22.5"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
@@ -28,13 +28,14 @@
     "@types/dotenv": "8.2.0",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
+    "@wagmi/cli": "2.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "tsup": "8.2.4",
     "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "vitest": "3.0.4"
   },
   "exports": {
     ".": {
@@ -56,6 +57,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist",
+    "codegen": "wagmi generate",
     "dev": "tsup --watch",
     "test": "vitest"
   },

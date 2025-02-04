@@ -9,6 +9,7 @@ import {
 } from "./api/fxhash.js"
 import { fxAppEnvMetadata } from "./config/metadata.js"
 import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
+import { gpuRenderingConfigDev, gpuRenderingConfigProd } from "./config/gpu.js"
 import {
   tezosMainnetContracts,
   tezosTestnetContracts,
@@ -151,6 +152,7 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
       },
     },
     localDocker: {
@@ -170,6 +172,7 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
       },
     },
     dev: {
@@ -189,6 +192,7 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
       },
     },
     prd: {
@@ -208,6 +212,7 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
+        gpu: gpuRenderingConfigProd,
       },
     },
   },

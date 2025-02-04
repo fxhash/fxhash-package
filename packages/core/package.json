@@ -40,7 +40,7 @@
     "react-dom": "18.2.0",
     "tsup": "8.2.4",
     "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "vitest": "3.0.4"
   },
   "exports": {
     ".": {
@@ -69,12 +69,12 @@
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
     "@taquito/utils": "20.1.2",
-    "@wagmi/connectors": "5.3.3",
-    "@wagmi/core": "2.14.1",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
     "ethers": "6.13.4",
     "jwt-decode": "4.0.0",
-    "viem": "2.19.4",
-    "wagmi": "2.12.25"
+    "viem": "2.22.5",
+    "wagmi": "2.14.7"
   },
   "publishConfig": {
     "access": "public"
