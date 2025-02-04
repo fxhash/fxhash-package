@@ -641,6 +641,10 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
+type AirdropTezClaimResult {
+  signature: String!
+}
+
 input AuthenticationInput {
   id: String!
   publicKey: String
@@ -8254,6 +8258,7 @@ type generative_token {
     where: generative_token_collected_bool_exp
   ): generative_token_collected_aggregate!
   created_at: timestamptz!
+  display_still_uri: String
   display_uri: String
   enabled: Boolean!
 
@@ -8715,6 +8720,7 @@ input generative_token_bool_exp {
   collectors: generative_token_collected_bool_exp
   collectors_aggregate: generative_token_collected_aggregate_bool_exp
   created_at: timestamptz_comparison_exp
+  display_still_uri: String_comparison_exp
   display_uri: String_comparison_exp
   enabled: Boolean_comparison_exp
   features: jsonb_comparison_exp
@@ -9044,6 +9050,7 @@ type generative_token_max_fields {
   chain: String
   codex_id: String
   created_at: timestamptz
+  display_still_uri: String
   display_uri: String
   flag: generative_token_flag_enum
   generative_uri: String
@@ -9083,6 +9090,7 @@ input generative_token_max_order_by {
   capture_media_id: order_by
   codex_id: order_by
   created_at: order_by
+  display_still_uri: order_by
   display_uri: order_by
   flag: order_by
   generative_uri: order_by
@@ -9120,6 +9128,7 @@ type generative_token_min_fields {
   chain: String
   codex_id: String
   created_at: timestamptz
+  display_still_uri: String
   display_uri: String
   flag: generative_token_flag_enum
   generative_uri: String
@@ -9159,6 +9168,7 @@ input generative_token_min_order_by {
   capture_media_id: order_by
   codex_id: order_by
   created_at: order_by
+  display_still_uri: order_by
   display_uri: order_by
   flag: order_by
   generative_uri: order_by
@@ -9198,6 +9208,7 @@ input generative_token_order_by {
   collection_offers_aggregate: collection_offer_aggregate_order_by
   collectors_aggregate: generative_token_collected_aggregate_order_by
   created_at: order_by
+  display_still_uri: order_by
   display_uri: order_by
   enabled: order_by
   features: order_by
@@ -9267,6 +9278,9 @@ enum generative_token_select_column {
 
   """column name"""
   created_at
+
+  """column name"""
+  display_still_uri
 
   """column name"""
   display_uri
@@ -9495,6 +9509,7 @@ input generative_token_stream_cursor_value_input {
   capture_media_id: bpchar
   codex_id: String
   created_at: timestamptz
+  display_still_uri: String
   display_uri: String
   enabled: Boolean
   flag: generative_token_flag_enum
@@ -12501,6 +12516,7 @@ input moderation_reason_stream_cursor_value_input {
 
 """mutation root"""
 type mutation_root {
+  airdrop_tez_claim: AirdropTezClaimResult
   authenticate(input: AuthenticationInput!): AuthenticationResult
 
   """Authenticate using a Web3Auth idToken"""
@@ -12642,6 +12658,7 @@ type objkt {
   ): [auction!]!
   capture_media_id: bpchar
   created_at: timestamptz!
+  display_still_uri: bpchar
   display_uri: bpchar
   duplicate: Boolean
   features(
@@ -13000,6 +13017,7 @@ input objkt_bool_exp {
   auctions: auction_bool_exp
   capture_media_id: bpchar_comparison_exp
   created_at: timestamptz_comparison_exp
+  display_still_uri: bpchar_comparison_exp
   display_uri: bpchar_comparison_exp
   duplicate: Boolean_comparison_exp
   features: jsonb_comparison_exp
@@ -13041,6 +13059,7 @@ type objkt_max_fields {
   assigned_at: timestamptz
   capture_media_id: bpchar
   created_at: timestamptz
+  display_still_uri: bpchar
   display_uri: bpchar
   generation_hash: String
   id: String
@@ -13072,6 +13091,7 @@ input objkt_max_order_by {
   assigned_at: order_by
   capture_media_id: order_by
   created_at: order_by
+  display_still_uri: order_by
   display_uri: order_by
   generation_hash: order_by
   id: order_by
@@ -13096,6 +13116,7 @@ type objkt_min_fields {
   assigned_at: timestamptz
   capture_media_id: bpchar
   created_at: timestamptz
+  display_still_uri: bpchar
   display_uri: bpchar
   generation_hash: String
   id: String
@@ -13127,6 +13148,7 @@ input objkt_min_order_by {
   assigned_at: order_by
   capture_media_id: order_by
   created_at: order_by
+  display_still_uri: order_by
   display_uri: order_by
   generation_hash: order_by
   id: order_by
@@ -13155,6 +13177,7 @@ input objkt_order_by {
   auctions_aggregate: auction_aggregate_order_by
   capture_media_id: order_by
   created_at: order_by
+  display_still_uri: order_by
   display_uri: order_by
   duplicate: order_by
   features: order_by
@@ -13205,6 +13228,9 @@ enum objkt_select_column {
 
   """column name"""
   created_at
+
+  """column name"""
+  display_still_uri
 
   """column name"""
   display_uri
@@ -13439,6 +13465,7 @@ input objkt_stream_cursor_value_input {
   assigned_at: timestamptz
   capture_media_id: bpchar
   created_at: timestamptz
+  display_still_uri: bpchar
   display_uri: bpchar
   duplicate: Boolean
   features: jsonb
@@ -21493,6 +21520,9 @@ type user {
   """An object relationship"""
   user_stat: user_stats
   wallet: Wallet
+
+  """An object relationship"""
+  wallet_account: foreign_wallet_account
 }
 
 """
@@ -21555,6 +21585,7 @@ input user_bool_exp {
   type: user_type_enum_comparison_exp
   updated_at: timestamptz_comparison_exp
   user_stat: user_stats_bool_exp
+  wallet_account: foreign_wallet_account_bool_exp
 }
 
 scalar user_flag_enum
@@ -21648,6 +21679,7 @@ input user_order_by {
   type: order_by
   updated_at: order_by
   user_stat: user_stats_order_by
+  wallet_account: foreign_wallet_account_order_by
 }
 
 """
