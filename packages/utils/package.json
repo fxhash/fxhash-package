@@ -11,7 +11,7 @@
     "@fxhash/tsconfig": "workspace:*",
     "tsup": "8.2.4",
     "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "vitest": "3.0.4"
   },
   "exports": {
     ".": {
