@@ -13,7 +13,7 @@
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
-    "tslib": "2.6.0",
+    "tslib": "2.6.2",
     "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
