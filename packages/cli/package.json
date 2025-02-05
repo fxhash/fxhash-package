@@ -68,7 +68,6 @@
     "@types/yargs": "17.0.24",
     "chokidar": "3.5.3",
     "eslint": "8.57.0",
-    "eslint-config-next": "13.4.7",
     "tsc-alias": "1.8.5",
     "tslib": "2.6.0",
     "tsup": "8.3.6",
