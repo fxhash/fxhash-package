@@ -9,7 +9,7 @@
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "tslib": "2.6.0",
-    "tsup": "8.2.4",
+    "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
   "exports": {

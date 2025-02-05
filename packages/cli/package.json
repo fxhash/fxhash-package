@@ -71,7 +71,7 @@
     "eslint-config-next": "13.4.7",
     "tsc-alias": "1.8.5",
     "tslib": "2.6.0",
-    "tsup": "8.2.4",
+    "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
   "engines": {
