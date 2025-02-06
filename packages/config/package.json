@@ -9,15 +9,20 @@
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
-    "tsup": "8.3.0",
+    "tsup": "8.3.6",
     "typescript": "5.7.2",
     "unplugin-isolated-decl": "0.6.4"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "require": "./dist/index.cjs"
+      }
     }
   },
   "files": [

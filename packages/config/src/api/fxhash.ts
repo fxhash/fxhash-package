@@ -45,9 +45,6 @@ export const fxhashDevApis: IFxhashApis = {
         "onchfs://4287364ed3219d3f2f77302a71eff0db49e971058ef87f163981ef89a445b143",
     },
   },
-  dashboard: {
-    backend: "https://live-minting.fxhash-dev.xyz",
-  },
   events: {
     liveBackend: "_NONE",
   },
@@ -120,9 +117,6 @@ export const fxhashPrdApis: IFxhashApis = {
       onchfs:
         "onchfs://4287364ed3219d3f2f77302a71eff0db49e971058ef87f163981ef89a445b143",
     },
-  },
-  dashboard: {
-    backend: "https://events.fxhash.xyz",
   },
   events: {
     liveBackend: "_NONE",

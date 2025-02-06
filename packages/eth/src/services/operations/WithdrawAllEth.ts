@@ -1,16 +1,13 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { encodeFunctionData } from "viem"
-
+import { dutchAuctionV2Abi } from "@/__generated__/wagmi.js"
 import {
   simulateAndExecuteContract,
   type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { Qu_GetEthMinterProceeds } from "@fxhash/gql"
 import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
-import {
-  FIXED_PRICE_MINTER_ABI,
-  DUTCH_AUCTION_MINTER_ABI,
-} from "@/abi/index.js"
+import { FIXED_PRICE_MINTER_ABI } from "@/abi/index.js"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits.js"
 import type { CallData } from "@0xsplits/splits-sdk"
 import {
@@ -72,9 +69,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       const isDutchAuction =
         minterProceeds.minter_address ===
         currentConfig.contracts.dutch_auction_minter_v1
-      const abi = isDutchAuction
-        ? DUTCH_AUCTION_MINTER_ABI
-        : FIXED_PRICE_MINTER_ABI
+      const abi = isDutchAuction ? dutchAuctionV2Abi : FIXED_PRICE_MINTER_ABI
       const args = isDutchAuction
         ? ([
             minterProceeds.token_address as `0x${string}`,

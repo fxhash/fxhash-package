@@ -6,8 +6,7 @@ import {
 } from "@fxhash/params"
 import { RuntimeDefinition, RuntimeState, RuntimeWholeState } from "./_types.js"
 import semver from "semver"
-import { float2hex } from "../../../../utils/dist/float.js"
-import { xorshiftString } from "../../../../utils/dist/bytes.js"
+import { float2hex, xorshiftString } from "@fxhash/utils"
 import mergeWith from "lodash.mergewith"
 
 /**
