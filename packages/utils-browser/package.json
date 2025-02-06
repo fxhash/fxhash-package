@@ -10,7 +10,7 @@
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "tsup": "8.2.4",
+    "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
   "exports": {
