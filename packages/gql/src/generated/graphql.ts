@@ -64,6 +64,8 @@ export type Account = {
   /** An array relationship */
   roles: Array<AccountsRoles>;
   status: Scalars['AccountStatus']['output'];
+  /** An object relationship */
+  tokenAllocation?: Maybe<AccountTokenAllocation>;
   username: Scalars['String']['output'];
   /** An array relationship */
   wallets: Array<Wallet>;
@@ -190,6 +192,226 @@ export type AccountStatus_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['AccountStatus']['input']>>;
 };
 
+/** columns and relationships of "AccountTokenAllocation" */
+export type AccountTokenAllocation = {
+  __typename?: 'AccountTokenAllocation';
+  /** An object relationship */
+  account?: Maybe<Account>;
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregated selection of "AccountTokenAllocation" */
+export type AccountTokenAllocation_Aggregate = {
+  __typename?: 'AccountTokenAllocation_aggregate';
+  aggregate?: Maybe<AccountTokenAllocation_Aggregate_Fields>;
+  nodes: Array<AccountTokenAllocation>;
+};
+
+/** aggregate fields of "AccountTokenAllocation" */
+export type AccountTokenAllocation_Aggregate_Fields = {
+  __typename?: 'AccountTokenAllocation_aggregate_fields';
+  avg?: Maybe<AccountTokenAllocation_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<AccountTokenAllocation_Max_Fields>;
+  min?: Maybe<AccountTokenAllocation_Min_Fields>;
+  stddev?: Maybe<AccountTokenAllocation_Stddev_Fields>;
+  stddev_pop?: Maybe<AccountTokenAllocation_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<AccountTokenAllocation_Stddev_Samp_Fields>;
+  sum?: Maybe<AccountTokenAllocation_Sum_Fields>;
+  var_pop?: Maybe<AccountTokenAllocation_Var_Pop_Fields>;
+  var_samp?: Maybe<AccountTokenAllocation_Var_Samp_Fields>;
+  variance?: Maybe<AccountTokenAllocation_Variance_Fields>;
+};
+
+
+/** aggregate fields of "AccountTokenAllocation" */
+export type AccountTokenAllocation_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<AccountTokenAllocation_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type AccountTokenAllocation_Avg_Fields = {
+  __typename?: 'AccountTokenAllocation_avg_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "AccountTokenAllocation". All fields are combined with a logical 'AND'. */
+export type AccountTokenAllocation_Bool_Exp = {
+  _and?: InputMaybe<Array<AccountTokenAllocation_Bool_Exp>>;
+  _not?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
+  _or?: InputMaybe<Array<AccountTokenAllocation_Bool_Exp>>;
+  account?: InputMaybe<Account_Bool_Exp>;
+  accountId?: InputMaybe<Uuid_Comparison_Exp>;
+  earnedTotalUsd?: InputMaybe<Numeric_Comparison_Exp>;
+  monthsActive?: InputMaybe<Int_Comparison_Exp>;
+  nbArtistsCollected?: InputMaybe<Bigint_Comparison_Exp>;
+  nbIterationsMinted?: InputMaybe<Bigint_Comparison_Exp>;
+  spentTotalUsd?: InputMaybe<Numeric_Comparison_Exp>;
+  tokenAllocation_sort?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type AccountTokenAllocation_Max_Fields = {
+  __typename?: 'AccountTokenAllocation_max_fields';
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregate min on columns */
+export type AccountTokenAllocation_Min_Fields = {
+  __typename?: 'AccountTokenAllocation_min_fields';
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** Ordering options when selecting data from "AccountTokenAllocation". */
+export type AccountTokenAllocation_Order_By = {
+  account?: InputMaybe<Account_Order_By>;
+  accountId?: InputMaybe<Order_By>;
+  earnedTotalUsd?: InputMaybe<Order_By>;
+  monthsActive?: InputMaybe<Order_By>;
+  nbArtistsCollected?: InputMaybe<Order_By>;
+  nbIterationsMinted?: InputMaybe<Order_By>;
+  spentTotalUsd?: InputMaybe<Order_By>;
+  tokenAllocation_sort?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "AccountTokenAllocation" */
+export enum AccountTokenAllocation_Select_Column {
+  /** column name */
+  AccountId = 'accountId',
+  /** column name */
+  EarnedTotalUsd = 'earnedTotalUsd',
+  /** column name */
+  MonthsActive = 'monthsActive',
+  /** column name */
+  NbArtistsCollected = 'nbArtistsCollected',
+  /** column name */
+  NbIterationsMinted = 'nbIterationsMinted',
+  /** column name */
+  SpentTotalUsd = 'spentTotalUsd',
+  /** column name */
+  TokenAllocationSort = 'tokenAllocation_sort'
+}
+
+/** aggregate stddev on columns */
+export type AccountTokenAllocation_Stddev_Fields = {
+  __typename?: 'AccountTokenAllocation_stddev_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type AccountTokenAllocation_Stddev_Pop_Fields = {
+  __typename?: 'AccountTokenAllocation_stddev_pop_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type AccountTokenAllocation_Stddev_Samp_Fields = {
+  __typename?: 'AccountTokenAllocation_stddev_samp_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "AccountTokenAllocation" */
+export type AccountTokenAllocation_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AccountTokenAllocation_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AccountTokenAllocation_Stream_Cursor_Value_Input = {
+  accountId?: InputMaybe<Scalars['uuid']['input']>;
+  earnedTotalUsd?: InputMaybe<Scalars['numeric']['input']>;
+  monthsActive?: InputMaybe<Scalars['Int']['input']>;
+  nbArtistsCollected?: InputMaybe<Scalars['bigint']['input']>;
+  nbIterationsMinted?: InputMaybe<Scalars['bigint']['input']>;
+  spentTotalUsd?: InputMaybe<Scalars['numeric']['input']>;
+  tokenAllocation_sort?: InputMaybe<Scalars['numeric']['input']>;
+};
+
+/** aggregate sum on columns */
+export type AccountTokenAllocation_Sum_Fields = {
+  __typename?: 'AccountTokenAllocation_sum_fields';
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregate var_pop on columns */
+export type AccountTokenAllocation_Var_Pop_Fields = {
+  __typename?: 'AccountTokenAllocation_var_pop_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type AccountTokenAllocation_Var_Samp_Fields = {
+  __typename?: 'AccountTokenAllocation_var_samp_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type AccountTokenAllocation_Variance_Fields = {
+  __typename?: 'AccountTokenAllocation_variance_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
 /** aggregated selection of "Account" */
 export type Account_Aggregate = {
   __typename?: 'Account_aggregate';
@@ -225,6 +447,7 @@ export type Account_Bool_Exp = {
   profile?: InputMaybe<Profile_Bool_Exp>;
   roles?: InputMaybe<AccountsRoles_Bool_Exp>;
   status?: InputMaybe<AccountStatus_Comparison_Exp>;
+  tokenAllocation?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
   username?: InputMaybe<String_Comparison_Exp>;
   wallets?: InputMaybe<Wallet_Bool_Exp>;
 };
@@ -264,6 +487,7 @@ export type Account_Order_By = {
   profile?: InputMaybe<Profile_Order_By>;
   roles_aggregate?: InputMaybe<AccountsRoles_Aggregate_Order_By>;
   status?: InputMaybe<Order_By>;
+  tokenAllocation?: InputMaybe<AccountTokenAllocation_Order_By>;
   username?: InputMaybe<Order_By>;
   wallets_aggregate?: InputMaybe<Wallet_Aggregate_Order_By>;
 };
@@ -2391,6 +2615,168 @@ export type RequestMintResult = {
   hash: Scalars['String']['output'];
 };
 
+/** columns and relationships of "Retrospective" */
+export type Retrospective = {
+  __typename?: 'Retrospective';
+  bestCollectors?: Maybe<Scalars['String']['output']>;
+  bestProjectCreated?: Maybe<Scalars['String']['output']>;
+  biggestSaleAsArtist?: Maybe<Scalars['String']['output']>;
+  earnedPrimary: Scalars['String']['output'];
+  earnedRoyalties: Scalars['String']['output'];
+  earnedSecondary: Scalars['String']['output'];
+  earnedTotalNb: Scalars['Int']['output'];
+  earnedTotalUsd: Scalars['numeric']['output'];
+  monthsActive: Scalars['Int']['output'];
+  mostArtistsCollected: Scalars['String']['output'];
+  mostProjectCollected?: Maybe<Scalars['String']['output']>;
+  nbArtistsCollected: Scalars['Int']['output'];
+  nbCollectors: Scalars['Int']['output'];
+  nbIterationsMinted: Scalars['Int']['output'];
+  nbProjectsCreated: Scalars['Int']['output'];
+  spentPrimary: Scalars['String']['output'];
+  spentSecondary: Scalars['String']['output'];
+  spentTotalNb: Scalars['Int']['output'];
+  spentTotalUsd: Scalars['numeric']['output'];
+  tokenAllocation: Scalars['numeric']['output'];
+  /** An object relationship */
+  wallet?: Maybe<Wallet>;
+  walletAddress: Scalars['String']['output'];
+};
+
+/** Boolean expression to filter rows from the table "Retrospective". All fields are combined with a logical 'AND'. */
+export type Retrospective_Bool_Exp = {
+  _and?: InputMaybe<Array<Retrospective_Bool_Exp>>;
+  _not?: InputMaybe<Retrospective_Bool_Exp>;
+  _or?: InputMaybe<Array<Retrospective_Bool_Exp>>;
+  bestCollectors?: InputMaybe<String_Comparison_Exp>;
+  bestProjectCreated?: InputMaybe<String_Comparison_Exp>;
+  biggestSaleAsArtist?: InputMaybe<String_Comparison_Exp>;
+  earnedPrimary?: InputMaybe<String_Comparison_Exp>;
+  earnedRoyalties?: InputMaybe<String_Comparison_Exp>;
+  earnedSecondary?: InputMaybe<String_Comparison_Exp>;
+  earnedTotalNb?: InputMaybe<Int_Comparison_Exp>;
+  earnedTotalUsd?: InputMaybe<Numeric_Comparison_Exp>;
+  monthsActive?: InputMaybe<Int_Comparison_Exp>;
+  mostArtistsCollected?: InputMaybe<String_Comparison_Exp>;
+  mostProjectCollected?: InputMaybe<String_Comparison_Exp>;
+  nbArtistsCollected?: InputMaybe<Int_Comparison_Exp>;
+  nbCollectors?: InputMaybe<Int_Comparison_Exp>;
+  nbIterationsMinted?: InputMaybe<Int_Comparison_Exp>;
+  nbProjectsCreated?: InputMaybe<Int_Comparison_Exp>;
+  spentPrimary?: InputMaybe<String_Comparison_Exp>;
+  spentSecondary?: InputMaybe<String_Comparison_Exp>;
+  spentTotalNb?: InputMaybe<Int_Comparison_Exp>;
+  spentTotalUsd?: InputMaybe<Numeric_Comparison_Exp>;
+  tokenAllocation?: InputMaybe<Numeric_Comparison_Exp>;
+  wallet?: InputMaybe<Wallet_Bool_Exp>;
+  walletAddress?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "Retrospective". */
+export type Retrospective_Order_By = {
+  bestCollectors?: InputMaybe<Order_By>;
+  bestProjectCreated?: InputMaybe<Order_By>;
+  biggestSaleAsArtist?: InputMaybe<Order_By>;
+  earnedPrimary?: InputMaybe<Order_By>;
+  earnedRoyalties?: InputMaybe<Order_By>;
+  earnedSecondary?: InputMaybe<Order_By>;
+  earnedTotalNb?: InputMaybe<Order_By>;
+  earnedTotalUsd?: InputMaybe<Order_By>;
+  monthsActive?: InputMaybe<Order_By>;
+  mostArtistsCollected?: InputMaybe<Order_By>;
+  mostProjectCollected?: InputMaybe<Order_By>;
+  nbArtistsCollected?: InputMaybe<Order_By>;
+  nbCollectors?: InputMaybe<Order_By>;
+  nbIterationsMinted?: InputMaybe<Order_By>;
+  nbProjectsCreated?: InputMaybe<Order_By>;
+  spentPrimary?: InputMaybe<Order_By>;
+  spentSecondary?: InputMaybe<Order_By>;
+  spentTotalNb?: InputMaybe<Order_By>;
+  spentTotalUsd?: InputMaybe<Order_By>;
+  tokenAllocation?: InputMaybe<Order_By>;
+  wallet?: InputMaybe<Wallet_Order_By>;
+  walletAddress?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "Retrospective" */
+export enum Retrospective_Select_Column {
+  /** column name */
+  BestCollectors = 'bestCollectors',
+  /** column name */
+  BestProjectCreated = 'bestProjectCreated',
+  /** column name */
+  BiggestSaleAsArtist = 'biggestSaleAsArtist',
+  /** column name */
+  EarnedPrimary = 'earnedPrimary',
+  /** column name */
+  EarnedRoyalties = 'earnedRoyalties',
+  /** column name */
+  EarnedSecondary = 'earnedSecondary',
+  /** column name */
+  EarnedTotalNb = 'earnedTotalNb',
+  /** column name */
+  EarnedTotalUsd = 'earnedTotalUsd',
+  /** column name */
+  MonthsActive = 'monthsActive',
+  /** column name */
+  MostArtistsCollected = 'mostArtistsCollected',
+  /** column name */
+  MostProjectCollected = 'mostProjectCollected',
+  /** column name */
+  NbArtistsCollected = 'nbArtistsCollected',
+  /** column name */
+  NbCollectors = 'nbCollectors',
+  /** column name */
+  NbIterationsMinted = 'nbIterationsMinted',
+  /** column name */
+  NbProjectsCreated = 'nbProjectsCreated',
+  /** column name */
+  SpentPrimary = 'spentPrimary',
+  /** column name */
+  SpentSecondary = 'spentSecondary',
+  /** column name */
+  SpentTotalNb = 'spentTotalNb',
+  /** column name */
+  SpentTotalUsd = 'spentTotalUsd',
+  /** column name */
+  TokenAllocation = 'tokenAllocation',
+  /** column name */
+  WalletAddress = 'walletAddress'
+}
+
+/** Streaming cursor of the table "Retrospective" */
+export type Retrospective_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Retrospective_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Retrospective_Stream_Cursor_Value_Input = {
+  bestCollectors?: InputMaybe<Scalars['String']['input']>;
+  bestProjectCreated?: InputMaybe<Scalars['String']['input']>;
+  biggestSaleAsArtist?: InputMaybe<Scalars['String']['input']>;
+  earnedPrimary?: InputMaybe<Scalars['String']['input']>;
+  earnedRoyalties?: InputMaybe<Scalars['String']['input']>;
+  earnedSecondary?: InputMaybe<Scalars['String']['input']>;
+  earnedTotalNb?: InputMaybe<Scalars['Int']['input']>;
+  earnedTotalUsd?: InputMaybe<Scalars['numeric']['input']>;
+  monthsActive?: InputMaybe<Scalars['Int']['input']>;
+  mostArtistsCollected?: InputMaybe<Scalars['String']['input']>;
+  mostProjectCollected?: InputMaybe<Scalars['String']['input']>;
+  nbArtistsCollected?: InputMaybe<Scalars['Int']['input']>;
+  nbCollectors?: InputMaybe<Scalars['Int']['input']>;
+  nbIterationsMinted?: InputMaybe<Scalars['Int']['input']>;
+  nbProjectsCreated?: InputMaybe<Scalars['Int']['input']>;
+  spentPrimary?: InputMaybe<Scalars['String']['input']>;
+  spentSecondary?: InputMaybe<Scalars['String']['input']>;
+  spentTotalNb?: InputMaybe<Scalars['Int']['input']>;
+  spentTotalUsd?: InputMaybe<Scalars['numeric']['input']>;
+  tokenAllocation?: InputMaybe<Scalars['numeric']['input']>;
+  walletAddress?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type SearchEntity = {
   __typename?: 'SearchEntity';
   account?: Maybe<SearchEntityAccount>;
@@ -2594,6 +2980,8 @@ export type Wallet = {
   accountId: Scalars['uuid']['output'];
   address: Scalars['String']['output'];
   network: Scalars['BlockchainNetwork']['output'];
+  /** An object relationship */
+  retrospective?: Maybe<Retrospective>;
   walletUser: Array<User>;
 };
 
@@ -2630,6 +3018,7 @@ export type Wallet_Bool_Exp = {
   accountId?: InputMaybe<Uuid_Comparison_Exp>;
   address?: InputMaybe<String_Comparison_Exp>;
   network?: InputMaybe<BlockchainNetwork_Comparison_Exp>;
+  retrospective?: InputMaybe<Retrospective_Bool_Exp>;
 };
 
 /** order by max() on columns of table "Wallet" */
@@ -2652,6 +3041,7 @@ export type Wallet_Order_By = {
   accountId?: InputMaybe<Order_By>;
   address?: InputMaybe<Order_By>;
   network?: InputMaybe<Order_By>;
+  retrospective?: InputMaybe<Retrospective_Order_By>;
 };
 
 /** select columns of table "Wallet" */
@@ -2897,7 +3287,7 @@ export type Action = {
   issuer?: Maybe<User>;
   issuer_id?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
-  issuer_wallet?: Maybe<Foreign_Wallet>;
+  issuer_wallet_account?: Maybe<Foreign_Wallet_Account>;
   metadata?: Maybe<Scalars['jsonb']['output']>;
   numeric_value?: Maybe<Scalars['numeric']['output']>;
   /** An object relationship */
@@ -3005,7 +3395,7 @@ export type Action_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   issuer?: InputMaybe<User_Bool_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
-  issuer_wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  issuer_wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   numeric_value?: InputMaybe<Numeric_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
@@ -3101,7 +3491,7 @@ export type Action_Order_By = {
   id?: InputMaybe<Order_By>;
   issuer?: InputMaybe<User_Order_By>;
   issuer_id?: InputMaybe<Order_By>;
-  issuer_wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+  issuer_wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
   metadata?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
@@ -3274,6 +3664,280 @@ export type Action_Variance_Fields = {
 export type Action_Variance_Order_By = {
   article_id?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "active_listing" */
+export type Active_Listing = {
+  __typename?: 'active_listing';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  is_inactive?: Maybe<Scalars['Boolean']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['jsonb']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+
+/** columns and relationships of "active_listing" */
+export type Active_ListingMetadataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** aggregated selection of "active_listing" */
+export type Active_Listing_Aggregate = {
+  __typename?: 'active_listing_aggregate';
+  aggregate?: Maybe<Active_Listing_Aggregate_Fields>;
+  nodes: Array<Active_Listing>;
+};
+
+/** aggregate fields of "active_listing" */
+export type Active_Listing_Aggregate_Fields = {
+  __typename?: 'active_listing_aggregate_fields';
+  avg?: Maybe<Active_Listing_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Active_Listing_Max_Fields>;
+  min?: Maybe<Active_Listing_Min_Fields>;
+  stddev?: Maybe<Active_Listing_Stddev_Fields>;
+  stddev_pop?: Maybe<Active_Listing_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Active_Listing_Stddev_Samp_Fields>;
+  sum?: Maybe<Active_Listing_Sum_Fields>;
+  var_pop?: Maybe<Active_Listing_Var_Pop_Fields>;
+  var_samp?: Maybe<Active_Listing_Var_Samp_Fields>;
+  variance?: Maybe<Active_Listing_Variance_Fields>;
+};
+
+
+/** aggregate fields of "active_listing" */
+export type Active_Listing_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Active_Listing_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Active_Listing_Avg_Fields = {
+  __typename?: 'active_listing_avg_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "active_listing". All fields are combined with a logical 'AND'. */
+export type Active_Listing_Bool_Exp = {
+  _and?: InputMaybe<Array<Active_Listing_Bool_Exp>>;
+  _not?: InputMaybe<Active_Listing_Bool_Exp>;
+  _or?: InputMaybe<Array<Active_Listing_Bool_Exp>>;
+  accepted_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  accepted_by_id?: InputMaybe<String_Comparison_Exp>;
+  amount?: InputMaybe<Numeric_Comparison_Exp>;
+  article_id?: InputMaybe<Int_Comparison_Exp>;
+  cancelled_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
+  issuer_id?: InputMaybe<String_Comparison_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
+  objkt_id?: InputMaybe<String_Comparison_Exp>;
+  price?: InputMaybe<Numeric_Comparison_Exp>;
+  royalties?: InputMaybe<Int_Comparison_Exp>;
+  status?: InputMaybe<Listing_Status_Enum_Comparison_Exp>;
+  version?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Active_Listing_Max_Fields = {
+  __typename?: 'active_listing_max_fields';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate min on columns */
+export type Active_Listing_Min_Fields = {
+  __typename?: 'active_listing_min_fields';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+/** Ordering options when selecting data from "active_listing". */
+export type Active_Listing_Order_By = {
+  accepted_at?: InputMaybe<Order_By>;
+  accepted_by_id?: InputMaybe<Order_By>;
+  amount?: InputMaybe<Order_By>;
+  article_id?: InputMaybe<Order_By>;
+  cancelled_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  is_inactive?: InputMaybe<Order_By>;
+  issuer_id?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
+  objkt_id?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  royalties?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "active_listing" */
+export enum Active_Listing_Select_Column {
+  /** column name */
+  AcceptedAt = 'accepted_at',
+  /** column name */
+  AcceptedById = 'accepted_by_id',
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  ArticleId = 'article_id',
+  /** column name */
+  CancelledAt = 'cancelled_at',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsInactive = 'is_inactive',
+  /** column name */
+  IssuerId = 'issuer_id',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  ObjktId = 'objkt_id',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Royalties = 'royalties',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  Version = 'version'
+}
+
+/** aggregate stddev on columns */
+export type Active_Listing_Stddev_Fields = {
+  __typename?: 'active_listing_stddev_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Active_Listing_Stddev_Pop_Fields = {
+  __typename?: 'active_listing_stddev_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Active_Listing_Stddev_Samp_Fields = {
+  __typename?: 'active_listing_stddev_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "active_listing" */
+export type Active_Listing_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Active_Listing_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Active_Listing_Stream_Cursor_Value_Input = {
+  accepted_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  accepted_by_id?: InputMaybe<Scalars['String']['input']>;
+  amount?: InputMaybe<Scalars['numeric']['input']>;
+  article_id?: InputMaybe<Scalars['Int']['input']>;
+  cancelled_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
+  issuer_id?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['jsonb']['input']>;
+  objkt_id?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['numeric']['input']>;
+  royalties?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<Scalars['listing_status_enum']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Active_Listing_Sum_Fields = {
+  __typename?: 'active_listing_sum_fields';
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate var_pop on columns */
+export type Active_Listing_Var_Pop_Fields = {
+  __typename?: 'active_listing_var_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Active_Listing_Var_Samp_Fields = {
+  __typename?: 'active_listing_var_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Active_Listing_Variance_Fields = {
+  __typename?: 'active_listing_variance_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "any_offer" */
@@ -3535,7 +4199,7 @@ export type Article = {
   /** An object relationship */
   user: User;
   /** An object relationship */
-  wallet?: Maybe<Foreign_Wallet>;
+  wallet_account?: Maybe<Foreign_Wallet_Account>;
 };
 
 
@@ -3761,7 +4425,7 @@ export type Article_Bool_Exp = {
   title?: InputMaybe<String_Comparison_Exp>;
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
-  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "article_flag_enum". All fields are combined with logical 'AND'. */
@@ -3915,7 +4579,7 @@ export type Article_Ledger = {
   /** An object relationship */
   user: User;
   /** An object relationship */
-  wallet?: Maybe<Foreign_Wallet>;
+  wallet_account?: Maybe<Foreign_Wallet_Account>;
 };
 
 /** aggregated selection of "article_ledger" */
@@ -3997,7 +4661,7 @@ export type Article_Ledger_Bool_Exp = {
   article_id?: InputMaybe<Int_Comparison_Exp>;
   owner_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
-  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -4037,7 +4701,7 @@ export type Article_Ledger_Order_By = {
   article_id?: InputMaybe<Order_By>;
   owner_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
-  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
 };
 
 /** select columns of table "article_ledger" */
@@ -4293,7 +4957,7 @@ export type Article_Order_By = {
   title?: InputMaybe<Order_By>;
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   user?: InputMaybe<User_Order_By>;
-  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
 };
 
 /** columns and relationships of "article_revision" */
@@ -4648,10 +5312,11 @@ export type Article_Variance_Order_By = {
 /** columns and relationships of "artist" */
 export type Artist = {
   __typename?: 'artist';
-  /** An object relationship */
-  account?: Maybe<Foreign_Account>;
   flag?: Maybe<Scalars['user_flag_enum']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
+  /** An object relationship */
+  wallet_account?: Maybe<Foreign_Wallet_Account>;
 };
 
 /** aggregated selection of "artist" */
@@ -4681,9 +5346,10 @@ export type Artist_Bool_Exp = {
   _and?: InputMaybe<Array<Artist_Bool_Exp>>;
   _not?: InputMaybe<Artist_Bool_Exp>;
   _or?: InputMaybe<Array<Artist_Bool_Exp>>;
-  account?: InputMaybe<Foreign_Account_Bool_Exp>;
   flag?: InputMaybe<User_Flag_Enum_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  username?: InputMaybe<String_Comparison_Exp>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -4691,6 +5357,7 @@ export type Artist_Max_Fields = {
   __typename?: 'artist_max_fields';
   flag?: Maybe<Scalars['user_flag_enum']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
@@ -4698,13 +5365,15 @@ export type Artist_Min_Fields = {
   __typename?: 'artist_min_fields';
   flag?: Maybe<Scalars['user_flag_enum']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 /** Ordering options when selecting data from "artist". */
 export type Artist_Order_By = {
-  account?: InputMaybe<Foreign_Account_Order_By>;
   flag?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  username?: InputMaybe<Order_By>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
 };
 
 /** select columns of table "artist" */
@@ -4712,7 +5381,9 @@ export enum Artist_Select_Column {
   /** column name */
   Flag = 'flag',
   /** column name */
-  Id = 'id'
+  Id = 'id',
+  /** column name */
+  Username = 'username'
 }
 
 /** Streaming cursor of the table "artist" */
@@ -4727,6 +5398,7 @@ export type Artist_Stream_Cursor_Input = {
 export type Artist_Stream_Cursor_Value_Input = {
   flag?: InputMaybe<Scalars['user_flag_enum']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** columns and relationships of "auction" */
@@ -5217,44 +5889,34 @@ export type Auction_Variance_Order_By = {
   version?: InputMaybe<Order_By>;
 };
 
-/** columns and relationships of "squid_processor_base.status" */
+/** columns and relationships of "squid_processor_base.hot_block" */
 export type Base_Indexer = {
   __typename?: 'base_indexer';
-  hash?: Maybe<Scalars['String']['output']>;
+  hash: Scalars['String']['output'];
   height: Scalars['Int']['output'];
-  id: Scalars['Int']['output'];
-  nonce?: Maybe<Scalars['Int']['output']>;
 };
 
-/** Boolean expression to filter rows from the table "squid_processor_base.status". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "squid_processor_base.hot_block". All fields are combined with a logical 'AND'. */
 export type Base_Indexer_Bool_Exp = {
   _and?: InputMaybe<Array<Base_Indexer_Bool_Exp>>;
   _not?: InputMaybe<Base_Indexer_Bool_Exp>;
   _or?: InputMaybe<Array<Base_Indexer_Bool_Exp>>;
   hash?: InputMaybe<String_Comparison_Exp>;
   height?: InputMaybe<Int_Comparison_Exp>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  nonce?: InputMaybe<Int_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "squid_processor_base.status". */
+/** Ordering options when selecting data from "squid_processor_base.hot_block". */
 export type Base_Indexer_Order_By = {
   hash?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  nonce?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "squid_processor_base.status" */
+/** select columns of table "squid_processor_base.hot_block" */
 export enum Base_Indexer_Select_Column {
   /** column name */
   Hash = 'hash',
   /** column name */
-  Height = 'height',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Nonce = 'nonce'
+  Height = 'height'
 }
 
 /** Streaming cursor of the table "base_indexer" */
@@ -5269,8 +5931,6 @@ export type Base_Indexer_Stream_Cursor_Input = {
 export type Base_Indexer_Stream_Cursor_Value_Input = {
   hash?: InputMaybe<Scalars['String']['input']>;
   height?: InputMaybe<Scalars['Int']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
-  nonce?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'. */
@@ -5564,13 +6224,17 @@ export type Codex_Update_Request_Stream_Cursor_Value_Input = {
 export type Collaboration = {
   __typename?: 'collaboration';
   collaboration_contract_id: Scalars['String']['output'];
+  /** An object relationship */
+  collaborator: User;
   collaborator_id: Scalars['String']['output'];
+  /** An object relationship */
+  contract: User;
   /** An object relationship */
   user: User;
   /** An object relationship */
   userByCollaboratorId: User;
   /** An object relationship */
-  wallet?: Maybe<Foreign_Wallet>;
+  wallet_account?: Maybe<Foreign_Wallet_Account>;
 };
 
 /** order by aggregate values of table "collaboration" */
@@ -5586,10 +6250,12 @@ export type Collaboration_Bool_Exp = {
   _not?: InputMaybe<Collaboration_Bool_Exp>;
   _or?: InputMaybe<Array<Collaboration_Bool_Exp>>;
   collaboration_contract_id?: InputMaybe<String_Comparison_Exp>;
+  collaborator?: InputMaybe<User_Bool_Exp>;
   collaborator_id?: InputMaybe<String_Comparison_Exp>;
+  contract?: InputMaybe<User_Bool_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   userByCollaboratorId?: InputMaybe<User_Bool_Exp>;
-  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 /** order by max() on columns of table "collaboration" */
@@ -5607,10 +6273,12 @@ export type Collaboration_Min_Order_By = {
 /** Ordering options when selecting data from "collaboration". */
 export type Collaboration_Order_By = {
   collaboration_contract_id?: InputMaybe<Order_By>;
+  collaborator?: InputMaybe<User_Order_By>;
   collaborator_id?: InputMaybe<Order_By>;
+  contract?: InputMaybe<User_Order_By>;
   user?: InputMaybe<User_Order_By>;
   userByCollaboratorId?: InputMaybe<User_Order_By>;
-  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
 };
 
 /** select columns of table "collaboration" */
@@ -5939,44 +6607,34 @@ export type Eth_Frame_Data_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** columns and relationships of "squid_processor.status" */
+/** columns and relationships of "squid_processor.hot_block" */
 export type Eth_Indexer = {
   __typename?: 'eth_indexer';
-  hash?: Maybe<Scalars['String']['output']>;
+  hash: Scalars['String']['output'];
   height: Scalars['Int']['output'];
-  id: Scalars['Int']['output'];
-  nonce?: Maybe<Scalars['Int']['output']>;
 };
 
-/** Boolean expression to filter rows from the table "squid_processor.status". All fields are combined with a logical 'AND'. */
+/** Boolean expression to filter rows from the table "squid_processor.hot_block". All fields are combined with a logical 'AND'. */
 export type Eth_Indexer_Bool_Exp = {
   _and?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
   _not?: InputMaybe<Eth_Indexer_Bool_Exp>;
   _or?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
   hash?: InputMaybe<String_Comparison_Exp>;
   height?: InputMaybe<Int_Comparison_Exp>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  nonce?: InputMaybe<Int_Comparison_Exp>;
 };
 
-/** Ordering options when selecting data from "squid_processor.status". */
+/** Ordering options when selecting data from "squid_processor.hot_block". */
 export type Eth_Indexer_Order_By = {
   hash?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  nonce?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "squid_processor.status" */
+/** select columns of table "squid_processor.hot_block" */
 export enum Eth_Indexer_Select_Column {
   /** column name */
   Hash = 'hash',
   /** column name */
-  Height = 'height',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Nonce = 'nonce'
+  Height = 'height'
 }
 
 /** Streaming cursor of the table "eth_indexer" */
@@ -5991,8 +6649,6 @@ export type Eth_Indexer_Stream_Cursor_Input = {
 export type Eth_Indexer_Stream_Cursor_Value_Input = {
   hash?: InputMaybe<Scalars['String']['input']>;
   height?: InputMaybe<Scalars['Int']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
-  nonce?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** columns and relationships of "eth_minter_proceeds" */
@@ -6274,133 +6930,60 @@ export type Float8_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['float8']['input']>>;
 };
 
-/** columns and relationships of "foreign_account" */
-export type Foreign_Account = {
-  __typename?: 'foreign_account';
-  id?: Maybe<Scalars['uuid']['output']>;
-  username?: Maybe<Scalars['String']['output']>;
-  /** An array relationship */
-  wallets: Array<Foreign_Wallet>;
-};
-
-
-/** columns and relationships of "foreign_account" */
-export type Foreign_AccountWalletsArgs = {
-  distinct_on?: InputMaybe<Array<Foreign_Wallet_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Foreign_Wallet_Order_By>>;
-  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
-};
-
-/** Boolean expression to filter rows from the table "foreign_account". All fields are combined with a logical 'AND'. */
-export type Foreign_Account_Bool_Exp = {
-  _and?: InputMaybe<Array<Foreign_Account_Bool_Exp>>;
-  _not?: InputMaybe<Foreign_Account_Bool_Exp>;
-  _or?: InputMaybe<Array<Foreign_Account_Bool_Exp>>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  username?: InputMaybe<String_Comparison_Exp>;
-  wallets?: InputMaybe<Foreign_Wallet_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "foreign_account". */
-export type Foreign_Account_Order_By = {
-  id?: InputMaybe<Order_By>;
-  username?: InputMaybe<Order_By>;
-  wallets_aggregate?: InputMaybe<Foreign_Wallet_Aggregate_Order_By>;
-};
-
-/** select columns of table "foreign_account" */
-export enum Foreign_Account_Select_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Username = 'username'
-}
-
-/** Streaming cursor of the table "foreign_account" */
-export type Foreign_Account_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Foreign_Account_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Foreign_Account_Stream_Cursor_Value_Input = {
-  id?: InputMaybe<Scalars['uuid']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** columns and relationships of "foreign_wallet" */
-export type Foreign_Wallet = {
-  __typename?: 'foreign_wallet';
-  /** An object relationship */
-  account?: Maybe<Foreign_Account>;
+/** columns and relationships of "foreign_wallet_account" */
+export type Foreign_Wallet_Account = {
+  __typename?: 'foreign_wallet_account';
+  account?: Maybe<Account>;
   accountId?: Maybe<Scalars['uuid']['output']>;
-  address?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   user?: Maybe<User>;
+  username?: Maybe<Scalars['String']['output']>;
+  wallet?: Maybe<Wallet>;
+  walletAddress?: Maybe<Scalars['String']['output']>;
 };
 
-/** order by aggregate values of table "foreign_wallet" */
-export type Foreign_Wallet_Aggregate_Order_By = {
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Foreign_Wallet_Max_Order_By>;
-  min?: InputMaybe<Foreign_Wallet_Min_Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "foreign_wallet". All fields are combined with a logical 'AND'. */
-export type Foreign_Wallet_Bool_Exp = {
-  _and?: InputMaybe<Array<Foreign_Wallet_Bool_Exp>>;
-  _not?: InputMaybe<Foreign_Wallet_Bool_Exp>;
-  _or?: InputMaybe<Array<Foreign_Wallet_Bool_Exp>>;
-  account?: InputMaybe<Foreign_Account_Bool_Exp>;
+/** Boolean expression to filter rows from the table "foreign_wallet_account". All fields are combined with a logical 'AND'. */
+export type Foreign_Wallet_Account_Bool_Exp = {
+  _and?: InputMaybe<Array<Foreign_Wallet_Account_Bool_Exp>>;
+  _not?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  _or?: InputMaybe<Array<Foreign_Wallet_Account_Bool_Exp>>;
   accountId?: InputMaybe<Uuid_Comparison_Exp>;
-  address?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
+  username?: InputMaybe<String_Comparison_Exp>;
+  walletAddress?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** order by max() on columns of table "foreign_wallet" */
-export type Foreign_Wallet_Max_Order_By = {
+/** Ordering options when selecting data from "foreign_wallet_account". */
+export type Foreign_Wallet_Account_Order_By = {
   accountId?: InputMaybe<Order_By>;
-  address?: InputMaybe<Order_By>;
-};
-
-/** order by min() on columns of table "foreign_wallet" */
-export type Foreign_Wallet_Min_Order_By = {
-  accountId?: InputMaybe<Order_By>;
-  address?: InputMaybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "foreign_wallet". */
-export type Foreign_Wallet_Order_By = {
-  account?: InputMaybe<Foreign_Account_Order_By>;
-  accountId?: InputMaybe<Order_By>;
-  address?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
+  username?: InputMaybe<Order_By>;
+  walletAddress?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "foreign_wallet" */
-export enum Foreign_Wallet_Select_Column {
+/** select columns of table "foreign_wallet_account" */
+export enum Foreign_Wallet_Account_Select_Column {
   /** column name */
   AccountId = 'accountId',
   /** column name */
-  Address = 'address'
+  Username = 'username',
+  /** column name */
+  WalletAddress = 'walletAddress'
 }
 
-/** Streaming cursor of the table "foreign_wallet" */
-export type Foreign_Wallet_Stream_Cursor_Input = {
+/** Streaming cursor of the table "foreign_wallet_account" */
+export type Foreign_Wallet_Account_Stream_Cursor_Input = {
   /** Stream column input with initial value */
-  initial_value: Foreign_Wallet_Stream_Cursor_Value_Input;
+  initial_value: Foreign_Wallet_Account_Stream_Cursor_Value_Input;
   /** cursor ordering */
   ordering?: InputMaybe<Cursor_Ordering>;
 };
 
 /** Initial value of the column from where the streaming should start */
-export type Foreign_Wallet_Stream_Cursor_Value_Input = {
+export type Foreign_Wallet_Account_Stream_Cursor_Value_Input = {
   accountId?: InputMaybe<Scalars['uuid']['input']>;
-  address?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  walletAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** columns and relationships of "generative_token" */
@@ -6501,7 +7084,7 @@ export type Generative_Token = {
   user?: Maybe<User>;
   version: Scalars['generative_token_version']['output'];
   /** An object relationship */
-  wallet?: Maybe<Foreign_Wallet>;
+  wallet_account?: Maybe<Foreign_Wallet_Account>;
 };
 
 
@@ -6898,7 +7481,7 @@ export type Generative_Token_Bool_Exp = {
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
-  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 /** columns and relationships of "generative_token_collected" */
@@ -7342,7 +7925,7 @@ export type Generative_Token_Order_By = {
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
-  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
 };
 
 /** select columns of table "generative_token" */
@@ -10296,6 +10879,8 @@ export type Objkt = {
   actions: Array<Action>;
   /** An aggregate relationship */
   actions_aggregate: Action_Aggregate;
+  /** An object relationship */
+  active_listings?: Maybe<Active_Listing>;
   assigned?: Maybe<Scalars['Boolean']['output']>;
   assigned_at?: Maybe<Scalars['timestamptz']['output']>;
   /** An array relationship */
@@ -10349,7 +10934,7 @@ export type Objkt = {
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
   version: Scalars['Int']['output'];
   /** An object relationship */
-  wallet?: Maybe<Foreign_Wallet>;
+  wallet_account?: Maybe<Foreign_Wallet_Account>;
 };
 
 
@@ -10636,6 +11221,7 @@ export type Objkt_Bool_Exp = {
   _or?: InputMaybe<Array<Objkt_Bool_Exp>>;
   actions?: InputMaybe<Action_Bool_Exp>;
   actions_aggregate?: InputMaybe<Action_Aggregate_Bool_Exp>;
+  active_listings?: InputMaybe<Active_Listing_Bool_Exp>;
   assigned?: InputMaybe<Boolean_Comparison_Exp>;
   assigned_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   auctions?: InputMaybe<Auction_Bool_Exp>;
@@ -10674,7 +11260,7 @@ export type Objkt_Bool_Exp = {
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   version?: InputMaybe<Int_Comparison_Exp>;
-  wallet?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -10782,6 +11368,7 @@ export type Objkt_Min_Order_By = {
 /** Ordering options when selecting data from "objkt". */
 export type Objkt_Order_By = {
   actions_aggregate?: InputMaybe<Action_Aggregate_Order_By>;
+  active_listings?: InputMaybe<Active_Listing_Order_By>;
   assigned?: InputMaybe<Order_By>;
   assigned_at?: InputMaybe<Order_By>;
   auctions_aggregate?: InputMaybe<Auction_Aggregate_Order_By>;
@@ -10819,7 +11406,7 @@ export type Objkt_Order_By = {
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
-  wallet?: InputMaybe<Foreign_Wallet_Order_By>;
+  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
 };
 
 /** select columns of table "objkt" */
@@ -11276,6 +11863,10 @@ export type Offchain_Query = {
   AccountRole: Array<AccountRole>;
   /** fetch data from the table: "AccountRole" using primary key columns */
   AccountRole_by_pk?: Maybe<AccountRole>;
+  /** fetch data from the table: "AccountTokenAllocation" */
+  AccountTokenAllocation: Array<AccountTokenAllocation>;
+  /** fetch aggregated fields from the table: "AccountTokenAllocation" */
+  AccountTokenAllocation_aggregate: AccountTokenAllocation_Aggregate;
   /** fetch aggregated fields from the table: "Account" */
   Account_aggregate: Account_Aggregate;
   /** fetch data from the table: "Account" using primary key columns */
@@ -11334,6 +11925,10 @@ export type Offchain_Query = {
   ProjectMedia: Array<ProjectMedia>;
   /** fetch data from the table: "Project" using primary key columns */
   Project_by_pk?: Maybe<Project>;
+  /** fetch data from the table: "Retrospective" */
+  Retrospective: Array<Retrospective>;
+  /** fetch data from the table: "Retrospective" using primary key columns */
+  Retrospective_by_pk?: Maybe<Retrospective>;
   /** fetch data from the table: "UserAccount" */
   UserAccount: Array<UserAccount>;
   /** fetch data from the table: "Wallet" */
@@ -11371,6 +11966,24 @@ export type Offchain_QueryAccountRoleArgs = {
 
 export type Offchain_QueryAccountRole_By_PkArgs = {
   value: Scalars['String']['input'];
+};
+
+
+export type Offchain_QueryAccountTokenAllocationArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocation_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocation_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
+};
+
+
+export type Offchain_QueryAccountTokenAllocation_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocation_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocation_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
 };
 
 
@@ -11586,6 +12199,20 @@ export type Offchain_QueryProject_By_PkArgs = {
 };
 
 
+export type Offchain_QueryRetrospectiveArgs = {
+  distinct_on?: InputMaybe<Array<Retrospective_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Retrospective_Order_By>>;
+  where?: InputMaybe<Retrospective_Bool_Exp>;
+};
+
+
+export type Offchain_QueryRetrospective_By_PkArgs = {
+  walletAddress: Scalars['String']['input'];
+};
+
+
 export type Offchain_QueryUserAccountArgs = {
   distinct_on?: InputMaybe<Array<UserAccount_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -11647,6 +12274,12 @@ export type Offchain_Subscription = {
   AccountRole_by_pk?: Maybe<AccountRole>;
   /** fetch data from the table in a streaming manner: "AccountRole" */
   AccountRole_stream: Array<AccountRole>;
+  /** fetch data from the table: "AccountTokenAllocation" */
+  AccountTokenAllocation: Array<AccountTokenAllocation>;
+  /** fetch aggregated fields from the table: "AccountTokenAllocation" */
+  AccountTokenAllocation_aggregate: AccountTokenAllocation_Aggregate;
+  /** fetch data from the table in a streaming manner: "AccountTokenAllocation" */
+  AccountTokenAllocation_stream: Array<AccountTokenAllocation>;
   /** fetch aggregated fields from the table: "Account" */
   Account_aggregate: Account_Aggregate;
   /** fetch data from the table: "Account" using primary key columns */
@@ -11735,6 +12368,12 @@ export type Offchain_Subscription = {
   Project_by_pk?: Maybe<Project>;
   /** fetch data from the table in a streaming manner: "Project" */
   Project_stream: Array<Project>;
+  /** fetch data from the table: "Retrospective" */
+  Retrospective: Array<Retrospective>;
+  /** fetch data from the table: "Retrospective" using primary key columns */
+  Retrospective_by_pk?: Maybe<Retrospective>;
+  /** fetch data from the table in a streaming manner: "Retrospective" */
+  Retrospective_stream: Array<Retrospective>;
   /** fetch data from the table: "UserAccount" */
   UserAccount: Array<UserAccount>;
   /** fetch data from the table in a streaming manner: "UserAccount" */
@@ -11787,6 +12426,31 @@ export type Offchain_SubscriptionAccountRole_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<AccountRole_Stream_Cursor_Input>>;
   where?: InputMaybe<AccountRole_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountTokenAllocationArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocation_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocation_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountTokenAllocation_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocation_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocation_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountTokenAllocation_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<AccountTokenAllocation_Stream_Cursor_Input>>;
+  where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
 };
 
 
@@ -12104,6 +12768,27 @@ export type Offchain_SubscriptionProject_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Project_Stream_Cursor_Input>>;
   where?: InputMaybe<Project_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionRetrospectiveArgs = {
+  distinct_on?: InputMaybe<Array<Retrospective_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Retrospective_Order_By>>;
+  where?: InputMaybe<Retrospective_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionRetrospective_By_PkArgs = {
+  walletAddress: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionRetrospective_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Retrospective_Stream_Cursor_Input>>;
+  where?: InputMaybe<Retrospective_Bool_Exp>;
 };
 
 
@@ -12561,6 +13246,10 @@ export type Onchain_Query = {
   action_aggregate: Action_Aggregate;
   /** fetch data from the table: "action" using primary key columns */
   action_by_pk?: Maybe<Action>;
+  /** fetch data from the table: "active_listing" */
+  active_listing: Array<Active_Listing>;
+  /** fetch aggregated fields from the table: "active_listing" */
+  active_listing_aggregate: Active_Listing_Aggregate;
   /** fetch data from the table: "any_offer" */
   any_offer: Array<Any_Offer>;
   /** fetch aggregated fields from the table: "any_offer" */
@@ -12601,9 +13290,9 @@ export type Onchain_Query = {
   auction_bid_table_by_pk?: Maybe<Auction_Bid_Table>;
   /** fetch data from the table: "auction" using primary key columns */
   auction_by_pk?: Maybe<Auction>;
-  /** fetch data from the table: "squid_processor_base.status" */
+  /** fetch data from the table: "squid_processor_base.hot_block" */
   base_indexer: Array<Base_Indexer>;
-  /** fetch data from the table: "squid_processor_base.status" using primary key columns */
+  /** fetch data from the table: "squid_processor_base.hot_block" using primary key columns */
   base_indexer_by_pk?: Maybe<Base_Indexer>;
   /** fetch data from the table: "codex" */
   codex: Array<Codex>;
@@ -12623,9 +13312,9 @@ export type Onchain_Query = {
   eth_frame_data: Array<Eth_Frame_Data>;
   /** fetch data from the table: "eth_frame_data" using primary key columns */
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
-  /** fetch data from the table: "squid_processor.status" */
+  /** fetch data from the table: "squid_processor.hot_block" */
   eth_indexer: Array<Eth_Indexer>;
-  /** fetch data from the table: "squid_processor.status" using primary key columns */
+  /** fetch data from the table: "squid_processor.hot_block" using primary key columns */
   eth_indexer_by_pk?: Maybe<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
@@ -12643,10 +13332,8 @@ export type Onchain_Query = {
   eth_user_proceeds: Array<Eth_User_Proceeds>;
   /** fetch data from the table: "eth_user_proceeds" using primary key columns */
   eth_user_proceeds_by_pk?: Maybe<Eth_User_Proceeds>;
-  /** fetch data from the table: "foreign_account" */
-  foreign_account: Array<Foreign_Account>;
-  /** fetch data from the table: "foreign_wallet" */
-  foreign_wallet: Array<Foreign_Wallet>;
+  /** fetch data from the table: "foreign_wallet_account" */
+  foreign_wallet_account: Array<Foreign_Wallet_Account>;
   /** fetch data from the table: "generative_token" */
   generative_token: Array<Generative_Token>;
   /** fetch aggregated fields from the table: "generative_token" */
@@ -12790,6 +13477,24 @@ export type Onchain_QueryAction_AggregateArgs = {
 
 export type Onchain_QueryAction_By_PkArgs = {
   id: Scalars['uuid']['input'];
+};
+
+
+export type Onchain_QueryActive_ListingArgs = {
+  distinct_on?: InputMaybe<Array<Active_Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Active_Listing_Order_By>>;
+  where?: InputMaybe<Active_Listing_Bool_Exp>;
+};
+
+
+export type Onchain_QueryActive_Listing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Active_Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Active_Listing_Order_By>>;
+  where?: InputMaybe<Active_Listing_Bool_Exp>;
 };
 
 
@@ -12959,7 +13664,7 @@ export type Onchain_QueryBase_IndexerArgs = {
 
 
 export type Onchain_QueryBase_Indexer_By_PkArgs = {
-  id: Scalars['Int']['input'];
+  height: Scalars['Int']['input'];
 };
 
 
@@ -13042,7 +13747,7 @@ export type Onchain_QueryEth_IndexerArgs = {
 
 
 export type Onchain_QueryEth_Indexer_By_PkArgs = {
-  id: Scalars['Int']['input'];
+  height: Scalars['Int']['input'];
 };
 
 
@@ -13102,21 +13807,12 @@ export type Onchain_QueryEth_User_Proceeds_By_PkArgs = {
 };
 
 
-export type Onchain_QueryForeign_AccountArgs = {
-  distinct_on?: InputMaybe<Array<Foreign_Account_Select_Column>>;
+export type Onchain_QueryForeign_Wallet_AccountArgs = {
+  distinct_on?: InputMaybe<Array<Foreign_Wallet_Account_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Foreign_Account_Order_By>>;
-  where?: InputMaybe<Foreign_Account_Bool_Exp>;
-};
-
-
-export type Onchain_QueryForeign_WalletArgs = {
-  distinct_on?: InputMaybe<Array<Foreign_Wallet_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Foreign_Wallet_Order_By>>;
-  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  order_by?: InputMaybe<Array<Foreign_Wallet_Account_Order_By>>;
+  where?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 
@@ -13567,6 +14263,12 @@ export type Onchain_Subscription = {
   action_by_pk?: Maybe<Action>;
   /** fetch data from the table in a streaming manner: "action" */
   action_stream: Array<Action>;
+  /** fetch data from the table: "active_listing" */
+  active_listing: Array<Active_Listing>;
+  /** fetch aggregated fields from the table: "active_listing" */
+  active_listing_aggregate: Active_Listing_Aggregate;
+  /** fetch data from the table in a streaming manner: "active_listing" */
+  active_listing_stream: Array<Active_Listing>;
   /** fetch data from the table: "any_offer" */
   any_offer: Array<Any_Offer>;
   /** fetch aggregated fields from the table: "any_offer" */
@@ -13625,11 +14327,11 @@ export type Onchain_Subscription = {
   auction_by_pk?: Maybe<Auction>;
   /** fetch data from the table in a streaming manner: "auction" */
   auction_stream: Array<Auction>;
-  /** fetch data from the table: "squid_processor_base.status" */
+  /** fetch data from the table: "squid_processor_base.hot_block" */
   base_indexer: Array<Base_Indexer>;
-  /** fetch data from the table: "squid_processor_base.status" using primary key columns */
+  /** fetch data from the table: "squid_processor_base.hot_block" using primary key columns */
   base_indexer_by_pk?: Maybe<Base_Indexer>;
-  /** fetch data from the table in a streaming manner: "squid_processor_base.status" */
+  /** fetch data from the table in a streaming manner: "squid_processor_base.hot_block" */
   base_indexer_stream: Array<Base_Indexer>;
   /** fetch data from the table: "codex" */
   codex: Array<Codex>;
@@ -13659,11 +14361,11 @@ export type Onchain_Subscription = {
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
   /** fetch data from the table in a streaming manner: "eth_frame_data" */
   eth_frame_data_stream: Array<Eth_Frame_Data>;
-  /** fetch data from the table: "squid_processor.status" */
+  /** fetch data from the table: "squid_processor.hot_block" */
   eth_indexer: Array<Eth_Indexer>;
-  /** fetch data from the table: "squid_processor.status" using primary key columns */
+  /** fetch data from the table: "squid_processor.hot_block" using primary key columns */
   eth_indexer_by_pk?: Maybe<Eth_Indexer>;
-  /** fetch data from the table in a streaming manner: "squid_processor.status" */
+  /** fetch data from the table in a streaming manner: "squid_processor.hot_block" */
   eth_indexer_stream: Array<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
@@ -13689,14 +14391,10 @@ export type Onchain_Subscription = {
   eth_user_proceeds_by_pk?: Maybe<Eth_User_Proceeds>;
   /** fetch data from the table in a streaming manner: "eth_user_proceeds" */
   eth_user_proceeds_stream: Array<Eth_User_Proceeds>;
-  /** fetch data from the table: "foreign_account" */
-  foreign_account: Array<Foreign_Account>;
-  /** fetch data from the table in a streaming manner: "foreign_account" */
-  foreign_account_stream: Array<Foreign_Account>;
-  /** fetch data from the table: "foreign_wallet" */
-  foreign_wallet: Array<Foreign_Wallet>;
-  /** fetch data from the table in a streaming manner: "foreign_wallet" */
-  foreign_wallet_stream: Array<Foreign_Wallet>;
+  /** fetch data from the table: "foreign_wallet_account" */
+  foreign_wallet_account: Array<Foreign_Wallet_Account>;
+  /** fetch data from the table in a streaming manner: "foreign_wallet_account" */
+  foreign_wallet_account_stream: Array<Foreign_Wallet_Account>;
   /** fetch data from the table: "generative_token" */
   generative_token: Array<Generative_Token>;
   /** fetch aggregated fields from the table: "generative_token" */
@@ -13905,6 +14603,31 @@ export type Onchain_SubscriptionAction_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Action_Stream_Cursor_Input>>;
   where?: InputMaybe<Action_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionActive_ListingArgs = {
+  distinct_on?: InputMaybe<Array<Active_Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Active_Listing_Order_By>>;
+  where?: InputMaybe<Active_Listing_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionActive_Listing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Active_Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Active_Listing_Order_By>>;
+  where?: InputMaybe<Active_Listing_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionActive_Listing_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Active_Listing_Stream_Cursor_Input>>;
+  where?: InputMaybe<Active_Listing_Bool_Exp>;
 };
 
 
@@ -14137,7 +14860,7 @@ export type Onchain_SubscriptionBase_IndexerArgs = {
 
 
 export type Onchain_SubscriptionBase_Indexer_By_PkArgs = {
-  id: Scalars['Int']['input'];
+  height: Scalars['Int']['input'];
 };
 
 
@@ -14262,7 +14985,7 @@ export type Onchain_SubscriptionEth_IndexerArgs = {
 
 
 export type Onchain_SubscriptionEth_Indexer_By_PkArgs = {
-  id: Scalars['Int']['input'];
+  height: Scalars['Int']['input'];
 };
 
 
@@ -14357,35 +15080,19 @@ export type Onchain_SubscriptionEth_User_Proceeds_StreamArgs = {
 };
 
 
-export type Onchain_SubscriptionForeign_AccountArgs = {
-  distinct_on?: InputMaybe<Array<Foreign_Account_Select_Column>>;
+export type Onchain_SubscriptionForeign_Wallet_AccountArgs = {
+  distinct_on?: InputMaybe<Array<Foreign_Wallet_Account_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Foreign_Account_Order_By>>;
-  where?: InputMaybe<Foreign_Account_Bool_Exp>;
+  order_by?: InputMaybe<Array<Foreign_Wallet_Account_Order_By>>;
+  where?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 
-export type Onchain_SubscriptionForeign_Account_StreamArgs = {
+export type Onchain_SubscriptionForeign_Wallet_Account_StreamArgs = {
   batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Foreign_Account_Stream_Cursor_Input>>;
-  where?: InputMaybe<Foreign_Account_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionForeign_WalletArgs = {
-  distinct_on?: InputMaybe<Array<Foreign_Wallet_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Foreign_Wallet_Order_By>>;
-  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionForeign_Wallet_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Foreign_Wallet_Stream_Cursor_Input>>;
-  where?: InputMaybe<Foreign_Wallet_Bool_Exp>;
+  cursor: Array<InputMaybe<Foreign_Wallet_Account_Stream_Cursor_Input>>;
+  where?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
 };
 
 
