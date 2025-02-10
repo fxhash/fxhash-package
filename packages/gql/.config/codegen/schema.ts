@@ -4,10 +4,9 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      "https://api.v2.dev.fxhash-dev.xyz/v1/graphql": {
+      "http://localhost:8888/v1/graphql": {
         headers: {
-          "x-hasura-admin-secret":
-            "mmZkYYp6KNGpcIzNIqVhFhGj5Ka5POU4UtxPB82gIT2a2Z173OZHn8MKL3aS3CHH",
+          "x-hasura-admin-secret": "changeme",
           "x-hasura-role": "user",
         },
       },
