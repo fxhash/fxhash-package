@@ -436,9 +436,10 @@ export function revertReceiversFee(
   // Reverse the fee deduction from each receiver
   const originalReceivers = receivers
     .filter(account => {
-      if (account.address === getConfigForChain(chain).config.ethFeeReceiver)
+      if (account.address === getConfigForChain(chain).config.ethFeeReceiver) {
         return false
-      else return true
+      }
+      return true
     })
     .map(account => {
       return {
