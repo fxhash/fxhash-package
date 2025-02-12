@@ -13,8 +13,9 @@ import { TezosContractOperation } from "./ContractOperation"
 import { GenerativeToken, UserType, UpdateIssuerForm } from "@fxhash/shared"
 
 export type TUpdateIssuerV3OperationParams = {
-  token: GenerativeToken
+  projectId: string
   data: UpdateIssuerForm<string>
+  collabAddress: string | null
 }
 
 /**
@@ -26,9 +27,8 @@ export class TezosUpdateIssuerV3Operation extends TezosContractOperation<TUpdate
   collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER_V3
+      this.params.collabAddress || FxhashContracts.ISSUER_V3
     )
   }
 
@@ -38,7 +38,7 @@ export class TezosUpdateIssuerV3Operation extends TezosContractOperation<TUpdate
     const numbered = transformUpdateIssuerFormToNumbers(this.params.data)
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.projectId,
       enabled: numbered.enabled,
       royalties: numbered.royalties,
       primary_split: numbered.splitsPrimary,
@@ -47,7 +47,7 @@ export class TezosUpdateIssuerV3Operation extends TezosContractOperation<TUpdate
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    if (this.collab) {
+    if (!!this.params.collabAddress) {
       const packed = pack(params, EBuildableParams.UPDATE_ISSUER)
 
       return this.contract!.methodsObject.make_proposal({
@@ -60,8 +60,8 @@ export class TezosUpdateIssuerV3Operation extends TezosContractOperation<TUpdate
   }
 
   success(): string {
-    return this.collab
-      ? `A proposal to update "${this.params.token.name}" was successfully sent`
-      : `Your project "${this.params.token.name}" was updated`
+    return !!this.params.collabAddress
+      ? `A proposal to update "${this.params.projectId}" was successfully sent`
+      : `Your project "${this.params.projectId}" was updated`
   }
 }
