@@ -1,5 +1,5 @@
+import { dutchAuctionV2Abi } from "@/__generated__/wagmi.js"
 import { EthereumContractOperation } from "../contractOperation.js"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
@@ -22,11 +22,11 @@ export class RefundDutchAuctionMinterEthV1Operation extends EthereumContractOper
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
     const args: SimulateAndExecuteContractRequest<
-      typeof DUTCH_AUCTION_MINTER_ABI,
+      typeof dutchAuctionV2Abi,
       "refund"
     > = {
       address: currentConfig.contracts.dutch_auction_minter_v1,
-      abi: DUTCH_AUCTION_MINTER_ABI,
+      abi: dutchAuctionV2Abi,
       functionName: "refund",
       args: [
         this.params.token as `0x${string}`,

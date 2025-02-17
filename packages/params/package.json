@@ -24,15 +24,20 @@
     "esbuild-sass-plugin": "2.12.0",
     "node-sass": "9.0.0",
     "postcss": "8.4.38",
-    "tslib": "2.6.0",
-    "tsup": "8.2.4",
+    "tslib": "2.6.2",
+    "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "require": "./dist/index.cjs"
+      }
     }
   },
   "files": [
