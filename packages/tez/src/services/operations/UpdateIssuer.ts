@@ -10,12 +10,24 @@ import {
 import { transformUpdateIssuerFormToNumbers } from "../../utils/transformers/update-issuer"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { GenerativeToken, UserType, UpdateIssuerForm } from "@fxhash/shared"
+
+export interface UpdateIssuerData {
+  enabled: boolean
+  royalties: string
+  splitsPrimary: {
+    address: string
+    pct: number
+  }[]
+  splitsSecondary: {
+    address: string
+    pct: number
+  }[]
+}
 
 export type TUpdateIssuerOperationParams = {
   projectId: string
-  data: UpdateIssuerForm<string>
-  collabAddress: string | null
+  data: UpdateIssuerData
+  collabAddress?: string
 }
 
 /**
