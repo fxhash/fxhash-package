@@ -3,7 +3,7 @@
   "version": "0.0.8",
   "author": "fxhash",
   "dependencies": {
-    "node-html-parser": "6.1.5"
+    "node-html-parser": "6.1.9"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
