@@ -12,7 +12,8 @@ import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
 
 export type TBurnTokenV3OperationParams = {
-  token: GenerativeToken
+  projectId: string
+  collabAddress?: string
 }
 
 /**
@@ -21,21 +22,19 @@ export type TBurnTokenV3OperationParams = {
  */
 export class TezosBurnTokenV3Operation extends TezosContractOperation<TBurnTokenV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
-  collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER_V3
+      this.params.collabAddress || FxhashContracts.ISSUER_V3
     )
   }
 
   async call(): Promise<TransactionWalletOperation> {
-    const params = this.params.token.id
+    const params = this.params.projectId
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    if (this.collab) {
+    if (this.params.collabAddress) {
       const packed = pack(params, EBuildableParams.BURN)
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.BURN_V3,
@@ -47,8 +46,8 @@ export class TezosBurnTokenV3Operation extends TezosContractOperation<TBurnToken
   }
 
   success(): string {
-    return this.collab
-      ? `A proposal to burn ${this.params.token.name} was successfully sent`
-      : `You have burnt ${this.params.token.name}. [insert dramatic music]`
+    return this.params.collabAddress
+      ? `A proposal to burn ${this.params.projectId} was successfully sent`
+      : `You have burnt ${this.params.projectId}. [insert dramatic music]`
   }
 }
