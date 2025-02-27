@@ -200,7 +200,7 @@ export class EthereumWalletManager extends WalletManager {
   public walletClient: WalletClient<Transport, Chain, Account>
   public publicClient: PublicClient<Transport, Chain>
   public signer: JsonRpcSigner | PrivateKeyAccount
-  public safe: Safe.default | undefined
+  public safe: Safe | undefined
   public ethersAdapterForSafe?: EthersAdapter
   private rpcNodes: string[]
   private connectorName?: string
@@ -276,7 +276,7 @@ export class EthereumWalletManager extends WalletManager {
     try {
       let safeSdk
       if (this.ethersAdapterForSafe) {
-        safeSdk = await Safe.default.create({
+        safeSdk = await Safe.create({
           ethAdapter: this.ethersAdapterForSafe,
           safeAddress: safeAddress,
         })

@@ -9,8 +9,6 @@
       "@/*": ["./src/*"]
     },
     "strict": true,
-    "useUnknownInCatchVariables": false,
-    "module": "Node16",
-    "moduleResolution": "Node16"
+    "useUnknownInCatchVariables": false
   }
 }

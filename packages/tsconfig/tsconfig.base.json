@@ -4,6 +4,8 @@
     "./tsconfig.compiler.options.json"
   ],
   "compilerOptions": {
-    "target": "ES2021"
+    "target": "ES2021",
+    "module": "ES2020",
+    "moduleResolution": "bundler"
   }
 }
