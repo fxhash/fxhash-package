@@ -274,9 +274,11 @@ export class EthereumWalletManager extends WalletManager {
       return success(safeAddress)
     }
     try {
-      let safeSdk
+      let safeSdk: Safe
       if (this.ethersAdapterForSafe) {
-        safeSdk = await Safe.create({
+        // @ts-expect-error safe package is not properly bundled
+        // To be revisited once we upgrade to a newer version of the safe package
+        safeSdk = await Safe.default.create({
           ethAdapter: this.ethersAdapterForSafe,
           safeAddress: safeAddress,
         })
