@@ -39,7 +39,7 @@ export class CreateSafeMultisigEthV1Operation extends EthereumContractOperation<
       threshold: this.params.threshold,
     }
 
-    const safeInstance: Safe.default = await safeFactory.deploySafe({
+    const safeInstance: Safe = await safeFactory.deploySafe({
       safeAccountConfig,
     })
     this.manager.safe = safeInstance
