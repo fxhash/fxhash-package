@@ -23,7 +23,6 @@
     "dist"
   ],
   "license": "MIT",
-  "module": "./dist/index.js",
   "private": true,
   "publishConfig": {
     "access": "public"

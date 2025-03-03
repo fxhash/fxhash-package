@@ -24,7 +24,6 @@
     "dist"
   ],
   "license": "MIT",
-  "module": "./dist/index.js",
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {

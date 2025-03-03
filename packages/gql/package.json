@@ -33,7 +33,6 @@
   ],
   "keywords": [],
   "license": "MIT",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "graphql": "16.7.1"
   },

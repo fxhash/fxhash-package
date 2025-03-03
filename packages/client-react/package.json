@@ -23,16 +23,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "@fxhash/sdk": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
@@ -48,6 +45,5 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

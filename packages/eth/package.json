@@ -47,7 +47,6 @@
     "dist"
   ],
   "license": "MIT",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "@fxhash/config": "workspace:*"
   },
