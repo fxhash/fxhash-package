@@ -6,8 +6,6 @@
     "rootDir": "src",
     "outDir": "dist",
     "isolatedDeclarations": true,
-    "declaration": true,
-    "module": "node16",
-    "target": "es2022"
+    "declaration": true
   }
 }
