@@ -28,7 +28,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -52,6 +52,5 @@
     "dev": "tsup --watch",
     "test": "vitest"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }
