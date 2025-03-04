@@ -5,7 +5,6 @@ import {
   type IAttributesEditorWrapperProps,
   IFxTextBlockDefinition,
 } from "./_interfaces.js"
-import { T } from "vitest/dist/reporters-5f784f42.js"
 
 export type EditAttributeComp = FunctionComponent<
   PropsWithChildren<IEditAttributeProps>

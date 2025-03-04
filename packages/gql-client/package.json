@@ -11,28 +11,24 @@
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "20.11.30",
-    "tsup": "8.2.4",
+    "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

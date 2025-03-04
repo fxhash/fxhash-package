@@ -1,18 +1,16 @@
-import { defineConfig, Options } from "tsup"
+import { defineConfig, type Options } from "tsup"
 import { sassPlugin, postcssModules } from "esbuild-sass-plugin"
 
 export default defineConfig((options: Options) => ({
-  entry: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
+  entry: ["src/index.tsx"],
   outDir: "dist",
   format: ["cjs", "esm"],
-  splitting: true,
   sourcemap: true,
   clean: !options.watch,
   dts: true,
-  bundle: true,
   esbuildPlugins: [
     sassPlugin({
       transform: postcssModules({}),
-    }) as any,
+    }),
   ],
 }))

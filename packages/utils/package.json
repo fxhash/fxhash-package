@@ -9,23 +9,20 @@
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "tsup": "8.2.4",
+    "tsup": "8.3.6",
     "typescript": "5.7.2",
-    "vitest": "0.34.6"
+    "vitest": "3.0.4"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "private": true,
   "publishConfig": {
     "access": "public"
@@ -36,6 +33,5 @@
     "dev": "tsup --watch",
     "test": "vitest"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

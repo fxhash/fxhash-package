@@ -20,15 +20,9 @@ export interface IBaseContracts {
   signerSafe: `0x${string}`
   moderationSafe: `0x${string}`
   farcaster_frame_fixed_price_minter_v1: `0x${string}`
+  fx_airdrop: `0x${string}`
+  fx_tez_airdrop: `0x${string}`
 }
-
-/**
- * ! TODO
- * -----------------------------------------------------------------------------
- * Put the actual addresses for the testnet and mainnet contracts.
- * NEED TO DEPLOY:
- * - onchfs
- */
 
 export const baseTestnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
@@ -53,13 +47,10 @@ export const baseTestnetContracts: IBaseContracts = {
   moderationSafe: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
+  fx_airdrop: "0x9D62B27f97FD409a2Acb68Fa4253bc085d3b658A",
+  fx_tez_airdrop: "0xc05938c065924e620D4617Acabf2A3308d6165b6",
 }
 
-/**
- * TODO
- * -----------------------------------------------------------------------------
- * Put the actual addresses.
- */
 export const baseMainnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
@@ -81,7 +72,8 @@ export const baseMainnetContracts: IBaseContracts = {
   fxhashTeamSafeAddress: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
   signerSafe: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
   moderationSafe: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
-  // FIXME: Replace with mainnet address.
   farcaster_frame_fixed_price_minter_v1:
     "0x6e625892C739bFD960671Db5544E260757480725",
+  fx_airdrop: "0xTODO",
+  fx_tez_airdrop: "0xcTODO",
 }
