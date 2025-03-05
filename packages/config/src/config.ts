@@ -19,12 +19,11 @@ import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
 import { getEnv } from "./helpers.js"
 import {
   BlockchainIdentifiers,
-  IFxhashConfig,
-  IFxhashConfigSingleEnv,
-  TBlockchainNetwork,
-  TEnv,
+  type IFxhashConfig,
+  type IFxhashConfigSingleEnv,
+  type TBlockchainNetwork,
+  type TEnv,
 } from "./types.js"
-// Import other necessary types and configurations
 
 /**
  * ! Beware ! Changing these values will result in current
