@@ -1,1 +1,1 @@
-# `@fxhash/text`
+# `@fxhash/slate`
