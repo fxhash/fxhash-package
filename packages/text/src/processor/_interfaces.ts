@@ -9,14 +9,6 @@ export interface IArticleElementProcessor {
     node: Node,
     properties: any
   ) => Omit<any, "children"> | null
-  transformSlateToMarkdownMdhast?: (
-    node: unknown,
-    next: (children: any[]) => any
-  ) => object
-  transformMarkdownMdhastToSlate?: (
-    node: any,
-    next: (children: any[]) => any
-  ) => object
 }
 
 /*
