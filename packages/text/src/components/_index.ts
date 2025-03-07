@@ -1,6 +1,5 @@
-export * from "./Editor/_index.js"
 export * from "./tezos-storage-pointer/_index.js"
 export * from "./_interfaces.js"
 export * from "./_types.js"
-export * from "./_external-exports.js"
 export * from "./embed/_index.js"
+export * from "./mention/Display.js"

@@ -1,6 +1,6 @@
-import { IArticleElementProcessor } from "./_interfaces"
+import { ISlateElementProcessor } from "./_interfaces"
 
-export const listItemProcessor: IArticleElementProcessor = {
+export const listItemProcessor: ISlateElementProcessor = {
   transformSlateToMarkdownMdhast: (
     node: any,
     next: (children: any[]) => any

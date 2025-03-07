@@ -1,6 +1,6 @@
-import { IArticleElementProcessor } from "./_interfaces"
+import { ISlateElementProcessor } from "./_interfaces"
 
-export const mathProcessor: IArticleElementProcessor = {
+export const mathProcessor: ISlateElementProcessor = {
   transformMarkdownMdhastToSlate: (node: any) => {
     return {
       type: node.type,

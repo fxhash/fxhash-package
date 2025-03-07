@@ -6,19 +6,19 @@ import remarkParse from "remark-parse"
 import { remarkToSlate, RemarkToSlateOptions } from "remark-slate-transformer"
 import { Descendant, Node } from "slate"
 import { unified } from "unified"
-import {
-  IDirectiveNodeProps,
-  mathProcessor,
-  mdastFlattenListItemParagraphs,
-  mdastParseMentions,
-  remarkFxHashCustom,
-} from "./processor/_index"
 import { audioProcessor } from "./processor/audio"
+import { blockquoteProcessor } from "./processor/blockquote"
+import { imageProcessor } from "./processor/image"
+import { mathProcessor } from "./processor/math"
 import { mentionProcessor } from "./processor/mention"
 import { videoProcessor } from "./processor/video"
-import remarkUnwrapImages from "./processor/plugins/remarkUnwrapImages"
-import { imageProcessor } from "./processor/image"
-import { blockquoteProcessor } from "./processor/blockquote"
+import {
+  IDirectiveNodeProps,
+  mdastParseMentions,
+  mdastFlattenListItemParagraphs,
+  remarkFxHashCustom,
+  remarkUnwrapImages,
+} from "@fxhash/text"
 
 const directives: Record<
   string,

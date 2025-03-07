@@ -1,6 +1,6 @@
-import { IArticleElementProcessor } from "./_interfaces"
+import { ISlateElementProcessor } from "./_interfaces"
 
-export const blockquoteProcessor: IArticleElementProcessor = {
+export const blockquoteProcessor: ISlateElementProcessor = {
   transformMarkdownMdhastToSlate: (node: any, next: any) => {
     let children = next(node.children)
 
