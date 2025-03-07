@@ -27,7 +27,7 @@ const containsOther = 3
  *   Transform.
  */
 
-export default function remarkUnwrapImages() {
+export function remarkUnwrapImages() {
   /**
    * Transform.
    *

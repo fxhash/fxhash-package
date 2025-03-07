@@ -1,6 +1,6 @@
 import { Node } from "slate"
 import { convertSlateLeafDirectiveToMarkdown } from "@/getMarkdownFromSlateEditorState"
-import { IArticleElementProcessor } from "./_interfaces"
+import { ISlateElementProcessor } from "./_interfaces"
 
 const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
   // create a regular image node
@@ -58,7 +58,7 @@ const mediasConvert: Record<
   audio: createMarkdownAudioFromFigure,
 }
 
-export const figureProcessor: IArticleElementProcessor = {
+export const figureProcessor: ISlateElementProcessor = {
   /**
    * Turns a figcaption element into an element which will be turned into an image or video
    * in proper markdown

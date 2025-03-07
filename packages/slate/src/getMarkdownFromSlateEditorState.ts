@@ -5,13 +5,10 @@ import remarkMath from "remark-math"
 import { slateToRemark, SlateToRemarkOptions } from "remark-slate-transformer"
 import remarkStringify from "remark-stringify"
 import { unified } from "unified"
-import {
-  mathProcessor,
-  mentionProcessor,
-  remarkFxHashCustom,
-} from "./processor/_index"
+import { mentionProcessor, remarkFxHashCustom } from "@fxhash/text"
 import { figureProcessor } from "./processor/figure"
 import { listItemProcessor } from "./processor/list-item"
+import { mathProcessor } from "./processor/math"
 
 export function convertSlateLeafDirectiveToMarkdown(node: any): object {
   const { children, type, ...attributes } = node
