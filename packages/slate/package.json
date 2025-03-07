@@ -6,8 +6,8 @@
   "dependencies": {
     "@fxhash/config": "workspace:*",
     "@fxhash/errors": "workspace:*",
-    "@fxhash/text": "workspace:*",
     "@fxhash/shared": "workspace:*",
+    "@fxhash/text": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "gray-matter": "4.0.3",
