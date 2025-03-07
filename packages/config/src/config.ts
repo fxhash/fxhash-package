@@ -24,6 +24,7 @@ import {
   TBlockchainNetwork,
   TEnv,
 } from "./types.js"
+import { AUTH_JWT_PK_DEV, AUTH_JWT_PK_PRD } from "./constants.js"
 // Import other necessary types and configurations
 
 /**
@@ -153,6 +154,7 @@ const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
         gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     localDocker: {
@@ -173,6 +175,7 @@ const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
         gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     dev: {
@@ -193,6 +196,7 @@ const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigDev,
         gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     prd: {
@@ -213,6 +217,7 @@ const fxhashConfig: IFxhashConfig = {
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
         gpu: gpuRenderingConfigProd,
+        authJwtPublicKey: AUTH_JWT_PK_PRD,
       },
     },
   },
