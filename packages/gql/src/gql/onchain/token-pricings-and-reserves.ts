@@ -13,6 +13,7 @@ export const Qu_GetTokenPricingsAndReserves = graphql(`
           method
           amount
           data
+          merkle_root
         }
         pricing_fixeds {
           id

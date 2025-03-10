@@ -462,7 +462,7 @@ export function getPricingFromParams(
             reserves.every(
               reserve =>
                 reserve.data.reserveId !== pricing.id.split("-")[1] ||
-                !reserve.data.merkleRoot
+                !reserve.merkle_root
             )
           )
     return { pricing, isFixed: isFixed }
@@ -486,8 +486,7 @@ export function getPricingAndReserveFromParams(
       for (const pricing of pricingList) {
         const reserveId = pricing.id.split("-")[1]
         const reserve = reserves.find(
-          reserve =>
-            reserve.data.reserveId === reserveId && reserve.data.merkleRoot
+          reserve => reserve.data.reserveId === reserveId && reserve.merkle_root
         )
         if (reserve) {
           return { pricing, reserve }
@@ -503,7 +502,7 @@ export function getPricingAndReserveFromParams(
               reserves.every(
                 reserve =>
                   reserve.data.reserveId !== pricing.id.split("-")[1] ||
-                  !reserve.data.merkleRoot
+                  !reserve.merkle_root
               )
             )
 
@@ -578,7 +577,9 @@ export const prepareMintParams = async (
   let reserveSave: any = undefined
   for (const reserve of tokenPricingsAndReserves.data.onchain
     .generative_token_by_pk.reserves) {
-    const merkleTreeWhitelist = await getWhitelist(reserve.data.merkleRoot)
+    if (!reserve.merkle_root)
+      throw new Error(`no merkle root found for reserve: ${reserve.id}`)
+    const merkleTreeWhitelist = await getWhitelist(reserve.merkle_root)
 
     invariant(
       merkleTreeWhitelist && merkleTreeWhitelist.length > 0,
