@@ -6,12 +6,12 @@ import remarkParse from "remark-parse"
 import { remarkToSlate, RemarkToSlateOptions } from "remark-slate-transformer"
 import { Descendant, Node } from "slate"
 import { unified } from "unified"
-import { audioProcessor } from "./processor/audio"
-import { blockquoteProcessor } from "./processor/blockquote"
-import { imageProcessor } from "./processor/image"
-import { mathProcessor } from "./processor/math"
-import { mentionProcessor } from "./processor/mention"
-import { videoProcessor } from "./processor/video"
+import { audioProcessor } from "./processor/audio.js"
+import { blockquoteProcessor } from "./processor/blockquote.js"
+import { imageProcessor } from "./processor/image.js"
+import { mathProcessor } from "./processor/math.js"
+import { mentionProcessor } from "./processor/mention.js"
+import { videoProcessor } from "./processor/video.js"
 import {
   IDirectiveNodeProps,
   mdastParseMentions,

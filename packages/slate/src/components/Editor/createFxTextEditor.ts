@@ -8,6 +8,7 @@ import {
   withTables,
   withConstraints,
   withBreaks,
+  withSimpleCopyPaste,
 } from "./plugins/_index"
 import { withMediaSupport } from "./plugins/media/plugin"
 import { IUseFxTextEditorProps } from "./_interfaces"
@@ -48,6 +49,7 @@ export function createFxEditor({
     { f: withTables },
     { f: withConstraints },
     { f: withBreaks },
+    { f: withSimpleCopyPaste },
   ]
   const enhancedEditor = plugins.reduce((e, plugin) => {
     return plugin.f(e, ...Object.values(plugin.args || {}))

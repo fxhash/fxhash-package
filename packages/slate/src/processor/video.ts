@@ -1,4 +1,4 @@
-import { ISlateElementProcessor } from "./_interfaces"
+import { ISlateElementProcessor } from "./_interfaces.js"
 
 export const videoProcessor: ISlateElementProcessor = {
   transformMarkdownMdhastToSlate: node => {

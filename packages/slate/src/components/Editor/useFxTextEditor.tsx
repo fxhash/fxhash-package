@@ -12,7 +12,7 @@ import { renderLeaf } from "./renderLeaf.js"
 import { renderFxTextElement } from "./renderElement.js"
 import { defaultFxTextEditorBlockDefinition } from "./blockDefinitions.js"
 import mergeWith from "lodash.mergewith"
-import { createFxEditor } from "./createFxTextEditor"
+import { createFxEditor } from "./createFxTextEditor.js"
 
 export const DefaultFxTextSlateEditableProps: FxTextSlateEditableProps = {
   renderLeaf,

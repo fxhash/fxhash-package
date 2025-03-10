@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { RenderElementProps, useSlateStatic } from "slate-react"
-import { IRenderFxTextElementProps } from "./_interfaces"
+import { IRenderFxTextElementProps } from "./_interfaces.js"
 
 export const renderFxTextElement =
   ({ nodeMenu: NodeMenu }: IRenderFxTextElementProps) =>

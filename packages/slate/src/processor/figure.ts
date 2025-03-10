@@ -1,6 +1,6 @@
 import { Node } from "slate"
-import { convertSlateLeafDirectiveToMarkdown } from "@/getMarkdownFromSlateEditorState"
-import { ISlateElementProcessor } from "./_interfaces"
+import { ISlateElementProcessor } from "./_interfaces.js"
+import { convertSlateLeafDirectiveToMarkdown } from "./leafDirective.js"
 
 const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
   // create a regular image node

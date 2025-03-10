@@ -163,7 +163,6 @@ export const withMediaSupport: EnhanceEditorWith = (
   // in the tree
   editor.normalizeNode = entry => {
     const [node, path] = entry
-
     if (Element.isElement(node) && node.type === "figure") {
       // if the figure node doesn't have an image node as a child, the figure
       // node gets completely removed
