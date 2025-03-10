@@ -605,6 +605,11 @@ export type AccountsRoles_Stream_Cursor_Value_Input = {
   roleValue?: InputMaybe<AccountRole_Enum>;
 };
 
+export type AirdropTezClaimInput = {
+  publicKey: Scalars['String']['input'];
+  signature: Scalars['String']['input'];
+};
+
 export type AirdropTezClaimResult = {
   __typename?: 'AirdropTezClaimResult';
   signature: Scalars['String']['output'];
@@ -2412,6 +2417,7 @@ export type ProjectReserves = {
   amount: Scalars['Int']['output'];
   data: Scalars['JSON']['output'];
   id: Scalars['String']['output'];
+  merkle_root?: Maybe<Scalars['String']['output']>;
   method: Scalars['Int']['output'];
 };
 
@@ -2709,7 +2715,7 @@ export type Retrospective = {
   spentTotalNb: Scalars['Int']['output'];
   spentTotalUsd: Scalars['numeric']['output'];
   tokenAllocation: Scalars['numeric']['output'];
-  tokenAllocationString?: Maybe<Scalars['String']['output']>;
+  tokenAllocationString: Scalars['String']['output'];
   /** An object relationship */
   wallet?: Maybe<Wallet>;
   walletAddress: Scalars['String']['output'];
@@ -5966,50 +5972,6 @@ export type Auction_Variance_Order_By = {
   version?: InputMaybe<Order_By>;
 };
 
-/** columns and relationships of "squid_processor_base.hot_block" */
-export type Base_Indexer = {
-  __typename?: 'base_indexer';
-  hash: Scalars['String']['output'];
-  height: Scalars['Int']['output'];
-};
-
-/** Boolean expression to filter rows from the table "squid_processor_base.hot_block". All fields are combined with a logical 'AND'. */
-export type Base_Indexer_Bool_Exp = {
-  _and?: InputMaybe<Array<Base_Indexer_Bool_Exp>>;
-  _not?: InputMaybe<Base_Indexer_Bool_Exp>;
-  _or?: InputMaybe<Array<Base_Indexer_Bool_Exp>>;
-  hash?: InputMaybe<String_Comparison_Exp>;
-  height?: InputMaybe<Int_Comparison_Exp>;
-};
-
-/** Ordering options when selecting data from "squid_processor_base.hot_block". */
-export type Base_Indexer_Order_By = {
-  hash?: InputMaybe<Order_By>;
-  height?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "squid_processor_base.hot_block" */
-export enum Base_Indexer_Select_Column {
-  /** column name */
-  Hash = 'hash',
-  /** column name */
-  Height = 'height'
-}
-
-/** Streaming cursor of the table "base_indexer" */
-export type Base_Indexer_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Base_Indexer_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Base_Indexer_Stream_Cursor_Value_Input = {
-  hash?: InputMaybe<Scalars['String']['input']>;
-  height?: InputMaybe<Scalars['Int']['input']>;
-};
-
 /** Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'. */
 export type Bigint_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['bigint']['input']>;
@@ -7097,8 +7059,6 @@ export type Generative_Token = {
   /** A computed field, executes function "get_features_for_generative_token" */
   features?: Maybe<Scalars['jsonb']['output']>;
   flag: Scalars['generative_token_flag_enum']['output'];
-  /** An object relationship */
-  frame_settings?: Maybe<Eth_Frame_Data>;
   /** An array relationship */
   generative_token_articles: Array<Article_Generative_Token>;
   generative_uri?: Maybe<Scalars['String']['output']>;
@@ -7519,7 +7479,6 @@ export type Generative_Token_Bool_Exp = {
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
   features?: InputMaybe<Jsonb_Comparison_Exp>;
   flag?: InputMaybe<Generative_Token_Flag_Enum_Comparison_Exp>;
-  frame_settings?: InputMaybe<Eth_Frame_Data_Bool_Exp>;
   generative_token_articles?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   generative_uri?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
@@ -7970,7 +7929,6 @@ export type Generative_Token_Order_By = {
   enabled?: InputMaybe<Order_By>;
   features?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
-  frame_settings?: InputMaybe<Eth_Frame_Data_Order_By>;
   generative_token_articles_aggregate?: InputMaybe<Article_Generative_Token_Aggregate_Order_By>;
   generative_uri?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -10847,6 +10805,12 @@ export type Mutation_Root = {
 
 
 /** mutation root */
+export type Mutation_RootAirdrop_Tez_ClaimArgs = {
+  input?: InputMaybe<AirdropTezClaimInput>;
+};
+
+
+/** mutation root */
 export type Mutation_RootAuthenticateArgs = {
   input: AuthenticationInput;
 };
@@ -13438,10 +13402,6 @@ export type Onchain_Query = {
   auction_bid_table_by_pk?: Maybe<Auction_Bid_Table>;
   /** fetch data from the table: "auction" using primary key columns */
   auction_by_pk?: Maybe<Auction>;
-  /** fetch data from the table: "squid_processor_base.hot_block" */
-  base_indexer: Array<Base_Indexer>;
-  /** fetch data from the table: "squid_processor_base.hot_block" using primary key columns */
-  base_indexer_by_pk?: Maybe<Base_Indexer>;
   /** fetch data from the table: "codex" */
   codex: Array<Codex>;
   /** fetch data from the table: "codex" using primary key columns */
@@ -13799,20 +13759,6 @@ export type Onchain_QueryAuction_Bid_Table_By_PkArgs = {
 export type Onchain_QueryAuction_By_PkArgs = {
   id: Scalars['Int']['input'];
   version: Scalars['Int']['input'];
-};
-
-
-export type Onchain_QueryBase_IndexerArgs = {
-  distinct_on?: InputMaybe<Array<Base_Indexer_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Base_Indexer_Order_By>>;
-  where?: InputMaybe<Base_Indexer_Bool_Exp>;
-};
-
-
-export type Onchain_QueryBase_Indexer_By_PkArgs = {
-  height: Scalars['Int']['input'];
 };
 
 
@@ -14475,12 +14421,6 @@ export type Onchain_Subscription = {
   auction_by_pk?: Maybe<Auction>;
   /** fetch data from the table in a streaming manner: "auction" */
   auction_stream: Array<Auction>;
-  /** fetch data from the table: "squid_processor_base.hot_block" */
-  base_indexer: Array<Base_Indexer>;
-  /** fetch data from the table: "squid_processor_base.hot_block" using primary key columns */
-  base_indexer_by_pk?: Maybe<Base_Indexer>;
-  /** fetch data from the table in a streaming manner: "squid_processor_base.hot_block" */
-  base_indexer_stream: Array<Base_Indexer>;
   /** fetch data from the table: "codex" */
   codex: Array<Codex>;
   /** fetch data from the table: "codex" using primary key columns */
@@ -14995,27 +14935,6 @@ export type Onchain_SubscriptionAuction_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Auction_Stream_Cursor_Input>>;
   where?: InputMaybe<Auction_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionBase_IndexerArgs = {
-  distinct_on?: InputMaybe<Array<Base_Indexer_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Base_Indexer_Order_By>>;
-  where?: InputMaybe<Base_Indexer_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionBase_Indexer_By_PkArgs = {
-  height: Scalars['Int']['input'];
-};
-
-
-export type Onchain_SubscriptionBase_Indexer_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Base_Indexer_Stream_Cursor_Input>>;
-  where?: InputMaybe<Base_Indexer_Bool_Exp>;
 };
 
 

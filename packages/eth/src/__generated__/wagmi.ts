@@ -891,6 +891,790 @@ export const fxAirdropAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PumpFun
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const pumpFunAbi = [
+  {
+    type: "constructor",
+    inputs: [
+      { name: "_fxToken", internalType: "address", type: "address" },
+      { name: "_uniswapRouter", internalType: "address", type: "address" },
+      { name: "_uniswapFactory", internalType: "address", type: "address" },
+      { name: "_initialOwner", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "INITIAL_FEE_PERCENTAGE",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "INITIAL_FX_RATE",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "INITIAL_SUPPLY",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "K",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "MAX_FEE_PERCENTAGE",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "MAX_GRADUATION_RESERVE",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "MIN_PURCHASE_AMOUNT",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+      { name: "_amountIn", internalType: "uint256", type: "uint256" },
+    ],
+    name: "buy",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "creatorTokenInfo",
+    outputs: [
+      { name: "user", internalType: "address", type: "address" },
+      { name: "graduatedToken", internalType: "address", type: "address" },
+      { name: "supply", internalType: "uint256", type: "uint256" },
+      { name: "tradingEnabled", internalType: "bool", type: "bool" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "creatorTokens",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "feePercentage",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "feeReceiver",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "fxRate",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "fxToken",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+      { name: "_amountIn", internalType: "uint256", type: "uint256" },
+      {
+        name: "_orderType",
+        internalType: "enum IPumpFun.OrderType",
+        type: "uint8",
+      },
+    ],
+    name: "getAmountOut",
+    outputs: [{ name: "amountOut", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "user", internalType: "address", type: "address" }],
+    name: "getCreatorTokens",
+    outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "offset", internalType: "uint256", type: "uint256" },
+      { name: "limit", internalType: "uint256", type: "uint256" },
+    ],
+    name: "getCreatorTokensPaginated",
+    outputs: [
+      { name: "tokens", internalType: "address[]", type: "address[]" },
+      { name: "total", internalType: "uint256", type: "uint256" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+    ],
+    name: "getTokenReserves",
+    outputs: [
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "uint256", type: "uint256" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "getTotalCreatorTokens",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "getTotalUsers",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "user", internalType: "address", type: "address" },
+      { name: "offset", internalType: "uint256", type: "uint256" },
+      { name: "limit", internalType: "uint256", type: "uint256" },
+    ],
+    name: "getUserCreatorTokensPaginated",
+    outputs: [
+      { name: "tokens", internalType: "address[]", type: "address[]" },
+      { name: "total", internalType: "uint256", type: "uint256" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+    ],
+    name: "graduate",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "initialSupply",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+    ],
+    name: "isEligibleForGraduation",
+    outputs: [
+      { name: "status", internalType: "enum IPumpFun.Status", type: "uint8" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_purchaseAmount", internalType: "uint256", type: "uint256" },
+      { name: "_name", internalType: "string", type: "string" },
+      { name: "_symbol", internalType: "string", type: "string" },
+    ],
+    name: "launch",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+    ],
+    name: "migrate",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+      { name: "_user", internalType: "address", type: "address" },
+    ],
+    name: "migrateFor",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "poolInfo",
+    outputs: [
+      { name: "creatorReserve", internalType: "uint256", type: "uint256" },
+      { name: "fxReserve", internalType: "uint256", type: "uint256" },
+      { name: "k", internalType: "uint256", type: "uint256" },
+      { name: "feePercentage", internalType: "uint256", type: "uint256" },
+      { name: "feeReceiver", internalType: "address", type: "address" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+      { name: "_amountIn", internalType: "uint256", type: "uint256" },
+    ],
+    name: "sell",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_newPercentage", internalType: "uint256", type: "uint256" },
+    ],
+    name: "setFeePercentage",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_newReceiver", internalType: "address", type: "address" },
+    ],
+    name: "setFeeReceiver",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_newRate", internalType: "uint256", type: "uint256" }],
+    name: "setFxRate",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_newSupply", internalType: "uint256", type: "uint256" }],
+    name: "setInitialSupply",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "uniswapFactory",
+    outputs: [
+      { name: "", internalType: "contract IUniswapV2Factory", type: "address" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "uniswapRouter",
+    outputs: [
+      {
+        name: "",
+        internalType: "contract IUniswapV2Router02",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "users",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "user", internalType: "address", type: "address", indexed: true },
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "CreatorTokenAdded",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "feeReceiver",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "feeAmount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "FeeCollected",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "feePercentage",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "FeePercentageUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "feeReceiver",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "FeeReceiverUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "fxRate",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "FxRateUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "graduatedToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "creatorLiquidity",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "fxLiquidity",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "Graduated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      { name: "user", internalType: "address", type: "address", indexed: true },
+      {
+        name: "creatorTokenRefund",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "fxTokenRefund",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "GraduationRefund",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "initialSupply",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "InitialSupplyUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      { name: "id", internalType: "uint256", type: "uint256", indexed: true },
+      { name: "name", internalType: "string", type: "string", indexed: false },
+      {
+        name: "symbol",
+        internalType: "string",
+        type: "string",
+        indexed: false,
+      },
+      {
+        name: "purchaseAmount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "liquidityAmount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "Launched",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "user", internalType: "address", type: "address", indexed: true },
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "graduatedToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "amount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "Migrated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "previousOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "OwnershipTransferred",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "feeReceiver",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "creatorReserve",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "fxReserve",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      { name: "k", internalType: "uint256", type: "uint256", indexed: false },
+      {
+        name: "feeAmount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "PoolInitialized",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "creatorReserve",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "fxReserve",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "PoolUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "amountIn",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "amountOut",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "Purchased",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "amountIn",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "amountOut",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "Sold",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "user", internalType: "address", type: "address", indexed: true },
+    ],
+    name: "UserCreated",
+  },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
+  {
+    type: "error",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "account", internalType: "address", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+  },
+  { type: "error", inputs: [], name: "PumpFun__FeeExceedsMaximum" },
+  { type: "error", inputs: [], name: "PumpFun__InsufficientLiquidity" },
+  { type: "error", inputs: [], name: "PumpFun__InvalidGraduationReserve" },
+  { type: "error", inputs: [], name: "PumpFun__InvalidPurchaseAmount" },
+  { type: "error", inputs: [], name: "PumpFun__InvalidRate" },
+  { type: "error", inputs: [], name: "PumpFun__InvalidSupply" },
+  { type: "error", inputs: [], name: "PumpFun__NoTokensToMigrate" },
+  { type: "error", inputs: [], name: "PumpFun__NotTokenCreator" },
+  { type: "error", inputs: [], name: "PumpFun__TokenNotGraduated" },
+  { type: "error", inputs: [], name: "PumpFun__TokenNotLaunched" },
+  { type: "error", inputs: [], name: "PumpFun__TradingNotEnabled" },
+  { type: "error", inputs: [], name: "PumpFun__ZeroAddress" },
+  { type: "error", inputs: [], name: "PumpFun__ZeroAmountIn" },
+  {
+    type: "error",
+    inputs: [{ name: "token", internalType: "address", type: "address" }],
+    name: "SafeERC20FailedOperation",
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TezAirdrop
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

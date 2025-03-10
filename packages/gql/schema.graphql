@@ -641,6 +641,11 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
+input AirdropTezClaimInput {
+  publicKey: String!
+  signature: String!
+}
+
 type AirdropTezClaimResult {
   signature: String!
 }
@@ -2797,6 +2802,7 @@ type ProjectReserves {
   amount: Int!
   data: JSON!
   id: String!
+  merkle_root: String
   method: Int!
 }
 
@@ -3161,7 +3167,7 @@ type Retrospective {
   spentTotalNb: Int!
   spentTotalUsd: numeric!
   tokenAllocation: numeric!
-  tokenAllocationString: String
+  tokenAllocationString: String!
 
   """An object relationship"""
   wallet: Wallet
@@ -6877,61 +6883,6 @@ input auction_variance_order_by {
   version: order_by
 }
 
-"""
-columns and relationships of "squid_processor_base.hot_block"
-"""
-type base_indexer {
-  hash: String!
-  height: Int!
-}
-
-"""
-Boolean expression to filter rows from the table "squid_processor_base.hot_block". All fields are combined with a logical 'AND'.
-"""
-input base_indexer_bool_exp {
-  _and: [base_indexer_bool_exp!]
-  _not: base_indexer_bool_exp
-  _or: [base_indexer_bool_exp!]
-  hash: String_comparison_exp
-  height: Int_comparison_exp
-}
-
-"""
-Ordering options when selecting data from "squid_processor_base.hot_block".
-"""
-input base_indexer_order_by {
-  hash: order_by
-  height: order_by
-}
-
-"""
-select columns of table "squid_processor_base.hot_block"
-"""
-enum base_indexer_select_column {
-  """column name"""
-  hash
-
-  """column name"""
-  height
-}
-
-"""
-Streaming cursor of the table "base_indexer"
-"""
-input base_indexer_stream_cursor_input {
-  """Stream column input with initial value"""
-  initial_value: base_indexer_stream_cursor_value_input!
-
-  """cursor ordering"""
-  ordering: cursor_ordering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input base_indexer_stream_cursor_value_input {
-  hash: String
-  height: Int
-}
-
 scalar bigint
 
 """
@@ -8375,9 +8326,6 @@ type generative_token {
   ): jsonb
   flag: generative_token_flag_enum!
 
-  """An object relationship"""
-  frame_settings: eth_frame_data
-
   """An array relationship"""
   generative_token_articles(
     """distinct select on columns"""
@@ -8816,7 +8764,6 @@ input generative_token_bool_exp {
   enabled: Boolean_comparison_exp
   features: jsonb_comparison_exp
   flag: generative_token_flag_enum_comparison_exp
-  frame_settings: eth_frame_data_bool_exp
   generative_token_articles: article_generative_token_bool_exp
   generative_uri: String_comparison_exp
   id: String_comparison_exp
@@ -9305,7 +9252,6 @@ input generative_token_order_by {
   enabled: order_by
   features: order_by
   flag: order_by
-  frame_settings: eth_frame_data_order_by
   generative_token_articles_aggregate: article_generative_token_aggregate_order_by
   generative_uri: order_by
   id: order_by
@@ -12608,7 +12554,7 @@ input moderation_reason_stream_cursor_value_input {
 
 """mutation root"""
 type mutation_root {
-  airdrop_tez_claim: AirdropTezClaimResult
+  airdrop_tez_claim(input: AirdropTezClaimInput): AirdropTezClaimResult
   authenticate(input: AuthenticationInput!): AuthenticationResult
 
   """Authenticate using a Web3Auth idToken"""
@@ -16171,31 +16117,6 @@ type onchain_query {
   auction_by_pk(id: Int!, version: Int!): auction
 
   """
-  fetch data from the table: "squid_processor_base.hot_block"
-  """
-  base_indexer(
-    """distinct select on columns"""
-    distinct_on: [base_indexer_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [base_indexer_order_by!]
-
-    """filter the rows returned"""
-    where: base_indexer_bool_exp
-  ): [base_indexer!]!
-
-  """
-  fetch data from the table: "squid_processor_base.hot_block" using primary key columns
-  """
-  base_indexer_by_pk(height: Int!): base_indexer
-
-  """
   fetch data from the table: "codex"
   """
   codex(
@@ -17749,45 +17670,6 @@ type onchain_subscription {
     """filter the rows returned"""
     where: auction_bool_exp
   ): [auction!]!
-
-  """
-  fetch data from the table: "squid_processor_base.hot_block"
-  """
-  base_indexer(
-    """distinct select on columns"""
-    distinct_on: [base_indexer_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [base_indexer_order_by!]
-
-    """filter the rows returned"""
-    where: base_indexer_bool_exp
-  ): [base_indexer!]!
-
-  """
-  fetch data from the table: "squid_processor_base.hot_block" using primary key columns
-  """
-  base_indexer_by_pk(height: Int!): base_indexer
-
-  """
-  fetch data from the table in a streaming manner: "squid_processor_base.hot_block"
-  """
-  base_indexer_stream(
-    """maximum number of rows returned in a single batch"""
-    batch_size: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [base_indexer_stream_cursor_input]!
-
-    """filter the rows returned"""
-    where: base_indexer_bool_exp
-  ): [base_indexer!]!
 
   """
   fetch data from the table: "codex"
