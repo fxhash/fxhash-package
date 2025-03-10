@@ -3,7 +3,7 @@ import cssModulesPlugin from "esbuild-css-modules-plugin"
 
 export default defineConfig((options: Options) => ({
   esbuildPlugins: [cssModulesPlugin()],
-  entry: ["src/index.ts"],
+  entry: ["src/index.ts", "src/getJsxFromMarkdown.ts"],
   outDir: "dist",
   format: ["esm"],
   jsx: "react",
