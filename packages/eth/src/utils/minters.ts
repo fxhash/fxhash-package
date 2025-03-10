@@ -442,13 +442,13 @@ export function getPricingFromParams(
   generativeToken: NonNullable<
     GetTokenPricingsAndReservesQuery["onchain"]
   >["generative_token_by_pk"],
+  reserves: NonNullable<GetTokenPricingsAndReservesQuery["onchain"]>["reserve"],
   whitelist: boolean
 ) {
   if (!generativeToken) {
     throw new Error("generativeToken is null or undefined")
   }
-  const { pricing_fixeds, pricing_dutch_auctions, reserves, is_frame } =
-    generativeToken
+  const { pricing_fixeds, pricing_dutch_auctions, is_frame } = generativeToken
   const isFixed = pricing_fixeds.length > 0
   const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
 
@@ -462,7 +462,7 @@ export function getPricingFromParams(
             reserves.every(
               reserve =>
                 reserve.data.reserveId !== pricing.id.split("-")[1] ||
-                !reserve.merkle_root
+                !reserve.data.merkleRoot
             )
           )
     return { pricing, isFixed: isFixed }
@@ -474,10 +474,11 @@ export function getPricingAndReserveFromParams(
   generativeToken: NonNullable<
     GetTokenPricingsAndReservesQuery["onchain"]
   >["generative_token_by_pk"],
+  reserves: NonNullable<GetTokenPricingsAndReservesQuery["onchain"]>["reserve"],
   whitelist: boolean
 ) {
   invariant(generativeToken, "generativeToken is null or undefined")
-  const { pricing_fixeds, pricing_dutch_auctions, reserves } = generativeToken
+  const { pricing_fixeds, pricing_dutch_auctions } = generativeToken
   const isFixed = pricing_fixeds.length > 0
   const pricingList = isFixed ? pricing_fixeds : pricing_dutch_auctions
 
@@ -486,7 +487,8 @@ export function getPricingAndReserveFromParams(
       for (const pricing of pricingList) {
         const reserveId = pricing.id.split("-")[1]
         const reserve = reserves.find(
-          reserve => reserve.data.reserveId === reserveId && reserve.merkle_root
+          reserve =>
+            reserve.data.reserveId === reserveId && reserve.data.merkleRoot
         )
         if (reserve) {
           return { pricing, reserve }
@@ -502,7 +504,7 @@ export function getPricingAndReserveFromParams(
               reserves.every(
                 reserve =>
                   reserve.data.reserveId !== pricing.id.split("-")[1] ||
-                  !reserve.merkle_root
+                  !reserve.data.merkleRoot
               )
             )
 
@@ -528,10 +530,8 @@ interface PrepareMintParamsPayload {
         >["generative_token_by_pk"]
       >["pricing_dutch_auctions"][0]
   reserve?: NonNullable<
-    NonNullable<
-      GetTokenPricingsAndReservesQuery["onchain"]
-    >["generative_token_by_pk"]
-  >["reserves"][0]
+    NonNullable<GetTokenPricingsAndReservesQuery["onchain"]>["reserve"][0]
+  >
   indexesAndProofs?: {
     indexes: number[]
     proofs: string[][]
@@ -561,6 +561,7 @@ export const prepareMintParams = async (
 
   const { pricing, isFixed } = getPricingFromParams(
     tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
+    tokenPricingsAndReserves.data.onchain.reserve,
     !!whitelistedAddress
   )
 
@@ -575,11 +576,8 @@ export const prepareMintParams = async (
       }
     | undefined = undefined
   let reserveSave: any = undefined
-  for (const reserve of tokenPricingsAndReserves.data.onchain
-    .generative_token_by_pk.reserves) {
-    if (!reserve.merkle_root)
-      throw new Error(`no merkle root found for reserve: ${reserve.id}`)
-    const merkleTreeWhitelist = await getWhitelist(reserve.merkle_root)
+  for (const reserve of tokenPricingsAndReserves.data.onchain.reserve) {
+    const merkleTreeWhitelist = await getWhitelist(reserve.data.merkleRoot)
 
     invariant(
       merkleTreeWhitelist && merkleTreeWhitelist.length > 0,
@@ -636,6 +634,7 @@ export const fetchTokenReserveId = async (
 
   const { pricing } = getPricingFromParams(
     tokenPricingsAndReserves.data.onchain.generative_token_by_pk,
+    tokenPricingsAndReserves.data.onchain.reserve,
     useWhitelist
   )
   invariant(pricing, "No pricing found")
