@@ -23,6 +23,7 @@ import {
   windowWallets,
   defaultStorageDriver,
 } from "@fxhash/core"
+import { isBrowser } from "@fxhash/utils-browser"
 
 export interface IClientManySources extends IClient {
   /**
@@ -90,7 +91,7 @@ export function createClient(params: ICreateClientParams): IClientManySources {
     userSources.push(source)
   }
 
-  if (params.wallets?.web3auth) {
+  if (isBrowser() && params.wallets?.web3auth) {
     wallets.web3auth = web3AuthWallets({
       gqlWrapper: gql,
       safeFrameDomWrapper:
@@ -109,7 +110,7 @@ export function createClient(params: ICreateClientParams): IClientManySources {
     userSources.push(source)
   }
 
-  if (params.wallets?.window) {
+  if (isBrowser() && params.wallets?.window) {
     const opts = params.wallets.window
     wallets.window = windowWallets({
       evm: configOrUndefined(opts.evm?.wagmiConfig),
