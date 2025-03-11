@@ -142,6 +142,7 @@ export function ClientPlugnPlayProvider({
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
+    account: config?.hydration?.account || defaultContext.account,
     config: _config,
     client,
   })
@@ -169,14 +170,6 @@ export function ClientPlugnPlayProvider({
     )
 
     if (!once.current) {
-      console.log("INIT")
-      console.log("INIT")
-      console.log("INIT")
-      console.log("INIT")
-      console.log("INIT")
-      console.log("INIT")
-      console.log("INIT")
-      console.log("INIT")
       client.init()
       once.current = true
     }

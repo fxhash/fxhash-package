@@ -177,28 +177,32 @@ export function accountUtils({
    * stored in the storage.
    */
   const reconnectFromStorage = async () => {
-    const account = await getAccountFromStorage()
-    // if there's an account in the storage, then init authentication
-    // recovery process, which depends on the authentication strategy
-    if (account) {
-      try {
-        if (!credentialsDriver.validate(account.credentials)) {
-          console.error("credentials recovered from storage are invalid")
-          await cleanup()
-          return
-        }
-        // If we can get the profile we are authenticated
-        await sync()
-        // todo: carefully think about this flow here: is this how we handle fail?
-      } catch (e) {
-        // if a sync error occurs, we may want to try refreshing credentials
-        console.log("Error getting profile", e)
+    try {
+      const account = await getAccountFromStorage()
+      // if there's an account in the storage, then init authentication
+      // recovery process, which depends on the authentication strategy
+      if (account) {
         try {
-          await refreshCredentials()
-        } catch (_) {
-          // todo: handle error for credentials missing
+          if (!credentialsDriver.validate(account.credentials)) {
+            console.error("credentials recovered from storage are invalid")
+            throw "invalid credentials in storage"
+          }
+          // If we can get the profile we are authenticated
+          await sync()
+        } catch (e) {
+          // if a sync error occurs, we may want to try refreshing credentials
+          console.log("Error getting profile", e)
+          try {
+            await refreshCredentials()
+          } catch (_) {
+            throw "refresh crendentials failed" // triggers cleanup
+          }
         }
+      } else {
+        throw "no account" // triggers cleanup
       }
+    } catch (err) {
+      await cleanup()
     }
   }
 
