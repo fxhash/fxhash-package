@@ -126,6 +126,7 @@ export function ClientPlugnPlayProvider({
       credentials: config.credentials,
       safeDomWrapper: safeDomContainer,
       socialLogin,
+      hydration: config.hydration,
     }))
 
     // Override the ConnectKit initialization for React context
@@ -142,7 +143,7 @@ export function ClientPlugnPlayProvider({
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
-    account: config?.hydration?.account || defaultContext.account,
+    account: client.source.getAccount(),
     config: _config,
     client,
   })
