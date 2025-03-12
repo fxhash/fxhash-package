@@ -39,11 +39,28 @@ const ConnectKitDriver = ({
   openConnectKitModalRef,
   client,
 }: ConnectKitDriverProps) => {
-  const modal = useModal()
+  const isConnected = useRef(false)
+  const modal = useModal({
+    onConnect: () => {
+      isConnected.current = true
+    },
+    onDisconnect: () => {
+      isConnected.current = false
+    },
+  })
+
   useEffect(() => {
     openConnectKitModalRef.current = modal.setOpen.bind(null, true)
-    client.setConnectKitModal(() => openConnectKitModalRef.current?.())
-  }, [modal, client])
+    client.setConnectKitModal(
+      // Open function
+      () => openConnectKitModalRef.current?.(),
+      // IsConnected function
+      () => isConnected.current,
+      // IsOpen function
+      () => modal.open
+    )
+  }, [modal])
+
   return null
 }
 
@@ -139,33 +156,6 @@ export function ClientPlugnPlayProvider({
 
     return client
   }, [])
-
-  // Capture the modal opener
-  const ConnectKitDriver = () => {
-    const isConnected = useRef(false)
-    const modal = useModal({
-      onConnect: () => {
-        isConnected.current = true
-      },
-      onDisconnect: () => {
-        isConnected.current = false
-      },
-    })
-
-    useEffect(() => {
-      openConnectKitModalRef.current = modal.setOpen.bind(null, true)
-      client.setConnectKitModal(
-        // Open function
-        () => openConnectKitModalRef.current?.(),
-        // IsConnected function
-        () => isConnected.current,
-        // IsOpen function
-        () => modal.open
-      )
-    }, [modal])
-
-    return null
-  }
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
