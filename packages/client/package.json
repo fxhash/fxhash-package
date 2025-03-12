@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.2.2",
+    "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/config": "workspace:*",
     "@fxhash/core": "workspace:*",
     "@fxhash/errors": "workspace:*",
@@ -14,8 +14,8 @@
     "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "@tanstack/react-query": "5.28.8",
-    "@taquito/beacon-wallet": "19.2.1",
-    "@taquito/taquito": "17.3.1"
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
@@ -23,39 +23,33 @@
     "@types/eslint": "8.44.0",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@typescript-eslint/eslint-plugin": "5.62.0",
-    "@typescript-eslint/parser": "5.62.0",
-    "@wagmi/connectors": "5.3.3",
-    "@wagmi/core": "2.14.1",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
     "connectkit": "1.8.2",
-    "eslint": "8.45.0",
-    "tsup": "8.2.4",
+    "eslint": "8.57.0",
+    "tsup": "8.3.6",
     "typescript": "5.7.2",
-    "viem": "2.19.4",
-    "vitest": "0.34.6",
-    "wagmi": "2.12.25"
+    "viem": "2.22.5",
+    "wagmi": "2.14.7"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
-    "@wagmi/connectors": "5.3.3",
-    "@wagmi/core": "2.14.1",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
     "connectkit": "1.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "viem": "2.19.4",
-    "wagmi": "2.12.25"
+    "viem": "2.22.5",
+    "wagmi": "2.14.7"
   },
   "publishConfig": {
     "access": "public"
@@ -63,10 +57,7 @@
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest",
-    "test:local": "FXHASH_ENV=local vitest"
+    "dev": "tsup --watch"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

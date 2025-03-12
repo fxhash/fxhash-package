@@ -48,4 +48,4 @@ export const RESERVOIR_ABI = [
     type: "function",
   },
   { stateMutability: "payable", type: "receive" },
-]
+] as const

@@ -6,8 +6,7 @@ import {
 } from "@fxhash/params"
 import { RuntimeDefinition, RuntimeState, RuntimeWholeState } from "./_types.js"
 import semver from "semver"
-import { float2hex } from "../../../../utils/dist/float.js"
-import { xorshiftString } from "../../../../utils/dist/bytes.js"
+import { float2hex, xorshiftString } from "@fxhash/utils"
 import mergeWith from "lodash.mergewith"
 
 /**
@@ -53,6 +52,25 @@ export function getSnippetVersionFromProject(project: {
   if (isValidSnippetVersionInVersion(project.metadata.version))
     return project.metadata.version
   return undefined
+}
+
+/**
+ * Given a project with its metadata this function will return the
+ * cid of the project.
+ *
+ * Why is this relevant? Although its in general prefered
+ * to use the genrative_uri for the source of an artwork generator.
+ * Early projects do not store the previewHash in their metadata. Therefore
+ * it is required to use the actual artifactUri in the runtime in order to
+ * reconstruct the preview image.
+ */
+export function getCidFromProject(project: {
+  generative_uri: string
+  metadata: Record<string, any>
+}): string {
+  if (!project.metadata.previewHash && project.metadata.artifactUri)
+    return project.metadata.artifactUri
+  return project.generative_uri
 }
 
 /**

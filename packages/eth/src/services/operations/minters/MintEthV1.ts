@@ -4,12 +4,12 @@ import { prepareMintParams } from "@/utils/index.js"
 import { MintDutchAutionWhitelistEthV1Operation } from "./MintDutchAuctionWhitelistEthV1.js"
 import { MintFixedPriceEthV1Operation } from "./MintFixedPriceEthV1.js"
 import { MintDAEthV1Operation } from "./MintDutchAuctionEthV1.js"
-import { TransactionType } from "@fxhash/shared"
+import type { TransactionType } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
 
 export type TMintEthV1OperationParams = {
   token: `0x${string}` | string
-  to: string | null
+  to: `0x${string}` | string
   qty: bigint
   whitelist: boolean
   price: bigint
@@ -68,38 +68,38 @@ export class MintEthV1Operation extends EthereumContractOperation<TMintEthV1Oper
         )
       }
       return
+    }
+
+    if (!indexesAndProofs || !reserve)
+      throw new Error("No indexes or proofs found")
+    if (isFixed) {
+      this.mintOperation = new MintFixedPriceWhitelistEthV1Operation(
+        this.manager,
+        {
+          token: this.params.token,
+          to: this.params.to,
+          index: indexesAndProofs.indexes,
+          proof: indexesAndProofs.proofs,
+          reserveId: reserve.data.reserveId,
+          price: this.params.price,
+          amount: this.params.qty,
+        },
+        this.chain
+      )
     } else {
-      if (!indexesAndProofs || !reserve)
-        throw new Error("No indexes or proofs found")
-      if (isFixed) {
-        this.mintOperation = new MintFixedPriceWhitelistEthV1Operation(
-          this.manager,
-          {
-            token: this.params.token,
-            to: this.params.to,
-            index: indexesAndProofs.indexes,
-            proof: indexesAndProofs.proofs,
-            reserveId: reserve.data.reserveId,
-            price: this.params.price,
-            amount: this.params.qty,
-          },
-          this.chain
-        )
-      } else {
-        this.mintOperation = new MintDutchAutionWhitelistEthV1Operation(
-          this.manager,
-          {
-            token: this.params.token,
-            to: this.params.to,
-            index: indexesAndProofs.indexes,
-            proof: indexesAndProofs.proofs,
-            reserveId: reserve.data.reserveId,
-            amount: this.params.qty,
-            price: this.params.price,
-          },
-          this.chain
-        )
-      }
+      this.mintOperation = new MintDutchAutionWhitelistEthV1Operation(
+        this.manager,
+        {
+          token: this.params.token,
+          to: this.params.to,
+          index: indexesAndProofs.indexes,
+          proof: indexesAndProofs.proofs,
+          reserveId: reserve.data.reserveId,
+          amount: this.params.qty,
+          price: this.params.price,
+        },
+        this.chain
+      )
     }
   }
 

@@ -1,9 +1,8 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
-
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
@@ -22,11 +21,14 @@ export class TransferTokenEthV1Operation extends EthereumContractOperation<TTran
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_GEN_ART_721_ABI,
+      "safeTransferFrom"
+    > = {
       address: this.params.token,
       abi: FX_GEN_ART_721_ABI,
       functionName: "safeTransferFrom",
-      args: [this.params.from, this.params.to, this.params.tokenId],
+      args: [this.params.from, this.params.to, BigInt(this.params.tokenId)],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }

@@ -1,3 +1,0 @@
-# Use-cases
-
-Hello world!

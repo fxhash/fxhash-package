@@ -1,12 +1,14 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
+import type {
+  ContractAbstraction,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
-import { displayMutez } from "../../utils/units"
 import { TezosContractOperation } from "./ContractOperation"
-import { Objkt, Offer } from "@fxhash/shared"
+import type { Offer } from "@fxhash/shared"
 
 export type TOfferCancelOperationParams = {
-  offer: Offer
-  objkt: Objkt
+  offer: Pick<Offer, "id">
 }
 
 /**
@@ -22,14 +24,10 @@ export class OfferCancelOperation extends TezosContractOperation<TOfferCancelOpe
   }
 
   async call(): Promise<WalletOperation> {
-    return this.contract!.methodsObject.offer_cancel(
-      this.params.offer.id
-    ).send()
+    return this.contract.methodsObject.offer_cancel(this.params.offer.id).send()
   }
 
   success(): string {
-    return `You have cancelled your offer of ${displayMutez(
-      this.params.offer.price
-    )} on ${this.params.objkt.name}`
+    return "You have cancelled your offer"
   }
 }

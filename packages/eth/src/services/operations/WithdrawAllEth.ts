@@ -1,18 +1,15 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import { encodeFunctionData } from "viem"
-
+import { dutchAuctionV2Abi } from "@/__generated__/wagmi.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { Qu_GetEthMinterProceeds } from "@fxhash/gql"
 import { MULTICALL3_ABI } from "@/abi/Multicall3.js"
-import {
-  FIXED_PRICE_MINTER_ABI,
-  DUTCH_AUCTION_MINTER_ABI,
-} from "@/abi/index.js"
+import { FIXED_PRICE_MINTER_ABI } from "@/abi/index.js"
 import { getSplitsClient, SPLITS_ETHER_TOKEN } from "../Splits.js"
-import { CallData } from "@0xsplits/splits-sdk"
+import type { CallData } from "@0xsplits/splits-sdk"
 import {
   TransactionUnknownError,
   TransactionType,
@@ -64,7 +61,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
 
     const withdrawableProceeds =
       proceeds.data.onchain.eth_minter_proceeds.filter(
-        (proceed: any) => proceed.amount > 0
+        proceed => proceed.amount > 0
       )
 
     //we loop on the all the minters, to prepare the withdraw operations
@@ -72,12 +69,13 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       const isDutchAuction =
         minterProceeds.minter_address ===
         currentConfig.contracts.dutch_auction_minter_v1
-      const abi = isDutchAuction
-        ? DUTCH_AUCTION_MINTER_ABI
-        : FIXED_PRICE_MINTER_ABI
+      const abi = isDutchAuction ? dutchAuctionV2Abi : FIXED_PRICE_MINTER_ABI
       const args = isDutchAuction
-        ? [minterProceeds.token_address, minterProceeds.reserve_id]
-        : [minterProceeds.token_address]
+        ? ([
+            minterProceeds.token_address as `0x${string}`,
+            minterProceeds.reserve_id,
+          ] as const)
+        : ([minterProceeds.token_address as `0x${string}`] as const)
 
       const multicallPayload = {
         address: minterProceeds.minter_address as `0x${string}`,
@@ -167,14 +165,17 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
     //we properly format the payload for multicall
     const callRequests = multicallArgs.map(call => {
       return {
-        target: call.address,
+        target: call.address as `0x${string}`,
         callData: call.data,
       }
     })
 
     //if we have anything to do, we trigger the call, otherwise return undefined
     if (callRequests.length > 0) {
-      const args: SimulateAndExecuteContractRequest = {
+      const args: SimulateAndExecuteContractRequest<
+        typeof MULTICALL3_ABI,
+        "aggregate"
+      > = {
         address: currentConfig.contracts.multicall3 as `0x${string}`,
         abi: MULTICALL3_ABI,
         functionName: "aggregate",
@@ -190,11 +191,10 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
         type: TransactionType.ONCHAIN,
         hash: transactionHash,
       }
-    } else {
-      throw new TransactionUnknownError("Nothing to withdraw")
     }
+    throw new TransactionUnknownError("Nothing to withdraw")
   }
   success(): string {
-    return `Successfully withdrew all eth from minters and splits`
+    return "Successfully withdrew all eth from minters and splits"
   }
 }

@@ -9,4 +9,5 @@ export {
   enhanceRuntimeDefinition,
   isValidSnippetVersionInVersion,
   getSnippetVersionFromProject,
+  getCidFromProject,
 } from "./utils.js"
