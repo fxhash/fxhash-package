@@ -22,6 +22,7 @@ import {
   web3AuthWallets,
   windowWallets,
   defaultStorageDriver,
+  withAccountHydration,
 } from "@fxhash/core"
 import { isBrowser } from "@fxhash/utils-browser"
 
@@ -128,7 +129,14 @@ export function createClient(params: ICreateClientParams): IClientManySources {
   }
 
   // will reconciliate the different sources to ensure only a single source
-  const rootSource = multipleUserSources({ sources: userSources })
+  let rootSource = multipleUserSources({ sources: userSources })
+
+  if (params.hydration?.account) {
+    rootSource = withAccountHydration({
+      source: rootSource,
+      account: params.hydration?.account,
+    })
+  }
 
   return {
     userSource: rootSource,
