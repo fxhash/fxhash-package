@@ -9,7 +9,7 @@ export interface CustomArticleElementsByType {
 
 // Define a custom Node interface that satisfies the constraints expected by unist-util-visit
 export interface CustomNode extends Root {
-  data: {
+  data?: {
     [key: string]: any
     hName?: string
     hProperties?: {

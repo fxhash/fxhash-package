@@ -250,10 +250,8 @@ export function getAvailableIndexesAndProofsForUser(
   user: `0x${string}`,
   whitelist: MerkleTreeWhitelist,
   whitelistReserve: NonNullable<
-    NonNullable<
-      GetTokenPricingsAndReservesQuery["onchain"]
-    >["generative_token_by_pk"]
-  >["reserves"][0]
+    NonNullable<GetTokenPricingsAndReservesQuery["onchain"]>["reserve"][0]
+  >
 ): { indexes: number[]; proofs: string[][] } {
   const reducedWhiteList = structuredClone(whitelist.whitelist)
   // Remove consumed slots from whitelist

@@ -5,10 +5,9 @@ import {
 } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { TezosContractOperation } from "./ContractOperation"
-import { NFTArticle } from "@fxhash/shared"
 
 export type TLockArticleOperationParams = {
-  article: NFTArticle
+  articleId: string
 }
 
 /**
@@ -23,11 +22,11 @@ export class TezosLockArticleOperation extends TezosContractOperation<TLockArtic
 
   async call(): Promise<TransactionWalletOperation> {
     return this.contract!.methodsObject.lock_metadata(
-      this.params.article.id
+      this.params.articleId
     ).send()
   }
 
   success(): string {
-    return `The metadata of your article ${this.params.article.title} was successfully locked.`
+    return `The metadata of your article was successfully locked.`
   }
 }
