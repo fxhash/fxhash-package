@@ -52,7 +52,7 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_token: "0xd89fdcb6c8d107f27cee4452ccfb70dc4f9768a7",
   fx_airdrop: "0x3be624a86987e70fbf21bd4618e6c06cee0131f1",
   fx_tez_airdrop: "0x3b4c8052ff6092ba86b0a2983e1aeefbe98d3efb",
-  fx_pumpfun: "0x027977daD0E14880B55Aa64B957F9ff5CaE90e94",
+  fx_pumpfun: "0xA01868B04B97ef13E12B3F8b6567ce39850F6caD",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
