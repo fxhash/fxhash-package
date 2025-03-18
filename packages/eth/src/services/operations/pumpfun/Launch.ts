@@ -9,12 +9,12 @@ import { pumpFunAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
 export type TPumpFunLaunchEthOperationParams = {
-  // The amount of FxTokens used to create liquidity
-  purchaseAmount: bigint
   // The name of the creator token
   name: string
   // The symbol of the creator token
   symbol: string
+  // The amount of FxTokens used to create liquidity
+  purchaseAmount: bigint
 }
 
 export class PumpFunLaunchEthOperation extends EthereumContractOperation<TPumpFunLaunchEthOperationParams> {
@@ -28,9 +28,9 @@ export class PumpFunLaunchEthOperation extends EthereumContractOperation<TPumpFu
         abi: pumpFunAbi,
         functionName: "launch",
         args: [
-          this.params.purchaseAmount,
           this.params.name,
           this.params.symbol,
+          this.params.purchaseAmount,
         ],
         account: this.manager.address as `0x${string}`,
         chain: getCurrentChain(this.chain),
