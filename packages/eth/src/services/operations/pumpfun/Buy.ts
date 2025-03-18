@@ -21,7 +21,7 @@ export class PumpFunBuyEthOperation extends EthereumContractOperation<TPumpFunBu
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<typeof pumpFunAbi, "buy"> = {
-      address: config.base.contracts.fx_pumpfun,
+      address: config.base.contracts.fx_bonding_curve_token_factory,
       abi: pumpFunAbi,
       functionName: "buy",
       args: [this.params.creatorToken, this.params.amountIn],
