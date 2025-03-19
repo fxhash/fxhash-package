@@ -891,6 +891,252 @@ export const fxAirdropAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ProjectFactory
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const projectFactoryAbi = [
+  {
+    type: "constructor",
+    inputs: [
+      { name: "_initialOwner", internalType: "address", type: "address" },
+      { name: "_initialAdmin", internalType: "address", type: "address" },
+      { name: "_initialBaseURI", internalType: "string", type: "string" },
+      { name: "_initialRenderer", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_name", internalType: "string", type: "string" },
+      { name: "_symbol", internalType: "string", type: "string" },
+      { name: "_creatorToken", internalType: "address", type: "address" },
+      { name: "_initialOwner", internalType: "address", type: "address" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+    ],
+    name: "createProject",
+    outputs: [
+      { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "initialAdmin",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "initialBaseURI",
+    outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "initialRenderer",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "projectId",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "projects",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_initialAdmin", internalType: "address", type: "address" },
+    ],
+    name: "setInitialAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_initialBaseURI", internalType: "string", type: "string" },
+    ],
+    name: "setInitialBaseURI",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_initialRenderer", internalType: "address", type: "address" },
+    ],
+    name: "setInitialRenderer",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "prevImplementation",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newImplementation",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "ImplementationUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "previousOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "OwnershipTransferred",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "projectId",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: true,
+      },
+      {
+        name: "projectToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "creator",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "ProjectCreated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
+  {
+    type: "error",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "account", internalType: "address", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+  },
+  { type: "error", inputs: [], name: "ProjectFactory__NotCreator" },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PumpFun
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -899,8 +1145,9 @@ export const pumpFunAbi = [
     type: "constructor",
     inputs: [
       { name: "_fxToken", internalType: "address", type: "address" },
-      { name: "_uniswapRouter", internalType: "address", type: "address" },
+      { name: "_migrator", internalType: "address", type: "address" },
       { name: "_uniswapFactory", internalType: "address", type: "address" },
+      { name: "_lockerFactory", internalType: "address", type: "address" },
       { name: "_initialOwner", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
@@ -950,7 +1197,7 @@ export const pumpFunAbi = [
   {
     type: "function",
     inputs: [],
-    name: "MIN_PURCHASE_AMOUNT",
+    name: "MIN_SEED_AMOUNT",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
@@ -973,6 +1220,7 @@ export const pumpFunAbi = [
       { name: "graduatedToken", internalType: "address", type: "address" },
       { name: "supply", internalType: "uint256", type: "uint256" },
       { name: "tradingEnabled", internalType: "bool", type: "bool" },
+      { name: "isGraduated", internalType: "bool", type: "bool" },
     ],
     stateMutability: "view",
   },
@@ -1023,12 +1271,15 @@ export const pumpFunAbi = [
       },
     ],
     name: "getAmountOut",
-    outputs: [{ name: "amountOut", internalType: "uint256", type: "uint256" }],
+    outputs: [
+      { name: "amountOut", internalType: "uint256", type: "uint256" },
+      { name: "feeAmount", internalType: "uint256", type: "uint256" },
+    ],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [{ name: "user", internalType: "address", type: "address" }],
+    inputs: [{ name: "_user", internalType: "address", type: "address" }],
     name: "getCreatorTokens",
     outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
     stateMutability: "view",
@@ -1036,8 +1287,8 @@ export const pumpFunAbi = [
   {
     type: "function",
     inputs: [
-      { name: "offset", internalType: "uint256", type: "uint256" },
-      { name: "limit", internalType: "uint256", type: "uint256" },
+      { name: "_offset", internalType: "uint256", type: "uint256" },
+      { name: "_limit", internalType: "uint256", type: "uint256" },
     ],
     name: "getCreatorTokensPaginated",
     outputs: [
@@ -1075,11 +1326,11 @@ export const pumpFunAbi = [
   {
     type: "function",
     inputs: [
-      { name: "user", internalType: "address", type: "address" },
-      { name: "offset", internalType: "uint256", type: "uint256" },
-      { name: "limit", internalType: "uint256", type: "uint256" },
+      { name: "_user", internalType: "address", type: "address" },
+      { name: "_offset", internalType: "uint256", type: "uint256" },
+      { name: "_limit", internalType: "uint256", type: "uint256" },
     ],
-    name: "getUserCreatorTokensPaginated",
+    name: "getUserTokensPaginated",
     outputs: [
       { name: "tokens", internalType: "address[]", type: "address[]" },
       { name: "total", internalType: "uint256", type: "uint256" },
@@ -1109,20 +1360,33 @@ export const pumpFunAbi = [
     ],
     name: "isEligibleForGraduation",
     outputs: [
-      { name: "status", internalType: "enum IPumpFun.Status", type: "uint8" },
+      { name: "", internalType: "enum IPumpFun.Status", type: "uint8" },
     ],
     stateMutability: "view",
   },
   {
     type: "function",
     inputs: [
-      { name: "_purchaseAmount", internalType: "uint256", type: "uint256" },
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
+      { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
     ],
     name: "launch",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "lockerFactory",
+    outputs: [
+      {
+        name: "",
+        internalType: "contract IUniswapV2LockerFactory",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -1245,11 +1509,11 @@ export const pumpFunAbi = [
   {
     type: "function",
     inputs: [],
-    name: "uniswapRouter",
+    name: "uniswapMigrator",
     outputs: [
       {
         name: "",
-        internalType: "contract IUniswapV2Router02",
+        internalType: "contract IUniswapV2Migrator",
         type: "address",
       },
     ],
@@ -1268,20 +1532,6 @@ export const pumpFunAbi = [
     name: "users",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      { name: "user", internalType: "address", type: "address", indexed: true },
-      {
-        name: "creatorToken",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "CreatorTokenAdded",
   },
   {
     type: "event",
@@ -1383,32 +1633,6 @@ export const pumpFunAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "creatorToken",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-      { name: "user", internalType: "address", type: "address", indexed: true },
-      {
-        name: "creatorTokenRefund",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-      {
-        name: "fxTokenRefund",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-    ],
-    name: "GraduationRefund",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
         name: "initialSupply",
         internalType: "uint256",
         type: "uint256",
@@ -1421,34 +1645,66 @@ export const pumpFunAbi = [
     type: "event",
     anonymous: false,
     inputs: [
+      { name: "user", internalType: "address", type: "address", indexed: true },
       {
         name: "creatorToken",
         internalType: "address",
         type: "address",
         indexed: true,
       },
-      { name: "id", internalType: "uint256", type: "uint256", indexed: true },
-      { name: "name", internalType: "string", type: "string", indexed: false },
       {
-        name: "symbol",
-        internalType: "string",
-        type: "string",
-        indexed: false,
+        name: "graduatedToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
       },
+      { name: "id", internalType: "uint256", type: "uint256", indexed: false },
       {
-        name: "purchaseAmount",
+        name: "purchasedAmount",
         internalType: "uint256",
         type: "uint256",
         indexed: false,
       },
       {
-        name: "liquidityAmount",
+        name: "creatorReserve",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "fxReserve",
         internalType: "uint256",
         type: "uint256",
         indexed: false,
       },
     ],
     name: "Launched",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      { name: "pair", internalType: "address", type: "address", indexed: true },
+      {
+        name: "locker",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "liquidity",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "LockerCreated",
   },
   {
     type: "event",
@@ -1582,6 +1838,18 @@ export const pumpFunAbi = [
         indexed: true,
       },
       {
+        name: "sender",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "recipient",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
         name: "amountIn",
         internalType: "uint256",
         type: "uint256",
@@ -1589,6 +1857,12 @@ export const pumpFunAbi = [
       },
       {
         name: "amountOut",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "feeAmount",
         internalType: "uint256",
         type: "uint256",
         indexed: false,
@@ -1607,6 +1881,18 @@ export const pumpFunAbi = [
         indexed: true,
       },
       {
+        name: "sender",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "recipient",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
         name: "amountIn",
         internalType: "uint256",
         type: "uint256",
@@ -1614,6 +1900,12 @@ export const pumpFunAbi = [
       },
       {
         name: "amountOut",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "feeAmount",
         internalType: "uint256",
         type: "uint256",
         indexed: false,
@@ -1654,6 +1946,7 @@ export const pumpFunAbi = [
     inputs: [{ name: "account", internalType: "address", type: "address" }],
     name: "OwnableUnauthorizedAccount",
   },
+  { type: "error", inputs: [], name: "PumpFun__CalculationOverflow" },
   { type: "error", inputs: [], name: "PumpFun__FeeExceedsMaximum" },
   { type: "error", inputs: [], name: "PumpFun__InsufficientLiquidity" },
   { type: "error", inputs: [], name: "PumpFun__InvalidGraduationReserve" },
