@@ -8,7 +8,7 @@ import { getCurrentChain } from "@/services/Wallet.js"
 import { projectFactoryAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TPumpFunCreateProjectEthOperationParams = {
+export type TTokenLaunchpadCreateProjectEthOperationParams = {
   // The name of the project
   name: string
   // The symbol of the project
@@ -23,7 +23,7 @@ export type TPumpFunCreateProjectEthOperationParams = {
   }
 }
 
-export class PumpFunCreateProjectEthOperation extends EthereumContractOperation<TPumpFunCreateProjectEthOperationParams> {
+export class TokenLaunchpadCreateProjectEthOperation extends EthereumContractOperation<TTokenLaunchpadCreateProjectEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 

@@ -900,7 +900,6 @@ export const projectFactoryAbi = [
     inputs: [
       { name: "_initialOwner", internalType: "address", type: "address" },
       { name: "_initialAdmin", internalType: "address", type: "address" },
-      { name: "_initialBaseURI", internalType: "string", type: "string" },
       { name: "_initialRenderer", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
@@ -912,6 +911,7 @@ export const projectFactoryAbi = [
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_creatorToken", internalType: "address", type: "address" },
       { name: "_initialOwner", internalType: "address", type: "address" },
+      { name: "_baseURI", internalType: "string", type: "string" },
       {
         name: "_mintInfo",
         internalType: "struct IProjectToken.MintInfo",
@@ -921,6 +921,7 @@ export const projectFactoryAbi = [
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
         ],
       },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
     ],
     name: "createProject",
     outputs: [
@@ -933,13 +934,6 @@ export const projectFactoryAbi = [
     inputs: [],
     name: "initialAdmin",
     outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "initialBaseURI",
-    outputs: [{ name: "", internalType: "string", type: "string" }],
     stateMutability: "view",
   },
   {
@@ -1003,15 +997,6 @@ export const projectFactoryAbi = [
   {
     type: "function",
     inputs: [
-      { name: "_initialBaseURI", internalType: "string", type: "string" },
-    ],
-    name: "setInitialBaseURI",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
       { name: "_initialRenderer", internalType: "address", type: "address" },
     ],
     name: "setInitialRenderer",
@@ -1031,25 +1016,6 @@ export const projectFactoryAbi = [
     name: "unpause",
     outputs: [],
     stateMutability: "nonpayable",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "prevImplementation",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-      {
-        name: "newImplementation",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "ImplementationUpdated",
   },
   {
     type: "event",
@@ -1100,11 +1066,18 @@ export const projectFactoryAbi = [
         indexed: true,
       },
       {
-        name: "creator",
+        name: "creatorToken",
         internalType: "address",
         type: "address",
         indexed: true,
       },
+      {
+        name: "creator",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      { name: "name", internalType: "string", type: "string", indexed: false },
     ],
     name: "ProjectCreated",
   },
@@ -1137,10 +1110,310 @@ export const projectFactoryAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// PumpFun
+// TezAirdrop
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const pumpFunAbi = [
+export const tezAirdropAbi = [
+  {
+    type: "constructor",
+    inputs: [
+      { name: "_owner", internalType: "address", type: "address" },
+      { name: "_fxToken", internalType: "address", type: "address" },
+      { name: "_signer", internalType: "address", type: "address" },
+      { name: "_merkleRoot", internalType: "bytes32", type: "bytes32" },
+      { name: "_lockTime", internalType: "uint256", type: "uint256" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "TEZ_WALLET_TYPEHASH",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_amount", internalType: "uint256", type: "uint256" },
+      { name: "_wallet", internalType: "string", type: "string" },
+      { name: "_signature", internalType: "bytes", type: "bytes" },
+      { name: "_merkleProof", internalType: "bytes32[]", type: "bytes32[]" },
+    ],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_user", internalType: "address", type: "address" },
+      { name: "_amount", internalType: "uint256", type: "uint256" },
+      { name: "_wallet", internalType: "string", type: "string" },
+      { name: "_signature", internalType: "bytes", type: "bytes" },
+      { name: "_merkleProof", internalType: "bytes32[]", type: "bytes32[]" },
+    ],
+    name: "claimFor",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_to", internalType: "address", type: "address" },
+      { name: "_amount", internalType: "uint256", type: "uint256" },
+      { name: "_wallet", internalType: "string", type: "string" },
+      { name: "_signature", internalType: "bytes", type: "bytes" },
+      { name: "_merkleProof", internalType: "bytes32[]", type: "bytes32[]" },
+    ],
+    name: "claimTo",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "eip712Domain",
+    outputs: [
+      { name: "fields", internalType: "bytes1", type: "bytes1" },
+      { name: "name", internalType: "string", type: "string" },
+      { name: "version", internalType: "string", type: "string" },
+      { name: "chainId", internalType: "uint256", type: "uint256" },
+      { name: "verifyingContract", internalType: "address", type: "address" },
+      { name: "salt", internalType: "bytes32", type: "bytes32" },
+      { name: "extensions", internalType: "uint256[]", type: "uint256[]" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "fxToken",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_caller", internalType: "address", type: "address" },
+      { name: "_wallet", internalType: "string", type: "string" },
+    ],
+    name: "generateTezWalletHash",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "string", type: "string" }],
+    name: "hasClaimed",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "lockTimestamp",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "merkleRoot",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "signer",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_newTimestamp", internalType: "uint256", type: "uint256" },
+    ],
+    name: "updateLockTimestamp",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_newRoot", internalType: "bytes32", type: "bytes32" }],
+    name: "updateMerkleRoot",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_newSigner", internalType: "address", type: "address" }],
+    name: "updateSigner",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_to", internalType: "address", type: "address" }],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "user", internalType: "address", type: "address", indexed: true },
+      { name: "wallet", internalType: "string", type: "string", indexed: true },
+      {
+        name: "amount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "AirdropClaimed",
+  },
+  { type: "event", anonymous: false, inputs: [], name: "EIP712DomainChanged" },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "newTimestamp",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "LockTimestampUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "newRoot",
+        internalType: "bytes32",
+        type: "bytes32",
+        indexed: false,
+      },
+    ],
+    name: "MerkleRootUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "previousOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "OwnershipTransferred",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "newSigner",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "SignerUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "to", internalType: "address", type: "address", indexed: false },
+      {
+        name: "amount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "Withdrawal",
+  },
+  { type: "error", inputs: [], name: "ECDSAInvalidSignature" },
+  {
+    type: "error",
+    inputs: [{ name: "length", internalType: "uint256", type: "uint256" }],
+    name: "ECDSAInvalidSignatureLength",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "s", internalType: "bytes32", type: "bytes32" }],
+    name: "ECDSAInvalidSignatureS",
+  },
+  { type: "error", inputs: [], name: "InvalidShortString" },
+  {
+    type: "error",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "account", internalType: "address", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "token", internalType: "address", type: "address" }],
+    name: "SafeERC20FailedOperation",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "str", internalType: "string", type: "string" }],
+    name: "StringTooLong",
+  },
+  { type: "error", inputs: [], name: "TezAirdrop__AlreadyClaimed" },
+  { type: "error", inputs: [], name: "TezAirdrop__InvalidProof" },
+  { type: "error", inputs: [], name: "TezAirdrop__InvalidSignature" },
+  { type: "error", inputs: [], name: "TezAirdrop__LockTimeElapsed" },
+  { type: "error", inputs: [], name: "TezAirdrop__LockTimeNotElapsed" },
+  { type: "error", inputs: [], name: "TezAirdrop__ZeroAmount" },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TokenLaunchpad
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const tokenLaunchpadAbi = [
   {
     type: "constructor",
     inputs: [
@@ -1266,7 +1539,7 @@ export const pumpFunAbi = [
       { name: "_amountIn", internalType: "uint256", type: "uint256" },
       {
         name: "_orderType",
-        internalType: "enum IPumpFun.OrderType",
+        internalType: "enum ITokenLaunchpad.OrderType",
         type: "uint8",
       },
     ],
@@ -1360,7 +1633,7 @@ export const pumpFunAbi = [
     ],
     name: "isEligibleForGraduation",
     outputs: [
-      { name: "", internalType: "enum IPumpFun.Status", type: "uint8" },
+      { name: "", internalType: "enum ITokenLaunchpad.Status", type: "uint8" },
     ],
     stateMutability: "view",
   },
@@ -1665,16 +1938,11 @@ export const pumpFunAbi = [
         type: "uint256",
         indexed: false,
       },
+      { name: "name", internalType: "string", type: "string", indexed: false },
       {
-        name: "creatorReserve",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-      {
-        name: "fxReserve",
-        internalType: "uint256",
-        type: "uint256",
+        name: "symbol",
+        internalType: "string",
+        type: "string",
         indexed: false,
       },
     ],
@@ -1946,323 +2214,27 @@ export const pumpFunAbi = [
     inputs: [{ name: "account", internalType: "address", type: "address" }],
     name: "OwnableUnauthorizedAccount",
   },
-  { type: "error", inputs: [], name: "PumpFun__CalculationOverflow" },
-  { type: "error", inputs: [], name: "PumpFun__FeeExceedsMaximum" },
-  { type: "error", inputs: [], name: "PumpFun__InsufficientLiquidity" },
-  { type: "error", inputs: [], name: "PumpFun__InvalidGraduationReserve" },
-  { type: "error", inputs: [], name: "PumpFun__InvalidPurchaseAmount" },
-  { type: "error", inputs: [], name: "PumpFun__InvalidRate" },
-  { type: "error", inputs: [], name: "PumpFun__InvalidSupply" },
-  { type: "error", inputs: [], name: "PumpFun__NoTokensToMigrate" },
-  { type: "error", inputs: [], name: "PumpFun__NotTokenCreator" },
-  { type: "error", inputs: [], name: "PumpFun__TokenNotGraduated" },
-  { type: "error", inputs: [], name: "PumpFun__TokenNotLaunched" },
-  { type: "error", inputs: [], name: "PumpFun__TradingNotEnabled" },
-  { type: "error", inputs: [], name: "PumpFun__ZeroAddress" },
-  { type: "error", inputs: [], name: "PumpFun__ZeroAmountIn" },
   {
     type: "error",
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "SafeERC20FailedOperation",
   },
-] as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TezAirdrop
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const tezAirdropAbi = [
-  {
-    type: "constructor",
-    inputs: [
-      { name: "_owner", internalType: "address", type: "address" },
-      { name: "_fxToken", internalType: "address", type: "address" },
-      { name: "_signer", internalType: "address", type: "address" },
-      { name: "_merkleRoot", internalType: "bytes32", type: "bytes32" },
-      { name: "_lockTime", internalType: "uint256", type: "uint256" },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "TEZ_WALLET_TYPEHASH",
-    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "_amount", internalType: "uint256", type: "uint256" },
-      { name: "_wallet", internalType: "string", type: "string" },
-      { name: "_signature", internalType: "bytes", type: "bytes" },
-      { name: "_merkleProof", internalType: "bytes32[]", type: "bytes32[]" },
-    ],
-    name: "claim",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "_user", internalType: "address", type: "address" },
-      { name: "_amount", internalType: "uint256", type: "uint256" },
-      { name: "_wallet", internalType: "string", type: "string" },
-      { name: "_signature", internalType: "bytes", type: "bytes" },
-      { name: "_merkleProof", internalType: "bytes32[]", type: "bytes32[]" },
-    ],
-    name: "claimFor",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "_to", internalType: "address", type: "address" },
-      { name: "_amount", internalType: "uint256", type: "uint256" },
-      { name: "_wallet", internalType: "string", type: "string" },
-      { name: "_signature", internalType: "bytes", type: "bytes" },
-      { name: "_merkleProof", internalType: "bytes32[]", type: "bytes32[]" },
-    ],
-    name: "claimTo",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "eip712Domain",
-    outputs: [
-      { name: "fields", internalType: "bytes1", type: "bytes1" },
-      { name: "name", internalType: "string", type: "string" },
-      { name: "version", internalType: "string", type: "string" },
-      { name: "chainId", internalType: "uint256", type: "uint256" },
-      { name: "verifyingContract", internalType: "address", type: "address" },
-      { name: "salt", internalType: "bytes32", type: "bytes32" },
-      { name: "extensions", internalType: "uint256[]", type: "uint256[]" },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "fxToken",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "_caller", internalType: "address", type: "address" },
-      { name: "_wallet", internalType: "string", type: "string" },
-    ],
-    name: "generateTezWalletHash",
-    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "", internalType: "string", type: "string" }],
-    name: "hasClaimed",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "lockTimestamp",
-    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "merkleRoot",
-    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "owner",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "signer",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "_newTimestamp", internalType: "uint256", type: "uint256" },
-    ],
-    name: "updateLockTimestamp",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "_newRoot", internalType: "bytes32", type: "bytes32" }],
-    name: "updateMerkleRoot",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "_newSigner", internalType: "address", type: "address" }],
-    name: "updateSigner",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "_to", internalType: "address", type: "address" }],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      { name: "user", internalType: "address", type: "address", indexed: true },
-      { name: "wallet", internalType: "string", type: "string", indexed: true },
-      {
-        name: "amount",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-    ],
-    name: "AirdropClaimed",
-  },
-  { type: "event", anonymous: false, inputs: [], name: "EIP712DomainChanged" },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "newTimestamp",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-    ],
-    name: "LockTimestampUpdated",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "newRoot",
-        internalType: "bytes32",
-        type: "bytes32",
-        indexed: false,
-      },
-    ],
-    name: "MerkleRootUpdated",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "previousOwner",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-      {
-        name: "newOwner",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "OwnershipTransferred",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "newSigner",
-        internalType: "address",
-        type: "address",
-        indexed: false,
-      },
-    ],
-    name: "SignerUpdated",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      { name: "to", internalType: "address", type: "address", indexed: false },
-      {
-        name: "amount",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-    ],
-    name: "Withdrawal",
-  },
-  { type: "error", inputs: [], name: "ECDSAInvalidSignature" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__CalculationOverflow" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__FeeExceedsMaximum" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InsufficientLiquidity" },
   {
     type: "error",
-    inputs: [{ name: "length", internalType: "uint256", type: "uint256" }],
-    name: "ECDSAInvalidSignatureLength",
+    inputs: [],
+    name: "TokenLaunchpad__InvalidGraduationReserve",
   },
-  {
-    type: "error",
-    inputs: [{ name: "s", internalType: "bytes32", type: "bytes32" }],
-    name: "ECDSAInvalidSignatureS",
-  },
-  { type: "error", inputs: [], name: "InvalidShortString" },
-  {
-    type: "error",
-    inputs: [{ name: "owner", internalType: "address", type: "address" }],
-    name: "OwnableInvalidOwner",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "account", internalType: "address", type: "address" }],
-    name: "OwnableUnauthorizedAccount",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "token", internalType: "address", type: "address" }],
-    name: "SafeERC20FailedOperation",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "str", internalType: "string", type: "string" }],
-    name: "StringTooLong",
-  },
-  { type: "error", inputs: [], name: "TezAirdrop__AlreadyClaimed" },
-  { type: "error", inputs: [], name: "TezAirdrop__InvalidProof" },
-  { type: "error", inputs: [], name: "TezAirdrop__InvalidSignature" },
-  { type: "error", inputs: [], name: "TezAirdrop__LockTimeElapsed" },
-  { type: "error", inputs: [], name: "TezAirdrop__LockTimeNotElapsed" },
-  { type: "error", inputs: [], name: "TezAirdrop__ZeroAmount" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InvalidPurchaseAmount" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InvalidRate" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InvalidSupply" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__NoTokensToMigrate" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__NotTokenCreator" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__TokenNotGraduated" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__TokenNotLaunched" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__TradingNotEnabled" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__ZeroAddress" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__ZeroAmountIn" },
 ] as const
