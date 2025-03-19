@@ -17,10 +17,13 @@ export type TTokenLaunchpadCreateProjectEthOperationParams = {
   creatorToken: `0x${string}`
   // The initial owner address
   initialOwner: `0x${string}`
+  // The base URI for the project
+  baseURI: string
   mintInfo: {
     price: bigint
     maxSupply: bigint
   }
+  tagIds: bigint[]
 }
 
 export class TokenLaunchpadCreateProjectEthOperation extends EthereumContractOperation<TTokenLaunchpadCreateProjectEthOperationParams> {
@@ -40,7 +43,9 @@ export class TokenLaunchpadCreateProjectEthOperation extends EthereumContractOpe
         this.params.symbol,
         this.params.creatorToken,
         this.params.initialOwner,
+        this.params.baseURI,
         this.params.mintInfo,
+        this.params.tagIds,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
