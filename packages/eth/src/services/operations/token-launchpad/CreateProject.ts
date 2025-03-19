@@ -8,7 +8,7 @@ import { getCurrentChain } from "@/services/Wallet.js"
 import { projectFactoryAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TPumpFunCreateProjectEthOperationParams = {
+export type TTokenLaunchpadCreateProjectEthOperationParams = {
   // The name of the project
   name: string
   // The symbol of the project
@@ -17,13 +17,16 @@ export type TPumpFunCreateProjectEthOperationParams = {
   creatorToken: `0x${string}`
   // The initial owner address
   initialOwner: `0x${string}`
+  // The base URI for the project
+  baseURI: string
   mintInfo: {
     price: bigint
     maxSupply: bigint
   }
+  tagIds: bigint[]
 }
 
-export class PumpFunCreateProjectEthOperation extends EthereumContractOperation<TPumpFunCreateProjectEthOperationParams> {
+export class TokenLaunchpadCreateProjectEthOperation extends EthereumContractOperation<TTokenLaunchpadCreateProjectEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
@@ -40,7 +43,9 @@ export class PumpFunCreateProjectEthOperation extends EthereumContractOperation<
         this.params.symbol,
         this.params.creatorToken,
         this.params.initialOwner,
+        this.params.baseURI,
         this.params.mintInfo,
+        this.params.tagIds,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
