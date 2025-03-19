@@ -1,4 +1,4 @@
-export const FX_BONDING_CURVE_TOKEN_FACTORY_ABI = [
+export const FX_TOKEN_LAUNCHPAD_ABI = [
   {
     inputs: [
       { internalType: "address", name: "_fxToken", type: "address" },
@@ -30,29 +30,57 @@ export const FX_BONDING_CURVE_TOKEN_FACTORY_ABI = [
     name: "OwnableUnauthorizedAccount",
     type: "error",
   },
-  { inputs: [], name: "PumpFun__CalculationOverflow", type: "error" },
-  { inputs: [], name: "PumpFun__FeeExceedsMaximum", type: "error" },
-  { inputs: [], name: "PumpFun__InsufficientLiquidity", type: "error" },
-  {
-    inputs: [],
-    name: "PumpFun__InvalidGraduationReserve",
-    type: "error",
-  },
-  { inputs: [], name: "PumpFun__InvalidPurchaseAmount", type: "error" },
-  { inputs: [], name: "PumpFun__InvalidRate", type: "error" },
-  { inputs: [], name: "PumpFun__InvalidSupply", type: "error" },
-  { inputs: [], name: "PumpFun__NoTokensToMigrate", type: "error" },
-  { inputs: [], name: "PumpFun__NotTokenCreator", type: "error" },
-  { inputs: [], name: "PumpFun__TokenNotGraduated", type: "error" },
-  { inputs: [], name: "PumpFun__TokenNotLaunched", type: "error" },
-  { inputs: [], name: "PumpFun__TradingNotEnabled", type: "error" },
-  { inputs: [], name: "PumpFun__ZeroAddress", type: "error" },
-  { inputs: [], name: "PumpFun__ZeroAmountIn", type: "error" },
   {
     inputs: [{ internalType: "address", name: "token", type: "address" }],
     name: "SafeERC20FailedOperation",
     type: "error",
   },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__CalculationOverflow",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__FeeExceedsMaximum",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__InsufficientLiquidity",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__InvalidGraduationReserve",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__InvalidPurchaseAmount",
+    type: "error",
+  },
+  { inputs: [], name: "TokenLaunchpad__InvalidRate", type: "error" },
+  { inputs: [], name: "TokenLaunchpad__InvalidSupply", type: "error" },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__NoTokensToMigrate",
+    type: "error",
+  },
+  { inputs: [], name: "TokenLaunchpad__NotTokenCreator", type: "error" },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__TokenNotGraduated",
+    type: "error",
+  },
+  { inputs: [], name: "TokenLaunchpad__TokenNotLaunched", type: "error" },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__TradingNotEnabled",
+    type: "error",
+  },
+  { inputs: [], name: "TokenLaunchpad__ZeroAddress", type: "error" },
+  { inputs: [], name: "TokenLaunchpad__ZeroAmountIn", type: "error" },
   {
     anonymous: false,
     inputs: [
@@ -600,7 +628,7 @@ export const FX_BONDING_CURVE_TOKEN_FACTORY_ABI = [
       { internalType: "address", name: "_creatorToken", type: "address" },
       { internalType: "uint256", name: "_amountIn", type: "uint256" },
       {
-        internalType: "enum IPumpFun.OrderType",
+        internalType: "enum ITokenLaunchpad.OrderType",
         name: "_orderType",
         type: "uint8",
       },
@@ -695,7 +723,11 @@ export const FX_BONDING_CURVE_TOKEN_FACTORY_ABI = [
     ],
     name: "isEligibleForGraduation",
     outputs: [
-      { internalType: "enum IPumpFun.Status", name: "", type: "uint8" },
+      {
+        internalType: "enum ITokenLaunchpad.Status",
+        name: "",
+        type: "uint8",
+      },
     ],
     stateMutability: "view",
     type: "function",
