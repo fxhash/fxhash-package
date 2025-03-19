@@ -1,4 +1,6 @@
-import { SlateBuilder } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
+export interface IDirectiveNodeProps {
+  [key: string]: any
+}
 
 export interface IArticleElementProcessor {
   htmlTagName?: string
@@ -7,8 +9,6 @@ export interface IArticleElementProcessor {
     node: Node,
     properties: any
   ) => Omit<any, "children"> | null
-  transformSlateToMarkdownMdhast?: SlateBuilder
-  transformMarkdownMdhastToSlate?: (node: any) => object
 }
 
 /*

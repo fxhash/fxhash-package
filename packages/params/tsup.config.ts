@@ -1,4 +1,4 @@
-import { defineConfig, Options } from "tsup"
+import { defineConfig, type Options } from "tsup"
 import { sassPlugin, postcssModules } from "esbuild-sass-plugin"
 
 export default defineConfig((options: Options) => ({
@@ -11,6 +11,6 @@ export default defineConfig((options: Options) => ({
   esbuildPlugins: [
     sassPlugin({
       transform: postcssModules({}),
-    }) as any,
+    }),
   ],
 }))
