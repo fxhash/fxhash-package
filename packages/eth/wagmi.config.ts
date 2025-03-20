@@ -6,6 +6,7 @@ const tokenContractFilesToInclude: string[] = ["FxAirdrop", "TezAirdrop"]
 const creatorTokenContractFilesToInclude: string[] = [
   "TokenLaunchpad",
   "ProjectFactory",
+  "ProjectToken",
 ]
 
 export default defineConfig({
