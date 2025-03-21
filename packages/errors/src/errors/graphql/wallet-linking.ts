@@ -9,7 +9,6 @@ export class WalletAlreadyOtherAccountMainWalletError extends RichError {
   }
 }
 
-@RichError.setErrorName('WalletAlreadyLinkedError')
 export class WalletAlreadyLinkedError extends RichError {
   name = "WalletAlreadyLinkedError" as const
   messages = {
