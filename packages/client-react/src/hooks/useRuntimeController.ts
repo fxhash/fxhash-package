@@ -34,9 +34,22 @@ export const useRuntimeController: UseRuntimeController = ({
           ...options,
         },
       }),
-    [state, options]
+    // since objects are compared by reference and not by value
+    // we explicitly pass the values to the dependency array
+    [
+      state.cid,
+      state.chain,
+      state.snippetVersion,
+      state.hash,
+      state.iteration,
+      state.minter,
+      state.context,
+      state.inputBytes,
+      state.definition,
+      options?.autoRefresh,
+      options?.connector,
+    ]
   )
-
   const [runtime, setRuntime] = useState<RuntimeWholeState>(() =>
     controller.runtime().whole()
   )
