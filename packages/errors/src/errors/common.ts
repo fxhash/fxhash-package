@@ -72,17 +72,11 @@ export class RichError extends Error implements IRichError, IEquatableError {
 
   constructor(messagesOverride?: IRichErrorMessages) {
     super()
+    Object.defineProperty(this.constructor, 'name', {
+      value: this.constructor.name
+    });
     if (messagesOverride) {
       this.messagesOverride = messagesOverride
-    }
-  }
-
-  static setErrorName(name: string) {
-    return function(target: typeof RichError): void {
-      Object.defineProperty(target, 'name', {
-        value: name,
-        configurable: true
-      });
     }
   }
 
