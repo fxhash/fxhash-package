@@ -1,6 +1,7 @@
 import { isRichErrorMessages } from "../../utils/rich-error.js"
 import { IRichErrorMessages, RichError, RichErrorUnion } from "../common.js"
 
+@RichError.setErrorName('WalletAlreadyOtherAccountMainWalletError')
 export class WalletAlreadyOtherAccountMainWalletError extends RichError {
   messages = {
     dev: "Wallet is already the main wallet of another account.",
@@ -8,10 +9,7 @@ export class WalletAlreadyOtherAccountMainWalletError extends RichError {
   }
 }
 
-Object.defineProperty(WalletAlreadyOtherAccountMainWalletError, 'name', {
-  value: 'WalletAlreadyOtherAccountMainWalletError'
-});
-
+@RichError.setErrorName('WalletAlreadyLinkedError')
 export class WalletAlreadyLinkedError extends RichError {
   name = "WalletAlreadyLinkedError" as const
   messages = {
