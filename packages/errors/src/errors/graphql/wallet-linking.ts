@@ -9,9 +9,7 @@ export class WalletAlreadyOtherAccountMainWalletError extends RichError {
 }
 
 Object.defineProperty(WalletAlreadyOtherAccountMainWalletError, 'name', {
-  value: 'WalletAlreadyOtherAccountMainWalletError',
-  configurable: true,
-  writable: true
+  value: 'WalletAlreadyOtherAccountMainWalletError'
 });
 
 export class WalletAlreadyLinkedError extends RichError {
