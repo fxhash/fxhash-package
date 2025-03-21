@@ -72,9 +72,6 @@ export class RichError extends Error implements IRichError, IEquatableError {
 
   constructor(messagesOverride?: IRichErrorMessages) {
     super()
-    Object.defineProperty(this.constructor, 'name', {
-      value: this.constructor.name
-    });
     if (messagesOverride) {
       this.messagesOverride = messagesOverride
     }
@@ -146,6 +143,11 @@ export class RichError extends Error implements IRichError, IEquatableError {
     return new UnexpectedRichError(messagesOverride)
   }
 }
+Object.defineProperty(RichError, "name", {
+  get() {
+    return this.name;
+  }
+});
 
 /**
  * A Rich error serialized,
