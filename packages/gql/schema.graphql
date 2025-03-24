@@ -816,6 +816,11 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
+input AirdropTezClaimInput {
+  publicKey: String!
+  signature: String!
+}
+
 type AirdropTezClaimResult {
   signature: String!
 }
@@ -876,6 +881,89 @@ input ChallengeInput {
 type ChallengeResult {
   id: String!
   text: String!
+}
+
+"""
+columns and relationships of "ClaimProof"
+"""
+type ClaimProof {
+  address: String!
+  allocation: String!
+  leaf: String!
+  proof: [String!]
+}
+
+"""
+Boolean expression to filter rows from the table "ClaimProof". All fields are combined with a logical 'AND'.
+"""
+input ClaimProof_bool_exp {
+  _and: [ClaimProof_bool_exp!]
+  _not: ClaimProof_bool_exp
+  _or: [ClaimProof_bool_exp!]
+  address: String_comparison_exp
+  allocation: String_comparison_exp
+  leaf: String_comparison_exp
+  proof: String_array_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "ClaimProof".
+"""
+input ClaimProof_order_by {
+  address: order_by
+  allocation: order_by
+  leaf: order_by
+  proof: order_by
+}
+
+"""
+select columns of table "ClaimProof"
+"""
+enum ClaimProof_select_column {
+  """
+  column name
+  """
+  address
+
+  """
+  column name
+  """
+  allocation
+
+  """
+  column name
+  """
+  leaf
+
+  """
+  column name
+  """
+  proof
+}
+
+"""
+Streaming cursor of the table "ClaimProof"
+"""
+input ClaimProof_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: ClaimProof_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input ClaimProof_stream_cursor_value_input {
+  address: String
+  allocation: String
+  leaf: String
+  proof: [String!]
 }
 
 """
@@ -1938,6 +2026,11 @@ input Int_comparison_exp {
   _neq: Int
   _nin: [Int!]
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 input LinkWalletInput {
   id: String!
@@ -3296,6 +3389,14 @@ input ProjectMedia_variance_order_by {
   index: order_by
 }
 
+type ProjectReserves {
+  amount: Int!
+  data: JSON!
+  id: String!
+  merkle_root: String
+  method: Int!
+}
+
 scalar ProjectState
 
 """
@@ -3719,6 +3820,7 @@ type Retrospective {
   spentTotalNb: Int!
   spentTotalUsd: numeric!
   tokenAllocation: numeric!
+  tokenAllocationString: String
 
   """
   An object relationship
@@ -3754,6 +3856,7 @@ input Retrospective_bool_exp {
   spentTotalNb: Int_comparison_exp
   spentTotalUsd: numeric_comparison_exp
   tokenAllocation: numeric_comparison_exp
+  tokenAllocationString: String_comparison_exp
   wallet: Wallet_bool_exp
   walletAddress: String_comparison_exp
 }
@@ -3782,6 +3885,7 @@ input Retrospective_order_by {
   spentTotalNb: order_by
   spentTotalUsd: order_by
   tokenAllocation: order_by
+  tokenAllocationString: order_by
   wallet: Wallet_order_by
   walletAddress: order_by
 }
@@ -3893,6 +3997,11 @@ enum Retrospective_select_column {
   """
   column name
   """
+  tokenAllocationString
+
+  """
+  column name
+  """
   walletAddress
 }
 
@@ -3935,6 +4044,7 @@ input Retrospective_stream_cursor_value_input {
   spentTotalNb: Int
   spentTotalUsd: numeric
   tokenAllocation: numeric
+  tokenAllocationString: String
   walletAddress: String
 }
 
@@ -9773,6 +9883,36 @@ type generative_token {
   """
   An array relationship
   """
+  _reserves(
+    """
+    distinct select on columns
+    """
+    distinct_on: [reserve_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [reserve_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: reserve_bool_exp
+  ): [reserve!]!
+
+  """
+  An array relationship
+  """
   actions(
     """
     distinct select on columns
@@ -10367,36 +10507,7 @@ type generative_token {
     """
     where: report_bool_exp
   ): [report!]!
-
-  """
-  An array relationship
-  """
-  reserves(
-    """
-    distinct select on columns
-    """
-    distinct_on: [reserve_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [reserve_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: reserve_bool_exp
-  ): [reserve!]!
+  reserves: [ProjectReserves!]!
   royalties: Int!
   slug: String!
 
@@ -10613,6 +10724,7 @@ input generative_token_bool_exp {
   _and: [generative_token_bool_exp!]
   _not: generative_token_bool_exp
   _or: [generative_token_bool_exp!]
+  _reserves: reserve_bool_exp
   actions: action_bool_exp
   actions_aggregate: action_aggregate_bool_exp
   author: user_bool_exp
@@ -10665,7 +10777,6 @@ input generative_token_bool_exp {
   redeemables: redeemable_bool_exp
   redeemed_percentage: float8_comparison_exp
   reports: report_bool_exp
-  reserves: reserve_bool_exp
   royalties: Int_comparison_exp
   slug: String_comparison_exp
   splits_primary: split_bool_exp
@@ -11146,6 +11257,7 @@ input generative_token_min_order_by {
 Ordering options when selecting data from "generative_token".
 """
 input generative_token_order_by {
+  _reserves_aggregate: reserve_aggregate_order_by
   actions_aggregate: action_aggregate_order_by
   author: user_order_by
   author_id: order_by
@@ -11195,7 +11307,6 @@ input generative_token_order_by {
   redeemables_aggregate: redeemable_aggregate_order_by
   redeemed_percentage: order_by
   reports_aggregate: report_aggregate_order_by
-  reserves_aggregate: reserve_aggregate_order_by
   royalties: order_by
   slug: order_by
   splits_primary_aggregate: split_aggregate_order_by
@@ -15080,7 +15191,7 @@ input moderation_reason_stream_cursor_value_input {
 mutation root
 """
 type mutation_root {
-  airdrop_tez_claim: AirdropTezClaimResult
+  airdrop_tez_claim(input: AirdropTezClaimInput): AirdropTezClaimResult
   authenticate(input: AuthenticationInput!): AuthenticationResult
 
   """
@@ -16900,6 +17011,41 @@ type offchain_query {
   ): AccountsRoles
 
   """
+  fetch data from the table: "ClaimProof"
+  """
+  ClaimProof(
+    """
+    distinct select on columns
+    """
+    distinct_on: [ClaimProof_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [ClaimProof_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: ClaimProof_bool_exp
+  ): [ClaimProof!]!
+
+  """
+  fetch data from the table: "ClaimProof" using primary key columns
+  """
+  ClaimProof_by_pk(address: String!): ClaimProof
+
+  """
   fetch data from the table: "Consumable"
   """
   Consumable(
@@ -17832,6 +17978,61 @@ type offchain_subscription {
     """
     where: AccountsRoles_bool_exp
   ): [AccountsRoles!]!
+
+  """
+  fetch data from the table: "ClaimProof"
+  """
+  ClaimProof(
+    """
+    distinct select on columns
+    """
+    distinct_on: [ClaimProof_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [ClaimProof_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: ClaimProof_bool_exp
+  ): [ClaimProof!]!
+
+  """
+  fetch data from the table: "ClaimProof" using primary key columns
+  """
+  ClaimProof_by_pk(address: String!): ClaimProof
+
+  """
+  fetch data from the table in a streaming manner: "ClaimProof"
+  """
+  ClaimProof_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [ClaimProof_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: ClaimProof_bool_exp
+  ): [ClaimProof!]!
 
   """
   fetch data from the table: "Consumable"
@@ -25053,6 +25254,7 @@ type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+  projectReserves(projectId: String!): [ProjectReserves!]!
   search(input: SearchInput!): SearchOutput!
   walletRpcs: [WalletRpc!]
 }

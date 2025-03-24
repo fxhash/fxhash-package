@@ -139,6 +139,7 @@ export interface IFxhashEnvConfig {
   openTelemetryTarget: string
   algolia: AlgoliaConfig
   gpu: GPURenderingConfig
+  authJwtPublicKey: string
 }
 
 type TBlockchainContacts = {

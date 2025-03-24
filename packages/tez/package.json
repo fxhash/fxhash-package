@@ -28,16 +28,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/config": "workspace:*",
@@ -54,6 +51,5 @@
     "dev": "tsup --watch",
     "test": "vitest"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

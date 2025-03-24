@@ -1,7 +1,7 @@
 export interface MentionProps {
-  tzAddress: string
+  address: string
 }
 
 export function MentionDisplay(props: MentionProps) {
-  return <em>{props.tzAddress}</em>
+  return <em>{props.address}</em>
 }

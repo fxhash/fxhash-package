@@ -58,6 +58,7 @@ export function walletSource<Net extends BlockchainNetwork>({
     },
     initialized: () => _init.finished,
     getAccount: () => null,
+    refetchAccount: () => null,
     logoutAccount: async () => {},
     getWallet(net) {
       invariant(this.supports(net), "invalid network")

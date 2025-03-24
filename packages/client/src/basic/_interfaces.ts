@@ -1,6 +1,7 @@
 import type { IAppMetadata } from "@fxhash/config"
 import type {
   BeaconConfig,
+  GetSingleUserAccountResult,
   Hex,
   ICredentialsDriver,
   IGraphqlWrapper,
@@ -110,6 +111,21 @@ export interface ICreateClientParams {
       tezos: string
     }>
   }>
+
+  /**
+   * In the context of SSR applications, we want to "seed" the initial state
+   * for it to be accessible on the server. This can be a value which comes
+   * from JWT authentication for instance.
+   *
+   * When the client is initialized, it will override this initial state with
+   * the actual client state.
+   */
+  hydration?: {
+    /**
+     * Initial account information.
+     */
+    account?: GetSingleUserAccountResult | null
+  }
 
   /**
    * If you want to have access to authentication-gated features (such as

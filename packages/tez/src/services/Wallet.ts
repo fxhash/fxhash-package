@@ -58,6 +58,20 @@ export function isBeaconWallet(
   return false
 }
 
+export async function isBeaconError(err: any, type: "aborted") {
+  switch (type) {
+    case "aborted": {
+      const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
+        .AbortedBeaconError
+      return (
+        err instanceof AbortedBeaconError || err.errorType === "ABORTED_ERROR"
+      )
+    }
+    default:
+      throw "fatal"
+  }
+}
+
 type TezosSignerProvider = {
   signer: Signer
 }
@@ -166,9 +180,7 @@ export class TezosWalletManager extends WalletManager {
       }
       return success(signature)
     } catch (error) {
-      const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
-        .AbortedBeaconError
-      if (error instanceof AbortedBeaconError) {
+      if (isBeaconError(error, "aborted")) {
         return failure(new UserRejectedError())
       }
       throw error

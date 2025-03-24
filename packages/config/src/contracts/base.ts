@@ -1,7 +1,7 @@
 export interface IBaseContracts {
   multicall3: `0x${string}`
   seaport_zone: `0x${string}`
-  project_factory_v1: `0x${string}`
+  issuer_factory_v1: `0x${string}`
   fixed_price_minter_v1: `0x${string}`
   dutch_auction_minter_v1: `0x${string}`
   mint_ticket_factory_v1: `0x${string}`
@@ -20,14 +20,17 @@ export interface IBaseContracts {
   signerSafe: `0x${string}`
   moderationSafe: `0x${string}`
   farcaster_frame_fixed_price_minter_v1: `0x${string}`
+  fx_token: `0x${string}`
   fx_airdrop: `0x${string}`
   fx_tez_airdrop: `0x${string}`
+  fx_token_launchpad: `0x${string}`
+  fx_project_factory: `0x${string}`
 }
 
 export const baseTestnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
-  project_factory_v1: "0x60cFDE3aaf6E938535767794088cf15EaaC50019",
+  issuer_factory_v1: "0x60cFDE3aaf6E938535767794088cf15EaaC50019",
   mint_ticket_factory_v1: "0x8A7e5eE0CeA42DBE1d2aAC4501262B0edC5B518B",
   dutch_auction_minter_v1: "0xeb5Cee0eD6A47BE2A463A0C9e83dA5DE6149d375",
   fixed_price_minter_v1: "0x29159d2DFbF93E991d39Dc080a5f8dcc5C90ebb8",
@@ -47,14 +50,17 @@ export const baseTestnetContracts: IBaseContracts = {
   moderationSafe: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
-  fx_airdrop: "0x9D62B27f97FD409a2Acb68Fa4253bc085d3b658A",
-  fx_tez_airdrop: "0xc05938c065924e620D4617Acabf2A3308d6165b6",
+  fx_token: "0xd89fdcb6c8d107f27cee4452ccfb70dc4f9768a7",
+  fx_airdrop: "0x3be624a86987e70fbf21bd4618e6c06cee0131f1",
+  fx_tez_airdrop: "0x3b4c8052ff6092ba86b0a2983e1aeefbe98d3efb",
+  fx_token_launchpad: "0xB468007A3DEEf197ad23EA6938425a79d9C6e819",
+  fx_project_factory: "0x8fCd5c219E225c708Bc6AdE7F57a92C7D0948a30",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
-  project_factory_v1: "0xf05636d65c7a10dF989eC2411D4F3230d3A02f3D",
+  issuer_factory_v1: "0xf05636d65c7a10dF989eC2411D4F3230d3A02f3D",
   mint_ticket_factory_v1: "0xe5832D3a3da179e818e9E3bFF7b96A928b29Eda2",
   dutch_auction_minter_v1: "0x9667a1Cf26223c9de22207DD93cfEEc9237b8f4E",
   fixed_price_minter_v1: "0x4bDcaC532143d8d35ed759189EE22E3704580b9D",
@@ -74,6 +80,9 @@ export const baseMainnetContracts: IBaseContracts = {
   moderationSafe: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
   farcaster_frame_fixed_price_minter_v1:
     "0x6e625892C739bFD960671Db5544E260757480725",
+  fx_token: "0xTODO",
   fx_airdrop: "0xTODO",
-  fx_tez_airdrop: "0xcTODO",
+  fx_tez_airdrop: "0xTODO",
+  fx_token_launchpad: "0xTODO",
+  fx_project_factory: "0xTODO",
 }
