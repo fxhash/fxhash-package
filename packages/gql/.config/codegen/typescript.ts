@@ -11,15 +11,11 @@ const config: CodegenConfig = {
       presetConfig: {
         fragmentMasking: false,
       },
-      config: {
-        scalars: {
-          numeric: "string",
-        },
-      },
     },
   },
   config: {
     scalars: {
+      numeric: "string",
       uuid: {
         input: "string",
         output: "string",
