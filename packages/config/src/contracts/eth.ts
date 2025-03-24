@@ -1,7 +1,7 @@
 export interface IEthContracts {
   multicall3: `0x${string}`
   seaport_zone: `0x${string}`
-  project_factory_v1: `0x${string}`
+  issuer_factory_v1: `0x${string}`
   fixed_price_minter_v1: `0x${string}`
   dutch_auction_minter_v1: `0x${string}`
   mint_ticket_factory_v1: `0x${string}`
@@ -20,12 +20,13 @@ export interface IEthContracts {
   signerSafe: `0x${string}`
   moderationSafe: `0x${string}`
   farcaster_frame_fixed_price_minter_v1: `0x${string}`
+  fx_token: `0x${string}`
 }
 
 export const ethTestnetContracts: IEthContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
-  project_factory_v1: "0x4e9ef916F55B5d4a27E6406C7Ce8bcd29c2693d6",
+  issuer_factory_v1: "0x4e9ef916F55B5d4a27E6406C7Ce8bcd29c2693d6",
   mint_ticket_factory_v1: "0xbaed21d8C57caf71578b9aE1E09a68721d0Dd02d",
   dutch_auction_minter_v1: "0x2F8ea350E7F29BCaC2AEE5889d64df07EE3Fa98d",
   fixed_price_minter_v1: "0xa6c9c758e80ec18e1a28d485b97400B11dCFCD64",
@@ -45,6 +46,7 @@ export const ethTestnetContracts: IEthContracts = {
   moderationSafe: "0x4F073947573FF44621cA25061Fb035c73a3014ab",
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
+  fx_token: "0xfa2e08ebfa6dae5ff68c3a0e2eb33a78f363f9fe",
 }
 
 /**
@@ -55,7 +57,7 @@ export const ethTestnetContracts: IEthContracts = {
 export const ethMainnetContracts: IEthContracts = {
   multicall3: "0xcA11bde05977b3631167028862bE2a173976CA11",
   seaport_zone: "0x0000000006B429721d1F4c4cD256BF3A38c09Ac6",
-  project_factory_v1: "0x442295de8A31d65026dBc09c29d469F6854f188a",
+  issuer_factory_v1: "0x442295de8A31d65026dBc09c29d469F6854f188a",
   mint_ticket_factory_v1: "0xDB92ed0e6265d042F05E5C2f6D2F99496e87D706",
   dutch_auction_minter_v1: "0x1bC736a2b144096a4752534C557D7E6C311CcAF1",
   fixed_price_minter_v1: "0xB645cFfD9bFB93c2c181d5Be0D6a8C1d81C2aEf3",
@@ -75,4 +77,5 @@ export const ethMainnetContracts: IEthContracts = {
   moderationSafe: "0x99CDaECbe1be4B7232a4f2c79EF76D403886FE1E",
   farcaster_frame_fixed_price_minter_v1:
     "0x6e625892C739bFD960671Db5544E260757480725",
+  fx_token: "0xTODO",
 }

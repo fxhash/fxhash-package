@@ -68,16 +68,18 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
   instanciated = true
 
   const wallets = multichainWallets({
-    [BlockchainNetwork.ETHEREUM]: evm
-      ? eip1193WalletSource({
-          wagmiConfig: evm.config,
-        })
-      : undefined,
-    [BlockchainNetwork.TEZOS]: tezos
-      ? tzip10WalletSource({
-          beaconConfig: tezos.config,
-        })
-      : undefined,
+    [BlockchainNetwork.ETHEREUM]:
+      isBrowser() && evm
+        ? eip1193WalletSource({
+            wagmiConfig: evm.config,
+          })
+        : undefined,
+    [BlockchainNetwork.TEZOS]:
+      isBrowser() && tezos
+        ? tzip10WalletSource({
+            beaconConfig: tezos.config,
+          })
+        : undefined,
   })
 
   return {

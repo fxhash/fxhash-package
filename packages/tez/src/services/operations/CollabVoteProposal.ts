@@ -8,7 +8,7 @@ import { TezosContractOperation } from "./ContractOperation"
 import { Collaboration } from "@fxhash/shared"
 
 export type TCollabVoteProposalParams = {
-  collaboration: Collaboration
+  collaborationId: string
   proposal: CollaborationProposal
   approval: boolean
 }
@@ -20,7 +20,7 @@ export class CollabVoteProposalOperation extends TezosContractOperation<TCollabV
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
-    this.contract = await this.manager.getContract(this.params.collaboration.id)
+    this.contract = await this.manager.getContract(this.params.collaborationId)
   }
 
   async call(): Promise<TransactionWalletOperation> {

@@ -8,24 +8,4 @@ export const audioProcessor: IArticleElementProcessor = {
       controls: true,
     }
   },
-  transformMarkdownMdhastToSlate: node => {
-    return {
-      type: "figure",
-      children: [
-        {
-          type: "audio",
-          src: node.src || "",
-          children: [
-            {
-              text: "",
-            },
-          ],
-        },
-        {
-          type: "figcaption",
-          children: node.children,
-        },
-      ],
-    }
-  },
 }

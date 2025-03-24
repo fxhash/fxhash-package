@@ -200,7 +200,7 @@ export class EthereumWalletManager extends WalletManager {
   public walletClient: WalletClient<Transport, Chain, Account>
   public publicClient: PublicClient<Transport, Chain>
   public signer: JsonRpcSigner | PrivateKeyAccount
-  public safe: Safe.default | undefined
+  public safe: Safe | undefined
   public ethersAdapterForSafe?: EthersAdapter
   private rpcNodes: string[]
   private connectorName?: string
@@ -274,8 +274,10 @@ export class EthereumWalletManager extends WalletManager {
       return success(safeAddress)
     }
     try {
-      let safeSdk
+      let safeSdk: Safe
       if (this.ethersAdapterForSafe) {
+        // @ts-expect-error safe package is not properly bundled
+        // To be revisited once we upgrade to a newer version of the safe package
         safeSdk = await Safe.default.create({
           ethAdapter: this.ethersAdapterForSafe,
           safeAddress: safeAddress,

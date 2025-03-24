@@ -7,12 +7,12 @@ import {
   FxhashCollabFactoryCalls,
   FxhashContracts,
 } from "../../types/Contracts"
-import { GenerativeToken, UserType } from "@fxhash/shared"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
 
 export type TBurnTokenOperationParams = {
-  token: GenerativeToken
+  projectId: string
+  collabAddress?: string
 }
 
 /**
@@ -21,21 +21,19 @@ export type TBurnTokenOperationParams = {
  */
 export class TezosBurnTokenOperation extends TezosContractOperation<TBurnTokenOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
-  collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
+      this.params.collabAddress || FxhashContracts.ISSUER
     )
   }
 
   async call(): Promise<TransactionWalletOperation> {
-    const params = this.params.token.id
+    const params = this.params.projectId
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    if (this.collab) {
+    if (this.params.collabAddress) {
       const packed = pack(params, EBuildableParams.BURN)
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.BURN,
@@ -47,8 +45,8 @@ export class TezosBurnTokenOperation extends TezosContractOperation<TBurnTokenOp
   }
 
   success(): string {
-    return this.collab
-      ? `A proposal to burn ${this.params.token.name} was successfully sent`
-      : `You have burnt ${this.params.token.name}. [insert dramatic music]`
+    return this.params.collabAddress
+      ? `A proposal to burn ${this.params.projectId} was successfully sent`
+      : `You have burnt ${this.params.projectId}. [insert dramatic music]`
   }
 }

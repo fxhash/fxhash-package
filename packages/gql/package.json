@@ -19,14 +19,13 @@
     "@parcel/watcher": "2.4.1",
     "chokidar-cli": "3.0.0",
     "graphql": "16.7.1",
-    "tsup": "8.2.4",
+    "tsup": "8.3.6",
     "typescript": "5.7.2"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -34,8 +33,6 @@
   ],
   "keywords": [],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "graphql": "16.7.1"
   },
@@ -47,6 +44,5 @@
     "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
     "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

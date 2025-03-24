@@ -9,6 +9,7 @@ import {
 } from "./api/fxhash.js"
 import { fxAppEnvMetadata } from "./config/metadata.js"
 import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
+import { gpuRenderingConfigDev, gpuRenderingConfigProd } from "./config/gpu.js"
 import {
   tezosMainnetContracts,
   tezosTestnetContracts,
@@ -18,12 +19,12 @@ import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
 import { getEnv } from "./helpers.js"
 import {
   BlockchainIdentifiers,
-  IFxhashConfig,
-  IFxhashConfigSingleEnv,
-  TBlockchainNetwork,
-  TEnv,
+  type IFxhashConfig,
+  type IFxhashConfigSingleEnv,
+  type TBlockchainNetwork,
+  type TEnv,
 } from "./types.js"
-// Import other necessary types and configurations
+import { AUTH_JWT_PK_DEV, AUTH_JWT_PK_PRD } from "./constants.js"
 
 /**
  * ! Beware ! Changing these values will result in current
@@ -151,6 +152,8 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     localDocker: {
@@ -170,6 +173,8 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     dev: {
@@ -189,6 +194,8 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     prd: {
@@ -208,6 +215,8 @@ const fxhashConfig: IFxhashConfig = {
         awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
+        gpu: gpuRenderingConfigProd,
+        authJwtPublicKey: AUTH_JWT_PK_PRD,
       },
     },
   },

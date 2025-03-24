@@ -1,3 +1,4 @@
+import { GPURenderingConfig } from "@fxhash/config"
 import type { Collaboration } from "./entities/User"
 import type { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
 import type { GenerativeTokenMetadata } from "./Metadata"
@@ -38,6 +39,7 @@ export interface CaptureSettings {
   frameCount?: number
   captureInterval?: number
   playbackFps?: number
+  gpuVersion?: keyof GPURenderingConfig
 }
 
 // object defining the fx(params) when minting a Generative Token
