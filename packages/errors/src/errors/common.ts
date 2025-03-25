@@ -104,6 +104,10 @@ export class RichError extends Error implements IRichError, IEquatableError {
     }
   }
 
+  static get code(): string {
+    return this.name
+  }
+
   /**
    * Instanciates a Rich Error, trying to match the serialized error with the
    * provided Rich Error classes. The `code` property of the serialized payload
@@ -122,7 +126,7 @@ export class RichError extends Error implements IRichError, IEquatableError {
     expected: T
   ): RichErrorUnion<T> | UnexpectedRichError {
     for (const RichErrorClass of expected) {
-      if (RichErrorClass.name === serialized.code) {
+      if (RichErrorClass.code === serialized.code) {
         return new RichErrorClass(serialized.messages) as InstanceType<
           T[number]
         >

@@ -35,6 +35,10 @@ export interface CaptureSettings {
   delay?: number
   resolution?: Vec2
   gpu?: boolean
+  gif?: boolean
+  frameCount?: number
+  captureInterval?: number
+  playbackFps?: number
   gpuVersion?: keyof GPURenderingConfig
 }
 

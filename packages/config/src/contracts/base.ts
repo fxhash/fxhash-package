@@ -50,7 +50,7 @@ export const baseTestnetContracts: IBaseContracts = {
   moderationSafe: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
-  fx_token: "0xd89fdcb6c8d107f27cee4452ccfb70dc4f9768a7",
+  fx_token: "0xd89fdcB6c8D107f27CEe4452Ccfb70Dc4F9768a7",
   fx_airdrop: "0x3be624a86987e70fbf21bd4618e6c06cee0131f1",
   fx_tez_airdrop: "0x3b4c8052ff6092ba86b0a2983e1aeefbe98d3efb",
   fx_token_launchpad: "0xB468007A3DEEf197ad23EA6938425a79d9C6e819",
