@@ -28,7 +28,7 @@
     "connectkit": "1.8.2",
     "eslint": "8.57.0",
     "tsup": "8.3.6",
-    "typescript": "5.7.2",
+    "typescript": "5.8.2",
     "viem": "2.22.5",
     "wagmi": "2.14.7"
   },

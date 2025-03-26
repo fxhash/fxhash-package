@@ -24,7 +24,7 @@
     "postcss-modules": "6.0.0",
     "tslib": "2.6.2",
     "tsup": "8.3.6",
-    "typescript": "5.7.2"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {

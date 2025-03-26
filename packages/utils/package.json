@@ -10,7 +10,7 @@
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "tsup": "8.3.6",
-    "typescript": "5.7.2",
+    "typescript": "5.8.2",
     "vitest": "3.0.4"
   },
   "exports": {
