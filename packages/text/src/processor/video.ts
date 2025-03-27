@@ -7,24 +7,4 @@ export const videoProcessor: IArticleElementProcessor = {
       controls: true,
     }
   },
-  transformMarkdownMdhastToSlate: node => {
-    return {
-      type: "figure",
-      children: [
-        {
-          type: "video",
-          src: node.src || "",
-          children: [
-            {
-              text: "",
-            },
-          ],
-        },
-        {
-          type: "figcaption",
-          children: node.children,
-        },
-      ],
-    }
-  },
 }

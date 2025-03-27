@@ -816,6 +816,11 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
+input AirdropTezClaimInput {
+  publicKey: String!
+  signature: String!
+}
+
 type AirdropTezClaimResult {
   signature: String!
 }
@@ -876,6 +881,89 @@ input ChallengeInput {
 type ChallengeResult {
   id: String!
   text: String!
+}
+
+"""
+columns and relationships of "ClaimProof"
+"""
+type ClaimProof {
+  address: String!
+  allocation: String!
+  leaf: String!
+  proof: [String!]
+}
+
+"""
+Boolean expression to filter rows from the table "ClaimProof". All fields are combined with a logical 'AND'.
+"""
+input ClaimProof_bool_exp {
+  _and: [ClaimProof_bool_exp!]
+  _not: ClaimProof_bool_exp
+  _or: [ClaimProof_bool_exp!]
+  address: String_comparison_exp
+  allocation: String_comparison_exp
+  leaf: String_comparison_exp
+  proof: String_array_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "ClaimProof".
+"""
+input ClaimProof_order_by {
+  address: order_by
+  allocation: order_by
+  leaf: order_by
+  proof: order_by
+}
+
+"""
+select columns of table "ClaimProof"
+"""
+enum ClaimProof_select_column {
+  """
+  column name
+  """
+  address
+
+  """
+  column name
+  """
+  allocation
+
+  """
+  column name
+  """
+  leaf
+
+  """
+  column name
+  """
+  proof
+}
+
+"""
+Streaming cursor of the table "ClaimProof"
+"""
+input ClaimProof_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: ClaimProof_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input ClaimProof_stream_cursor_value_input {
+  address: String
+  allocation: String
+  leaf: String
+  proof: [String!]
 }
 
 """
@@ -1938,6 +2026,11 @@ input Int_comparison_exp {
   _neq: Int
   _nin: [Int!]
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 input LinkWalletInput {
   id: String!
@@ -3296,6 +3389,14 @@ input ProjectMedia_variance_order_by {
   index: order_by
 }
 
+type ProjectReserves {
+  amount: Int!
+  data: JSON!
+  id: String!
+  merkle_root: String
+  method: Int!
+}
+
 scalar ProjectState
 
 """
@@ -3719,6 +3820,7 @@ type Retrospective {
   spentTotalNb: Int!
   spentTotalUsd: numeric!
   tokenAllocation: numeric!
+  tokenAllocationString: String
 
   """
   An object relationship
@@ -3754,6 +3856,7 @@ input Retrospective_bool_exp {
   spentTotalNb: Int_comparison_exp
   spentTotalUsd: numeric_comparison_exp
   tokenAllocation: numeric_comparison_exp
+  tokenAllocationString: String_comparison_exp
   wallet: Wallet_bool_exp
   walletAddress: String_comparison_exp
 }
@@ -3782,6 +3885,7 @@ input Retrospective_order_by {
   spentTotalNb: order_by
   spentTotalUsd: order_by
   tokenAllocation: order_by
+  tokenAllocationString: order_by
   wallet: Wallet_order_by
   walletAddress: order_by
 }
@@ -3893,6 +3997,11 @@ enum Retrospective_select_column {
   """
   column name
   """
+  tokenAllocationString
+
+  """
+  column name
+  """
   walletAddress
 }
 
@@ -3935,6 +4044,7 @@ input Retrospective_stream_cursor_value_input {
   spentTotalNb: Int
   spentTotalUsd: numeric
   tokenAllocation: numeric
+  tokenAllocationString: String
   walletAddress: String
 }
 
@@ -5466,6 +5576,89 @@ type active_listing_variance_fields {
   price: Float
   royalties: Float
   version: Float
+}
+
+"""
+columns and relationships of "airdrop_claim"
+"""
+type airdrop_claim {
+  amount: numeric!
+  claimed_at: timestamptz!
+  claimed_by: String
+  id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "airdrop_claim". All fields are combined with a logical 'AND'.
+"""
+input airdrop_claim_bool_exp {
+  _and: [airdrop_claim_bool_exp!]
+  _not: airdrop_claim_bool_exp
+  _or: [airdrop_claim_bool_exp!]
+  amount: numeric_comparison_exp
+  claimed_at: timestamptz_comparison_exp
+  claimed_by: String_comparison_exp
+  id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "airdrop_claim".
+"""
+input airdrop_claim_order_by {
+  amount: order_by
+  claimed_at: order_by
+  claimed_by: order_by
+  id: order_by
+}
+
+"""
+select columns of table "airdrop_claim"
+"""
+enum airdrop_claim_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  claimed_at
+
+  """
+  column name
+  """
+  claimed_by
+
+  """
+  column name
+  """
+  id
+}
+
+"""
+Streaming cursor of the table "airdrop_claim"
+"""
+input airdrop_claim_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: airdrop_claim_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input airdrop_claim_stream_cursor_value_input {
+  amount: numeric
+  claimed_at: timestamptz
+  claimed_by: String
+  id: String
 }
 
 """
@@ -9773,6 +9966,36 @@ type generative_token {
   """
   An array relationship
   """
+  _reserves(
+    """
+    distinct select on columns
+    """
+    distinct_on: [reserve_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [reserve_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: reserve_bool_exp
+  ): [reserve!]!
+
+  """
+  An array relationship
+  """
   actions(
     """
     distinct select on columns
@@ -10367,36 +10590,7 @@ type generative_token {
     """
     where: report_bool_exp
   ): [report!]!
-
-  """
-  An array relationship
-  """
-  reserves(
-    """
-    distinct select on columns
-    """
-    distinct_on: [reserve_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [reserve_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: reserve_bool_exp
-  ): [reserve!]!
+  reserves: [ProjectReserves!]!
   royalties: Int!
   slug: String!
 
@@ -10462,6 +10656,7 @@ type generative_token {
   supply: numeric!
   tags: [String!]
   thumbnail_uri: String
+  token_id: String
 
   """
   An array relationship
@@ -10613,6 +10808,7 @@ input generative_token_bool_exp {
   _and: [generative_token_bool_exp!]
   _not: generative_token_bool_exp
   _or: [generative_token_bool_exp!]
+  _reserves: reserve_bool_exp
   actions: action_bool_exp
   actions_aggregate: action_aggregate_bool_exp
   author: user_bool_exp
@@ -10665,7 +10861,6 @@ input generative_token_bool_exp {
   redeemables: redeemable_bool_exp
   redeemed_percentage: float8_comparison_exp
   reports: report_bool_exp
-  reserves: reserve_bool_exp
   royalties: Int_comparison_exp
   slug: String_comparison_exp
   splits_primary: split_bool_exp
@@ -10673,6 +10868,7 @@ input generative_token_bool_exp {
   supply: numeric_comparison_exp
   tags: String_array_comparison_exp
   thumbnail_uri: String_comparison_exp
+  token_id: String_comparison_exp
   transactions: transaction_bool_exp
   updated_at: timestamptz_comparison_exp
   user: user_bool_exp
@@ -11023,6 +11219,7 @@ type generative_token_max_fields {
   supply: numeric
   tags: [String!]
   thumbnail_uri: String
+  token_id: String
   updated_at: timestamptz
   version: generative_token_version
 }
@@ -11058,6 +11255,7 @@ input generative_token_max_order_by {
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
+  token_id: order_by
   updated_at: order_by
   version: order_by
 }
@@ -11103,6 +11301,7 @@ type generative_token_min_fields {
   supply: numeric
   tags: [String!]
   thumbnail_uri: String
+  token_id: String
   updated_at: timestamptz
   version: generative_token_version
 }
@@ -11138,6 +11337,7 @@ input generative_token_min_order_by {
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
+  token_id: order_by
   updated_at: order_by
   version: order_by
 }
@@ -11146,6 +11346,7 @@ input generative_token_min_order_by {
 Ordering options when selecting data from "generative_token".
 """
 input generative_token_order_by {
+  _reserves_aggregate: reserve_aggregate_order_by
   actions_aggregate: action_aggregate_order_by
   author: user_order_by
   author_id: order_by
@@ -11195,7 +11396,6 @@ input generative_token_order_by {
   redeemables_aggregate: redeemable_aggregate_order_by
   redeemed_percentage: order_by
   reports_aggregate: report_aggregate_order_by
-  reserves_aggregate: reserve_aggregate_order_by
   royalties: order_by
   slug: order_by
   splits_primary_aggregate: split_aggregate_order_by
@@ -11203,6 +11403,7 @@ input generative_token_order_by {
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
+  token_id: order_by
   transactions_aggregate: transaction_aggregate_order_by
   updated_at: order_by
   user: user_order_by
@@ -11378,6 +11579,11 @@ enum generative_token_select_column {
   column name
   """
   thumbnail_uri
+
+  """
+  column name
+  """
+  token_id
 
   """
   column name
@@ -11585,6 +11791,7 @@ input generative_token_stream_cursor_value_input {
   supply: numeric
   tags: [String!]
   thumbnail_uri: String
+  token_id: String
   updated_at: timestamptz
   version: generative_token_version
 }
@@ -15080,7 +15287,7 @@ input moderation_reason_stream_cursor_value_input {
 mutation root
 """
 type mutation_root {
-  airdrop_tez_claim: AirdropTezClaimResult
+  airdrop_tez_claim(input: AirdropTezClaimInput): AirdropTezClaimResult
   authenticate(input: AuthenticationInput!): AuthenticationResult
 
   """
@@ -16900,6 +17107,41 @@ type offchain_query {
   ): AccountsRoles
 
   """
+  fetch data from the table: "ClaimProof"
+  """
+  ClaimProof(
+    """
+    distinct select on columns
+    """
+    distinct_on: [ClaimProof_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [ClaimProof_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: ClaimProof_bool_exp
+  ): [ClaimProof!]!
+
+  """
+  fetch data from the table: "ClaimProof" using primary key columns
+  """
+  ClaimProof_by_pk(address: String!): ClaimProof
+
+  """
   fetch data from the table: "Consumable"
   """
   Consumable(
@@ -17832,6 +18074,61 @@ type offchain_subscription {
     """
     where: AccountsRoles_bool_exp
   ): [AccountsRoles!]!
+
+  """
+  fetch data from the table: "ClaimProof"
+  """
+  ClaimProof(
+    """
+    distinct select on columns
+    """
+    distinct_on: [ClaimProof_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [ClaimProof_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: ClaimProof_bool_exp
+  ): [ClaimProof!]!
+
+  """
+  fetch data from the table: "ClaimProof" using primary key columns
+  """
+  ClaimProof_by_pk(address: String!): ClaimProof
+
+  """
+  fetch data from the table in a streaming manner: "ClaimProof"
+  """
+  ClaimProof_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [ClaimProof_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: ClaimProof_bool_exp
+  ): [ClaimProof!]!
 
   """
   fetch data from the table: "Consumable"
@@ -19432,6 +19729,41 @@ type onchain_query {
     """
     where: active_listing_bool_exp
   ): active_listing_aggregate!
+
+  """
+  fetch data from the table: "airdrop_claim"
+  """
+  airdrop_claim(
+    """
+    distinct select on columns
+    """
+    distinct_on: [airdrop_claim_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [airdrop_claim_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: airdrop_claim_bool_exp
+  ): [airdrop_claim!]!
+
+  """
+  fetch data from the table: "airdrop_claim" using primary key columns
+  """
+  airdrop_claim_by_pk(id: String!): airdrop_claim
 
   """
   fetch data from the table: "any_offer"
@@ -21324,6 +21656,146 @@ type onchain_query {
   split_by_pk(id: Int!): split
 
   """
+  fetch data from the table: "token"
+  """
+  token(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_bool_exp
+  ): [token!]!
+
+  """
+  fetch data from the table: "token_bonding_trade"
+  """
+  token_bonding_trade(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_bonding_trade_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_bonding_trade_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_bonding_trade_bool_exp
+  ): [token_bonding_trade!]!
+
+  """
+  fetch data from the table: "token_bonding_trade" using primary key columns
+  """
+  token_bonding_trade_by_pk(id: Int!): token_bonding_trade
+
+  """
+  fetch data from the table: "token" using primary key columns
+  """
+  token_by_pk(id: String!): token
+
+  """
+  fetch data from the table: "token_holding"
+  """
+  token_holding(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_holding_bool_exp
+  ): [token_holding!]!
+
+  """
+  fetch data from the table: "token_holding" using primary key columns
+  """
+  token_holding_by_pk(id: String!): token_holding
+
+  """
+  fetch data from the table: "token_transfer"
+  """
+  token_transfer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_transfer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_transfer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_transfer_bool_exp
+  ): [token_transfer!]!
+
+  """
+  fetch data from the table: "token_transfer" using primary key columns
+  """
+  token_transfer_by_pk(id: Int!): token_transfer
+
+  """
   fetch data from the table: "transaction"
   """
   transaction(
@@ -21594,6 +22066,61 @@ type onchain_subscription {
     """
     where: active_listing_bool_exp
   ): [active_listing!]!
+
+  """
+  fetch data from the table: "airdrop_claim"
+  """
+  airdrop_claim(
+    """
+    distinct select on columns
+    """
+    distinct_on: [airdrop_claim_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [airdrop_claim_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: airdrop_claim_bool_exp
+  ): [airdrop_claim!]!
+
+  """
+  fetch data from the table: "airdrop_claim" using primary key columns
+  """
+  airdrop_claim_by_pk(id: String!): airdrop_claim
+
+  """
+  fetch data from the table in a streaming manner: "airdrop_claim"
+  """
+  airdrop_claim_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [airdrop_claim_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: airdrop_claim_bool_exp
+  ): [airdrop_claim!]!
 
   """
   fetch data from the table: "any_offer"
@@ -24426,6 +24953,226 @@ type onchain_subscription {
   ): [split!]!
 
   """
+  fetch data from the table: "token"
+  """
+  token(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_bool_exp
+  ): [token!]!
+
+  """
+  fetch data from the table: "token_bonding_trade"
+  """
+  token_bonding_trade(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_bonding_trade_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_bonding_trade_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_bonding_trade_bool_exp
+  ): [token_bonding_trade!]!
+
+  """
+  fetch data from the table: "token_bonding_trade" using primary key columns
+  """
+  token_bonding_trade_by_pk(id: Int!): token_bonding_trade
+
+  """
+  fetch data from the table in a streaming manner: "token_bonding_trade"
+  """
+  token_bonding_trade_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [token_bonding_trade_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: token_bonding_trade_bool_exp
+  ): [token_bonding_trade!]!
+
+  """
+  fetch data from the table: "token" using primary key columns
+  """
+  token_by_pk(id: String!): token
+
+  """
+  fetch data from the table: "token_holding"
+  """
+  token_holding(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_holding_bool_exp
+  ): [token_holding!]!
+
+  """
+  fetch data from the table: "token_holding" using primary key columns
+  """
+  token_holding_by_pk(id: String!): token_holding
+
+  """
+  fetch data from the table in a streaming manner: "token_holding"
+  """
+  token_holding_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [token_holding_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: token_holding_bool_exp
+  ): [token_holding!]!
+
+  """
+  fetch data from the table in a streaming manner: "token"
+  """
+  token_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [token_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: token_bool_exp
+  ): [token!]!
+
+  """
+  fetch data from the table: "token_transfer"
+  """
+  token_transfer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_transfer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_transfer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_transfer_bool_exp
+  ): [token_transfer!]!
+
+  """
+  fetch data from the table: "token_transfer" using primary key columns
+  """
+  token_transfer_by_pk(id: Int!): token_transfer
+
+  """
+  fetch data from the table in a streaming manner: "token_transfer"
+  """
+  token_transfer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [token_transfer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: token_transfer_bool_exp
+  ): [token_transfer!]!
+
+  """
   fetch data from the table: "transaction"
   """
   transaction(
@@ -25053,6 +25800,7 @@ type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+  projectReserves(projectId: String!): [ProjectReserves!]!
   search(input: SearchInput!): SearchOutput!
   walletRpcs: [WalletRpc!]
 }
@@ -26344,6 +27092,499 @@ input timestamptz_comparison_exp {
 }
 
 """
+columns and relationships of "token"
+"""
+type token {
+  ascension_progress: float8!
+  author_id: String!
+  created_at: timestamptz!
+  description: String!
+  graduated_address: String!
+  graduated_at: timestamptz
+  id: String!
+  metadata_uri: String!
+  name: String!
+  opens_at: timestamptz!
+  supply: numeric!
+  ticker: String!
+}
+
+"""
+columns and relationships of "token_bonding_trade"
+"""
+type token_bonding_trade {
+  amount_in: numeric!
+  amount_out: numeric!
+  created_at: timestamptz!
+  id: Int!
+  op_hash: String!
+  price: numeric!
+  token_id: String!
+  type: token_bonding_trade_type_enum!
+  user_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "token_bonding_trade". All fields are combined with a logical 'AND'.
+"""
+input token_bonding_trade_bool_exp {
+  _and: [token_bonding_trade_bool_exp!]
+  _not: token_bonding_trade_bool_exp
+  _or: [token_bonding_trade_bool_exp!]
+  amount_in: numeric_comparison_exp
+  amount_out: numeric_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  op_hash: String_comparison_exp
+  price: numeric_comparison_exp
+  token_id: String_comparison_exp
+  type: token_bonding_trade_type_enum_comparison_exp
+  user_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_bonding_trade".
+"""
+input token_bonding_trade_order_by {
+  amount_in: order_by
+  amount_out: order_by
+  created_at: order_by
+  id: order_by
+  op_hash: order_by
+  price: order_by
+  token_id: order_by
+  type: order_by
+  user_id: order_by
+}
+
+"""
+select columns of table "token_bonding_trade"
+"""
+enum token_bonding_trade_select_column {
+  """
+  column name
+  """
+  amount_in
+
+  """
+  column name
+  """
+  amount_out
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  op_hash
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  type
+
+  """
+  column name
+  """
+  user_id
+}
+
+"""
+Streaming cursor of the table "token_bonding_trade"
+"""
+input token_bonding_trade_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: token_bonding_trade_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input token_bonding_trade_stream_cursor_value_input {
+  amount_in: numeric
+  amount_out: numeric
+  created_at: timestamptz
+  id: Int
+  op_hash: String
+  price: numeric
+  token_id: String
+  type: token_bonding_trade_type_enum
+  user_id: String
+}
+
+scalar token_bonding_trade_type_enum
+
+"""
+Boolean expression to compare columns of type "token_bonding_trade_type_enum". All fields are combined with logical 'AND'.
+"""
+input token_bonding_trade_type_enum_comparison_exp {
+  _eq: token_bonding_trade_type_enum
+  _gt: token_bonding_trade_type_enum
+  _gte: token_bonding_trade_type_enum
+  _in: [token_bonding_trade_type_enum!]
+  _is_null: Boolean
+  _lt: token_bonding_trade_type_enum
+  _lte: token_bonding_trade_type_enum
+  _neq: token_bonding_trade_type_enum
+  _nin: [token_bonding_trade_type_enum!]
+}
+
+"""
+Boolean expression to filter rows from the table "token". All fields are combined with a logical 'AND'.
+"""
+input token_bool_exp {
+  _and: [token_bool_exp!]
+  _not: token_bool_exp
+  _or: [token_bool_exp!]
+  ascension_progress: float8_comparison_exp
+  author_id: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  description: String_comparison_exp
+  graduated_address: String_comparison_exp
+  graduated_at: timestamptz_comparison_exp
+  id: String_comparison_exp
+  metadata_uri: String_comparison_exp
+  name: String_comparison_exp
+  opens_at: timestamptz_comparison_exp
+  supply: numeric_comparison_exp
+  ticker: String_comparison_exp
+}
+
+"""
+columns and relationships of "token_holding"
+"""
+type token_holding {
+  amount: numeric!
+  holder_id: String!
+  id: String!
+  token_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "token_holding". All fields are combined with a logical 'AND'.
+"""
+input token_holding_bool_exp {
+  _and: [token_holding_bool_exp!]
+  _not: token_holding_bool_exp
+  _or: [token_holding_bool_exp!]
+  amount: numeric_comparison_exp
+  holder_id: String_comparison_exp
+  id: String_comparison_exp
+  token_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_holding".
+"""
+input token_holding_order_by {
+  amount: order_by
+  holder_id: order_by
+  id: order_by
+  token_id: order_by
+}
+
+"""
+select columns of table "token_holding"
+"""
+enum token_holding_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  holder_id
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  token_id
+}
+
+"""
+Streaming cursor of the table "token_holding"
+"""
+input token_holding_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: token_holding_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input token_holding_stream_cursor_value_input {
+  amount: numeric
+  holder_id: String
+  id: String
+  token_id: String
+}
+
+"""
+Ordering options when selecting data from "token".
+"""
+input token_order_by {
+  ascension_progress: order_by
+  author_id: order_by
+  created_at: order_by
+  description: order_by
+  graduated_address: order_by
+  graduated_at: order_by
+  id: order_by
+  metadata_uri: order_by
+  name: order_by
+  opens_at: order_by
+  supply: order_by
+  ticker: order_by
+}
+
+"""
+select columns of table "token"
+"""
+enum token_select_column {
+  """
+  column name
+  """
+  ascension_progress
+
+  """
+  column name
+  """
+  author_id
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  description
+
+  """
+  column name
+  """
+  graduated_address
+
+  """
+  column name
+  """
+  graduated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata_uri
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  opens_at
+
+  """
+  column name
+  """
+  supply
+
+  """
+  column name
+  """
+  ticker
+}
+
+"""
+Streaming cursor of the table "token"
+"""
+input token_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: token_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input token_stream_cursor_value_input {
+  ascension_progress: float8
+  author_id: String
+  created_at: timestamptz
+  description: String
+  graduated_address: String
+  graduated_at: timestamptz
+  id: String
+  metadata_uri: String
+  name: String
+  opens_at: timestamptz
+  supply: numeric
+  ticker: String
+}
+
+"""
+columns and relationships of "token_transfer"
+"""
+type token_transfer {
+  amount: numeric!
+  created_at: timestamptz!
+  id: Int!
+  op_hash: String!
+  sender_id: String!
+  target_id: String!
+  token_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "token_transfer". All fields are combined with a logical 'AND'.
+"""
+input token_transfer_bool_exp {
+  _and: [token_transfer_bool_exp!]
+  _not: token_transfer_bool_exp
+  _or: [token_transfer_bool_exp!]
+  amount: numeric_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  op_hash: String_comparison_exp
+  sender_id: String_comparison_exp
+  target_id: String_comparison_exp
+  token_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_transfer".
+"""
+input token_transfer_order_by {
+  amount: order_by
+  created_at: order_by
+  id: order_by
+  op_hash: order_by
+  sender_id: order_by
+  target_id: order_by
+  token_id: order_by
+}
+
+"""
+select columns of table "token_transfer"
+"""
+enum token_transfer_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  op_hash
+
+  """
+  column name
+  """
+  sender_id
+
+  """
+  column name
+  """
+  target_id
+
+  """
+  column name
+  """
+  token_id
+}
+
+"""
+Streaming cursor of the table "token_transfer"
+"""
+input token_transfer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: token_transfer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input token_transfer_stream_cursor_value_input {
+  amount: numeric
+  created_at: timestamptz
+  id: Int
+  op_hash: String
+  sender_id: String
+  target_id: String
+  token_id: String
+}
+
+"""
 columns and relationships of "transaction"
 """
 type transaction {
@@ -26750,6 +27991,11 @@ type user {
     """
     where: action_bool_exp
   ): action_aggregate!
+
+  """
+  An object relationship
+  """
+  airdrop_claim: airdrop_claim
 
   """
   An array relationship
@@ -27531,6 +28777,7 @@ input user_bool_exp {
   actionsByIssuerId: action_bool_exp
   actionsByIssuerId_aggregate: action_aggregate_bool_exp
   actions_aggregate: action_aggregate_bool_exp
+  airdrop_claim: airdrop_claim_bool_exp
   article_ledgers: article_ledger_bool_exp
   article_ledgers_aggregate: article_ledger_aggregate_bool_exp
   articles: article_bool_exp
@@ -27633,6 +28880,7 @@ Ordering options when selecting data from "user".
 input user_order_by {
   actionsByIssuerId_aggregate: action_aggregate_order_by
   actions_aggregate: action_aggregate_order_by
+  airdrop_claim: airdrop_claim_order_by
   article_ledgers_aggregate: article_ledger_aggregate_order_by
   articles_aggregate: article_aggregate_order_by
   auction_bids_aggregate: auction_bid_aggregate_order_by

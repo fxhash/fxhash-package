@@ -270,7 +270,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
     }
     if (this.params.collabAddress) {
       const safeTransactionData: MetaTransactionData = {
-        to: getAddress(currentConfig.contracts.project_factory_v1),
+        to: getAddress(currentConfig.contracts.issuer_factory_v1),
         data: encodeFunctionData({
           abi: FX_ISSUER_FACTORY_ABI,
           functionName: functionName,
@@ -295,7 +295,7 @@ export class CreateProjectEthV1Operation extends EthereumContractOperation<TCrea
       typeof FX_ISSUER_FACTORY_ABI,
       typeof functionName
     > = {
-      address: currentConfig.contracts.project_factory_v1,
+      address: currentConfig.contracts.issuer_factory_v1,
       abi: FX_ISSUER_FACTORY_ABI,
       functionName: functionName,
       args: args as any,

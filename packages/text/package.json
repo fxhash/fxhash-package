@@ -13,6 +13,7 @@
     "hast": "1.0.0",
     "hast-util-sanitize": "5.0.2",
     "hast-util-to-jsx-runtime": "2.3.2",
+    "hast-util-whitespace": "3.0.0",
     "hastscript": "7.2.0",
     "mdast": "3.0.0",
     "mdast-util-find-and-replace": "3.0.1",
@@ -28,7 +29,6 @@
     "remark-math": "6.0.0",
     "remark-parse": "11.0.0",
     "remark-rehype": "11.1.1",
-    "remark-slate-transformer": "0.6.9",
     "unified": "11.0.5",
     "unist-builder": "4.0.0",
     "unist-util-visit": "5.0.0"
@@ -43,12 +43,16 @@
     "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.57.0",
     "tsup": "8.3.6",
-    "typescript": "5.7.2"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./getJsxFromMarkdown": {
+      "types": "./dist/getJsxFromMarkdown.d.ts",
+      "import": "./dist/getJsxFromMarkdown.js"
     }
   },
   "files": [
