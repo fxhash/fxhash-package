@@ -73,7 +73,7 @@ export type GenerativeTokenMetadataV1 = BaseGenerativeTokenMetadata
 
 export type GenerativeTokenMetadataV2 = GenerativeTokenMetadataV1 & {
   previewHash?: string
-  previewIteration?: number
+  previewIteration?: string
   previewMinter?: string
   previewInputBytes?: string
   mintingInstructions: string

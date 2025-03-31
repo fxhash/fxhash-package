@@ -5,8 +5,12 @@ import {
 } from "../../services/parameters-builder/BuildParameters"
 import { mapReserveDefinition } from "@/utils/generative-token/reserve"
 import { apiEventsSignPayload } from "@/services/apis/events.service"
-import { IReserveConsumption } from "@/types/Reserve"
-import { EReserveMethod, IReserve, IReserveMintInput } from "@fxhash/shared"
+import {
+  EReserveMethod,
+  IReserve,
+  IReserveMintInput,
+  IReserveConsumption,
+} from "@fxhash/shared"
 
 /**
  * Given a reserve from an input form, packs the data of the reserve and outputs
@@ -60,9 +64,16 @@ export function packMintReserveInput(input: IReserveMintInput): string {
   return packed
 }
 
+export interface IPreparedReserveConsumption {
+  reserveInput: string
+  payloadPacked?: string
+  payloadSignature?: string
+  mintPassGroupAddress?: string
+}
+
 export const prepareReserveConsumption = async (
   consume: IReserveConsumption
-) => {
+): Promise<IPreparedReserveConsumption> => {
   switch (consume.method) {
     case EReserveMethod.WHITELIST: {
       return {

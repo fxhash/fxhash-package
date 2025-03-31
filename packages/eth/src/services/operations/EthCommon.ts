@@ -303,7 +303,7 @@ export async function predictFxContractAddress(
     address:
       factoryType === "ticket"
         ? chainConfig.contracts.mint_ticket_factory_v1
-        : chainConfig.contracts.project_factory_v1,
+        : chainConfig.contracts.issuer_factory_v1,
     abi:
       factoryType === "ticket" ? FX_TICKETS_FACTORY_ABI : FX_ISSUER_FACTORY_ABI,
     functionName:
@@ -436,9 +436,10 @@ export function revertReceiversFee(
   // Reverse the fee deduction from each receiver
   const originalReceivers = receivers
     .filter(account => {
-      if (account.address === getConfigForChain(chain).config.ethFeeReceiver)
+      if (account.address === getConfigForChain(chain).config.ethFeeReceiver) {
         return false
-      else return true
+      }
+      return true
     })
     .map(account => {
       return {

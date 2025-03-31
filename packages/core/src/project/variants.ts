@@ -16,7 +16,7 @@ export function getProjectConstraintVariant(
   return [
     explorationSettings?.hashConstraints?.[index] ?? "",
     explorationSettings?.minterConstraints?.[index] ?? "",
-    explorationSettings?.iterationConstraints?.[index] ?? 1,
+    explorationSettings?.iterationConstraints?.[index] ?? "1",
     explorationSettings?.paramsConstraints?.[index] ?? "",
   ]
 }

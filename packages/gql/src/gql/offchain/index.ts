@@ -1,4 +1,5 @@
 export * from "./accounts"
+export * from "./airdrop"
 export * from "./projects"
 export * from "./redeemable"
 export * from "./whitelist"

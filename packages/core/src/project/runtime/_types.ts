@@ -18,7 +18,7 @@ export type ProjectState = {
   chain: BlockchainType
   snippetVersion?: string
   hash?: string
-  iteration?: number
+  iteration?: string
   minter?: string
   context?: ExecutionContext
   inputBytes?: string

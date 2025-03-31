@@ -64,7 +64,7 @@ export async function getSafeFactory(signer: JsonRpcSigner | Provider) {
  * and authorize actions performed by the SafeApiKit instance.
  * @returns an instance of the `SafeApiKit` class.
  */
-export function getSafeService(chain: BlockchainType): SafeApiKit.default {
+export function getSafeService(chain: BlockchainType): SafeApiKit {
   // @dev: we have to add this otherwise it won't compile, however runtime is fine ...
   // @ts-ignore
   return new SafeApiKit.default({

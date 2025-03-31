@@ -13,6 +13,7 @@ export type TypeOfRichError<T extends RichError> = {
   new (): T
   parse: (typeof RichError)["parse"]
   Unexpected: (typeof RichError)["Unexpected"]
+  code: (typeof RichError)["code"]
 }
 
 /**

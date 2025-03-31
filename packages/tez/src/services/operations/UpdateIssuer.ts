@@ -10,11 +10,24 @@ import {
 import { transformUpdateIssuerFormToNumbers } from "../../utils/transformers/update-issuer"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { GenerativeToken, UserType, UpdateIssuerForm } from "@fxhash/shared"
+
+export interface UpdateIssuerData {
+  enabled: boolean
+  royalties: string
+  splitsPrimary: {
+    address: string
+    pct: number
+  }[]
+  splitsSecondary: {
+    address: string
+    pct: number
+  }[]
+}
 
 export type TUpdateIssuerOperationParams = {
-  token: GenerativeToken
-  data: UpdateIssuerForm<string>
+  projectId: string
+  data: UpdateIssuerData
+  collabAddress?: string
 }
 
 /**
@@ -26,9 +39,8 @@ export class TezosUpdateIssuerOperation extends TezosContractOperation<TUpdateIs
   collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
+      this.params.collabAddress || FxhashContracts.ISSUER
     )
   }
 
@@ -38,7 +50,7 @@ export class TezosUpdateIssuerOperation extends TezosContractOperation<TUpdateIs
     const numbered = transformUpdateIssuerFormToNumbers(this.params.data)
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.projectId,
       enabled: numbered.enabled,
       royalties: numbered.royalties,
       primary_split: numbered.splitsPrimary,
@@ -47,7 +59,7 @@ export class TezosUpdateIssuerOperation extends TezosContractOperation<TUpdateIs
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    if (this.collab) {
+    if (!!this.params.collabAddress) {
       const packed = pack(params, EBuildableParams.UPDATE_ISSUER)
 
       return this.contract!.methodsObject.make_proposal({
@@ -60,8 +72,8 @@ export class TezosUpdateIssuerOperation extends TezosContractOperation<TUpdateIs
   }
 
   success(): string {
-    return this.collab
-      ? `A proposal to update ${this.params.token.name} was successfully sent`
-      : `Your project ${this.params.token.name} was updated`
+    return !!this.params.collabAddress
+      ? `A proposal to update ${this.params.projectId} was successfully sent`
+      : `Your project ${this.params.projectId} was updated`
   }
 }

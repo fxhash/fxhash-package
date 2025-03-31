@@ -29,6 +29,10 @@ export function remarkFxHashCustom(): Transformer<CustomNode, CustomNode> {
       ) {
         // @ts-ignore
         const component = customElements[node.type]?.[node.name]
+        node.children =
+          node.children.length === 0
+            ? [{ type: "text", value: "" }]
+            : node.children
         if (component?.transformMdhastToComponent) {
           const hast: any = h(
             node.name as string,

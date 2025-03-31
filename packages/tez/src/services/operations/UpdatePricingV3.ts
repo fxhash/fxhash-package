@@ -14,20 +14,19 @@ import { TezosContractOperation } from "./ContractOperation"
 import { GenerativeToken, UserType, GenTokPricingForm } from "@fxhash/shared"
 
 export type TUpdatePricingV3OperationParams = {
+  projectId: string
   data: GenTokPricingForm<string>
-  token: GenerativeToken
+  collabAddress?: string
 }
 /**
  * Updates the pricing of a Generative Token
  */
 export class UpdatePricingV3Operation extends TezosContractOperation<TUpdatePricingV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
-  collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER_V3
+      this.params.collabAddress || FxhashContracts.ISSUER_V3
     )
   }
 
@@ -40,13 +39,13 @@ export class UpdatePricingV3Operation extends TezosContractOperation<TUpdatePric
     const packedPricing = packPricing(numbered)
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.projectId,
       pricing: packedPricing,
     }
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    if (this.collab) {
+    if (this.params.collabAddress) {
       const packed = pack(params, EBuildableParams.UPDATE_PRICE_V3)
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.UPDATE_PRICE_V3,
@@ -58,8 +57,8 @@ export class UpdatePricingV3Operation extends TezosContractOperation<TUpdatePric
   }
 
   success(): string {
-    return this.collab
-      ? `A request to update the pricing of "${this.params.token.name}" was successfully sent`
-      : `The pricing of "${this.params.token.name}" was successfully updated`
+    return this.params.collabAddress
+      ? `A request to update the pricing of "${this.params.projectId}" was successfully sent`
+      : `The pricing of "${this.params.projectId}" was successfully updated`
   }
 }

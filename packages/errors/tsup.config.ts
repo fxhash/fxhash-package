@@ -5,7 +5,7 @@ export default defineConfig((options: Options) => ({
   esbuildPlugins: [unpluginIsolatedDecl()],
   entry: ["src/index.ts"],
   outDir: "dist",
-  format: ["cjs", "esm"],
+  format: "esm",
   sourcemap: true,
   clean: !options.watch,
 }))
