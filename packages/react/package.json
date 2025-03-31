@@ -20,24 +20,21 @@
     "@types/react": "18.3.12",
     "@wagmi/connectors": "5.7.3",
     "@wagmi/core": "2.16.3",
-    "tsup": "8.2.4",
-    "typescript": "5.7.2",
+    "tsup": "8.3.6",
+    "typescript": "5.8.2",
     "viem": "2.22.5",
     "wagmi": "2.14.7"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/taquito": "20.1.2",
@@ -55,6 +52,5 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

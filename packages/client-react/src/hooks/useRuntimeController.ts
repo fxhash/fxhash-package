@@ -34,7 +34,7 @@ export const useRuntimeController: UseRuntimeController = ({
           ...options,
         },
       }),
-    []
+    [state, options]
   )
 
   const [runtime, setRuntime] = useState<RuntimeWholeState>(() =>

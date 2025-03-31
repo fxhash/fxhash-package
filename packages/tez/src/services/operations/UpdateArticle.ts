@@ -7,10 +7,9 @@ import {
 import { FxhashContracts } from "../../types/Contracts"
 import { stringToByteString } from "../../utils/convert"
 import { TezosContractOperation } from "./ContractOperation"
-import { NFTArticle } from "@fxhash/shared"
 
 export type TUpdateArticleOperationParams = {
-  article: NFTArticle
+  articleId: string
   metadataCid: string
 }
 
@@ -30,7 +29,7 @@ export class TezosUpdateArticleOperation extends TezosContractOperation<TUpdateA
     metadata.set("", stringToByteString(`ipfs://${this.params.metadataCid}`))
 
     return this.contract!.methodsObject.update_metadata({
-      token_id: this.params.article.id,
+      token_id: this.params.articleId,
       metadata: metadata,
     }).send()
   }

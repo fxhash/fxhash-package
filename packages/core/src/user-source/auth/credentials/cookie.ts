@@ -18,7 +18,7 @@ export const cookieCredentials = (): ICredentialsDriver<{}> => {
   if (typeof window === "undefined" || typeof window.location === "undefined") {
     console.warn("Cookie credentials should only be used in a browser context.")
   } else {
-    if (envApiHost !== getHost(location.host)) {
+    if (envApiHost !== getHost(location.href)) {
       console.warn(
         `Cookies can only be used on ${envApiHost} domains. JWT credentials should be used instead.`
       )

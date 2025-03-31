@@ -1,4 +1,4 @@
-import { ITezosStoragePointer } from "@/processor/_interfaces"
+import { ITezosStoragePointer } from "@/processor/_interfaces.js"
 import { getTezosStoratePointerPayload } from "./useTezosStoragePointer.js"
 import { ITezosStoragePointerProps } from "./_types.js"
 

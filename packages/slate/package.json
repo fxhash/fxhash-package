@@ -1,0 +1,68 @@
+{
+  "name": "@fxhash/slate",
+  "description": "Slate implementation for fx(text) article editor",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/text": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "gray-matter": "4.0.3",
+    "is-hotkey": "0.2.0",
+    "lodash.mergewith": "4.6.2",
+    "remark-directive": "3.0.0",
+    "remark-gfm": "4.0.0",
+    "remark-math": "6.0.0",
+    "remark-parse": "11.0.0",
+    "remark-slate-transformer": "0.9.0",
+    "remark-stringify": "11.0.0",
+    "slate": "0.110.2",
+    "slate-history": "0.110.3",
+    "slate-react": "0.111.0",
+    "unified": "11.0.5"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/eslint": "8.44.0",
+    "@types/is-hotkey": "0.1.7",
+    "@types/lodash.mergewith": "4.6.9",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "eslint": "8.57.0",
+    "tsup": "8.3.6",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./getJsxFromMarkdown": {
+      "types": "./dist/getJsxFromMarkdown.d.ts",
+      "import": "./dist/getJsxFromMarkdown.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:local": "FXHASH_ENV=local vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

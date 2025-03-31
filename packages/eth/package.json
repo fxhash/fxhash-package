@@ -33,23 +33,20 @@
     "react-dom": "18.2.0",
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
-    "tsup": "8.2.4",
-    "typescript": "5.7.2",
+    "tsup": "8.3.6",
+    "typescript": "5.8.2",
     "vitest": "3.0.4"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
   "peerDependencies": {
     "@fxhash/config": "workspace:*"
   },
@@ -61,6 +58,5 @@
     "dev": "tsup --watch",
     "test": "vitest"
   },
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  "type": "module"
 }

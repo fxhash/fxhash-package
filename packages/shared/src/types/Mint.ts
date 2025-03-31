@@ -35,6 +35,10 @@ export interface CaptureSettings {
   delay?: number
   resolution?: Vec2
   gpu?: boolean
+  gif?: boolean
+  frameCount?: number
+  captureInterval?: number
+  playbackFps?: number
   gpuVersion?: keyof GPURenderingConfig
 }
 
@@ -60,7 +64,7 @@ export interface MintGenerativeData<N = string> {
   // the hash selector for the preview
   previewHash?: string
   // the iteration selection for the preview
-  previewIteration?: number
+  previewIteration?: string
   // the minter selection for the preview
   previewMinter?: string
   // the byte string of param values for the preview
@@ -95,12 +99,12 @@ export interface MintGenerativeData<N = string> {
  * iteration: the iteration of the project
  * inputBytes: the serialized input bytes of the project
  */
-export type ConstraintVariant = [string, string, number, string]
+export type ConstraintVariant = [string, string, string, string]
 
 export interface GenTokConstrains {
   hashConstraints?: string[] | null
   minterConstraints?: string[] | null
-  iterationConstraints?: number[] | null
+  iterationConstraints?: string[] | null
   paramsConstraints?: string[] | null
 }
 

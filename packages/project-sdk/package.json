@@ -4,8 +4,7 @@
   "author": "fxhash",
   "dependencies": {
     "@fxhash/params": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "node-html-parser": "6.1.5"
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
@@ -13,9 +12,9 @@
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
-    "tslib": "2.6.0",
-    "tsup": "8.2.4",
-    "typescript": "5.7.2"
+    "tslib": "2.6.2",
+    "tsup": "8.3.6",
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {

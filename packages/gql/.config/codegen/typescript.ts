@@ -15,6 +15,7 @@ const config: CodegenConfig = {
   },
   config: {
     scalars: {
+      numeric: "string",
       uuid: {
         input: "string",
         output: "string",
