@@ -4,12 +4,14 @@ import type {
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
   IAccountSource,
+  GetSingleUserAccountResult,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
 import { AtLeastOne, PromiseResult } from "@fxhash/utils"
 import { WalletSourceRequestConnectionError } from "@fxhash/errors"
+import { ICreateClientParams } from ".."
 
 /**
  * Options for creating a Client PlugnPlay
@@ -83,6 +85,16 @@ export type ClientPlugnPlayOptions = {
    * @default document.body
    */
   safeDomWrapper?: HTMLElement
+
+  /**
+   * In the context of SSR applications, we want to "seed" the initial state
+   * for it to be accessible on the server. This can be a value which comes
+   * from JWT authentication for instance.
+   *
+   * When the client is initialized, it will override this initial state with
+   * the actual client state.
+   */
+  hydration?: ICreateClientParams["hydration"]
 }
 
 export interface IClientPlugnPlay {

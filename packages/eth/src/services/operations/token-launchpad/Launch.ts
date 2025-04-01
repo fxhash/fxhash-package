@@ -5,36 +5,34 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { pumpFunAbi } from "@/__generated__/wagmi.js"
+import { tokenLaunchpadAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TPumpFunLaunchEthOperationParams = {
-  // The amount of FxTokens used to create liquidity
-  purchaseAmount: bigint
+export type TTokenLaunchpadLaunchEthOperationParams = {
   // The name of the creator token
   name: string
   // The symbol of the creator token
   symbol: string
+  // The amount of FxTokens used to create liquidity
+  purchaseAmount: bigint
 }
 
-export class PumpFunLaunchEthOperation extends EthereumContractOperation<TPumpFunLaunchEthOperationParams> {
+export class TokenLaunchpadLaunchEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest<typeof pumpFunAbi, "launch"> =
-      {
-        address: config.base.contracts.fx_pumpfun,
-        abi: pumpFunAbi,
-        functionName: "launch",
-        args: [
-          this.params.purchaseAmount,
-          this.params.name,
-          this.params.symbol,
-        ],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
+    const args: SimulateAndExecuteContractRequest<
+      typeof tokenLaunchpadAbi,
+      "launch"
+    > = {
+      address: config.base.contracts.fx_token_launchpad,
+      abi: tokenLaunchpadAbi,
+      functionName: "launch",
+      args: [this.params.name, this.params.symbol, this.params.purchaseAmount],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {
       type: TransactionType.ONCHAIN,

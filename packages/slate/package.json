@@ -35,7 +35,7 @@
     "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.57.0",
     "tsup": "8.3.6",
-    "typescript": "5.7.2"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {

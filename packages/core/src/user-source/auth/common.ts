@@ -177,28 +177,32 @@ export function accountUtils({
    * stored in the storage.
    */
   const reconnectFromStorage = async () => {
-    const account = await getAccountFromStorage()
-    // if there's an account in the storage, then init authentication
-    // recovery process, which depends on the authentication strategy
-    if (account) {
-      try {
-        if (!credentialsDriver.validate(account.credentials)) {
-          console.error("credentials recovered from storage are invalid")
-          await cleanup()
-          return
-        }
-        // If we can get the profile we are authenticated
-        await sync()
-        // todo: carefully think about this flow here: is this how we handle fail?
-      } catch (e) {
-        // if a sync error occurs, we may want to try refreshing credentials
-        console.log("Error getting profile", e)
+    try {
+      const account = await getAccountFromStorage()
+      // if there's an account in the storage, then init authentication
+      // recovery process, which depends on the authentication strategy
+      if (account) {
         try {
-          await refreshCredentials()
-        } catch (_) {
-          // todo: handle error for credentials missing
+          if (!credentialsDriver.validate(account.credentials)) {
+            console.error("credentials recovered from storage are invalid")
+            throw "invalid credentials in storage"
+          }
+          // If we can get the profile we are authenticated
+          await sync()
+        } catch (e) {
+          // if a sync error occurs, we may want to try refreshing credentials
+          console.log("Error getting profile", e)
+          try {
+            await refreshCredentials()
+          } catch (_) {
+            throw "refresh crendentials failed" // triggers cleanup
+          }
         }
+      } else {
+        throw "no account" // triggers cleanup
       }
+    } catch (err) {
+      await cleanup()
     }
   }
 
@@ -272,24 +276,31 @@ export function authWithWallets<AuthError extends IEquatableError>({
   })
 
   const _authenticate = async () => {
-    const credentials = await authenticate()
-    if (credentials.isFailure()) throw credentials.error
+    try {
+      const credentials = await authenticate()
+      if (credentials.isFailure()) throw credentials.error
 
-    const { accessToken, refreshToken } = credentials.unwrap()
-    const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
+      const { accessToken, refreshToken } = credentials.unwrap()
+      const { id } = jwtDecode<JwtAccessTokenPayload>(accessToken)
 
-    // store user ID in storage, and some additionnal data based on the
-    // authentication payload received.
-    await _account.store({
-      id,
-      credentials: credentialsDriver.getStoredAuthentication(
-        accessToken,
-        refreshToken
-      ),
-    })
+      // store user ID in storage, and some additionnal data based on the
+      // authentication payload received.
+      await _account.store({
+        id,
+        credentials: credentialsDriver.getStoredAuthentication(
+          accessToken,
+          refreshToken
+        ),
+      })
 
-    // fetch user account, should be authenticated
-    await _account.sync()
+      // fetch user account, should be authenticated
+      await _account.sync()
+    } catch (err: any) {
+      walletsSource.disconnectAllWallets()
+      emitter.emit("error", {
+        error: new AuthenticationError(err as TAuthenticationError),
+      })
+    }
   }
 
   /**
@@ -325,17 +336,11 @@ export function authWithWallets<AuthError extends IEquatableError>({
           !walletsSource.requirements().userInput
         ) {
           // here events not hooked, so no side-effects triggered
-          try {
-            await _authenticate()
-            return
-          } catch (err) {
-            walletsSource.disconnectAllWallets()
-            return
-          }
+          await _authenticate()
         } else {
           walletsSource.disconnectAllWallets()
-          return
         }
+        return
       }
 
       // if we are during the initialization, and wallet doesn't belong to
@@ -360,20 +365,15 @@ export function authWithWallets<AuthError extends IEquatableError>({
   const _hookEvents = () => {
     clean.add(
       walletsSource.emitter.on("wallets-changed", async payload => {
+        console.log("wallets have changed !")
         const anyManager = anyActiveManager(walletsSource.getWallets())
         const account = _account.get()
 
         // when wallet is connected, but no account is authenticated, we start
         // authentication process
         if (anyManager && !account) {
-          try {
-            await _authenticate()
-          } catch (err) {
-            emitter.emit("error", {
-              error: new AuthenticationError(err as TAuthenticationError),
-            })
-            return
-          }
+          await _authenticate()
+          return
         }
 
         // if a connected wallet isn't linked to the account, and such account

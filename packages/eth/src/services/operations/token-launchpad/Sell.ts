@@ -5,24 +5,27 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { pumpFunAbi } from "@/__generated__/wagmi.js"
+import { tokenLaunchpadAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TPumpFunSellEthOperationParams = {
+export type TTokenLaunchpadSellEthOperationParams = {
   // The address of the creator token
   creatorToken: `0x${string}`
   // The amount of creator tokens being sold
   amountIn: bigint
 }
 
-export class PumpFunSellEthOperation extends EthereumContractOperation<TPumpFunSellEthOperationParams> {
+export class TokenLaunchpadSellEthOperation extends EthereumContractOperation<TTokenLaunchpadSellEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest<typeof pumpFunAbi, "sell"> = {
-      address: config.base.contracts.fx_pumpfun,
-      abi: pumpFunAbi,
+    const args: SimulateAndExecuteContractRequest<
+      typeof tokenLaunchpadAbi,
+      "sell"
+    > = {
+      address: config.base.contracts.fx_token_launchpad,
+      abi: tokenLaunchpadAbi,
       functionName: "sell",
       args: [this.params.creatorToken, this.params.amountIn],
       account: this.manager.address as `0x${string}`,

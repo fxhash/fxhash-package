@@ -59,6 +59,7 @@ export function createClientPlugnPlay({
   socialLogin,
   safeDomWrapper,
   credentials = "jwt",
+  hydration,
 }: ClientPlugnPlayOptions): IClientPlugnPlay {
   // checks on provided values
   invariant(metadata, "metadata required")
@@ -118,6 +119,7 @@ export function createClientPlugnPlay({
       storage,
       credentials: creds as any,
     },
+    hydration,
   })
 
   let _openConnectKitModal: (() => void) | null = null
