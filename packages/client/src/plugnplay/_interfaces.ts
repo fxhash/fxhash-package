@@ -4,7 +4,7 @@ import type {
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
   IAccountSource,
-  GetSingleUserAccountResult,
+  IWallet,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
@@ -125,9 +125,9 @@ export interface IClientPlugnPlay {
    * @param network Network on which a connection attempt should be made.
    * @returns A promise which resolves when the connection attempt is complete.
    */
-  connectWallet: (
+  connectWallet: <Net extends BlockchainNetwork>(
     network: BlockchainNetwork
-  ) => PromiseResult<void, WalletSourceRequestConnectionError>
+  ) => PromiseResult<IWallet<Net>, WalletSourceRequestConnectionError>
 
   /**
    * Initialize the whole client. Must be called before using any of the client
