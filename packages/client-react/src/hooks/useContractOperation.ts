@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useState, useCallback } from "react"
 import {
   TContractOperation,
   WalletManager,
@@ -9,20 +9,15 @@ import {
   PromiseResult,
   Success,
   Failure,
-  invariant,
   BlockchainType,
   BlockchainNetwork,
-  setIntervalCapped,
   RichError,
+  sleep,
 } from "@fxhash/sdk"
 import { NoWalletConnectedForNetworkError } from "@fxhash/errors"
-import {
-  useEvmWallet,
-  useEvmWalletConnected,
-  useTezosWallet,
-  useTezosWalletConnected,
-} from "./useWallets.js"
+import { useEvmWallet, useTezosWallet } from "./useWallets.js"
 import { useClient } from "./useClient.js"
+import { useIsMounted } from "./useIsMounted.js"
 
 /**
  * A value for the state of the transaction
@@ -220,8 +215,6 @@ export function useContractOperation<
 } {
   const tezosWalletManager = useTezosWallet()
   const ethereumWalletManager = useEvmWallet()
-  const isTezosConnected = useTezosWalletConnected()
-  const isEthereumConnected = useEvmWalletConnected()
   const { client } = useClient()
 
   const [state, setState] = useState<DeferredTaskState<TData, TError>>({
@@ -234,72 +227,33 @@ export function useContractOperation<
     txHash: undefined,
   })
 
-  // Add mounted ref to track component lifecycle
-  const isMounted = useRef(true)
-
-  // Store the wallet managers in refs to avoid stale closures
-  const tezosWalletManagerRef = useRef(tezosWalletManager)
-  const ethereumWalletManagerRef = useRef(ethereumWalletManager)
-
-  // Update wallet manager refs when they change
-  useEffect(() => {
-    tezosWalletManagerRef.current = tezosWalletManager
-    ethereumWalletManagerRef.current = ethereumWalletManager
-  }, [tezosWalletManager, ethereumWalletManager])
-
-  // Handle cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isMounted.current = false
-    }
-  }, [])
-
-  const getWalletManager = (network: BlockchainNetwork) => {
-    return {
-      [BlockchainType.BASE]: ethereumWalletManagerRef.current,
-      [BlockchainType.ETHEREUM]: ethereumWalletManagerRef.current,
-      [BlockchainType.TEZOS]: tezosWalletManagerRef.current,
-    }[network]
-  }
+  const isMounted = useIsMounted()
 
   const execute = useCallback(
     async <TBlockchain extends BlockchainType>(
       blockchainType: TBlockchain,
       params: TInput
     ) => {
-      const connected = {
-        [BlockchainType.BASE]: isEthereumConnected,
-        [BlockchainType.ETHEREUM]: isEthereumConnected,
-        [BlockchainType.TEZOS]: isTezosConnected,
-      }[blockchainType]
-
       const network =
         blockchainType === BlockchainType.TEZOS
           ? BlockchainNetwork.TEZOS
           : BlockchainNetwork.ETHEREUM
 
       // if there's no user synced, we request a sync
-      if (!connected) {
+      if (!client.source.getWallet(network)?.connected) {
         try {
-          await client?.connectWallet(network)
+          const res = await client?.connectWallet(network)
+          if (res.isFailure()) throw res.error
 
-          // wait for wallet manager to be ready
-          await setIntervalCapped(
-            () => {
-              if (getWalletManager(network)) return true
-              return
-            },
-            {
-              delay: 100,
-              maxSteps: 20,
-            }
-          )
+          // annoying but Beacon throws a Rate limit error if tx request is
+          // made immediately after...
+          if (network === BlockchainNetwork.TEZOS) await sleep(1000)
 
           // Check if still mounted after async operation
-          if (!isMounted.current) return
+          if (!isMounted()) return
         } catch (err) {
           console.log("error connecting wallet", err)
-          if (!isMounted.current) return
+          if (!isMounted()) return
 
           setState(() => ({
             status: ContractOperationStatus.ERROR,
@@ -338,7 +292,8 @@ export function useContractOperation<
       })
 
       try {
-        const walletManager = getWalletManager(network)
+        const walletManager =
+          client.source.getWallet(network)?.connected?.manager
         if (!walletManager) {
           setState(() => ({
             status: ContractOperationStatus.ERROR,
@@ -358,7 +313,7 @@ export function useContractOperation<
           blockchainType
         )
 
-        if (!isMounted.current) return
+        if (!isMounted()) return
 
         if (sendTransactionResult.isFailure()) {
           setState({
@@ -394,7 +349,7 @@ export function useContractOperation<
             hash: sendTransactionResult.value.hash,
           })
 
-          if (!isMounted.current) return
+          if (!isMounted()) return
 
           if (confirmationResult.isFailure()) {
             setState({
@@ -424,7 +379,7 @@ export function useContractOperation<
         })
         return sendTransactionResult
       } finally {
-        if (isMounted.current) {
+        if (isMounted()) {
           setState(({ data, error, txHash }) => {
             if (data !== undefined) {
               return {
@@ -461,7 +416,7 @@ export function useContractOperation<
         }
       }
     },
-    [operations, client, isEthereumConnected, isTezosConnected]
+    [operations, client]
   )
 
   /**
