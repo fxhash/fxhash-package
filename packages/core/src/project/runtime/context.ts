@@ -25,7 +25,7 @@ import cloneDeep from "lodash.clonedeep"
 const DEFAULT_RUNTIME_STATE: RuntimeState = Object.freeze({
   hash: "",
   minter: "",
-  iteration: 1,
+  iteration: "1",
   params: {},
   chain: BlockchainType.ETHEREUM,
 })

@@ -4,8 +4,9 @@ import { foundry } from "@wagmi/cli/plugins"
 const contractFilesToInclude: string[] = ["DutchAuctionV2"]
 const tokenContractFilesToInclude: string[] = ["FxAirdrop", "TezAirdrop"]
 const creatorTokenContractFilesToInclude: string[] = [
-  "PumpFun",
+  "TokenLaunchpad",
   "ProjectFactory",
+  "ProjectToken",
 ]
 
 export default defineConfig({

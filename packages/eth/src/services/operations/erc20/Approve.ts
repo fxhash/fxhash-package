@@ -5,33 +5,28 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { pumpFunAbi } from "@/__generated__/wagmi.js"
-import { config } from "@fxhash/config"
+import { erc20Abi } from "viem"
 
-export type TPumpFunLaunchEthOperationParams = {
-  // The name of the creator token
-  name: string
-  // The symbol of the creator token
-  symbol: string
-  // The amount of FxTokens used to create liquidity
-  purchaseAmount: bigint
+export type TErc20ApproveEthOperationParams = {
+  // The address of the token
+  tokenAddress: `0x${string}`
+  // The address of the spender
+  spenderAddress: `0x${string}`
+  // The amount of tokens to approve
+  amount: bigint
 }
 
-export class PumpFunLaunchEthOperation extends EthereumContractOperation<TPumpFunLaunchEthOperationParams> {
+export class Erc20ApproveEthOperation extends EthereumContractOperation<TErc20ApproveEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest<typeof pumpFunAbi, "launch"> =
+    const args: SimulateAndExecuteContractRequest<typeof erc20Abi, "approve"> =
       {
-        address: config.base.contracts.fx_pumpfun,
-        abi: pumpFunAbi,
-        functionName: "launch",
-        args: [
-          this.params.name,
-          this.params.symbol,
-          this.params.purchaseAmount,
-        ],
+        address: this.params.tokenAddress,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [this.params.spenderAddress, this.params.amount],
         account: this.manager.address as `0x${string}`,
         chain: getCurrentChain(this.chain),
       }
@@ -43,6 +38,6 @@ export class PumpFunLaunchEthOperation extends EthereumContractOperation<TPumpFu
   }
 
   success(): string {
-    return "Successfully created token"
+    return "Successfully bought tokens"
   }
 }

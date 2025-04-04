@@ -5,26 +5,31 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { pumpFunAbi } from "@/__generated__/wagmi.js"
+import { tokenLaunchpadAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TPumpFunSellEthOperationParams = {
-  // The address of the creator token
-  creatorToken: `0x${string}`
-  // The amount of creator tokens being sold
-  amountIn: bigint
+export type TTokenLaunchpadLaunchEthOperationParams = {
+  // The name of the creator token
+  name: string
+  // The symbol of the creator token
+  symbol: string
+  // The amount of FxTokens used to create liquidity
+  purchaseAmount: bigint
 }
 
-export class PumpFunSellEthOperation extends EthereumContractOperation<TPumpFunSellEthOperationParams> {
+export class TokenLaunchpadLaunchEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
-    const args: SimulateAndExecuteContractRequest<typeof pumpFunAbi, "sell"> = {
-      address: config.base.contracts.fx_pumpfun,
-      abi: pumpFunAbi,
-      functionName: "sell",
-      args: [this.params.creatorToken, this.params.amountIn],
+    const args: SimulateAndExecuteContractRequest<
+      typeof tokenLaunchpadAbi,
+      "launch"
+    > = {
+      address: config.base.contracts.fx_token_launchpad,
+      abi: tokenLaunchpadAbi,
+      functionName: "launch",
+      args: [this.params.name, this.params.symbol, this.params.purchaseAmount],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }
@@ -36,6 +41,6 @@ export class PumpFunSellEthOperation extends EthereumContractOperation<TPumpFunS
   }
 
   success(): string {
-    return "Successfully sold tokens"
+    return "Successfully created token"
   }
 }

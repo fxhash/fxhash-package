@@ -61,7 +61,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
 
     const withdrawableProceeds =
       proceeds.data.onchain.eth_minter_proceeds.filter(
-        proceed => proceed.amount > 0
+        proceed => Number(proceed.amount) > 0
       )
 
     //we loop on the all the minters, to prepare the withdraw operations
@@ -73,7 +73,7 @@ export class WithdrawAllEthV1Operation extends EthereumContractOperation<TWithdr
       const args = isDutchAuction
         ? ([
             minterProceeds.token_address as `0x${string}`,
-            minterProceeds.reserve_id,
+            BigInt(minterProceeds.reserve_id || 0),
           ] as const)
         : ([minterProceeds.token_address as `0x${string}`] as const)
 

@@ -96,7 +96,7 @@ export function createRuntimeController(
   const _initialRuntimeState = {
     hash: _initial.hash || mockTransactionHash(_initial.chain),
     minter: _initial.minter || mockBlockchainAddress(_initial.chain),
-    iteration: _initial.iteration || 1,
+    iteration: _initial.iteration || "1",
     context: _initial.context,
     chain: _initial.chain,
     params:
