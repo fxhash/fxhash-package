@@ -2818,10 +2818,10 @@ export const tokenLaunchpadAbi = [
   {
     type: "function",
     inputs: [
-      { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
+      { name: "_desiredAmountOut", internalType: "uint256", type: "uint256" },
     ],
     name: "previewLaunch",
-    outputs: [{ name: "amountOut", internalType: "uint256", type: "uint256" }],
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
