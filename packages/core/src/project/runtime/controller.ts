@@ -7,7 +7,7 @@ import {
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
 import { proxyConnector } from "./connectors.js"
-import { ProjectState, RuntimeWholeState } from "./_types.js"
+import { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
 import {
   FxParamsData,
   buildParamsObject,
@@ -141,13 +141,16 @@ export function createRuntimeController(
     _prevRuntime = { ...runtime }
   }
 
+  let _prevControls: ControlState | null = null
   _controls.emitter.on("controls-changed", _handleControlsChange)
   function _handleControlsChange(eventData: ControlsChangedEventPayload) {
     try {
       const { update, state } = eventData
       // find the params that actually changed
       const changed = Object.keys(update)
-        .filter(id => state.params.values[id] !== update[id])
+        .filter(id =>
+          !_prevControls ? true : _prevControls.params.values[id] !== update[id]
+        )
         .map(id => state.params.definition?.find(d => d.id === id))
       // when there are no changes we don't need to do anything
       // e.g. when artworks call emit in a draw loop this should
@@ -177,6 +180,7 @@ export function createRuntimeController(
       console.error(err)
     } finally {
       emitter.emit("controls-changed", eventData)
+      _prevControls = eventData.state
     }
   }
 
@@ -202,6 +206,7 @@ export function createRuntimeController(
         features,
         hash,
       } = e.data.data
+
       _runtime.update({
         state: { hash, minter, params: values },
         definition: { params: definitions, version },

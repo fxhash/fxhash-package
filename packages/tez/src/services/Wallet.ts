@@ -226,7 +226,10 @@ export class TezosWalletManager extends WalletManager {
         const AbortedBeaconError = (await import("@airgap/beacon-sdk"))
           .AbortedBeaconError
         // TODO try to catch insufficient funds error and return failure of new InsufficientFundsError()
-        if (error instanceof AbortedBeaconError) {
+        if (
+          error instanceof AbortedBeaconError ||
+          error.errorType === "ABORTED_ERROR"
+        ) {
           return failure(new UserRejectedError())
         }
         if (this.canErrorBeCycled(error) && i < this.rpcNodes.length) {
