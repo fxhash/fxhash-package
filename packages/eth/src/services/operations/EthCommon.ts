@@ -210,6 +210,12 @@ export async function handleContractError(error: any): Promise<string> {
       console.log("error: ", error)
       return `Failed: ${errorName}`
     }
+    const executionError = error.walk(
+      err => err instanceof ContractFunctionExecutionError
+    )
+    if (executionError instanceof ContractFunctionExecutionError) {
+      throw new TransactionRevertedError(executionError.shortMessage)
+    }
   }
   throw error // Re-throwing error if it's not an instance of BaseError.
 }
