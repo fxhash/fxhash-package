@@ -23,14 +23,14 @@
     "@types/eslint": "8.44.0",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.7.12",
+    "@wagmi/core": "2.16.7",
     "connectkit": "1.8.2",
     "eslint": "8.57.0",
     "tsup": "8.3.6",
     "typescript": "5.8.2",
-    "viem": "2.22.5",
-    "wagmi": "2.14.7"
+    "viem": "2.26.2",
+    "wagmi": "2.14.16"
   },
   "exports": {
     ".": {
@@ -43,13 +43,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.7.12",
+    "@wagmi/core": "2.16.7",
     "connectkit": "1.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "viem": "2.22.5",
-    "wagmi": "2.14.7"
+    "viem": "2.26.2",
+    "wagmi": "2.14.16"
   },
   "publishConfig": {
     "access": "public"

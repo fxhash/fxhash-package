@@ -18,12 +18,12 @@
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/taquito": "20.1.2",
     "@types/react": "18.3.12",
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.7.12",
+    "@wagmi/core": "2.16.7",
     "tsup": "8.3.6",
     "typescript": "5.8.2",
-    "viem": "2.22.5",
-    "wagmi": "2.14.7"
+    "viem": "2.26.2",
+    "wagmi": "2.14.16"
   },
   "exports": {
     ".": {
@@ -38,13 +38,13 @@
   "peerDependencies": {
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/taquito": "20.1.2",
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.7.12",
+    "@wagmi/core": "2.16.7",
     "connectkit": "1.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "viem": "2.22.5",
-    "wagmi": "2.14.7"
+    "viem": "2.26.2",
+    "wagmi": "2.14.16"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
