@@ -194,6 +194,8 @@ export async function handleContractError(error: any): Promise<string> {
 
   //if it's an error sent by the contract, we want to throw a more meaningful error
   if (error instanceof BaseError) {
+    // Log the error, can be useful for debugging
+    console.error(error)
     const revertError = error.walk(
       err => err instanceof ContractFunctionRevertedError
     )
