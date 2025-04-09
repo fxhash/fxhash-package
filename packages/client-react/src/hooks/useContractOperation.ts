@@ -212,6 +212,7 @@ export function useContractOperation<
     Awaited<ReturnType<InstanceType<TOperations[TBlockchain]>["call"]>>,
     TError
   >
+  reset: () => void
 } {
   const tezosWalletManager = useTezosWallet()
   const ethereumWalletManager = useEvmWallet()
@@ -467,5 +468,15 @@ export function useContractOperation<
     ...state,
     execute: execute as any,
     rawExecute: rawExecute as any,
+    reset: () =>
+      setState({
+        status: ContractOperationStatus.NONE,
+        called: false,
+        loading: false,
+        data: undefined,
+        error: undefined,
+        params: undefined,
+        txHash: undefined,
+      }),
   }
 }
