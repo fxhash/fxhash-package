@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from "react"
+import { useState, useCallback } from "react"
 import {
   TContractOperation,
   WalletManager,
@@ -9,10 +9,15 @@ import {
   PromiseResult,
   Success,
   Failure,
-  invariant,
   BlockchainType,
+  BlockchainNetwork,
+  RichError,
+  sleep,
 } from "@fxhash/sdk"
+import { NoWalletConnectedForNetworkError } from "@fxhash/errors"
 import { useEvmWallet, useTezosWallet } from "./useWallets.js"
+import { useClient } from "./useClient.js"
+import { useIsMounted } from "./useIsMounted.js"
 
 /**
  * A value for the state of the transaction
@@ -96,7 +101,7 @@ export type DeferredTaskSuccess<TData> = {
  */
 export type DeferredTaskFailed<TError extends IEquatableError> = {
   status: ContractOperationStatus.ERROR
-  called: true
+  called: boolean
   loading: false
   data: undefined
   error: TError
@@ -155,9 +160,11 @@ type TBlockchainContractOperation = {
 // Extract the error type from WalletManager.sendTransaction
 type ExtractPendingOrRejectedError<T> =
   T extends Success<unknown> ? never : T extends Failure<infer U> ? U : never
-type TError = ExtractPendingOrRejectedError<
-  Awaited<ReturnType<InstanceType<typeof WalletManager>["sendTransaction"]>>
->
+type TError =
+  | ExtractPendingOrRejectedError<
+      Awaited<ReturnType<InstanceType<typeof WalletManager>["sendTransaction"]>>
+    >
+  | RichError
 
 export function useContractOperation<
   TBlockchain extends BlockchainType,
@@ -209,6 +216,7 @@ export function useContractOperation<
 } {
   const tezosWalletManager = useTezosWallet()
   const ethereumWalletManager = useEvmWallet()
+  const { client } = useClient()
 
   const [state, setState] = useState<DeferredTaskState<TData, TError>>({
     status: ContractOperationStatus.NONE,
@@ -220,11 +228,47 @@ export function useContractOperation<
     txHash: undefined,
   })
 
+  const isMounted = useIsMounted()
+
   const execute = useCallback(
     async <TBlockchain extends BlockchainType>(
       blockchainType: TBlockchain,
       params: TInput
     ) => {
+      const network =
+        blockchainType === BlockchainType.TEZOS
+          ? BlockchainNetwork.TEZOS
+          : BlockchainNetwork.ETHEREUM
+
+      // if there's no user synced, we request a sync
+      if (!client.source.getWallet(network)?.connected) {
+        try {
+          const res = await client?.connectWallet(network)
+          if (res.isFailure()) throw res.error
+
+          // annoying but Beacon throws a Rate limit error if tx request is
+          // made immediately after...
+          if (network === BlockchainNetwork.TEZOS) await sleep(1000)
+
+          // Check if still mounted after async operation
+          if (!isMounted()) return
+        } catch (err) {
+          console.log("error connecting wallet", err)
+          if (!isMounted()) return
+
+          setState(() => ({
+            status: ContractOperationStatus.ERROR,
+            called: false,
+            loading: false,
+            data: undefined,
+            error: new NoWalletConnectedForNetworkError(network) as TError,
+            params,
+            txHash: undefined,
+          }))
+          return
+        }
+      }
+
       setState(({ data, txHash }): DeferredTaskState<TData, TError> => {
         if (data !== undefined) {
           return {
@@ -248,20 +292,29 @@ export function useContractOperation<
         }
       })
 
-      let walletManager = {
-        [BlockchainType.BASE]: ethereumWalletManager,
-        [BlockchainType.ETHEREUM]: ethereumWalletManager,
-        [BlockchainType.TEZOS]: tezosWalletManager,
-      }[blockchainType]
-
       try {
-        invariant(!!walletManager, "Wallet manager must be defined")
+        const walletManager =
+          client.source.getWallet(network)?.connected?.manager
+        if (!walletManager) {
+          setState(() => ({
+            status: ContractOperationStatus.ERROR,
+            called: false,
+            loading: false,
+            data: undefined,
+            error: new NoWalletConnectedForNetworkError(network) as TError,
+            params,
+            txHash: undefined,
+          }))
+          return
+        }
 
         const sendTransactionResult = await walletManager.sendTransaction(
           operations[blockchainType],
           params,
           blockchainType
         )
+
+        if (!isMounted()) return
 
         if (sendTransactionResult.isFailure()) {
           setState({
@@ -292,9 +345,13 @@ export function useContractOperation<
             params,
             txHash: undefined,
           })
+
           confirmationResult = await walletManager.waitForTransaction({
             hash: sendTransactionResult.value.hash,
           })
+
+          if (!isMounted()) return
+
           if (confirmationResult.isFailure()) {
             setState({
               status: ContractOperationStatus.ERROR,
@@ -323,42 +380,44 @@ export function useContractOperation<
         })
         return sendTransactionResult
       } finally {
-        setState(({ data, error, txHash }) => {
-          if (data !== undefined) {
+        if (isMounted()) {
+          setState(({ data, error, txHash }) => {
+            if (data !== undefined) {
+              return {
+                status: ContractOperationStatus.INJECTED,
+                called: true,
+                data,
+                error: undefined,
+                loading: false,
+                params,
+                txHash: txHash!,
+              }
+            }
+            if (error) {
+              return {
+                status: ContractOperationStatus.ERROR,
+                called: true,
+                data: undefined,
+                error,
+                loading: false,
+                params,
+                txHash,
+              }
+            }
             return {
-              status: ContractOperationStatus.INJECTED,
-              called: true,
-              data,
+              status: ContractOperationStatus.NONE,
+              called: false,
+              data: undefined,
               error: undefined,
               loading: false,
-              params,
-              txHash: txHash!,
+              params: undefined,
+              txHash: undefined,
             }
-          }
-          if (error) {
-            return {
-              status: ContractOperationStatus.ERROR,
-              called: true,
-              data: undefined,
-              error,
-              loading: false,
-              params,
-              txHash,
-            }
-          }
-          return {
-            status: ContractOperationStatus.NONE,
-            called: false,
-            data: undefined,
-            error: undefined,
-            loading: false,
-            params: undefined,
-            txHash: undefined,
-          }
-        })
+          })
+        }
       }
     },
-    [operations, tezosWalletManager, ethereumWalletManager]
+    [operations, client]
   )
 
   /**

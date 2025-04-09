@@ -12,6 +12,7 @@ import { tzip10WalletSource } from "./tezos.js"
 import { type IWindowWalletsSource } from "./_interfaces.js"
 import { isBrowser } from "@fxhash/utils-browser"
 import { multichainWallets } from "../common/multichain.js"
+import { WalletSourceRequestConnectionWalletNotAvailableError } from "@fxhash/errors"
 
 type Options = {
   /**
@@ -91,10 +92,11 @@ export function windowWallets({ evm, tezos }: Options): IWindowWalletsSource {
       )
       await wallets.init()
     },
-    requestConnection(network) {
+    async requestConnection(network) {
       const wallet = wallets.getWallet(network)
-      wallet &&
-        (wallet.source as IWindowWalletsSource).requestConnection(network)
+      if (!wallet)
+        throw new WalletSourceRequestConnectionWalletNotAvailableError(network)
+      return wallet.source.requestConnection(network)
     },
     requirements() {
       return {
