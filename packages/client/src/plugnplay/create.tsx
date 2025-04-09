@@ -4,7 +4,13 @@
  */
 
 import { createClient, ICreateClientParams } from "@/basic/_index.js"
-import { cleanup, intialization, invariant } from "@fxhash/utils"
+import {
+  cleanup,
+  failure,
+  intialization,
+  invariant,
+  success,
+} from "@fxhash/utils"
 import { isBrowser } from "@fxhash/utils-browser"
 import {
   GraphqlWrapper,
@@ -14,6 +20,7 @@ import {
   UserSourceEventEmitter,
   Web3AuthLoginPayload,
   IWalletsAccountSource,
+  IWallet,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import {
@@ -124,6 +131,44 @@ export function createClientPlugnPlay({
 
   let _openConnectKitModal: (() => void) | null = null
   let _initConnectKitOverride: (() => Promise<void>) | null = null
+  let _isConnectKitConnected: (() => boolean) | null = null
+  let _isConnectKitOpen: (() => boolean) | null = null
+
+  const _connectWithConnectKitModal = () => {
+    return new Promise<void>((resolve, reject) => {
+      invariant(
+        _openConnectKitModal && _isConnectKitOpen,
+        "ConnectKit modal functions not initialized"
+      )
+
+      // Check if already connected
+      if (client.userSource.getWallet(BlockchainNetwork.ETHEREUM)?.connected) {
+        resolve()
+        return
+      }
+
+      // Poll for modal closure
+      const checkInterval = setInterval(() => {
+        if (
+          client.userSource.getWallet(BlockchainNetwork.ETHEREUM)?.connected
+        ) {
+          clearInterval(checkInterval)
+          resolve()
+          return
+        }
+
+        // Check if modal was closed without connecting
+        if (!_isConnectKitOpen?.() && !_isConnectKitConnected?.()) {
+          clearInterval(checkInterval)
+          reject(new Error("Modal closed without connecting"))
+          return
+        }
+      }, 500)
+
+      // Open the modal
+      _openConnectKitModal()
+    })
+  }
 
   /**
    * ConnectKit is a great interface for handling wallet connections, however
@@ -164,19 +209,34 @@ export function createClientPlugnPlay({
     })
   }
 
-  function requestConnection(network: BlockchainNetwork) {
-    init.check()
-    invariant(
-      client.walletSources.window,
-      "cannot request connection if no window wallets"
-    )
-    // on EVM use connectKit, need to bypass call to wallets source
-    if (network === BlockchainNetwork.ETHEREUM && _manageConnectKit) {
-      _openConnectKitModal?.()
-      return
-    }
-    // otherwise use native requestConnection from SDK
-    client.walletSources.window.requestConnection(network)
+  function requestConnection<Net extends BlockchainNetwork>(network: Net) {
+    return new Promise<IWallet<Net>>(async (resolve, reject) => {
+      init.check()
+      invariant(
+        client.walletSources.window,
+        "cannot request connection if no window wallets"
+      )
+
+      // Listen for user-changed event
+      const off = client.userSource.emitter.on("user-changed", () => {
+        const wallets = client.userSource.getWallets()
+        if (wallets?.[network]) {
+          off()
+          resolve(wallets[network] as IWallet<Net>)
+        }
+      })
+
+      try {
+        // on EVM use connectKit, need to bypass call to wallets source
+        if (network === BlockchainNetwork.ETHEREUM && _manageConnectKit) {
+          await _connectWithConnectKitModal()
+        }
+        // otherwise use native requestConnection from SDK
+        await client.walletSources.window.requestConnection(network)
+      } catch (err) {
+        reject(err)
+      }
+    })
   }
 
   return {
@@ -188,7 +248,15 @@ export function createClientPlugnPlay({
 
     source: client.userSource,
     emitter,
-    connectWallet: requestConnection,
+
+    async connectWallet(network) {
+      try {
+        const wallet = await requestConnection(network)
+        return success(wallet as any)
+      } catch (err: any) {
+        return failure(err)
+      }
+    },
 
     async init() {
       invariant(
@@ -252,8 +320,14 @@ export function createClientPlugnPlay({
       _initConnectKitOverride = initFn
     },
 
-    setConnectKitModal(openFn: () => void) {
+    setConnectKitModal(
+      openFn: () => void,
+      isConnectedFn: () => boolean,
+      isOpenFn: () => boolean
+    ) {
       _openConnectKitModal = openFn
+      _isConnectKitConnected = isConnectedFn
+      _isConnectKitOpen = isOpenFn
     },
   }
 }
