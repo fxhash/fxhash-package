@@ -17,7 +17,7 @@
     "@wagmi/connectors": "5.7.3",
     "@wagmi/core": "2.16.3",
     "esbuild-css-modules-plugin": "2.7.1",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "typescript": "5.8.2",
     "viem": "2.22.5"
   },

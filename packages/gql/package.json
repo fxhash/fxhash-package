@@ -19,7 +19,7 @@
     "@parcel/watcher": "2.5.1",
     "chokidar-cli": "3.0.0",
     "graphql": "16.10.0",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "typescript": "5.8.2"
   },
   "exports": {
