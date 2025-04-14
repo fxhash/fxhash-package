@@ -4,12 +4,13 @@ import type {
   IWeb3AuthWalletsSource,
   IGraphqlWrapper,
   IAccountSource,
-  GetSingleUserAccountResult,
+  IWallet,
 } from "@fxhash/core"
 import { BlockchainNetwork } from "@fxhash/shared"
 import { Config as WagmiConfig } from "@wagmi/core"
 import { IAppMetadata, config as fxConfig } from "@fxhash/config"
-import { AtLeastOne } from "@fxhash/utils"
+import { AtLeastOne, PromiseResult } from "@fxhash/utils"
+import { WalletSourceRequestConnectionError } from "@fxhash/errors"
 import { ICreateClientParams } from ".."
 
 /**
@@ -121,10 +122,12 @@ export interface IClientPlugnPlay {
 
   /**
    * Can be called to trigger events for connecting a wallet on a given network.
-   *
    * @param network Network on which a connection attempt should be made.
+   * @returns A promise which resolves when the connection attempt is complete.
    */
-  connectWallet: (network: BlockchainNetwork) => void
+  connectWallet: <Net extends BlockchainNetwork>(
+    network: BlockchainNetwork
+  ) => PromiseResult<IWallet<Net>, WalletSourceRequestConnectionError>
 
   /**
    * Initialize the whole client. Must be called before using any of the client
@@ -196,7 +199,11 @@ export interface IClientPlugnPlay {
   setConnectKitInit(initFn: () => Promise<void>): void
 
   /**
-   * Override the function to open the ConnectKit modal.
+   * Override the function to set the ConnectKit modal.
    */
-  setConnectKitModal(openFn: () => void): void
+  setConnectKitModal(
+    openFn: () => void,
+    isConnectedFn: () => boolean,
+    isOpenFn: () => boolean
+  ): void
 }

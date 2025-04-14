@@ -54,7 +54,6 @@ export async function fetchReservoir<T>(
   body: string | undefined = undefined,
   queryParams: { [key: string]: any } = {}
 ): Promise<T> {
-  if (!RESERVOIR_API_KEY) throw new Error("missing RESERVOIR_API_KEY")
   try {
     const params = new URLSearchParams(queryParams).toString()
     const reservoirUrl = `${getConfigForChain(chain).apis?.reservoir}`

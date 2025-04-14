@@ -8,6 +8,7 @@
     "input-otp": "1.2.4"
   },
   "devDependencies": {
+    "@fxhash/errors": "workspace:*",
     "@fxhash/sdk": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",

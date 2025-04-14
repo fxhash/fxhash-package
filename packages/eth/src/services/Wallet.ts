@@ -341,7 +341,10 @@ export class EthereumWalletManager extends WalletManager {
         if (
           error instanceof UserRejectedRequestError ||
           // This can happen for Safe transactions
-          error instanceof UserRejectedError
+          error instanceof UserRejectedError ||
+          // In some cases we see "generic" ContractFunctionExecutionError
+          // where only the message indiciates the reason
+          error.shortMessage === "User rejected the request."
         ) {
           return failure(new UserRejectedError())
         } else if (error instanceof InsufficientFundsError) {
