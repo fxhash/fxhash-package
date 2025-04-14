@@ -20,7 +20,7 @@
     "@types/react": "18.3.12",
     "@wagmi/connectors": "5.7.3",
     "@wagmi/core": "2.16.3",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "typescript": "5.8.2",
     "viem": "2.22.5",
     "wagmi": "2.14.7"
