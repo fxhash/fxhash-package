@@ -6,7 +6,7 @@
     "@fxhash/config": "workspace:*",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
-    "graphql": "16.7.1"
+    "graphql": "16.10.0"
   },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
