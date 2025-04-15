@@ -180,7 +180,10 @@ export function useContractOperation<
       ? P
       : never,
 >(
-  operations: TOperations
+  operations: TOperations,
+  options: {
+    onSuccess?: (data: TData) => void
+  } = {}
 ): DeferredTaskState<TData, TError> & {
   // We respecify the type of the execute function to make it work with the generic blockchainType
   // the result of the await execute(blockchainType, params) will be typed
@@ -366,14 +369,16 @@ export function useContractOperation<
           }
         }
 
+        const data = {
+          ...sendTransactionResult.value,
+          operation: confirmationResult?.value,
+        } as TData
+        options.onSuccess?.(data)
         setState({
           status: ContractOperationStatus.INJECTED,
           called: true,
           loading: false,
-          data: {
-            ...sendTransactionResult.value,
-            operation: confirmationResult?.value,
-          } as TData,
+          data,
           error: undefined,
           params,
           txHash: sendTransactionResult.value.hash,
