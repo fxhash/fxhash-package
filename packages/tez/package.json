@@ -39,7 +39,7 @@
     "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
-    "@taquito/beacon-wallet": "20.1.2.",
+    "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
     "onchfs": "workspace:*"
