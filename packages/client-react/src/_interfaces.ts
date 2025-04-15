@@ -1,4 +1,5 @@
 import { ClientPlugnPlayOptions, DeepOmit } from "@fxhash/sdk"
+import { ContractOperationSuccess } from "./hooks/useContractOperation"
 
 export interface IClientPlugnPlayProviderWeb2SignInOptions {
   /**
@@ -46,6 +47,11 @@ export interface IClientPlugnPlayProviderCustomConfig {
    * will need to provide your application ID in here
    */
   web2SignIn?: false | IClientPlugnPlayProviderWeb2SignInOptions
+
+  /**
+   * A callback function that is called when an operation is successful.
+   */
+  onOperationSuccess?: (data: ContractOperationSuccess) => void
 }
 
 export interface IReactClientPlugnPlayConfig

@@ -166,24 +166,23 @@ type TError =
     >
   | RichError
 
+export interface ContractOperationSuccess {
+  hash: string
+  // TODO: fix this any
+  operation: any
+}
+
 export function useContractOperation<
   TBlockchain extends BlockchainType,
   TOperations extends TBlockchainContractOperation,
-  TData = {
-    hash: string
-    // TODO: fix this any
-    operation: any
-  },
+  TData = ContractOperationSuccess,
   TInput = TOperations[TBlockchain] extends TTezosContractOperation<infer P>
     ? P
     : TOperations[TBlockchain] extends TEthereumContractOperation<infer P>
       ? P
       : never,
 >(
-  operations: TOperations,
-  options: {
-    onSuccess?: (data: TData) => void
-  } = {}
+  operations: TOperations
 ): DeferredTaskState<TData, TError> & {
   // We respecify the type of the execute function to make it work with the generic blockchainType
   // the result of the await execute(blockchainType, params) will be typed
@@ -219,7 +218,7 @@ export function useContractOperation<
 } {
   const tezosWalletManager = useTezosWallet()
   const ethereumWalletManager = useEvmWallet()
-  const { client } = useClient()
+  const { client, onOperationSuccess } = useClient()
 
   const [state, setState] = useState<DeferredTaskState<TData, TError>>({
     status: ContractOperationStatus.NONE,
@@ -373,7 +372,7 @@ export function useContractOperation<
           ...sendTransactionResult.value,
           operation: confirmationResult?.value,
         } as TData
-        options.onSuccess?.(data)
+        onOperationSuccess?.(data as ContractOperationSuccess)
         setState({
           status: ContractOperationStatus.INJECTED,
           called: true,
