@@ -10,11 +10,13 @@ import {
   processParam,
   deserializeParams,
   ParameterProcessors,
-} from "@fxhash/params/utils"
-import { FxParamType, FxParamValue, FxParamsRaw } from "@fxhash/params/types"
+  type FxParamType,
+  type FxParamValue,
+  type FxParamsRaw,
+} from "@fxhash/params"
+import { version } from "../version"
 
 export function createFxhashSdk(window: Window): FxHashApi {
-  console.log("hi")
   const { parent } = window
 
   const search = new URLSearchParams(window.location.search)
@@ -37,7 +39,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
   const initialInputBytes = searchParams?.replace("#0x", "")
 
   const $fx: FxHashApi = {
-    _version: "4.0.1",
+    _version: version,
     _processors: ParameterProcessors,
     // where params def & features will be stored
     _params: undefined,

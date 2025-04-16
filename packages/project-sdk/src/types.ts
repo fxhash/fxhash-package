@@ -1,12 +1,12 @@
 import {
-  FxParamDefinition,
-  FxParamProcessors,
-  FxParamTransformationTypeMap,
-  FxParamType,
-  FxParamValue,
-  FxParamsRaw,
-  FxParamsTransformed,
-} from "@fxhash/params/types"
+  type FxParamDefinition,
+  type FxParamProcessors,
+  type FxParamTransformationTypeMap,
+  type FxParamType,
+  type FxParamValue,
+  type FxParamsRaw,
+  type FxParamsTransformed,
+} from "@fxhash/params"
 import { ResettableRandFunction } from "@fxhash/utils"
 
 export type FxHashExecutionContext = "standalone" | "capture" | "minting"
