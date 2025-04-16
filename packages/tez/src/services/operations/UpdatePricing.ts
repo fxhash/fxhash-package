@@ -7,16 +7,16 @@ import {
   FxhashCollabFactoryCalls,
   FxhashContracts,
 } from "../../types/Contracts"
-import { GenTokPricingForm } from "../../types/Mint"
 import { packPricing } from "../../utils/pack/pricing"
 import { transformPricingFormToNumbers } from "../../utils/transformers/pricing"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { GenerativeToken, UserType } from "@fxhash/shared"
+import { GenerativeToken, UserType, GenTokPricingForm } from "@fxhash/shared"
 
 export type TUpdatePricingOperationParams = {
+  projectId: string
   data: GenTokPricingForm<string>
-  token: GenerativeToken
+  collabAddress?: string
 }
 
 /**
@@ -24,12 +24,10 @@ export type TUpdatePricingOperationParams = {
  */
 export class TezosUpdatePricingOperation extends TezosContractOperation<TUpdatePricingOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
-  collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
+      this.params.collabAddress || FxhashContracts.ISSUER
     )
   }
 
@@ -42,13 +40,13 @@ export class TezosUpdatePricingOperation extends TezosContractOperation<TUpdateP
     const packedPricing = packPricing(numbered)
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.projectId,
       details: packedPricing.details,
     }
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    if (this.collab) {
+    if (this.params.collabAddress) {
       const packed = pack(params, EBuildableParams.UPDATE_PRICE)
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.UPDATE_PRICE,
@@ -60,8 +58,8 @@ export class TezosUpdatePricingOperation extends TezosContractOperation<TUpdateP
   }
 
   success(): string {
-    return this.collab
-      ? `A request to update the pricing of ${this.params.token.name} was successfully sent`
-      : `The pricing of ${this.params.token.name} was successfully updated`
+    return this.params.collabAddress
+      ? `A request to update the pricing of ${this.params.projectId} was successfully sent`
+      : `The pricing of ${this.params.projectId} was successfully updated`
   }
 }

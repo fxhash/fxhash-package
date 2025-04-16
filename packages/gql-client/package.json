@@ -1,41 +1,34 @@
 {
   "name": "@fxhash/gql-client",
-  "private": true,
   "version": "0.0.1",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
+  "dependencies": {
+    "@fxhash/config": "workspace:*",
+    "@urql/core": "4.1.4",
+    "deepmerge": "4.3.1",
+    "graphql": "16.10.0"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/node": "20.11.30",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "default": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
+  "license": "MIT",
+  "private": true,
+  "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {
-    "@fxhash/config": "workspace:*",
-    "@urql/core": "4.1.4",
-    "deepmerge": "4.3.1",
-    "graphql": "16.7.1"
-  },
-  "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
-    "@types/node": "20.11.30",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3"
-  }
+  "type": "module"
 }

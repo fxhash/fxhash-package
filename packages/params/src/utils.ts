@@ -12,6 +12,7 @@ import {
   FxParamTransformation,
   FxParamsRaw,
   FxParamsTransformed,
+  FxParamDefinitions,
 } from "./types"
 
 export function rgbaToHex(r: number, g: number, b: number, a: number): string {
@@ -366,6 +367,16 @@ export function serializeParams(
   return bytes
 }
 
+// call seralizeParams(), returns nullif no params
+export function serializeParamsOrNull(
+  params: FxParamsData,
+  definition: FxParamDefinition<any>[]
+) {
+  const serialized = serializeParams(params, definition || [])
+  if (serialized.length === 0) return null
+  return serialized
+}
+
 // takes an array of bytes, in hexadecimal format, and a parametric space
 // definition and outputs an array of parameters, mapping the definition and
 // validating input based on the definition constraints
@@ -431,19 +442,59 @@ export function consolidateParams(params: any, data: any) {
   return rtn
 }
 
+/**
+ * Given a definition and some params data, builds a clean params object where
+ * the values are first found in the data object, then in the definition if a
+ * default value exists, otherwise in randomizes the value using the param
+ * associated processor.
+ *
+ * @param definition an array of parameter definition
+ * @param data the params data used to reconstruct the final values
+ */
+export function buildParamsObject(
+  definition: FxParamDefinitions,
+  data: FxParamsData | null
+) {
+  if (!definition) return {}
+
+  const out: FxParamsData = {}
+  for (const def of definition) {
+    // find if the data object has the propery
+    if (data?.hasOwnProperty(def.id)) {
+      out[def.id] = data[def.id]
+      continue
+    }
+    // find if the definition object has a default value
+    if (def.hasOwnProperty("default")) {
+      out[def.id] = def.default
+      continue
+    }
+    // otherwise use the param processor randomizer
+    const processor = ParameterProcessors[def.type] as FxParamProcessor<any>
+    const rand = processor.random(def)
+    out[def.id] = processor.transform?.(rand) || rand
+  }
+  return out
+}
+
 export function getRandomParamValues(
   params: FxParamDefinition<FxParamType>[],
-  options?: { noTransform: boolean }
+  options?: { noTransform?: boolean; randomizeAll?: boolean }
 ): any {
   return params.reduce(
     (acc, definition) => {
       const processor = ParameterProcessors[
         definition.type as FxParamType
       ] as FxParamProcessor<FxParamType>
-      const v = processor.random(definition) as FxParamType
-      acc[definition.id] = options?.noTransform
-        ? v
-        : processor.transform?.(v) || v
+      let v = (definition.value || definition.default) as FxParamType
+      if (definition.update !== "code-driven" || options?.randomizeAll) {
+        v = processor.random(definition) as FxParamType
+      }
+      if (v) {
+        acc[definition.id] = options?.noTransform
+          ? v
+          : processor.transform?.(v) || v
+      }
       return acc
     },
     {} as Record<string, any>

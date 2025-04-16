@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
+import type { ReservoirPlaceBidParams } from "@/services/reservoir/types.js"
 import { placeBid } from "../Marketplace.js"
 import {
   RESERVOIR_ORDERBOOK,
@@ -12,7 +12,7 @@ export type TMakeOfferEthV1OperationParams = {
     token: string
     tokenId: string
     amount: number
-    price: string
+    price: bigint
     expiration?: string
     orderIdToReplace?: string
   }[]
@@ -25,7 +25,8 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
-    const args: ReservoirPlaceBidParams = this.params.orders.map(order => {
+    const args: ReservoirPlaceBidParams = []
+    for (const order of this.params.orders) {
       let options = {}
       if (order.orderIdToReplace) {
         options = {
@@ -41,16 +42,17 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
           },
         }
       }
-      return {
+      args.push({
         token: `${order.token}:${order.tokenId}`,
-        weiPrice: order.price,
+        weiPrice: order.price.toString(),
         quantity: order.amount,
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
         automatedRoyalties: true,
-      }
-    })
+      })
+    }
+
     const transactionHash = await placeBid(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
@@ -59,6 +61,6 @@ export class MakeOfferEthV1Operation extends EthereumContractOperation<TMakeOffe
   }
 
   success(): string {
-    return `You successfully placed an offer`
+    return "your collection offer has been placed!"
   }
 }

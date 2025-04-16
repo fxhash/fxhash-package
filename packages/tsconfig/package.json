@@ -1,17 +1,12 @@
 {
   "name": "@fxhash/tsconfig",
-  "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
+  "version": "1.0.0",
   "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@tsconfig/create-react-app": "2.0.2",
-    "@tsconfig/node18": "18.2.2",
-    "@tsconfig/recommended": "1.0.3"
+    "@tsconfig/create-react-app": "2.0.5",
+    "@tsconfig/node22": "22.0.0",
+    "@tsconfig/recommended": "1.0.8"
   },
   "exports": {
     "./tsconfig.base.json": "./tsconfig.base.json",
@@ -20,5 +15,10 @@
     "./node": "./tsconfig.node.json",
     "./tsconfig.react.json": "./tsconfig.react.json",
     "./react": "./tsconfig.react.json"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

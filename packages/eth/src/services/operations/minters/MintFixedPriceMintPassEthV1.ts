@@ -3,7 +3,7 @@ import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
@@ -40,17 +40,20 @@ export class MintFixedPriceMintPassEthV1Operation extends EthereumContractOperat
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FIXED_PRICE_MINTER_ABI,
+      "buyMintPass"
+    > = {
       address: currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "buyMintPass",
       args: [
-        this.params.token,
-        this.params.reserveId,
+        this.params.token as `0x${string}`,
+        BigInt(this.params.reserveId),
         this.params.amount,
-        this.params.to,
-        this.params.index,
-        this.params.signature,
+        this.params.to as `0x${string}`,
+        BigInt(this.params.index),
+        this.params.signature as `0x${string}`,
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,

@@ -70,7 +70,7 @@ As such, the directory `src/gql/` hosts the different queries, which are exposed
 The code generation is divided in 2 steps, designed to optimise and improve the robustness of the process:
 
 - `codegen:schema`: generates a global `schema.graphql` file from the hasura instance running at `http://localhost:8888`
-- `codegen:typescript`: generates the TS typings and query typings from the graphql schema & the queries in `stc/gql`
+- `codegen:typescript`: generates the TS typings and query typings from the graphql schema & the queries in `src/gql`
 
 **Only tun `pnpm run codegen:schema` when you update the Hasura API.**
 

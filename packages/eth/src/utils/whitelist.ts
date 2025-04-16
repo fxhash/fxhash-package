@@ -7,7 +7,7 @@ import {
   Qu_GetWhitelists,
   GetTokenPricingsAndReservesQuery,
 } from "@fxhash/gql"
-import { invariant } from "@fxhash/shared"
+import { invariant } from "@fxhash/utils"
 
 /**
  * High level wrapper time for the whitelist for easier use in the UI
@@ -250,10 +250,8 @@ export function getAvailableIndexesAndProofsForUser(
   user: `0x${string}`,
   whitelist: MerkleTreeWhitelist,
   whitelistReserve: NonNullable<
-    NonNullable<
-      GetTokenPricingsAndReservesQuery["onchain"]
-    >["generative_token_by_pk"]
-  >["reserves"][0]
+    NonNullable<GetTokenPricingsAndReservesQuery["onchain"]>["reserve"][0]
+  >
 ): { indexes: number[]; proofs: string[][] } {
   const reducedWhiteList = structuredClone(whitelist.whitelist)
   // Remove consumed slots from whitelist

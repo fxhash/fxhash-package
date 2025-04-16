@@ -1,9 +1,6 @@
-import { char2Bytes } from "@taquito/utils"
 import { AuthToken } from "@/types/auth-token"
 import { AuthRole } from "@/types/roles"
-import { SignOptions } from "jsonwebtoken"
 import jwt from "jsonwebtoken"
-const { sign, verify } = jwt
 
 // local auth public, used to keep in-memory pointer of the key to be f4st
 let authPublic: string | null = null
@@ -35,7 +32,7 @@ export function verifyAuthToken(
   }
 
   // verify the JWT and return it
-  const decoded = verify(token, localAuthPublic, { algorithms: ["RS256"] })
+  const decoded = jwt.verify(token, localAuthPublic, { algorithms: ["RS256"] })
   return decoded as AuthToken
 }
 
@@ -77,7 +74,7 @@ export function verifyAuthRole(token: string, role: AuthRole) {
  */
 export function signAuthToken(
   payload: string | Buffer | Object,
-  options?: SignOptions,
+  options?: jwt.SignOptions,
   jwtPrivateKey?: string
 ): string {
   const authPrivate =
@@ -88,7 +85,7 @@ export function signAuthToken(
       "Cannot find private key: the fxhash auth jwt private key (AUTH_JWT_PRIVATE_KEY) is missing from the environment variables."
     )
   }
-  return sign(payload, authPrivate, {
+  return jwt.sign(payload, authPrivate, {
     algorithm: "RS256",
     expiresIn: "14d",
     ...options,
@@ -96,22 +93,3 @@ export function signAuthToken(
 }
 
 export const VALID_FOR = 24 * 60 * 60 * 1000 // 24 hours
-
-const TEZOS_SIGNING_PREFIX = "0501" // 05 for 'micheline expression', 01 for 'string'.
-
-// 4 bytes (8 chars in the hex-encoding) for the size of the subsequent string
-const encodeSizePrefix = (payload: string): string => {
-  const hex = payload.length.toString(16)
-  return hex.padStart(8, "0")
-}
-
-/**
- * Encodes the sign-in payload into the format expected by the Tezos wallet
- * @param {string} payload - The payload to encode.
- * @return {string} - The encoded payload.
- */
-export function encodeTezosPayload(payload: string): string {
-  const bytes = char2Bytes(payload)
-  const sizePrefix = encodeSizePrefix(payload)
-  return TEZOS_SIGNING_PREFIX + sizePrefix + bytes
-}

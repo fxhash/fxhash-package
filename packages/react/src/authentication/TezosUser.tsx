@@ -1,17 +1,26 @@
-import { useState, createContext, useContext, useEffect, useMemo } from "react"
+import {
+  useState,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react"
 import { TezosWalletManager } from "@fxhash/tez"
 import {
   BlockchainType,
   PendingSigningRequestError,
-  PromiseResult,
   UserRejectedError,
-  failure,
-  invariant,
-  success,
+  WalletConnectionError,
 } from "@fxhash/shared"
+import { type PromiseResult, failure, invariant, success } from "@fxhash/utils"
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import { TezosToolkit, WalletProvider } from "@taquito/taquito"
-import { AbortedBeaconError } from "@airgap/beacon-sdk"
+import {
+  AbortedBeaconError,
+  AccountInfo,
+  BeaconEvent,
+} from "@airgap/beacon-sdk"
 import autonomyIRL from "autonomy-irl-js"
 import {
   IConnexionPayload,
@@ -72,6 +81,11 @@ export function TezosUserProvider({
 }: TezosUserProviderProps) {
   const [context, setContext] = useState<TUserTezosWalletContext>(defaultCtx)
 
+  const contextRef = useRef(context)
+  useEffect(() => {
+    contextRef.current = context
+  }, [context])
+
   /**
    * FOR LIVE MINTING:
    * construct a fake wallet provider using autonomyIRL to be able to reuse
@@ -128,7 +142,7 @@ export function TezosUserProvider({
 
     context.tezosToolkit.setWalletProvider(provider as WalletProvider)
     const walletManager = new TezosWalletManager({
-      wallet: provider as BeaconWallet,
+      wallet: { wallet: provider as WalletProvider },
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
       address: pkh,
@@ -159,9 +173,10 @@ export function TezosUserProvider({
     return success(pkh)
   }
 
+  const isConnectingManually = useRef(false)
   const connect = async (): PromiseResult<
     IConnexionPayload,
-    UserRejectedError | PendingSigningRequestError
+    UserRejectedError | PendingSigningRequestError | WalletConnectionError
   > => {
     invariant(
       context.beaconWallet,
@@ -171,6 +186,7 @@ export function TezosUserProvider({
       context.tezosToolkit,
       "TezosUserProvider: tezosToolkit is not set"
     )
+    isConnectingManually.current = true
 
     try {
       await context.beaconWallet.requestPermissions()
@@ -184,7 +200,7 @@ export function TezosUserProvider({
     const address = await context.beaconWallet.getPKH()
     context.tezosToolkit.setWalletProvider(context.beaconWallet)
     const walletManager = new TezosWalletManager({
-      wallet: context.beaconWallet,
+      wallet: { wallet: context.beaconWallet },
       tezosToolkit: context.tezosToolkit,
       rpcNodes: config.rpcNodes,
       address,
@@ -206,6 +222,8 @@ export function TezosUserProvider({
       walletManager,
     }))
 
+    isConnectingManually.current = false
+
     // success payload for the connection
     return success({
       address,
@@ -224,33 +242,31 @@ export function TezosUserProvider({
    * to the platform and thus register its wallet to the tezos toolkit
    */
   const connectFromStorage = async (
+    address: string,
     beaconWallet: BeaconWallet,
     toolkit: TezosToolkit
-  ): PromiseResult<string | false, UserRejectedError> => {
+  ): PromiseResult<boolean, UserRejectedError> => {
     invariant(beaconWallet, "TezosUserProvider: beaconWallet is not set")
     invariant(toolkit, "TezosUserProvider: tezosToolkit is not set")
 
     try {
-      const pkh = await beaconWallet.getPKH()
-      if (pkh) {
-        toolkit.setWalletProvider(beaconWallet)
+      // connect from storage
+      toolkit.setWalletProvider(beaconWallet)
 
-        const walletManager = new TezosWalletManager({
-          wallet: beaconWallet,
-          tezosToolkit: toolkit,
-          rpcNodes: config.rpcNodes,
-          address: pkh,
-        })
-        setContext({
-          ...context,
-          address: pkh,
-          walletManager,
-        })
+      const walletManager = new TezosWalletManager({
+        wallet: { wallet: beaconWallet },
+        tezosToolkit: toolkit,
+        rpcNodes: config.rpcNodes,
+        address,
+      })
 
-        return success(pkh)
-      } else {
-        return success(false)
-      }
+      setContext({
+        ...context,
+        address,
+        walletManager,
+      })
+
+      return success(true)
     } catch (err) {
       return success(false)
     }
@@ -271,20 +287,35 @@ export function TezosUserProvider({
    * on mount. The beacon wallet can't be initialized server side as it
    * requires access to the local storage.
    */
+  const mounted = useRef(false)
   useEffect(() => {
+    if (mounted.current) return
+    mounted.current = true
     const toolkit = config.tezosToolkit
     const beacon = config.createBeaconWallet()
-    connectFromStorage(beacon, toolkit).then(res => {
-      if (res.isFailure()) {
-        console.log("connect from storage failed", res.error)
+    beacon.client.subscribeToEvent(
+      BeaconEvent.ACTIVE_ACCOUNT_SET,
+      async (account?: AccountInfo) => {
+        // avoid race conditions from manual connection
+        if (isConnectingManually.current) return
+        // if the account is different from the one in the context, disconnect
+        const existing = contextRef.current.address
+        if (existing && account?.address !== existing) {
+          await disconnect()
+          await beacon.client.disconnect()
+          return
+        }
+        // if wallet has an active account, connect it
+        if (account) connectFromStorage(account.address, beacon, toolkit)
+        // initialize the context
+        setContext(context => ({
+          ...context,
+          tezosToolkit: toolkit,
+          beaconWallet: beacon,
+          initialized: true,
+        }))
       }
-      setContext(context => ({
-        ...context,
-        tezosToolkit: toolkit,
-        beaconWallet: beacon,
-        initialized: true,
-      }))
-    })
+    )
   }, [])
 
   const contextValue = useMemo<TUserTezosWalletContext>(

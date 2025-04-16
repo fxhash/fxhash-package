@@ -1,5 +1,8 @@
 import { BASE58_CHARSET } from "./base58"
-import { Blockchain } from "./types/blockchain"
+
+// todo: should maybe merge @fxhash/utils & @fxhash/shared ?
+// or move this into shared ? as it's sort of blockchain-related
+type Blockchain = "ETHEREUM" | "BASE" | "TEZOS"
 
 export function mockEthereumAddress(): string {
   const randomBytes = Array.from(

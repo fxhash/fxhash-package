@@ -1,0 +1,46 @@
+{
+  "name": "@fxhash/sdk",
+  "description": "Bundle of all the fxhash low & medium level packages exported as one.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/client": "workspace:*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/params": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/eslint": "8.44.0",
+    "eslint": "8.57.0",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module"
+}

@@ -1,12 +1,14 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
+import type {
+  ContractAbstraction,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
-import { displayMutez } from "../../utils/units"
 import { TezosContractOperation } from "./ContractOperation"
-import { CollectionOffer, GenerativeToken } from "@fxhash/shared"
+import type { CollectionOffer } from "@fxhash/shared"
 
 export type TCollectionOfferCancelOperationParams = {
-  offer: CollectionOffer
-  token: GenerativeToken
+  offer: Pick<CollectionOffer, "id">
 }
 
 /**
@@ -22,14 +24,12 @@ export class CollectionOfferCancelOperation extends TezosContractOperation<TColl
   }
 
   async call(): Promise<WalletOperation> {
-    return this.contract!.methodsObject.collection_offer_cancel(
-      this.params.offer.id
-    ).send()
+    return this.contract.methodsObject
+      .collection_offer_cancel(this.params.offer.id)
+      .send()
   }
 
   success(): string {
-    return `You have cancelled your collection offer of ${displayMutez(
-      this.params.offer.price
-    )} on ${this.params.token.name}`
+    return "You have cancelled your collection offer"
   }
 }

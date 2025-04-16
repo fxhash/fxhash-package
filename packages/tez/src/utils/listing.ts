@@ -1,26 +1,25 @@
-import { Listing } from "@fxhash/shared"
+import type { Listing } from "@fxhash/shared"
 import { FxhashContracts } from "../types/Contracts"
 
-export function getListingFA2Contract(listing: Listing): string {
+export function getListingFA2Contract(
+  listing: Pick<Listing, "version">
+): string {
   if (listing.version === 0) {
     return FxhashContracts.MARKETPLACE_V1
-  } else {
-    return FxhashContracts.MARKETPLACE_V2
   }
+  return FxhashContracts.MARKETPLACE_V2
 }
 
-export function getListingCancelEp(listing: Listing): string {
+export function getListingCancelEp(listing: Pick<Listing, "version">): string {
   if (listing.version === 0) {
     return "cancel_offer"
-  } else {
-    return "listing_cancel"
   }
+  return "listing_cancel"
 }
 
-export function getListingAcceptEp(listing: Listing): string {
+export function getListingAcceptEp(listing: Pick<Listing, "version">): string {
   if (listing.version === 0) {
     return "collect"
-  } else {
-    return "listing_accept"
   }
+  return "listing_accept"
 }

@@ -1,0 +1,76 @@
+{
+  "name": "@fxhash/text",
+  "description": "Low-level fx(text) implementation.",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "gray-matter": "4.0.3",
+    "hast": "1.0.0",
+    "hast-util-sanitize": "5.0.2",
+    "hast-util-to-jsx-runtime": "2.3.2",
+    "hast-util-whitespace": "3.0.0",
+    "hastscript": "7.2.0",
+    "mdast": "3.0.0",
+    "mdast-util-find-and-replace": "3.0.1",
+    "react-tweet": "3.2.1",
+    "rehype-highlight": "7.0.1",
+    "rehype-katex": "7.0.1",
+    "rehype-react": "8.0.0",
+    "rehype-sanitize": "6.0.0",
+    "rehype-stringify": "10.0.1",
+    "rehype-unwrap-images": "1.0.0",
+    "remark-directive": "3.0.0",
+    "remark-gfm": "4.0.0",
+    "remark-math": "6.0.0",
+    "remark-parse": "11.0.0",
+    "remark-rehype": "11.1.1",
+    "unified": "11.0.5",
+    "unist-builder": "4.0.0",
+    "unist-util-visit": "5.0.0"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/eslint": "8.44.0",
+    "@types/mdast": "4.0.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "eslint": "8.57.0",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./getJsxFromMarkdown": {
+      "types": "./dist/getJsxFromMarkdown.d.ts",
+      "import": "./dist/getJsxFromMarkdown.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test:local": "FXHASH_ENV=local vitest"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

@@ -1,13 +1,16 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
+import type {
+  ContractAbstraction,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { displayMutez } from "../../utils/units"
 import { TezosContractOperation } from "./ContractOperation"
-import { GenerativeToken } from "@fxhash/shared"
 
 export type TCollectionOfferOperationParams = {
-  token: GenerativeToken
+  token: string
   amount: number
-  price: number
+  price: bigint
 }
 
 /**
@@ -23,19 +26,21 @@ export class CollectionOfferOperation extends TezosContractOperation<TCollection
   }
 
   async call(): Promise<WalletOperation> {
-    return this.marketplaceContract!.methodsObject.collection_offer({
-      amount: this.params.amount,
-      collection: this.params.token.id,
-      price: this.params.price,
-    }).send({
-      mutez: true,
-      amount: this.params.price * this.params.amount,
-    })
+    return this.marketplaceContract.methodsObject
+      .collection_offer({
+        amount: this.params.amount,
+        collection: this.params.token,
+        price: this.params.price,
+      })
+      .send({
+        mutez: true,
+        amount: Number(this.params.price * BigInt(this.params.amount)),
+      })
   }
 
   success(): string {
     return `You have made a collection offer of ${displayMutez(
-      this.params.price
-    )} tez on ${this.params.token.name}`
+      Number(this.params.price)
+    )} tez`
   }
 }

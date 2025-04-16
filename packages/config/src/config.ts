@@ -1,118 +1,55 @@
-import { ethMainnetApis, ethTestnetApis, IEthApis } from "./api/eth"
-import { ITezosApis, tezosTestnetApis, tezosMainnetApis } from "./api/tezos"
+import { baseMainnetApis, baseTestnetApis } from "./api/base.js"
+import { ethMainnetApis, ethTestnetApis } from "./api/eth.js"
+import { tezosMainnetApis, tezosTestnetApis } from "./api/tezos.js"
 import {
-  IFxhashApis,
   fxhashDevApis,
   fxhashLocalApis,
   fxhashLocalDockerApis,
   fxhashPrdApis,
-} from "./api/fxhash"
+} from "./api/fxhash.js"
+import { fxAppEnvMetadata } from "./config/metadata.js"
+import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
+import { gpuRenderingConfigDev, gpuRenderingConfigProd } from "./config/gpu.js"
 import {
-  ITezosContracts,
   tezosMainnetContracts,
   tezosTestnetContracts,
-} from "./contracts/tezos"
-import { BlockchainIdentifier, BlockchainIdentifiers } from "./types"
+} from "./contracts/tezos.js"
+import { ethMainnetContracts, ethTestnetContracts } from "./contracts/eth.js"
+import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
+import { getEnv } from "./helpers.js"
 import {
-  ethMainnetContracts,
-  ethTestnetContracts,
-  IEthContracts,
-} from "./contracts/eth"
-import {
-  baseMainnetContracts,
-  baseTestnetContracts,
-  IBaseContracts,
-} from "./contracts/base"
-import { baseMainnetApis, baseTestnetApis, IBaseApis } from "./api/base"
-import { getConfigForEnv } from "./utils"
-import {
-  AlgoliaConfig,
-  algoliaConfigDev,
-  algoliaConfigProd,
-} from "./config/algolia"
+  BlockchainIdentifiers,
+  type IFxhashConfig,
+  type IFxhashConfigSingleEnv,
+  type TBlockchainNetwork,
+  type TEnv,
+} from "./types.js"
+import { AUTH_JWT_PK_DEV, AUTH_JWT_PK_PRD } from "./constants.js"
 
-// the variations supported by the config
-export type TBlockchain = "tez" | "eth" | "base"
-export type TBlockchainNetwork = "testnet" | "mainnet"
-export type TEnv = "dev" | "prd" | "local" | "localDocker"
-export type TEnvName = "development" | "production" | "local" | "localDocker"
-
-export interface IFxhashNetworkConfig {
-  network: string
-  chainId: BlockchainIdentifier
-  ethFeeReceiver: `0x${string}`
-  wertRelayer: string
+/**
+ * ! Beware ! Changing these values will result in current
+ * projects breaking.
+ * https://github.com/fxhash/monorepo/issues/701
+ */
+const tezosFees = {
+  primary: 500,
+  secondary: 250,
 }
 
-export interface IFxhashEnvConfig {
-  envName: TEnvName
-  gtMinPrice: string
-  walletConnectId: string
-  projectLockTime: number
-  referrerShare: number
-  cloudflareTurnstileSiteKey: string
-  cloudflareTurnstileSiteKeyV2: string
-  fxhashPrimaryFee: number
-  fxhashSecondaryFee: number
-  syndicateProjectId: string
-  openTelemetryTarget: string
-  algolia: AlgoliaConfig
+const ethFees = {
+  primary: 1000,
+  secondary: 2500,
 }
 
-type TBlockchainContacts = {
-  [B in TBlockchain]: {
-    tez: ITezosContracts
-    eth: IEthContracts
-    base: IBaseContracts
-  }[B]
+const baseFees = {
+  primary: 1000,
+  secondary: 2500,
 }
+/**
+ * --------------------------------------------------------
+ */
 
-type TBlockchainApis = {
-  [B in TBlockchain]: {
-    tez: ITezosApis
-    eth: IEthApis | null
-    base: IBaseApis | null
-  }[B]
-}
-
-type TNetworkBlockchainConfig = {
-  [B in TBlockchain]: {
-    tez: IFxhashNetworkConfig
-    eth: IFxhashNetworkConfig
-    base: IFxhashNetworkConfig
-  }[B]
-}
-
-export type IFxhashConfig = {
-  networks: {
-    [N in TBlockchainNetwork]: {
-      [B in TBlockchain]: {
-        contracts: TBlockchainContacts[B]
-        config: TNetworkBlockchainConfig[B]
-        apis: TBlockchainApis[B]
-      }
-    }
-  }
-  envs: {
-    [K in TEnv]: {
-      apis: IFxhashApis
-      config: IFxhashEnvConfig
-    }
-  }
-}
-
-export type IFxhashConfigSingleEnv = {
-  [B in TBlockchain]: {
-    contracts: TBlockchainContacts[B]
-    config: TNetworkBlockchainConfig[B]
-    apis: TBlockchainApis[B]
-  }
-} & {
-  apis: IFxhashApis
-  config: IFxhashEnvConfig
-}
-
-export const fxhashConfig: IFxhashConfig = {
+const fxhashConfig: IFxhashConfig = {
   networks: {
     testnet: {
       tez: {
@@ -122,6 +59,9 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.TezosGhostnet,
           ethFeeReceiver: "0x",
           wertRelayer: "tz1T2uyYTshSGrEg13VGJFqsWwbi2H175hZb",
+          fxhashFees: tezosFees,
+          royaltyBasisPoint: 1000,
+          splitBasisPoint: 1000,
         },
         apis: tezosTestnetApis,
       },
@@ -132,6 +72,9 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.EthereumSepolia,
           ethFeeReceiver: "0xe1f04609f7bC45e23a1BA4CD4a76f476755beBA6",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
+          fxhashFees: ethFees,
+          royaltyBasisPoint: 10_000,
+          splitBasisPoint: 1_000_000,
         },
         apis: ethTestnetApis,
       },
@@ -142,6 +85,9 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.BaseSepolia,
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0x2ff0ec69341f43cc462251bd49bb63681adafcb0",
+          fxhashFees: baseFees,
+          royaltyBasisPoint: 10_000,
+          splitBasisPoint: 1_000_000,
         },
         apis: baseTestnetApis,
       },
@@ -154,6 +100,9 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.TezosMainnet,
           ethFeeReceiver: "0x",
           wertRelayer: "tz1KkPS1TWFyDWfQwrdvmTmsCLUNMegDrrSi",
+          fxhashFees: tezosFees,
+          royaltyBasisPoint: 1000,
+          splitBasisPoint: 1000,
         },
         apis: tezosMainnetApis,
       },
@@ -164,6 +113,9 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.EthereumMainnet,
           ethFeeReceiver: "0xed650E40F7bd3812152D4BFA6740662F50e178DF",
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
+          fxhashFees: ethFees,
+          royaltyBasisPoint: 10_000,
+          splitBasisPoint: 1_000_000,
         },
         apis: ethMainnetApis,
       },
@@ -174,6 +126,9 @@ export const fxhashConfig: IFxhashConfig = {
           chainId: BlockchainIdentifiers.BaseMainnet,
           ethFeeReceiver: "0xF70DF285Bc6941b4760BcC041B0cA1cc50E27F8d",
           wertRelayer: "0xc16157e00b1bff1522c6f01246b4fb621da048d0",
+          fxhashFees: baseFees,
+          royaltyBasisPoint: 10_000,
+          splitBasisPoint: 1_000_000,
         },
         apis: baseMainnetApis,
       },
@@ -184,94 +139,118 @@ export const fxhashConfig: IFxhashConfig = {
       apis: fxhashLocalApis,
       config: {
         envName: "local",
+        metadata: fxAppEnvMetadata("local"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
+        awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     localDocker: {
       apis: fxhashLocalDockerApis,
       config: {
         envName: "localDocker",
+        metadata: fxAppEnvMetadata("localDocker"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "1x00000000000000000000AA",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
+        awsS3Region: "us-east-1",
         openTelemetryTarget: "http://localhost:14268",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     dev: {
       apis: fxhashDevApis,
       config: {
         envName: "development",
+        metadata: fxAppEnvMetadata("dev"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVOb6invoeYS4EN",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-w_xThcj91jkA",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "9dd71e90-4605-45f4-94e0-4e533b01081d",
+        awsS3Bucket: "fxh-media-assets-dev-testnet-us-east-1",
+        awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigDev,
+        gpu: gpuRenderingConfigDev,
+        authJwtPublicKey: AUTH_JWT_PK_DEV,
       },
     },
     prd: {
       apis: fxhashPrdApis,
       config: {
         envName: "production",
+        metadata: fxAppEnvMetadata("prd"),
         gtMinPrice: "0",
         walletConnectId: "111994543d1b754bab82c368d0e61ae5",
         projectLockTime: 3600,
         referrerShare: 0,
+        splitsApiKey: "75348d57d6cf60fa4551766c",
         cloudflareTurnstileSiteKey: "0x4AAAAAAAVObp1YeuhbqNKB",
         cloudflareTurnstileSiteKeyV2: "0x4AAAAAAAW-yE4Q6Wdz6SNb",
-        /**
-         * ! Beware ! Changing any of these 3 values will result in current
-         * projects breaking.
-         * https://github.com/fxhash/monorepo/issues/701
-         */
-        fxhashPrimaryFee: 1000,
-        fxhashSecondaryFee: 2500,
         syndicateProjectId: "398ad73d-341c-4861-a038-f0ae1ca58e07",
+        awsS3Bucket: "fxh-media-assets-prd-mainnet-us-east-1",
+        awsS3Region: "us-east-1",
         openTelemetryTarget: "https://tempo.ss.fxhash2.xyz",
         algolia: algoliaConfigProd,
+        gpu: gpuRenderingConfigProd,
+        authJwtPublicKey: AUTH_JWT_PK_PRD,
       },
     },
   },
 }
 
-export const localConfig = getConfigForEnv("local")
-export const localDockerConfig = getConfigForEnv("localDocker")
-export const devConfig = getConfigForEnv("dev")
-export const prdConfig = getConfigForEnv("prd")
+export function getBlockchainNetworkForEnv(env: TEnv): TBlockchainNetwork {
+  return env === "prd" ? "mainnet" : "testnet"
+}
+
+export function getConfigForEnv(env: TEnv): IFxhashConfigSingleEnv {
+  const blockchainNetwork = getBlockchainNetworkForEnv(env)
+  return {
+    ...fxhashConfig.networks[blockchainNetwork],
+    ...fxhashConfig.envs[env],
+  }
+}
+
+export const localConfig: IFxhashConfigSingleEnv = getConfigForEnv("local")
+export const localDockerConfig: IFxhashConfigSingleEnv =
+  getConfigForEnv("localDocker")
+export const devConfig: IFxhashConfigSingleEnv = getConfigForEnv("dev")
+export const prdConfig: IFxhashConfigSingleEnv = getConfigForEnv("prd")
+
+const currentEnv = getEnv()
+let config: IFxhashConfigSingleEnv = getConfigForEnv(currentEnv)
+
+function setConfig(
+  userConfig: Partial<IFxhashConfigSingleEnv>
+): IFxhashConfigSingleEnv {
+  config = {
+    ...config,
+    ...userConfig,
+  }
+  return config
+}
+
+export { fxhashConfig, config, setConfig }

@@ -1,6 +1,6 @@
 // Logic imported from the Lens SDK
 // https://github.com/lens-protocol/lens-sdk/blob/lens-v2/packages/react/src/helpers/tasks.ts
-import { IEquatableError, PromiseResult } from "@fxhash/shared"
+import { IEquatableError, PromiseResult } from "@fxhash/utils"
 import { useCallback, useState } from "react"
 
 /**

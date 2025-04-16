@@ -1,20 +1,25 @@
-import { OpKind, WalletOperation, WalletParamsWithKind } from "@taquito/taquito"
+import {
+  OpKind,
+  type WalletOperation,
+  type WalletParamsWithKind,
+} from "@taquito/taquito"
 import { getGentkLocalID } from "@/utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
-import { displayMutez } from "../../utils/units"
 import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
 import { TezosContractOperation } from "./ContractOperation"
-import { Objkt, Offer } from "@fxhash/shared"
+import type { Objkt, Offer } from "@fxhash/shared"
 
 export type TOfferAcceptOperationParams = {
-  offer: Offer
-  token: Objkt
-  price: number
+  offer: Pick<Offer, "id">
+  token: Pick<Objkt, "id" | "version"> & {
+    activeListing: Pick<Objkt["activeListing"], "id" | "version">
+    owner_id: string
+  }
 }
 
 /**
@@ -27,7 +32,7 @@ export class OfferAcceptOperation extends TezosContractOperation<TOfferAcceptOpe
     const updateOperatorsParams = [
       {
         add_operator: {
-          owner: this.params.token.owner!.id,
+          owner: this.params.token.owner_id,
           operator: FxhashContracts.MARKETPLACE_V2,
           token_id: getGentkLocalID(this.params.token.id),
         },
@@ -88,8 +93,6 @@ export class OfferAcceptOperation extends TezosContractOperation<TOfferAcceptOpe
   }
 
   success(): string {
-    return `You have accepted the offer on ${
-      this.params.token.name
-    } for ${displayMutez(this.params.price)} tez`
+    return "You have accepted the offer"
   }
 }

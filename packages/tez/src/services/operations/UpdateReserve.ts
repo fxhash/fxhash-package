@@ -14,8 +14,9 @@ import { TezosContractOperation } from "./ContractOperation"
 import { GenerativeToken, IReserve, UserType } from "@fxhash/shared"
 
 export type TUpdateReservesOperationParams = {
+  projectId: string
   reserves: IReserve<string>[]
-  token: GenerativeToken
+  collabAddress?: string
 }
 
 /**
@@ -26,9 +27,8 @@ export class TezosUpdateReservesOperation extends TezosContractOperation<TUpdate
   collab = false
 
   async prepare() {
-    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
+      this.params.collabAddress || FxhashContracts.ISSUER
     )
   }
 
@@ -41,7 +41,7 @@ export class TezosUpdateReservesOperation extends TezosContractOperation<TUpdate
     }))
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.projectId,
       reserves: reserves,
     }
 
@@ -60,7 +60,7 @@ export class TezosUpdateReservesOperation extends TezosContractOperation<TUpdate
 
   success(): string {
     return this.collab
-      ? `A request to update the reserves of ${this.params.token.name} was successfully sent`
-      : `The reserves of ${this.params.token.name} was successfully updated`
+      ? `A request to update the reserves of ${this.params.projectId} was successfully sent`
+      : `The reserves of ${this.params.projectId} was successfully updated`
   }
 }

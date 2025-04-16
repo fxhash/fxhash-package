@@ -1563,4 +1563,4 @@ export const FX_TICKETS_ABI = [
     name: "UnregisteredMinter",
     inputs: [],
   },
-]
+] as const

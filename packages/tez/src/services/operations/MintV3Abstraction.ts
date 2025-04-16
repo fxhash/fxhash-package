@@ -7,8 +7,6 @@ import {
   WalletParamsWithKind,
 } from "@taquito/taquito"
 import { FxhashContracts } from "@/types/Contracts"
-import { IReserveConsumption } from "@/types/Reserve"
-import { genTokCurrentPrice } from "@/utils/genTokCurrentPrice"
 import { isTicketOwner, isTicketUsed } from "@/services/Blockchain"
 import { prepareReserveConsumption } from "@/utils/pack/reserves"
 import { TezosContractOperation } from "./ContractOperation"
@@ -16,7 +14,7 @@ import {
   EBuildableParams,
   buildParameters,
 } from "../parameters-builder/BuildParameters"
-import { EReserveMethod, GenerativeToken } from "@fxhash/shared"
+import { EReserveMethod, IReserveConsumption } from "@fxhash/shared"
 
 const isValidTicket = async (
   pkh: string,
@@ -41,7 +39,11 @@ const getFirstTicketAvailable = async (
 export type TMintV3AbstractionOperationParams = {
   // if a ticket ID or array of ticketID is provided, uses the first ticket available; otherwise mints on issuer
   ticketId: number | number[] | null
-  token: GenerativeToken
+  token: {
+    name: string
+    id: string
+  }
+  price: number
   inputBytes: string
   consumeReserve?: IReserveConsumption | null
 }
@@ -162,7 +164,7 @@ export class TezosMintV3AbstractionOperation extends TezosContractOperation<TMin
     return {
       kind: OpKind.TRANSACTION,
       to: FxhashContracts.ISSUER_V3,
-      amount: genTokCurrentPrice(this.params.token),
+      amount: this.params.price,
       mutez: true,
       parameter: {
         entrypoint: "mint",

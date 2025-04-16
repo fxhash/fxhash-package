@@ -3,7 +3,7 @@ import { Objkt } from "./Objkt"
 import { User } from "./User"
 
 export interface Offer {
-  id: number
+  id: string
   version: number
   buyer: User
   objkt: Objkt
@@ -14,7 +14,7 @@ export interface Offer {
 }
 
 export interface CollectionOffer {
-  id: number
+  id: string
   version: number
   buyer: User
   token: GenerativeToken

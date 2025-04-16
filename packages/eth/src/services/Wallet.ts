@@ -3,9 +3,6 @@ import {
   PendingSigningRequestError,
   UserRejectedError,
   WalletManager,
-  PromiseResult,
-  failure,
-  success,
   InsufficientFundsError,
   TransactionRevertedError,
   TransactionReceiptError,
@@ -15,6 +12,7 @@ import {
   WalletConnectionErrorReason,
   WalletConnectionError,
 } from "@fxhash/shared"
+import { PromiseResult, failure, success, invariant } from "@fxhash/utils"
 import {
   Account,
   Chain,
@@ -28,10 +26,16 @@ import {
   createPublicClient,
   http,
   Client,
+  createWalletClient,
+  PrivateKeyAccount,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
-import Safe from "@safe-global/protocol-kit"
-import { getSafeSDK } from "../services/Safe.js"
+import Safe, { EthersAdapter } from "@safe-global/protocol-kit"
+import {
+  getEthersAdapterForSafe,
+  getSafeSDK,
+  getWalletProvider,
+} from "../services/Safe.js"
 import { TEthereumContractOperation } from "./operations/index.js"
 import {
   BrowserProvider,
@@ -39,6 +43,7 @@ import {
   FallbackProvider,
   JsonRpcProvider,
 } from "ethers"
+import { privateKeyToAccount } from "viem/accounts"
 /* Temp remove until package is esm compatible
 import {
   fallback,
@@ -49,7 +54,11 @@ import {
 import { metaMask, walletConnect, coinbaseWallet } from "@wagmi/connectors"
 */
 
-export function clientToSigner(client: Client<Transport, Chain, Account>) {
+export type { PrivateKeyAccount }
+
+export function clientToSigner(
+  client: Client<Transport, Chain, Account>
+): JsonRpcSigner {
   const { account, chain, transport } = client
   const network = {
     chainId: chain.id,
@@ -181,16 +190,20 @@ interface EthereumWalletManagerParams {
   walletClient: WalletClient<Transport, Chain, Account>
   publicClient: PublicClient<Transport, Chain>
   rpcNodes?: string[]
-  signer: JsonRpcSigner
+  signer: JsonRpcSigner | PrivateKeyAccount
+  ethersAdapterForSafe?: EthersAdapter
+  connectorName?: string
 }
 
 export class EthereumWalletManager extends WalletManager {
   private signingInProgress = false
   public walletClient: WalletClient<Transport, Chain, Account>
   public publicClient: PublicClient<Transport, Chain>
-  public signer: JsonRpcSigner
-  public safe: Safe.default | undefined
+  public signer: JsonRpcSigner | PrivateKeyAccount
+  public safe: Safe | undefined
+  public ethersAdapterForSafe?: EthersAdapter
   private rpcNodes: string[]
+  private connectorName?: string
 
   constructor(params: EthereumWalletManagerParams) {
     super(params.address)
@@ -198,6 +211,8 @@ export class EthereumWalletManager extends WalletManager {
     this.publicClient = params.publicClient
     this.rpcNodes = params.rpcNodes || config.eth.apis!.rpcs
     this.signer = params.signer
+    this.ethersAdapterForSafe = params.ethersAdapterForSafe
+    this.connectorName = params.connectorName
   }
 
   isConnected(): boolean {
@@ -206,19 +221,34 @@ export class EthereumWalletManager extends WalletManager {
 
   async signMessageWithWallet(
     message: string
-  ): PromiseResult<string, PendingSigningRequestError | UserRejectedError> {
+  ): PromiseResult<
+    string,
+    PendingSigningRequestError | UserRejectedError | WalletConnectionError
+  > {
     if (this.signingInProgress) {
       return failure(new PendingSigningRequestError())
     }
     this.signingInProgress = true
-
     try {
-      const signature = await this.walletClient.signMessage({
-        message,
-        // ! TODO: to fix
-        // @ts-ignore
-        account: this.address as `0x${string}`,
-      })
+      let signature
+      if (this.ethersAdapterForSafe) {
+        signature = await (this.signer as PrivateKeyAccount).signMessage({
+          message,
+        })
+      } else {
+        // For the coinbase smart wallet, we need to force the signer to be ETHEREUM and not BASE
+        const result = await this.prepareSigner({
+          blockchainType: BlockchainType.ETHEREUM,
+        })
+        if (result.isFailure()) {
+          return failure(result.error)
+        }
+
+        signature = await this.walletClient.signMessage({
+          message,
+          account: this.address as `0x${string}`,
+        })
+      }
       return success(signature)
     } catch (error) {
       if (error instanceof UserRejectedRequestError) {
@@ -244,7 +274,17 @@ export class EthereumWalletManager extends WalletManager {
       return success(safeAddress)
     }
     try {
-      const safeSdk = await getSafeSDK(safeAddress, this.signer)
+      let safeSdk: Safe
+      if (this.ethersAdapterForSafe) {
+        // @ts-expect-error safe package is not properly bundled
+        // To be revisited once we upgrade to a newer version of the safe package
+        safeSdk = await Safe.default.create({
+          ethAdapter: this.ethersAdapterForSafe,
+          safeAddress: safeAddress,
+        })
+      } else {
+        safeSdk = await getSafeSDK(safeAddress, this.signer as JsonRpcSigner)
+      }
       this.safe = safeSdk
       return success(safeAddress)
     } catch (error: any) {
@@ -301,7 +341,10 @@ export class EthereumWalletManager extends WalletManager {
         if (
           error instanceof UserRejectedRequestError ||
           // This can happen for Safe transactions
-          error instanceof UserRejectedError
+          error instanceof UserRejectedError ||
+          // In some cases we see "generic" ContractFunctionExecutionError
+          // where only the message indiciates the reason
+          error.shortMessage === "User rejected the request."
         ) {
           return failure(new UserRejectedError())
         } else if (error instanceof InsufficientFundsError) {
@@ -394,6 +437,10 @@ export class EthereumWalletManager extends WalletManager {
     if (chain.id === 1) {
       return
     }
+    // Coinbase smart wallet doesn't support adding chains
+    if (this.connectorName === "coinbaseWalletSDK") {
+      return
+    }
     try {
       await this.walletClient.addChain({ chain })
     } catch (error) {
@@ -412,6 +459,8 @@ export class EthereumWalletManager extends WalletManager {
       })
       return success()
     } catch (error) {
+      console.log("error when switching chains:")
+      console.log(error)
       // Do nothing as we return an error below
     }
     return failure(
@@ -445,5 +494,26 @@ export class EthereumWalletManager extends WalletManager {
     //     transport: http(rpcUrls[0]),
     //   })
     //   this.walletClient = client
+  }
+
+  static async fromPrivateKey(privateKey: `0x${string}`) {
+    const chain = chains[BlockchainType.ETHEREUM]
+    const transport = http(config.eth.apis.rpcs[0])
+    const publicClient = createPublicClient({
+      chain,
+      transport,
+    })
+    const account = privateKeyToAccount(privateKey)
+    const walletClient = createWalletClient({ account, chain, transport })
+    invariant(walletClient, "walletClient is not set")
+    return new EthereumWalletManager({
+      publicClient,
+      walletClient,
+      address: account.address,
+      signer: account,
+      ethersAdapterForSafe: getEthersAdapterForSafe(
+        getWalletProvider(privateKey, config.eth.apis.rpcs[0])
+      ),
+    })
   }
 }

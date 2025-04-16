@@ -1,63 +1,55 @@
 {
   "name": "@fxhash/tez",
-  "private": true,
   "version": "0.0.9",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "test": "vitest",
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "dependencies": {
     "@apollo/client": "3.8.1",
-    "@fxhash/auth": "workspace:*",
     "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@taquito/michel-codec": "17.3.1",
     "@taquito/michelson-encoder": "17.3.1",
     "@taquito/rpc": "17.3.1",
     "@taquito/utils": "17.3.1"
   },
-  "peerDependencies": {
-    "@airgap/beacon-sdk": "4.0.10",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@taquito/beacon-wallet": "17.3.1",
-    "@taquito/taquito": "17.3.1",
-    "onchfs": "workspace:*",
-    "@taquito/signer": "17.3.1"
-  },
   "devDependencies": {
-    "@babel/core": "7.23.9",
-    "@airgap/beacon-sdk": "4.0.10",
+    "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@taquito/beacon-wallet": "17.3.1",
-    "@taquito/taquito": "17.3.1",
-    "@taquito/signer": "17.3.1",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/signer": "20.1.2",
+    "@taquito/taquito": "20.1.2",
     "onchfs": "workspace:*",
-    "tslib": "2.6.0",
-    "tsup": "8.0.1",
-    "typescript": "5.3.3",
-    "vitest": "0.34.6"
-  }
+    "tslib": "2.6.2",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2",
+    "vitest": "3.1.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@airgap/beacon-sdk": "4.3.1",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/signer": "20.1.2",
+    "@taquito/taquito": "20.1.2",
+    "onchfs": "workspace:*"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest"
+  },
+  "type": "module"
 }

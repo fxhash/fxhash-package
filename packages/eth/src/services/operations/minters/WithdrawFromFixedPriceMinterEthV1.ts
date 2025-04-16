@@ -3,7 +3,7 @@ import { FIXED_PRICE_MINTER_ABI } from "@/abi/FixedPriceMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
@@ -20,11 +20,14 @@ export class WithdrawFromFixedPriceMinterEthV1Operation extends EthereumContract
   async prepare() {}
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof FIXED_PRICE_MINTER_ABI,
+      "withdraw"
+    > = {
       address: currentConfig.contracts.fixed_price_minter_v1,
       abi: FIXED_PRICE_MINTER_ABI,
       functionName: "withdraw",
-      args: [this.params.token],
+      args: [this.params.token as `0x${string}`],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }

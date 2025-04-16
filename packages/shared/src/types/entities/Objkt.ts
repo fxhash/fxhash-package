@@ -11,7 +11,7 @@ import { Redeemable } from "./Redeemable"
 
 export interface Objkt {
   id: string
-  version: 0 | 1
+  version: number
   issuer: GenerativeToken
   owner?: User | null
   minter?: User | null
@@ -32,7 +32,7 @@ export interface Objkt {
   royaltiesSplit: Split[]
   activeListing?: Listing | null
   offers?: Offer[]
-  actions: Action[]
+  actions?: Action[]
   createdAt: string
   updatedAt: string
   assignedAt: string | null

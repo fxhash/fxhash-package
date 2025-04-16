@@ -1,5 +1,5 @@
 import { EthereumContractOperation } from "../contractOperation.js"
-import { ReservoirListingParams } from "@/services/reservoir/types.js"
+import type { ReservoirListingParams } from "@/services/reservoir/types.js"
 import {
   RESERVOIR_ORDERBOOK,
   RESERVOIR_ORDER_KIND,
@@ -11,7 +11,7 @@ export type TListTokenEthV1OperationParams = {
   orders: {
     token: string
     tokenId: string
-    price: string
+    price: bigint
     expiration?: string
     orderIdToReplace?: string
   }[]
@@ -24,7 +24,8 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
   async call(): Promise<{ type: TransactionType.OFFCHAIN; hash: string }> {
-    const args: ReservoirListingParams = this.params.orders.map(order => {
+    const args: ReservoirListingParams = []
+    for (const order of this.params.orders) {
       let options = {}
       if (order.orderIdToReplace) {
         options = {
@@ -40,16 +41,16 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
           },
         }
       }
-      return {
+      args.push({
         token: `${order.token}:${order.tokenId}`,
-        weiPrice: order.price,
+        weiPrice: order.price.toString(),
         orderbook: RESERVOIR_ORDERBOOK,
         orderKind: RESERVOIR_ORDER_KIND,
         options: options,
         automatedRoyalties: true,
         expirationTime: order.expiration ? order.expiration : undefined,
-      }
-    })
+      })
+    }
     const transactionHash = await listToken(args, this.manager, this.chain)
     return {
       type: TransactionType.OFFCHAIN,
@@ -58,6 +59,6 @@ export class ListTokenEthV1Operation extends EthereumContractOperation<TListToke
   }
 
   success(): string {
-    return `You listed successfully`
+    return "your listing has been created!"
   }
 }

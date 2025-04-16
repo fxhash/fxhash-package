@@ -1,9 +1,9 @@
+import { dutchAuctionV2Abi } from "@/__generated__/wagmi.js"
 import { EthereumContractOperation } from "../contractOperation.js"
-import { DUTCH_AUCTION_MINTER_ABI } from "@/abi/DutchAuctionMinter.js"
 import { getConfigForChain, getCurrentChain } from "@/services/Wallet.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 
@@ -24,7 +24,7 @@ export type TMintDAEthV1OperationParams = {
   price: bigint
   amount: bigint
   reserveId: number
-  to: string | null
+  to: string
 }
 
 /**
@@ -39,15 +39,18 @@ export class MintDAEthV1Operation extends EthereumContractOperation<TMintDAEthV1
   }
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const currentConfig = getConfigForChain(this.chain)
-    const args: SimulateAndExecuteContractRequest = {
+    const args: SimulateAndExecuteContractRequest<
+      typeof dutchAuctionV2Abi,
+      "buy"
+    > = {
       address: currentConfig.contracts.dutch_auction_minter_v1,
-      abi: DUTCH_AUCTION_MINTER_ABI,
+      abi: dutchAuctionV2Abi,
       functionName: "buy",
       args: [
-        this.params.token,
-        this.params.reserveId,
+        this.params.token as `0x${string}`,
+        BigInt(this.params.reserveId),
         this.params.amount,
-        this.params.to,
+        this.params.to as `0x${string}`,
       ],
       account: this.manager.address as `0x${string}`,
       value: this.params.price,

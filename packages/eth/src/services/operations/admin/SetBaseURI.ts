@@ -3,9 +3,9 @@ import { encodeFunctionData, getAddress } from "viem"
 import { FX_GEN_ART_721_ABI } from "@/abi/FxGenArt721.js"
 import {
   simulateAndExecuteContract,
-  SimulateAndExecuteContractRequest,
+  type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types"
 import { proposeSafeTransaction } from "@/services/Safe.js"
 import { getHashFromIPFSCID } from "@/utils/index.js"
 import { TransactionType } from "@fxhash/shared"
@@ -34,7 +34,7 @@ function getSafeTxData(
     data: encodeFunctionData({
       abi: FX_GEN_ART_721_ABI,
       functionName: "setBaseURI",
-      args: [params.baseURI],
+      args: [params.baseURI as `0x${string}`],
     }),
     value: "0",
   }
@@ -60,23 +60,23 @@ export class SetBaseURIEthV1Operation extends EthereumContractOperation<TSetBase
         type: TransactionType.OFFCHAIN,
         hash: transactionHash,
       }
-    } else {
-      const args: SimulateAndExecuteContractRequest = {
-        address: this.params.token,
-        abi: FX_GEN_ART_721_ABI,
-        functionName: "setBaseURI",
-        args: [parsedCID],
-        account: this.manager.address as `0x${string}`,
-        chain: getCurrentChain(this.chain),
-      }
-      const transactionHash = await simulateAndExecuteContract(
-        this.manager,
-        args
-      )
-      return {
-        type: TransactionType.ONCHAIN,
-        hash: transactionHash,
-      }
+    }
+
+    const args: SimulateAndExecuteContractRequest<
+      typeof FX_GEN_ART_721_ABI,
+      "setBaseURI"
+    > = {
+      address: this.params.token,
+      abi: FX_GEN_ART_721_ABI,
+      functionName: "setBaseURI",
+      args: [parsedCID as `0x${string}`],
+      account: this.manager.address as `0x${string}`,
+      chain: getCurrentChain(this.chain),
+    }
+    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    return {
+      type: TransactionType.ONCHAIN,
+      hash: transactionHash,
     }
   }
 
