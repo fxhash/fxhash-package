@@ -27,6 +27,7 @@ export type FxhashSdkPrivate = {
   _propagateEvent: (name: FxEventId, data: any) => Promise<any[][]>
   _updateInputBytes: () => void
   _emitParams: (data: FxEmitData) => void
+  _fxRandsByDepth: ResettableRandFunction[]
 }
 type _Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
@@ -35,9 +36,12 @@ interface UserDefinedParams
 
 export type FxHashApi = FxhashSdkPrivate & {
   hash: string
+  hashList: string[]
+  depth: number
   minter: string
   iteration: number
   rand: ResettableRandFunction
+  randAt: (depth: number) => ResettableRandFunction
   randminter: ResettableRandFunction
   context: FxHashExecutionContext
   inputBytes?: string
@@ -60,10 +64,20 @@ export type FxHashApi = FxhashSdkPrivate & {
   getRandomParam: (id: string) => FxParamValue<FxParamType>
   on: (event: FxEventId, handler: FxOnEventHandler, onDone: FxOnDone) => void
   emit: (event: FxEventId, data: FxEmitData) => void
+  genomes: FxGenomeDefinition
+  defineGenome: (
+    name: string,
+    genome: FxGenome<FxFeatureValue>
+  ) => FxFeatureValue
 }
 
 export type FxFeatureValue = string | number | boolean
 export type FxFeatures = Record<string, FxFeatureValue>
+
+export type FxGenome<FxFeatureValue> = (depth: number) => FxFeatureValue
+export type FxGenomeDefinition = {
+  [featureName: string]: FxFeatureValue
+}
 
 export type FxEventId = "params:update"
 export type FxEmitData = Record<string, FxParamValue<FxParamType>>

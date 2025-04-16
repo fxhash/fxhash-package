@@ -15,15 +15,19 @@ type FxhashSdkPrivate = {
     _propagateEvent: (name: FxEventId, data: any) => Promise<any[][]>;
     _updateInputBytes: () => void;
     _emitParams: (data: FxEmitData) => void;
+    _fxRandsByDepth: ResettableRandFunction[];
 };
 type _Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 interface UserDefinedParams extends _Optional<FxParamDefinition<FxParamType>, "value" | "options"> {
 }
 type FxHashApi = FxhashSdkPrivate & {
     hash: string;
+    hashList: string[];
+    depth: number;
     minter: string;
     iteration: number;
     rand: ResettableRandFunction;
+    randAt: (depth: number) => ResettableRandFunction;
     randminter: ResettableRandFunction;
     context: FxHashExecutionContext;
     inputBytes?: string;
@@ -42,9 +46,15 @@ type FxHashApi = FxhashSdkPrivate & {
     getRandomParam: (id: string) => FxParamValue<FxParamType>;
     on: (event: FxEventId, handler: FxOnEventHandler, onDone: FxOnDone) => void;
     emit: (event: FxEventId, data: FxEmitData) => void;
+    genomes: FxGenomeDefinition;
+    defineGenome: (name: string, genome: FxGenome<FxFeatureValue>) => FxFeatureValue;
 };
 type FxFeatureValue = string | number | boolean;
 type FxFeatures = Record<string, FxFeatureValue>;
+type FxGenome<FxFeatureValue> = (depth: number) => FxFeatureValue;
+type FxGenomeDefinition = {
+    [featureName: string]: FxFeatureValue;
+};
 type FxEventId = "params:update";
 type FxEmitData = Record<string, FxParamValue<FxParamType>>;
 type FxEmitFunction = (event: FxEventId, data: FxEmitData) => void;
@@ -63,4 +73,4 @@ declare global {
     }
 }
 
-export type { FxEmitData, FxEmitFunction, FxEventId, FxFeatureValue, FxFeatures, FxHashApi, FxHashExecutionContext, FxInitOptions, FxOnDone, FxOnEventHandler, FxhashSdkPrivate, SetFeaturesOptions, SetParamsOptions };
+export type { FxEmitData, FxEmitFunction, FxEventId, FxFeatureValue, FxFeatures, FxGenome, FxGenomeDefinition, FxHashApi, FxHashExecutionContext, FxInitOptions, FxOnDone, FxOnEventHandler, FxhashSdkPrivate, SetFeaturesOptions, SetParamsOptions };

@@ -38,6 +38,13 @@ export function createFxhashSdk(window: Window): FxHashApi {
   const searchParams = window.location.hash
   const initialInputBytes = searchParams?.replace("#0x", "")
 
+  // inheritence
+  // TODO: retrieve parent hashes from window.location.hash
+  const parentHashes = [] as string[]
+  const hash_list = [...parentHashes, fxhash]
+
+  const fxRandsByDepth = [...parentHashes.map(h => createFxRandom(h)), fxrand]
+
   const $fx: FxHashApi = {
     _version: version,
     _processors: ParameterProcessors,
@@ -117,8 +124,14 @@ export function createFxhashSdk(window: Window): FxHashApi {
         })
       })
     },
+    _fxRandsByDepth: fxRandsByDepth,
     hash: fxhash,
+    hashList: hash_list,
+    depth: hash_list.length - 1,
     rand: fxrand,
+    randAt: function (depth: number) {
+      return this._fxRandsByDepth[depth]
+    },
     minter: fxminter,
     randminter: fxrandminter,
     iteration: Number(search.get("fxiteration")) || 1,
@@ -223,6 +236,13 @@ export function createFxhashSdk(window: Window): FxHashApi {
           console.log("$fx.emit called with unknown id:", id)
           break
       }
+    },
+    genomes: {},
+    defineGenome: function (name: string, evolve) {
+      const val = evolve(this.depth)
+      // TODO: add genomes to list of features?
+      this.genomes[name] = val
+      return val
     },
   }
   const resetFxRand: () => void = () => {
