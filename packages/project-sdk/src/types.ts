@@ -19,12 +19,19 @@ export type FxhashSdkPrivate = {
   _params?: FxParamDefinition<FxParamType>[]
   _rawValues: FxParamsRaw
   _paramValues: FxParamsTransformed
-  _receiveUpdateParams: (data: FxEmitData, onDone?: FxOnDone) => Promise<void>
+  _receiveUpdateParams: (
+    data: FxEmitData,
+    onDefault?: () => void
+  ) => Promise<void>
   _listeners: Record<FxEventId | string, Array<[FxOnEventHandler, FxOnDone?]>>
   _propagateEvent: (name: FxEventId, data: any) => Promise<any[][]>
   _updateInputBytes: () => void
   _emitParams: (data: FxEmitData) => void
 }
+type _Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+interface UserDefinedParams
+  extends _Optional<FxParamDefinition<FxParamType>, "value" | "options"> {}
 
 export type FxHashApi = FxhashSdkPrivate & {
   hash: string
@@ -39,8 +46,12 @@ export type FxHashApi = FxhashSdkPrivate & {
   features: (features: FxFeatures) => void
   getFeature: (id: string) => FxFeatureValue
   getFeatures: () => FxFeatures
-  stringifyParams: (definitions: FxParamDefinition<FxParamType>[]) => string
-  params: (paramsDefinitions: FxParamDefinition<FxParamType>[]) => void
+  stringifyParams: (
+    definitions:
+      | FxParamDefinition<FxParamType>[]
+      | Record<string, FxParamValue<FxParamType>>
+  ) => string
+  params: (paramsDefinitions: UserDefinedParams[]) => void
   getDefinitions: () => FxParamDefinition<FxParamType>[]
   getParam: (id: string) => FxParamTransformationTypeMap[FxParamType]
   getParams: () => FxParamsTransformed
@@ -57,8 +68,8 @@ export type FxFeatures = Record<string, FxFeatureValue>
 export type FxEventId = "params:update"
 export type FxEmitData = Record<string, FxParamValue<FxParamType>>
 export type FxEmitFunction = (event: FxEventId, data: FxEmitData) => void
-export type FxOnEventHandler = (data: FxEmitData) => Promise<void>
-export type FxOnDone = () => Promise<void>
+export type FxOnEventHandler = (data: FxEmitData) => Promise<boolean> | boolean
+export type FxOnDone = (optInDefault: boolean, newRawValues: FxEmitData) => void
 
 export interface FxInitOptions {
   params: FxParamDefinition<FxParamType>[]
@@ -69,6 +80,7 @@ export type SetFeaturesOptions = Pick<FxInitOptions, "features">
 export type SetParamsOptions = Pick<FxInitOptions, "params">
 
 declare global {
+  const $fx: typeof window.$fx
   interface Window {
     $fx: FxHashApi
   }

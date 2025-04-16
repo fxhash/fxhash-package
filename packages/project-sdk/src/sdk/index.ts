@@ -128,7 +128,12 @@ export function createFxhashSdk(window: Window): FxHashApi {
     isPreview: isFxpreview,
     inputBytes: undefined,
     params: function (definition) {
-      this._params = definition.map(def => ({ ...def, version: this._version }))
+      this._params = definition.map(def => ({
+        ...def,
+        version: this._version,
+        value: def.default,
+        options: def.options || {},
+      }))
       this._rawValues = deserializeParams(initialInputBytes, this._params, {
         withTransform: true,
         transformType: "constrain",
