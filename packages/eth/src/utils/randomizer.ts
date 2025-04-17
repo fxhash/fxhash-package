@@ -1,4 +1,4 @@
-import { FX_GEN_ART_721_ABI } from "@/abi/index.js"
+import { FX_GEN_ART_721_ABI, FX_TOKEN_LAUNCHPAD_ABI } from "@/abi/index.js"
 import { Interface, type TransactionReceipt } from "ethers"
 import { Hash } from "viem"
 
@@ -33,4 +33,23 @@ export function getOutputsFromMintTransaction(
     }
   }
   return Array.from(outputs.values())
+}
+
+const tokenLaunchpadInterface = new Interface(FX_TOKEN_LAUNCHPAD_ABI)
+
+export function getCreatorTokenFromLaunchTransaction(
+  transactionReceipt: Readonly<TransactionReceipt>
+): string {
+  console.log(transactionReceipt)
+  for (const log of transactionReceipt.logs) {
+    const desc = tokenLaunchpadInterface.parseLog({
+      topics: log.topics as string[],
+      data: log.data,
+    })
+    if (desc?.name === "Launched") {
+      const id = desc.args.getValue("creatorToken")
+      return id
+    }
+  }
+  throw new Error("failed to find launch event")
 }
