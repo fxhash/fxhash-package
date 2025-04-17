@@ -13,8 +13,6 @@ export type TTokenLaunchpadCreateProjectAndLaunchTokenEthOperationParams = {
   name: string
   // The symbol of the project
   symbol: string
-  // The creator token address
-  creatorToken: `0x${string}`
   // The initial owner address
   initialOwner: `0x${string}`
   // The base URI for the project
