@@ -41,7 +41,6 @@ const tokenLaunchpadInterface = new Interface(FX_TOKEN_LAUNCHPAD_ABI)
 export function getCreatorTokenFromLaunchTransaction(
   transactionReceipt: Readonly<TransactionReceipt>
 ): string {
-  console.log(transactionReceipt)
   for (const log of transactionReceipt.logs) {
     const desc = tokenLaunchpadInterface.parseLog({
       topics: log.topics as string[],
