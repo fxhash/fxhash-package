@@ -17,7 +17,7 @@
     "@wagmi/connectors": "5.7.12",
     "@wagmi/core": "2.16.7",
     "esbuild-css-modules-plugin": "2.7.1",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "typescript": "5.8.2",
     "viem": "2.26.2"
   },
@@ -35,8 +35,8 @@
     "@fxhash/sdk": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
     "@react-oauth/google": "0.12.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-otp-input": "3.1.1",
     "solid-js": "^1.9.3"
   },

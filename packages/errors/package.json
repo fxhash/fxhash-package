@@ -11,9 +11,9 @@
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tslib": "2.6.2",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "unplugin-isolated-decl": "0.6.4"
+    "unplugin-isolated-decl": "0.13.6"
   },
   "exports": {
     ".": {
