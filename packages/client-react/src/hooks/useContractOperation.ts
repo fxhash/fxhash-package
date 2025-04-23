@@ -166,14 +166,16 @@ type TError =
     >
   | RichError
 
+export interface ContractOperationSuccess {
+  hash: string
+  // TODO: fix this any
+  operation: any
+}
+
 export function useContractOperation<
   TBlockchain extends BlockchainType,
   TOperations extends TBlockchainContractOperation,
-  TData = {
-    hash: string
-    // TODO: fix this any
-    operation: any
-  },
+  TData = ContractOperationSuccess,
   TInput = TOperations[TBlockchain] extends TTezosContractOperation<infer P>
     ? P
     : TOperations[TBlockchain] extends TEthereumContractOperation<infer P>
@@ -216,7 +218,7 @@ export function useContractOperation<
 } {
   const tezosWalletManager = useTezosWallet()
   const ethereumWalletManager = useEvmWallet()
-  const { client } = useClient()
+  const { client, onOperationSuccess } = useClient()
 
   const [state, setState] = useState<DeferredTaskState<TData, TError>>({
     status: ContractOperationStatus.NONE,
@@ -366,14 +368,16 @@ export function useContractOperation<
           }
         }
 
+        const data = {
+          ...sendTransactionResult.value,
+          operation: confirmationResult?.value,
+        } as TData
+        onOperationSuccess?.(data as ContractOperationSuccess)
         setState({
           status: ContractOperationStatus.INJECTED,
           called: true,
           loading: false,
-          data: {
-            ...sendTransactionResult.value,
-            operation: confirmationResult?.value,
-          } as TData,
+          data,
           error: undefined,
           params,
           txHash: sendTransactionResult.value.hash,

@@ -28,6 +28,7 @@ import {
 } from "@/_interfaces.js"
 import { isProviderCustomConfigValid } from "@/utils/validate.js"
 import { Wrapper } from "./Wrapper.js"
+import { ContractOperationSuccess } from "@/hooks/useContractOperation.js"
 
 interface ConnectKitDriverProps {
   openConnectKitModalRef: React.MutableRefObject<(() => void) | null>
@@ -75,6 +76,7 @@ export type ClientBasicState = {
   refetchAccount: () => Promise<GetSingleUserAccountResult> | null
   managers: WalletManagersMap
   userError: UserSourceEventsTypemap["error"]["error"] | null
+  onOperationSuccess?: (data: ContractOperationSuccess) => void
 }
 
 const defaultActiveManagers = {
@@ -89,6 +91,7 @@ const defaultContext: ClientBasicState = {
   refetchAccount: () => null,
   managers: defaultActiveManagers,
   userError: null,
+  onOperationSuccess: undefined,
 }
 
 export const ClientPlugnPlayContext = createContext(defaultContext)
@@ -160,6 +163,7 @@ export function ClientPlugnPlayProvider({
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
+    onOperationSuccess: config.onOperationSuccess,
     account: client.source.getAccount(),
     config: _config,
     client,

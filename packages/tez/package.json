@@ -21,9 +21,9 @@
     "@taquito/taquito": "20.1.2",
     "onchfs": "workspace:*",
     "tslib": "2.6.2",
-    "tsup": "8.3.6",
+    "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.0.4"
+    "vitest": "3.1.1"
   },
   "exports": {
     ".": {
@@ -39,7 +39,7 @@
     "@airgap/beacon-sdk": "4.3.1",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
-    "@taquito/beacon-wallet": "20.1.2.",
+    "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
     "onchfs": "workspace:*"
