@@ -901,6 +901,8 @@ export const projectFactoryAbi = [
       { name: "_initialOwner", internalType: "address", type: "address" },
       { name: "_initialAdmin", internalType: "address", type: "address" },
       { name: "_initialRenderer", internalType: "address", type: "address" },
+      { name: "_tokenLaunchpad", internalType: "address", type: "address" },
+      { name: "_fxToken", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
@@ -926,6 +928,32 @@ export const projectFactoryAbi = [
     name: "createProject",
     outputs: [
       { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_name", internalType: "string", type: "string" },
+      { name: "_symbol", internalType: "string", type: "string" },
+      { name: "_initialOwner", internalType: "address", type: "address" },
+      { name: "_baseURI", internalType: "string", type: "string" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_fxAmount", internalType: "uint256", type: "uint256" },
+    ],
+    name: "createProjectAndLaunchToken",
+    outputs: [
+      { name: "projectToken", internalType: "address", type: "address" },
+      { name: "creatorToken", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
@@ -1002,6 +1030,22 @@ export const projectFactoryAbi = [
     name: "setInitialRenderer",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_tokenLaunchpad", internalType: "address", type: "address" },
+    ],
+    name: "setTokenLaunchpad",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "tokenLaunchpad",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -1124,6 +1168,25 @@ export const projectFactoryAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "oldTokenLaunchpad",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newTokenLaunchpad",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "TokenLaunchpadUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "account",
         internalType: "address",
         type: "address",
@@ -1145,7 +1208,13 @@ export const projectFactoryAbi = [
     name: "OwnableUnauthorizedAccount",
   },
   { type: "error", inputs: [], name: "ProjectFactory__NotCreator" },
+  { type: "error", inputs: [], name: "ProjectFactory__TokenLaunchpadNotSet" },
   { type: "error", inputs: [], name: "ProjectFactory__ZeroAddress" },
+  {
+    type: "error",
+    inputs: [{ name: "token", internalType: "address", type: "address" }],
+    name: "SafeERC20FailedOperation",
+  },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2508,6 +2577,13 @@ export const tokenLaunchpadAbi = [
   {
     type: "function",
     inputs: [],
+    name: "DEFAULT_ADMIN_ROLE",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
     name: "INITIAL_FEE_PERCENTAGE",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
@@ -2545,6 +2621,13 @@ export const tokenLaunchpadAbi = [
     inputs: [],
     name: "INITIAL_SUPPLY",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "LAUNCHER_ROLE",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
     stateMutability: "view",
   },
   {
@@ -2655,6 +2738,24 @@ export const tokenLaunchpadAbi = [
     inputs: [
       { name: "_creatorToken", internalType: "address", type: "address" },
     ],
+    name: "getGraduatedToken",
+    outputs: [
+      { name: "graduatedToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "role", internalType: "bytes32", type: "bytes32" }],
+    name: "getRoleAdmin",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creatorToken", internalType: "address", type: "address" },
+    ],
     name: "getTokenReserves",
     outputs: [
       { name: "", internalType: "uint256", type: "uint256" },
@@ -2701,6 +2802,33 @@ export const tokenLaunchpadAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "_launcher", internalType: "address", type: "address" }],
+    name: "grantLauncherRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32" },
+      { name: "account", internalType: "address", type: "address" },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32" },
+      { name: "account", internalType: "address", type: "address" },
+    ],
+    name: "hasRole",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "initialSupply",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
@@ -2732,7 +2860,23 @@ export const tokenLaunchpadAbi = [
       { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
     ],
     name: "launch",
-    outputs: [],
+    outputs: [
+      { name: "creatorToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_creator", internalType: "address", type: "address" },
+      { name: "_name", internalType: "string", type: "string" },
+      { name: "_symbol", internalType: "string", type: "string" },
+      { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
+    ],
+    name: "launchFor",
+    outputs: [
+      { name: "creatorToken", internalType: "address", type: "address" },
+    ],
     stateMutability: "nonpayable",
   },
   {
@@ -2834,6 +2978,33 @@ export const tokenLaunchpadAbi = [
   {
     type: "function",
     inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32" },
+      { name: "callerConfirmation", internalType: "address", type: "address" },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_launcher", internalType: "address", type: "address" }],
+    name: "revokeLauncherRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32" },
+      { name: "account", internalType: "address", type: "address" },
+    ],
+    name: "revokeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "_creatorToken", internalType: "address", type: "address" },
       { name: "_amountIn", internalType: "uint256", type: "uint256" },
     ],
@@ -2893,6 +3064,13 @@ export const tokenLaunchpadAbi = [
     name: "setMinSeedAmount",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "interfaceId", internalType: "bytes4", type: "bytes4" }],
+    name: "supportsInterface",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -3301,6 +3479,66 @@ export const tokenLaunchpadAbi = [
     type: "event",
     anonymous: false,
     inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32", indexed: true },
+      {
+        name: "previousAdminRole",
+        internalType: "bytes32",
+        type: "bytes32",
+        indexed: true,
+      },
+      {
+        name: "newAdminRole",
+        internalType: "bytes32",
+        type: "bytes32",
+        indexed: true,
+      },
+    ],
+    name: "RoleAdminChanged",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32", indexed: true },
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "sender",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "RoleGranted",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "role", internalType: "bytes32", type: "bytes32", indexed: true },
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "sender",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "RoleRevoked",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
       {
         name: "creatorToken",
         internalType: "address",
@@ -3361,6 +3599,15 @@ export const tokenLaunchpadAbi = [
     ],
     name: "UserCreated",
   },
+  { type: "error", inputs: [], name: "AccessControlBadConfirmation" },
+  {
+    type: "error",
+    inputs: [
+      { name: "account", internalType: "address", type: "address" },
+      { name: "neededRole", internalType: "bytes32", type: "bytes32" },
+    ],
+    name: "AccessControlUnauthorizedAccount",
+  },
   { type: "error", inputs: [], name: "EnforcedPause" },
   { type: "error", inputs: [], name: "ExpectedPause" },
   {
@@ -3381,6 +3628,7 @@ export const tokenLaunchpadAbi = [
   { type: "error", inputs: [], name: "TokenLaunchpad__CalculationOverflow" },
   { type: "error", inputs: [], name: "TokenLaunchpad__FeeExceedsMaximum" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InsufficientLiquidity" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InvalidCreatorAddress" },
   {
     type: "error",
     inputs: [],
