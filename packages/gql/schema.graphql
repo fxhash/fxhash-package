@@ -113,11 +113,15 @@ type Account {
     where: Project_bool_exp
   ): [Project!]!
   id: uuid!
+  isArtist: Boolean!
+  isModerated: Boolean!
+  isVerified: Boolean!
 
   """
   An object relationship
   """
   mainWallet: Wallet!
+  mainWalletAddress: String!
 
   """
   An object relationship
@@ -586,7 +590,11 @@ input Account_bool_exp {
   collaboratedProjects: ProjectCollaborator_bool_exp
   curatedProjects: Project_bool_exp
   id: uuid_comparison_exp
+  isArtist: Boolean_comparison_exp
+  isModerated: Boolean_comparison_exp
+  isVerified: Boolean_comparison_exp
   mainWallet: Wallet_bool_exp
+  mainWalletAddress: String_comparison_exp
   profile: Profile_bool_exp
   roles: AccountsRoles_bool_exp
   status: AccountStatus_comparison_exp
@@ -600,6 +608,7 @@ aggregate max on columns
 """
 type Account_max_fields {
   id: uuid
+  mainWalletAddress: String
   status: AccountStatus
   username: String
 }
@@ -609,6 +618,7 @@ aggregate min on columns
 """
 type Account_min_fields {
   id: uuid
+  mainWalletAddress: String
   status: AccountStatus
   username: String
 }
@@ -636,7 +646,11 @@ input Account_order_by {
   collaboratedProjects_aggregate: ProjectCollaborator_aggregate_order_by
   curatedProjects_aggregate: Project_aggregate_order_by
   id: order_by
+  isArtist: order_by
+  isModerated: order_by
+  isVerified: order_by
   mainWallet: Wallet_order_by
+  mainWalletAddress: order_by
   profile: Profile_order_by
   roles_aggregate: AccountsRoles_aggregate_order_by
   status: order_by
@@ -660,6 +674,26 @@ enum Account_select_column {
   column name
   """
   id
+
+  """
+  column name
+  """
+  isArtist
+
+  """
+  column name
+  """
+  isModerated
+
+  """
+  column name
+  """
+  isVerified
+
+  """
+  column name
+  """
+  mainWalletAddress
 
   """
   column name
@@ -699,6 +733,10 @@ Initial value of the column from where the streaming should start
 """
 input Account_stream_cursor_value_input {
   id: uuid
+  isArtist: Boolean
+  isModerated: Boolean
+  isVerified: Boolean
+  mainWalletAddress: String
   status: AccountStatus
   username: String
 }
@@ -6152,6 +6190,36 @@ type article {
   ): [listing!]!
 
   """
+  An aggregate relationship
+  """
+  listings_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_bool_exp
+  ): listing_aggregate!
+
+  """
   An object relationship
   """
   media_image: media_image
@@ -6361,6 +6429,7 @@ input article_bool_exp {
   id: Int_comparison_exp
   language: String_comparison_exp
   listings: listing_bool_exp
+  listings_aggregate: listing_aggregate_bool_exp
   media_image: media_image_bool_exp
   metadata: json_comparison_exp
   metadata_locked: Boolean_comparison_exp
@@ -12527,6 +12596,58 @@ type listing {
 }
 
 """
+aggregated selection of "listing"
+"""
+type listing_aggregate {
+  aggregate: listing_aggregate_fields
+  nodes: [listing!]!
+}
+
+input listing_aggregate_bool_exp {
+  bool_and: listing_aggregate_bool_exp_bool_and
+  bool_or: listing_aggregate_bool_exp_bool_or
+  count: listing_aggregate_bool_exp_count
+}
+
+input listing_aggregate_bool_exp_bool_and {
+  arguments: listing_select_column_listing_aggregate_bool_exp_bool_and_arguments_columns!
+  distinct: Boolean
+  filter: listing_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input listing_aggregate_bool_exp_bool_or {
+  arguments: listing_select_column_listing_aggregate_bool_exp_bool_or_arguments_columns!
+  distinct: Boolean
+  filter: listing_bool_exp
+  predicate: Boolean_comparison_exp!
+}
+
+input listing_aggregate_bool_exp_count {
+  arguments: [listing_select_column!]
+  distinct: Boolean
+  filter: listing_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "listing"
+"""
+type listing_aggregate_fields {
+  avg: listing_avg_fields
+  count(columns: [listing_select_column!], distinct: Boolean): Int!
+  max: listing_max_fields
+  min: listing_min_fields
+  stddev: listing_stddev_fields
+  stddev_pop: listing_stddev_pop_fields
+  stddev_samp: listing_stddev_samp_fields
+  sum: listing_sum_fields
+  var_pop: listing_var_pop_fields
+  var_samp: listing_var_samp_fields
+  variance: listing_variance_fields
+}
+
+"""
 order by aggregate values of table "listing"
 """
 input listing_aggregate_order_by {
@@ -12541,6 +12662,17 @@ input listing_aggregate_order_by {
   var_pop: listing_var_pop_order_by
   var_samp: listing_var_samp_order_by
   variance: listing_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type listing_avg_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -12583,6 +12715,25 @@ input listing_bool_exp {
 }
 
 """
+aggregate max on columns
+"""
+type listing_max_fields {
+  accepted_at: timestamptz
+  accepted_by_id: String
+  amount: numeric
+  article_id: Int
+  cancelled_at: timestamptz
+  created_at: timestamptz
+  id: String
+  issuer_id: String
+  objkt_id: String
+  price: numeric
+  royalties: Int
+  status: listing_status_enum
+  version: Int
+}
+
+"""
 order by max() on columns of table "listing"
 """
 input listing_max_order_by {
@@ -12599,6 +12750,25 @@ input listing_max_order_by {
   royalties: order_by
   status: order_by
   version: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type listing_min_fields {
+  accepted_at: timestamptz
+  accepted_by_id: String
+  amount: numeric
+  article_id: Int
+  cancelled_at: timestamptz
+  created_at: timestamptz
+  id: String
+  issuer_id: String
+  objkt_id: String
+  price: numeric
+  royalties: Int
+  status: listing_status_enum
+  version: Int
 }
 
 """
@@ -12725,6 +12895,26 @@ enum listing_select_column {
   version
 }
 
+"""
+select "listing_aggregate_bool_exp_bool_and_arguments_columns" columns of table "listing"
+"""
+enum listing_select_column_listing_aggregate_bool_exp_bool_and_arguments_columns {
+  """
+  column name
+  """
+  is_inactive
+}
+
+"""
+select "listing_aggregate_bool_exp_bool_or_arguments_columns" columns of table "listing"
+"""
+enum listing_select_column_listing_aggregate_bool_exp_bool_or_arguments_columns {
+  """
+  column name
+  """
+  is_inactive
+}
+
 scalar listing_status_enum
 
 """
@@ -12743,6 +12933,17 @@ input listing_status_enum_comparison_exp {
 }
 
 """
+aggregate stddev on columns
+"""
+type listing_stddev_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 order by stddev() on columns of table "listing"
 """
 input listing_stddev_order_by {
@@ -12754,6 +12955,17 @@ input listing_stddev_order_by {
 }
 
 """
+aggregate stddev_pop on columns
+"""
+type listing_stddev_pop_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 order by stddev_pop() on columns of table "listing"
 """
 input listing_stddev_pop_order_by {
@@ -12762,6 +12974,17 @@ input listing_stddev_pop_order_by {
   price: order_by
   royalties: order_by
   version: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type listing_stddev_samp_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -12812,6 +13035,17 @@ input listing_stream_cursor_value_input {
 }
 
 """
+aggregate sum on columns
+"""
+type listing_sum_fields {
+  amount: numeric
+  article_id: Int
+  price: numeric
+  royalties: Int
+  version: Int
+}
+
+"""
 order by sum() on columns of table "listing"
 """
 input listing_sum_order_by {
@@ -12820,6 +13054,17 @@ input listing_sum_order_by {
   price: order_by
   royalties: order_by
   version: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type listing_var_pop_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -12834,6 +13079,17 @@ input listing_var_pop_order_by {
 }
 
 """
+aggregate var_samp on columns
+"""
+type listing_var_samp_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 order by var_samp() on columns of table "listing"
 """
 input listing_var_samp_order_by {
@@ -12842,6 +13098,17 @@ input listing_var_samp_order_by {
   price: order_by
   royalties: order_by
   version: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type listing_variance_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
 }
 
 """
@@ -15712,6 +15979,36 @@ type objkt {
   ): [listing!]!
 
   """
+  An aggregate relationship
+  """
+  listings_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_bool_exp
+  ): listing_aggregate!
+
+  """
   An object relationship
   """
   media_image: media_image
@@ -16130,6 +16427,7 @@ input objkt_bool_exp {
   issuer_id: String_comparison_exp
   iteration: numeric_comparison_exp
   listings: listing_bool_exp
+  listings_aggregate: listing_aggregate_bool_exp
   media_image: media_image_bool_exp
   metadata: json_comparison_exp
   metadata_uri: String_comparison_exp
@@ -21127,6 +21425,36 @@ type onchain_query {
   ): [listing!]!
 
   """
+  fetch aggregated fields from the table: "listing"
+  """
+  listing_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_bool_exp
+  ): listing_aggregate!
+
+  """
   fetch data from the table: "listing" using primary key columns
   """
   listing_by_pk(id: String!, version: Int!): listing
@@ -22135,6 +22463,36 @@ type onchain_query {
   fetch data from the table: "token_market_stats_history" using primary key columns
   """
   token_market_stats_history_by_pk(id: Int!): token_market_stats_history
+
+  """
+  fetch data from the table: "token_market_stats_history_hourly"
+  """
+  token_market_stats_history_hourly(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_market_stats_history_hourly_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_market_stats_history_hourly_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_market_stats_history_hourly_bool_exp
+  ): [token_market_stats_history_hourly!]!
 
   """
   fetch data from the table: "token_transfer"
@@ -24234,6 +24592,36 @@ type onchain_subscription {
   ): [listing!]!
 
   """
+  fetch aggregated fields from the table: "listing"
+  """
+  listing_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_bool_exp
+  ): listing_aggregate!
+
+  """
   fetch data from the table: "listing" using primary key columns
   """
   listing_by_pk(id: String!, version: Int!): listing
@@ -25662,6 +26050,56 @@ type onchain_subscription {
   fetch data from the table: "token_market_stats_history" using primary key columns
   """
   token_market_stats_history_by_pk(id: Int!): token_market_stats_history
+
+  """
+  fetch data from the table: "token_market_stats_history_hourly"
+  """
+  token_market_stats_history_hourly(
+    """
+    distinct select on columns
+    """
+    distinct_on: [token_market_stats_history_hourly_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [token_market_stats_history_hourly_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: token_market_stats_history_hourly_bool_exp
+  ): [token_market_stats_history_hourly!]!
+
+  """
+  fetch data from the table in a streaming manner: "token_market_stats_history_hourly"
+  """
+  token_market_stats_history_hourly_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [token_market_stats_history_hourly_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: token_market_stats_history_hourly_bool_exp
+  ): [token_market_stats_history_hourly!]!
 
   """
   fetch data from the table in a streaming manner: "token_market_stats_history"
@@ -28603,6 +29041,98 @@ input token_market_stats_history_bool_exp {
 }
 
 """
+columns and relationships of "token_market_stats_history_hourly"
+"""
+type token_market_stats_history_hourly {
+  market_cap: numeric
+  price: numeric
+  timestamp: timestamptz
+  token_id: String
+  volume24: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "token_market_stats_history_hourly". All fields are combined with a logical 'AND'.
+"""
+input token_market_stats_history_hourly_bool_exp {
+  _and: [token_market_stats_history_hourly_bool_exp!]
+  _not: token_market_stats_history_hourly_bool_exp
+  _or: [token_market_stats_history_hourly_bool_exp!]
+  market_cap: numeric_comparison_exp
+  price: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  token_id: String_comparison_exp
+  volume24: numeric_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_market_stats_history_hourly".
+"""
+input token_market_stats_history_hourly_order_by {
+  market_cap: order_by
+  price: order_by
+  timestamp: order_by
+  token_id: order_by
+  volume24: order_by
+}
+
+"""
+select columns of table "token_market_stats_history_hourly"
+"""
+enum token_market_stats_history_hourly_select_column {
+  """
+  column name
+  """
+  market_cap
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  timestamp
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  volume24
+}
+
+"""
+Streaming cursor of the table "token_market_stats_history_hourly"
+"""
+input token_market_stats_history_hourly_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: token_market_stats_history_hourly_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input token_market_stats_history_hourly_stream_cursor_value_input {
+  market_cap: numeric
+  price: numeric
+  timestamp: timestamptz
+  token_id: String
+  volume24: numeric
+}
+
+"""
 Ordering options when selecting data from "token_market_stats_history".
 """
 input token_market_stats_history_order_by {
@@ -29938,6 +30468,66 @@ type user {
   ): [listing!]!
 
   """
+  An aggregate relationship
+  """
+  listingsByAcceptedById_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_bool_exp
+  ): listing_aggregate!
+
+  """
+  An aggregate relationship
+  """
+  listings_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_bool_exp
+  ): listing_aggregate!
+
+  """
   An object relationship
   """
   media_image: media_image
@@ -30342,6 +30932,8 @@ input user_bool_exp {
   id: String_comparison_exp
   listings: listing_bool_exp
   listingsByAcceptedById: listing_bool_exp
+  listingsByAcceptedById_aggregate: listing_aggregate_bool_exp
+  listings_aggregate: listing_aggregate_bool_exp
   media_image: media_image_bool_exp
   metadata: jsonb_comparison_exp
   metadata_uri: String_comparison_exp

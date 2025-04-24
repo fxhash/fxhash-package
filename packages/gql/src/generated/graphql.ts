@@ -61,8 +61,12 @@ export type Account = {
   /** An array relationship */
   curatedProjects: Array<Project>;
   id: Scalars['uuid']['output'];
+  isArtist: Scalars['Boolean']['output'];
+  isModerated: Scalars['Boolean']['output'];
+  isVerified: Scalars['Boolean']['output'];
   /** An object relationship */
   mainWallet: Wallet;
+  mainWalletAddress: Scalars['String']['output'];
   /** An object relationship */
   profile?: Maybe<Profile>;
   /** An array relationship */
@@ -447,7 +451,11 @@ export type Account_Bool_Exp = {
   collaboratedProjects?: InputMaybe<ProjectCollaborator_Bool_Exp>;
   curatedProjects?: InputMaybe<Project_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  isArtist?: InputMaybe<Boolean_Comparison_Exp>;
+  isModerated?: InputMaybe<Boolean_Comparison_Exp>;
+  isVerified?: InputMaybe<Boolean_Comparison_Exp>;
   mainWallet?: InputMaybe<Wallet_Bool_Exp>;
+  mainWalletAddress?: InputMaybe<String_Comparison_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   roles?: InputMaybe<AccountsRoles_Bool_Exp>;
   status?: InputMaybe<AccountStatus_Comparison_Exp>;
@@ -460,6 +468,7 @@ export type Account_Bool_Exp = {
 export type Account_Max_Fields = {
   __typename?: 'Account_max_fields';
   id?: Maybe<Scalars['uuid']['output']>;
+  mainWalletAddress?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Scalars['AccountStatus']['output']>;
   username?: Maybe<Scalars['String']['output']>;
 };
@@ -468,6 +477,7 @@ export type Account_Max_Fields = {
 export type Account_Min_Fields = {
   __typename?: 'Account_min_fields';
   id?: Maybe<Scalars['uuid']['output']>;
+  mainWalletAddress?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Scalars['AccountStatus']['output']>;
   username?: Maybe<Scalars['String']['output']>;
 };
@@ -487,7 +497,11 @@ export type Account_Order_By = {
   collaboratedProjects_aggregate?: InputMaybe<ProjectCollaborator_Aggregate_Order_By>;
   curatedProjects_aggregate?: InputMaybe<Project_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
+  isArtist?: InputMaybe<Order_By>;
+  isModerated?: InputMaybe<Order_By>;
+  isVerified?: InputMaybe<Order_By>;
   mainWallet?: InputMaybe<Wallet_Order_By>;
+  mainWalletAddress?: InputMaybe<Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   roles_aggregate?: InputMaybe<AccountsRoles_Aggregate_Order_By>;
   status?: InputMaybe<Order_By>;
@@ -505,6 +519,14 @@ export type Account_Pk_Columns_Input = {
 export enum Account_Select_Column {
   /** column name */
   Id = 'id',
+  /** column name */
+  IsArtist = 'isArtist',
+  /** column name */
+  IsModerated = 'isModerated',
+  /** column name */
+  IsVerified = 'isVerified',
+  /** column name */
+  MainWalletAddress = 'mainWalletAddress',
   /** column name */
   Status = 'status',
   /** column name */
@@ -527,6 +549,10 @@ export type Account_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Account_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']['input']>;
+  isArtist?: InputMaybe<Scalars['Boolean']['input']>;
+  isModerated?: InputMaybe<Scalars['Boolean']['input']>;
+  isVerified?: InputMaybe<Scalars['Boolean']['input']>;
+  mainWalletAddress?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['AccountStatus']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -4316,6 +4342,8 @@ export type Article = {
   language: Scalars['String']['output'];
   /** An array relationship */
   listings: Array<Listing>;
+  /** An aggregate relationship */
+  listings_aggregate: Listing_Aggregate;
   /** An object relationship */
   media_image?: Maybe<Media_Image>;
   metadata: Scalars['json']['output'];
@@ -4406,6 +4434,16 @@ export type ArticleArticle_RevisionsArgs = {
 
 /** columns and relationships of "article" */
 export type ArticleListingsArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Order_By>>;
+  where?: InputMaybe<Listing_Bool_Exp>;
+};
+
+
+/** columns and relationships of "article" */
+export type ArticleListings_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -4548,6 +4586,7 @@ export type Article_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   language?: InputMaybe<String_Comparison_Exp>;
   listings?: InputMaybe<Listing_Bool_Exp>;
+  listings_aggregate?: InputMaybe<Listing_Aggregate_Bool_Exp>;
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
   metadata?: InputMaybe<Json_Comparison_Exp>;
   metadata_locked?: InputMaybe<Boolean_Comparison_Exp>;
@@ -8810,6 +8849,63 @@ export type ListingMetadataArgs = {
   path?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** aggregated selection of "listing" */
+export type Listing_Aggregate = {
+  __typename?: 'listing_aggregate';
+  aggregate?: Maybe<Listing_Aggregate_Fields>;
+  nodes: Array<Listing>;
+};
+
+export type Listing_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Listing_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Listing_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Listing_Aggregate_Bool_Exp_Count>;
+};
+
+export type Listing_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Listing_Select_Column_Listing_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Listing_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Listing_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Listing_Select_Column_Listing_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Listing_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Listing_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Listing_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Listing_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "listing" */
+export type Listing_Aggregate_Fields = {
+  __typename?: 'listing_aggregate_fields';
+  avg?: Maybe<Listing_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Listing_Max_Fields>;
+  min?: Maybe<Listing_Min_Fields>;
+  stddev?: Maybe<Listing_Stddev_Fields>;
+  stddev_pop?: Maybe<Listing_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Listing_Stddev_Samp_Fields>;
+  sum?: Maybe<Listing_Sum_Fields>;
+  var_pop?: Maybe<Listing_Var_Pop_Fields>;
+  var_samp?: Maybe<Listing_Var_Samp_Fields>;
+  variance?: Maybe<Listing_Variance_Fields>;
+};
+
+
+/** aggregate fields of "listing" */
+export type Listing_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Listing_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** order by aggregate values of table "listing" */
 export type Listing_Aggregate_Order_By = {
   avg?: InputMaybe<Listing_Avg_Order_By>;
@@ -8823,6 +8919,16 @@ export type Listing_Aggregate_Order_By = {
   var_pop?: InputMaybe<Listing_Var_Pop_Order_By>;
   var_samp?: InputMaybe<Listing_Var_Samp_Order_By>;
   variance?: InputMaybe<Listing_Variance_Order_By>;
+};
+
+/** aggregate avg on columns */
+export type Listing_Avg_Fields = {
+  __typename?: 'listing_avg_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "listing" */
@@ -8860,6 +8966,24 @@ export type Listing_Bool_Exp = {
   version?: InputMaybe<Int_Comparison_Exp>;
 };
 
+/** aggregate max on columns */
+export type Listing_Max_Fields = {
+  __typename?: 'listing_max_fields';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
 /** order by max() on columns of table "listing" */
 export type Listing_Max_Order_By = {
   accepted_at?: InputMaybe<Order_By>;
@@ -8875,6 +8999,24 @@ export type Listing_Max_Order_By = {
   royalties?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Listing_Min_Fields = {
+  __typename?: 'listing_min_fields';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "listing" */
@@ -8951,6 +9093,18 @@ export enum Listing_Select_Column {
   Version = 'version'
 }
 
+/** select "listing_aggregate_bool_exp_bool_and_arguments_columns" columns of table "listing" */
+export enum Listing_Select_Column_Listing_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  IsInactive = 'is_inactive'
+}
+
+/** select "listing_aggregate_bool_exp_bool_or_arguments_columns" columns of table "listing" */
+export enum Listing_Select_Column_Listing_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  IsInactive = 'is_inactive'
+}
+
 /** Boolean expression to compare columns of type "listing_status_enum". All fields are combined with logical 'AND'. */
 export type Listing_Status_Enum_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['listing_status_enum']['input']>;
@@ -8964,6 +9118,16 @@ export type Listing_Status_Enum_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['listing_status_enum']['input']>>;
 };
 
+/** aggregate stddev on columns */
+export type Listing_Stddev_Fields = {
+  __typename?: 'listing_stddev_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
 /** order by stddev() on columns of table "listing" */
 export type Listing_Stddev_Order_By = {
   amount?: InputMaybe<Order_By>;
@@ -8973,6 +9137,16 @@ export type Listing_Stddev_Order_By = {
   version?: InputMaybe<Order_By>;
 };
 
+/** aggregate stddev_pop on columns */
+export type Listing_Stddev_Pop_Fields = {
+  __typename?: 'listing_stddev_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
 /** order by stddev_pop() on columns of table "listing" */
 export type Listing_Stddev_Pop_Order_By = {
   amount?: InputMaybe<Order_By>;
@@ -8980,6 +9154,16 @@ export type Listing_Stddev_Pop_Order_By = {
   price?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Listing_Stddev_Samp_Fields = {
+  __typename?: 'listing_stddev_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "listing" */
@@ -9018,6 +9202,16 @@ export type Listing_Stream_Cursor_Value_Input = {
   version?: InputMaybe<Scalars['Int']['input']>;
 };
 
+/** aggregate sum on columns */
+export type Listing_Sum_Fields = {
+  __typename?: 'listing_sum_fields';
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
 /** order by sum() on columns of table "listing" */
 export type Listing_Sum_Order_By = {
   amount?: InputMaybe<Order_By>;
@@ -9025,6 +9219,16 @@ export type Listing_Sum_Order_By = {
   price?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_pop on columns */
+export type Listing_Var_Pop_Fields = {
+  __typename?: 'listing_var_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "listing" */
@@ -9036,6 +9240,16 @@ export type Listing_Var_Pop_Order_By = {
   version?: InputMaybe<Order_By>;
 };
 
+/** aggregate var_samp on columns */
+export type Listing_Var_Samp_Fields = {
+  __typename?: 'listing_var_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
 /** order by var_samp() on columns of table "listing" */
 export type Listing_Var_Samp_Order_By = {
   amount?: InputMaybe<Order_By>;
@@ -9043,6 +9257,16 @@ export type Listing_Var_Samp_Order_By = {
   price?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Listing_Variance_Fields = {
+  __typename?: 'listing_variance_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "listing" */
@@ -11215,6 +11439,8 @@ export type Objkt = {
   iteration?: Maybe<Scalars['numeric']['output']>;
   /** An array relationship */
   listings: Array<Listing>;
+  /** An aggregate relationship */
+  listings_aggregate: Listing_Aggregate;
   /** An object relationship */
   media_image?: Maybe<Media_Image>;
   metadata?: Maybe<Scalars['json']['output']>;
@@ -11291,6 +11517,16 @@ export type ObjktFeaturesArgs = {
 
 /** columns and relationships of "objkt" */
 export type ObjktListingsArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Order_By>>;
+  where?: InputMaybe<Listing_Bool_Exp>;
+};
+
+
+/** columns and relationships of "objkt" */
+export type ObjktListings_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -11554,6 +11790,7 @@ export type Objkt_Bool_Exp = {
   issuer_id?: InputMaybe<String_Comparison_Exp>;
   iteration?: InputMaybe<Numeric_Comparison_Exp>;
   listings?: InputMaybe<Listing_Bool_Exp>;
+  listings_aggregate?: InputMaybe<Listing_Aggregate_Bool_Exp>;
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
   metadata?: InputMaybe<Json_Comparison_Exp>;
   metadata_uri?: InputMaybe<String_Comparison_Exp>;
@@ -13748,6 +13985,8 @@ export type Onchain_Query = {
   ipfs_cid_by_pk?: Maybe<Ipfs_Cid>;
   /** fetch data from the table: "listing" */
   listing: Array<Listing>;
+  /** fetch aggregated fields from the table: "listing" */
+  listing_aggregate: Listing_Aggregate;
   /** fetch data from the table: "listing" using primary key columns */
   listing_by_pk?: Maybe<Listing>;
   /** fetch data from the table: "market_stats" */
@@ -13852,6 +14091,8 @@ export type Onchain_Query = {
   token_market_stats_history: Array<Token_Market_Stats_History>;
   /** fetch data from the table: "token_market_stats_history" using primary key columns */
   token_market_stats_history_by_pk?: Maybe<Token_Market_Stats_History>;
+  /** fetch data from the table: "token_market_stats_history_hourly" */
+  token_market_stats_history_hourly: Array<Token_Market_Stats_History_Hourly>;
   /** fetch data from the table: "token_transfer" */
   token_transfer: Array<Token_Transfer>;
   /** fetch data from the table: "token_transfer" using primary key columns */
@@ -14364,6 +14605,15 @@ export type Onchain_QueryListingArgs = {
 };
 
 
+export type Onchain_QueryListing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Order_By>>;
+  where?: InputMaybe<Listing_Bool_Exp>;
+};
+
+
 export type Onchain_QueryListing_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
@@ -14746,6 +14996,15 @@ export type Onchain_QueryToken_Market_Stats_History_By_PkArgs = {
 };
 
 
+export type Onchain_QueryToken_Market_Stats_History_HourlyArgs = {
+  distinct_on?: InputMaybe<Array<Token_Market_Stats_History_Hourly_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Token_Market_Stats_History_Hourly_Order_By>>;
+  where?: InputMaybe<Token_Market_Stats_History_Hourly_Bool_Exp>;
+};
+
+
 export type Onchain_QueryToken_TransferArgs = {
   distinct_on?: InputMaybe<Array<Token_Transfer_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -14995,6 +15254,8 @@ export type Onchain_Subscription = {
   ipfs_cid_stream: Array<Ipfs_Cid>;
   /** fetch data from the table: "listing" */
   listing: Array<Listing>;
+  /** fetch aggregated fields from the table: "listing" */
+  listing_aggregate: Listing_Aggregate;
   /** fetch data from the table: "listing" using primary key columns */
   listing_by_pk?: Maybe<Listing>;
   /** fetch data from the table in a streaming manner: "listing" */
@@ -15141,6 +15402,10 @@ export type Onchain_Subscription = {
   token_market_stats_history: Array<Token_Market_Stats_History>;
   /** fetch data from the table: "token_market_stats_history" using primary key columns */
   token_market_stats_history_by_pk?: Maybe<Token_Market_Stats_History>;
+  /** fetch data from the table: "token_market_stats_history_hourly" */
+  token_market_stats_history_hourly: Array<Token_Market_Stats_History_Hourly>;
+  /** fetch data from the table in a streaming manner: "token_market_stats_history_hourly" */
+  token_market_stats_history_hourly_stream: Array<Token_Market_Stats_History_Hourly>;
   /** fetch data from the table in a streaming manner: "token_market_stats_history" */
   token_market_stats_history_stream: Array<Token_Market_Stats_History>;
   /** fetch data from the table in a streaming manner: "token_market_stats" */
@@ -15884,6 +16149,15 @@ export type Onchain_SubscriptionListingArgs = {
 };
 
 
+export type Onchain_SubscriptionListing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Order_By>>;
+  where?: InputMaybe<Listing_Bool_Exp>;
+};
+
+
 export type Onchain_SubscriptionListing_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
@@ -16410,6 +16684,22 @@ export type Onchain_SubscriptionToken_Market_Stats_HistoryArgs = {
 
 export type Onchain_SubscriptionToken_Market_Stats_History_By_PkArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type Onchain_SubscriptionToken_Market_Stats_History_HourlyArgs = {
+  distinct_on?: InputMaybe<Array<Token_Market_Stats_History_Hourly_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Token_Market_Stats_History_Hourly_Order_By>>;
+  where?: InputMaybe<Token_Market_Stats_History_Hourly_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionToken_Market_Stats_History_Hourly_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Token_Market_Stats_History_Hourly_Stream_Cursor_Input>>;
+  where?: InputMaybe<Token_Market_Stats_History_Hourly_Bool_Exp>;
 };
 
 
@@ -18467,6 +18757,68 @@ export type Token_Market_Stats_History_Bool_Exp = {
   volume24?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
+/** columns and relationships of "token_market_stats_history_hourly" */
+export type Token_Market_Stats_History_Hourly = {
+  __typename?: 'token_market_stats_history_hourly';
+  market_cap?: Maybe<Scalars['numeric']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  token_id?: Maybe<Scalars['String']['output']>;
+  volume24?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "token_market_stats_history_hourly". All fields are combined with a logical 'AND'. */
+export type Token_Market_Stats_History_Hourly_Bool_Exp = {
+  _and?: InputMaybe<Array<Token_Market_Stats_History_Hourly_Bool_Exp>>;
+  _not?: InputMaybe<Token_Market_Stats_History_Hourly_Bool_Exp>;
+  _or?: InputMaybe<Array<Token_Market_Stats_History_Hourly_Bool_Exp>>;
+  market_cap?: InputMaybe<Numeric_Comparison_Exp>;
+  price?: InputMaybe<Numeric_Comparison_Exp>;
+  timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
+  token_id?: InputMaybe<String_Comparison_Exp>;
+  volume24?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "token_market_stats_history_hourly". */
+export type Token_Market_Stats_History_Hourly_Order_By = {
+  market_cap?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+  token_id?: InputMaybe<Order_By>;
+  volume24?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "token_market_stats_history_hourly" */
+export enum Token_Market_Stats_History_Hourly_Select_Column {
+  /** column name */
+  MarketCap = 'market_cap',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  TokenId = 'token_id',
+  /** column name */
+  Volume24 = 'volume24'
+}
+
+/** Streaming cursor of the table "token_market_stats_history_hourly" */
+export type Token_Market_Stats_History_Hourly_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Token_Market_Stats_History_Hourly_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Token_Market_Stats_History_Hourly_Stream_Cursor_Value_Input = {
+  market_cap?: InputMaybe<Scalars['numeric']['input']>;
+  price?: InputMaybe<Scalars['numeric']['input']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
+  token_id?: InputMaybe<Scalars['String']['input']>;
+  volume24?: InputMaybe<Scalars['numeric']['input']>;
+};
+
 /** Ordering options when selecting data from "token_market_stats_history". */
 export type Token_Market_Stats_History_Order_By = {
   from?: InputMaybe<Order_By>;
@@ -19056,6 +19408,10 @@ export type User = {
   listings: Array<Listing>;
   /** An array relationship */
   listingsByAcceptedById: Array<Listing>;
+  /** An aggregate relationship */
+  listingsByAcceptedById_aggregate: Listing_Aggregate;
+  /** An aggregate relationship */
+  listings_aggregate: Listing_Aggregate;
   /** An object relationship */
   media_image?: Maybe<Media_Image>;
   metadata?: Maybe<Scalars['jsonb']['output']>;
@@ -19277,6 +19633,26 @@ export type UserListingsByAcceptedByIdArgs = {
 
 
 /** columns and relationships of "user" */
+export type UserListingsByAcceptedById_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Order_By>>;
+  where?: InputMaybe<Listing_Bool_Exp>;
+};
+
+
+/** columns and relationships of "user" */
+export type UserListings_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Order_By>>;
+  where?: InputMaybe<Listing_Bool_Exp>;
+};
+
+
+/** columns and relationships of "user" */
 export type UserMetadataArgs = {
   path?: InputMaybe<Scalars['String']['input']>;
 };
@@ -19429,6 +19805,8 @@ export type User_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   listings?: InputMaybe<Listing_Bool_Exp>;
   listingsByAcceptedById?: InputMaybe<Listing_Bool_Exp>;
+  listingsByAcceptedById_aggregate?: InputMaybe<Listing_Aggregate_Bool_Exp>;
+  listings_aggregate?: InputMaybe<Listing_Aggregate_Bool_Exp>;
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   metadata_uri?: InputMaybe<String_Comparison_Exp>;
@@ -19861,7 +20239,7 @@ export type UpdateAccountMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAccountMutation = { __typename?: 'mutation_root', update_account?: { __typename?: 'UpdateAccountOutput', id: string, username: string } | null };
+export type UpdateAccountMutation = { __typename?: 'mutation_root', update_account?: { __typename?: 'UpdateAccountOutput', id: string, username: string, profile?: { __typename?: 'UpdateProfileOutput', picture?: string | null, description?: string | null, website?: string | null, location?: string | null } | null } | null };
 
 export type SetFarcasterHandleMutationVariables = Exact<{
   input: SetFarcasterHandleInput;
@@ -20078,7 +20456,7 @@ export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"Operati
 export const GetAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountsQuery, GetAccountsQueryVariables>;
 export const GetAccountWalletsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccountWallets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_Wallets"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_Wallets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mainWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountWalletsQuery, GetAccountWalletsQueryVariables>;
 export const GetMyAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMyAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"UserAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_Wallets"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_Wallets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mainWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetMyAccountQuery, GetMyAccountQueryVariables>;
-export const UpdateAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAccount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAccountInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]} as unknown as DocumentNode<UpdateAccountMutation, UpdateAccountMutationVariables>;
+export const UpdateAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAccount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAccountInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateAccountMutation, UpdateAccountMutationVariables>;
 export const SetFarcasterHandleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SetFarcasterHandle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SetFarcasterHandleInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"set_farcaster_handle"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]} as unknown as DocumentNode<SetFarcasterHandleMutation, SetFarcasterHandleMutationVariables>;
 export const AirdropTezClaimDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AirdropTezClaim"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AirdropTezClaimInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airdrop_tez_claim"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signature"}}]}}]}}]} as unknown as DocumentNode<AirdropTezClaimMutation, AirdropTezClaimMutationVariables>;
 export const GetAllProjectsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllProjects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllProjectsQuery, GetAllProjectsQueryVariables>;
