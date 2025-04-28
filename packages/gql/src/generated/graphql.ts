@@ -4336,7 +4336,7 @@ export type Article = {
   created_at: Scalars['timestamptz']['output'];
   description: Scalars['String']['output'];
   display_uri: Scalars['String']['output'];
-  editions: Scalars['bigint']['output'];
+  editions: Scalars['Int']['output'];
   flag: Scalars['article_flag_enum']['output'];
   id: Scalars['Int']['output'];
   language: Scalars['String']['output'];
@@ -4581,7 +4581,7 @@ export type Article_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   display_uri?: InputMaybe<String_Comparison_Exp>;
-  editions?: InputMaybe<Bigint_Comparison_Exp>;
+  editions?: InputMaybe<Int_Comparison_Exp>;
   flag?: InputMaybe<Article_Flag_Enum_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   language?: InputMaybe<String_Comparison_Exp>;
@@ -5009,7 +5009,7 @@ export type Article_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   display_uri?: Maybe<Scalars['String']['output']>;
-  editions?: Maybe<Scalars['bigint']['output']>;
+  editions?: Maybe<Scalars['Int']['output']>;
   flag?: Maybe<Scalars['article_flag_enum']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   language?: Maybe<Scalars['String']['output']>;
@@ -5060,7 +5060,7 @@ export type Article_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   display_uri?: Maybe<Scalars['String']['output']>;
-  editions?: Maybe<Scalars['bigint']['output']>;
+  editions?: Maybe<Scalars['Int']['output']>;
   flag?: Maybe<Scalars['article_flag_enum']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   language?: Maybe<Scalars['String']['output']>;
@@ -5410,7 +5410,7 @@ export type Article_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   display_uri?: InputMaybe<Scalars['String']['input']>;
-  editions?: InputMaybe<Scalars['bigint']['input']>;
+  editions?: InputMaybe<Scalars['Int']['input']>;
   flag?: InputMaybe<Scalars['article_flag_enum']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   language?: InputMaybe<Scalars['String']['input']>;
@@ -5432,7 +5432,7 @@ export type Article_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Article_Sum_Fields = {
   __typename?: 'article_sum_fields';
-  editions?: Maybe<Scalars['bigint']['output']>;
+  editions?: Maybe<Scalars['Int']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   royalties?: Maybe<Scalars['Int']['output']>;
 };
@@ -5487,98 +5487,6 @@ export type Article_Variance_Order_By = {
   editions?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
-};
-
-/** columns and relationships of "artist" */
-export type Artist = {
-  __typename?: 'artist';
-  flag?: Maybe<Scalars['user_flag_enum']['output']>;
-  id?: Maybe<Scalars['uuid']['output']>;
-  username?: Maybe<Scalars['String']['output']>;
-  /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
-};
-
-/** aggregated selection of "artist" */
-export type Artist_Aggregate = {
-  __typename?: 'artist_aggregate';
-  aggregate?: Maybe<Artist_Aggregate_Fields>;
-  nodes: Array<Artist>;
-};
-
-/** aggregate fields of "artist" */
-export type Artist_Aggregate_Fields = {
-  __typename?: 'artist_aggregate_fields';
-  count: Scalars['Int']['output'];
-  max?: Maybe<Artist_Max_Fields>;
-  min?: Maybe<Artist_Min_Fields>;
-};
-
-
-/** aggregate fields of "artist" */
-export type Artist_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Artist_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-/** Boolean expression to filter rows from the table "artist". All fields are combined with a logical 'AND'. */
-export type Artist_Bool_Exp = {
-  _and?: InputMaybe<Array<Artist_Bool_Exp>>;
-  _not?: InputMaybe<Artist_Bool_Exp>;
-  _or?: InputMaybe<Array<Artist_Bool_Exp>>;
-  flag?: InputMaybe<User_Flag_Enum_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  username?: InputMaybe<String_Comparison_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
-};
-
-/** aggregate max on columns */
-export type Artist_Max_Fields = {
-  __typename?: 'artist_max_fields';
-  flag?: Maybe<Scalars['user_flag_enum']['output']>;
-  id?: Maybe<Scalars['uuid']['output']>;
-  username?: Maybe<Scalars['String']['output']>;
-};
-
-/** aggregate min on columns */
-export type Artist_Min_Fields = {
-  __typename?: 'artist_min_fields';
-  flag?: Maybe<Scalars['user_flag_enum']['output']>;
-  id?: Maybe<Scalars['uuid']['output']>;
-  username?: Maybe<Scalars['String']['output']>;
-};
-
-/** Ordering options when selecting data from "artist". */
-export type Artist_Order_By = {
-  flag?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  username?: InputMaybe<Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
-};
-
-/** select columns of table "artist" */
-export enum Artist_Select_Column {
-  /** column name */
-  Flag = 'flag',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Username = 'username'
-}
-
-/** Streaming cursor of the table "artist" */
-export type Artist_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Artist_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Artist_Stream_Cursor_Value_Input = {
-  flag?: InputMaybe<Scalars['user_flag_enum']['input']>;
-  id?: InputMaybe<Scalars['uuid']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** columns and relationships of "auction" */
@@ -7208,7 +7116,7 @@ export type Generative_Token = {
   id: Scalars['String']['output'];
   input_bytes_size: Scalars['Int']['output'];
   is_frame: Scalars['Boolean']['output'];
-  iterations_count?: Maybe<Scalars['numeric']['output']>;
+  iterations_count: Scalars['numeric']['output'];
   labels: Array<Scalars['Int']['output']>;
   lock_end: Scalars['timestamptz']['output'];
   lock_price_for_reserves: Scalars['Boolean']['output'];
@@ -11436,7 +11344,7 @@ export type Objkt = {
   id: Scalars['String']['output'];
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id: Scalars['String']['output'];
-  iteration?: Maybe<Scalars['numeric']['output']>;
+  iteration: Scalars['Int']['output'];
   /** An array relationship */
   listings: Array<Listing>;
   /** An aggregate relationship */
@@ -11788,7 +11696,7 @@ export type Objkt_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   input_bytes?: InputMaybe<String_Comparison_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
-  iteration?: InputMaybe<Numeric_Comparison_Exp>;
+  iteration?: InputMaybe<Int_Comparison_Exp>;
   listings?: InputMaybe<Listing_Bool_Exp>;
   listings_aggregate?: InputMaybe<Listing_Aggregate_Bool_Exp>;
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
@@ -11829,7 +11737,7 @@ export type Objkt_Max_Fields = {
   id?: Maybe<Scalars['String']['output']>;
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id?: Maybe<Scalars['String']['output']>;
-  iteration?: Maybe<Scalars['numeric']['output']>;
+  iteration?: Maybe<Scalars['Int']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -11884,7 +11792,7 @@ export type Objkt_Min_Fields = {
   id?: Maybe<Scalars['String']['output']>;
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id?: Maybe<Scalars['String']['output']>;
-  iteration?: Maybe<Scalars['numeric']['output']>;
+  iteration?: Maybe<Scalars['Int']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -12172,7 +12080,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
   issuer_id?: InputMaybe<Scalars['String']['input']>;
-  iteration?: InputMaybe<Scalars['numeric']['input']>;
+  iteration?: InputMaybe<Scalars['Int']['input']>;
   metadata?: InputMaybe<Scalars['json']['input']>;
   metadata_uri?: InputMaybe<Scalars['String']['input']>;
   minter_id?: InputMaybe<Scalars['String']['input']>;
@@ -12191,7 +12099,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Objkt_Sum_Fields = {
   __typename?: 'objkt_sum_fields';
-  iteration?: Maybe<Scalars['numeric']['output']>;
+  iteration?: Maybe<Scalars['Int']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['float8']['output']>;
@@ -13893,10 +13801,6 @@ export type Onchain_Query = {
   article_revision: Array<Article_Revision>;
   /** fetch data from the table: "article_revision" using primary key columns */
   article_revision_by_pk?: Maybe<Article_Revision>;
-  /** fetch data from the table: "artist" */
-  artist: Array<Artist>;
-  /** fetch aggregated fields from the table: "artist" */
-  artist_aggregate: Artist_Aggregate;
   /** fetch data from the table: "auction" */
   auction: Array<Auction>;
   /** fetch data from the table: "auction_bid" */
@@ -14259,24 +14163,6 @@ export type Onchain_QueryArticle_RevisionArgs = {
 export type Onchain_QueryArticle_Revision_By_PkArgs = {
   article_id: Scalars['Int']['input'];
   iteration: Scalars['smallint']['input'];
-};
-
-
-export type Onchain_QueryArtistArgs = {
-  distinct_on?: InputMaybe<Array<Artist_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Artist_Order_By>>;
-  where?: InputMaybe<Artist_Bool_Exp>;
-};
-
-
-export type Onchain_QueryArtist_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Artist_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Artist_Order_By>>;
-  where?: InputMaybe<Artist_Bool_Exp>;
 };
 
 
@@ -15116,12 +15002,6 @@ export type Onchain_Subscription = {
   article_revision_stream: Array<Article_Revision>;
   /** fetch data from the table in a streaming manner: "article" */
   article_stream: Array<Article>;
-  /** fetch data from the table: "artist" */
-  artist: Array<Artist>;
-  /** fetch aggregated fields from the table: "artist" */
-  artist_aggregate: Artist_Aggregate;
-  /** fetch data from the table in a streaming manner: "artist" */
-  artist_stream: Array<Artist>;
   /** fetch data from the table: "auction" */
   auction: Array<Auction>;
   /** fetch data from the table: "auction_bid" */
@@ -15642,31 +15522,6 @@ export type Onchain_SubscriptionArticle_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Article_Stream_Cursor_Input>>;
   where?: InputMaybe<Article_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionArtistArgs = {
-  distinct_on?: InputMaybe<Array<Artist_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Artist_Order_By>>;
-  where?: InputMaybe<Artist_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionArtist_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Artist_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Artist_Order_By>>;
-  where?: InputMaybe<Artist_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionArtist_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Artist_Stream_Cursor_Input>>;
-  where?: InputMaybe<Artist_Bool_Exp>;
 };
 
 
@@ -20338,21 +20193,21 @@ export type GetWhitelistQuery = { __typename?: 'query_root', offchain?: { __type
 
 export type Article_BaseDetailsFragment = { __typename?: 'article', id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null };
 
-export type Article_FullDetailsFragment = { __typename?: 'article', body: string, tags: Array<string>, language: string, editions: any, royalties: number, metadata_uri: string, metadata: any, flag: any, id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, moderation_reason?: { __typename?: 'moderation_reason', id: string, reason: string } | null, splits: Array<{ __typename?: 'split', pct: number, user: { __typename?: 'user', id: string, name?: string | null } }>, article_revisions: Array<{ __typename?: 'article_revision', iteration: any, metadata_uri: string, created_at: any, op_hash: string }>, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null };
+export type Article_FullDetailsFragment = { __typename?: 'article', body: string, tags: Array<string>, language: string, editions: number, royalties: number, metadata_uri: string, metadata: any, flag: any, id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, moderation_reason?: { __typename?: 'moderation_reason', id: string, reason: string } | null, splits: Array<{ __typename?: 'split', pct: number, user: { __typename?: 'user', id: string, name?: string | null } }>, article_revisions: Array<{ __typename?: 'article_revision', iteration: any, metadata_uri: string, created_at: any, op_hash: string }>, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null };
 
 export type GetFullArticleByIdQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetFullArticleByIdQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', article_by_pk?: { __typename?: 'article', body: string, tags: Array<string>, language: string, editions: any, royalties: number, metadata_uri: string, metadata: any, flag: any, id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, moderation_reason?: { __typename?: 'moderation_reason', id: string, reason: string } | null, splits: Array<{ __typename?: 'split', pct: number, user: { __typename?: 'user', id: string, name?: string | null } }>, article_revisions: Array<{ __typename?: 'article_revision', iteration: any, metadata_uri: string, created_at: any, op_hash: string }>, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null } | null } | null };
+export type GetFullArticleByIdQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', article_by_pk?: { __typename?: 'article', body: string, tags: Array<string>, language: string, editions: number, royalties: number, metadata_uri: string, metadata: any, flag: any, id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, moderation_reason?: { __typename?: 'moderation_reason', id: string, reason: string } | null, splits: Array<{ __typename?: 'split', pct: number, user: { __typename?: 'user', id: string, name?: string | null } }>, article_revisions: Array<{ __typename?: 'article_revision', iteration: any, metadata_uri: string, created_at: any, op_hash: string }>, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null } | null } | null };
 
 export type GetFullArticleBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetFullArticleBySlugQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', article: Array<{ __typename?: 'article', body: string, tags: Array<string>, language: string, editions: any, royalties: number, metadata_uri: string, metadata: any, flag: any, id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, moderation_reason?: { __typename?: 'moderation_reason', id: string, reason: string } | null, splits: Array<{ __typename?: 'split', pct: number, user: { __typename?: 'user', id: string, name?: string | null } }>, article_revisions: Array<{ __typename?: 'article_revision', iteration: any, metadata_uri: string, created_at: any, op_hash: string }>, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null }> } | null };
+export type GetFullArticleBySlugQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', article: Array<{ __typename?: 'article', body: string, tags: Array<string>, language: string, editions: number, royalties: number, metadata_uri: string, metadata: any, flag: any, id: number, created_at: any, slug: string, title: string, description: string, thumbnail_uri: string, thumbnail_caption?: string | null, display_uri: string, moderation_reason?: { __typename?: 'moderation_reason', id: string, reason: string } | null, splits: Array<{ __typename?: 'split', pct: number, user: { __typename?: 'user', id: string, name?: string | null } }>, article_revisions: Array<{ __typename?: 'article_revision', iteration: any, metadata_uri: string, created_at: any, op_hash: string }>, user: { __typename?: 'user', id: string, name?: string | null }, media_image?: { __typename?: 'media_image', id: any, width?: number | null, height?: number | null, placeholder?: string | null } | null }> } | null };
 
 export type GetEthPrimarySplitsQueryVariables = Exact<{
   where?: InputMaybe<Eth_Primary_Splits_Bool_Exp>;
@@ -20382,7 +20237,7 @@ export type Qu_GenerativeTokenByIdQueryVariables = Exact<{
 }>;
 
 
-export type Qu_GenerativeTokenByIdQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', generative_token_by_pk?: { __typename?: 'generative_token', id: string, thumbnail_uri?: string | null, actions: Array<{ __typename?: 'action', id: string, chain?: string | null, created_at: any, metadata?: any | null, numeric_value?: string | null, op_hash: string, type: any, generative_token?: { __typename?: 'generative_token', id: string } | null, objkt?: { __typename?: 'objkt', id: string, iteration?: string | null } | null, issuer?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null } | null } } | null } | null, target?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null } | null } } | null } | null }> } | null } | null };
+export type Qu_GenerativeTokenByIdQuery = { __typename?: 'query_root', onchain?: { __typename?: 'onchain_query', generative_token_by_pk?: { __typename?: 'generative_token', id: string, thumbnail_uri?: string | null, actions: Array<{ __typename?: 'action', id: string, chain?: string | null, created_at: any, metadata?: any | null, numeric_value?: string | null, op_hash: string, type: any, generative_token?: { __typename?: 'generative_token', id: string } | null, objkt?: { __typename?: 'objkt', id: string, iteration: number } | null, issuer?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null } | null } } | null } | null, target?: { __typename?: 'user', id: string, wallet?: { __typename?: 'Wallet', account: { __typename?: 'Account', id: string, username: string, profile?: { __typename?: 'Profile', picture?: string | null } | null } } | null } | null }> } | null } | null };
 
 export type Qu_GetObjectsOfTokenAndWalletsQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['String']['input']>;
