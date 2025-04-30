@@ -8,7 +8,7 @@ import { getCurrentChain } from "@/services/Wallet.js"
 import { projectFactoryAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TTokenLaunchpadCreateProjectAndLaunchTokenEthOperationParams = {
+export type TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams = {
   // The name of the project
   name: string
   // The symbol of the project
@@ -26,18 +26,18 @@ export type TTokenLaunchpadCreateProjectAndLaunchTokenEthOperationParams = {
   purchaseAmount: bigint
 }
 
-export class TokenLaunchpadCreateProjectAndLaunchTokenEthOperation extends EthereumContractOperation<TTokenLaunchpadCreateProjectAndLaunchTokenEthOperationParams> {
+export class TokenLaunchpadLaunchProjectAndCreateTokenEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<
       typeof projectFactoryAbi,
-      "createProjectAndLaunchToken"
+      "launchTokenAndCreateProject"
     > = {
       address: config.base.contracts.fx_project_factory,
       abi: projectFactoryAbi,
-      functionName: "createProjectAndLaunchToken",
+      functionName: "launchTokenAndCreateProject",
       args: [
         this.params.name,
         this.params.symbol,
