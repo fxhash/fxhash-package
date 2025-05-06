@@ -1,5 +1,5 @@
 export type HashParams = {
-  hash: string;
+  params: string;
   lineage: string[];
 }
 
@@ -7,29 +7,29 @@ export function parseHashParams(url: string): HashParams {
   const hashIndex = url.indexOf('#');
 
   if (hashIndex === -1) {
-    return { hash: '', lineage: [] };
+    return { params: '', lineage: [] };
   }
 
-  const hash = url.slice(hashIndex + 1);
+  const params = url.slice(hashIndex + 1);
 
   // old params only #0x{bytes}
-  if (hash.startsWith('0x')) {
-    return { hash, lineage: [] };
+  if (params.startsWith('0x')) {
+    return { params, lineage: [] };
   }
 
-  // new extensible hash params #lineage=...&params=...
-  const params = new URLSearchParams(hash);
+  // new extensible params params #lineage=...&params=...
+  const urlSearchParams = new URLSearchParams(params);
 
-  // handle hash lineage param
+  // handle params lineage param
   let lineage: string[] = [];
-  const lineageParam = params.get('lineage');
+  const lineageParam = urlSearchParams.get('lineage');
 
   if (lineageParam) {
     lineage = lineageParam.split(',').map((l) => l.trim());
   }
 
   return {
-    hash: params.get('hash') || hash,
+    params: urlSearchParams.get('params') || params,
     lineage
   };
 }

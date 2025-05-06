@@ -37,23 +37,19 @@ export function createFxhashSdk(window: Window): FxHashApi {
   }
   // get the byte params from the URL
   const {
-    hash,
-    lineage
+    params,
+    lineage: _lineage
   } = parseHashParams(window.location.href)
-  const initialInputBytes = hash?.replace("0x", "")
 
-  // inheritence
-  const hash_list = [...lineage, fxhash]
-
+  const initialInputBytes = params.replace("0x", "")
+  const lineage = [..._lineage, fxhash]
   const fxRandsByDepth = [...lineage.map(h => createFxRandom(h)), fxrand]
 
   const $fx: FxHashApi = {
     _version: version,
     _processors: ParameterProcessors,
-    // where params def & features will be stored
     _params: undefined,
     _features: undefined,
-    // where the parameter values are stored
     _rawValues: {},
     _paramValues: {},
     _listeners: {},
@@ -127,12 +123,10 @@ export function createFxhashSdk(window: Window): FxHashApi {
       })
     },
     _fxRandsByDepth: fxRandsByDepth,
-    createFxRandom: function (hash: string) {
-
-    }
+    createFxRandom: createFxRandom,
     hash: fxhash,
-    hashList: hash_list,
-    depth: hash_list.length - 1,
+    lineage: lineage,
+    depth: lineage.length - 1,
     rand: fxrand,
     randAt: function (depth: number) {
       return this._fxRandsByDepth[depth]
@@ -245,7 +239,6 @@ export function createFxhashSdk(window: Window): FxHashApi {
     genomes: {},
     defineGenome: function (name: string, evolve) {
       const val = evolve(this.depth)
-      // TODO: add genomes to list of features?
       this.genomes[name] = val
       return val
     },

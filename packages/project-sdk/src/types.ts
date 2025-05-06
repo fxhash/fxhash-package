@@ -7,7 +7,7 @@ import {
   type FxParamsRaw,
   type FxParamsTransformed,
 } from "@fxhash/params"
-import { ResettableRandFunction } from "@fxhash/utils"
+import { createFxRandom, ResettableRandFunction } from "@fxhash/utils"
 
 export type FxHashExecutionContext = "standalone" | "capture" | "minting"
 
@@ -32,11 +32,12 @@ export type FxhashSdkPrivate = {
 type _Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 interface UserDefinedParams
-  extends _Optional<FxParamDefinition<FxParamType>, "value" | "options"> {}
+  extends _Optional<FxParamDefinition<FxParamType>, "value" | "options"> { }
 
 export type FxHashApi = FxhashSdkPrivate & {
+  createFxRandom: (hash: string) => ResettableRandFunction
   hash: string
-  hashList: string[]
+  lineage: string[]
   depth: number
   minter: string
   iteration: number
