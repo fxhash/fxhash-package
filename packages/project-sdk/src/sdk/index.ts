@@ -1,8 +1,9 @@
-import { FxEmitData, FxHashApi, FxHashExecutionContext } from "../types"
+import { type FxHashApi, type FxHashExecutionContext } from "../types"
 import {
   createFxRandom,
   mockTezosAddress,
   mockTezosTransactionHash,
+  parseHashParams,
 } from "@fxhash/utils"
 import {
   serializeParams,
@@ -35,15 +36,16 @@ export function createFxhashSdk(window: Window): FxHashApi {
     setTimeout(() => fxpreview(), 500)
   }
   // get the byte params from the URL
-  const searchParams = window.location.hash
-  const initialInputBytes = searchParams?.replace("#0x", "")
+  const {
+    hash,
+    lineage
+  } = parseHashParams(window.location.href)
+  const initialInputBytes = hash?.replace("0x", "")
 
   // inheritence
-  // TODO: retrieve parent hashes from window.location.hash
-  const parentHashes = [] as string[]
-  const hash_list = [...parentHashes, fxhash]
+  const hash_list = [...lineage, fxhash]
 
-  const fxRandsByDepth = [...parentHashes.map(h => createFxRandom(h)), fxrand]
+  const fxRandsByDepth = [...lineage.map(h => createFxRandom(h)), fxrand]
 
   const $fx: FxHashApi = {
     _version: version,
@@ -125,6 +127,9 @@ export function createFxhashSdk(window: Window): FxHashApi {
       })
     },
     _fxRandsByDepth: fxRandsByDepth,
+    createFxRandom: function (hash: string) {
+
+    }
     hash: fxhash,
     hashList: hash_list,
     depth: hash_list.length - 1,
