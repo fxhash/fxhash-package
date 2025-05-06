@@ -18,6 +18,15 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     stateMutability: "nonpayable",
     type: "constructor",
   },
+  { inputs: [], name: "AccessControlBadConfirmation", type: "error" },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "bytes32", name: "neededRole", type: "bytes32" },
+    ],
+    name: "AccessControlUnauthorizedAccount",
+    type: "error",
+  },
   { inputs: [], name: "EnforcedPause", type: "error" },
   { inputs: [], name: "ExpectedPause", type: "error" },
   {
@@ -52,15 +61,26 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
   },
   {
     inputs: [],
+    name: "TokenLaunchpad__InvalidCreatorAddress",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "TokenLaunchpad__InvalidGraduationReserve",
     type: "error",
   },
+  { inputs: [], name: "TokenLaunchpad__InvalidK", type: "error" },
   {
     inputs: [],
     name: "TokenLaunchpad__InvalidPurchaseAmount",
     type: "error",
   },
   { inputs: [], name: "TokenLaunchpad__InvalidRate", type: "error" },
+  {
+    inputs: [],
+    name: "TokenLaunchpad__InvalidSeedAmount",
+    type: "error",
+  },
   { inputs: [], name: "TokenLaunchpad__InvalidSupply", type: "error" },
   {
     inputs: [],
@@ -193,6 +213,19 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "k",
+        type: "uint256",
+      },
+    ],
+    name: "KUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
         name: "user",
@@ -214,12 +247,6 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
         indexed: false,
         internalType: "uint256",
         name: "id",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "purchasedAmount",
         type: "uint256",
       },
       {
@@ -273,6 +300,19 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "maxGraduationReserve",
+        type: "uint256",
+      },
+    ],
+    name: "MaxGraduationReserveUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
         name: "user",
@@ -298,6 +338,19 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
       },
     ],
     name: "Migrated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "minSeedAmount",
+        type: "uint256",
+      },
+    ],
+    name: "MinSeedAmountUpdated",
     type: "event",
   },
   {
@@ -448,6 +501,81 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     inputs: [
       {
         indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "previousAdminRole",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "newAdminRole",
+        type: "bytes32",
+      },
+    ],
+    name: "RoleAdminChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleGranted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleRevoked",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
         name: "creatorToken",
         type: "address",
@@ -514,6 +642,13 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
   },
   {
     inputs: [],
+    name: "DEFAULT_ADMIN_ROLE",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "INITIAL_FEE_PERCENTAGE",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
@@ -528,6 +663,27 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
   },
   {
     inputs: [],
+    name: "INITIAL_K",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "INITIAL_MAX_GRADUATION_RESERVE",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "INITIAL_MIN_SEED_AMOUNT",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "INITIAL_SUPPLY",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
@@ -535,28 +691,14 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
   },
   {
     inputs: [],
-    name: "K",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "LAUNCHER_ROLE",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "MAX_FEE_PERCENTAGE",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MAX_GRADUATION_RESERVE",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MIN_SEED_AMOUNT",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
@@ -665,6 +807,24 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     inputs: [
       { internalType: "address", name: "_creatorToken", type: "address" },
     ],
+    name: "getGraduatedToken",
+    outputs: [
+      { internalType: "address", name: "graduatedToken", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "role", type: "bytes32" }],
+    name: "getRoleAdmin",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "_creatorToken", type: "address" },
+    ],
     name: "getTokenReserves",
     outputs: [
       { internalType: "uint256", name: "", type: "uint256" },
@@ -711,6 +871,33 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "address", name: "_launcher", type: "address" }],
+    name: "grantLauncherRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "account", type: "address" },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "account", type: "address" },
+    ],
+    name: "hasRole",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "initialSupply",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -733,6 +920,13 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "k",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "string", name: "_name", type: "string" },
       { internalType: "string", name: "_symbol", type: "string" },
@@ -743,7 +937,27 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
       },
     ],
     name: "launch",
-    outputs: [],
+    outputs: [
+      { internalType: "address", name: "creatorToken", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "_creator", type: "address" },
+      { internalType: "string", name: "_name", type: "string" },
+      { internalType: "string", name: "_symbol", type: "string" },
+      {
+        internalType: "uint256",
+        name: "_totalFxAmountIn",
+        type: "uint256",
+      },
+    ],
+    name: "launchFor",
+    outputs: [
+      { internalType: "address", name: "creatorToken", type: "address" },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -757,6 +971,13 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
         type: "address",
       },
     ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxGraduationReserve",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
@@ -777,6 +998,13 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     name: "migrateFor",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "minSeedAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -818,8 +1046,52 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_desiredAmountOut",
+        type: "uint256",
+      },
+    ],
+    name: "previewLaunch",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      {
+        internalType: "address",
+        name: "callerConfirmation",
+        type: "address",
+      },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "_launcher", type: "address" }],
+    name: "revokeLauncherRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "account", type: "address" },
+    ],
+    name: "revokeRole",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -864,6 +1136,34 @@ export const FX_TOKEN_LAUNCHPAD_ABI = [
     name: "setInitialSupply",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_newK", type: "uint256" }],
+    name: "setK",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_newReserve", type: "uint256" }],
+    name: "setMaxGraduationReserve",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_newAmount", type: "uint256" }],
+    name: "setMinSeedAmount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
+    name: "supportsInterface",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
     type: "function",
   },
   {
