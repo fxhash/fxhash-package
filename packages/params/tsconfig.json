@@ -1,7 +1,11 @@
 {
-  "extends": "@fxhash/tsconfig/react",
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"],
+  "extends": "@fxhash/tsconfig/base",
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
