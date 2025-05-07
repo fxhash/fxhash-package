@@ -138,6 +138,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
     depth: lineage.length - 1,
     rand: fxrand,
     randAt: function (depth: number) {
+      if (!this._fxRandsByDepth[depth]) throw new Error("Invalid depth")
       return this._fxRandsByDepth[depth]
     },
     minter: fxminter,
