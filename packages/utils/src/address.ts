@@ -1,4 +1,4 @@
-import { BASE58_CHARSET } from "./base58"
+import { BASE58_CHARSET } from "./constants"
 
 // todo: should maybe merge @fxhash/utils & @fxhash/shared ?
 // or move this into shared ? as it's sort of blockchain-related
