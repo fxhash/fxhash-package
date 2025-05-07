@@ -51,7 +51,7 @@ export type FxHashApi = FxhashSdkPrivate & {
   context: FxHashExecutionContext
   inputBytes?: string
   preview: () => void
-  captureFrame: (isLastFrame: boolean) => void
+  captureFrame: (isLastFrame?: boolean) => void
   isPreview: boolean
   features: (features: FxFeatures) => void
   getFeature: (id: string) => FxFeatureValue

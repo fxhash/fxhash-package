@@ -45,11 +45,10 @@ export function createFxhashSdk(window: Window): FxHashApi {
     setTimeout(() => fxpreview(), 500)
   }
   // call this function to trigger capture frame
-  function captureFrame(isLastFrame: boolean) {
-    window.dispatchEvent(new Event("fxhash-capture-frame"))
+  function captureFrame(isLastFrame: boolean = false) {
+    window.dispatchEvent(new CustomEvent("fxhash-capture-frame", { detail: { isLastFrame: isLastFrame } }))
     setTimeout(() => captureFrame(isLastFrame), 500)
   }
-
   // get the byte params from the URL
   const {
     params,
