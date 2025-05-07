@@ -7,7 +7,9 @@ import {
   type FxParamsRaw,
   type FxParamsTransformed,
 } from "@fxhash/params"
-import { createFxRandom, ResettableRandFunction } from "@fxhash/utils"
+import {
+  type ResettableRandFunction
+} from "@fxhash/utils"
 
 export type FxHashExecutionContext = "standalone" | "capture" | "minting"
 

@@ -1,20 +1,29 @@
-import { type FxHashApi, type FxHashExecutionContext } from "../types"
+import {
+  mockTezosAddress,
+} from "@fxhash/utils/address"
+import {
+  mockTezosTransactionHash,
+} from "@fxhash/utils/hash"
 import {
   createFxRandom,
-  mockTezosAddress,
-  mockTezosTransactionHash,
-  parseHashParams,
-} from "@fxhash/utils"
+} from "@fxhash/utils/math"
+import { parseHashParams } from "@fxhash/utils/url"
+import {
+  type FxParamType,
+  type FxParamValue,
+  type FxParamsRaw,
+} from "@fxhash/params"
 import {
   serializeParams,
   processParams,
   processParam,
   deserializeParams,
   ParameterProcessors,
-  type FxParamType,
-  type FxParamValue,
-  type FxParamsRaw,
-} from "@fxhash/params"
+} from "@fxhash/params/utils"
+import {
+  type FxHashApi,
+  type FxHashExecutionContext
+} from "../types"
 import { version } from "../version"
 
 export function createFxhashSdk(window: Window): FxHashApi {
