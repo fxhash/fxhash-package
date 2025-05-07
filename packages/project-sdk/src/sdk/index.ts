@@ -21,6 +21,7 @@ import {
   ParameterProcessors,
 } from "@fxhash/params/utils"
 import {
+  FxGenomeValues,
   type FxHashApi,
   type FxHashExecutionContext
 } from "../types"
@@ -32,7 +33,6 @@ export function createFxhashSdk(window: Window): FxHashApi {
   const search = new URLSearchParams(window.location.search)
   // make fxrandstring from hash
   const fxhash = search.get("fxhash") || mockTezosTransactionHash()
-  let fxrand = createFxRandom(fxhash)
   // make fxrandminter from minter address
   const fxminter = search.get("fxminter") || mockTezosAddress()
   let fxrandminter = createFxRandom(fxminter)
@@ -52,7 +52,29 @@ export function createFxhashSdk(window: Window): FxHashApi {
 
   const initialInputBytes = params.replace("0x", "")
   const lineage = [..._lineage, fxhash]
-  const fxRandsByDepth = [...lineage.map(h => createFxRandom(h)), fxrand]
+  const fxRandsByDepth = [...lineage.map(h => createFxRandom(h))]
+
+  const resetFxRandByDepth = (depth: number) => {
+    if (depth < 0 || depth >= lineage.length) throw new Error("Invalid depth")
+    const hash = lineage[depth]
+    fxRandsByDepth[depth] = createFxRandom(hash)
+    // Add reset method to this generator as well
+    fxRandsByDepth[depth].reset = () => resetFxRandByDepth(depth)
+
+    // If this is the main rand (last in the array), update $fx.rand too
+    if (depth === lineage.length - 1) {
+      fxrand = fxRandsByDepth[depth]
+      $fx.rand = fxrand
+    }
+  }
+
+  fxRandsByDepth.forEach((generator, index) => {
+    generator.reset = () => resetFxRandByDepth(index)
+  })
+
+  let fxrand = fxRandsByDepth[lineage.length - 1]
+
+  console.log(lineage.length, fxRandsByDepth.length)
 
   const $fx: FxHashApi = {
     _version: version,
@@ -131,15 +153,15 @@ export function createFxhashSdk(window: Window): FxHashApi {
         })
       })
     },
-    _fxRandsByDepth: fxRandsByDepth,
+    _fxRandByDepth: fxRandsByDepth,
     createFxRandom: createFxRandom,
     hash: fxhash,
     lineage: lineage,
     depth: lineage.length - 1,
     rand: fxrand,
     randAt: function (depth: number) {
-      if (!this._fxRandsByDepth[depth]) throw new Error("Invalid depth")
-      return this._fxRandsByDepth[depth]
+      if (!this._fxRandByDepth[depth]) throw new Error("Invalid depth")
+      return this._fxRandByDepth[depth]
     },
     minter: fxminter,
     randminter: fxrandminter,
@@ -248,15 +270,29 @@ export function createFxhashSdk(window: Window): FxHashApi {
     },
     genomes: {},
     defineGenome: function (name: string, evolve) {
-      const val = evolve(this.depth)
+      const val = evolve(this.depth, this.lineage)
       this.genomes[name] = val
       return val
     },
+    defineGenomes(defs) {
+      const results: FxGenomeValues = {}
+      for (const key in defs) {
+        const fn = defs[key]
+        const value = fn(this.depth, this.lineage)
+        this.genomes[key] = value
+        results[key] = value
+      }
+      return results
+    },
+    getGenome(name) {
+      return this.genomes[name]
+    },
+    getGeomes() {
+      return this.genomes
+    }
   }
   const resetFxRand: () => void = () => {
-    fxrand = createFxRandom(fxhash)
-    $fx.rand = fxrand
-    fxrand.reset = resetFxRand
+    resetFxRandByDepth(lineage.length - 1)
   }
   fxrand.reset = resetFxRand
   const resetFxRandMinter: () => void = () => {
