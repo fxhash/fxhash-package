@@ -44,6 +44,12 @@ export function createFxhashSdk(window: Window): FxHashApi {
     window.dispatchEvent(new Event("fxhash-preview"))
     setTimeout(() => fxpreview(), 500)
   }
+  // call this function to trigger capture frame
+  function captureFrame(isLastFrame: boolean) {
+    window.dispatchEvent(new Event("fxhash-capture-frame"))
+    setTimeout(() => captureFrame(isLastFrame), 500)
+  }
+
   // get the byte params from the URL
   const {
     params,
@@ -169,6 +175,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
     context:
       (search.get("fxcontext") as FxHashExecutionContext) || "standalone",
     preview: fxpreview,
+    captureFrame: captureFrame,
     isPreview: isFxpreview,
     inputBytes: undefined,
     params: function (definition) {
