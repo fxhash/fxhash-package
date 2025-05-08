@@ -1369,16 +1369,6 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
-    inputs: [
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "address", type: "address" },
-    ],
-    name: "evolutionAllowlist",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     name: "evolutionPermissions",
     outputs: [
@@ -1395,9 +1385,12 @@ export const projectTokenAbi = [
     inputs: [
       { name: "_parentId", internalType: "uint256", type: "uint256" },
       { name: "_to", internalType: "address", type: "address" },
+      { name: "_amount", internalType: "uint256", type: "uint256" },
     ],
     name: "evolve",
-    outputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
+    outputs: [
+      { name: "tokenIds", internalType: "uint256[]", type: "uint256[]" },
+    ],
     stateMutability: "payable",
   },
   {
@@ -1437,6 +1430,16 @@ export const projectTokenAbi = [
   {
     type: "function",
     inputs: [
+      { name: "_tokenId", internalType: "uint256", type: "uint256" },
+      { name: "_user", internalType: "address", type: "address" },
+    ],
+    name: "isAllowedToEvolve",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "owner", internalType: "address", type: "address" },
       { name: "operator", internalType: "address", type: "address" },
     ],
@@ -1446,10 +1449,27 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
+    inputs: [
+      { name: "_tokenId", internalType: "uint256", type: "uint256" },
+      { name: "_user", internalType: "address", type: "address" },
+    ],
+    name: "isInEvolutionAllowlist",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     name: "lineageDepth",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_tokenId", internalType: "uint256", type: "uint256" }],
+    name: "liquidate",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -1547,10 +1567,13 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "_tokenId", internalType: "uint256", type: "uint256" }],
-    name: "redeem",
-    outputs: [],
-    stateMutability: "nonpayable",
+    inputs: [
+      { name: "_tokenId", internalType: "uint256", type: "uint256" },
+      { name: "_to", internalType: "address", type: "address" },
+    ],
+    name: "regenerate",
+    outputs: [{ name: "newTokenId", internalType: "uint256", type: "uint256" }],
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -1579,16 +1602,6 @@ export const projectTokenAbi = [
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "_tokenId", internalType: "uint256", type: "uint256" },
-      { name: "_to", internalType: "address", type: "address" },
-    ],
-    name: "reroll",
-    outputs: [{ name: "newTokenId", internalType: "uint256", type: "uint256" }],
-    stateMutability: "payable",
   },
   {
     type: "function",
@@ -1660,7 +1673,7 @@ export const projectTokenAbi = [
     inputs: [
       { name: "_tokenId", internalType: "uint256", type: "uint256" },
       { name: "_user", internalType: "address", type: "address" },
-      { name: "_canEvovle", internalType: "bool", type: "bool" },
+      { name: "_canEvolve", internalType: "bool", type: "bool" },
     ],
     name: "setEvolutionAllowlist",
     outputs: [],
@@ -2360,7 +2373,7 @@ export const projectTokenAbi = [
         indexed: false,
       },
     ],
-    name: "TokenRedeemed",
+    name: "TokenLiquidated",
   },
   {
     type: "event",
@@ -2385,7 +2398,7 @@ export const projectTokenAbi = [
         indexed: true,
       },
     ],
-    name: "TokenRerolled",
+    name: "TokenRegenerated",
   },
   {
     type: "event",
@@ -2574,6 +2587,7 @@ export const projectTokenAbi = [
     name: "ProjectToken__InsufficientFee",
   },
   { type: "error", inputs: [], name: "ProjectToken__InsufficientSupply" },
+  { type: "error", inputs: [], name: "ProjectToken__InvalidAmount" },
   {
     type: "error",
     inputs: [{ name: "currency", internalType: "address", type: "address" }],
@@ -2934,13 +2948,6 @@ export const tokenLaunchpadAbi = [
   {
     type: "function",
     inputs: [],
-    name: "INITIAL_FX_RATE",
-    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
     name: "INITIAL_K",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
@@ -3022,13 +3029,6 @@ export const tokenLaunchpadAbi = [
     inputs: [],
     name: "feeReceiver",
     outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "fxRate",
-    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -3375,13 +3375,6 @@ export const tokenLaunchpadAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "_newRate", internalType: "uint256", type: "uint256" }],
-    name: "setFxRate",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     inputs: [{ name: "_newSupply", internalType: "uint256", type: "uint256" }],
     name: "setInitialSupply",
     outputs: [],
@@ -3508,19 +3501,6 @@ export const tokenLaunchpadAbi = [
       },
     ],
     name: "FeeReceiverUpdated",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "fxRate",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-    ],
-    name: "FxRateUpdated",
   },
   {
     type: "event",
@@ -3972,6 +3952,7 @@ export const tokenLaunchpadAbi = [
   { type: "error", inputs: [], name: "TokenLaunchpad__FeeExceedsMaximum" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InsufficientLiquidity" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidCreatorAddress" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InvalidGraduation" },
   {
     type: "error",
     inputs: [],
@@ -3983,7 +3964,6 @@ export const tokenLaunchpadAbi = [
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidSeedAmount" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidSupply" },
   { type: "error", inputs: [], name: "TokenLaunchpad__NoTokensToMigrate" },
-  { type: "error", inputs: [], name: "TokenLaunchpad__NotTokenCreator" },
   { type: "error", inputs: [], name: "TokenLaunchpad__TokenNotGraduated" },
   { type: "error", inputs: [], name: "TokenLaunchpad__TokenNotLaunched" },
   { type: "error", inputs: [], name: "TokenLaunchpad__TradingNotEnabled" },

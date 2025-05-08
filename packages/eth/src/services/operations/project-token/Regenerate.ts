@@ -8,10 +8,10 @@ import { getCurrentChain } from "@/services/Wallet.js"
 import { projectTokenAbi } from "@/__generated__/wagmi.js"
 import { zeroAddress } from "viem"
 
-export type TProjectTokenReRollEthOperationParams = {
+export type TProjectTokenRegenerateEthOperationParams = {
   // The address of the project token
   projectToken: `0x${string}`
-  // The token ID to reroll
+  // The token ID to regenerate
   tokenId: bigint
   // The address of the recipient
   address: `0x${string}`
@@ -21,18 +21,18 @@ export type TProjectTokenReRollEthOperationParams = {
   mintFeeCurrency?: string
 }
 
-export class ProjectTokenReRollEthOperation extends EthereumContractOperation<TProjectTokenReRollEthOperationParams> {
+export class ProjectTokenRegenerateEthOperation extends EthereumContractOperation<TProjectTokenRegenerateEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<
       typeof projectTokenAbi,
-      "reroll"
+      "regenerate"
     > = {
       address: this.params.projectToken,
       abi: projectTokenAbi,
-      functionName: "reroll",
+      functionName: "regenerate",
       args: [this.params.tokenId, this.params.address],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),

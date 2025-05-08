@@ -7,24 +7,24 @@ import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 import { projectTokenAbi } from "@/__generated__/wagmi.js"
 
-export type TProjectTokenRedeemEthOperationParams = {
+export type TProjectTokenLiquidateEthOperationParams = {
   // The address of the project token
   projectToken: `0x${string}`
   tokenId: bigint
 }
 
-export class ProjectTokenRedeemEthOperation extends EthereumContractOperation<TProjectTokenRedeemEthOperationParams> {
+export class ProjectTokenLiquidateEthOperation extends EthereumContractOperation<TProjectTokenLiquidateEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<
       typeof projectTokenAbi,
-      "redeem"
+      "liquidate"
     > = {
       address: this.params.projectToken,
       abi: projectTokenAbi,
-      functionName: "redeem",
+      functionName: "liquidate",
       args: [this.params.tokenId],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
@@ -37,6 +37,6 @@ export class ProjectTokenRedeemEthOperation extends EthereumContractOperation<TP
   }
 
   success(): string {
-    return "Successfully redeemed token"
+    return "Successfully liquidated token"
   }
 }
