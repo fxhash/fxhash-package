@@ -5,7 +5,7 @@ export default defineConfig((options: Options) => ({
   entry: ["src/index.ts"],
   outDir: "dist",
   format: "esm",
-  jsx: "react",
+  jsx: "automatic",
   loader: {
     ".svg": "dataurl",
   },

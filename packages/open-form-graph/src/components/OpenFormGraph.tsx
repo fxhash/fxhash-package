@@ -1,4 +1,3 @@
-import React from 'react';
 import ForceGraph2D from "react-force-graph-2d"
 import { useEffect, useRef } from "react"
 import { forceCollide } from "d3-force"
