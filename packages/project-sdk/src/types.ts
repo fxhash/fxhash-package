@@ -38,6 +38,11 @@ interface UserDefinedParams
 
 export type FxLineage = string[]
 
+export type RandAtFunction = (depth: number) => number
+interface ResettableRandAtFunction extends RandAtFunction {
+  reset: (depth: number) => void
+}
+
 export type FxHashApi = FxhashSdkPrivate & {
   createFxRandom: (hash: string) => ResettableRandFunction
   hash: string
@@ -46,7 +51,7 @@ export type FxHashApi = FxhashSdkPrivate & {
   minter: string
   iteration: number
   rand: ResettableRandFunction
-  randAt: (depth: number) => ResettableRandFunction
+  randAt: ResettableRandAtFunction
   randminter: ResettableRandFunction
   context: FxHashExecutionContext
   inputBytes?: string
@@ -70,26 +75,10 @@ export type FxHashApi = FxhashSdkPrivate & {
   getRandomParam: (id: string) => FxParamValue<FxParamType>
   on: (event: FxEventId, handler: FxOnEventHandler, onDone: FxOnDone) => void
   emit: (event: FxEventId, data: FxEmitData) => void
-  genomes: FxGenomeValues
-  defineGenome: (
-    name: string,
-    genome: FxGenome<FxFeatureValue>
-  ) => FxFeatureValue
-  defineGenomes: (defs: FxGenomeDefinitions) => FxGenomeValues
-  getGenome: (name: string) => FxFeatureValue
-  getGeomes: () => FxFeatures
 }
 
 export type FxFeatureValue = string | number | boolean
 export type FxFeatures = Record<string, FxFeatureValue>
-
-export type FxGenome<FxFeatureValue> = (depth: number, lineage: FxLineage) => FxFeatureValue
-export type FxGenomeValues = {
-  [featureName: string]: FxFeatureValue
-}
-export type FxGenomeDefinitions = {
-  [featureName: string]: FxGenome<FxFeatureValue>
-}
 
 export type FxEventId = "params:update"
 export type FxEmitData = Record<string, FxParamValue<FxParamType>>

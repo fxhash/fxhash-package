@@ -21,7 +21,6 @@ import {
   ParameterProcessors,
 } from "@fxhash/params/utils"
 import {
-  FxGenomeValues,
   type FxHashApi,
   type FxHashExecutionContext
 } from "../types"
@@ -79,7 +78,13 @@ export function createFxhashSdk(window: Window): FxHashApi {
 
   let fxrand = fxRandsByDepth[lineage.length - 1]
 
-  console.log(lineage.length, fxRandsByDepth.length)
+  function randAt(depth: number) {
+    if (!fxRandsByDepth[depth]) throw new Error("Invalid depth")
+    return fxRandsByDepth[depth]()
+  }
+  randAt.reset = (depth: number) => {
+    resetFxRandByDepth(depth)
+  }
 
   const $fx: FxHashApi = {
     _version: version,
@@ -164,10 +169,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
     lineage: lineage,
     depth: lineage.length - 1,
     rand: fxrand,
-    randAt: function (depth: number) {
-      if (!this._fxRandByDepth[depth]) throw new Error("Invalid depth")
-      return this._fxRandByDepth[depth]
-    },
+    randAt: randAt,
     minter: fxminter,
     randminter: fxrandminter,
     iteration: Number(search.get("fxiteration")) || 1,
@@ -182,7 +184,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
         ...def,
         version: this._version,
         value: def.default,
-        options: def.options || {},
+        options: def.options,
       }))
       this._rawValues = deserializeParams(initialInputBytes, this._params, {
         withTransform: true,
@@ -226,7 +228,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
       return processor.random(definition as any)
     },
     getDefinitions: function () {
-      if (!this._params) throw new Error("Params not defined")
+      if (!this._params) return []
       return this._params
     },
     stringifyParams: function (params) {
@@ -274,28 +276,6 @@ export function createFxhashSdk(window: Window): FxHashApi {
           break
       }
     },
-    genomes: {},
-    defineGenome: function (name: string, evolve) {
-      const val = evolve(this.depth, this.lineage)
-      this.genomes[name] = val
-      return val
-    },
-    defineGenomes(defs) {
-      const results: FxGenomeValues = {}
-      for (const key in defs) {
-        const fn = defs[key]
-        const value = fn(this.depth, this.lineage)
-        this.genomes[key] = value
-        results[key] = value
-      }
-      return results
-    },
-    getGenome(name) {
-      return this.genomes[name]
-    },
-    getGeomes() {
-      return this.genomes
-    }
   }
   const resetFxRand: () => void = () => {
     resetFxRandByDepth(lineage.length - 1)
