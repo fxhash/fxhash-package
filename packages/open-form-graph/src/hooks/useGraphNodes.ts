@@ -1,4 +1,3 @@
-
 import { useOpenFormGraph } from "@/context/graph"
 import { circle, rect, img } from "@/util/canvas"
 import { dim } from "@/util/color"
@@ -15,7 +14,8 @@ export function useGraphNodes() {
     clusterSizeRange,
     highlights,
     hasNodeChildren,
-    config, getNodeSize,
+    config,
+    getNodeSize,
   } = useOpenFormGraph()
 
   const { color, colorContrast } = useColor()
@@ -32,29 +32,31 @@ export function useGraphNodes() {
     [clusterSizeRange]
   )
 
-  const nodePointerAreaPaint = useCallback((node: Node, col: string, ctx: CanvasRenderingContext2D, scale: number) => {
-    const size = getNodeSize(node.id as string)
-    const collapsed = node.collapsed && hasNodeChildren(node.id as string)
-    const isSelected = selectedNode?.id === node.id
-    if (collapsed) {
-      circle(ctx, node.x, node.y, size, {
-        stroke: true,
-        strokeStyle: col,
-        fill: true,
-        fillStyle: col,
-      })
-    } else {
-      rect(ctx, node.x - size / 2, node.y - size / 2, size, size, {
-        stroke: true,
-        strokeStyle: col,
-        lineWidth: isSelected ? 1 : 0.2,
-        fill: true,
-        fillStyle: col,
-        borderRadius: 1,
-      })
-
-    }
-  }, [getNodeSize, hasNodeChildren, selectedNode])
+  const nodePointerAreaPaint = useCallback(
+    (node: Node, col: string, ctx: CanvasRenderingContext2D, scale: number) => {
+      const size = getNodeSize(node.id as string)
+      const collapsed = node.collapsed && hasNodeChildren(node.id as string)
+      const isSelected = selectedNode?.id === node.id
+      if (collapsed) {
+        circle(ctx, node.x, node.y, size, {
+          stroke: true,
+          strokeStyle: col,
+          fill: true,
+          fillStyle: col,
+        })
+      } else {
+        rect(ctx, node.x - size / 2, node.y - size / 2, size, size, {
+          stroke: true,
+          strokeStyle: col,
+          lineWidth: isSelected ? 1 : 0.2,
+          fill: true,
+          fillStyle: col,
+          borderRadius: 1,
+        })
+      }
+    },
+    [getNodeSize, hasNodeChildren, selectedNode]
+  )
 
   const renderNode = useCallback(
     (node: NodeObject<Node>, ctx: CanvasRenderingContext2D, scale: number) => {
@@ -81,7 +83,6 @@ export function useGraphNodes() {
           fill: true,
           fillStyle: color(dim(opacity, isLight))(),
         })
-
 
         const showLabel = visibilityScale(node.clusterSize, scale)
 
@@ -138,6 +139,6 @@ export function useGraphNodes() {
   )
   return {
     renderNode,
-    nodePointerAreaPaint
+    nodePointerAreaPaint,
   }
 }

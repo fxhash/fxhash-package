@@ -1,5 +1,5 @@
-import { useOpenFormGraph } from "@/context/graph";
-import { useColor } from "./useColor";
+import { useOpenFormGraph } from "@/context/graph"
+import { useColor } from "./useColor"
 
 export function useGraphLinks() {
   const { color } = useColor()
@@ -13,6 +13,6 @@ export function useGraphLinks() {
     linkWidth: (link: { source: { id: string }; target: { id: string } }) => {
       const isHighlighted = highlights.links.find(l => l === link)
       return isHighlighted ? 1.2 : 1
-    }
+    },
   }
 }

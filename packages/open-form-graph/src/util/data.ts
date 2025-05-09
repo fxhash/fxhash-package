@@ -1049,24 +1049,24 @@ export function collectChildren(
   node: Node,
   threshold: number,
   visited = new Set<string>()
-): { nodes: Node[], links: Link[] } {
-  const collectedNodes: Node[] = [];
-  const collectedLinks: Link[] = [];
+): { nodes: Node[]; links: Link[] } {
+  const collectedNodes: Node[] = []
+  const collectedLinks: Link[] = []
 
   function collect(n: Node) {
     for (const link of n.childLinks) {
-      const child = link.target;
-      if (visited.has(child.id)) continue;
+      const child = link.target
+      if (visited.has(child.id)) continue
       if (child.clusterSize <= threshold || !node.collapsed) {
-        visited.add(child.id);
-        collectedNodes.push(child);
-        collectedLinks.push(link);
-        collect(child);
+        visited.add(child.id)
+        collectedNodes.push(child)
+        collectedLinks.push(link)
+        collect(child)
       }
     }
   }
 
-  collect(node);
+  collect(node)
 
-  return { nodes: collectedNodes, links: collectedLinks };
+  return { nodes: collectedNodes, links: collectedLinks }
 }

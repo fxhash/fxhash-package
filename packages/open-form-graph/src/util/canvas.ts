@@ -111,32 +111,32 @@ export function img(
   opacity: number = 1.0,
   bgColor?: string
 ) {
-  ctx.save();
-  ctx.beginPath();
+  ctx.save()
+  ctx.beginPath()
   if (borderRadius > 0) {
-    const r = Math.min(borderRadius, width / 2, height / 2);
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + width - r, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + r);
-    ctx.lineTo(x + width, y + height - r);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
-    ctx.lineTo(x + r, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
+    const r = Math.min(borderRadius, width / 2, height / 2)
+    ctx.moveTo(x + r, y)
+    ctx.lineTo(x + width - r, y)
+    ctx.quadraticCurveTo(x + width, y, x + width, y + r)
+    ctx.lineTo(x + width, y + height - r)
+    ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height)
+    ctx.lineTo(x + r, y + height)
+    ctx.quadraticCurveTo(x, y + height, x, y + height - r)
+    ctx.lineTo(x, y + r)
+    ctx.quadraticCurveTo(x, y, x + r, y)
   } else {
-    ctx.rect(x, y, width, height);
+    ctx.rect(x, y, width, height)
   }
-  ctx.closePath();
+  ctx.closePath()
   if (bgColor) {
-    ctx.save();
-    ctx.fillStyle = bgColor;
-    ctx.globalAlpha = 1.0;
-    ctx.fillRect(x, y, width, height);
-    ctx.restore();
+    ctx.save()
+    ctx.fillStyle = bgColor
+    ctx.globalAlpha = 1.0
+    ctx.fillRect(x, y, width, height)
+    ctx.restore()
   }
-  ctx.clip();
-  ctx.globalAlpha = opacity;
-  ctx.drawImage(image, x, y, width, height);
-  ctx.restore();
+  ctx.clip()
+  ctx.globalAlpha = opacity
+  ctx.drawImage(image, x, y, width, height)
+  ctx.restore()
 }

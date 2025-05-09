@@ -28,8 +28,9 @@ interface OpenFormGraphProviderProps {
   rootId: string
 }
 
-const OpenFormGraphContext = createContext<OpenFormGraphApi | undefined>(undefined)
-
+const OpenFormGraphContext = createContext<OpenFormGraphApi | undefined>(
+  undefined
+)
 
 export function OpenFormGraphProvider({
   config = {},
@@ -39,7 +40,10 @@ export function OpenFormGraphProvider({
   children,
 }: OpenFormGraphProviderProps) {
   const [rootId, setRootId] = useState<string>(_rootId)
-  const [_config, setConfig] = useState<GraphConfig>({ ...DEFAULT_GRAPH_CONFIG, ...config })
+  const [_config, setConfig] = useState<GraphConfig>({
+    ...DEFAULT_GRAPH_CONFIG,
+    ...config,
+  })
   const [_theme, setTheme] = useState<"dark" | "light">(theme)
 
   const [layoutConfig, setLayoutConfig] = useState({
@@ -76,7 +80,10 @@ export function OpenFormGraphProvider({
 
     return {
       nodes: _nodes,
-      links: data.links.map(l => ({ source: nodesById[l.source], target: nodesById[l.target] })),
+      links: data.links.map(l => ({
+        source: nodesById[l.source],
+        target: nodesById[l.target],
+      })),
     }
   }, [data, rootId])
 
@@ -134,29 +141,30 @@ export function OpenFormGraphProvider({
     return nodesById
   }, [graphData, rootId])
 
-  const [highlights, setHighlights] = useState<{ nodes: Node[], links: Link[] }>({ nodes: [], links: [] })
+  const [highlights, setHighlights] = useState<{
+    nodes: Node[]
+    links: Link[]
+  }>({ nodes: [], links: [] })
 
   const prunedTree = useMemo(() => {
     const visibleNodes: Node[] = []
     const visibleLinks: Link[] = []
-      ; (function traverseTree(node = nodesById[rootId]) {
-        visibleNodes.push(node)
-        if (node.collapsed) return
-        visibleLinks.push(...node.childLinks)
-        node.childLinks
-          .map(link => link.target)
-          .forEach(traverseTree)
-      })()
+    ;(function traverseTree(node = nodesById[rootId]) {
+      visibleNodes.push(node)
+      if (node.collapsed) return
+      visibleLinks.push(...node.childLinks)
+      node.childLinks.map(link => link.target).forEach(traverseTree)
+    })()
     visibleNodes.sort((a, b) => {
-      const aHighlighted = highlights.nodes.includes(a);
-      const bHighlighted = highlights.nodes.includes(b);
+      const aHighlighted = highlights.nodes.includes(a)
+      const bHighlighted = highlights.nodes.includes(b)
 
-      if (aHighlighted && !bHighlighted) return -1;
-      if (!aHighlighted && bHighlighted) return 1;
-      if (a.collapsed && !b.collapsed) return 1;
-      if (!a.collapsed && b.collapsed) return -1;
-      return 0;
-    });
+      if (aHighlighted && !bHighlighted) return -1
+      if (!aHighlighted && bHighlighted) return 1
+      if (a.collapsed && !b.collapsed) return 1
+      if (!a.collapsed && b.collapsed) return -1
+      return 0
+    })
 
     return { nodes: visibleNodes, links: visibleLinks }
   }, [nodesById, rootId, highlights])
@@ -168,64 +176,69 @@ export function OpenFormGraphProvider({
 
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
 
-  const breadthFirstSearch = (startNode: Node, rootId: string): { nodes: Node[], links: any[] } => {
-    const resultNodes: Node[] = [startNode];
-    const visited = new Set<string>([startNode.id]);
-    let currentNode = startNode;
-    let pathToRoot: Node[] = [];
+  const breadthFirstSearch = (
+    startNode: Node,
+    rootId: string
+  ): { nodes: Node[]; links: any[] } => {
+    const resultNodes: Node[] = [startNode]
+    const visited = new Set<string>([startNode.id])
+    let currentNode = startNode
+    let pathToRoot: Node[] = []
 
     while (currentNode.id !== rootId) {
-      let foundParent = false;
+      let foundParent = false
 
       for (const link of graphData.links) {
         const sourceId = link.source.id
         const targetId = link.target.id
 
         if (targetId === currentNode.id) {
-          const parentNode = nodesById[sourceId];
+          const parentNode = nodesById[sourceId]
           if (parentNode && !visited.has(parentNode.id)) {
-            pathToRoot.push(parentNode);
-            visited.add(parentNode.id);
-            currentNode = parentNode;
-            foundParent = true;
-            break;
+            pathToRoot.push(parentNode)
+            visited.add(parentNode.id)
+            currentNode = parentNode
+            foundParent = true
+            break
           }
         }
       }
 
-      if (!foundParent || currentNode.id === rootId) break;
+      if (!foundParent || currentNode.id === rootId) break
     }
 
-    const rootNode = nodesById[rootId];
+    const rootNode = nodesById[rootId]
     if (rootNode && !visited.has(rootId)) {
-      pathToRoot.push(rootNode);
-      visited.add(rootId);
+      pathToRoot.push(rootNode)
+      visited.add(rootId)
     }
 
-    resultNodes.push(...pathToRoot);
+    resultNodes.push(...pathToRoot)
 
     graphData.links.forEach(link => {
       const sourceId = link.source.id
       const targetId = link.target.id
 
       if (sourceId === startNode.id) {
-        const childNode = nodesById[targetId];
+        const childNode = nodesById[targetId]
         if (childNode && !visited.has(childNode.id)) {
-          resultNodes.push(childNode);
-          visited.add(childNode.id);
+          resultNodes.push(childNode)
+          visited.add(childNode.id)
         }
       }
-    });
+    })
 
     const resultLinks = graphData.links.filter(link => {
-      const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
-      const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+      const sourceId =
+        typeof link.source === "object" ? link.source.id : link.source
+      const targetId =
+        typeof link.target === "object" ? link.target.id : link.target
 
-      return visited.has(sourceId) && visited.has(targetId);
-    });
+      return visited.has(sourceId) && visited.has(targetId)
+    })
 
-    return { nodes: resultNodes, links: resultLinks };
-  };
+    return { nodes: resultNodes, links: resultLinks }
+  }
 
   const handleNodeClick = useCallback(
     (node: Node) => {
@@ -239,7 +252,10 @@ export function OpenFormGraphProvider({
       children.nodes.forEach(n => {
         n.collapsed = false
       })
-      setHighlights({ nodes: [...highlights.nodes, ...children.nodes], links: [...highlights.links, ...children.links] })
+      setHighlights({
+        nodes: [...highlights.nodes, ...children.nodes],
+        links: [...highlights.links, ...children.links],
+      })
       if (node.collapsed) {
         setSelectedNode(null)
       } else {
@@ -268,31 +284,37 @@ export function OpenFormGraphProvider({
   const minNodeLevel = Math.min(...allLevels)
   const maxNodeLevel = Math.max(...allLevels)
 
-  const getNodeSize = useCallback((nodeId: string) => {
-    const n = nodesById[nodeId]
-    if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize
-    if (!n.collapsed || n.id === rootId) return _config.nodeSize
-    return normalize(
-      n.clusterSize,
-      minClusterSize,
-      maxClusterSize,
-      _config.minClusterSize / 2,
-      _config.maxClusterSize / 2
-    )
-  }, [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren])
+  const getNodeSize = useCallback(
+    (nodeId: string) => {
+      const n = nodesById[nodeId]
+      if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize
+      if (!n.collapsed || n.id === rootId) return _config.nodeSize
+      return normalize(
+        n.clusterSize,
+        minClusterSize,
+        maxClusterSize,
+        _config.minClusterSize / 2,
+        _config.maxClusterSize / 2
+      )
+    },
+    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren]
+  )
 
-  const getNodeForce = useCallback((nodeId: string) => {
-    const n = nodesById[nodeId]
-    if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize * 2
-    if (!n.collapsed || n.id === rootId) return _config.nodeSize * 0.75
-    return normalize(
-      n.clusterSize,
-      minClusterSize,
-      maxClusterSize,
-      _config.minClusterSize / 2,
-      _config.maxClusterSize / 2
-    )
-  }, [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren])
+  const getNodeForce = useCallback(
+    (nodeId: string) => {
+      const n = nodesById[nodeId]
+      if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize * 2
+      if (!n.collapsed || n.id === rootId) return _config.nodeSize * 0.75
+      return normalize(
+        n.clusterSize,
+        minClusterSize,
+        maxClusterSize,
+        _config.minClusterSize / 2,
+        _config.maxClusterSize / 2
+      )
+    },
+    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren]
+  )
 
   const contextValue: OpenFormGraphApi = {
     rootId,
@@ -312,11 +334,11 @@ export function OpenFormGraphProvider({
     config: _config,
     setConfig,
     getNodeSize,
-    getNodeForce
+    getNodeForce,
   }
 
   return (
-    <OpenFormGraphContext.Provider value={contextValue} >
+    <OpenFormGraphContext.Provider value={contextValue}>
       {children}
     </OpenFormGraphContext.Provider>
   )

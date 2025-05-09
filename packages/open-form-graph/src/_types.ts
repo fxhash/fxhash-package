@@ -9,7 +9,6 @@ export type RawLink = {
   target: string
 }
 
-
 export type Link = {
   source: Node
   target: Node
@@ -28,5 +27,5 @@ export type Node = {
 export type RawGraphData = { nodes: RawNode[]; links: RawLink[] }
 export type GraphData = { nodes: Node[]; links: Link[] }
 
-export type RGB = [number, number, number];
-export type ColorTransform = (rgb: RGB) => RGB;
+export type RGB = [number, number, number]
+export type ColorTransform = (rgb: RGB) => RGB

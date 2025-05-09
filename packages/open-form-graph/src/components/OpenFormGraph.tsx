@@ -72,13 +72,10 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       dagLevelDistance={layoutConfig.dagLevelDistance}
       cooldownTicks={4000}
       onEngineStop={() => {
-        ref.current?.zoomToFit(
-          400,
-          layoutConfig.dagLevelDistance,
-          node =>
-            selectedNode ?
-              highlights.nodes.findIndex(n => n.id === node.id) > -1 :
-              true
+        ref.current?.zoomToFit(400, layoutConfig.dagLevelDistance, node =>
+          selectedNode
+            ? highlights.nodes.findIndex(n => n.id === node.id) > -1
+            : true
         )
       }}
       minZoom={config.minZoom}
