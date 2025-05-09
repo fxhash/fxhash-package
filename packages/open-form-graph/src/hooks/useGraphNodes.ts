@@ -1,6 +1,5 @@
 
-import { NODE_SIZE, MIN_CLUSTER_SIZE, MAX_CLUSTER_SIZE, NODE_WIDTH } from "@/constants"
-import { useGraphDataContext } from "@/context/graph"
+import { useOpenFormGraph } from "@/context/graph"
 import { circle, rect, img } from "@/util/canvas"
 import { dim } from "@/util/color"
 import { scaleLog } from "d3-scale"
@@ -11,7 +10,14 @@ import { normalize } from "@/util/math"
 import { Node } from "@/_types"
 
 export function useGraphNodes() {
-  const { selectedNode, theme, clusterSizeRange, highlights, hasNodeChildren } = useGraphDataContext()
+  const {
+    selectedNode,
+    theme,
+    clusterSizeRange,
+    highlights,
+    hasNodeChildren,
+    config
+  } = useOpenFormGraph()
 
   const { color, colorContrast } = useColor()
 
@@ -30,7 +36,7 @@ export function useGraphNodes() {
   const renderNode = useCallback(
     (node: NodeObject<Node>, ctx: CanvasRenderingContext2D, scale: number) => {
       const fontSize = 12 / scale
-      const radius = NODE_SIZE
+      const radius = config.nodeSize
       const isLight = theme === "light"
 
       const x = node.x || 0
@@ -50,8 +56,8 @@ export function useGraphNodes() {
           node.clusterSize,
           clusterSizeRange[0],
           clusterSizeRange[1],
-          MIN_CLUSTER_SIZE / 2,
-          MAX_CLUSTER_SIZE / 2
+          config.minClusterSize / 2,
+          config.maxClusterSize / 2
         )
         circle(ctx, x, y, norm, {
           stroke: true,
@@ -98,11 +104,20 @@ export function useGraphNodes() {
           ctx.font = "6px Sans-Serif"
           ctx.textAlign = "left"
           ctx.textBaseline = "middle"
-          ctx.fillText(node.label, x + NODE_WIDTH, y)
+          ctx.fillText(node.label, x + config.nodeSize, y)
         }
       }
     },
-    [theme, selectedNode, clusterSizeRange, visibilityScale]
+    [
+      selectedNode,
+      theme,
+      clusterSizeRange,
+      highlights,
+      hasNodeChildren,
+      config,
+      visibilityScale,
+      color
+    ]
   )
   return {
     renderNode,

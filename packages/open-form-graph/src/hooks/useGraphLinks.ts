@@ -1,9 +1,9 @@
-import { useGraphDataContext } from "@/context/graph";
+import { useOpenFormGraph } from "@/context/graph";
 import { useColor } from "./useColor";
 
 export function useGraphLinks() {
   const { color } = useColor()
-  const { highlights, selectedNode } = useGraphDataContext()
+  const { highlights, selectedNode } = useOpenFormGraph()
   return {
     linkColor: (link: { source: { id: string }; target: { id: string } }) => {
       const isHighlighted = highlights.links.find(l => l === link)

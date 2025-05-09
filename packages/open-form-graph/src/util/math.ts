@@ -1,4 +1,3 @@
-
 export function normalize(
   val: number,
   min: number,

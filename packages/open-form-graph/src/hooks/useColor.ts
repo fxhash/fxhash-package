@@ -1,13 +1,12 @@
-import { DARK, LIGHT } from "@/constants"
-import { useGraphDataContext } from "@/context/graph"
+import { useOpenFormGraph } from "@/context/graph"
 import { color } from "@/util/color"
 
 
 export function useColor() {
-  const { theme } = useGraphDataContext()
+  const { theme, config } = useOpenFormGraph()
 
   return {
-    color: theme === "dark" ? color(DARK) : color(LIGHT),
-    colorContrast: theme === "dark" ? color(LIGHT) : color(DARK)
+    color: theme === "light" ? color(config.theme.dark) : color(config.theme.light),
+    colorContrast: theme === "light" ? color(config.theme.light) : color(config.theme.dark)
   }
 }

@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useContext,
   useCallback,
@@ -10,10 +10,13 @@ import React, {
 } from "react"
 import { ForceGraphMethods, NodeObject, LinkObject } from "react-force-graph-2d"
 import { scaleLinear } from "d3-scale"
-import { GraphDataApi } from "@/_interfaces"
+import { GraphConfig, OpenFormGraphApi } from "@/_interfaces"
 import { RawNode, RawLink, Link, GraphData, Node } from "@/_types"
+import { preloadImage } from "@/util/img"
+import { DEFAULT_GRAPH_CONFIG } from "./constants"
 
-interface GraphDataProviderProps {
+interface OpenFormGraphProviderProps {
+  config?: Partial<GraphConfig>
   theme: "dark" | "light"
   children: ReactNode
   data: {
@@ -23,31 +26,17 @@ interface GraphDataProviderProps {
   rootId: string
 }
 
-const GraphDataContext = createContext<GraphDataApi | undefined>(undefined)
+const OpenFormGraphContext = createContext<OpenFormGraphApi | undefined>(undefined)
 
-const imageCache = new Map<string, HTMLImageElement>()
 
-function preloadImage(
-  url: string,
-  ref: React.MutableRefObject<ForceGraphMethods<Node, Link> | undefined>
-): HTMLImageElement {
-  if (imageCache.has(url)) return imageCache.get(url)!
-  const img = new Image()
-  img.src = url
-  imageCache.set(url, img)
-  img.onload = () => {
-    // this is a hack to force the canvans to refresh
-    ref?.current?.zoomToFit(1)
-  }
-  return img
-}
-
-export function GraphDataProvider({
+export function OpenFormGraphProvider({
+  config = {},
   theme = "light",
   data,
   rootId,
   children,
-}: GraphDataProviderProps) {
+}: OpenFormGraphProviderProps) {
+  const [_config, setConfig] = useState<GraphConfig>({ ...DEFAULT_GRAPH_CONFIG, ...config })
   const [_theme, setTheme] = useState<"dark" | "light">(theme)
 
   const [layoutConfig, setLayoutConfig] = useState({
@@ -59,6 +48,7 @@ export function GraphDataProvider({
   const ref = useRef<
     ForceGraphMethods<NodeObject<Node>, LinkObject<Node, Link>> | undefined
   >()
+
   const graphData = useMemo<GraphData>(() => {
     const _nodes = [...data.nodes].map(n => {
       const enhancedNode: Node = {
@@ -266,7 +256,7 @@ export function GraphDataProvider({
   const minNodeLevel = Math.min(...allLevels)
   const maxNodeLevel = Math.max(...allLevels)
 
-  const contextValue: GraphDataApi = {
+  const contextValue: OpenFormGraphApi = {
     rootId,
     data: prunedTree,
     onClickNode: handleNodeClick,
@@ -280,21 +270,23 @@ export function GraphDataProvider({
     highlights,
     ref,
     theme: _theme,
-    setTheme
+    setTheme,
+    config: _config,
+    setConfig
   }
 
   return (
-    <GraphDataContext.Provider value={contextValue} >
+    <OpenFormGraphContext.Provider value={contextValue} >
       {children}
-    </GraphDataContext.Provider>
+    </OpenFormGraphContext.Provider>
   )
 }
 
-export function useGraphDataContext(): GraphDataApi {
-  const context = useContext(GraphDataContext)
+export function useOpenFormGraph(): OpenFormGraphApi {
+  const context = useContext(OpenFormGraphContext)
   if (!context) {
     throw new Error(
-      "useGraphDataContext must be used within a GraphDataProvider"
+      "useOpenFormGraph must be used within a OpenFormGraphProvider"
     )
   }
   return context
