@@ -40,7 +40,6 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 
 #### Options
 
-`--portStudio` The port fxlens is served on. Default: `3300`  
 `--portProject` The port the project is served on. Default: `3301`  
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`  
 `--noLens` Only serve the project. Don't start fxlens.

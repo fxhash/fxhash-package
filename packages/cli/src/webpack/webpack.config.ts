@@ -4,11 +4,11 @@ import { getProjectPaths } from "../templates/paths"
 
 export interface WebpackConfigFactoryOptions {
   srcPath: string
-  portStudio?: number
   portProject?: number
   minify?: boolean
   zippify?: boolean
   rootPath?: string
+  noLens?: boolean
 }
 
 export type WebpackConfigFactory = (

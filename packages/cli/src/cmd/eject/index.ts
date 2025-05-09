@@ -66,7 +66,7 @@ export const commandEject: CommandModule = {
 
       logger.log(`Exporting webpack configurations`)
 
-      const pWebpackDevConfig = format(
+      const pWebpackDevConfig = await format(
         render(baseWebpackTemplate, {
           mode: `"dev"`,
         }),
@@ -76,7 +76,7 @@ export const commandEject: CommandModule = {
         path.join(CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME + ".js"),
         pWebpackDevConfig
       )
-      const pWebpackProdConfig = format(
+      const pWebpackProdConfig = await format(
         render(baseWebpackTemplate, {
           mode: `"prd"`,
         }),

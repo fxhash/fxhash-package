@@ -26,13 +26,8 @@ function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
 }
 
-export function devCommandBuilder(yargs) {
+export function devCommandBuilder(yargs: any) {
   return yargs
-    .option("portStudio", {
-      type: "number",
-      default: env.PORT_FXSTUDIO,
-      describe: "The port the studio will be served on",
-    })
     .option("portProject", {
       type: "number",
       default: env.PORT_FXPROJECT,
@@ -57,7 +52,6 @@ export const commandDev: CommandModule = {
   builder: devCommandBuilder,
   handler: async yargs => {
     const portProject = yargs.portProject as number
-    const portStudio = yargs.portStudio as number
     const srcPathArg = yargs.srcPath as string
     const noLensArg = yargs.noLens as boolean
 
@@ -69,7 +63,7 @@ export const commandDev: CommandModule = {
     const project = getProjectPaths(srcPath)
 
     // commonly used variable for ease
-    const URL_FXLENS = `http://localhost:${portStudio}`
+    const URL_FXLENS = `http://localhost:${portProject}/fxlens`
     const URL_PROJECT = `http://localhost:${portProject}`
 
     try {
@@ -80,7 +74,7 @@ export const commandDev: CommandModule = {
         },
         project
       )
-    } catch (err) {
+    } catch (err: any) {
       console.log(chalk.red.bold(`❗ ${err.message}`))
       console.log(chalk.dim("Starting anyways...\n\n"))
     }
@@ -90,8 +84,8 @@ export const commandDev: CommandModule = {
 
     const webpackConfigFactoryOptions = {
       srcPath,
-      portStudio,
       portProject,
+      noLens: noLensArg,
     }
 
     let webpackConfig: Configuration
@@ -138,19 +132,6 @@ export const commandDev: CommandModule = {
         )
       }
     })
-
-    if (!noLensArg) {
-      // start fxlens
-      const app = express()
-      app.use(express.static(FXSTUDIO_PATH))
-      app.listen(portStudio, () => {
-        console.log(
-          `${logger.successC("[fxlens] fx(lens) is running on")} ${logger.url(
-            URL_FXLENS
-          )}`
-        )
-      })
-    }
 
     server.startCallback(() => {
       let target = `${URL_FXLENS}/?target=${URL_PROJECT}`

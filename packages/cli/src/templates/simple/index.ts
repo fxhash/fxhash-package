@@ -17,7 +17,7 @@ export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
     head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
-  const pHtml = format(html, { parser: "html" })
+  const pHtml = await format(html, { parser: "html" })
   const sdkPath = require.resolve("@fxhash/project-sdk")
   const sdkContent = readFileSync(sdkPath, "utf-8")
   return {
