@@ -5,7 +5,7 @@ Provides utilities for anything related to fxhash authentication.
 ## Installation
 
 ```
-pnpm add -E @fxhash/react react react-dom viewm wagmi @taquito/taquito @taquito/beacon-wallet
+pnpm add -E react react-dom viewm wagmi @taquito/taquito @taquito/beacon-wallet
 ```
 
 ## Config
