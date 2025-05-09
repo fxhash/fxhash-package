@@ -1,4 +1,4 @@
-import { RawGraphData, RawNode, RawLink } from "@/_types"
+import { RawGraphData, RawNode, RawLink, Node, Link } from "@/_types"
 
 const images = [
   "https://media.fxhash.xyz/w_512/QmPN6Pg34LiaSu1hE2THHY3ikiTWUvq2DWBazAZyHvGtEG",
@@ -1043,4 +1043,30 @@ export function generateTree(
   }
 
   return { nodes, links }
+}
+
+export function collectChildren(
+  node: Node,
+  threshold: number,
+  visited = new Set<string>()
+): { nodes: Node[], links: Link[] } {
+  const collectedNodes: Node[] = [];
+  const collectedLinks: Link[] = [];
+
+  function collect(n: Node) {
+    for (const link of n.childLinks) {
+      const child = link.target;
+      if (visited.has(child.id)) continue;
+      if (child.clusterSize <= threshold || !node.collapsed) {
+        visited.add(child.id);
+        collectedNodes.push(child);
+        collectedLinks.push(link);
+        collect(child);
+      }
+    }
+  }
+
+  collect(node);
+
+  return { nodes: collectedNodes, links: collectedLinks };
 }

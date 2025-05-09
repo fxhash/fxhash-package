@@ -18,6 +18,7 @@ export type Link = {
 export type Node = {
   id: string
   collapsed: boolean
+  hide: boolean
   clusterSize: number
   level?: number
   childLinks: Link[]

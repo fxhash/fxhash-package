@@ -15,6 +15,7 @@ import { RawNode, RawLink, Link, GraphData, Node } from "@/_types"
 import { preloadImage } from "@/util/img"
 import { DEFAULT_GRAPH_CONFIG } from "./constants"
 import { normalize } from "@/util/math"
+import { collectChildren } from "@/util/data"
 
 interface OpenFormGraphProviderProps {
   config?: Partial<GraphConfig>
@@ -34,9 +35,10 @@ export function OpenFormGraphProvider({
   config = {},
   theme = "light",
   data,
-  rootId,
+  rootId: _rootId,
   children,
 }: OpenFormGraphProviderProps) {
+  const [rootId, setRootId] = useState<string>(_rootId)
   const [_config, setConfig] = useState<GraphConfig>({ ...DEFAULT_GRAPH_CONFIG, ...config })
   const [_theme, setTheme] = useState<"dark" | "light">(theme)
 
@@ -58,6 +60,7 @@ export function OpenFormGraphProvider({
         collapsed: n.id !== rootId,
         childLinks: [],
         level: undefined,
+        hide: false,
       }
 
       if ("imgSrc" in n && typeof n.imgSrc === "string") {
@@ -133,7 +136,7 @@ export function OpenFormGraphProvider({
 
   const [highlights, setHighlights] = useState<{ nodes: Node[], links: Link[] }>({ nodes: [], links: [] })
 
-  const getPrunedTree = useCallback(() => {
+  const prunedTree = useMemo(() => {
     const visibleNodes: Node[] = []
     const visibleLinks: Link[] = []
       ; (function traverseTree(node = nodesById[rootId]) {
@@ -163,7 +166,6 @@ export function OpenFormGraphProvider({
     [nodesById]
   )
 
-  const [prunedTree, setPrunedTree] = useState(getPrunedTree())
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
 
   const breadthFirstSearch = (startNode: Node, rootId: string): { nodes: Node[], links: any[] } => {
@@ -227,15 +229,24 @@ export function OpenFormGraphProvider({
 
   const handleNodeClick = useCallback(
     (node: Node) => {
-      setSelectedNode(node)
-      if (node === selectedNode) {
+      if (selectedNode !== node) {
+        node.collapsed = false
+      } else {
         node.collapsed = !node.collapsed
       }
       const highlights = breadthFirstSearch(node, rootId)
-      setHighlights(highlights)
-      setPrunedTree(getPrunedTree())
+      const children = collectChildren(node, 25)
+      children.nodes.forEach(n => {
+        n.collapsed = false
+      })
+      setHighlights({ nodes: [...highlights.nodes, ...children.nodes], links: [...highlights.links, ...children.links] })
+      if (node.collapsed) {
+        setSelectedNode(null)
+      } else {
+        setSelectedNode(node)
+      }
     },
-    [getPrunedTree, graphData.links, nodesById, selectedNode]
+    [graphData.links, nodesById, selectedNode]
   )
 
   useEffect(() => {
