@@ -38,4 +38,6 @@ export interface OpenFormGraphApi {
   setTheme: (theme: "dark" | "light") => void
   config: GraphConfig
   setConfig: React.Dispatch<React.SetStateAction<GraphConfig>>
+  getNodeSize: (nodeId: string) => number
+  getNodeForce: (nodeId: string) => number
 }

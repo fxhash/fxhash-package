@@ -14,6 +14,7 @@ import { GraphConfig, OpenFormGraphApi } from "@/_interfaces"
 import { RawNode, RawLink, Link, GraphData, Node } from "@/_types"
 import { preloadImage } from "@/util/img"
 import { DEFAULT_GRAPH_CONFIG } from "./constants"
+import { normalize } from "@/util/math"
 
 interface OpenFormGraphProviderProps {
   config?: Partial<GraphConfig>
@@ -256,6 +257,32 @@ export function OpenFormGraphProvider({
   const minNodeLevel = Math.min(...allLevels)
   const maxNodeLevel = Math.max(...allLevels)
 
+  const getNodeSize = useCallback((nodeId: string) => {
+    const n = nodesById[nodeId]
+    if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize
+    if (!n.collapsed || n.id === rootId) return _config.nodeSize
+    return normalize(
+      n.clusterSize,
+      minClusterSize,
+      maxClusterSize,
+      _config.minClusterSize / 2,
+      _config.maxClusterSize / 2
+    )
+  }, [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren])
+
+  const getNodeForce = useCallback((nodeId: string) => {
+    const n = nodesById[nodeId]
+    if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize * 2
+    if (!n.collapsed || n.id === rootId) return _config.nodeSize * 0.75
+    return normalize(
+      n.clusterSize,
+      minClusterSize,
+      maxClusterSize,
+      _config.minClusterSize / 2,
+      _config.maxClusterSize / 2
+    )
+  }, [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren])
+
   const contextValue: OpenFormGraphApi = {
     rootId,
     data: prunedTree,
@@ -272,7 +299,9 @@ export function OpenFormGraphProvider({
     theme: _theme,
     setTheme,
     config: _config,
-    setConfig
+    setConfig,
+    getNodeSize,
+    getNodeForce
   }
 
   return (

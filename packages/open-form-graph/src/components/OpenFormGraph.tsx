@@ -6,6 +6,9 @@ import { useGraphNodes } from "@/hooks/useGraphNodes"
 import { useOpenFormGraph } from "@/context/graph"
 import { normalize } from "@/util/math"
 import { Node } from "@/_types"
+import { rect } from "@/util/canvas"
+import { dim } from "@/util/color"
+import { useColor } from "@/hooks/useColor"
 
 interface ProjectGraphProps {
   width: number
@@ -24,12 +27,13 @@ export function OpenFormGraph(props: ProjectGraphProps) {
     data,
     layoutConfig,
     selectedNode,
-    setSelectedNode,
     highlights,
     onClickNode,
+    getNodeSize,
+    getNodeForce,
   } = useOpenFormGraph()
 
-  const { renderNode } = useGraphNodes()
+  const { renderNode, nodePointerAreaPaint } = useGraphNodes()
   const links = useGraphLinks()
   useEffect(() => {
     if (!ref.current) return
@@ -38,16 +42,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       forceCollide()
         .strength(0.3)
         .radius(node => {
-          const n = node as Node
-          if (!n.collapsed && hasNodeChildren(n.id)) return config.nodeSize * 2
-          if (!n.collapsed || n.id === rootId) return config.nodeSize * 0.75
-          return normalize(
-            n.clusterSize,
-            clusterSizeRange[0],
-            clusterSizeRange[1],
-            config.minClusterSize,
-            config.maxClusterSize / 2
-          )
+          return getNodeForce((node as Node).id)
         })
     )
 
@@ -57,8 +52,9 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       if (!l.target.collapsed) return config.nodeSize
       return config.nodeSize * 2
     })
-  }, [ref, config, hasNodeChildren, clusterSizeRange, rootId])
+  }, [ref, config, hasNodeChildren, clusterSizeRange, rootId, getNodeForce])
   const reheated = useRef<boolean>(false)
+  const { color, colorContrast } = useColor()
 
   return (
     <ForceGraph2D
@@ -87,8 +83,9 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       }}
       minZoom={config.minZoom}
       maxZoom={config.maxZoom}
-      nodeRelSize={4}
+      nodeRelSize={2}
       enableNodeDrag={false}
+      /*
       onBackgroundClick={() => {
         if (selectedNode) {
           setSelectedNode(null)
@@ -98,6 +95,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
           )
         }
       }}
+      */
       onNodeClick={onClickNode}
       onNodeDrag={() => {
         if (!reheated.current) {
@@ -108,7 +106,12 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       onNodeDragEnd={() => {
         reheated.current = false
       }}
+      nodeVal={node => {
+        const n = node as Node
+        return getNodeSize(n.id)
+      }}
       nodeCanvasObject={renderNode}
+      nodePointerAreaPaint={nodePointerAreaPaint}
       {...links}
     />
   )
