@@ -1,0 +1,43 @@
+{
+  "name": "@fxhash/open-form-graph",
+  "description": "A react-force-graph visualizer for open form collections",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "d3-force": "3.0.0",
+    "d3-scale": "4.0.2",
+    "d3-scale-chromatic": "3.1.0",
+    "react-force-graph-2d": "1.27.1"
+  },
+  "devDependencies": {
+    "@types/d3-force": "3.0.10",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-scale-chromatic": "3.1.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module"
+}
