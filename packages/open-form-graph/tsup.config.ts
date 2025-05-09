@@ -14,4 +14,7 @@ export default defineConfig((options: Options) => ({
   clean: !options.watch,
   dts: true,
   bundle: true,
+  external: [
+    "react-force-graph-2d",
+  ]
 }))
