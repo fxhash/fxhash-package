@@ -1057,7 +1057,7 @@ export function collectChildren(
     for (const link of n.childLinks) {
       const child = link.target
       if (visited.has(child.id)) continue
-      if (child.clusterSize <= threshold || !node.collapsed) {
+      if (child.clusterSize <= threshold) {
         visited.add(child.id)
         collectedNodes.push(child)
         collectedLinks.push(link)

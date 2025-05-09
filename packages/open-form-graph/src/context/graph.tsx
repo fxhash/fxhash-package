@@ -149,12 +149,12 @@ export function OpenFormGraphProvider({
   const prunedTree = useMemo(() => {
     const visibleNodes: Node[] = []
     const visibleLinks: Link[] = []
-    ;(function traverseTree(node = nodesById[rootId]) {
-      visibleNodes.push(node)
-      if (node.collapsed) return
-      visibleLinks.push(...node.childLinks)
-      node.childLinks.map(link => link.target).forEach(traverseTree)
-    })()
+      ; (function traverseTree(node = nodesById[rootId]) {
+        visibleNodes.push(node)
+        if (node.collapsed) return
+        visibleLinks.push(...node.childLinks)
+        node.childLinks.map(link => link.target).forEach(traverseTree)
+      })()
     visibleNodes.sort((a, b) => {
       const aHighlighted = highlights.nodes.includes(a)
       const bHighlighted = highlights.nodes.includes(b)
@@ -242,8 +242,26 @@ export function OpenFormGraphProvider({
 
   const handleNodeClick = useCallback(
     (node: Node) => {
+      if (node.id === rootId) {
+        setSelectedNode(null)
+        return
+      }
       if (selectedNode !== node) {
         node.collapsed = false
+        if (selectedNode) {
+          selectedNode.collapsed = selectedNode.childLinks.map(link => link.target).every(
+            child => child.childLinks.length === 0
+          )
+          const children = collectChildren(selectedNode, 25)
+          children.nodes.forEach(n => {
+            const childNodes = node.childLinks.map(link => link.target)
+            const shouldCollapse = childNodes.every(
+              child => child.childLinks.length === 0
+            )
+            n.collapsed = shouldCollapse
+          })
+        }
+
       } else {
         node.collapsed = !node.collapsed
       }
