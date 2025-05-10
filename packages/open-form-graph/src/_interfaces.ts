@@ -1,4 +1,5 @@
 import { ForceGraphMethods } from "react-force-graph-2d"
+import { ForceGraphMethods as ForceGraphMethods3D } from "react-force-graph-3d"
 import { GraphData, Link, Node } from "./_types.js"
 
 export interface GraphConfig {
@@ -21,8 +22,10 @@ export interface LayoutConfig {
   dagLevelDistance: number
 }
 
+type _ForceGraphMethods = ForceGraphMethods<Node, Link> | ForceGraphMethods3D<Node, Link>
+
 export interface OpenFormGraphApi {
-  ref: React.MutableRefObject<ForceGraphMethods<Node, Link> | undefined>
+  ref: React.MutableRefObject<_ForceGraphMethods | undefined>
   rootId: string
   data: GraphData
   onClickNode: (node: Node) => void

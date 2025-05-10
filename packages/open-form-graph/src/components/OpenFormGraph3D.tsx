@@ -1,22 +1,24 @@
-import ForceGraph2D from "react-force-graph-2d"
+
+import ForceGraph3D from "react-force-graph-3d"
 import { useEffect, useRef } from "react"
 import { forceCollide } from "d3-force"
 import { useGraphLinks } from "@/hooks/useGraphLinks"
-import { useGraphNodes } from "@/hooks/useGraphNodes"
 import { useOpenFormGraph } from "@/context/graph"
 import { Node } from "@/_types"
 import { useColor } from "@/hooks/useColor"
+import { useGraphNodesThree } from "@/hooks/useGraphNodesThree"
 
 interface ProjectGraphProps {
   width: number
   height: number
 }
 
-export function OpenFormGraph(props: ProjectGraphProps) {
+export function OpenFormGraph3D(props: ProjectGraphProps) {
   const { width, height } = props
 
   const {
     ref,
+    theme,
     hasNodeChildren,
     rootId,
     config,
@@ -30,7 +32,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
     getNodeForce,
   } = useOpenFormGraph()
 
-  const { renderNode, nodePointerAreaPaint } = useGraphNodes()
+  const nodes = useGraphNodesThree()
   const links = useGraphLinks()
   useEffect(() => {
     if (!ref.current) return
@@ -54,7 +56,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
   const { color, colorContrast } = useColor()
 
   return (
-    <ForceGraph2D
+    <ForceGraph3D
       ref={ref as any}
       width={width}
       height={height}
@@ -75,8 +77,8 @@ export function OpenFormGraph(props: ProjectGraphProps) {
             : true
         )
       }}
-      minZoom={config.minZoom}
-      maxZoom={config.maxZoom}
+      //      minZoom={config.minZoom}
+      //      maxZoom={config.maxZoom}
       nodeRelSize={2}
       enableNodeDrag={false}
       /*
@@ -90,6 +92,8 @@ export function OpenFormGraph(props: ProjectGraphProps) {
         }
       }}
       */
+      numDimensions={2}
+      backgroundColor={theme === "dark" ? "#000" : "#fff"}
       onNodeClick={onClickNode}
       onNodeDrag={() => {
         if (!reheated.current) {
@@ -104,8 +108,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
         const n = node as Node
         return getNodeSize(n.id)
       }}
-      nodeCanvasObject={renderNode}
-      nodePointerAreaPaint={nodePointerAreaPaint}
+      {...nodes}
       {...links}
     />
   )
