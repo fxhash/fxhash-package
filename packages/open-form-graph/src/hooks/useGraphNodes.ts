@@ -6,6 +6,7 @@ import { useCallback } from "react"
 import { NodeObject } from "react-force-graph-2d"
 import { useColor } from "./useColor"
 import { Node } from "@/_types"
+import { useDebounce } from "./useDebounce"
 
 export function useGraphNodes() {
   const {
@@ -60,15 +61,15 @@ export function useGraphNodes() {
 
   const renderNode = useCallback(
     (node: NodeObject<Node>, ctx: CanvasRenderingContext2D, scale: number) => {
-      const size = getNodeSize(node.id as string)
+      const isSelected = selectedNode?.id === node.id
+      const isHighlighted = highlights.nodes.find(n => n.id === node.id)
+      const size = getNodeSize(node.id as string) + (isSelected ? 5 : 0)
       const fontSize = 12 / scale
       const isLight = theme === "light"
 
       const x = node.x || 0
       const y = node.y || 0
 
-      const isSelected = selectedNode?.id === node.id
-      const isHighlighted = highlights.nodes.find(n => n.id === node.id)
 
       let opacity = 1
       if (selectedNode && !isHighlighted) {

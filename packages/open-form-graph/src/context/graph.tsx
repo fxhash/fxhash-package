@@ -322,6 +322,7 @@ export function OpenFormGraphProvider({
   const getNodeForce = useCallback(
     (nodeId: string) => {
       const n = nodesById[nodeId]
+      if (selectedNode?.id === n.id) return _config.nodeSize * 1.5
       if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize * 2
       if (!n.collapsed || n.id === rootId) return _config.nodeSize * 0.75
       return normalize(
@@ -332,7 +333,7 @@ export function OpenFormGraphProvider({
         _config.maxClusterSize / 2
       )
     },
-    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren]
+    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren, selectedNode]
   )
 
   const contextValue: OpenFormGraphApi = {
