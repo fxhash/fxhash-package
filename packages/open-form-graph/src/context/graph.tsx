@@ -112,6 +112,7 @@ export function OpenFormGraphProvider({
       }
     }
 
+
     graphData.nodes.forEach(node => {
       if (node.id === rootId) {
         node.collapsed = false
@@ -248,39 +249,39 @@ export function OpenFormGraphProvider({
       }
       if (selectedNode !== node) {
         node.collapsed = false
+      } else {
+        node.collapsed = !node.collapsed
+      }
+      if (node.collapsed) {
         if (selectedNode) {
-          selectedNode.collapsed = selectedNode.childLinks.map(link => link.target).every(
-            child => child.childLinks.length === 0
-          )
-          const children = collectChildren(selectedNode, 25)
-          children.nodes.forEach(n => {
+          function collapseFrom(node: Node) {
             const childNodes = node.childLinks.map(link => link.target)
             const shouldCollapse = childNodes.every(
               child => child.childLinks.length === 0
             )
-            n.collapsed = shouldCollapse
-          })
-        }
+            node.collapsed = shouldCollapse
+            childNodes.forEach(collapseFrom)
+            if (node.clusterSize === 0) node.collapsed = false
+          }
 
-      } else {
-        node.collapsed = !node.collapsed
-      }
-      const highlights = breadthFirstSearch(node, rootId)
-      const children = collectChildren(node, 25)
-      children.nodes.forEach(n => {
-        n.collapsed = false
-      })
-      setHighlights({
-        nodes: [...highlights.nodes, ...children.nodes],
-        links: [...highlights.links, ...children.links],
-      })
-      if (node.collapsed) {
+          collapseFrom(selectedNode)
+        }
         setSelectedNode(null)
+        setHighlights({ nodes: [], links: [] })
       } else {
+        const highlights = breadthFirstSearch(node, rootId)
+        const children = collectChildren(node, 25)
+        children.nodes.forEach(n => {
+          n.collapsed = false
+        })
+        setHighlights({
+          nodes: [...highlights.nodes, ...children.nodes],
+          links: [...highlights.links, ...children.links],
+        })
         setSelectedNode(node)
       }
     },
-    [graphData.links, nodesById, selectedNode]
+    [graphData, nodesById, selectedNode]
   )
 
   useEffect(() => {
