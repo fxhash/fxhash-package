@@ -1,12 +1,13 @@
-
+import { ForceGraphMethods as ForceGraphMethods3D } from "react-force-graph-3d"
 import ForceGraph3D from "react-force-graph-3d"
 import { useEffect, useRef } from "react"
 import { forceCollide } from "d3-force"
 import { useGraphLinks } from "@/hooks/useGraphLinks"
 import { useOpenFormGraph } from "@/context/graph"
-import { Node } from "@/_types"
+import { Link, Node } from "@/_types"
 import { useColor } from "@/hooks/useColor"
 import { useGraphNodesThree } from "@/hooks/useGraphNodesThree"
+import { TrackballControls } from "three/examples/jsm/Addons.js"
 
 interface ProjectGraphProps {
   width: number
@@ -53,7 +54,6 @@ export function OpenFormGraph3D(props: ProjectGraphProps) {
     })
   }, [ref, config, hasNodeChildren, clusterSizeRange, rootId, getNodeForce])
   const reheated = useRef<boolean>(false)
-  const { color, colorContrast } = useColor()
 
   return (
     <ForceGraph3D
@@ -71,11 +71,13 @@ export function OpenFormGraph3D(props: ProjectGraphProps) {
       dagLevelDistance={layoutConfig.dagLevelDistance}
       cooldownTicks={4000}
       onEngineStop={() => {
+        /*
         ref.current?.zoomToFit(400, layoutConfig.dagLevelDistance, node =>
           selectedNode
             ? highlights.nodes.findIndex(n => n.id === node.id) > -1
             : true
         )
+        */
       }}
       //      minZoom={config.minZoom}
       //      maxZoom={config.maxZoom}

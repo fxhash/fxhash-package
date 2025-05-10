@@ -1,11 +1,13 @@
-import { useCallback } from "react"
+import { ForceGraphMethods as ForceGraphMethods3D } from "react-force-graph-3d"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useOpenFormGraph } from "@/context/graph"
 import { scaleLog } from "d3-scale"
 import * as THREE from "three"
 import SpriteText from "three-spritetext"
 import { NodeObject } from "react-force-graph-3d"
-import { Node } from "@/_types"
+import { Link, Node } from "@/_types"
 import { useColor } from "./useColor"
+import throttle from "lodash.throttle"
 
 function rgbToHex(rgb: string): string {
   const result = rgb.match(/\d+/g)
@@ -24,21 +26,46 @@ export function useGraphNodesThree() {
     ref
   } = useOpenFormGraph()
 
-  const { color } = useColor()
+  const { color, colorContrast } = useColor()
+
+
+  const zoomRef = useRef(0)
+
+  useEffect(() => {
+    if (!ref.current) return
+    const _ref = ref.current as ForceGraphMethods3D<Node, Link>
+
+    const throttledDebounce = throttle(() => {
+      // _ref.refresh()
+    }, 30)
+
+    const controls = _ref.controls() as any
+    const handleChange = (e: any) => {
+      zoomRef.current = e.target.object.position.z
+      throttledDebounce()
+    }
+
+    controls.addEventListener("change", handleChange)
+
+    // Cleanup
+    return () => {
+      controls.removeEventListener("change", handleChange)
+      throttledDebounce.cancel()
+    }
+  }, [])
 
   const visibilityScale = useCallback(
     (clusterSize: number, currentZoom: number) => {
       const minZoomRequired = scaleLog()
         .domain([1, clusterSizeRange[1]])
-        .range([7.5, 1.8])
+        .range([1000, 300,])
         .clamp(true)(clusterSize)
-      return currentZoom >= minZoomRequired ? 1 : 0
+      return currentZoom >= minZoomRequired ? 0 : 1
     },
     [clusterSizeRange]
   )
 
   const nodeThreeObject = useCallback((node: NodeObject<Node>) => {
-    console.log((ref?.current as any)?.camera())
     const size = getNodeSize(node.id as string)
     const isSelected = selectedNode?.id === node.id
     const isHighlighted = highlights.nodes.find(n => n.id === node.id)
@@ -71,12 +98,11 @@ export function useGraphNodesThree() {
       const sphere = new THREE.Mesh(geometry, material)
       sphere.userData = { node }
 
-      const showLabel = visibilityScale(node.clusterSize, 1)
+      const showLabel = visibilityScale(node.clusterSize, zoomRef.current)
       if (showLabel) {
         const label = new SpriteText(String(node.clusterSize))
-        label.color = "#ffffff"
-        label.textHeight = size * 0.6
-        label.position.y = size
+        label.color = rgbToHex(color(1))
+        label.textHeight = 10
         const group = new THREE.Group()
         group.add(sphere)
         group.add(label)
