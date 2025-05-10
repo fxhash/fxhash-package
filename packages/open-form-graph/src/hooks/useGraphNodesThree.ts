@@ -3,22 +3,28 @@ import { useOpenFormGraph } from "@/context/graph"
 import { scaleLog } from "d3-scale"
 import * as THREE from "three"
 import SpriteText from "three-spritetext"
-import { useColor } from "./useColor"
 import { NodeObject } from "react-force-graph-3d"
 import { Node } from "@/_types"
+import { useColor } from "./useColor"
+
+function rgbToHex(rgb: string): string {
+  const result = rgb.match(/\d+/g)
+  if (!result || result.length < 3) return "#000000"
+  const [r, g, b] = result.map(n => parseInt(n).toString(16).padStart(2, "0"))
+  return `#${r}${g}${b}`
+}
 
 export function useGraphNodesThree() {
   const {
     selectedNode,
-    theme,
     clusterSizeRange,
     highlights,
     hasNodeChildren,
     getNodeSize,
+    ref
   } = useOpenFormGraph()
 
-  const { color, colorContrast } = useColor()
-  const isLight = theme === "light"
+  const { color } = useColor()
 
   const visibilityScale = useCallback(
     (clusterSize: number, currentZoom: number) => {
@@ -26,13 +32,13 @@ export function useGraphNodesThree() {
         .domain([1, clusterSizeRange[1]])
         .range([7.5, 1.8])
         .clamp(true)(clusterSize)
-
       return currentZoom >= minZoomRequired ? 1 : 0
     },
     [clusterSizeRange]
   )
 
   const nodeThreeObject = useCallback((node: NodeObject<Node>) => {
+    console.log((ref?.current as any)?.camera())
     const size = getNodeSize(node.id as string)
     const isSelected = selectedNode?.id === node.id
     const isHighlighted = highlights.nodes.find(n => n.id === node.id)
@@ -42,57 +48,64 @@ export function useGraphNodesThree() {
       opacity = 0.1
     }
 
-    const nodeColor = node.collapsed
-      ? colorContrast(opacity)
-      : color(opacity)
-
-    // Handle image nodes (expanded with image)
     if (node.imgSrc && !node.collapsed) {
-      const texture = new THREE.TextureLoader().load(node.imgSrc)
-      texture.colorSpace = THREE.SRGBColorSpace
-      const spriteMaterial = new THREE.SpriteMaterial({ map: texture })
-      const sprite = new THREE.Sprite(spriteMaterial)
-      sprite.scale.set(size, size, 1)
-      sprite.userData = { node }
-      return sprite
+      const geometry = new THREE.PlaneGeometry(size, size)
+      const material = new THREE.MeshLambertMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity,
+        side: THREE.DoubleSide,
+      })
+      const plane = new THREE.Mesh(geometry, material)
+      plane.userData = { node }
+      return plane
     }
 
-    // Collapsed = Sphere, Expanded = Box
-    const geometry = node.collapsed && hasNodeChildren(node.id as string)
-      ? new THREE.SphereGeometry(size / 2, 16, 16)
-      : new THREE.BoxGeometry(size, size, size)
+    if (node.collapsed && hasNodeChildren(node.id as string)) {
+      const geometry = new THREE.SphereGeometry(size / 2, 16, 16)
+      const material = new THREE.MeshLambertMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity,
+      })
+      const sphere = new THREE.Mesh(geometry, material)
+      sphere.userData = { node }
 
+      const showLabel = visibilityScale(node.clusterSize, 1)
+      if (showLabel) {
+        const label = new SpriteText(String(node.clusterSize))
+        label.color = "#ffffff"
+        label.textHeight = size * 0.6
+        label.position.y = size
+        const group = new THREE.Group()
+        group.add(sphere)
+        group.add(label)
+        return group
+      }
+
+      return sphere
+    }
+
+    const rgbColor = color(opacity)
+    const hex = rgbToHex(rgbColor)
+
+    const geometry = new THREE.BoxGeometry(size, size, size)
     const material = new THREE.MeshLambertMaterial({
-      color: nodeColor,
+      color: hex,
       transparent: true,
       opacity,
     })
 
-    const mesh = new THREE.Mesh(geometry, material)
-    mesh.userData = { node }
-
-    // Show label as SpriteText if collapsed and label is visible
-    const showLabel = node.collapsed && visibilityScale(node.clusterSize, 1) // assume zoom = 1
-
-    if (showLabel) {
-      const label = new SpriteText(String(node.clusterSize))
-      label.color = colorContrast(1)
-      label.textHeight = size * 0.6
-      const group = new THREE.Group()
-      group.add(mesh)
-      group.add(label)
-      return group
-    }
-
-    return mesh
+    const box = new THREE.Mesh(geometry, material)
+    box.userData = { node }
+    return box
   }, [
     getNodeSize,
     selectedNode,
     highlights,
     hasNodeChildren,
+    visibilityScale,
     color,
-    colorContrast,
-    visibilityScale
   ])
 
   return {
