@@ -1,11 +1,13 @@
-import type { CommandModule } from "yargs"
+import { string, type CommandModule } from "yargs"
 import { simpleTemplate } from "../../templates/simple/index"
 import { writeProjectToDisk } from "../../templates/writer"
 import { logger } from "../../utils/logger"
 import { ejectedTemplate } from "../../templates/ejected/index"
 import { chooseFromPrompt, prompt } from "../../utils/prompts"
+import { TemplateFactoryResponse } from "../../templates/types"
 
-const TEMPLATE_CHOICES = {
+const TEMPLATE_CHOICES: Record<string, (options: { name?: string }) => Promise<TemplateFactoryResponse>>
+  = {
   "simple (recommended)": simpleTemplate,
   ejected: ejectedTemplate,
 }

@@ -1,10 +1,22 @@
 import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
 import { getProjectPaths } from "../templates/paths"
+import { FXSTUDIO_PATH } from "../constants"
 
 export const createDevConfig: WebpackConfigFactory = options => {
-  const { srcPath, portProject, rootPath } = options
+  const { srcPath, portProject, rootPath, noLens } = options
   const baseConfig = createBaseConfig(options)
   const { staticPath } = getProjectPaths(srcPath, rootPath)
+  const _static = [{
+    directory: staticPath,
+    publicPath: "/",
+  }]
+
+  if (!noLens) {
+    _static.push({
+      directory: FXSTUDIO_PATH,
+      publicPath: "/fxlens/",
+    })
+  }
   return {
     ...baseConfig,
     mode: "development",
@@ -14,9 +26,7 @@ export const createDevConfig: WebpackConfigFactory = options => {
       // https://webpack.js.org/concepts/hot-module-replacement/
       hot: false,
       port: portProject,
-      static: {
-        directory: staticPath,
-      },
+      static: _static,
       client: {
         overlay: {
           errors: true,
@@ -24,6 +34,6 @@ export const createDevConfig: WebpackConfigFactory = options => {
         },
       },
     },
-    plugins: [...baseConfig.plugins],
+    plugins: [...(baseConfig.plugins || [])],
   }
 }

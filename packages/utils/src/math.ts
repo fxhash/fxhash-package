@@ -1,5 +1,5 @@
 import { isEthereumAddressValid, isTezosAddressValid } from "./address"
-import { BASE58_CHARSET } from "./base58"
+import { BASE58_CHARSET } from "./constants"
 import { isEthereumTransactionHashValid } from "./hash"
 import { ResettableRandFunction } from "./types/math"
 

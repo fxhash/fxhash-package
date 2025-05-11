@@ -22,18 +22,18 @@ export async function ejectedTemplate({
     head: `<link rel="stylesheet" href="./styles.css">`,
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
-  const pHtml = format(html, { parser: "html" })
+  const pHtml = await format(html, { parser: "html" })
   const pkgJson = JSON.stringify({ ...packageJson, name }, null, 2)
   const sdkPath = require.resolve("@fxhash/project-sdk")
   const sdkContent = readFileSync(sdkPath, "utf-8")
 
-  const pWebpackDevConfig = format(
+  const pWebpackDevConfig = await format(
     render(baseWebpackTemplate, {
       mode: `"dev"`,
     }),
     { parser: "babel" }
   )
-  const pWebpackProdConfig = format(
+  const pWebpackProdConfig = await format(
     render(baseWebpackTemplate, {
       mode: `"prd"`,
     }),

@@ -8,8 +8,10 @@ import {
   FxParamsData,
   FxParamValue,
   FxParamTranformType,
-  FxParamTransformationTypeMap,
   FxParamProcessorTransformer,
+  FxParamTransformation,
+  FxParamsRaw,
+  FxParamsTransformed,
   FxParamDefinitions,
 } from "./types"
 
@@ -383,10 +385,7 @@ export function deserializeParams(
   definition: FxParamDefinition<FxParamType>[],
   options: { withTransform?: boolean; transformType?: FxParamTranformType }
 ) {
-  const params: Record<
-    string,
-    FxParamValue<FxParamType> | FxParamTransformationTypeMap[FxParamType]
-  > = {}
+  const params: FxParamsRaw | FxParamsTransformed = {}
   for (const def of definition) {
     const processor = ParameterProcessors[
       def.type as FxParamType
@@ -538,7 +537,7 @@ export const processParam = (
   value: FxParamValue<FxParamType>,
   definitions: FxParamDefinition<FxParamType>[],
   transformType: FxParamTranformType
-): FxParamValue<FxParamType> | FxParamTransformationTypeMap[FxParamType] => {
+): FxParamValue<FxParamType> | FxParamTransformation => {
   const definition = definitions.find(d => d.id === paramId)
   if (!definition) {
     throw new Error(`No definition found for param ${paramId}`)

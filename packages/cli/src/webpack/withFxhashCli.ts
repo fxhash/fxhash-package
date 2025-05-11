@@ -14,7 +14,6 @@ export interface WithFxhashCliOptions extends WebpackConfigFactoryOptions {
 
 export const DEFAULT_OPTIONS = {
   srcPath: env.SRC_PATH,
-  portStudio: env.PORT_FXSTUDIO,
   portProject: env.PORT_FXPROJECT,
 }
 

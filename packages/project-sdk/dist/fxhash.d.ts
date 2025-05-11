@@ -1,36 +1,65 @@
-import { FxParamDefinition, FxParamType, FxParamValue } from '@fxhash/params/types';
+import { FxParamValue, FxParamType, FxParamProcessors, FxParamDefinition, FxParamsRaw, FxParamsTransformed, FxParamTransformationTypeMap } from '@fxhash/params';
 import { ResettableRandFunction } from '@fxhash/utils';
 
 type FxHashExecutionContext = "standalone" | "capture" | "minting";
-type FxHashApi = {
+type FxhashSdkPrivate = {
+    _version: string;
+    _features?: FxFeatures;
+    _updateParams: (data: FxEmitData) => void;
+    _processors: FxParamProcessors;
+    _params?: FxParamDefinition<FxParamType>[];
+    _rawValues: FxParamsRaw;
+    _paramValues: FxParamsTransformed;
+    _receiveUpdateParams: (data: FxEmitData, onDefault?: () => void) => Promise<void>;
+    _listeners: Record<FxEventId | string, Array<[FxOnEventHandler, FxOnDone?]>>;
+    _propagateEvent: (name: FxEventId, data: any) => Promise<any[][]>;
+    _updateInputBytes: () => void;
+    _emitParams: (data: FxEmitData) => void;
+    _fxRandsByDepth: ResettableRandFunction[];
+};
+type _Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+interface UserDefinedParams extends _Optional<FxParamDefinition<FxParamType>, "value" | "options"> {
+}
+type FxHashApi = FxhashSdkPrivate & {
     hash: string;
+    hashList: string[];
+    depth: number;
     minter: string;
     iteration: number;
     rand: ResettableRandFunction;
+    randAt: (depth: number) => ResettableRandFunction;
     randminter: ResettableRandFunction;
     context: FxHashExecutionContext;
+    inputBytes?: string;
     preview: () => void;
     isPreview: boolean;
     features: (features: FxFeatures) => void;
-    getFeature: (id: string) => FxFeatureValue | undefined;
+    getFeature: (id: string) => FxFeatureValue;
     getFeatures: () => FxFeatures;
-    stringifyParams: (definitions: FxParamDefinition<FxParamType>[]) => string;
-    params: (paramsDefinitions: FxParamDefinition<FxParamType>[]) => void;
+    stringifyParams: (definitions: FxParamDefinition<FxParamType>[] | Record<string, FxParamValue<FxParamType>>) => string;
+    params: (paramsDefinitions: UserDefinedParams[]) => void;
     getDefinitions: () => FxParamDefinition<FxParamType>[];
-    getParam: (id: string) => FxParamValue<FxParamType>;
-    getParams: () => FxParamValue<FxParamType>;
-    getRawParam: (id: string) => string;
-    getRawParams: () => {
-        string: string;
-    };
-    on: (event: FxEventId, handler: () => void, onDone: () => void) => void;
+    getParam: (id: string) => FxParamTransformationTypeMap[FxParamType];
+    getParams: () => FxParamsTransformed;
+    getRawParam: (id: string) => FxParamValue<FxParamType>;
+    getRawParams: () => Record<string, FxParamValue<FxParamType>>;
+    getRandomParam: (id: string) => FxParamValue<FxParamType>;
+    on: (event: FxEventId, handler: FxOnEventHandler, onDone: FxOnDone) => void;
     emit: (event: FxEventId, data: FxEmitData) => void;
+    genomes: FxGenomeDefinition;
+    defineGenome: (name: string, genome: FxGenome<FxFeatureValue>) => FxFeatureValue;
 };
 type FxFeatureValue = string | number | boolean;
 type FxFeatures = Record<string, FxFeatureValue>;
+type FxGenome<FxFeatureValue> = (depth: number) => FxFeatureValue;
+type FxGenomeDefinition = {
+    [featureName: string]: FxFeatureValue;
+};
 type FxEventId = "params:update";
 type FxEmitData = Record<string, FxParamValue<FxParamType>>;
 type FxEmitFunction = (event: FxEventId, data: FxEmitData) => void;
+type FxOnEventHandler = (data: FxEmitData) => Promise<boolean> | boolean;
+type FxOnDone = (optInDefault: boolean, newRawValues: FxEmitData) => void;
 interface FxInitOptions {
     params: FxParamDefinition<FxParamType>[];
     features: FxFeatures;
@@ -38,9 +67,10 @@ interface FxInitOptions {
 type SetFeaturesOptions = Pick<FxInitOptions, "features">;
 type SetParamsOptions = Pick<FxInitOptions, "params">;
 declare global {
+    const $fx: typeof window.$fx;
     interface Window {
         $fx: FxHashApi;
     }
 }
 
-export { FxEmitData, FxEmitFunction, FxEventId, FxFeatureValue, FxFeatures, FxHashApi, FxHashExecutionContext, FxInitOptions, SetFeaturesOptions, SetParamsOptions };
+export type { FxEmitData, FxEmitFunction, FxEventId, FxFeatureValue, FxFeatures, FxGenome, FxGenomeDefinition, FxHashApi, FxHashExecutionContext, FxInitOptions, FxOnDone, FxOnEventHandler, FxhashSdkPrivate, SetFeaturesOptions, SetParamsOptions };
