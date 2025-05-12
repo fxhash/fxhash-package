@@ -31,14 +31,15 @@ export interface OpenFormGraphApi {
   ref: React.MutableRefObject<_ForceGraphMethods | undefined>
   rootId: string
   data: GraphData
-  onClickNode: (node: Node) => void
+  onClickNode: (nodeId: string) => void
   hasNodeChildren: (nodeId: string) => boolean
   clusterSizeRange: [number, number]
   graphLevelRange: [number, number]
   setLayoutConfig: React.Dispatch<React.SetStateAction<LayoutConfig>>
   layoutConfig: LayoutConfig
   selectedNode: Node | null
-  setSelectedNode: (node: Node | null) => void
+  selectedNodeId: string | null
+  setSelectedNodeId: (node: string | null) => void
   highlights: GraphData
   theme: "dark" | "light"
   setTheme: (theme: "dark" | "light") => void
@@ -46,4 +47,5 @@ export interface OpenFormGraphApi {
   setConfig: React.Dispatch<React.SetStateAction<GraphConfig>>
   getNodeSize: (nodeId: string) => number
   getNodeForce: (nodeId: string) => number
+  search: (startNodeId: string, rootId: string) => { nodes: Node[], links: Link[] }
 }

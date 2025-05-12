@@ -93,7 +93,7 @@ export function OpenFormGraph3D(props: ProjectGraphProps) {
       */
       numDimensions={2}
       backgroundColor={theme === "dark" ? "#000" : "#fff"}
-      onNodeClick={onClickNode}
+      onNodeClick={(n) => onClickNode(n.id)}
       onNodeDrag={() => {
         if (!reheated.current) {
           ref.current?.d3ReheatSimulation()

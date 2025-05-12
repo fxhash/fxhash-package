@@ -175,47 +175,29 @@ export function OpenFormGraphProvider({
     })
 
     return nodesById
-  }, [graphData, rootId])
+  }, [graphData.links, graphData.nodes, rootId])
 
-  const [highlights, setHighlights] = useState<{
-    nodes: Node[]
-    links: Link[]
-  }>({ nodes: [], links: [] })
 
-  const prunedTree = useMemo(() => {
-    const visibleNodes: Node[] = []
-    const visibleLinks: Link[] = []
-      ; (function traverseTree(node = nodesById[rootId]) {
-        visibleNodes.push(node)
-        if (node.collapsed) return
-        visibleLinks.push(...node.childLinks)
-        node.childLinks.map(link => link.target).forEach(traverseTree)
-      })()
-    visibleNodes.sort((a, b) => {
-      const aHighlighted = highlights.nodes.includes(a)
-      const bHighlighted = highlights.nodes.includes(b)
-
-      if (aHighlighted && !bHighlighted) return -1
-      if (!aHighlighted && bHighlighted) return 1
-      if (a.collapsed && !b.collapsed) return 1
-      if (!a.collapsed && b.collapsed) return -1
-      return 0
-    })
-
-    return { nodes: visibleNodes, links: visibleLinks }
-  }, [nodesById, rootId, highlights])
 
   const hasNodeChildren = useCallback(
     (nodeId: string) => nodesById[nodeId]?.childLinks.length > 0,
     [nodesById]
   )
 
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null)
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
+  const selectedNode = useMemo(() => {
+    if (!selectedNodeId) return null
+    const n = graphData.nodes.find(n => n.id === selectedNodeId)
+    if (n) return n
+    return null
+  }, [graphData.nodes, selectedNodeId])
+
 
   const breadthFirstSearch = (
-    startNode: Node,
+    startNodeId: string,
     rootId: string
-  ): { nodes: Node[]; links: any[] } => {
+  ): { nodes: Node[]; links: Link[] } => {
+    const startNode = nodesById[startNodeId]
     const resultNodes: Node[] = [startNode]
     const visited = new Set<string>([startNode.id])
     let currentNode = startNode
@@ -276,48 +258,92 @@ export function OpenFormGraphProvider({
     return { nodes: resultNodes, links: resultLinks }
   }
 
+  const highlights = useMemo(() => {
+    if (!selectedNodeId) {
+      return { nodes: [], links: [] };
+    }
+
+    const node = nodesById[selectedNodeId];
+    if (!node || node.collapsed) {
+      return { nodes: [], links: [] };
+    }
+
+    const pathHighlights = breadthFirstSearch(node.id, rootId);
+    const children = collectChildren(node, 25);
+
+    return {
+      nodes: [...pathHighlights.nodes, ...children.nodes],
+      links: [...pathHighlights.links, ...children.links],
+    };
+  }, [selectedNodeId, nodesById, rootId, breadthFirstSearch, collectChildren]);
+
+  const prunedTree = useMemo(() => {
+    const visibleNodes: Node[] = []
+    const visibleLinks: Link[] = []
+      ; (function traverseTree(node = nodesById[rootId]) {
+        visibleNodes.push(node)
+        if (node.collapsed) return
+        visibleLinks.push(...node.childLinks)
+        node.childLinks.map(link => link.target).forEach(traverseTree)
+      })()
+    visibleNodes.sort((a, b) => {
+      const aHighlighted = highlights.nodes.includes(a)
+      const bHighlighted = highlights.nodes.includes(b)
+
+      if (aHighlighted && !bHighlighted) return -1
+      if (!aHighlighted && bHighlighted) return 1
+      if (a.collapsed && !b.collapsed) return 1
+      if (!a.collapsed && b.collapsed) return -1
+      return 0
+    })
+
+    return { nodes: visibleNodes, links: visibleLinks }
+  }, [nodesById, rootId, highlights])
+
+  // Modified handleNodeClick that uses the memoized highlights
   const handleNodeClick = useCallback(
-    (node: Node) => {
+    (nodeId: string) => {
+      const node = nodesById[nodeId]
       if (node.id === rootId) {
-        setSelectedNode(null)
-        return
+        setSelectedNodeId(null);
+        return;
       }
-      if (selectedNode !== node) {
-        node.collapsed = false
+
+      if (selectedNode?.id !== node.id) {
+        node.collapsed = false;
       } else {
-        node.collapsed = !node.collapsed
+        node.collapsed = !node.collapsed;
       }
+
       if (node.collapsed) {
         if (selectedNode) {
           function collapseFrom(node: Node) {
-            const childNodes = node.childLinks.map(link => link.target)
+            const childNodes = node.childLinks.map(link => link.target);
             const shouldCollapse = childNodes.every(
               child => child.childLinks.length === 0
-            )
-            node.collapsed = shouldCollapse
-            childNodes.forEach(collapseFrom)
-            if (node.clusterSize === 0) node.collapsed = false
+            );
+            node.collapsed = shouldCollapse;
+            childNodes.forEach(collapseFrom);
+            if (node.clusterSize === 0) node.collapsed = false;
           }
 
-          collapseFrom(selectedNode)
+          collapseFrom(selectedNode);
         }
-        setSelectedNode(null)
-        setHighlights({ nodes: [], links: [] })
+        setSelectedNodeId(null);
+        // No need to explicitly set highlights here as they will be updated via useMemo
       } else {
-        const highlights = breadthFirstSearch(node, rootId)
-        const children = collectChildren(node, 25)
+        // Expand the children nodes
+        const children = collectChildren(node, 25);
         children.nodes.forEach(n => {
-          n.collapsed = false
-        })
-        setHighlights({
-          nodes: [...highlights.nodes, ...children.nodes],
-          links: [...highlights.links, ...children.links],
-        })
-        setSelectedNode(node)
+          n.collapsed = false;
+        });
+
+        setSelectedNodeId(node.id);
+        // No need to explicitly set highlights here as they will be updated via useMemo
       }
     },
-    [graphData, nodesById, selectedNode]
-  )
+    [rootId, selectedNode, collectChildren]
+  );
 
   useEffect(() => {
     setLayoutConfig(prev => ({
@@ -341,6 +367,7 @@ export function OpenFormGraphProvider({
   const getNodeSize = useCallback(
     (nodeId: string) => {
       const n = nodesById[nodeId]
+      if (!n) return 0
       if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize
       if (!n.collapsed || n.id === rootId) return _config.nodeSize
       return normalize(
@@ -351,12 +378,13 @@ export function OpenFormGraphProvider({
         _config.maxClusterSize / 2
       )
     },
-    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren]
+    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren, nodesById]
   )
 
   const getNodeForce = useCallback(
     (nodeId: string) => {
       const n = nodesById[nodeId]
+      if (!n) return 0
       if (selectedNode?.id === n.id) return _config.nodeSize * 1.5
       if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize * 2
       if (!n.collapsed || n.id === rootId) return _config.nodeSize * 0.75
@@ -368,8 +396,10 @@ export function OpenFormGraphProvider({
         _config.maxClusterSize / 2
       )
     },
-    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren, selectedNode]
+    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren, selectedNode, nodesById]
   )
+
+
 
   const contextValue: OpenFormGraphApi = {
     rootId,
@@ -381,7 +411,8 @@ export function OpenFormGraphProvider({
     layoutConfig,
     setLayoutConfig,
     selectedNode,
-    setSelectedNode,
+    setSelectedNodeId,
+    selectedNodeId,
     highlights,
     ref,
     theme: _theme,
@@ -390,6 +421,7 @@ export function OpenFormGraphProvider({
     setConfig,
     getNodeSize,
     getNodeForce,
+    search: breadthFirstSearch,
   }
 
   return (

@@ -1,6 +1,6 @@
 export type RawNode = {
   id: string
-  label: string
+  label?: string
   imgSrc?: string
 }
 
