@@ -5,7 +5,6 @@ import { useGraphLinks } from "@/hooks/useGraphLinks"
 import { useGraphNodes } from "@/hooks/useGraphNodes"
 import { useOpenFormGraph } from "@/context/graph"
 import { Node } from "@/_types"
-import { useColor } from "@/hooks/useColor"
 
 interface ProjectGraphProps {
   width: number
@@ -43,7 +42,6 @@ export function OpenFormGraph(props: ProjectGraphProps) {
         })
     )
 
-    //    graphData.ref.current.d3Force("charge")?.distanceMax(200)
     ref.current.d3Force("center", null)
     ref.current.d3Force("link")?.distance((l: any) => {
       if (!l.target.collapsed) return config.nodeSize
@@ -51,7 +49,6 @@ export function OpenFormGraph(props: ProjectGraphProps) {
     })
   }, [ref, config, hasNodeChildren, clusterSizeRange, rootId, getNodeForce])
   const reheated = useRef<boolean>(false)
-  const { color, colorContrast } = useColor()
 
   return (
     <ForceGraph2D
@@ -69,7 +66,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       dagLevelDistance={layoutConfig.dagLevelDistance}
       cooldownTicks={4000}
       onEngineStop={() => {
-        ref.current?.zoomToFit(400, layoutConfig.dagLevelDistance, node =>
+        ref.current?.zoomToFit(400, config.focusPadding, node =>
           selectedNode
             ? highlights.nodes.findIndex(n => n.id === node.id) > -1
             : true

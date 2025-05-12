@@ -3,12 +3,15 @@ import { useColor } from "./useColor"
 
 export function useGraphLinks() {
   const { color } = useColor()
-  const { highlights, selectedNode } = useOpenFormGraph()
+  const { highlights, selectedNode, theme } = useOpenFormGraph()
   return {
     linkColor: (link: { source: { id: string }; target: { id: string } }) => {
-      if (!selectedNode) return color(0.2)
+      const isLight = theme === "light"
+      const visible = isLight ? 0.2 : 0.15
+      const opaque = isLight ? 0.1 : 0.05
+      if (!selectedNode) return color(visible)
       const isHighlighted = highlights.links.find(l => l === link)
-      return color(isHighlighted ? 0.7 : 0.1)
+      return color(isHighlighted ? visible : opaque)
     },
     linkWidth: (link: { source: { id: string }; target: { id: string } }) => {
       const isHighlighted = highlights.links.find(l => l === link)

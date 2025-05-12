@@ -1,4 +1,5 @@
 import { RawGraphData, RawNode, RawLink, Node, Link } from "@/_types"
+import { VOID_ROOT_ID } from "@/context/constants"
 
 const images = [
   "https://media.fxhash.xyz/w_512/QmPN6Pg34LiaSu1hE2THHY3ikiTWUvq2DWBazAZyHvGtEG",
@@ -1003,6 +1004,7 @@ const images = [
   "https://media.fxhash.xyz/w_512/QmPadWkr5pqTSuMp4sUVy9tHBDi9ddp4USDLrxHEFqwYYn",
 ]
 
+
 export function generateTree(
   maxNodes: number,
   maxChildren: number
@@ -1013,14 +1015,16 @@ export function generateTree(
   let index = 0
 
   function createNode(label: string): RawNode {
+    const isRoot = label === VOID_ROOT_ID
+    const idx = isRoot ? VOID_ROOT_ID : index++
     return {
-      id: `${index++}`,
+      id: idx.toString(),
       label,
-      imgSrc: images[index % images.length],
+      imgSrc: isRoot ? undefined : images[index % images.length],
     }
   }
 
-  const root = createNode("Root")
+  const root = createNode(VOID_ROOT_ID)
   nodes.push(root)
 
   const queue = [root]

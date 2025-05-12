@@ -13,6 +13,8 @@ export function preloadImage(
   imageCache.set(url, img)
   img.onload = () => {
     // this is a hack to force the canvans to refresh
+    // TODO: we should actually update the node data with the images when they
+    // are loaded to rerender.
     ref?.current?.zoomToFit(1)
   }
   return img

@@ -140,3 +140,103 @@ export function img(
   ctx.drawImage(image, x, y, width, height)
   ctx.restore()
 }
+
+export function hexagon(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  options?: {
+    fill?: boolean
+    fillStyle?: string
+    stroke?: boolean
+    strokeStyle?: string
+    lineWidth?: number
+    rotation?: number
+    borderRadius?: number
+  }
+) {
+  const {
+    fill = true,
+    fillStyle,
+    stroke = false,
+    strokeStyle,
+    lineWidth = 0.2,
+    rotation = 0,
+    borderRadius = 0,
+  } = options || {}
+
+  ctx.save()
+
+  if (fillStyle !== undefined) ctx.fillStyle = fillStyle
+  if (strokeStyle !== undefined) ctx.strokeStyle = strokeStyle
+  if (lineWidth !== undefined) ctx.lineWidth = lineWidth
+
+  const sides = 6
+  const angleStep = (Math.PI * 2) / sides
+
+  ctx.beginPath()
+
+  const points = []
+  for (let i = 0; i < sides; i++) {
+    const angle = rotation + i * angleStep
+    points.push({
+      x: x + radius * Math.cos(angle),
+      y: y + radius * Math.sin(angle),
+    })
+  }
+
+  if (borderRadius > 0) {
+    const maxBorderRadius = Math.min(borderRadius, radius / 3)
+
+    for (let i = 0; i < sides; i++) {
+      const current = points[i]
+      const next = points[(i + 1) % sides]
+      const prev = points[(i - 1 + sides) % sides]
+
+      const toPrev = { x: prev.x - current.x, y: prev.y - current.y }
+      const toNext = { x: next.x - current.x, y: next.y - current.y }
+
+      const lenPrev = Math.sqrt(toPrev.x * toPrev.x + toPrev.y * toPrev.y)
+      const lenNext = Math.sqrt(toNext.x * toNext.x + toNext.y * toNext.y)
+
+      const normPrev = { x: toPrev.x / lenPrev, y: toPrev.y / lenPrev }
+      const normNext = { x: toNext.x / lenNext, y: toNext.y / lenNext }
+
+      const cpPrev = {
+        x: current.x + normPrev.x * maxBorderRadius,
+        y: current.y + normPrev.y * maxBorderRadius,
+      }
+
+      const cpNext = {
+        x: current.x + normNext.x * maxBorderRadius,
+        y: current.y + normNext.y * maxBorderRadius,
+      }
+
+      if (i === 0) {
+        ctx.moveTo(cpPrev.x, cpPrev.y)
+      } else {
+        ctx.lineTo(cpPrev.x, cpPrev.y)
+      }
+
+      ctx.quadraticCurveTo(current.x, current.y, cpNext.x, cpNext.y)
+    }
+  } else {
+    ctx.moveTo(points[0].x, points[0].y)
+    for (let i = 1; i < sides; i++) {
+      ctx.lineTo(points[i].x, points[i].y)
+    }
+  }
+
+  ctx.closePath()
+
+  if (fill) {
+    ctx.fill()
+  }
+
+  if (stroke) {
+    ctx.stroke()
+  }
+
+  ctx.restore()
+}

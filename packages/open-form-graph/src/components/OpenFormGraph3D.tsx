@@ -1,13 +1,10 @@
-import { ForceGraphMethods as ForceGraphMethods3D } from "react-force-graph-3d"
 import ForceGraph3D from "react-force-graph-3d"
 import { useEffect, useRef } from "react"
 import { forceCollide } from "d3-force"
 import { useGraphLinks } from "@/hooks/useGraphLinks"
 import { useOpenFormGraph } from "@/context/graph"
 import { Link, Node } from "@/_types"
-import { useColor } from "@/hooks/useColor"
 import { useGraphNodesThree } from "@/hooks/useGraphNodesThree"
-import { TrackballControls } from "three/examples/jsm/Addons.js"
 
 interface ProjectGraphProps {
   width: number

@@ -26,7 +26,7 @@ export function useGraphNodesThree() {
     ref
   } = useOpenFormGraph()
 
-  const { color, colorContrast } = useColor()
+  const { color } = useColor()
 
 
   const zoomRef = useRef(0)
@@ -47,7 +47,6 @@ export function useGraphNodesThree() {
 
     controls.addEventListener("change", handleChange)
 
-    // Cleanup
     return () => {
       controls.removeEventListener("change", handleChange)
       throttledDebounce.cancel()

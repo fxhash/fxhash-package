@@ -78,12 +78,47 @@ export function OpenFormGraphProvider({
       _nodes.map(node => [node.id, node])
     )
 
+    const transformedLinks = data.links.map(l => ({
+      source: nodesById[l.source],
+      target: nodesById[l.target],
+    }))
+
+
+    // If the root node id does not exist, create one
+    if (!nodesById[rootId]) {
+      const rootNode: Node = {
+        id: rootId,
+        label: "Root Node",
+        clusterSize: data.nodes.length,
+        collapsed: false,
+        childLinks: [],
+        level: 0,
+        hide: false,
+      }
+
+      _nodes.push(rootNode)
+      nodesById[rootId] = rootNode
+
+      const targetIds = new Set(transformedLinks.map(link => link.target.id))
+      const innerRootNodes = _nodes.filter(node =>
+        node.id !== rootId && !targetIds.has(node.id)
+      )
+
+      const newRootLinks = innerRootNodes.map(node => ({
+        source: rootNode,
+        target: node,
+      }))
+
+      return {
+        nodes: _nodes,
+        links: [...transformedLinks, ...newRootLinks],
+      }
+    }
+
+    // If root node exists, proceed with original logic
     return {
       nodes: _nodes,
-      links: data.links.map(l => ({
-        source: nodesById[l.source],
-        target: nodesById[l.target],
-      })),
+      links: transformedLinks,
     }
   }, [data, rootId])
 
@@ -289,9 +324,9 @@ export function OpenFormGraphProvider({
       ...prev,
       dagLevelDistance: scaleLinear()
         .domain([0, data.nodes.length])
-        .range([80, 400])(prunedTree.nodes.length),
+        .range([_config.minDagLevelDistance, _config.maxDagLevelDistance])(prunedTree.nodes.length),
     }))
-  }, [prunedTree.nodes.length, data.nodes.length])
+  }, [prunedTree.nodes.length, data.nodes.length, _config])
 
   const allSizes = graphData.nodes
     .filter(n => n.collapsed)

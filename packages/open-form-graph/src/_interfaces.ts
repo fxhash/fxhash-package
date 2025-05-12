@@ -9,6 +9,9 @@ export interface GraphConfig {
   maxClusterSize: number
   minZoom: number
   maxZoom: number
+  focusPadding: number,
+  minDagLevelDistance: number,
+  maxDagLevelDistance: number,
   theme: {
     dark: [number, number, number]
     light: [number, number, number]
