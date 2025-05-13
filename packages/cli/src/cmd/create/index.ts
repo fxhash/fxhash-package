@@ -5,12 +5,14 @@ import { TemplateFactoryResponse } from "../../templates/types.js"
 import { writeProjectToDisk } from "../../templates/writer.js"
 import { logger } from "../../utils/logger.js"
 import { chooseFromPrompt, prompt } from "../../utils/prompts.js"
+import { openFormTemplate } from "../../templates/openform/index.js"
 
 const TEMPLATE_CHOICES: Record<
   string,
   (options: { name?: string }) => Promise<TemplateFactoryResponse>
 > = {
-  "simple (recommended)": simpleTemplate,
+  "open form (NEW)": openFormTemplate,
+  "simple": simpleTemplate,
   ejected: ejectedTemplate,
 }
 
