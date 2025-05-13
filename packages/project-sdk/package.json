@@ -38,10 +38,10 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "prebuild": "node ./version-gen.js",
     "build": "tsup --config tsup.config.version.ts",
     "build-sdk": "pnpm run build && tsup --config tsup.config.sdk.ts",
-    "dev-sdk": "tsup --watch"
+    "dev-sdk": "tsup --watch",
+    "prebuild": "node ./version-gen.js"
   },
   "types": "./dist/fxhash.d.ts"
 }
