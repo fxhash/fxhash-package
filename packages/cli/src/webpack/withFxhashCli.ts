@@ -1,11 +1,11 @@
 import { Configuration } from "webpack"
-import { WebpackConfigFactoryOptions } from "./webpack.config"
-import { createDevConfig } from "./webpack.config.dev"
+import { WebpackConfigFactoryOptions } from "./webpack.config.js"
+import { createDevConfig } from "./webpack.config.dev.js"
 import { merge } from "lodash"
-import { createProdConfig } from "./webpack.config.prod"
-import env from "../constants"
+import { createProdConfig } from "./webpack.config.prod.js"
+import env from "../constants.js"
 import yargs, { Arguments } from "yargs"
-import { devCommandBuilder } from "../cmd/dev/index"
+import { devCommandBuilder } from "../cmd/dev/index.js"
 export type FxhashCliMode = "dev" | "prd"
 
 export interface WithFxhashCliOptions extends WebpackConfigFactoryOptions {

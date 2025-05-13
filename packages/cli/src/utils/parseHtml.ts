@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs"
-import parse, { HTMLElement } from "node-html-parser"
+import { HTMLElement, parse } from "node-html-parser"
 import { format } from "prettier"
 
 // Utility function to read and parse HTML
@@ -21,12 +21,8 @@ export async function formatAndWriteHtml(
   root: HTMLElement,
   filePath: string
 ): Promise<string> {
-  try {
-    const newHtml = root.toString()
-    const pNewHtml = await format(newHtml, { parser: "html" })
-    writeFileSync(filePath, pNewHtml)
-    return pNewHtml
-  } catch (error) {
-    throw error
-  }
+  const newHtml = root.toString()
+  const pNewHtml = await format(newHtml, { parser: "html" })
+  writeFileSync(filePath, pNewHtml)
+  return pNewHtml
 }

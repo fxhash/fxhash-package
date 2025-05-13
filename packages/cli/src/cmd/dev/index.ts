@@ -3,19 +3,17 @@ import Webpack, { Configuration } from "webpack"
 import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
-import env, { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME } from "../../constants"
-import { createDevConfig } from "../../webpack/webpack.config.dev"
-import { logger } from "../../utils/logger"
-import {
-  isEjectedProject,
-  validateProjectStructure,
-} from "../../validate/index"
 import path from "path"
 import { existsSync } from "fs"
-import { updateToolkit } from "../../updates/toolkit/toolkit"
-import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
-import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
-import { getProjectPaths } from "../../templates/paths"
+import { env } from "process"
+import { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME } from "../../constants.js"
+import { getProjectPaths } from "../../templates/paths.js"
+import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens.js"
+import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk.js"
+import { updateToolkit } from "../../updates/toolkit/toolkit.js"
+import { logger } from "../../utils/logger.js"
+import { isEjectedProject, validateProjectStructure } from "../../validate/index.js"
+import { createDevConfig } from "../../webpack/webpack.config.dev.js"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)

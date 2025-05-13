@@ -1,8 +1,8 @@
 import CopyPlugin from "copy-webpack-plugin"
 import path from "path"
-import { ZipperPlugin } from "./plugins/ZipperPlugin"
-import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
-import { getProjectPaths } from "../templates/paths"
+import { ZipperPlugin } from "./plugins/ZipperPlugin.js"
+import { createBaseConfig, WebpackConfigFactory } from "./webpack.config.js"
+import { getProjectPaths } from "../templates/paths.js"
 import TerserPlugin from "terser-webpack-plugin"
 
 export const createProdConfig: WebpackConfigFactory = options => {
@@ -12,7 +12,7 @@ export const createProdConfig: WebpackConfigFactory = options => {
     srcPath,
     rootPath
   )
-  const zipFilePath = baseConfig.output.path + ".zip"
+  const zipFilePath = baseConfig?.output?.path + ".zip"
   return {
     ...baseConfig,
     mode: "production",
@@ -27,27 +27,27 @@ export const createProdConfig: WebpackConfigFactory = options => {
     },
     // add the zipper plugin to the list of plugins
     plugins: [
-      ...baseConfig.plugins,
-      staticPath !== baseConfig.output.path &&
-        new CopyPlugin({
-          patterns: [
-            {
-              from: staticPath,
-              filter: async filePath => {
-                const filesNotToCopy = [zipFilePath]
-                const foldersNotToCopy = [distPath]
-                if (filesNotToCopy.some(file => filePath === file)) return false
-                if (
-                  foldersNotToCopy.some(
-                    folder => path.dirname(filePath) === folder
-                  )
+      ...(baseConfig.plugins as any),
+      staticPath !== baseConfig?.output?.path &&
+      new CopyPlugin({
+        patterns: [
+          {
+            from: staticPath,
+            filter: async filePath => {
+              const filesNotToCopy = [zipFilePath]
+              const foldersNotToCopy = [distPath]
+              if (filesNotToCopy.some(file => filePath === file)) return false
+              if (
+                foldersNotToCopy.some(
+                  folder => path.dirname(filePath) === folder
                 )
-                  return false
-                return true
-              },
+              )
+                return false
+              return true
             },
-          ],
-        }),
+          },
+        ],
+      }),
       zippify && new ZipperPlugin({ zipPath: zipFilePath }),
     ].filter(p => !!p),
   }

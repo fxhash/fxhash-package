@@ -1,7 +1,8 @@
-import { logger } from "./logger"
 import { createInterface, clearScreenDown, moveCursor } from "readline"
+//@ts-ignore
 import keypress from "keypress"
 import chalk from "chalk"
+import { logger } from "./logger.js"
 
 export async function prompt(question: string): Promise<string> {
   const rl = createInterface({
@@ -81,11 +82,10 @@ export async function chooseFromPrompt(
   })
 }
 
-const YESNO_CHOICES = {
+const YESNO_CHOICES: Record<string, boolean> = {
   no: false,
   yes: true,
 }
-
 const YESNO_OPTIONS_DEFAULT: ChooseFromPromptOptions = {
   title: "Are you sure",
   description: "The change can't be reversed.",
@@ -96,10 +96,3 @@ export async function yesno(options = YESNO_OPTIONS_DEFAULT): Promise<boolean> {
   return YESNO_CHOICES[choice]
 }
 
-function hideCursor() {
-  process.stdout.write("\u001b[?25l")
-}
-
-function showCursor() {
-  process.stdout.write("\u001b[?25h")
-}

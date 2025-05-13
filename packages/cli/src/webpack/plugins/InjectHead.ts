@@ -3,11 +3,12 @@ import fs from "fs"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import { format } from "prettier"
 import { Compiler } from "webpack"
-import { SNIPPET_PATH } from "../../constants"
+import { SNIPPET_PATH } from "../../constants.js"
 
 export class InjectHead {
   apply(compiler: Compiler) {
     compiler.hooks.compilation.tap("InjectHead", compilation => {
+      // @ts-ignore
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         "InjectHead",
         async (data: any, callback: any) => {

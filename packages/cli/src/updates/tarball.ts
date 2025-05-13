@@ -3,8 +3,8 @@ import { glob } from "glob"
 import { execSync } from "child_process"
 import fs from "fs"
 import path from "path"
-import { ValidProjectSdkFiles } from "../validate/index"
-import { getTmpPath } from "../constants"
+import { getTmpPath } from "../constants.js"
+import { ValidProjectSdkFiles } from "../validate/index.js"
 
 interface PackageOptions {
   version?: string
@@ -14,7 +14,7 @@ export async function readFilesFromPackageTarball(
   packageName: string,
   filesToRead: string[],
   options: PackageOptions = {}
-): Promise<ValidProjectSdkFiles> {
+): Promise<ValidProjectSdkFiles | null> {
   try {
     const _version = options.version || "latest"
     const tmpPath = getTmpPath()
@@ -35,6 +35,7 @@ export async function readFilesFromPackageTarball(
       cwd: extractionPath,
     })
     const packagePath = path.join(extractionPath, "package")
+    console.log(packagePath)
     const files = await glob(filesToRead, {
       cwd: packagePath,
     })

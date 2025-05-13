@@ -1,6 +1,6 @@
-import { JS_ENTRY_FILE_NAME } from "../constants"
+import { JS_ENTRY_FILE_NAME } from "../constants.js"
 import { WebpackConfiguration } from "webpack-dev-server"
-import { getProjectPaths } from "../templates/paths"
+import { getProjectPaths } from "../templates/paths.js"
 
 export interface WebpackConfigFactoryOptions {
   srcPath: string

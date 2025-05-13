@@ -4,14 +4,16 @@ import { JSDOM } from "jsdom"
 import fs from "fs"
 import { format } from "prettier"
 import path from "path"
-import { CWD_PATH } from "../../constants"
+import { CWD_PATH } from "../../constants.js"
 
 export class RemoveEntryJsPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.compilation.tap("RemoveNotFoundScripts", compilation => {
+
+      //@ts-ignore
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         "RemoveNotFoundScripts",
-        async (data, cb) => {
+        async (data: any, cb: any) => {
           // Create a DOM from the generated HTML
           const { window } = new JSDOM(data.html)
 
@@ -24,7 +26,8 @@ export class RemoveEntryJsPlugin {
           const fileExists = (filePath: string) => {
             try {
               return fs.existsSync(filePath)
-            } catch (err) {
+            } catch (err: any) {
+              console.error(err.message)
               return false
             }
           }

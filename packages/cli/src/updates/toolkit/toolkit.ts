@@ -1,6 +1,7 @@
-import { FxhashProjectStructure } from "../../templates/paths"
-import { logger } from "../../utils/logger"
-import { updateLockFile } from "../lockfile"
+import { i } from "../../../../params/dist/utils-jEvPb5wq.js"
+import { FxhashProjectStructure } from "../../templates/paths.js"
+import { logger } from "../../utils/logger.js"
+import { updateLockFile } from "../lockfile.js"
 
 type ModuleVersion = {
   [key: string]: string
@@ -47,6 +48,7 @@ export async function updateToolkit(
           }
         )
 
+        //@ts-ignore
         updateLockFile(currentContent => ({
           ...currentContent,
           ...updatedVersion,

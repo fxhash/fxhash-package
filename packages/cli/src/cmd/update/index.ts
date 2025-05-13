@@ -1,14 +1,11 @@
+import { env } from "process"
 import type { CommandModule } from "yargs"
-import env from "../../constants"
-import { logger } from "../../utils/logger"
-import {
-  isEjectedProject,
-  validateProjectStructure,
-} from "../../validate/index"
-import { getProjectPaths } from "../../templates/paths"
-import { updateToolkit } from "../../updates/toolkit/toolkit"
-import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
-import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
+import { getProjectPaths } from "../../templates/paths.js"
+import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens.js"
+import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk.js"
+import { updateToolkit } from "../../updates/toolkit/toolkit.js"
+import { logger } from "../../utils/logger.js"
+import { isEjectedProject, validateProjectStructure } from "../../validate/index.js"
 
 export const commandUpdate: CommandModule = {
   command: "update",
@@ -45,7 +42,7 @@ export const commandUpdate: CommandModule = {
       )
     } catch (err) {
       logger.error("Error upgrading fx(hash) environment")
-      logger.errorExit(err)
+      logger.errorExit(err as Error)
     }
   },
 }

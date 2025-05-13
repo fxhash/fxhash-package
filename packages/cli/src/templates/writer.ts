@@ -1,7 +1,7 @@
-import { STATIC_PATH } from "../constants"
 import { writeFileSync, rmSync, mkdirSync, cpSync } from "fs"
 import path from "path"
-import { TemplateUserConfig } from "./types"
+import { STATIC_PATH } from "../constants.js"
+import { TemplateUserConfig } from "./types.js"
 
 export async function writeProjectToDisk({
   template,

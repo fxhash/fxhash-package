@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
-import { readFilesFromPackageTarball } from "../tarball"
-import { ModuleUpdater } from "./toolkit"
-import { getSha256 } from "./utils"
+import { readFilesFromPackageTarball } from "../tarball.js"
+import { ModuleUpdater } from "./toolkit.js"
+import { getSha256 } from "./utils.js"
 
 const PROJECT_SDK_SHA_KEY = "project-sdk"
 const PROJECT_SDK_DIST_ENTRY = "dist/fxhash.min.js"
@@ -26,7 +26,7 @@ export function createProjectSdkUpdateConfig(
       if (existsSync(fxhashSdkPath)) {
         currentSha = getSha256(fxhashSdkPath)
       }
-      const latestSha = getSha256(files.files[0])
+      const latestSha = getSha256(files?.files[0] || "")
       if (currentSha === latestSha) {
         return null
       }
@@ -41,7 +41,7 @@ export function createProjectSdkUpdateConfig(
         [PROJECT_SDK_DIST_ENTRY, PROJECT_SDK_DIST_ENTRY_OLD],
         { version: options.version }
       )
-      const sdkFile = readFileSync(files.files[0])
+      const sdkFile = readFileSync(files?.files[0] || "")
       writeFileSync(fxhashSdkPath, sdkFile)
       return latestVersion
     },

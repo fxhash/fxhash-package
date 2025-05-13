@@ -1,8 +1,8 @@
-import { createBaseConfig, WebpackConfigFactory } from "./webpack.config"
-import { getProjectPaths } from "../templates/paths"
-import { FXSTUDIO_PATH } from "../constants"
+import { createBaseConfig, WebpackConfigFactory } from "./webpack.config.js"
+import { getProjectPaths } from "../templates/paths.js"
+import { FXSTUDIO_PATH } from "../constants.js"
 
-export const createDevConfig: WebpackConfigFactory = options => {
+export const createDevConfig: WebpackConfigFactory = (options: any) => {
   const { srcPath, portProject, rootPath, noLens } = options
   const baseConfig = createBaseConfig(options)
   const { staticPath } = getProjectPaths(srcPath, rootPath)

@@ -1,6 +1,6 @@
 import path from "path"
 import fs from "fs"
-import { STATIC_PATH } from "../constants"
+import { STATIC_PATH } from "../constants.js"
 
 const LOCK_FILENAME = "fxhash-lock.json"
 const PATH_FILE = path.join(STATIC_PATH, LOCK_FILENAME)
@@ -19,7 +19,7 @@ export function readLockFile() {
  * @param {(content: Object => Object)} updateFn takes the current JSON config
  * as first argument and returns the new JSON config object
  */
-export function updateLockFile(updateFn) {
+export function updateLockFile(updateFn: any) {
   // read content of the lock file, if it exists; if not, define as empty obj
   let contents = readLockFile()
   // update using the provided function
