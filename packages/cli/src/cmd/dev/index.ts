@@ -5,8 +5,7 @@ import open from "open"
 import chalk from "chalk"
 import path from "path"
 import { existsSync } from "fs"
-import { env } from "process"
-import { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME } from "../../constants.js"
+import env, { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME } from "../../constants.js"
 import { getProjectPaths } from "../../templates/paths.js"
 import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens.js"
 import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk.js"
@@ -50,6 +49,11 @@ export function devCommandBuilder(yargs: any) {
       default: undefined,
       describe: "The version of the fxhash project-sdk to use",
     })
+    .option("noUpdate", {
+      type: "boolean",
+      default: false,
+      describe: "Prevent any updates to be downloaded",
+    })
 }
 
 export const commandDev: CommandModule = {
@@ -61,6 +65,7 @@ export const commandDev: CommandModule = {
     const srcPathArg = yargs.srcPath as string
     const noLensArg = yargs.noLens as boolean
     const sdkVersionArg = yargs.sdkVersion as string
+    const noUpdateArg = yargs.noUpdate as boolean
 
     const isEjected = isEjectedProject(srcPathArg)
 
@@ -73,19 +78,23 @@ export const commandDev: CommandModule = {
     const URL_FXLENS = `http://localhost:${portProject}/fxlens`
     const URL_PROJECT = `http://localhost:${portProject}`
 
-    try {
-      await updateToolkit(
-        {
-          fxlens: fxlensUpdateConfig,
-          "@fxhash/project-sdk": createProjectSdkUpdateConfig({
-            version: sdkVersionArg,
-          }),
-        },
-        project
-      )
-    } catch (err: any) {
-      console.log(chalk.red.bold(`❗ ${err.message}`))
-      console.log(chalk.dim("Starting anyways...\n\n"))
+    if (!noUpdateArg) {
+      try {
+        await updateToolkit(
+          {
+            fxlens: fxlensUpdateConfig,
+            "@fxhash/project-sdk": createProjectSdkUpdateConfig({
+              version: sdkVersionArg,
+            }),
+          },
+          project
+        )
+      } catch (err: any) {
+        console.log(chalk.red.bold(`❗ ${err.message}`))
+        console.log(chalk.dim("Starting anyways...\n\n"))
+      }
+    } else {
+      console.log("skipping updates")
     }
 
     // TODO:do some checkups to see if fxlens is available, otherwise throw?

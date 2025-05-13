@@ -1,4 +1,3 @@
-import { env } from "process"
 import type { CommandModule } from "yargs"
 import { getProjectPaths } from "../../templates/paths.js"
 import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens.js"
@@ -9,6 +8,7 @@ import {
   isEjectedProject,
   validateProjectStructure,
 } from "../../validate/index.js"
+import env from "../../constants.js"
 
 export const commandUpdate: CommandModule = {
   command: "update",

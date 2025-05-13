@@ -9,9 +9,8 @@ import {
   writeFileSync,
 } from "fs"
 import path from "path"
-import { env } from "process"
 import yesno from "yesno"
-import {
+import env, {
   CWD_PATH,
   WEBPACK_CONFIG_DEV_FILE_NAME,
   WEBPACK_CONFIG_PROD_FILE_NAME,
