@@ -9,9 +9,9 @@ export interface GraphConfig {
   maxClusterSize: number
   minZoom: number
   maxZoom: number
-  focusPadding: number,
-  minDagLevelDistance: number,
-  maxDagLevelDistance: number,
+  focusPadding: number
+  minDagLevelDistance: number
+  maxDagLevelDistance: number
   theme: {
     dark: [number, number, number]
     light: [number, number, number]
@@ -25,7 +25,9 @@ export interface LayoutConfig {
   dagLevelDistance: number
 }
 
-type _ForceGraphMethods = ForceGraphMethods<Node, Link> | ForceGraphMethods3D<Node, Link>
+type _ForceGraphMethods =
+  | ForceGraphMethods<Node, Link>
+  | ForceGraphMethods3D<Node, Link>
 
 export interface OpenFormGraphApi {
   ref: React.MutableRefObject<_ForceGraphMethods | undefined>
@@ -47,5 +49,8 @@ export interface OpenFormGraphApi {
   setConfig: React.Dispatch<React.SetStateAction<GraphConfig>>
   getNodeSize: (nodeId: string) => number
   getNodeForce: (nodeId: string) => number
-  search: (startNodeId: string, rootId: string) => { nodes: Node[], links: Link[] }
+  search: (
+    startNodeId: string,
+    rootId: string
+  ) => { nodes: Node[]; links: Link[] }
 }

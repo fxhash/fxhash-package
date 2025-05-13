@@ -3,10 +3,7 @@ import Webpack, { Configuration } from "webpack"
 import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
-import env, {
-  CWD_PATH,
-  WEBPACK_CONFIG_DEV_FILE_NAME,
-} from "../../constants"
+import env, { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
 import { logger } from "../../utils/logger"
 import {
@@ -79,7 +76,9 @@ export const commandDev: CommandModule = {
       await updateToolkit(
         {
           fxlens: fxlensUpdateConfig,
-          "@fxhash/project-sdk": createProjectSdkUpdateConfig({ version: sdkVersionArg }),
+          "@fxhash/project-sdk": createProjectSdkUpdateConfig({
+            version: sdkVersionArg,
+          }),
         },
         project
       )

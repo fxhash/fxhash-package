@@ -11,14 +11,15 @@ interface UpdateProjectSdkOptions {
   version?: string
 }
 
-export function createProjectSdkUpdateConfig(options: UpdateProjectSdkOptions = {}) {
+export function createProjectSdkUpdateConfig(
+  options: UpdateProjectSdkOptions = {}
+) {
   const updater: ModuleUpdater = {
-    requiresUpdate: async (project) => {
+    requiresUpdate: async project => {
       const fxhashSdkPath = project?.fxhashSdkPath || ""
-      const files = await readFilesFromPackageTarball("@fxhash/project-sdk", [
-        PROJECT_SDK_DIST_ENTRY,
-        PROJECT_SDK_DIST_ENTRY_OLD,
-      ],
+      const files = await readFilesFromPackageTarball(
+        "@fxhash/project-sdk",
+        [PROJECT_SDK_DIST_ENTRY, PROJECT_SDK_DIST_ENTRY_OLD],
         { version: options.version }
       )
       let currentSha = ""
@@ -35,10 +36,9 @@ export function createProjectSdkUpdateConfig(options: UpdateProjectSdkOptions = 
     },
     update: async (latestVersion, project) => {
       const fxhashSdkPath = project?.fxhashSdkPath || ""
-      const files = await readFilesFromPackageTarball("@fxhash/project-sdk", [
-        PROJECT_SDK_DIST_ENTRY,
-        PROJECT_SDK_DIST_ENTRY_OLD,
-      ],
+      const files = await readFilesFromPackageTarball(
+        "@fxhash/project-sdk",
+        [PROJECT_SDK_DIST_ENTRY, PROJECT_SDK_DIST_ENTRY_OLD],
         { version: options.version }
       )
       const sdkFile = readFileSync(files.files[0])

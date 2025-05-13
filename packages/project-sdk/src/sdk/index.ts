@@ -1,12 +1,6 @@
-import {
-  mockTezosAddress,
-} from "@fxhash/utils/address"
-import {
-  mockTezosTransactionHash,
-} from "@fxhash/utils/hash"
-import {
-  createFxRandom,
-} from "@fxhash/utils/math"
+import { mockTezosAddress } from "@fxhash/utils/address"
+import { mockTezosTransactionHash } from "@fxhash/utils/hash"
+import { createFxRandom } from "@fxhash/utils/math"
 import { parseHashParams } from "@fxhash/utils/url"
 import {
   type FxParamType,
@@ -20,10 +14,7 @@ import {
   deserializeParams,
   ParameterProcessors,
 } from "@fxhash/params/utils"
-import {
-  type FxHashApi,
-  type FxHashExecutionContext
-} from "../types"
+import { type FxHashApi, type FxHashExecutionContext } from "../types"
 import { version } from "../version"
 
 export function createFxhashSdk(window: Window): FxHashApi {
@@ -45,14 +36,15 @@ export function createFxhashSdk(window: Window): FxHashApi {
   }
   // call this function to trigger capture frame
   function captureFrame(isLastFrame: boolean = false) {
-    window.dispatchEvent(new CustomEvent("fxhash-capture-frame", { detail: { isLastFrame: isLastFrame } }))
+    window.dispatchEvent(
+      new CustomEvent("fxhash-capture-frame", {
+        detail: { isLastFrame: isLastFrame },
+      })
+    )
     setTimeout(() => captureFrame(isLastFrame), 500)
   }
   // get the byte params from the URL
-  const {
-    params,
-    lineage: _lineage
-  } = parseHashParams(window.location.href)
+  const { params, lineage: _lineage } = parseHashParams(window.location.href)
 
   const initialInputBytes = params.replace("0x", "")
   const lineage = [..._lineage, fxhash]

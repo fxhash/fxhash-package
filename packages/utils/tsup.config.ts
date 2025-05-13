@@ -6,7 +6,7 @@ export default defineConfig((options: Options) => ({
     "src/url.ts",
     "src/hash.ts",
     "src/math.ts",
-    "src/address.ts"
+    "src/address.ts",
   ],
   outDir: "dist",
   format: "esm",

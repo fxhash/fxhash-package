@@ -6,8 +6,10 @@ import { ejectedTemplate } from "../../templates/ejected/index"
 import { chooseFromPrompt, prompt } from "../../utils/prompts"
 import { TemplateFactoryResponse } from "../../templates/types"
 
-const TEMPLATE_CHOICES: Record<string, (options: { name?: string }) => Promise<TemplateFactoryResponse>>
-  = {
+const TEMPLATE_CHOICES: Record<
+  string,
+  (options: { name?: string }) => Promise<TemplateFactoryResponse>
+> = {
   "simple (recommended)": simpleTemplate,
   ejected: ejectedTemplate,
 }

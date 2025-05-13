@@ -14,15 +14,17 @@ export const commandUpdate: CommandModule = {
   command: "update",
   describe: "Upgrade the fx(hash) environment",
   builder: yargs =>
-    yargs.option("srcPath", {
-      type: "string",
-      default: env.SRC_PATH,
-      describe: "The path to the src of the project",
-    }).option("sdkVersion", {
-      type: "string",
-      default: null,
-      describe: "The version of the fxhash project-sdk to use",
-    }),
+    yargs
+      .option("srcPath", {
+        type: "string",
+        default: env.SRC_PATH,
+        describe: "The path to the src of the project",
+      })
+      .option("sdkVersion", {
+        type: "string",
+        default: null,
+        describe: "The version of the fxhash project-sdk to use",
+      }),
   handler: async yargs => {
     const srcPathArg = yargs.srcPath as string
     const sdkVersionArg = yargs.sdkVersion as string
@@ -35,7 +37,9 @@ export const commandUpdate: CommandModule = {
       await updateToolkit(
         {
           fxlens: fxlensUpdateConfig,
-          "@fxhash/project-sdk": createProjectSdkUpdateConfig({ version: sdkVersionArg }),
+          "@fxhash/project-sdk": createProjectSdkUpdateConfig({
+            version: sdkVersionArg,
+          }),
         },
         project
       )

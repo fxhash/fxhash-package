@@ -87,7 +87,7 @@ export function OpenFormGraph(props: ProjectGraphProps) {
         }
       }}
       */
-      onNodeClick={(n) => onClickNode(n.id)}
+      onNodeClick={n => onClickNode(n.id)}
       onNodeDrag={() => {
         if (!reheated.current) {
           ref.current?.d3ReheatSimulation()

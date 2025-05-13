@@ -1004,7 +1004,6 @@ const images = [
   "https://media.fxhash.xyz/w_512/QmPadWkr5pqTSuMp4sUVy9tHBDi9ddp4USDLrxHEFqwYYn",
 ]
 
-
 export function generateTree(
   maxNodes: number,
   maxChildren: number
@@ -1074,4 +1073,3 @@ export function collectChildren(
 
   return { nodes: collectedNodes, links: collectedLinks }
 }
-

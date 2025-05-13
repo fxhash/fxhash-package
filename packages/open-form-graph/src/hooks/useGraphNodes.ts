@@ -34,7 +34,12 @@ export function useGraphNodes() {
   )
 
   const nodePointerAreaPaint = useCallback(
-    (node: NodeObject<Node>, col: string, ctx: CanvasRenderingContext2D, scale: number) => {
+    (
+      node: NodeObject<Node>,
+      col: string,
+      ctx: CanvasRenderingContext2D,
+      scale: number
+    ) => {
       const x = node.x || 0
       const y = node.y || 0
       const size = getNodeSize(node.id as string)
@@ -71,7 +76,6 @@ export function useGraphNodes() {
 
       const x = node.x || 0
       const y = node.y || 0
-
 
       let opacity = 1
       if (selectedNode && !isHighlighted) {

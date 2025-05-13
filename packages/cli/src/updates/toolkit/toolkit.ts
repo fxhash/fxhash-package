@@ -7,9 +7,7 @@ type ModuleVersion = {
 } | null
 
 export type ModuleUpdater = {
-  requiresUpdate: (
-    project?: FxhashProjectStructure
-  ) => Promise<ModuleVersion>
+  requiresUpdate: (project?: FxhashProjectStructure) => Promise<ModuleVersion>
   update: (
     latestVersion: ModuleVersion,
     project?: FxhashProjectStructure
@@ -20,7 +18,7 @@ export type UpdateManagerConfig = Record<string, ModuleUpdater>
 
 export async function updateToolkit(
   config: UpdateManagerConfig,
-  project: FxhashProjectStructure,
+  project: FxhashProjectStructure
 ): Promise<void[]> {
   return await Promise.all(
     Object.keys(config).map(async moduleName => {

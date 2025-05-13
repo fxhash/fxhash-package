@@ -6,10 +6,12 @@ export const createDevConfig: WebpackConfigFactory = options => {
   const { srcPath, portProject, rootPath, noLens } = options
   const baseConfig = createBaseConfig(options)
   const { staticPath } = getProjectPaths(srcPath, rootPath)
-  const _static = [{
-    directory: staticPath,
-    publicPath: "/",
-  }]
+  const _static = [
+    {
+      directory: staticPath,
+      publicPath: "/",
+    },
+  ]
 
   if (!noLens) {
     _static.push({
