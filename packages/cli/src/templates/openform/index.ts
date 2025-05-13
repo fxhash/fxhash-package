@@ -1,4 +1,3 @@
-
 import { render } from "ejs"
 import { format } from "prettier"
 import { readFileSync } from "fs"

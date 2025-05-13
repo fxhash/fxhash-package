@@ -12,7 +12,7 @@ const TEMPLATE_CHOICES: Record<
   (options: { name?: string }) => Promise<TemplateFactoryResponse>
 > = {
   "open form (NEW)": openFormTemplate,
-  "simple": simpleTemplate,
+  simple: simpleTemplate,
   ejected: ejectedTemplate,
 }
 
