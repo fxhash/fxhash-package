@@ -46,8 +46,6 @@ export const commandAdd: CommandModule = {
       await validateProjectStructure(srcPath)
       const { htmlEntryPath } = getProjectPaths(srcPath)
 
-      console.log("list?", data)
-
       if (!list && !module) {
         console.log(
           "Pleas specifiy a library you want to add or use --list to see the available libraries"
@@ -56,7 +54,6 @@ export const commandAdd: CommandModule = {
       }
 
       const withoutEmpty = data?.offchain?.Library.filter(lib => {
-        console.log(lib)
         return lib.versions.length > 0
       })
 
