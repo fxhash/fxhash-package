@@ -1,5 +1,3 @@
 #!/usr/bin/env node
+export * from "@fxhash/cli"
 
-const fxhashCli = require("@fxhash/cli").default
-
-module.exports = fxhashCli

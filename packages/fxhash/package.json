@@ -2,6 +2,7 @@
   "name": "fxhash",
   "version": "0.0.10",
   "author": "fxhash",
+  "type": "module",
   "bin": {
     "fxhash": "./index.js"
   },
