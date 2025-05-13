@@ -95,4 +95,3 @@ export async function yesno(options = YESNO_OPTIONS_DEFAULT): Promise<boolean> {
   const choice = await chooseFromPrompt(YESNO_CHOICES, options)
   return YESNO_CHOICES[choice]
 }
-

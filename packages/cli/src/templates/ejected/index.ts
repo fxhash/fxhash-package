@@ -1,12 +1,18 @@
 import { render } from "ejs"
 import { readFileSync } from "fs"
 import { format } from "prettier"
-import { SDK_FILE_NAME, JS_ENTRY_FILE_NAME, HTML_ENTRY_FILE_NAME, WEBPACK_CONFIG_DEV_FILE_NAME, WEBPACK_CONFIG_PROD_FILE_NAME } from "../../constants.js"
+import {
+  SDK_FILE_NAME,
+  JS_ENTRY_FILE_NAME,
+  HTML_ENTRY_FILE_NAME,
+  WEBPACK_CONFIG_DEV_FILE_NAME,
+  WEBPACK_CONFIG_PROD_FILE_NAME,
+} from "../../constants.js"
 import { baseHtmlTemplate } from "../baseHtml.js"
 import { baseWebpackTemplate } from "../baseWebpackConfig.js"
 import { TemplateFactoryResponse } from "../types.js"
 import { packageJson } from "./packageJson.js"
-import { createRequire } from 'module';
+import { createRequire } from "module"
 
 export async function ejectedTemplate({
   name = "ejected",
@@ -19,7 +25,7 @@ export async function ejectedTemplate({
   })
   const pHtml = await format(html, { parser: "html" })
   const pkgJson = JSON.stringify({ ...packageJson, name }, null, 2)
-  const require = createRequire(import.meta.url);
+  const require = createRequire(import.meta.url)
   const sdkPath = require.resolve("@fxhash/project-sdk")
   const sdkContent = readFileSync(sdkPath, "utf-8")
 

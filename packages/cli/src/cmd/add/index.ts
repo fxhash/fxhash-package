@@ -55,8 +55,6 @@ export const commandAdd: CommandModule = {
         return
       }
 
-
-
       const withoutEmpty = data?.offchain?.Library.filter(lib => {
         console.log(lib)
         return lib.versions.length > 0
@@ -86,7 +84,10 @@ export const commandAdd: CommandModule = {
           library?.versions.find(v => v.id === version) || library?.versions[0]
 
         // if the versions dont match we couldn't find the specified version
-        if (!libraryVersion || (version && version !== "" && version !== libraryVersion?.id)) {
+        if (
+          !libraryVersion ||
+          (version && version !== "" && version !== libraryVersion?.id)
+        ) {
           logger.errorExit(
             `Could not find library ${name} with version ${version}`
           )

@@ -3,7 +3,12 @@ import { existsSync, readFileSync, writeFileSync } from "fs"
 import path, { isAbsolute } from "path"
 import chalk from "chalk"
 import { devConfig } from "@fxhash/config"
-import { CaptureTriggerMode, CaptureMode, fetchExtract, DEFAULT_CAPTURE_SETTINGS } from "../../capture/index.js"
+import {
+  CaptureTriggerMode,
+  CaptureMode,
+  fetchExtract,
+  DEFAULT_CAPTURE_SETTINGS,
+} from "../../capture/index.js"
 import { getRandomFxhash, getRandomTezosAddress } from "../../capture/math.js"
 import { urlWithHashAndParams } from "../../capture/url.js"
 import { CWD_PATH } from "../../constants.js"

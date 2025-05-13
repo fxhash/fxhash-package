@@ -2,7 +2,11 @@ import { existsSync, renameSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import { HTMLElement, parse } from "node-html-parser"
 import { format } from "prettier"
-import { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME, WEBPACK_CONFIG_PROD_FILE_NAME } from "../constants.js"
+import {
+  CWD_PATH,
+  WEBPACK_CONFIG_DEV_FILE_NAME,
+  WEBPACK_CONFIG_PROD_FILE_NAME,
+} from "../constants.js"
 import { getProjectPaths } from "../templates/paths.js"
 import { logger } from "../utils/logger.js"
 
@@ -21,7 +25,10 @@ function readAndParseHtml(filePath: string): Promise<HTMLElement> {
 }
 
 // Utility function to format and write HTML
-async function formatAndWriteHtml(root: any, filePath: string): Promise<string> {
+async function formatAndWriteHtml(
+  root: any,
+  filePath: string
+): Promise<string> {
   const newHtml = root.toString()
   const pNewHtml = await format(newHtml, { parser: "html" })
   writeFileSync(filePath, pNewHtml)

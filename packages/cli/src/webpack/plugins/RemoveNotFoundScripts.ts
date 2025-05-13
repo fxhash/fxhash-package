@@ -9,7 +9,6 @@ import { CWD_PATH } from "../../constants.js"
 export class RemoveEntryJsPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.compilation.tap("RemoveNotFoundScripts", compilation => {
-
       //@ts-ignore
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         "RemoveNotFoundScripts",

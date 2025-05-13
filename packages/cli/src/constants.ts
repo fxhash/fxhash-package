@@ -2,10 +2,10 @@ import dotenv from "dotenv"
 import path from "path"
 import os from "os"
 import fs from "fs"
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { dirname } from "node:path"
+import { fileURLToPath } from "node:url"
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 dotenv.config()
 const env = {
@@ -28,7 +28,6 @@ export const DIST_FOLDER_NAME = "upload"
 
 // User folders (where the CLI is run)
 export const CWD_PATH = path.resolve(process.cwd())
-
 
 // CLI Internal folders
 export const ROOT_PATH = path.resolve(__dirname)

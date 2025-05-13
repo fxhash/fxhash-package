@@ -11,7 +11,11 @@ import {
 import path from "path"
 import { env } from "process"
 import yesno from "yesno"
-import { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME, WEBPACK_CONFIG_PROD_FILE_NAME } from "../../constants.js"
+import {
+  CWD_PATH,
+  WEBPACK_CONFIG_DEV_FILE_NAME,
+  WEBPACK_CONFIG_PROD_FILE_NAME,
+} from "../../constants.js"
 import { baseWebpackTemplate } from "../../templates/baseWebpackConfig.js"
 import { packageJson } from "../../templates/ejected/packageJson.js"
 import { getProjectPaths } from "../../templates/paths.js"

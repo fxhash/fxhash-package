@@ -1,10 +1,14 @@
 import { render } from "ejs"
 import { format } from "prettier"
 import { readFileSync } from "fs"
-import { SDK_FILE_NAME, JS_ENTRY_FILE_NAME, HTML_ENTRY_FILE_NAME } from "../../constants.js"
+import {
+  SDK_FILE_NAME,
+  JS_ENTRY_FILE_NAME,
+  HTML_ENTRY_FILE_NAME,
+} from "../../constants.js"
 import { baseHtmlTemplate } from "../baseHtml.js"
 import { TemplateFactoryResponse } from "../types.js"
-import { createRequire } from 'module';
+import { createRequire } from "module"
 
 export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
   const name = "simple"
@@ -15,7 +19,7 @@ export async function simpleTemplate(): Promise<TemplateFactoryResponse> {
     entry: `<script src="./${JS_ENTRY_FILE_NAME}.js"></script>`,
   })
   const pHtml = await format(html, { parser: "html" })
-  const require = createRequire(import.meta.url);
+  const require = createRequire(import.meta.url)
   const sdkPath = require.resolve("@fxhash/project-sdk")
   const sdkContent = readFileSync(sdkPath, "utf-8")
   return {

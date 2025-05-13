@@ -1,5 +1,11 @@
 import path from "path"
-import { CWD_PATH, DIST_FOLDER_NAME, JS_ENTRY_FILE_NAME, HTML_ENTRY_FILE_NAME, SDK_FILE_NAME } from "../constants.js"
+import {
+  CWD_PATH,
+  DIST_FOLDER_NAME,
+  JS_ENTRY_FILE_NAME,
+  HTML_ENTRY_FILE_NAME,
+  SDK_FILE_NAME,
+} from "../constants.js"
 
 export interface FxhashProjectStructure {
   rootPath: string

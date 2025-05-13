@@ -29,25 +29,25 @@ export const createProdConfig: WebpackConfigFactory = options => {
     plugins: [
       ...(baseConfig.plugins as any),
       staticPath !== baseConfig?.output?.path &&
-      new CopyPlugin({
-        patterns: [
-          {
-            from: staticPath,
-            filter: async filePath => {
-              const filesNotToCopy = [zipFilePath]
-              const foldersNotToCopy = [distPath]
-              if (filesNotToCopy.some(file => filePath === file)) return false
-              if (
-                foldersNotToCopy.some(
-                  folder => path.dirname(filePath) === folder
+        new CopyPlugin({
+          patterns: [
+            {
+              from: staticPath,
+              filter: async filePath => {
+                const filesNotToCopy = [zipFilePath]
+                const foldersNotToCopy = [distPath]
+                if (filesNotToCopy.some(file => filePath === file)) return false
+                if (
+                  foldersNotToCopy.some(
+                    folder => path.dirname(filePath) === folder
+                  )
                 )
-              )
-                return false
-              return true
+                  return false
+                return true
+              },
             },
-          },
-        ],
-      }),
+          ],
+        }),
       zippify && new ZipperPlugin({ zipPath: zipFilePath }),
     ].filter(p => !!p),
   }

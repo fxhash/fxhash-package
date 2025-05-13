@@ -24,23 +24,26 @@ export class ZipperPlugin {
 
   apply(compiler: any) {
     // Specify the event hook to attach to
-    compiler.hooks.done.tapAsync("ZipperPlugin", (stats: any, callback: any) => {
-      const zipPath = this.options?.zipPath
-      if (!zipPath) throw new Error("No zipPath provided to ZipperPlugin")
-      const outputPath = stats.compilation.outputOptions.path
-      rmSync(zipPath, { force: true, recursive: true })
-      const zip = new AdmZip()
-      zip.addLocalFolder(outputPath)
-      zip.toBuffer()
-      zip.writeZip(zipPath)
-      logger.log(chalk.dim(`${zipPath} created`))
-      logger.log(
-        `Upload the ${basename(zipPath)} on ${logger.url(
-          "fxhash.xyz"
-        )} to mint your project.`
-      )
-      rmSync(outputPath, { force: true, recursive: true })
-      callback()
-    })
+    compiler.hooks.done.tapAsync(
+      "ZipperPlugin",
+      (stats: any, callback: any) => {
+        const zipPath = this.options?.zipPath
+        if (!zipPath) throw new Error("No zipPath provided to ZipperPlugin")
+        const outputPath = stats.compilation.outputOptions.path
+        rmSync(zipPath, { force: true, recursive: true })
+        const zip = new AdmZip()
+        zip.addLocalFolder(outputPath)
+        zip.toBuffer()
+        zip.writeZip(zipPath)
+        logger.log(chalk.dim(`${zipPath} created`))
+        logger.log(
+          `Upload the ${basename(zipPath)} on ${logger.url(
+            "fxhash.xyz"
+          )} to mint your project.`
+        )
+        rmSync(outputPath, { force: true, recursive: true })
+        callback()
+      }
+    )
   }
 }
