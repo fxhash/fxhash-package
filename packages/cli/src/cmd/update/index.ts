@@ -8,7 +8,7 @@ import {
 import { getProjectPaths } from "../../templates/paths"
 import { updateToolkit } from "../../updates/toolkit/toolkit"
 import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
-import { projectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
+import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
 
 export const commandUpdate: CommandModule = {
   command: "update",
@@ -18,9 +18,14 @@ export const commandUpdate: CommandModule = {
       type: "string",
       default: env.SRC_PATH,
       describe: "The path to the src of the project",
+    }).option("sdkVersion", {
+      type: "string",
+      default: null,
+      describe: "The version of the fxhash project-sdk to use",
     }),
   handler: async yargs => {
     const srcPathArg = yargs.srcPath as string
+    const sdkVersionArg = yargs.sdkVersion as string
 
     const isEjected = isEjectedProject(srcPathArg)
     const srcPath = isEjected ? srcPathArg : ""
@@ -30,7 +35,7 @@ export const commandUpdate: CommandModule = {
       await updateToolkit(
         {
           fxlens: fxlensUpdateConfig,
-          "@fxhash/project-sdk": projectSdkUpdateConfig,
+          "@fxhash/project-sdk": createProjectSdkUpdateConfig({ version: sdkVersionArg }),
         },
         project
       )

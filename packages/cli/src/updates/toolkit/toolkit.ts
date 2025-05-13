@@ -4,23 +4,23 @@ import { updateLockFile } from "../lockfile"
 
 type ModuleVersion = {
   [key: string]: string
-}
+} | null
 
 export type ModuleUpdater = {
   requiresUpdate: (
     project?: FxhashProjectStructure
-  ) => Promise<ModuleVersion | null>
+  ) => Promise<ModuleVersion>
   update: (
-    latestVersion: ModuleVersion | null,
+    latestVersion: ModuleVersion,
     project?: FxhashProjectStructure
-  ) => Promise<{ [key: string]: string }>
+  ) => Promise<ModuleVersion>
 }
 
 export type UpdateManagerConfig = Record<string, ModuleUpdater>
 
 export async function updateToolkit(
   config: UpdateManagerConfig,
-  project: FxhashProjectStructure
+  project: FxhashProjectStructure,
 ): Promise<void[]> {
   return await Promise.all(
     Object.keys(config).map(async moduleName => {

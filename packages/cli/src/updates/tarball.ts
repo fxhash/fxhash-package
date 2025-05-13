@@ -6,13 +6,19 @@ import path from "path"
 import { ValidProjectSdkFiles } from "../validate/index"
 import { getTmpPath } from "../constants"
 
+interface PackageOptions {
+  version?: string
+}
+
 export async function readFilesFromPackageTarball(
   packageName: string,
-  filesToRead: string[]
+  filesToRead: string[],
+  options: PackageOptions = {}
 ): Promise<ValidProjectSdkFiles> {
   try {
+    const _version = options.version || "latest"
     const tmpPath = getTmpPath()
-    const tarball = execSync(`npm pack ${packageName}`, {
+    const tarball = execSync(`npm pack ${packageName}@${_version}`, {
       cwd: tmpPath,
       stdio: [null, null, null],
     })

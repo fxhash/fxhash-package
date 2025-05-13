@@ -95,7 +95,7 @@ export async function validateProjectStructure(
       const scriptExists = htmlRoot.querySelector(
         `script[src="./${path.basename(fxhashSdkPathOld)}"]`
       )
-      scriptExists.setAttribute("src", `./${path.basename(fxhashSdkPath)}`)
+      scriptExists?.setAttribute("src", `./${path.basename(fxhashSdkPath)}`)
       await formatAndWriteHtml(htmlRoot, htmlEntryPath)
       logger.success("Renamed sdk file and updated script tag in html file")
     }

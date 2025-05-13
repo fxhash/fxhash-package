@@ -3,10 +3,8 @@ import Webpack, { Configuration } from "webpack"
 import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
-import express from "express"
 import env, {
   CWD_PATH,
-  FXSTUDIO_PATH,
   WEBPACK_CONFIG_DEV_FILE_NAME,
 } from "../../constants"
 import { createDevConfig } from "../../webpack/webpack.config.dev"
@@ -19,7 +17,7 @@ import path from "path"
 import { existsSync } from "fs"
 import { updateToolkit } from "../../updates/toolkit/toolkit"
 import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
-import { projectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
+import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
 import { getProjectPaths } from "../../templates/paths"
 
 function padn(n: number, len = 2, char = "0"): string {
@@ -44,6 +42,16 @@ export function devCommandBuilder(yargs: any) {
       default: env.NO_LENS,
       describe: "Only serve the project. Don't start fxlens.",
     })
+    .option("skip", {
+      type: "boolean",
+      default: env.NO_LENS,
+      describe: "Only serve the project. Don't start fxlens.",
+    })
+    .option("sdkVersion", {
+      type: "string",
+      default: undefined,
+      describe: "The version of the fxhash project-sdk to use",
+    })
 }
 
 export const commandDev: CommandModule = {
@@ -54,6 +62,7 @@ export const commandDev: CommandModule = {
     const portProject = yargs.portProject as number
     const srcPathArg = yargs.srcPath as string
     const noLensArg = yargs.noLens as boolean
+    const sdkVersionArg = yargs.sdkVersion as string
 
     const isEjected = isEjectedProject(srcPathArg)
 
@@ -70,7 +79,7 @@ export const commandDev: CommandModule = {
       await updateToolkit(
         {
           fxlens: fxlensUpdateConfig,
-          "@fxhash/project-sdk": projectSdkUpdateConfig,
+          "@fxhash/project-sdk": createProjectSdkUpdateConfig({ version: sdkVersionArg }),
         },
         project
       )
