@@ -2,7 +2,6 @@
   "name": "fxhash",
   "version": "0.0.10",
   "author": "fxhash",
-  "type": "module",
   "bin": {
     "fxhash": "./index.js"
   },
@@ -18,5 +17,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "fxhash/fxhash-package"
+  "repository": "fxhash/fxhash-package",
+  "type": "module"
 }

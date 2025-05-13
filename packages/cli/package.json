@@ -2,7 +2,6 @@
   "name": "@fxhash/cli",
   "version": "0.0.16",
   "author": "fxhash",
-  "type": "module",
   "bin": {
     "@fxhash/cli": "./dist/fxhashCli.js",
     "fxhash-add": "./dist/add.js",
@@ -109,5 +108,6 @@
     "dev": "tsup --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "types": "dist/index.d.ts"
 }
