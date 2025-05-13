@@ -197,8 +197,7 @@ export function createFxhashSdk(window: Window): FxHashApi {
       return this._features?.[id]
     },
     getFeatures: function () {
-      if (!this._features) throw new Error("Features not defined")
-      return this._features
+      return this._features || {}
     },
     getParam: function (id) {
       return this._paramValues[id]
