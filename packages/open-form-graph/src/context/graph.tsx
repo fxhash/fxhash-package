@@ -264,7 +264,7 @@ export function OpenFormGraphProvider({
     }
 
     const node = nodesById[selectedNodeId];
-    if (!node || node.collapsed) {
+    if (!node) {
       return { nodes: [], links: [] };
     }
 
@@ -275,7 +275,7 @@ export function OpenFormGraphProvider({
       nodes: [...pathHighlights.nodes, ...children.nodes],
       links: [...pathHighlights.links, ...children.links],
     };
-  }, [selectedNodeId, nodesById, rootId, breadthFirstSearch, collectChildren]);
+  }, [selectedNodeId, nodesById, rootId, breadthFirstSearch]);
 
   const prunedTree = useMemo(() => {
     const visibleNodes: Node[] = []
@@ -342,7 +342,7 @@ export function OpenFormGraphProvider({
         // No need to explicitly set highlights here as they will be updated via useMemo
       }
     },
-    [rootId, selectedNode, collectChildren]
+    [rootId, selectedNode, collectChildren, nodesById, setSelectedNodeId]
   );
 
   useEffect(() => {
@@ -378,7 +378,7 @@ export function OpenFormGraphProvider({
         _config.maxClusterSize / 2
       )
     },
-    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren, nodesById]
+    [_config, minClusterSize, maxClusterSize, rootId, hasNodeChildren, nodesById,]
   )
 
   const getNodeForce = useCallback(
