@@ -1,5 +1,11 @@
 # @fxhash/cli
 
+## 0.0.18
+
+### Patch Changes
+
+- 12b15773: update the open-form template
+
 ## 0.0.17
 
 ### Patch Changes

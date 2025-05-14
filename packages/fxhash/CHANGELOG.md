@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.12
+
+### Patch Changes
+
+- 12b15773: update the open-form template
+- Updated dependencies [12b15773]
+  - @fxhash/cli@0.0.18
+
 ## 0.0.11
 
 ### Patch Changes
