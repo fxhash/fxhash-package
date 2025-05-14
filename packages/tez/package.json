@@ -12,7 +12,7 @@
     "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
@@ -36,13 +36,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
-    "@fxhash/config": "0.0.9",
+    "@fxhash/config": "workspace:*",
     "onchfs": "0.0.0",
-    "@fxhash/gql": "0.0.8"
+    "@fxhash/gql": "workspace:*"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",

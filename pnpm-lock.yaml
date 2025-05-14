@@ -257,8 +257,8 @@ importers:
   packages/client:
     dependencies:
       '@airgap/beacon-sdk':
-        specifier: 4.3.1
-        version: 4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+        specifier: 4.5.2
+        version: 4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@fxhash/config':
         specifier: workspace:*
         version: link:../config
@@ -322,7 +322,7 @@ importers:
         version: 2.16.3(@tanstack/query-core@5.69.0)(@types/react@18.3.12)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(use-sync-external-store@1.5.0(react@18.3.1))(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))
       connectkit:
         specifier: 1.8.2
-        version: 1.8.2(@babel/core@7.27.1)(@tanstack/react-query@5.69.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))
+        version: 1.8.2(@babel/core@7.27.1)(@tanstack/react-query@5.69.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -346,7 +346,7 @@ importers:
         version: 0.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       connectkit:
         specifier: 1.8.2
-        version: 1.8.2(@babel/core@7.27.1)(@tanstack/react-query@5.69.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))
+        version: 1.8.2(@babel/core@7.27.1)(@tanstack/react-query@5.69.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))
       input-otp:
         specifier: 1.2.4
         version: 1.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -428,8 +428,8 @@ importers:
   packages/core:
     dependencies:
       '@airgap/beacon-sdk':
-        specifier: 4.3.1
-        version: 4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+        specifier: 4.5.2
+        version: 4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@fxhash/errors':
         specifier: workspace:*
         version: link:../errors
@@ -1310,8 +1310,8 @@ importers:
         version: 17.3.1
     devDependencies:
       '@airgap/beacon-sdk':
-        specifier: 4.3.1
-        version: 4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+        specifier: 4.5.2
+        version: 4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@fxhash/config':
         specifier: workspace:*
         version: link:../config
@@ -1452,65 +1452,41 @@ packages:
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
 
-  '@airgap/beacon-blockchain-substrate@4.3.1':
-    resolution: {integrity: sha512-kUnIo4qlGJDvheupN5S4ax1MrjsT6Idw4L/6KhpRTLIHd9yXz6JEJRLgrxIp4pFtmGsxIxol8kPnNTSMu15DhA==}
+  '@airgap/beacon-blockchain-substrate@4.5.2':
+    resolution: {integrity: sha512-T13es4jRnSR0unrvCOYHyxkT6TVDPqE52rb7qqu575yCFhNR75wTct2EMuVzSHmvrgyjvPo5reYHDhz4CrosgA==}
 
-  '@airgap/beacon-blockchain-tezos@4.3.1':
-    resolution: {integrity: sha512-aLTtwQeC0OQ64uCx66PF04oYKMeqXFh1EXD3KIk7Mv7fKlizDg7+MObcxdixAg1vObA2JDreurJTU9Uui7XVCw==}
-
-  '@airgap/beacon-core@4.3.1':
-    resolution: {integrity: sha512-Zo4dG6R7ZBapGTvuBSBM9jPIJYW3DJjEcbshJLnLBgCU3zjcitnW6auKaqpWjWIXqwP2ThzYwpjftWKpavCf9g==}
+  '@airgap/beacon-blockchain-tezos@4.5.2':
+    resolution: {integrity: sha512-sHK4jbh2tH6jo9o4VRAev0PKT0sYY9hHm/5LPrsHZZhatue5K/nT/ixFZn6dS9QOB7wB33ug7decXXCKSVkiGQ==}
 
   '@airgap/beacon-core@4.5.2':
     resolution: {integrity: sha512-7Ty3AUpnTawlIuKCOHZC5jVkjZufo6QJgoSUqjkc3m9H4WPmGVEHNpNZWgOmEu0oUyE6HoxILpEI1ihTRKTDvQ==}
 
-  '@airgap/beacon-dapp@4.3.1':
-    resolution: {integrity: sha512-WTQB7ULv9ergD+6OSv9RDbZyWjSCForWUEhKNMbAYd1RZSz4bcoMaqw8/0v97b+bjLayZmqNqhrUEo0Y7z/jXw==}
-
   '@airgap/beacon-dapp@4.5.2':
     resolution: {integrity: sha512-j1Uph/Kkap9NDpapn3dWwY8RorZ7hdipHz2y/w6skBeoM8014xspzi/jmsioUa6q0cKXR4ZzJG+obhHuxHZSAA==}
 
-  '@airgap/beacon-sdk@4.3.1':
-    resolution: {integrity: sha512-zk6HkieYGHY+LrA+VPpoQhbTjAQuDzGU81L3mzyECFg0/HWamiY3Tr9BpwwGKIJo1IW8WV1HLfzhE9SckzA0aA==}
-
-  '@airgap/beacon-transport-matrix@4.3.1':
-    resolution: {integrity: sha512-Kmm2056712xSbGkIFWM2IEeifw++owHubOg163bCcvSPc6dwNgTodZdbeXmkpHcTg8ZisRhe0j46IRwvMcw4gg==}
+  '@airgap/beacon-sdk@4.5.2':
+    resolution: {integrity: sha512-LpIN5+rKfpoQ2ZKdfS6A5n2BGhq+Smz5pb6wXTAc2bymHIirbslI7kfBHhwEv+59ZEYoxCQwVwLQC8ilIXOg2w==}
 
   '@airgap/beacon-transport-matrix@4.5.2':
     resolution: {integrity: sha512-U/sGId/oiT10Tg3CeGwavgrYoKiuoQ+QyqkPcIpIzthqse2aI14srDKjAvRKtMUIh0kimoZ9fCpZOxw8OVYWEQ==}
 
-  '@airgap/beacon-transport-postmessage@4.3.1':
-    resolution: {integrity: sha512-Dy3LsIhNkqR7s85iOnt0iAqoB3k9NPyP4x4uHEhhyV8jEn0Z03N+Ra09Zk3RvysqS5oIoFWPjuaG8HvRjuXihg==}
-
   '@airgap/beacon-transport-postmessage@4.5.2':
     resolution: {integrity: sha512-Yf9TCv4XYCa2kw5K8FdN1ZBx66HlauxLzjWaPZQf9y9hiF+xm/MHnq4ZS2lLegL2T7vhNzKsBxQHVOsccgt22Q==}
-
-  '@airgap/beacon-transport-walletconnect@4.3.1':
-    resolution: {integrity: sha512-UACRVnM6O6qVDua5nBBcY94FfiLxU56cArHVeNVTA2cp9jOyeE2JPUJ4jcaPs4yslikFbsT21Vn3d5FJl5Y1YQ==}
 
   '@airgap/beacon-transport-walletconnect@4.5.2':
     resolution: {integrity: sha512-klJVhcqHpOq5s7v9ZXcl6K2MNiwVavBMXU9MnQqHdAICvqcdXNIBe90v7enjgzvSz+u907RnMw3EynUFfdtiow==}
 
-  '@airgap/beacon-types@4.3.1':
-    resolution: {integrity: sha512-XYLZRQFRtfO33q/ZBSdssRIQHNXuRtoJhsnsmwwnbBssJKtiKEPfC0D+cf7BeBKoOObjigCIh9NixrPk+YyNeA==}
-
   '@airgap/beacon-types@4.5.2':
     resolution: {integrity: sha512-fc4jgyfOO0nsTIZL1lyJ5cVBmrTj18LN+aQ7wMj40IyvuyIWXBpOuG5qG8xE5sCVUbeDXLSllzyF6Jf7zYO3mA==}
-
-  '@airgap/beacon-ui@4.3.1':
-    resolution: {integrity: sha512-OJYrQlQxU98ZckW4xhyX1+hEMLOEd80N302sauKGzpUv7P0oxBfMLHaTVhQlZ7A+cAJkwMSqBa+Ek19QRPvoiQ==}
 
   '@airgap/beacon-ui@4.5.2':
     resolution: {integrity: sha512-012slEuLWxhES9JkSLiXdtxCSQOpheBjX5ohTo36Ln81ZcvmDRIWy1hh3EyVTYgO68s2FH7+IU5Aah+hodNMYQ==}
 
-  '@airgap/beacon-utils@4.3.1':
-    resolution: {integrity: sha512-6mghsASMxObCLcypsnTC38S+BkW8oZNxeuiSjPQSNE5c5LtNmDWS0Lm+UF69FjaskcbiUOxJWhOnmZZM3A9hcg==}
-
   '@airgap/beacon-utils@4.5.2':
     resolution: {integrity: sha512-m8wD22oRQpxvFho/cX8ZleUmiKdVIbTP2ZJpzCFURc2k3ln1Bpf7amnw5EN1jFpFLJ2qyYJhuvWEw7HFfJ3lpg==}
 
-  '@airgap/beacon-wallet@4.3.1':
-    resolution: {integrity: sha512-xsZdZLAsT4yKj2wz7lhMXhLChFhk1GglHi0bLaiJIi0ZycAbB76gOIwSAat7otMBLaswJj0b08JRinOCN4bf6Q==}
+  '@airgap/beacon-wallet@4.5.2':
+    resolution: {integrity: sha512-RDZgMEOuADiRH+DZIblD0V8FtJlK5+b+02MDcjmRd2hkMDpSgqvJNTlz+XI1ajlbcUB4Pd+M8uWmfSI+ZlQ8Yw==}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -2417,7 +2393,6 @@ packages:
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
-    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -2425,7 +2400,6 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
-    deprecated: Use @eslint/object-schema instead
 
   '@inquirer/confirm@3.2.0':
     resolution: {integrity: sha512-oOIwPs0Dvq5220Z8lGL/6LHRTEr9TgLHmiI99Rj1PJ1p1czTys+olrgBqZk4E2qC0YTzeHprxSQmoHioVdJ7Lw==}
@@ -2588,7 +2562,6 @@ packages:
 
   '@motionone/vue@10.16.4':
     resolution: {integrity: sha512-z10PF9JV6SbjFq+/rYabM+8CVlMokgl8RFGvieSGNTmrkQanfHn+15XBrhG3BgUfvmTeSeyShfOHpG0i9zEdcg==}
-    deprecated: Motion One for Vue is deprecated. Use Oku Motion instead https://oku-ui.com/motion
 
   '@mswjs/interceptors@0.29.1':
     resolution: {integrity: sha512-3rDakgJZ77+RiQUuSK69t1F0m8BQKA8Vh5DCS5V0DWvNY67zob2JhhQrhCO0AKLGINTRSFd1tBaHcJTkhefoSw==}
@@ -2990,7 +2963,6 @@ packages:
 
   '@paulmillr/qr@0.2.1':
     resolution: {integrity: sha512-IHnV6A+zxU7XwmKFinmYjUcwlyK9+xkG3/s9KcQhI9BjQKycrJ1JRO+FbNYPwZiPKW3je/DR0k7w8/gLa5eaxQ==}
-    deprecated: 'The package is now available as "qr": npm install qr'
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -3124,7 +3096,6 @@ packages:
 
   '@safe-global/safe-core-sdk-types@4.0.0':
     resolution: {integrity: sha512-KZPkCK3Ttnt3nSqn+M/rkkaY6ZZXy/vBC8lvI3lp3Y8SRgERdIymgLYqiizs+JTT9FZk+IFwfCaZz+4gFqvmpw==}
-    deprecated: 'WARNING: This project has been renamed to @safe-global/types-kit. Please, migrate from @safe-global/safe-core-sdk-types@5.1.0 to @safe-global/types-kit@1.0.0.'
 
   '@safe-global/safe-deployments@1.37.32':
     resolution: {integrity: sha512-3XRy6TnVz0uymPxMNo7WkaK88sL12ZpIMKOfrNHkODUZCxCO4GFA0FFfjByAPS1LAXfmV7Mulk9Zx1n9vqR8Cg==}
@@ -3263,9 +3234,6 @@ packages:
   '@stablelib/sha512@2.0.1':
     resolution: {integrity: sha512-DUNe5cbnoH3sSIN+MG04RvTCLXtkbyy/SnQxiNO+GgF/KSXkkUSlF6mUVvCUdZBZ2X3NgogR+tAvaRSn8wxnLw==}
 
-  '@stablelib/utf8@1.0.2':
-    resolution: {integrity: sha512-sDL1aB2U8FIpj7SjQJMxbOFIFkKvDKQGPHSrYejHZhtLNSK3qHe6ZIfa0woWkOiaJsdYslFzrc0VWXJZHmSIQQ==}
-
   '@stablelib/utf8@2.0.1':
     resolution: {integrity: sha512-7+C2Iap42fbLyoKMaEIIDSb1TrcQVo+lGDItYAwb2JoAJr7QffyuDnbtvV/qzTyokOIMBrJgT+Rpsp1bPR8SjA==}
 
@@ -3274,9 +3242,6 @@ packages:
 
   '@stablelib/wipe@2.0.1':
     resolution: {integrity: sha512-1eU2K9EgOcV4qc9jcP6G72xxZxEm5PfeI5H55l08W95b4oRJaqhmlWRc4xZAm6IVSKhVNxMi66V67hCzzuMTAg==}
-
-  '@stablelib/x25519-session@1.0.4':
-    resolution: {integrity: sha512-UZw67EJWSNTaou7Qp086fzGek7crrCQl2K7MoqEzslXxrm6vybySfcdsqaZ0ZpKq19IHWK8G0wAlFBy70srm3w==}
 
   '@stablelib/x25519-session@2.0.1':
     resolution: {integrity: sha512-GQrplqJsHiKwrXBoUpwpguaydLQbCiemcyeitnlDyTHhbtv3x5DO7zmZFac1RBIBxcdfYCwW6RaGmRdBKNm6Zg==}
@@ -3542,10 +3507,6 @@ packages:
 
   '@types/chalk@2.2.0':
     resolution: {integrity: sha512-1zzPV9FDe1I/WHhRkf9SNgqtRJWZqrBWgu7JGveuHmmyR9CnAPCie2N/x+iHrgnpYBIcCJWHBoMRv2TRWktsvw==}
-    deprecated: This is a stub types definition for chalk (https://github.com/chalk/chalk). chalk provides its own type definitions, so you don't need @types/chalk installed!
-
-  '@types/chrome@0.0.246':
-    resolution: {integrity: sha512-MxGxEomGxsJiL9xe/7ZwVgwdn8XVKWbPvxpVQl3nWOjrS0Ce63JsfzxUc4aU3GvRcUPYsfufHmJ17BFyKxeA4g==}
 
   '@types/chrome@0.0.315':
     resolution: {integrity: sha512-Oy1dYWkr6BCmgwBtOngLByCHstQ3whltZg7/7lubgIZEYvKobDneqplgc6LKERNRBwckFviV4UU5AZZNUFrJ4A==}
@@ -3582,7 +3543,6 @@ packages:
 
   '@types/dotenv@8.2.0':
     resolution: {integrity: sha512-ylSC9GhfRH7m1EUXBXofhgx4lUWmFeQDINW5oLuS+gxWdfUeW4zJdeVTYVkexEW+e2VUvlZR2kGnGGipAWR7kw==}
-    deprecated: This is a stub types definition. dotenv provides its own type definitions, so you do not need this installed.
 
   '@types/ejs@3.1.2':
     resolution: {integrity: sha512-ZmiaE3wglXVWBM9fyVC17aGPkLo/UgaOjEiI2FXQfyczrCefORPxIe+2dVmnmk3zkVIbizjrlQzmPGhSYGXG5g==}
@@ -3676,7 +3636,6 @@ packages:
 
   '@types/keypress@2.0.30':
     resolution: {integrity: sha512-PCS6Mrv4gbQ9167E25nuVmqerT4xM/zWuVFTLfHdQgBwmsfMj2kXR1DI3qZ5N3p21gbrPweRghci2CjMHRCWkA==}
-    deprecated: '''@types/keypress'' is now ''@types/keypress.js'''
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
@@ -3830,7 +3789,6 @@ packages:
 
   '@types/webpack-dev-server@4.7.2':
     resolution: {integrity: sha512-Y3p0Fmfvp0MHBDoCzo+xFJaWTw0/z37mWIo6P15j+OtmUDLvznJWdZNeD7Q004R+MpQlys12oXbXsrXRmxwg4Q==}
-    deprecated: This is a stub types definition. webpack-dev-server provides its own type definitions, so you do not need this installed.
 
   '@types/webpack-sources@3.2.3':
     resolution: {integrity: sha512-4nZOdMwSPHZ4pTEZzSp0AsTM4K7Qmu40UKW4tJDiOVs20UzYF9l+qUe4s0ftfN0pin06n+5cWWDJXH+sbhAiDw==}
@@ -3975,9 +3933,6 @@ packages:
       typescript:
         optional: true
 
-  '@walletconnect/core@2.14.0':
-    resolution: {integrity: sha512-E/dgBM9q3judXnTfZQ5ILvDpeSdDpabBLsXtYXa3Nyc26cfNplfLJ2nXm9FgtTdhM1nZ7yx4+zDPiXawBRZl2g==}
-
   '@walletconnect/core@2.17.0':
     resolution: {integrity: sha512-On+uSaCfWdsMIQsECwWHZBmUXfrnqmv6B8SXRRuTJgd8tUpEvBkLQH4X7XkSm3zW6ozEkQTCagZ2ox2YPn3kbw==}
     engines: {node: '>=18'}
@@ -4036,9 +3991,6 @@ packages:
   '@walletconnect/modal@2.7.0':
     resolution: {integrity: sha512-RQVt58oJ+rwqnPcIvRFeMGKuXb9qkgSmwz4noF8JZGUym3gUAzVs+uW2NQ1Owm9XOJAV+sANrtJ+VoVq1ftElw==}
 
-  '@walletconnect/relay-api@1.0.10':
-    resolution: {integrity: sha512-tqrdd4zU9VBNqUaXXQASaexklv6A54yEyQQEXYOCr+Jz8Ket0dmPBDyg19LVSNUN2cipAghQc45/KVmfFJ0cYw==}
-
   '@walletconnect/relay-api@1.0.11':
     resolution: {integrity: sha512-tLPErkze/HmC9aCmdZOhtVmYZq1wKfWTJtygQHoWtgg722Jd4homo54Cs4ak2RUFUZIGO2RsOpIcWipaua5D5Q==}
 
@@ -4051,9 +4003,6 @@ packages:
   '@walletconnect/safe-json@1.0.2':
     resolution: {integrity: sha512-Ogb7I27kZ3LPC3ibn8ldyUr5544t3/STow9+lzz7Sfo808YD7SBWk7SAsdBFlYgP2zDRy2hS3sKRcuSRM0OTmA==}
 
-  '@walletconnect/sign-client@2.14.0':
-    resolution: {integrity: sha512-UrB3S3eLjPYfBLCN3WJ5u7+WcZ8kFMe/QIDqLf76Jk6TaLwkSUy563LvnSw4KW/kA+/cY1KBSdUDfX1tzYJJXg==}
-
   '@walletconnect/sign-client@2.17.0':
     resolution: {integrity: sha512-sErYwvSSHQolNXni47L3Bm10ptJc1s1YoJvJd34s5E9h9+d3rj7PrhbiW9X82deN+Dm5oA8X9tC4xty1yIBrVg==}
 
@@ -4063,9 +4012,6 @@ packages:
   '@walletconnect/time@1.0.2':
     resolution: {integrity: sha512-uzdd9woDcJ1AaBZRhqy5rNC9laqWGErfc4dxA9a87mPdKOgWMD85mcFo9dIYIts/Jwocfwn07EC6EzclKubk/g==}
 
-  '@walletconnect/types@2.14.0':
-    resolution: {integrity: sha512-vevMi4jZLJ55vLuFOicQFmBBbLyb+S0sZS4IsaBdZkQflfGIq34HkN13c/KPl4Ye0aoR4/cUcUSitmGIzEQM5g==}
-
   '@walletconnect/types@2.17.0':
     resolution: {integrity: sha512-i1pn9URpvt9bcjRDkabuAmpA9K7mzyKoLJlbsAujRVX7pfaG7wur7u9Jz0bk1HxvuABL5LHNncTnVKSXKQ5jZA==}
 
@@ -4074,9 +4020,6 @@ packages:
 
   '@walletconnect/universal-provider@2.17.0':
     resolution: {integrity: sha512-d3V5Be7AqLrvzcdMZSBS8DmGDRdqnyLk1DWmRKAGgR6ieUWykhhUKlvfeoZtvJrIXrY7rUGYpH1X41UtFkW5Pw==}
-
-  '@walletconnect/utils@2.14.0':
-    resolution: {integrity: sha512-vRVomYQEtEAyCK2c5bzzEvtgxaGGITF8mWuIL+WYSAMyEJLY97mirP2urDucNwcUczwxUgI+no9RiNFbUHreQQ==}
 
   '@walletconnect/utils@2.17.0':
     resolution: {integrity: sha512-1aeQvjwsXy4Yh9G6g2eGmXrEl+BzkNjHRdCrGdMYqFTFa8ROEJfTGsSH3pLsNDlOY94CoBUvJvM55q/PMoN/FQ==}
@@ -4178,7 +4121,6 @@ packages:
 
   abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
-    deprecated: Use your platform's native atob() and btoa() methods instead
 
   abitype@1.0.7:
     resolution: {integrity: sha512-ZfYYSktDQUwc2eduYu8C4wOs+RDPmnRYMh7zNfzeMtGGgb0U+6tLGjixUic6mXf5xKKCcgT5Qp6cv39tOARVFw==}
@@ -4219,7 +4161,6 @@ packages:
 
   acorn-import-assertions@1.9.0:
     resolution: {integrity: sha512-cmMwop9x+8KFhxvKrKfPYmN6/pKTYYHBqLa0DfvVZcKMJWNyWLnaqND7dx/qn66R7ewM1UX5XMaDVP5wlVTaVA==}
-    deprecated: package has been renamed to acorn-import-attributes
     peerDependencies:
       acorn: ^8
 
@@ -4752,7 +4693,6 @@ packages:
   cids@0.7.5:
     resolution: {integrity: sha512-zT7mPeghoWAu+ppn8+BS1tQ5qGmbMfB4AregnQjA/qHY3GC1m1ptI9GkWNlgeu38r7CuRdXB47uY2XgAYt6QVA==}
     engines: {node: '>=4.0.0', npm: '>=3.0.0'}
-    deprecated: This module has been superseded by the multiformats module
 
   cipher-base@1.0.6:
     resolution: {integrity: sha512-3Ek9H3X6pj5TgenXYtNWdaBon1tgYCaebd+XPg0keyjEbEfkD4KkmAxkQ/i1vYvxdcT5nscLBfq9VJRmCBcFSw==}
@@ -5324,7 +5264,6 @@ packages:
   domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
     engines: {node: '>=12'}
-    deprecated: Use your platform's native DOMException instead
 
   domhandler@5.0.3:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
@@ -5526,7 +5465,6 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   esniff@2.0.1:
@@ -5948,7 +5886,6 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
 
   global@4.4.0:
     resolution: {integrity: sha512-wv/LAoHdRE3BeTGz53FAamhGlPLhlssK45usmGFThIi4XqnBmjKQ16u+RNbP7WvigRZDxUsM0J3gcQ5yicaL0w==}
@@ -6061,7 +5998,6 @@ packages:
   har-validator@5.1.5:
     resolution: {integrity: sha512-nmT2T0lljbxdQZfspsno9hgrG3Uir6Ks5afism62poxqBM6sDnMEuPmzTq8XN0OEwqKLLdh1jQI3qyE66Nzb3w==}
     engines: {node: '>=6'}
-    deprecated: this library is no longer supported
 
   hard-rejection@2.1.0:
     resolution: {integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==}
@@ -6149,7 +6085,6 @@ packages:
 
   hast@1.0.0:
     resolution: {integrity: sha512-vFUqlRV5C+xqP76Wwq2SrM0kipnmpxJm7OfvVXpB35Fp+Fn4MV+ozr+JZr5qFvyR1q/U+Foim2x+3P+x9S1PLA==}
-    deprecated: Renamed to rehype
 
   hastscript@7.2.0:
     resolution: {integrity: sha512-TtYPq24IldU8iKoJQqvZOuhi5CyCQRAbvDOX0x1eW6rsHSxa/1i2CCiptNTotGHJ3VoHRGmqiv6/D3q113ikkw==}
@@ -6321,7 +6256,6 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
-    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.3:
     resolution: {integrity: sha512-x00IRNXNy63jwGkJmzPigoySHbaqpNuzKbBOmzK+g2OdZpQ9w+sxCN+VSB3ja7IAge2OP2qpfxTjeNcyjmW1uw==}
@@ -6593,9 +6527,6 @@ packages:
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
-
-  isomorphic-unfetch@3.1.0:
-    resolution: {integrity: sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==}
 
   isomorphic-ws@5.0.0:
     resolution: {integrity: sha512-muId7Zzn9ywDsyXgTIafTry2sV3nySZeUDe6YedVd1Hvuuep5AsIlqK+XefWpYTyJG5e503F2xIuT2lcU6rCSw==}
@@ -6907,7 +6838,6 @@ packages:
 
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
-    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
@@ -7063,7 +6993,6 @@ packages:
 
   mdast@3.0.0:
     resolution: {integrity: sha512-xySmf8g4fPKMeC07jXGz971EkLbWAJ83s4US2Tj9lEdnZ142UP5grN73H1Xd3HzrdbU5o9GYYP/y8F9ZSwLE9g==}
-    deprecated: '`mdast` was renamed to `remark`'
 
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -7305,7 +7234,6 @@ packages:
   mkdirp-promise@5.0.1:
     resolution: {integrity: sha512-Hepn5kb1lJPtVW84RFT40YG1OddBNTOVUZR2bzQUHc+Z03en8/3uX0+060JDhcEzyO08HmipsN9DcnFMxhIL9w==}
     engines: {node: '>=4'}
-    deprecated: This package is broken and no longer maintained. 'mkdirp' itself supports promises now, please switch to that.
 
   mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
@@ -7345,11 +7273,9 @@ packages:
 
   multibase@0.6.1:
     resolution: {integrity: sha512-pFfAwyTjbbQgNc3G7D48JkJxWtoJoBMaR4xQUOuB8RnCgRqaYmWNFeJTTvrJ2w51bjLq2zTby6Rqj9TQ9elSUw==}
-    deprecated: This module has been superseded by the multiformats module
 
   multibase@0.7.0:
     resolution: {integrity: sha512-TW8q03O0f6PNFTQDvh3xxH03c8CjGaaYrjkl9UQPG6rz53TQzzxJVCIWVjzcbN/Q5Y53Zd0IBQBMVktVgNx4Fg==}
-    deprecated: This module has been superseded by the multiformats module
 
   multicast-dns@7.2.5:
     resolution: {integrity: sha512-2eznPJP8z2BFLX50tf0LuODrpINqP1RVIm/CObbTcBRITQgmC/TjcREF1NeTBzIcR5XO/ukWo+YHOjBbFwIupg==}
@@ -7357,11 +7283,9 @@ packages:
 
   multicodec@0.5.7:
     resolution: {integrity: sha512-PscoRxm3f+88fAtELwUnZxGDkduE2HD9Q6GHUOywQLjOGT/HAdhjLDYNZ1e7VR0s0TP0EwZ16LNUTFpoBGivOA==}
-    deprecated: This module has been superseded by the multiformats module
 
   multicodec@1.0.4:
     resolution: {integrity: sha512-NDd7FeS3QamVtbgfvu5h7fd1IlbaC4EQ0/pgU4zqE2vdHCmBGsUa0TiM8/TdSeG6BMPC92OOCf8F1ocE/Wkrrg==}
-    deprecated: This module has been superseded by the multiformats module
 
   multiformats@13.1.0:
     resolution: {integrity: sha512-HzdtdBwxsIkzpeXzhQ5mAhhuxcHbjEHH+JQoxt7hG/2HGFjjwyolLo7hbaexcnhoEuV4e0TNJ8kkpMjiEYY4VQ==}
@@ -7444,7 +7368,6 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
-    deprecated: Use your platform's native DOMException instead
 
   node-fetch-native@1.6.6:
     resolution: {integrity: sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==}
@@ -8235,7 +8158,6 @@ packages:
   request@2.88.2:
     resolution: {integrity: sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==}
     engines: {node: '>= 6'}
-    deprecated: request has been deprecated, see https://github.com/request/request/issues/3142
 
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
@@ -8294,7 +8216,6 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
-    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   ripemd160@2.0.2:
@@ -8306,7 +8227,6 @@ packages:
 
   rollup-plugin-inject@3.0.2:
     resolution: {integrity: sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==}
-    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
 
   rollup-plugin-node-polyfills@0.2.1:
     resolution: {integrity: sha512-4kCrKPTJ6sK4/gLL/U5QzVT8cxJcofO0OU74tnB19F40cmuAKSzH5/siithxlofFEjwvw1YAhPmbvGNA6jEroA==}
@@ -8621,7 +8541,6 @@ packages:
 
   sourcemap-codec@1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
-    deprecated: Please use @jridgewell/sourcemap-codec instead
 
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
@@ -9224,9 +9143,6 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  unfetch@4.2.0:
-    resolution: {integrity: sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA==}
-
   unified@11.0.5:
     resolution: {integrity: sha512-xKvGhPWw3k84Qjh8bI3ZeJjqnyadK+GEFtazSfZv/rKeTkTjOJho6mFqh2SM96iIcZokxiOpg78GazTSg8+KHA==}
 
@@ -9420,7 +9336,6 @@ packages:
 
   uuid@3.4.0:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
-    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
     hasBin: true
 
   uuid@8.3.2:
@@ -9912,7 +9827,6 @@ packages:
   yaeti@0.0.6:
     resolution: {integrity: sha512-MvQa//+KcZCUkBTIC9blM+CU9J2GzuTytsOUwf2lidtvkx/6gnEp1QvJv34t9vdjhFmha/mUiNDbN0D0mJWdug==}
     engines: {node: '>=0.10.32'}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   yallist@2.1.2:
     resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}
@@ -10025,10 +9939,10 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.0': {}
 
-  '@airgap/beacon-blockchain-substrate@4.3.1':
+  '@airgap/beacon-blockchain-substrate@4.5.2':
     dependencies:
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-ui': 4.3.1
+      '@airgap/beacon-types': 4.5.2
+      '@airgap/beacon-ui': 4.5.2
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10049,10 +9963,10 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@airgap/beacon-blockchain-tezos@4.3.1':
+  '@airgap/beacon-blockchain-tezos@4.5.2':
     dependencies:
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-ui': 4.3.1
+      '@airgap/beacon-types': 4.5.2
+      '@airgap/beacon-ui': 4.5.2
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10072,17 +9986,6 @@ snapshots:
       - db0
       - ioredis
       - uploadthing
-
-  '@airgap/beacon-core@4.3.1':
-    dependencies:
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-utils': 4.3.1
-      '@stablelib/ed25519': 1.0.3
-      '@stablelib/nacl': 1.0.4
-      '@stablelib/utf8': 1.0.2
-      '@stablelib/x25519-session': 1.0.4
-      broadcast-channel: 7.1.0
-      bs58check: 2.1.2
 
   '@airgap/beacon-core@4.5.2':
     dependencies:
@@ -10094,38 +9997,6 @@ snapshots:
       '@stablelib/x25519-session': 2.0.1
       broadcast-channel: 7.1.0
       bs58check: 4.0.0
-
-  '@airgap/beacon-dapp@4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-transport-matrix': 4.3.1
-      '@airgap/beacon-transport-postmessage': 4.3.1
-      '@airgap/beacon-transport-walletconnect': 4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@airgap/beacon-ui': 4.3.1
-      broadcast-channel: 7.1.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - debug
-      - encoding
-      - ioredis
-      - uploadthing
-      - utf-8-validate
 
   '@airgap/beacon-dapp@4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
@@ -10158,18 +10029,18 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@airgap/beacon-sdk@4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
+  '@airgap/beacon-sdk@4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
-      '@airgap/beacon-blockchain-substrate': 4.3.1
-      '@airgap/beacon-blockchain-tezos': 4.3.1
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-dapp': 4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@airgap/beacon-transport-matrix': 4.3.1
-      '@airgap/beacon-transport-postmessage': 4.3.1
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-ui': 4.3.1
-      '@airgap/beacon-utils': 4.3.1
-      '@airgap/beacon-wallet': 4.3.1
+      '@airgap/beacon-blockchain-substrate': 4.5.2
+      '@airgap/beacon-blockchain-tezos': 4.5.2
+      '@airgap/beacon-core': 4.5.2
+      '@airgap/beacon-dapp': 4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@airgap/beacon-transport-matrix': 4.5.2
+      '@airgap/beacon-transport-postmessage': 4.5.2
+      '@airgap/beacon-types': 4.5.2
+      '@airgap/beacon-ui': 4.5.2
+      '@airgap/beacon-utils': 4.5.2
+      '@airgap/beacon-wallet': 4.5.2
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10189,18 +10060,9 @@ snapshots:
       - bufferutil
       - db0
       - debug
-      - encoding
       - ioredis
       - uploadthing
       - utf-8-validate
-
-  '@airgap/beacon-transport-matrix@4.3.1':
-    dependencies:
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-utils': 4.3.1
-      axios: 1.9.0
-    transitivePeerDependencies:
-      - debug
 
   '@airgap/beacon-transport-matrix@4.5.2':
     dependencies:
@@ -10210,46 +10072,11 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@airgap/beacon-transport-postmessage@4.3.1':
-    dependencies:
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-utils': 4.3.1
-
   '@airgap/beacon-transport-postmessage@4.5.2':
     dependencies:
       '@airgap/beacon-core': 4.5.2
       '@airgap/beacon-types': 4.5.2
       '@airgap/beacon-utils': 4.5.2
-
-  '@airgap/beacon-transport-walletconnect@4.3.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-utils': 4.3.1
-      '@walletconnect/sign-client': 2.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - uploadthing
-      - utf-8-validate
 
   '@airgap/beacon-transport-walletconnect@4.5.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
@@ -10280,42 +10107,9 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@airgap/beacon-types@4.3.1':
-    dependencies:
-      '@types/chrome': 0.0.246
-
   '@airgap/beacon-types@4.5.2':
     dependencies:
       '@types/chrome': 0.0.315
-
-  '@airgap/beacon-ui@4.3.1':
-    dependencies:
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-transport-postmessage': 4.3.1
-      '@airgap/beacon-types': 4.3.1
-      '@airgap/beacon-utils': 4.3.1
-      '@walletconnect/utils': 2.14.0
-      qrcode-svg: 1.1.0
-      solid-js: 1.9.6
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - db0
-      - ioredis
-      - uploadthing
 
   '@airgap/beacon-ui@4.5.2':
     dependencies:
@@ -10347,14 +10141,6 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@airgap/beacon-utils@4.3.1':
-    dependencies:
-      '@stablelib/ed25519': 1.0.3
-      '@stablelib/nacl': 1.0.4
-      '@stablelib/random': 1.0.2
-      '@stablelib/utf8': 1.0.2
-      bs58check: 2.1.2
-
   '@airgap/beacon-utils@4.5.2':
     dependencies:
       '@stablelib/ed25519': 2.0.2
@@ -10363,11 +10149,11 @@ snapshots:
       '@stablelib/utf8': 2.0.1
       bs58check: 4.0.0
 
-  '@airgap/beacon-wallet@4.3.1':
+  '@airgap/beacon-wallet@4.5.2':
     dependencies:
-      '@airgap/beacon-core': 4.3.1
-      '@airgap/beacon-transport-matrix': 4.3.1
-      '@airgap/beacon-transport-postmessage': 4.3.1
+      '@airgap/beacon-core': 4.5.2
+      '@airgap/beacon-transport-matrix': 4.5.2
+      '@airgap/beacon-transport-postmessage': 4.5.2
     transitivePeerDependencies:
       - debug
 
@@ -12634,21 +12420,11 @@ snapshots:
       '@stablelib/hash': 2.0.0
       '@stablelib/wipe': 2.0.1
 
-  '@stablelib/utf8@1.0.2': {}
-
   '@stablelib/utf8@2.0.1': {}
 
   '@stablelib/wipe@1.0.1': {}
 
   '@stablelib/wipe@2.0.1': {}
-
-  '@stablelib/x25519-session@1.0.4':
-    dependencies:
-      '@stablelib/blake2b': 1.0.1
-      '@stablelib/keyagreement': 1.0.1
-      '@stablelib/random': 1.0.2
-      '@stablelib/wipe': 1.0.1
-      '@stablelib/x25519': 1.0.3
 
   '@stablelib/x25519-session@2.0.1':
     dependencies:
@@ -13082,11 +12858,6 @@ snapshots:
   '@types/chalk@2.2.0':
     dependencies:
       chalk: 4.1.2
-
-  '@types/chrome@0.0.246':
-    dependencies:
-      '@types/filesystem': 0.0.36
-      '@types/har-format': 1.2.16
 
   '@types/chrome@0.0.315':
     dependencies:
@@ -13698,48 +13469,6 @@ snapshots:
       - react
       - use-sync-external-store
 
-  '@walletconnect/core@2.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@walletconnect/heartbeat': 1.2.2
-      '@walletconnect/jsonrpc-provider': 1.0.14
-      '@walletconnect/jsonrpc-types': 1.0.4
-      '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/jsonrpc-ws-connection': 1.0.14(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@walletconnect/keyvaluestorage': 1.1.1
-      '@walletconnect/logger': 2.1.2
-      '@walletconnect/relay-api': 1.0.10
-      '@walletconnect/relay-auth': 1.0.4
-      '@walletconnect/safe-json': 1.0.2
-      '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.14.0
-      '@walletconnect/utils': 2.14.0
-      events: 3.3.0
-      isomorphic-unfetch: 3.1.0
-      lodash.isequal: 4.5.0
-      uint8arrays: 3.1.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - uploadthing
-      - utf-8-validate
-
   '@walletconnect/core@2.17.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
@@ -13973,10 +13702,6 @@ snapshots:
       - '@types/react'
       - react
 
-  '@walletconnect/relay-api@1.0.10':
-    dependencies:
-      '@walletconnect/jsonrpc-types': 1.0.4
-
   '@walletconnect/relay-api@1.0.11':
     dependencies:
       '@walletconnect/jsonrpc-types': 1.0.4
@@ -14001,40 +13726,6 @@ snapshots:
   '@walletconnect/safe-json@1.0.2':
     dependencies:
       tslib: 1.14.1
-
-  '@walletconnect/sign-client@2.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@walletconnect/core': 2.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@walletconnect/events': 1.0.1
-      '@walletconnect/heartbeat': 1.2.2
-      '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/logger': 2.1.2
-      '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.14.0
-      '@walletconnect/utils': 2.14.0
-      events: 3.3.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - uploadthing
-      - utf-8-validate
 
   '@walletconnect/sign-client@2.17.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
@@ -14105,34 +13796,6 @@ snapshots:
   '@walletconnect/time@1.0.2':
     dependencies:
       tslib: 1.14.1
-
-  '@walletconnect/types@2.14.0':
-    dependencies:
-      '@walletconnect/events': 1.0.1
-      '@walletconnect/heartbeat': 1.2.2
-      '@walletconnect/jsonrpc-types': 1.0.4
-      '@walletconnect/keyvaluestorage': 1.1.1
-      '@walletconnect/logger': 2.1.2
-      events: 3.3.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - db0
-      - ioredis
-      - uploadthing
 
   '@walletconnect/types@2.17.0':
     dependencies:
@@ -14223,42 +13886,6 @@ snapshots:
       - ioredis
       - uploadthing
       - utf-8-validate
-
-  '@walletconnect/utils@2.14.0':
-    dependencies:
-      '@stablelib/chacha20poly1305': 1.0.1
-      '@stablelib/hkdf': 1.0.1
-      '@stablelib/random': 1.0.2
-      '@stablelib/sha256': 1.0.1
-      '@stablelib/x25519': 1.0.3
-      '@walletconnect/relay-api': 1.0.10
-      '@walletconnect/safe-json': 1.0.2
-      '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.14.0
-      '@walletconnect/window-getters': 1.0.1
-      '@walletconnect/window-metadata': 1.0.1
-      detect-browser: 5.3.0
-      query-string: 7.1.3
-      uint8arrays: 3.1.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/kv'
-      - aws4fetch
-      - db0
-      - ioredis
-      - uploadthing
 
   '@walletconnect/utils@2.17.0':
     dependencies:
@@ -14684,14 +14311,14 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  babel-plugin-styled-components@2.1.4(@babel/core@7.27.1)(styled-components@5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1))(supports-color@5.5.0):
+  babel-plugin-styled-components@2.1.4(@babel/core@7.27.1)(styled-components@5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1))(supports-color@5.5.0):
     dependencies:
       '@babel/helper-annotate-as-pure': 7.27.1
       '@babel/helper-module-imports': 7.27.1(supports-color@5.5.0)
       '@babel/plugin-syntax-jsx': 7.27.1(@babel/core@7.27.1)
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1)
+      styled-components: 5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -15194,7 +14821,7 @@ snapshots:
 
   connect-history-api-fallback@2.0.0: {}
 
-  connectkit@1.8.2(@babel/core@7.27.1)(@tanstack/react-query@5.69.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)):
+  connectkit@1.8.2(@babel/core@7.27.1)(@tanstack/react-query@5.69.0(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)):
     dependencies:
       '@tanstack/react-query': 5.69.0(react@18.3.1)
       buffer: 6.0.3
@@ -15206,7 +14833,7 @@ snapshots:
       react-transition-state: 1.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-use-measure: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       resize-observer-polyfill: 1.5.1
-      styled-components: 5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1)
+      styled-components: 5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1)
       viem: 2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3)
       wagmi: 2.14.7(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.69.0(react@18.3.1))(@types/react@18.3.12)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.22.5(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)
     transitivePeerDependencies:
@@ -17291,13 +16918,6 @@ snapshots:
   isarray@2.0.5: {}
 
   isexe@2.0.0: {}
-
-  isomorphic-unfetch@3.1.0:
-    dependencies:
-      node-fetch: 2.7.0
-      unfetch: 4.2.0
-    transitivePeerDependencies:
-      - encoding
 
   isomorphic-ws@5.0.0(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
@@ -19925,19 +19545,19 @@ snapshots:
       hey-listen: 1.0.8
       tslib: 2.6.2
 
-  styled-components@5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1):
+  styled-components@5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1):
     dependencies:
       '@babel/helper-module-imports': 7.27.1(supports-color@5.5.0)
       '@babel/traverse': 7.27.1(supports-color@5.5.0)
       '@emotion/is-prop-valid': 1.3.1
       '@emotion/stylis': 0.8.5
       '@emotion/unitless': 0.7.5
-      babel-plugin-styled-components: 2.1.4(@babel/core@7.27.1)(styled-components@5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@16.13.1)(react@18.3.1))(supports-color@5.5.0)
+      babel-plugin-styled-components: 2.1.4(@babel/core@7.27.1)(styled-components@5.3.11(@babel/core@7.27.1)(react-dom@18.3.1(react@18.3.1))(react-is@17.0.2)(react@18.3.1))(supports-color@5.5.0)
       css-to-react-native: 3.2.0
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-is: 16.13.1
+      react-is: 17.0.2
       shallowequal: 1.1.0
       supports-color: 5.5.0
     transitivePeerDependencies:
@@ -20383,8 +20003,6 @@ snapshots:
   undici-types@6.19.8: {}
 
   undici-types@6.21.0: {}
-
-  unfetch@4.2.0: {}
 
   unified@11.0.5:
     dependencies:

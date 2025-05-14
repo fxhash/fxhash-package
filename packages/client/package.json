@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@tanstack/react-query": "5.69.0",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/taquito": "20.1.2",

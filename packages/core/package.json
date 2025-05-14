@@ -51,7 +51,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
