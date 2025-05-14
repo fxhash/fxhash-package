@@ -7,12 +7,7 @@ export const Qu_GetTokenPricingsAndReserves = graphql(`
   query GetTokenPricingsAndReserves($id: String!) {
     onchain {
       generative_token_by_pk(id: $id) {
-        reserves {
-          id
-          method
-          amount
-          data
-        }
+        is_frame
         pricing_fixeds {
           id
           opens_at
@@ -24,6 +19,12 @@ export const Qu_GetTokenPricingsAndReserves = graphql(`
           levels
           decrement_duration
         }
+      }
+      reserve(where: { token_id: { _eq: $id } }) {
+        id
+        method
+        amount
+        data
       }
     }
   }

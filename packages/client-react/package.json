@@ -1,0 +1,50 @@
+{
+  "name": "@fxhash/client-react",
+  "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
+  "version": "0.0.0",
+  "author": "fxhash",
+  "dependencies": {
+    "connectkit": "1.8.2",
+    "input-otp": "1.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@wagmi/connectors": "5.7.3",
+    "@wagmi/core": "2.16.3",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2",
+    "viem": "2.22.5",
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/sdk": "0.0.0",
+    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/utils-browser": "0.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@react-oauth/google": "0.12.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-otp-input": "3.1.1",
+    "solid-js": "^1.9.3",
+    "@fxhash/sdk": "0.0.0",
+    "@fxhash/utils-browser": "0.0.0"
+  },
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  }
+}

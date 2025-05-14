@@ -14,6 +14,7 @@ export const Qu_GetEthMinterProceeds = graphql(`
         token_address
         user_address
         amount
+        chain
       }
     }
   }

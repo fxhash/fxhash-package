@@ -1,0 +1,36 @@
+{
+  "name": "@fxhash/utils-browser",
+  "description": "A general-purpose package for browser-only compatible utilities.",
+  "version": "0.0.0",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/utils": "0.0.2"
+  },
+  "devDependencies": {
+    "tsup": "8.4.0",
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/eslint-config": "1.0.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  }
+}

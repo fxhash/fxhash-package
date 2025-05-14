@@ -1,43 +1,39 @@
 {
   "name": "@fxhash/auth",
-  "version": "0.0.8",
+  "version": "0.0.0",
   "author": "fxhash",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fxhash/fxhash-package"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
+    "@taquito/utils": "17.3.1",
     "cookie": "0.5.0",
     "express": "4.18.2",
     "jsonwebtoken": "9.0.0"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/tsconfig": "0.0.0",
     "@types/cookie": "0.5.1",
     "@types/express": "4.17.17",
     "@types/jsonwebtoken": "9.0.4",
     "@types/node": "18.7.13",
-    "tsup": "6.6.0",
-    "typescript": "5.0.4",
-    "@fxhash/eslint-config": "1.0.2"
+    "tslib": "2.6.2",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "private": true,
+  "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  }
+  },
+  "type": "module"
 }
-

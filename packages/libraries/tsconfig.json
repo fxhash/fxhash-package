@@ -1,31 +1,12 @@
 {
-  "compilerOptions": {
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "baseUrl": ".",
-    "jsx": "react-jsx",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "importHelpers": true,
-    "alwaysStrict": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": false,
-    "isolatedModules": true,
-    "paths": {
-      "@/*": ["./src/*"],
-    },
-  },
+  "extends": "@fxhash/tsconfig/base",
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }

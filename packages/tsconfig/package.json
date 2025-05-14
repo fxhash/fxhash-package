@@ -1,0 +1,27 @@
+{
+  "name": "@fxhash/tsconfig",
+  "description": "",
+  "version": "0.0.0",
+  "author": "",
+  "dependencies": {
+    "@tsconfig/create-react-app": "2.0.5",
+    "@tsconfig/node22": "22.0.0",
+    "@tsconfig/recommended": "1.0.8"
+  },
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./base": "./tsconfig.base.json",
+    "./tsconfig.node.json": "./tsconfig.node.json",
+    "./node": "./tsconfig.node.json",
+    "./tsconfig.react.json": "./tsconfig.react.json",
+    "./react": "./tsconfig.react.json"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

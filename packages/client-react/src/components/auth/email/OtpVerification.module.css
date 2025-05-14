@@ -1,0 +1,164 @@
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+.root {
+  position: relative;
+  z-index: 2;
+  width: min(380px, 100%);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  padding: 30px;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px -20px rgba(0, 0, 0, 0.5);
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.close:hover {
+  opacity: 0.8;
+}
+
+.close img {
+  width: 20px;
+  height: 20px;
+}
+
+.root button.submit {
+  background: black;
+  color: white;
+  border-radius: 3px;
+  min-width: 150px;
+  height: 40px;
+  padding: 0 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.root button:hover {
+  transform: scale(1.1);
+  font-size: calc(1em / 1.1 * 0.9);
+}
+
+.root button:disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.title {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.info {
+  color: #909090;
+  font-size: 0.75em;
+  width: 80%;
+}
+
+.otpWrapper {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.otp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  gap: 10px;
+}
+
+.otpDigit {
+  flex: 1 1 0;
+  background-color: white;
+  border-radius: 3px;
+  border: 2px solid #3c4043;
+  height: 47px;
+  max-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 20px;
+  position: relative;
+}
+
+.otpDigit.active {
+  box-shadow: 0 0 0 1px black;
+}
+
+.fakeCaretWrapper {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: caret-blink 1.5s steps(2, jump-none) forwards infinite;
+}
+
+.fakeCaret {
+  height: 50%;
+  width: 1px;
+  background: #3c4043;
+}
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/** ERROR **/
+.root.error .otpDigit {
+  border-color: #ff3333;
+  outline: 1px solid #ff3333;
+}
+
+.root.error .otpDigit.active {
+  border-color: #ff3333;
+  box-shadow: 0 0 0 1px #ff3333;
+}
+
+.errorWrapper {
+  width: 100%;
+}

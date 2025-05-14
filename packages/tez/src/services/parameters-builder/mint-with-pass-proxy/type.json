@@ -1,0 +1,74 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "pair",
+      "args": [
+        { "prim": "bytes", "annots": ["%payload"] },
+        { "prim": "signature", "annots": ["%signature"] }
+      ],
+      "annots": ["%consume_pass_params"]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        { "prim": "nat", "annots": ["%issuer_version"] },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "pair",
+              "args": [
+                {
+                  "prim": "pair",
+                  "args": [
+                    {
+                      "prim": "option",
+                      "args": [{ "prim": "bytes" }],
+                      "annots": ["%create_ticket"]
+                    },
+                    {
+                      "prim": "pair",
+                      "args": [
+                        { "prim": "bytes", "annots": ["%input_bytes"] },
+                        { "prim": "nat", "annots": ["%issuer_id"] }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "prim": "pair",
+                  "args": [
+                    {
+                      "prim": "option",
+                      "args": [{ "prim": "address" }],
+                      "annots": ["%recipient"]
+                    },
+                    {
+                      "prim": "pair",
+                      "args": [
+                        {
+                          "prim": "option",
+                          "args": [{ "prim": "address" }],
+                          "annots": ["%referrer"]
+                        },
+                        {
+                          "prim": "option",
+                          "args": [{ "prim": "bytes" }],
+                          "annots": ["%reserve_input"]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annots": ["%mint_params"]
+            },
+            { "prim": "address", "annots": ["%mint_pass_group_address"] }
+          ]
+        }
+      ]
+    }
+  ],
+  "annots": ["%mint_with_pass"]
+}

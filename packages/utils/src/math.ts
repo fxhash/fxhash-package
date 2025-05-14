@@ -1,9 +1,6 @@
 import { isEthereumAddressValid, isTezosAddressValid } from "./address"
-import { BASE58_CHARSET } from "./base58"
-import {
-  isEthereumTransactionHashValid,
-  isTezosTransactionHashValid,
-} from "./hash"
+import { BASE58_CHARSET } from "./constants"
+import { isEthereumTransactionHashValid } from "./hash"
 import { ResettableRandFunction } from "./types/math"
 
 export function getRandomHash(n: number): string {
@@ -42,13 +39,14 @@ function matcher(
   start: number,
   decoder: (s: string) => number = b58dec
 ): number[] {
-  return str
+  const matches = str
     .slice(start)
     .match(new RegExp(".{" + ((str.length - start) >> 2) + "}", "g"))
-    .map(decoder)
+  return matches ? matches.map(decoder) : []
 }
 
 function getSeedFromHash(hash: string): number[] {
+  // Accounting for ethereum and base
   if (isEthereumTransactionHashValid(hash) || isEthereumAddressValid(hash)) {
     return matcher(hash, 2, s => Number(BigInt(`0x${s}`) % BigInt(0xffffffff)))
   } else if (isTezosAddressValid(hash)) {

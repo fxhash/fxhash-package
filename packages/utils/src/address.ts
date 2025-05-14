@@ -1,5 +1,8 @@
-import { BASE58_CHARSET } from "./base58"
-import { Blockchain } from "./types/blockchain"
+import { BASE58_CHARSET } from "./constants"
+
+// todo: should maybe merge @fxhash/utils & @fxhash/shared ?
+// or move this into shared ? as it's sort of blockchain-related
+type Blockchain = "ETHEREUM" | "BASE" | "TEZOS"
 
 export function mockEthereumAddress(): string {
   const randomBytes = Array.from(
@@ -12,6 +15,8 @@ export function mockEthereumAddress(): string {
   return `0x${hexString}`
 }
 
+export const mockBaseAddress = mockEthereumAddress
+
 export function mockTezosAddress() {
   const randomSequence = Array.from(
     { length: 33 },
@@ -21,7 +26,7 @@ export function mockTezosAddress() {
 }
 
 export function mockBlockchainAddress(chain: Blockchain) {
-  if (chain === "ETHEREUM") return mockEthereumAddress()
+  if (["ETHEREUM", "BASE"].includes(chain)) return mockEthereumAddress()
   return mockTezosAddress()
 }
 
@@ -42,10 +47,18 @@ export function isEthereumAddressValid(address: string): boolean {
   return /^(0x)?[0-9a-fA-F]{40}$/.test(address)
 }
 
+export const isBaseAddressValid = isEthereumAddressValid
+
 export function getBlockchainFromAddress(address: string): Blockchain {
   if (isEthereumAddressValid(address)) return "ETHEREUM"
   if (isTezosAddressValid(address)) return "TEZOS"
   throw new Error(
     "The provided address is not a valid tezos or ethereum address"
+  )
+}
+
+export function isBlockchainAddressValid(address: string): boolean {
+  return [isTezosAddressValid, isEthereumAddressValid, isBaseAddressValid].some(
+    validation => validation(address)
   )
 }
