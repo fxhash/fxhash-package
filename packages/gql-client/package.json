@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
+    "@fxhash/config": "0.0.9",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
     "graphql": "16.10.0"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/tsconfig": "0.0.0",
     "@types/node": "20.11.30",
     "tsup": "8.4.0",
     "typescript": "5.8.2"

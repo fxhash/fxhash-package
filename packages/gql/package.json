@@ -7,7 +7,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/tsconfig": "0.0.0",
     "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "4.8.0",
     "@graphql-codegen/introspection": "4.0.3",

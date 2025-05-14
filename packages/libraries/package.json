@@ -4,10 +4,10 @@
   "version": "0.0.9",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*"
+    "@fxhash/config": "0.0.9"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/tsconfig": "0.0.0",
     "tslib": "2.6.2",
     "tsup": "8.4.0",
     "typescript": "5.8.2"
