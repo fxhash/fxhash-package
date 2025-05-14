@@ -32,5 +32,6 @@
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
   },
+  "sideEffects": false,
   "type": "module"
 }
