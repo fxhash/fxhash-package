@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "license": "MIT",
-  "packageManager": "pnpm@8.6.10",
+  "packageManager": "pnpm@10.10.0",
   "scripts": {
     "version": "pnpm changeset version && pnpm install --lockfile-only",
     "release": "pnpm turbo run build && pnpm changeset publish"

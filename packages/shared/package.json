@@ -4,14 +4,14 @@
   "author": "fxhash",
   "dependencies": {
     "jwt-decode": "4.0.0",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "tslib": "2.6.2",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
