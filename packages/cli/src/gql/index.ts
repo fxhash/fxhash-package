@@ -1,6 +1,6 @@
-import { devConfig } from "@fxhash/config"
+import { prdConfig } from "@fxhash/config"
 import { createGqlClient } from "@fxhash/gql-client"
 
 export const gqlClient = createGqlClient({
-  url: devConfig.apis.hasuraGql,
+  url: prdConfig.apis.hasuraGql,
 })
