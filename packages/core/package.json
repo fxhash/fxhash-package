@@ -71,9 +71,7 @@
     "viem": "2.22.5",
     "wagmi": "2.14.7"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
