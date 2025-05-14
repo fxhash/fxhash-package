@@ -8,11 +8,11 @@
     "@taquito/michelson-encoder": "17.3.1",
     "@taquito/rpc": "17.3.1",
     "@taquito/utils": "17.3.1",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/shared": "0.0.0"
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
@@ -20,10 +20,10 @@
     "tsup": "8.4.0",
     "typescript": "5.8.2",
     "vitest": "3.1.1",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/tsconfig": "0.0.0",
-    "onchfs": "0.0.0",
-    "@fxhash/config": "0.0.9"
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/config": "workspace:*",
+    "onchfs": "0.0.0"
   },
   "exports": {
     ".": {
@@ -36,13 +36,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
-    "@fxhash/config": "0.0.9",
+    "@fxhash/config": "workspace:*",
     "onchfs": "0.0.0",
-    "@fxhash/gql": "0.0.8"
+    "@fxhash/gql": "workspace:*"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",

@@ -4,18 +4,18 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.5.2",
     "@tanstack/react-query": "5.69.0",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/taquito": "20.1.2",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/core": "0.0.1",
-    "@fxhash/tez": "0.0.0",
-    "@fxhash/eth": "0.0.9",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/utils-browser": "0.0.0"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*"
   },
   "devDependencies": {
     "@types/eslint": "8.44.0",
@@ -29,8 +29,8 @@
     "typescript": "5.8.2",
     "viem": "2.22.5",
     "wagmi": "2.14.7",
-    "@fxhash/tsconfig": "0.0.0",
-    "@fxhash/eslint-config": "1.0.2"
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/eslint-config": "workspace:*"
   },
   "exports": {
     ".": {
