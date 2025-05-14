@@ -1,18 +1,18 @@
 {
   "name": "@fxhash/snippet",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "fxhash",
   "dependencies": {
     "node-html-parser": "6.1.9"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
     "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0",
-    "@fxhash/eslint-config": "1.0.2"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -31,10 +31,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  }
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

@@ -1,18 +1,18 @@
 {
   "name": "@fxhash/gql-client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
+    "@fxhash/config": "workspace:*",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
-    "graphql": "16.10.0",
-    "@fxhash/config": "0.0.9"
+    "graphql": "16.10.0"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "20.11.30",
     "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -28,9 +28,9 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  }
+  },
+  "type": "module"
 }

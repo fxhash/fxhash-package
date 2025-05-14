@@ -1,16 +1,16 @@
 {
   "name": "@fxhash/libraries",
   "description": "A collection of libraries artists can use in their projects.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "0.0.9"
+    "@fxhash/config": "workspace:*"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "tslib": "2.6.2",
     "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -24,9 +24,9 @@
   "license": "MIT",
   "private": true,
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  }
+  },
+  "type": "module"
 }
