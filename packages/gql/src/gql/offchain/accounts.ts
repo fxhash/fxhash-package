@@ -10,6 +10,8 @@ export const Frag_AccountBaseDetails = graphql(`
     profile {
       picture
       description
+      website
+      location
     }
     wallets {
       ...Wallet_BaseDetails
@@ -67,6 +69,48 @@ export const Qu_GetAccountWallets = graphql(`
         ...Account_BaseDetails
         ...Account_Wallets
       }
+    }
+  }
+`)
+
+export const Qu_GetMyAccount = graphql(`
+  query GetMyAccount {
+    offchain {
+      UserAccount {
+        account {
+          ...Account_BaseDetails
+          ...Account_Wallets
+        }
+      }
+    }
+  }
+`)
+
+/**
+ * Update the account's profile details.
+ */
+export const Mu_UpdateAccount = graphql(`
+  mutation UpdateAccount($input: UpdateAccountInput!) {
+    update_account(input: $input) {
+      id
+      username
+      profile {
+        picture
+        description
+        website
+        location
+      }
+    }
+  }
+`)
+
+/**
+ * Sets the farcaster handle for an account's profile.
+ */
+export const Mu_SetFarcasterHandle = graphql(`
+  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {
+    set_farcaster_handle(input: $input) {
+      handle
     }
   }
 `)

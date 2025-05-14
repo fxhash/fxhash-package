@@ -8,6 +8,7 @@ export const Qu_GetActionSalesBot = graphql(`
     onchain {
       action_by_pk(id: $id) {
         id
+        chain
         type
         numeric_value
         created_at
@@ -29,8 +30,10 @@ export const Qu_GetActionSalesBot = graphql(`
         }
         objkt {
           id
+          slug
           name
           metadata
+          thumbnail_uri
         }
         generative_token {
           id

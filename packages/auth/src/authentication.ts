@@ -1,6 +1,6 @@
 import { AuthToken } from "@/types/auth-token"
 import { AuthRole } from "@/types/roles"
-import { SignOptions, sign, verify } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 // local auth public, used to keep in-memory pointer of the key to be f4st
 let authPublic: string | null = null
@@ -32,7 +32,7 @@ export function verifyAuthToken(
   }
 
   // verify the JWT and return it
-  const decoded = verify(token, localAuthPublic, { algorithms: ["RS256"] })
+  const decoded = jwt.verify(token, localAuthPublic, { algorithms: ["RS256"] })
   return decoded as AuthToken
 }
 
@@ -74,20 +74,22 @@ export function verifyAuthRole(token: string, role: AuthRole) {
  */
 export function signAuthToken(
   payload: string | Buffer | Object,
-  options?: SignOptions,
+  options?: jwt.SignOptions,
   jwtPrivateKey?: string
 ): string {
   const authPrivate =
-    jwtPrivateKey || process.env.AUTH_JWT_PRIVATE_KEY.replace(/\\n/g, "\n")
+    jwtPrivateKey || process.env.AUTH_JWT_PRIVATE_KEY?.replace(/\\n/g, "\n")
 
   if (!authPrivate) {
     throw new Error(
       "Cannot find private key: the fxhash auth jwt private key (AUTH_JWT_PRIVATE_KEY) is missing from the environment variables."
     )
   }
-  return sign(payload, authPrivate, {
+  return jwt.sign(payload, authPrivate, {
     algorithm: "RS256",
     expiresIn: "14d",
     ...options,
   })
 }
+
+export const VALID_FOR = 24 * 60 * 60 * 1000 // 24 hours
