@@ -1,5 +1,11 @@
 # @fxhash/fxhash-snippet
 
+## 0.0.9
+
+### Patch Changes
+
+- cb15b5dc: release open form art toolkits
+
 ## 0.0.8
 
 ### Patch Changes

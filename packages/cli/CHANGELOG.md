@@ -1,5 +1,17 @@
 # @fxhash/cli
 
+## 0.0.17
+
+### Patch Changes
+
+- cb15b5dc: release open form art toolkits
+- Updated dependencies [cb15b5dc]
+  - @fxhash/project-sdk@0.0.14
+  - @fxhash/gql-client@0.0.1
+  - @fxhash/snippet@0.0.9
+  - @fxhash/config@0.0.10
+  - @fxhash/gql@0.0.9
+
 ## 0.0.16
 
 ### Patch Changes

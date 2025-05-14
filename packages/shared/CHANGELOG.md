@@ -1,4 +1,4 @@
-# @fxhash/gql-client
+# @fxhash/shared
 
 ## 0.0.1
 
@@ -7,10 +7,4 @@
 - cb15b5dc: release open form art toolkits
 - Updated dependencies [cb15b5dc]
   - @fxhash/config@0.0.10
-
-## 0.0.1
-
-### Patch Changes
-
-- Updated dependencies [615f7cd]
-  - @fxhash/config@0.0.9
+  - @fxhash/utils@0.0.3

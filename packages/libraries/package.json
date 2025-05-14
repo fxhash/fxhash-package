@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/libraries",
   "description": "A collection of libraries artists can use in their projects.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/config": "workspace:*"

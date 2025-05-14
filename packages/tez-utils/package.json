@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/tez-utils",
   "description": "Cross-platform tezos utilities.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "@taquito/utils": "17.3.1",
