@@ -9,6 +9,8 @@ import { projectFactoryAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
 export type TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams = {
+  // The metadataUri of the art coin
+  contractURI: string
   // The name of the project
   name: string
   // The symbol of the project
@@ -46,6 +48,7 @@ export class TokenLaunchpadLaunchProjectAndCreateTokenEthOperation extends Ether
         this.params.mintInfo,
         this.params.tagIds,
         this.params.purchaseAmount,
+        this.params.contractURI,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
