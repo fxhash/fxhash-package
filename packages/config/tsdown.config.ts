@@ -1,5 +1,4 @@
-import { defineConfig, type Options } from "tsup"
-import unpluginIsolatedDecl from "unplugin-isolated-decl/esbuild"
+import { defineConfig, type Options } from "tsdown"
 
 export default defineConfig((options: Options) => ({
   entry: ["src/index.ts"],
@@ -7,5 +6,6 @@ export default defineConfig((options: Options) => ({
   format: "esm",
   sourcemap: true,
   clean: !options.watch,
-  esbuildPlugins: [unpluginIsolatedDecl()],
+  dts: true,
+  platform: "neutral",
 }))

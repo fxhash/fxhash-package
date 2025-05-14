@@ -9,9 +9,8 @@
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
-    "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "unplugin-isolated-decl": "0.13.6"
+    "tsdown": "0.11.9",
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -28,8 +27,8 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup && tsc --noEmit",
-    "dev": "tsup --watch"
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
   },
   "type": "module"
 }
