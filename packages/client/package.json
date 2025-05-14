@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/client",
   "description": "Medium-level APIs to instanciate low-level @fxhash/core modules easily.",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.3.1",
@@ -51,9 +51,7 @@
     "viem": "2.22.5",
     "wagmi": "2.14.7"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
