@@ -36,6 +36,9 @@
   "peerDependencies": {
     "graphql": "16.10.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "codegen": "npm run codegen:schema && npm run codegen:typescript",

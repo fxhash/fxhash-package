@@ -1,5 +1,5 @@
 {
-  "extends": "@fxhash/tsconfig/react",
+  "extends": "@fxhash/tsconfig/base",
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {

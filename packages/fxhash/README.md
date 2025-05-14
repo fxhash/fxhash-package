@@ -46,9 +46,9 @@ Starts a development environment for the artwork. Each time `fxhash dev` is run 
 
 #### Options
 
-`--portStudio` The port fxlens is served on. Default: `3300`  
 `--portProject` The port the project is served on. Default: `3301`  
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`
+`--noUpdate` Prevent from running the update services. Keep what you got in case you want to work with a specific version of the project-sdk and fxlens. Default: `false`
 
 ### `$ fxhash update [options]`
 
@@ -57,6 +57,7 @@ Will update the whole fxhash environment. It will download the latest version of
 #### Options
 
 `--srcPath` The path to the source of the project. This is just relevant for ejected projects that actually have a nested structure. Default: `/src`
+`--sdkVersion` Use a specific version of the `@fxhash/project-sdk` Default: `latest`
 
 ### `$ fxhash eject`
 

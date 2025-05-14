@@ -2,7 +2,7 @@
 
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-import { commandCapture } from "./cmd/capture/index"
+import { commandCapture } from "./cmd/capture/index.js"
 
 export default yargs(["capture", ...hideBin(process.argv)])
   .scriptName("fxhash-add")

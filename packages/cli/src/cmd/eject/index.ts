@@ -1,13 +1,6 @@
 import type { CommandModule } from "yargs"
 import { render } from "ejs"
 import { format } from "prettier"
-import { logger } from "../../utils/logger"
-import { isProjectEjectable } from "../../validate/index"
-import env, {
-  CWD_PATH,
-  WEBPACK_CONFIG_DEV_FILE_NAME,
-  WEBPACK_CONFIG_PROD_FILE_NAME,
-} from "../../constants"
 import {
   existsSync,
   mkdirSync,
@@ -16,10 +9,17 @@ import {
   writeFileSync,
 } from "fs"
 import path from "path"
-import { packageJson } from "../../templates/ejected/packageJson"
-import { getProjectPaths } from "../../templates/paths"
-import { baseWebpackTemplate } from "../../templates/baseWebpackConfig"
-import { yesno } from "../../utils/prompts"
+import yesno from "yesno"
+import env, {
+  CWD_PATH,
+  WEBPACK_CONFIG_DEV_FILE_NAME,
+  WEBPACK_CONFIG_PROD_FILE_NAME,
+} from "../../constants.js"
+import { baseWebpackTemplate } from "../../templates/baseWebpackConfig.js"
+import { packageJson } from "../../templates/ejected/packageJson.js"
+import { getProjectPaths } from "../../templates/paths.js"
+import { logger } from "../../utils/logger.js"
+import { isProjectEjectable } from "../../validate/index.js"
 
 export const commandEject: CommandModule = {
   command: "eject",
@@ -35,6 +35,7 @@ export const commandEject: CommandModule = {
     try {
       await isProjectEjectable("")
       const wantToEject = await yesno({
+        // @ts-ignore
         title: "Are you sure you want to eject the project?",
         description: "The change can't be reversed.",
         hideIndex: true,
@@ -66,7 +67,7 @@ export const commandEject: CommandModule = {
 
       logger.log(`Exporting webpack configurations`)
 
-      const pWebpackDevConfig = format(
+      const pWebpackDevConfig = await format(
         render(baseWebpackTemplate, {
           mode: `"dev"`,
         }),
@@ -76,7 +77,7 @@ export const commandEject: CommandModule = {
         path.join(CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME + ".js"),
         pWebpackDevConfig
       )
-      const pWebpackProdConfig = format(
+      const pWebpackProdConfig = await format(
         render(baseWebpackTemplate, {
           mode: `"prd"`,
         }),

@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/gql-client",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/config": "workspace:*",
@@ -24,7 +24,9 @@
     "dist"
   ],
   "license": "MIT",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",

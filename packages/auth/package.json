@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/auth",
-  "version": "0.0.8",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@taquito/utils": "17.3.1",
@@ -29,9 +29,7 @@
     "dist"
   ],
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import yargs from "yargs"
-import { commands } from "./cmd"
+import { commands } from "./cmd/index.js"
 
 export default yargs(process.argv.slice(2))
   .scriptName("@fxhash/cli")

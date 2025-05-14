@@ -17,5 +17,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "fxhash/fxhash-package"
+  "repository": "fxhash/fxhash-package",
+  "type": "module"
 }

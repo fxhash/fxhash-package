@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/project-sdk",
-  "version": "0.0.13",
+  "version": "4.0.0",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/params": "workspace:*",
@@ -21,6 +21,10 @@
       "types": "./dist/fxhash.d.ts",
       "import": "./dist/fxhash.min.js",
       "require": "./dist/fxhash.min.js"
+    },
+    "./version": {
+      "types": "./dist/version.d.ts",
+      "import": "./dist/version.js"
     }
   },
   "files": [
@@ -34,8 +38,10 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build-sdk": "tsup",
-    "dev-sdk": "tsup --watch"
+    "build": "tsup --config tsup.config.version.ts",
+    "build-sdk": "pnpm run build && tsup --config tsup.config.sdk.ts",
+    "dev-sdk": "tsup --watch",
+    "prebuild": "node ./version-gen.js"
   },
   "types": "./dist/fxhash.d.ts"
 }

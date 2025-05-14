@@ -52,7 +52,7 @@ export interface PreviewRequestBody extends CaptureSettings {
 
 const extractApi = "https://extract.fxhash-dev.xyz"
 
-export async function fetchExtract(body: PreviewRequestBody): Promise<any> {
+export async function fetchExtract(body: PreviewRequestBody): Promise<unknown> {
   return await fetch(`${extractApi}/extract`, {
     method: "POST",
     headers: {

@@ -94,6 +94,12 @@ export const Mu_UpdateAccount = graphql(`
     update_account(input: $input) {
       id
       username
+      profile {
+        picture
+        description
+        website
+        location
+      }
     }
   }
 `)

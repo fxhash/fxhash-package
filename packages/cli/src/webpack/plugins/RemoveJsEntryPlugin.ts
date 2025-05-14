@@ -8,15 +8,17 @@ interface RemoveJsEntryPluginOptions {
   rootPath: string
 }
 export class RemoveJsEntryScriptPlugin {
-  options = null
+  options: RemoveJsEntryPluginOptions
   constructor(options: RemoveJsEntryPluginOptions) {
     this.options = options
   }
 
   apply(compiler: Compiler) {
     compiler.hooks.compilation.tap("RemoveJsEntryScriptPlugin", compilation => {
+      // @ts-ignore
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         "RemoveJsEntryScriptPlugin",
+        // @ts-ignore
         (data, cb) => {
           // Create a DOM from the generated HTML
           const { window } = new JSDOM(data.html)
@@ -32,6 +34,7 @@ export class RemoveJsEntryScriptPlugin {
               const scriptSrc = scriptTag.getAttribute("src")
               const localScriptPath = path.resolve(
                 this.options.rootPath,
+                // @ts-ignore
                 scriptSrc
               )
               if (localScriptPath === this.options.jsEntryPath) {
