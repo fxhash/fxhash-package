@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "dependencies": {
     "@0xsplits/splits-sdk": "4.0.3",
     "@openzeppelin/merkle-tree": "1.0.5",
@@ -48,7 +48,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@fxhash/config": "0.0.9"
+    "@fxhash/config": "0.0.10"
   },
   "private": true,
   "type": "module",

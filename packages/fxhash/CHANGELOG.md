@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.11
+
+### Patch Changes
+
+- cb15b5dc: release open form art toolkits
+- Updated dependencies [cb15b5dc]
+  - @fxhash/cli@0.0.17
+
 ## 0.0.10
 
 ### Patch Changes

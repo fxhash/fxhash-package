@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/shared",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "jwt-decode": "4.0.0",

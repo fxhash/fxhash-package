@@ -1,5 +1,11 @@
 # @fxhash/params
 
+## 0.0.11
+
+### Patch Changes
+
+- cb15b5dc: release open form art toolkits
+
 ## 0.0.10
 
 ### Patch Changes

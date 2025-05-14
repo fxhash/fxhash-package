@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/core",
   "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "fxhash",
   "dependencies": {
     "lodash.clonedeep": "4.5.0",
@@ -62,14 +62,14 @@
     "jwt-decode": "4.0.0",
     "viem": "2.22.5",
     "wagmi": "2.14.7",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/eth": "0.0.9",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/tez": "0.0.0",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/utils-browser": "0.0.0",
-    "@fxhash/shared": "0.0.0"
+    "@fxhash/config": "0.0.10",
+    "@fxhash/eth": "0.0.10",
+    "@fxhash/gql": "0.0.9",
+    "@fxhash/gql-client": "0.0.1",
+    "@fxhash/tez": "0.0.1",
+    "@fxhash/utils": "0.0.3",
+    "@fxhash/utils-browser": "0.0.1",
+    "@fxhash/shared": "0.0.1"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
