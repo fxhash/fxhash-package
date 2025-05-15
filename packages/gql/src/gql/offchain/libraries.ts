@@ -1,7 +1,7 @@
 import { graphql } from "@/generated"
 
 export const Qu_GetLibraries = graphql(`
-  query GetLibraries {
+  query Qu_GetLibraries {
     offchain {
       Library {
         id
