@@ -19,6 +19,7 @@ export type TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams = {
   initialOwner: `0x${string}`
   // The base URI for the project
   baseURI: string
+  mintFee: bigint
   mintInfo: {
     price: bigint
     maxSupply: bigint
@@ -48,6 +49,7 @@ export class TokenLaunchpadLaunchProjectAndCreateTokenEthOperation extends Ether
         this.params.mintInfo,
         this.params.tagIds,
         this.params.purchaseAmount,
+        this.params.mintFee,
         this.params.contractURI,
       ],
       account: this.manager.address as `0x${string}`,
