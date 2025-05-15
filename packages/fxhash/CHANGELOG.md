@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.13
+
+### Patch Changes
+
+- b9857313: Fix fxhash add cmd
+- Updated dependencies [b9857313]
+  - @fxhash/cli@0.0.19
+
 ## 0.0.12
 
 ### Patch Changes
