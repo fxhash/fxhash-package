@@ -1,12 +1,12 @@
 {
   "name": "fxhash",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "author": "fxhash",
   "bin": {
     "fxhash": "./index.js"
   },
   "dependencies": {
-    "@fxhash/cli": "0.0.16"
+    "@fxhash/cli": "0.0.19"
   },
   "engines": {
     "npm": ">=9.0.0",

@@ -1,5 +1,13 @@
 # @fxhash/client
 
+## 0.0.2
+
+### Patch Changes
+
+- @fxhash/core@0.0.3
+- @fxhash/eth@0.0.11
+- @fxhash/tez@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes

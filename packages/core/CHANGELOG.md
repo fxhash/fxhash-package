@@ -1,5 +1,14 @@
 # @fxhash/core
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [b9857313]
+  - @fxhash/gql@0.0.10
+  - @fxhash/eth@0.0.11
+  - @fxhash/tez@0.0.2
+
 ## 0.0.2
 
 ### Patch Changes
