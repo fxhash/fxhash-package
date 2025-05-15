@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/client-react",
   "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "connectkit": "1.8.2",
@@ -16,10 +16,10 @@
     "tsup": "8.4.0",
     "typescript": "5.8.2",
     "viem": "2.22.5",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/sdk": "0.0.0",
-    "@fxhash/tsconfig": "0.0.0",
-    "@fxhash/utils-browser": "0.0.0"
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/sdk": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*"
   },
   "exports": {
     ".": {
@@ -37,8 +37,8 @@
     "react-dom": "^18.3.1",
     "react-otp-input": "3.1.1",
     "solid-js": "^1.9.3",
-    "@fxhash/sdk": "0.0.0",
-    "@fxhash/utils-browser": "0.0.0"
+    "@fxhash/sdk": "0.0.1",
+    "@fxhash/utils-browser": "0.0.1"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",

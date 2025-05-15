@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/slate",
   "description": "Slate implementation for fx(text) article editor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "gray-matter": "4.0.3",
@@ -17,12 +17,12 @@
     "slate-history": "0.110.3",
     "slate-react": "0.111.0",
     "unified": "11.0.5",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/text": "0.0.0",
-    "@fxhash/utils-browser": "0.0.0"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/text": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/eslint": "8.44.0",
@@ -34,8 +34,8 @@
     "eslint": "8.57.0",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
