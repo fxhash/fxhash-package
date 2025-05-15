@@ -1,5 +1,5 @@
 import { config } from "@fxhash/config"
-import { Client, ClientOptions, fetchExchange } from "@urql/core"
+import { Client, type ClientOptions, fetchExchange } from "@urql/core"
 import deepmerge from "deepmerge"
 
 const defaultClientOptions: ClientOptions = {
@@ -26,7 +26,7 @@ export type CreateHasuraClientOptions = Optional<
  * @param hasuraAdminSecret The admin secret for hasura
  * @returns @urql/core client
  */
-export function createGqlClient(options: CreateHasuraClientOptions) {
+export function createGqlClient(options: CreateHasuraClientOptions): Client {
   const addHasuraAdminSecretHeaders = (reqInit: RequestInit) => {
     if (options.hasuraAdminSecret) {
       if (!reqInit.headers) {
@@ -67,7 +67,7 @@ export function createGqlClient(options: CreateHasuraClientOptions) {
  * @remark The function createHasuraClient() should be used if the default
  * client instanciated is not suited.
  */
-export const gqlClient = createGqlClient({
+export const gqlClient: Client = createGqlClient({
   hasuraAdminSecret: process.env.HASURA_ADMIN_SECRET,
 })
 export default gqlClient
@@ -75,4 +75,4 @@ export default gqlClient
 /**
  * Export utility types from `@urql/core`
  */
-export { type Client } from "@urql/core"
+export type { Client } from "@urql/core"
