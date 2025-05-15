@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/utils-browser",
   "description": "A general-purpose package for browser-only compatible utilities.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/utils": "0.0.2",
@@ -10,8 +10,8 @@
   "devDependencies": {
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0",
-    "@fxhash/eslint-config": "1.0.2"
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/eslint-config": "workspace:*"
   },
   "exports": {
     ".": {
