@@ -1,0 +1,14 @@
+{
+  "name": "root",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "version": "pnpm changeset version && pnpm install --lockfile-only",
+    "release": "pnpm turbo run build && pnpm changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.26.2",
+    "turbo": "1.10.15"
+  }
+}
