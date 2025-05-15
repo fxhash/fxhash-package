@@ -7,6 +7,8 @@
     "outDir": "dist",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "declaration": true,
+    "isolatedDeclarations": true
   }
 }

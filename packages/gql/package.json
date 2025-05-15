@@ -19,7 +19,7 @@
     "@parcel/watcher": "2.5.1",
     "chokidar-cli": "3.0.0",
     "graphql": "16.10.0",
-    "tsup": "8.4.0",
+    "tsdown": "0.11.9",
     "typescript": "5.8.2"
   },
   "exports": {
@@ -40,12 +40,13 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown && tsc --noEmit",
     "codegen": "npm run codegen:schema && npm run codegen:typescript",
     "codegen:dev": "npm run codegen:typescript && npm run build",
     "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
     "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
     "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent"
   },
+  "sideEffects": false,
   "type": "module"
 }
