@@ -4,11 +4,15 @@
   "license": "MIT",
   "packageManager": "pnpm@10.10.0",
   "scripts": {
+    "format": "prettier --write '**/*' --ignore-unknown",
     "version": "pnpm changeset version && pnpm install --lockfile-only",
     "release": "pnpm turbo run build && pnpm changeset publish"
   },
+  "prettier": "@fxhash/prettier-config",
   "devDependencies": {
     "@changesets/cli": "2.26.2",
-    "turbo": "1.10.15"
+    "@fxhash/prettier-config": "workspace:*",
+    "turbo": "1.10.15",
+    "prettier": "3.5.3"
   }
 }

@@ -1,0 +1,18 @@
+.turbo
+.next
+dist
+build
+lib
+generated
+pnpm-lock.yaml
+# We need to ignore the following files as they are too big and cause a prettier crash
+applications/contracts/tezos/tz-utils/packages/fxhash/scenarios/**/*.json
+applications/contracts/tezos/tz-utils/packages/fxhash/build/**/*.json
+mocks
+ci
+__generated__
+fxhash.min.js
+.docusaurus
+storybook-static
+packages/public/fxhash-package/doc/docs/reference
+applications/core/website
