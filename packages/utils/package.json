@@ -7,11 +7,11 @@
     "bs58check": "4.0.0"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.1.1"
+    "vitest": "3.1.1",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/tsconfig": "0.0.0"
   },
   "exports": {
     ".": {
@@ -43,10 +43,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest"
-  },
-  "type": "module"
+  }
 }

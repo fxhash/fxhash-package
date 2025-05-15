@@ -15,7 +15,6 @@
     "three-spritetext": "1.9.6"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/d3-force": "3.0.10",
     "@types/d3-scale": "4.0.9",
     "@types/d3-scale-chromatic": "3.1.0",
@@ -26,7 +25,8 @@
     "@types/three": "0.176.0",
     "esbuild-css-modules-plugin": "2.7.1",
     "tsup": "8.4.0",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "0.0.0"
   },
   "exports": {
     ".": {
@@ -46,9 +46,9 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "type": "module"
+  }
 }
