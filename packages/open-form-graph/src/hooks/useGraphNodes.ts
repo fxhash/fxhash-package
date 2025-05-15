@@ -77,18 +77,20 @@ export function useGraphNodes() {
       const x = node.x || 0
       const y = node.y || 0
 
-      let opacity = 1
+      let isDimmed = false
+      let opacity = 0.3
       if (selectedNode && !isHighlighted) {
         opacity = 0.1
+        isDimmed = true
       }
 
       const collapsed = node.collapsed && hasNodeChildren(node.id as string)
       if (collapsed) {
         circle(ctx, x, y, size, {
           stroke: true,
-          strokeStyle: colorContrast(dim(opacity, isLight))(),
+          strokeStyle: color(dim(isDimmed ? 0.1 : 0.3))(),
           fill: true,
-          fillStyle: color(dim(opacity, isLight))(),
+          fillStyle: color(dim(isDimmed ? 0.05 : 0.1, isLight))(),
         })
 
         const showLabel = visibilityScale(node.clusterSize, scale)
@@ -97,11 +99,12 @@ export function useGraphNodes() {
           ctx.font = `${fontSize}px Sans-Serif`
           ctx.textAlign = "center"
           ctx.textBaseline = "middle"
-          ctx.fillStyle = colorContrast(opacity)
+          ctx.fillStyle = color(dim(isDimmed ? 0.1 : 0.4))()
           ctx.fillText(node.clusterSize.toString(), x, y)
         }
       } else {
         if (node.id !== VOID_ROOT_ID) {
+          /*
           rect(ctx, x - size / 2, y - size / 2, size, size, {
             stroke: true,
             strokeStyle: color(dim(opacity, isLight))(),
@@ -110,13 +113,14 @@ export function useGraphNodes() {
             fillStyle: color(dim(opacity, isLight))(),
             borderRadius: 1,
           })
+          */
         } else {
           hexagon(ctx, x, y, size, {
             stroke: true,
-            strokeStyle: color(dim(opacity, isLight))(),
+            strokeStyle: color(dim(isDimmed ? 0.1 : 0.3))(),
             lineWidth: isSelected ? 1 : 0.2,
             fill: true,
-            fillStyle: color(dim(opacity, isLight))(),
+            fillStyle: color(dim(isDimmed ? 0.05 : 0.1, isLight))(),
             borderRadius: 1,
           })
         }
@@ -130,7 +134,7 @@ export function useGraphNodes() {
             size - PADDING,
             size - PADDING,
             1,
-            opacity,
+            isDimmed ? 0.1 : 1,
             isLight ? "white" : "black"
           )
         }
