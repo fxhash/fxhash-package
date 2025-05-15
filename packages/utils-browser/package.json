@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "tsup": "8.4.0",

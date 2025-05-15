@@ -4,7 +4,7 @@
   "author": "fxhash",
   "dependencies": {
     "@fxhash/errors": "workspace:*",
-    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "18.7.13",

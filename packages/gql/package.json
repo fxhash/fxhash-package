@@ -20,7 +20,7 @@
     "graphql": "16.10.0",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
