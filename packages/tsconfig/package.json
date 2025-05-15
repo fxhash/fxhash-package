@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/tsconfig",
   "description": "",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "author": "",
   "dependencies": {
     "@tsconfig/create-react-app": "2.0.5",
@@ -18,6 +18,9 @@
   },
   "keywords": [],
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }

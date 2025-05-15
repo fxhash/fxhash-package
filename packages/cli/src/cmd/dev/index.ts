@@ -3,36 +3,26 @@ import Webpack, { Configuration } from "webpack"
 import WebpackDevServer from "webpack-dev-server"
 import open from "open"
 import chalk from "chalk"
-import express from "express"
-import env, {
-  CWD_PATH,
-  FXSTUDIO_PATH,
-  WEBPACK_CONFIG_DEV_FILE_NAME,
-} from "../../constants"
-import { createDevConfig } from "../../webpack/webpack.config.dev"
-import { logger } from "../../utils/logger"
+import path from "path"
+import { existsSync } from "fs"
+import env, { CWD_PATH, WEBPACK_CONFIG_DEV_FILE_NAME } from "../../constants.js"
+import { getProjectPaths } from "../../templates/paths.js"
+import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens.js"
+import { createProjectSdkUpdateConfig } from "../../updates/toolkit/projectSdk.js"
+import { updateToolkit } from "../../updates/toolkit/toolkit.js"
+import { logger } from "../../utils/logger.js"
 import {
   isEjectedProject,
   validateProjectStructure,
-} from "../../validate/index"
-import path from "path"
-import { existsSync } from "fs"
-import { updateToolkit } from "../../updates/toolkit/toolkit"
-import { fxlensUpdateConfig } from "../../updates/toolkit/fxlens"
-import { projectSdkUpdateConfig } from "../../updates/toolkit/projectSdk"
-import { getProjectPaths } from "../../templates/paths"
+} from "../../validate/index.js"
+import { createDevConfig } from "../../webpack/webpack.config.dev.js"
 
 function padn(n: number, len = 2, char = "0"): string {
   return n.toString().padStart(len, char)
 }
 
-export function devCommandBuilder(yargs) {
+export function devCommandBuilder(yargs: any) {
   return yargs
-    .option("portStudio", {
-      type: "number",
-      default: env.PORT_FXSTUDIO,
-      describe: "The port the studio will be served on",
-    })
     .option("portProject", {
       type: "number",
       default: env.PORT_FXPROJECT,
@@ -49,6 +39,21 @@ export function devCommandBuilder(yargs) {
       default: env.NO_LENS,
       describe: "Only serve the project. Don't start fxlens.",
     })
+    .option("skip", {
+      type: "boolean",
+      default: env.NO_LENS,
+      describe: "Only serve the project. Don't start fxlens.",
+    })
+    .option("sdkVersion", {
+      type: "string",
+      default: undefined,
+      describe: "The version of the fxhash project-sdk to use",
+    })
+    .option("noUpdate", {
+      type: "boolean",
+      default: false,
+      describe: "Prevent any updates to be downloaded",
+    })
 }
 
 export const commandDev: CommandModule = {
@@ -57,9 +62,10 @@ export const commandDev: CommandModule = {
   builder: devCommandBuilder,
   handler: async yargs => {
     const portProject = yargs.portProject as number
-    const portStudio = yargs.portStudio as number
     const srcPathArg = yargs.srcPath as string
     const noLensArg = yargs.noLens as boolean
+    const sdkVersionArg = yargs.sdkVersion as string
+    const noUpdateArg = yargs.noUpdate as boolean
 
     const isEjected = isEjectedProject(srcPathArg)
 
@@ -69,20 +75,26 @@ export const commandDev: CommandModule = {
     const project = getProjectPaths(srcPath)
 
     // commonly used variable for ease
-    const URL_FXLENS = `http://localhost:${portStudio}`
+    const URL_FXLENS = `http://localhost:${portProject}/fxlens`
     const URL_PROJECT = `http://localhost:${portProject}`
 
-    try {
-      await updateToolkit(
-        {
-          fxlens: fxlensUpdateConfig,
-          "@fxhash/project-sdk": projectSdkUpdateConfig,
-        },
-        project
-      )
-    } catch (err) {
-      console.log(chalk.red.bold(`❗ ${err.message}`))
-      console.log(chalk.dim("Starting anyways...\n\n"))
+    if (!noUpdateArg) {
+      try {
+        await updateToolkit(
+          {
+            fxlens: fxlensUpdateConfig,
+            "@fxhash/project-sdk": createProjectSdkUpdateConfig({
+              version: sdkVersionArg,
+            }),
+          },
+          project
+        )
+      } catch (err: any) {
+        console.log(chalk.red.bold(`❗ ${err.message}`))
+        console.log(chalk.dim("Starting anyways...\n\n"))
+      }
+    } else {
+      console.log("skipping updates")
     }
 
     // TODO:do some checkups to see if fxlens is available, otherwise throw?
@@ -90,8 +102,8 @@ export const commandDev: CommandModule = {
 
     const webpackConfigFactoryOptions = {
       srcPath,
-      portStudio,
       portProject,
+      noLens: noLensArg,
     }
 
     let webpackConfig: Configuration
@@ -138,19 +150,6 @@ export const commandDev: CommandModule = {
         )
       }
     })
-
-    if (!noLensArg) {
-      // start fxlens
-      const app = express()
-      app.use(express.static(FXSTUDIO_PATH))
-      app.listen(portStudio, () => {
-        console.log(
-          `${logger.successC("[fxlens] fx(lens) is running on")} ${logger.url(
-            URL_FXLENS
-          )}`
-        )
-      })
-    }
 
     server.startCallback(() => {
       let target = `${URL_FXLENS}/?target=${URL_PROJECT}`

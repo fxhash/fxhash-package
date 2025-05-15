@@ -23,7 +23,9 @@
     "dist"
   ],
   "license": "MIT",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",

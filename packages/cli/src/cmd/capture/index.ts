@@ -1,18 +1,18 @@
 import type { CommandModule } from "yargs"
-import { CWD_PATH } from "../../constants"
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import path, { isAbsolute } from "path"
-import {
-  DEFAULT_CAPTURE_SETTINGS,
-  fetchExtract,
-  CaptureTriggerMode,
-  CaptureMode,
-} from "../../capture/index"
-import { urlWithHashAndParams } from "../../capture/url"
-import { getRandomFxhash, getRandomTezosAddress } from "../../capture/math"
-import { logger } from "../../utils/logger"
 import chalk from "chalk"
 import { devConfig } from "@fxhash/config"
+import {
+  CaptureTriggerMode,
+  CaptureMode,
+  fetchExtract,
+  DEFAULT_CAPTURE_SETTINGS,
+} from "../../capture/index.js"
+import { getRandomFxhash, getRandomTezosAddress } from "../../capture/math.js"
+import { urlWithHashAndParams } from "../../capture/url.js"
+import { CWD_PATH } from "../../constants.js"
+import { logger } from "../../utils/logger.js"
 
 export const commandCapture: CommandModule = {
   command: "capture",
@@ -144,7 +144,7 @@ export const commandCapture: CommandModule = {
           logger.success("Screenshot captured")
         }
       )
-      const preview = await previewResponse.json()
+      const preview = await (previewResponse as any).json()
       const imgResponse = await fetch(preview.capture)
       const imgBuffer = await imgResponse.arrayBuffer()
       const imageName = `capture-${new Date().getTime()}.jpg`
@@ -153,7 +153,7 @@ export const commandCapture: CommandModule = {
       console.log(chalk.dim(`${imagePath} saved!`))
     } catch (err) {
       logger.error("Error trying to capture project")
-      logger.errorExit(err)
+      logger.errorExit(err as Error)
     }
   },
 }

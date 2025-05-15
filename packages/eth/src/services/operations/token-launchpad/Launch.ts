@@ -15,6 +15,8 @@ export type TTokenLaunchpadLaunchEthOperationParams = {
   symbol: string
   // The amount of FxTokens used to create liquidity
   purchaseAmount: bigint
+  // The metadataUri of the art coin
+  contractURI: string
 }
 
 export class TokenLaunchpadLaunchEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchEthOperationParams> {
@@ -29,7 +31,12 @@ export class TokenLaunchpadLaunchEthOperation extends EthereumContractOperation<
       address: config.base.contracts.fx_token_launchpad,
       abi: tokenLaunchpadAbi,
       functionName: "launch",
-      args: [this.params.name, this.params.symbol, this.params.purchaseAmount],
+      args: [
+        this.params.name,
+        this.params.symbol,
+        this.params.purchaseAmount,
+        this.params.contractURI,
+      ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }

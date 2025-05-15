@@ -1,9 +1,7 @@
 import chalk from "chalk"
 
-const sep = "--------------------------------------"
-
 // Create and display a loader in the console.
-function logLoader(text = "", delay = 100) {
+function logLoader(text: string = "", delay: number = 100) {
   let x = 0
   const chars = ["⠙", "⠘", "⠰", "⠴", "⠤", "⠦", "⠆", "⠃", "⠋", "⠉"]
   const interval = setInterval(() => {
@@ -11,76 +9,105 @@ function logLoader(text = "", delay = 100) {
     x = x % chars.length
   }, delay)
   return {
-    stop: noClearLine => {
+    stop: (noClearLine?: boolean) => {
       clearInterval(interval)
       if (!noClearLine) {
-        process.stdout?.clearLine?.(null)
+        process.stdout?.clearLine?.(0)
         process.stdout?.cursorTo?.(0)
       }
     },
   }
 }
 
-function logSuccess(message) {
+function logSuccess(message: string | number): void {
   console.log(chalk.red.bold(`✅  ${chalk.green.bold(message)}`))
 }
 
-function logError(error, icon = true) {
-  console.log(chalk.red.bold(`${icon ? "❌ " : ""}${error}`))
+function logError(error: string | Error, icon: boolean = true): void {
+  const errorMessage = error instanceof Error ? error.message : error
+  console.log(chalk.red.bold(`${icon ? "❌ " : ""}${errorMessage}`))
 }
 
-function exitError(error) {
+function exitError(error: string | Error): never {
   logError(error)
   process.exit(0)
 }
 
-const tag = text => chalk.bgWhite.black.bold(" " + text + " ")
+interface LoaderInstance {
+  stop: (noClearLine?: boolean) => void
+}
+
+interface Logger {
+  clear: () => void
+  startStep: (name: string) => void
+  step: <T>(
+    name: string,
+    fn: () => Promise<T>,
+    onSuccess?: (result: T) => void
+  ) => Promise<T>
+  success: (customMessage?: string) => void
+  successC: typeof chalk.bold.green
+  progress: (message: string) => void
+  error: (errorMessage?: string | Error) => void
+  errorExit: (error: string | Error) => never
+  log: (msg: string) => void
+  url: typeof chalk.bold.blue
+}
 
 /**
  * Generic-purpose logger for executing steps
- * Calling this function does not instanciate anything but instead returns a
+ * Calling this function does not instantiate anything but instead returns a
  * list of functions which can be called to inform about the progress in a
- * styllistic fashion
+ * stylistic fashion
  */
-export function loggerFactory() {
-  let loader = null,
-    message = null
+export function loggerFactory(): Logger {
+  let loader: LoaderInstance | null = null,
+    message: string | null = null
 
-  const clear = () => {
+  const clear = (): void => {
     if (loader) loader.stop()
     loader = null
   }
 
-  const start = name => {
-    loader && loader.stop()
+  const start = (name: string): void => {
+    loader?.stop()
     message = name
     loader = logLoader(message)
   }
 
-  const success = customMessage => {
+  const success = (customMessage?: string): void => {
     clear()
-    logSuccess(customMessage || message)
+    logSuccess(customMessage || message || "")
   }
 
-  const progress = message => {
+  const progress = (progressMessage: string): void => {
     if (loader) loader.stop(true)
-    loader = logLoader(message)
+    loader = logLoader(progressMessage)
   }
 
-  const error = errorMessage => {
+  const error = (errorMessage?: string | Error): void => {
     clear()
     logError(message ? `error on: ${message}` : "error")
-    errorMessage && console.error(errorMessage)
+    console.error(errorMessage)
   }
 
-  const step = async (name, fn, onSuccess = success) => {
+  const step = async <T>(
+    name: string,
+    fn: () => Promise<T>,
+    onSuccess?: (result: T) => void
+  ): Promise<T> => {
     start(name)
     try {
       const res = await fn()
-      onSuccess?.(res)
+      if (onSuccess) {
+        onSuccess(res)
+      } else {
+        // Default behavior when no onSuccess is provided
+        success()
+      }
       return res
     } catch (err) {
-      error(err)
+      error(err instanceof Error ? err : String(err))
       throw err
     }
   }
@@ -94,7 +121,7 @@ export function loggerFactory() {
     progress,
     error,
     errorExit: exitError,
-    log: msg => console.log(chalk.white(msg)),
+    log: (msg: string) => console.log(chalk.white(msg)),
     url: chalk.bold.blue,
   }
 }

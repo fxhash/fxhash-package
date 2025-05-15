@@ -1,13 +1,6 @@
 import bs58check from "bs58check"
 
 /**
- * A string composed of all the base 58 encoding scheme characters, in the right
- * order.
- */
-export const BASE58_CHARSET =
-  "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-
-/**
  * OP_PREFIX: Tezos operation prefix
  * 5 (0x05) represents the generic operation tag
  * 116 (0x74) is the operation kind tag for transactions
