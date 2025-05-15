@@ -76,7 +76,7 @@ export const fxhashLocalDockerApis: IFxhashApis = {
 
 // list of APIs prod leverages
 export const fxhashPrdApis: IFxhashApis = {
-  website: "https://beta.fxhash.xyz",
+  website: "https://www.fxhash.xyz",
   docs: "https://docs.fxhash.xyz",
   main: "https://api.v2-temp.fxhash.xyz/graphql",
   hasura: "https://api.v2.fxhash.xyz",
