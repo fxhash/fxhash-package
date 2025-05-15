@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/config",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/utils": "0.0.2",
@@ -11,7 +11,7 @@
     "tsup": "8.4.0",
     "typescript": "5.8.2",
     "unplugin-isolated-decl": "0.13.6",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
