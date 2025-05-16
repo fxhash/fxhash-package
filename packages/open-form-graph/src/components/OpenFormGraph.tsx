@@ -76,6 +76,11 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       maxZoom={config.maxZoom}
       nodeRelSize={2}
       enableNodeDrag={false}
+      dagNodeFilter={node =>
+        !selectedNode
+          ? true
+          : highlights.nodes.findIndex(n => n.id === node.id) > -1
+      }
       /*
       onBackgroundClick={() => {
         if (selectedNode) {

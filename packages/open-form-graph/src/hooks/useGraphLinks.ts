@@ -7,7 +7,7 @@ export function useGraphLinks() {
   return {
     linkColor: (link: { source: { id: string }; target: { id: string } }) => {
       const isLight = theme === "light"
-      const visible = isLight ? 0.1 : 0.15
+      const visible = isLight ? 0.1 : 0.05
       const opaque = isLight ? 0.05 : 0.025
       if (!selectedNode) return color(visible)
       const isHighlighted = highlights.links.find(l => l === link)

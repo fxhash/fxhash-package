@@ -295,7 +295,6 @@ export function OpenFormGraphProvider({
     return { nodes: visibleNodes, links: visibleLinks }
   }, [nodesById, rootId, highlights])
 
-  // Modified handleNodeClick that uses the memoized highlights
   const handleNodeClick = useCallback(
     (nodeId: string) => {
       const node = nodesById[nodeId]
@@ -325,16 +324,13 @@ export function OpenFormGraphProvider({
           collapseFrom(selectedNode)
         }
         setSelectedNodeId(null)
-        // No need to explicitly set highlights here as they will be updated via useMemo
       } else {
-        // Expand the children nodes
         const children = collectChildren(node, 25)
         children.nodes.forEach(n => {
           n.collapsed = false
         })
 
         setSelectedNodeId(node.id)
-        // No need to explicitly set highlights here as they will be updated via useMemo
       }
     },
     [rootId, selectedNode, collectChildren, nodesById, setSelectedNodeId]
@@ -365,6 +361,7 @@ export function OpenFormGraphProvider({
     (nodeId: string) => {
       const n = nodesById[nodeId]
       if (!n) return 0
+      if (n.id === selectedNodeId) return _config.nodeSize * 2
       if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize
       if (!n.collapsed || n.id === rootId) return _config.nodeSize
       return normalize(
@@ -382,6 +379,7 @@ export function OpenFormGraphProvider({
       rootId,
       hasNodeChildren,
       nodesById,
+      selectedNodeId,
     ]
   )
 

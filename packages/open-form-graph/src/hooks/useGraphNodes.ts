@@ -70,7 +70,7 @@ export function useGraphNodes() {
     (node: NodeObject<Node>, ctx: CanvasRenderingContext2D, scale: number) => {
       const isSelected = selectedNode?.id === node.id
       const isHighlighted = highlights.nodes.find(n => n.id === node.id)
-      const size = getNodeSize(node.id as string) + (isSelected ? 5 : 0)
+      const size = getNodeSize(node.id as string)
       const fontSize = 12 / scale
       const isLight = theme === "light"
 
@@ -88,9 +88,9 @@ export function useGraphNodes() {
       if (collapsed) {
         circle(ctx, x, y, size, {
           stroke: true,
-          strokeStyle: color(dim(isDimmed ? 0.1 : 0.3))(),
+          strokeStyle: color(dim(opacity, isLight))(),
           fill: true,
-          fillStyle: color(dim(isDimmed ? 0.05 : 0.1, isLight))(),
+          fillStyle: color(dim(isDimmed ? 0.1 : 0.2, isLight))(),
         })
 
         const showLabel = visibilityScale(node.clusterSize, scale)
@@ -104,7 +104,6 @@ export function useGraphNodes() {
         }
       } else {
         if (node.id !== VOID_ROOT_ID) {
-          /*
           rect(ctx, x - size / 2, y - size / 2, size, size, {
             stroke: true,
             strokeStyle: color(dim(opacity, isLight))(),
@@ -113,14 +112,13 @@ export function useGraphNodes() {
             fillStyle: color(dim(opacity, isLight))(),
             borderRadius: 1,
           })
-          */
         } else {
           hexagon(ctx, x, y, size, {
             stroke: true,
-            strokeStyle: color(dim(isDimmed ? 0.1 : 0.3))(),
+            strokeStyle: color(dim(opacity, isLight))(),
             lineWidth: isSelected ? 1 : 0.2,
             fill: true,
-            fillStyle: color(dim(isDimmed ? 0.05 : 0.1, isLight))(),
+            fillStyle: color(dim(isDimmed ? 0.05 : 0.2, isLight))(),
             borderRadius: 1,
           })
         }
