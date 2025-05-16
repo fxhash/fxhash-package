@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/text",
   "description": "Low-level fx(text) implementation.",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/config": "workspace:*",
@@ -62,9 +62,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",

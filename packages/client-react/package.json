@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/client-react",
   "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "connectkit": "1.8.2",
@@ -14,12 +14,12 @@
     "@fxhash/utils-browser": "workspace:*",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.8.2",
+    "@wagmi/core": "2.17.2",
     "esbuild-css-modules-plugin": "2.7.1",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "viem": "2.22.5"
+    "viem": "2.29.2"
   },
   "exports": {
     ".": {

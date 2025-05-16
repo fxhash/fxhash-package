@@ -1,7 +1,13 @@
 import { defineConfig, Options } from "tsup"
 
 export default defineConfig((options: Options) => ({
-  entry: ["src/index.ts"],
+  entry: [
+    "src/index.ts",
+    "src/url.ts",
+    "src/hash.ts",
+    "src/math.ts",
+    "src/address.ts",
+  ],
   outDir: "dist",
   format: "esm",
   sourcemap: true,

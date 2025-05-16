@@ -1,19 +1,18 @@
-import { FxhashProjectStructure } from "../../templates/paths"
-import { logger } from "../../utils/logger"
-import { updateLockFile } from "../lockfile"
+import { i } from "../../../../params/dist/utils-jEvPb5wq.js"
+import { FxhashProjectStructure } from "../../templates/paths.js"
+import { logger } from "../../utils/logger.js"
+import { updateLockFile } from "../lockfile.js"
 
 type ModuleVersion = {
   [key: string]: string
-}
+} | null
 
 export type ModuleUpdater = {
-  requiresUpdate: (
-    project?: FxhashProjectStructure
-  ) => Promise<ModuleVersion | null>
+  requiresUpdate: (project?: FxhashProjectStructure) => Promise<ModuleVersion>
   update: (
-    latestVersion: ModuleVersion | null,
+    latestVersion: ModuleVersion,
     project?: FxhashProjectStructure
-  ) => Promise<{ [key: string]: string }>
+  ) => Promise<ModuleVersion>
 }
 
 export type UpdateManagerConfig = Record<string, ModuleUpdater>
@@ -49,6 +48,7 @@ export async function updateToolkit(
           }
         )
 
+        //@ts-ignore
         updateLockFile(currentContent => ({
           ...currentContent,
           ...updatedVersion,
