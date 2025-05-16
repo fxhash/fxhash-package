@@ -2961,6 +2961,25 @@ input OnboardingComponent_stream_cursor_value_input {
   id: Int
 }
 
+input OpenGraphInput {
+  rootId: String!
+}
+
+type OpenGraphLink {
+  source: String!
+  target: String!
+}
+
+type OpenGraphNode {
+  id: String!
+}
+
+type OpenGraphResponse {
+  links: [OpenGraphLink]!
+  nodes: [OpenGraphNode]!
+  rootId: String!
+}
+
 input PrepareRedemptionInput {
   payload: String!
   publicKey: String!
@@ -6307,12 +6326,19 @@ type art_coin {
   art_coin_market_stats: art_coin_market_stats
   ascension_progress: float8!
   author_id: String!
+  capture_media_id: bpchar
   created_at: timestamptz!
   description: String!
+  display_uri: String!
   flag: art_coin_flag_enum!
   graduated_address: String!
   graduated_at: timestamptz
   id: String!
+
+  """
+  An object relationship
+  """
+  media_image: media_image
   metadata_uri: String!
   name: String!
   opens_at: timestamptz!
@@ -6728,12 +6754,15 @@ input art_coin_bool_exp {
   art_coin_market_stats: art_coin_market_stats_bool_exp
   ascension_progress: float8_comparison_exp
   author_id: String_comparison_exp
+  capture_media_id: bpchar_comparison_exp
   created_at: timestamptz_comparison_exp
   description: String_comparison_exp
+  display_uri: String_comparison_exp
   flag: art_coin_flag_enum_comparison_exp
   graduated_address: String_comparison_exp
   graduated_at: timestamptz_comparison_exp
   id: String_comparison_exp
+  media_image: media_image_bool_exp
   metadata_uri: String_comparison_exp
   name: String_comparison_exp
   opens_at: timestamptz_comparison_exp
@@ -7366,8 +7395,10 @@ aggregate max on columns
 type art_coin_max_fields {
   ascension_progress: float8
   author_id: String
+  capture_media_id: bpchar
   created_at: timestamptz
   description: String
+  display_uri: String
   flag: art_coin_flag_enum
   graduated_address: String
   graduated_at: timestamptz
@@ -7386,8 +7417,10 @@ aggregate min on columns
 type art_coin_min_fields {
   ascension_progress: float8
   author_id: String
+  capture_media_id: bpchar
   created_at: timestamptz
   description: String
+  display_uri: String
   flag: art_coin_flag_enum
   graduated_address: String
   graduated_at: timestamptz
@@ -7408,12 +7441,15 @@ input art_coin_order_by {
   art_coin_market_stats: art_coin_market_stats_order_by
   ascension_progress: order_by
   author_id: order_by
+  capture_media_id: order_by
   created_at: order_by
   description: order_by
+  display_uri: order_by
   flag: order_by
   graduated_address: order_by
   graduated_at: order_by
   id: order_by
+  media_image: media_image_order_by
   metadata_uri: order_by
   name: order_by
   opens_at: order_by
@@ -7441,12 +7477,22 @@ enum art_coin_select_column {
   """
   column name
   """
+  capture_media_id
+
+  """
+  column name
+  """
   created_at
 
   """
   column name
   """
   description
+
+  """
+  column name
+  """
+  display_uri
 
   """
   column name
@@ -7544,8 +7590,10 @@ Initial value of the column from where the streaming should start
 input art_coin_stream_cursor_value_input {
   ascension_progress: float8
   author_id: String
+  capture_media_id: bpchar
   created_at: timestamptz
   description: String
+  display_uri: String
   flag: art_coin_flag_enum
   graduated_address: String
   graduated_at: timestamptz
@@ -11085,71 +11133,6 @@ Initial value of the column from where the streaming should start
 input eth_frame_data_stream_cursor_value_input {
   frame_minter_data: jsonb
   id: String
-}
-
-"""
-columns and relationships of "squid_processor.hot_block"
-"""
-type eth_indexer {
-  hash: String!
-  height: Int!
-}
-
-"""
-Boolean expression to filter rows from the table "squid_processor.hot_block". All fields are combined with a logical 'AND'.
-"""
-input eth_indexer_bool_exp {
-  _and: [eth_indexer_bool_exp!]
-  _not: eth_indexer_bool_exp
-  _or: [eth_indexer_bool_exp!]
-  hash: String_comparison_exp
-  height: Int_comparison_exp
-}
-
-"""
-Ordering options when selecting data from "squid_processor.hot_block".
-"""
-input eth_indexer_order_by {
-  hash: order_by
-  height: order_by
-}
-
-"""
-select columns of table "squid_processor.hot_block"
-"""
-enum eth_indexer_select_column {
-  """
-  column name
-  """
-  hash
-
-  """
-  column name
-  """
-  height
-}
-
-"""
-Streaming cursor of the table "eth_indexer"
-"""
-input eth_indexer_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: eth_indexer_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input eth_indexer_stream_cursor_value_input {
-  hash: String
-  height: Int
 }
 
 """
@@ -17541,6 +17524,66 @@ type objkt {
     where: auction_bool_exp
   ): [auction!]!
   capture_media_id: bpchar
+
+  """
+  An array relationship
+  """
+  children(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): [objkt!]!
+
+  """
+  An aggregate relationship
+  """
+  children_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [objkt_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [objkt_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: objkt_bool_exp
+  ): objkt_aggregate!
   children_count: Int!
   created_at: timestamptz!
   depth: Int!
@@ -18051,6 +18094,8 @@ input objkt_bool_exp {
   assigned_at: timestamptz_comparison_exp
   auctions: auction_bool_exp
   capture_media_id: bpchar_comparison_exp
+  children: objkt_bool_exp
+  children_aggregate: objkt_aggregate_bool_exp
   children_count: Int_comparison_exp
   created_at: timestamptz_comparison_exp
   depth: Int_comparison_exp
@@ -18240,6 +18285,7 @@ input objkt_order_by {
   assigned_at: order_by
   auctions_aggregate: auction_aggregate_order_by
   capture_media_id: order_by
+  children_aggregate: objkt_aggregate_order_by
   children_count: order_by
   created_at: order_by
   depth: order_by
@@ -23041,41 +23087,6 @@ type onchain_query {
   eth_frame_data_by_pk(id: String!): eth_frame_data
 
   """
-  fetch data from the table: "squid_processor.hot_block"
-  """
-  eth_indexer(
-    """
-    distinct select on columns
-    """
-    distinct_on: [eth_indexer_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [eth_indexer_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: eth_indexer_bool_exp
-  ): [eth_indexer!]!
-
-  """
-  fetch data from the table: "squid_processor.hot_block" using primary key columns
-  """
-  eth_indexer_by_pk(height: Int!): eth_indexer
-
-  """
   fetch data from the table: "eth_minter_proceeds"
   """
   eth_minter_proceeds(
@@ -26008,61 +26019,6 @@ type onchain_subscription {
   ): [eth_frame_data!]!
 
   """
-  fetch data from the table: "squid_processor.hot_block"
-  """
-  eth_indexer(
-    """
-    distinct select on columns
-    """
-    distinct_on: [eth_indexer_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [eth_indexer_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: eth_indexer_bool_exp
-  ): [eth_indexer!]!
-
-  """
-  fetch data from the table: "squid_processor.hot_block" using primary key columns
-  """
-  eth_indexer_by_pk(height: Int!): eth_indexer
-
-  """
-  fetch data from the table in a streaming manner: "squid_processor.hot_block"
-  """
-  eth_indexer_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [eth_indexer_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: eth_indexer_bool_exp
-  ): [eth_indexer!]!
-
-  """
   fetch data from the table: "eth_minter_proceeds"
   """
   eth_minter_proceeds(
@@ -28616,6 +28572,11 @@ type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+
+  """
+  Retrieve Open Graph Data
+  """
+  open_form_graph(input: OpenGraphInput!): OpenGraphResponse
   projectReserves(projectId: String!): [ProjectReserves!]!
   search(input: SearchInput!): SearchOutput!
   walletRpcs: [WalletRpc!]

@@ -2125,6 +2125,28 @@ export type OnboardingComponent_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type OpenGraphInput = {
+  rootId: Scalars['String']['input'];
+};
+
+export type OpenGraphLink = {
+  __typename?: 'OpenGraphLink';
+  source: Scalars['String']['output'];
+  target: Scalars['String']['output'];
+};
+
+export type OpenGraphNode = {
+  __typename?: 'OpenGraphNode';
+  id: Scalars['String']['output'];
+};
+
+export type OpenGraphResponse = {
+  __typename?: 'OpenGraphResponse';
+  links: Array<Maybe<OpenGraphLink>>;
+  nodes: Array<Maybe<OpenGraphNode>>;
+  rootId: Scalars['String']['output'];
+};
+
 export type PrepareRedemptionInput = {
   payload: Scalars['String']['input'];
   publicKey: Scalars['String']['input'];
@@ -4505,12 +4527,16 @@ export type Art_Coin = {
   art_coin_market_stats?: Maybe<Art_Coin_Market_Stats>;
   ascension_progress: Scalars['float8']['output'];
   author_id: Scalars['String']['output'];
+  capture_media_id?: Maybe<Scalars['bpchar']['output']>;
   created_at: Scalars['timestamptz']['output'];
   description: Scalars['String']['output'];
+  display_uri: Scalars['String']['output'];
   flag: Scalars['art_coin_flag_enum']['output'];
   graduated_address: Scalars['String']['output'];
   graduated_at?: Maybe<Scalars['timestamptz']['output']>;
   id: Scalars['String']['output'];
+  /** An object relationship */
+  media_image?: Maybe<Media_Image>;
   metadata_uri: Scalars['String']['output'];
   name: Scalars['String']['output'];
   opens_at: Scalars['timestamptz']['output'];
@@ -4849,12 +4875,15 @@ export type Art_Coin_Bool_Exp = {
   art_coin_market_stats?: InputMaybe<Art_Coin_Market_Stats_Bool_Exp>;
   ascension_progress?: InputMaybe<Float8_Comparison_Exp>;
   author_id?: InputMaybe<String_Comparison_Exp>;
+  capture_media_id?: InputMaybe<Bpchar_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
+  display_uri?: InputMaybe<String_Comparison_Exp>;
   flag?: InputMaybe<Art_Coin_Flag_Enum_Comparison_Exp>;
   graduated_address?: InputMaybe<String_Comparison_Exp>;
   graduated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
+  media_image?: InputMaybe<Media_Image_Bool_Exp>;
   metadata_uri?: InputMaybe<String_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   opens_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -5326,8 +5355,10 @@ export type Art_Coin_Max_Fields = {
   __typename?: 'art_coin_max_fields';
   ascension_progress?: Maybe<Scalars['float8']['output']>;
   author_id?: Maybe<Scalars['String']['output']>;
+  capture_media_id?: Maybe<Scalars['bpchar']['output']>;
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  display_uri?: Maybe<Scalars['String']['output']>;
   flag?: Maybe<Scalars['art_coin_flag_enum']['output']>;
   graduated_address?: Maybe<Scalars['String']['output']>;
   graduated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -5345,8 +5376,10 @@ export type Art_Coin_Min_Fields = {
   __typename?: 'art_coin_min_fields';
   ascension_progress?: Maybe<Scalars['float8']['output']>;
   author_id?: Maybe<Scalars['String']['output']>;
+  capture_media_id?: Maybe<Scalars['bpchar']['output']>;
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  display_uri?: Maybe<Scalars['String']['output']>;
   flag?: Maybe<Scalars['art_coin_flag_enum']['output']>;
   graduated_address?: Maybe<Scalars['String']['output']>;
   graduated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -5365,12 +5398,15 @@ export type Art_Coin_Order_By = {
   art_coin_market_stats?: InputMaybe<Art_Coin_Market_Stats_Order_By>;
   ascension_progress?: InputMaybe<Order_By>;
   author_id?: InputMaybe<Order_By>;
+  capture_media_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  display_uri?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
   graduated_address?: InputMaybe<Order_By>;
   graduated_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  media_image?: InputMaybe<Media_Image_Order_By>;
   metadata_uri?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
@@ -5388,9 +5424,13 @@ export enum Art_Coin_Select_Column {
   /** column name */
   AuthorId = 'author_id',
   /** column name */
+  CaptureMediaId = 'capture_media_id',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Description = 'description',
+  /** column name */
+  DisplayUri = 'display_uri',
   /** column name */
   Flag = 'flag',
   /** column name */
@@ -5446,8 +5486,10 @@ export type Art_Coin_Stream_Cursor_Input = {
 export type Art_Coin_Stream_Cursor_Value_Input = {
   ascension_progress?: InputMaybe<Scalars['float8']['input']>;
   author_id?: InputMaybe<Scalars['String']['input']>;
+  capture_media_id?: InputMaybe<Scalars['bpchar']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  display_uri?: InputMaybe<Scalars['String']['input']>;
   flag?: InputMaybe<Scalars['art_coin_flag_enum']['input']>;
   graduated_address?: InputMaybe<Scalars['String']['input']>;
   graduated_at?: InputMaybe<Scalars['timestamptz']['input']>;
@@ -7940,50 +7982,6 @@ export type Eth_Frame_Data_Stream_Cursor_Input = {
 export type Eth_Frame_Data_Stream_Cursor_Value_Input = {
   frame_minter_data?: InputMaybe<Scalars['jsonb']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** columns and relationships of "squid_processor.hot_block" */
-export type Eth_Indexer = {
-  __typename?: 'eth_indexer';
-  hash: Scalars['String']['output'];
-  height: Scalars['Int']['output'];
-};
-
-/** Boolean expression to filter rows from the table "squid_processor.hot_block". All fields are combined with a logical 'AND'. */
-export type Eth_Indexer_Bool_Exp = {
-  _and?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
-  _not?: InputMaybe<Eth_Indexer_Bool_Exp>;
-  _or?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
-  hash?: InputMaybe<String_Comparison_Exp>;
-  height?: InputMaybe<Int_Comparison_Exp>;
-};
-
-/** Ordering options when selecting data from "squid_processor.hot_block". */
-export type Eth_Indexer_Order_By = {
-  hash?: InputMaybe<Order_By>;
-  height?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "squid_processor.hot_block" */
-export enum Eth_Indexer_Select_Column {
-  /** column name */
-  Hash = 'hash',
-  /** column name */
-  Height = 'height'
-}
-
-/** Streaming cursor of the table "eth_indexer" */
-export type Eth_Indexer_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Eth_Indexer_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Eth_Indexer_Stream_Cursor_Value_Input = {
-  hash?: InputMaybe<Scalars['String']['input']>;
-  height?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** columns and relationships of "eth_minter_proceeds" */
@@ -12578,6 +12576,10 @@ export type Objkt = {
   /** An array relationship */
   auctions: Array<Auction>;
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
+  /** An array relationship */
+  children: Array<Objkt>;
+  /** An aggregate relationship */
+  children_aggregate: Objkt_Aggregate;
   children_count: Scalars['Int']['output'];
   created_at: Scalars['timestamptz']['output'];
   depth: Scalars['Int']['output'];
@@ -12667,6 +12669,26 @@ export type ObjktAuctionsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Auction_Order_By>>;
   where?: InputMaybe<Auction_Bool_Exp>;
+};
+
+
+/** columns and relationships of "objkt" */
+export type ObjktChildrenArgs = {
+  distinct_on?: InputMaybe<Array<Objkt_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Objkt_Order_By>>;
+  where?: InputMaybe<Objkt_Bool_Exp>;
+};
+
+
+/** columns and relationships of "objkt" */
+export type ObjktChildren_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Objkt_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Objkt_Order_By>>;
+  where?: InputMaybe<Objkt_Bool_Exp>;
 };
 
 
@@ -12948,6 +12970,8 @@ export type Objkt_Bool_Exp = {
   assigned_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   auctions?: InputMaybe<Auction_Bool_Exp>;
   capture_media_id?: InputMaybe<Bpchar_Comparison_Exp>;
+  children?: InputMaybe<Objkt_Bool_Exp>;
+  children_aggregate?: InputMaybe<Objkt_Aggregate_Bool_Exp>;
   children_count?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   depth?: InputMaybe<Int_Comparison_Exp>;
@@ -13123,6 +13147,7 @@ export type Objkt_Order_By = {
   assigned_at?: InputMaybe<Order_By>;
   auctions_aggregate?: InputMaybe<Auction_Aggregate_Order_By>;
   capture_media_id?: InputMaybe<Order_By>;
+  children_aggregate?: InputMaybe<Objkt_Aggregate_Order_By>;
   children_count?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
@@ -15268,10 +15293,6 @@ export type Onchain_Query = {
   eth_frame_data: Array<Eth_Frame_Data>;
   /** fetch data from the table: "eth_frame_data" using primary key columns */
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
-  /** fetch data from the table: "squid_processor.hot_block" */
-  eth_indexer: Array<Eth_Indexer>;
-  /** fetch data from the table: "squid_processor.hot_block" using primary key columns */
-  eth_indexer_by_pk?: Maybe<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
   /** fetch data from the table: "eth_minter_proceeds" using primary key columns */
@@ -15810,20 +15831,6 @@ export type Onchain_QueryEth_Frame_DataArgs = {
 
 export type Onchain_QueryEth_Frame_Data_By_PkArgs = {
   id: Scalars['String']['input'];
-};
-
-
-export type Onchain_QueryEth_IndexerArgs = {
-  distinct_on?: InputMaybe<Array<Eth_Indexer_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Eth_Indexer_Order_By>>;
-  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
-};
-
-
-export type Onchain_QueryEth_Indexer_By_PkArgs = {
-  height: Scalars['Int']['input'];
 };
 
 
@@ -16501,12 +16508,6 @@ export type Onchain_Subscription = {
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
   /** fetch data from the table in a streaming manner: "eth_frame_data" */
   eth_frame_data_stream: Array<Eth_Frame_Data>;
-  /** fetch data from the table: "squid_processor.hot_block" */
-  eth_indexer: Array<Eth_Indexer>;
-  /** fetch data from the table: "squid_processor.hot_block" using primary key columns */
-  eth_indexer_by_pk?: Maybe<Eth_Indexer>;
-  /** fetch data from the table in a streaming manner: "squid_processor.hot_block" */
-  eth_indexer_stream: Array<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
   /** fetch data from the table: "eth_minter_proceeds" using primary key columns */
@@ -17281,27 +17282,6 @@ export type Onchain_SubscriptionEth_Frame_Data_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Eth_Frame_Data_Stream_Cursor_Input>>;
   where?: InputMaybe<Eth_Frame_Data_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionEth_IndexerArgs = {
-  distinct_on?: InputMaybe<Array<Eth_Indexer_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Eth_Indexer_Order_By>>;
-  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionEth_Indexer_By_PkArgs = {
-  height: Scalars['Int']['input'];
-};
-
-
-export type Onchain_SubscriptionEth_Indexer_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Eth_Indexer_Stream_Cursor_Input>>;
-  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
 };
 
 
@@ -18412,6 +18392,8 @@ export type Query_Root = {
   mediaFullUrl: Scalars['String']['output'];
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
+  /** Retrieve Open Graph Data */
+  open_form_graph?: Maybe<OpenGraphResponse>;
   projectReserves: Array<ProjectReserves>;
   search: SearchOutput;
   walletRpcs?: Maybe<Array<WalletRpc>>;
@@ -18430,6 +18412,11 @@ export type Query_RootManagedWalletStateArgs = {
 
 export type Query_RootMediaFullUrlArgs = {
   s3key: Scalars['String']['input'];
+};
+
+
+export type Query_RootOpen_Form_GraphArgs = {
+  input: OpenGraphInput;
 };
 
 
