@@ -72,8 +72,7 @@ export type FxParamTransformationTypeMap = {
 
 export type FxParamUpdateMode = "page-reload" | "sync" | "code-driven"
 
-export type FxParamValue<Type extends FxParamType> =
-  FxParamTypeMap[keyof FxParamTypeMap]
+export type FxParamValue<Type extends FxParamType> = FxParamTypeMap[Type]
 
 export interface FxParamDefinition<Type extends FxParamType> {
   id: string
@@ -122,3 +121,7 @@ export type FxParamProcessors = {
 export type FxParamTranformType = "transform" | "constrain"
 
 export type FxParamsData = Record<string, any>
+
+export type FxParamsRaw = Record<string, FxParamValue<FxParamType>>
+export type FxParamTransformation = FxParamTransformationTypeMap[FxParamType]
+export type FxParamsTransformed = Record<string, FxParamTransformation>

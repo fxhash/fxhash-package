@@ -2070,6 +2070,271 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
+"""
+columns and relationships of "Library"
+"""
+type Library {
+  authors: String
+  createdAt: timestamp!
+  description: String
+  docUrl: String
+  id: String!
+  license: String
+  name: String
+
+  """
+  An array relationship
+  """
+  versions(
+    """
+    distinct select on columns
+    """
+    distinct_on: [LibraryVersion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [LibraryVersion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: LibraryVersion_bool_exp
+  ): [LibraryVersion!]!
+}
+
+"""
+columns and relationships of "LibraryVersion"
+"""
+type LibraryVersion {
+  content: String!
+  filename: String!
+  id: String!
+  libraryId: String!
+  onchfsPointer: String!
+}
+
+"""
+order by aggregate values of table "LibraryVersion"
+"""
+input LibraryVersion_aggregate_order_by {
+  count: order_by
+  max: LibraryVersion_max_order_by
+  min: LibraryVersion_min_order_by
+}
+
+"""
+Boolean expression to filter rows from the table "LibraryVersion". All fields are combined with a logical 'AND'.
+"""
+input LibraryVersion_bool_exp {
+  _and: [LibraryVersion_bool_exp!]
+  _not: LibraryVersion_bool_exp
+  _or: [LibraryVersion_bool_exp!]
+  content: String_comparison_exp
+  filename: String_comparison_exp
+  id: String_comparison_exp
+  libraryId: String_comparison_exp
+  onchfsPointer: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "LibraryVersion"
+"""
+input LibraryVersion_max_order_by {
+  content: order_by
+  filename: order_by
+  id: order_by
+  libraryId: order_by
+  onchfsPointer: order_by
+}
+
+"""
+order by min() on columns of table "LibraryVersion"
+"""
+input LibraryVersion_min_order_by {
+  content: order_by
+  filename: order_by
+  id: order_by
+  libraryId: order_by
+  onchfsPointer: order_by
+}
+
+"""
+Ordering options when selecting data from "LibraryVersion".
+"""
+input LibraryVersion_order_by {
+  content: order_by
+  filename: order_by
+  id: order_by
+  libraryId: order_by
+  onchfsPointer: order_by
+}
+
+"""
+select columns of table "LibraryVersion"
+"""
+enum LibraryVersion_select_column {
+  """
+  column name
+  """
+  content
+
+  """
+  column name
+  """
+  filename
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  libraryId
+
+  """
+  column name
+  """
+  onchfsPointer
+}
+
+"""
+Streaming cursor of the table "LibraryVersion"
+"""
+input LibraryVersion_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: LibraryVersion_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input LibraryVersion_stream_cursor_value_input {
+  content: String
+  filename: String
+  id: String
+  libraryId: String
+  onchfsPointer: String
+}
+
+"""
+Boolean expression to filter rows from the table "Library". All fields are combined with a logical 'AND'.
+"""
+input Library_bool_exp {
+  _and: [Library_bool_exp!]
+  _not: Library_bool_exp
+  _or: [Library_bool_exp!]
+  authors: String_comparison_exp
+  createdAt: timestamp_comparison_exp
+  description: String_comparison_exp
+  docUrl: String_comparison_exp
+  id: String_comparison_exp
+  license: String_comparison_exp
+  name: String_comparison_exp
+  versions: LibraryVersion_bool_exp
+}
+
+"""
+Ordering options when selecting data from "Library".
+"""
+input Library_order_by {
+  authors: order_by
+  createdAt: order_by
+  description: order_by
+  docUrl: order_by
+  id: order_by
+  license: order_by
+  name: order_by
+  versions_aggregate: LibraryVersion_aggregate_order_by
+}
+
+"""
+select columns of table "Library"
+"""
+enum Library_select_column {
+  """
+  column name
+  """
+  authors
+
+  """
+  column name
+  """
+  createdAt
+
+  """
+  column name
+  """
+  description
+
+  """
+  column name
+  """
+  docUrl
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  license
+
+  """
+  column name
+  """
+  name
+}
+
+"""
+Streaming cursor of the table "Library"
+"""
+input Library_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: Library_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input Library_stream_cursor_value_input {
+  authors: String
+  createdAt: timestamp
+  description: String
+  docUrl: String
+  id: String
+  license: String
+  name: String
+}
+
 input LinkWalletInput {
   id: String!
   publicKey: String
@@ -4825,6 +5090,11 @@ type action {
   """
   target: user
   target_id: String
+
+  """
+  An object relationship
+  """
+  target_wallet_account: foreign_wallet_account
   ticket_id: String
   token_id: String
   type: action_type_enum!
@@ -4929,6 +5199,7 @@ input action_bool_exp {
   redeemable_address: String_comparison_exp
   target: user_bool_exp
   target_id: String_comparison_exp
+  target_wallet_account: foreign_wallet_account_bool_exp
   ticket_id: String_comparison_exp
   token_id: String_comparison_exp
   type: action_type_enum_comparison_exp
@@ -5039,6 +5310,7 @@ input action_order_by {
   redeemable_address: order_by
   target: user_order_by
   target_id: order_by
+  target_wallet_account: foreign_wallet_account_order_by
   ticket_id: order_by
   token_id: order_by
   type: order_by
@@ -5966,6 +6238,1469 @@ type any_offer_variance_fields {
 }
 
 """
+columns and relationships of "art_coin"
+"""
+type art_coin {
+  """
+  An array relationship
+  """
+  art_coin_holdings(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): [art_coin_holding!]!
+
+  """
+  An aggregate relationship
+  """
+  art_coin_holdings_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): art_coin_holding_aggregate!
+
+  """
+  An object relationship
+  """
+  art_coin_market_stats: art_coin_market_stats
+  ascension_progress: float8!
+  author_id: String!
+  created_at: timestamptz!
+  description: String!
+  flag: art_coin_flag_enum!
+  graduated_address: String!
+  graduated_at: timestamptz
+  id: String!
+  metadata_uri: String!
+  name: String!
+  opens_at: timestamptz!
+
+  """
+  An array relationship
+  """
+  projects(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): [generative_token!]!
+
+  """
+  An aggregate relationship
+  """
+  projects_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_bool_exp
+  ): generative_token_aggregate!
+  slug: String!
+  supply: numeric!
+  ticker: String!
+
+  """
+  An object relationship
+  """
+  user: user!
+}
+
+"""
+aggregated selection of "art_coin"
+"""
+type art_coin_aggregate {
+  aggregate: art_coin_aggregate_fields
+  nodes: [art_coin!]!
+}
+
+"""
+aggregate fields of "art_coin"
+"""
+type art_coin_aggregate_fields {
+  avg: art_coin_avg_fields
+  count(columns: [art_coin_select_column!], distinct: Boolean): Int!
+  max: art_coin_max_fields
+  min: art_coin_min_fields
+  stddev: art_coin_stddev_fields
+  stddev_pop: art_coin_stddev_pop_fields
+  stddev_samp: art_coin_stddev_samp_fields
+  sum: art_coin_sum_fields
+  var_pop: art_coin_var_pop_fields
+  var_samp: art_coin_var_samp_fields
+  variance: art_coin_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type art_coin_avg_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
+columns and relationships of "art_coin_bonding_trade"
+"""
+type art_coin_bonding_trade {
+  amount_in: numeric!
+  amount_out: numeric!
+
+  """
+  An object relationship
+  """
+  art_coin: art_coin!
+  art_coin_id: String!
+  created_at: timestamptz!
+  id: Int!
+  op_hash: String!
+  price: numeric!
+  type: art_coin_bonding_trade_type_enum!
+
+  """
+  An object relationship
+  """
+  user: user!
+  user_id: String!
+}
+
+"""
+aggregated selection of "art_coin_bonding_trade"
+"""
+type art_coin_bonding_trade_aggregate {
+  aggregate: art_coin_bonding_trade_aggregate_fields
+  nodes: [art_coin_bonding_trade!]!
+}
+
+"""
+aggregate fields of "art_coin_bonding_trade"
+"""
+type art_coin_bonding_trade_aggregate_fields {
+  avg: art_coin_bonding_trade_avg_fields
+  count(
+    columns: [art_coin_bonding_trade_select_column!]
+    distinct: Boolean
+  ): Int!
+  max: art_coin_bonding_trade_max_fields
+  min: art_coin_bonding_trade_min_fields
+  stddev: art_coin_bonding_trade_stddev_fields
+  stddev_pop: art_coin_bonding_trade_stddev_pop_fields
+  stddev_samp: art_coin_bonding_trade_stddev_samp_fields
+  sum: art_coin_bonding_trade_sum_fields
+  var_pop: art_coin_bonding_trade_var_pop_fields
+  var_samp: art_coin_bonding_trade_var_samp_fields
+  variance: art_coin_bonding_trade_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type art_coin_bonding_trade_avg_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_bonding_trade". All fields are combined with a logical 'AND'.
+"""
+input art_coin_bonding_trade_bool_exp {
+  _and: [art_coin_bonding_trade_bool_exp!]
+  _not: art_coin_bonding_trade_bool_exp
+  _or: [art_coin_bonding_trade_bool_exp!]
+  amount_in: numeric_comparison_exp
+  amount_out: numeric_comparison_exp
+  art_coin: art_coin_bool_exp
+  art_coin_id: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  op_hash: String_comparison_exp
+  price: numeric_comparison_exp
+  type: art_coin_bonding_trade_type_enum_comparison_exp
+  user: user_bool_exp
+  user_id: String_comparison_exp
+}
+
+"""
+aggregate max on columns
+"""
+type art_coin_bonding_trade_max_fields {
+  amount_in: numeric
+  amount_out: numeric
+  art_coin_id: String
+  created_at: timestamptz
+  id: Int
+  op_hash: String
+  price: numeric
+  type: art_coin_bonding_trade_type_enum
+  user_id: String
+}
+
+"""
+aggregate min on columns
+"""
+type art_coin_bonding_trade_min_fields {
+  amount_in: numeric
+  amount_out: numeric
+  art_coin_id: String
+  created_at: timestamptz
+  id: Int
+  op_hash: String
+  price: numeric
+  type: art_coin_bonding_trade_type_enum
+  user_id: String
+}
+
+"""
+Ordering options when selecting data from "art_coin_bonding_trade".
+"""
+input art_coin_bonding_trade_order_by {
+  amount_in: order_by
+  amount_out: order_by
+  art_coin: art_coin_order_by
+  art_coin_id: order_by
+  created_at: order_by
+  id: order_by
+  op_hash: order_by
+  price: order_by
+  type: order_by
+  user: user_order_by
+  user_id: order_by
+}
+
+"""
+select columns of table "art_coin_bonding_trade"
+"""
+enum art_coin_bonding_trade_select_column {
+  """
+  column name
+  """
+  amount_in
+
+  """
+  column name
+  """
+  amount_out
+
+  """
+  column name
+  """
+  art_coin_id
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  op_hash
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  type
+
+  """
+  column name
+  """
+  user_id
+}
+
+"""
+aggregate stddev on columns
+"""
+type art_coin_bonding_trade_stddev_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type art_coin_bonding_trade_stddev_pop_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type art_coin_bonding_trade_stddev_samp_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+Streaming cursor of the table "art_coin_bonding_trade"
+"""
+input art_coin_bonding_trade_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_bonding_trade_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_bonding_trade_stream_cursor_value_input {
+  amount_in: numeric
+  amount_out: numeric
+  art_coin_id: String
+  created_at: timestamptz
+  id: Int
+  op_hash: String
+  price: numeric
+  type: art_coin_bonding_trade_type_enum
+  user_id: String
+}
+
+"""
+aggregate sum on columns
+"""
+type art_coin_bonding_trade_sum_fields {
+  amount_in: numeric
+  amount_out: numeric
+  id: Int
+  price: numeric
+}
+
+scalar art_coin_bonding_trade_type_enum
+
+"""
+Boolean expression to compare columns of type "art_coin_bonding_trade_type_enum". All fields are combined with logical 'AND'.
+"""
+input art_coin_bonding_trade_type_enum_comparison_exp {
+  _eq: art_coin_bonding_trade_type_enum
+  _gt: art_coin_bonding_trade_type_enum
+  _gte: art_coin_bonding_trade_type_enum
+  _in: [art_coin_bonding_trade_type_enum!]
+  _is_null: Boolean
+  _lt: art_coin_bonding_trade_type_enum
+  _lte: art_coin_bonding_trade_type_enum
+  _neq: art_coin_bonding_trade_type_enum
+  _nin: [art_coin_bonding_trade_type_enum!]
+}
+
+"""
+aggregate var_pop on columns
+"""
+type art_coin_bonding_trade_var_pop_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type art_coin_bonding_trade_var_samp_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type art_coin_bonding_trade_variance_fields {
+  amount_in: Float
+  amount_out: Float
+  id: Float
+  price: Float
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin". All fields are combined with a logical 'AND'.
+"""
+input art_coin_bool_exp {
+  _and: [art_coin_bool_exp!]
+  _not: art_coin_bool_exp
+  _or: [art_coin_bool_exp!]
+  art_coin_holdings: art_coin_holding_bool_exp
+  art_coin_holdings_aggregate: art_coin_holding_aggregate_bool_exp
+  art_coin_market_stats: art_coin_market_stats_bool_exp
+  ascension_progress: float8_comparison_exp
+  author_id: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  description: String_comparison_exp
+  flag: art_coin_flag_enum_comparison_exp
+  graduated_address: String_comparison_exp
+  graduated_at: timestamptz_comparison_exp
+  id: String_comparison_exp
+  metadata_uri: String_comparison_exp
+  name: String_comparison_exp
+  opens_at: timestamptz_comparison_exp
+  projects: generative_token_bool_exp
+  projects_aggregate: generative_token_aggregate_bool_exp
+  slug: String_comparison_exp
+  supply: numeric_comparison_exp
+  ticker: String_comparison_exp
+  user: user_bool_exp
+}
+
+scalar art_coin_flag_enum
+
+"""
+Boolean expression to compare columns of type "art_coin_flag_enum". All fields are combined with logical 'AND'.
+"""
+input art_coin_flag_enum_comparison_exp {
+  _eq: art_coin_flag_enum
+  _gt: art_coin_flag_enum
+  _gte: art_coin_flag_enum
+  _in: [art_coin_flag_enum!]
+  _is_null: Boolean
+  _lt: art_coin_flag_enum
+  _lte: art_coin_flag_enum
+  _neq: art_coin_flag_enum
+  _nin: [art_coin_flag_enum!]
+}
+
+"""
+columns and relationships of "art_coin_holding"
+"""
+type art_coin_holding {
+  amount: numeric!
+  art_coin_id: String!
+  holder_id: String!
+  id: String!
+
+  """
+  An object relationship
+  """
+  user: user!
+}
+
+"""
+aggregated selection of "art_coin_holding"
+"""
+type art_coin_holding_aggregate {
+  aggregate: art_coin_holding_aggregate_fields
+  nodes: [art_coin_holding!]!
+}
+
+input art_coin_holding_aggregate_bool_exp {
+  count: art_coin_holding_aggregate_bool_exp_count
+}
+
+input art_coin_holding_aggregate_bool_exp_count {
+  arguments: [art_coin_holding_select_column!]
+  distinct: Boolean
+  filter: art_coin_holding_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "art_coin_holding"
+"""
+type art_coin_holding_aggregate_fields {
+  avg: art_coin_holding_avg_fields
+  count(columns: [art_coin_holding_select_column!], distinct: Boolean): Int!
+  max: art_coin_holding_max_fields
+  min: art_coin_holding_min_fields
+  stddev: art_coin_holding_stddev_fields
+  stddev_pop: art_coin_holding_stddev_pop_fields
+  stddev_samp: art_coin_holding_stddev_samp_fields
+  sum: art_coin_holding_sum_fields
+  var_pop: art_coin_holding_var_pop_fields
+  var_samp: art_coin_holding_var_samp_fields
+  variance: art_coin_holding_variance_fields
+}
+
+"""
+order by aggregate values of table "art_coin_holding"
+"""
+input art_coin_holding_aggregate_order_by {
+  avg: art_coin_holding_avg_order_by
+  count: order_by
+  max: art_coin_holding_max_order_by
+  min: art_coin_holding_min_order_by
+  stddev: art_coin_holding_stddev_order_by
+  stddev_pop: art_coin_holding_stddev_pop_order_by
+  stddev_samp: art_coin_holding_stddev_samp_order_by
+  sum: art_coin_holding_sum_order_by
+  var_pop: art_coin_holding_var_pop_order_by
+  var_samp: art_coin_holding_var_samp_order_by
+  variance: art_coin_holding_variance_order_by
+}
+
+"""
+aggregate avg on columns
+"""
+type art_coin_holding_avg_fields {
+  amount: Float
+}
+
+"""
+order by avg() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_avg_order_by {
+  amount: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_holding". All fields are combined with a logical 'AND'.
+"""
+input art_coin_holding_bool_exp {
+  _and: [art_coin_holding_bool_exp!]
+  _not: art_coin_holding_bool_exp
+  _or: [art_coin_holding_bool_exp!]
+  amount: numeric_comparison_exp
+  art_coin_id: String_comparison_exp
+  holder_id: String_comparison_exp
+  id: String_comparison_exp
+  user: user_bool_exp
+}
+
+"""
+aggregate max on columns
+"""
+type art_coin_holding_max_fields {
+  amount: numeric
+  art_coin_id: String
+  holder_id: String
+  id: String
+}
+
+"""
+order by max() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_max_order_by {
+  amount: order_by
+  art_coin_id: order_by
+  holder_id: order_by
+  id: order_by
+}
+
+"""
+aggregate min on columns
+"""
+type art_coin_holding_min_fields {
+  amount: numeric
+  art_coin_id: String
+  holder_id: String
+  id: String
+}
+
+"""
+order by min() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_min_order_by {
+  amount: order_by
+  art_coin_id: order_by
+  holder_id: order_by
+  id: order_by
+}
+
+"""
+Ordering options when selecting data from "art_coin_holding".
+"""
+input art_coin_holding_order_by {
+  amount: order_by
+  art_coin_id: order_by
+  holder_id: order_by
+  id: order_by
+  user: user_order_by
+}
+
+"""
+select columns of table "art_coin_holding"
+"""
+enum art_coin_holding_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  art_coin_id
+
+  """
+  column name
+  """
+  holder_id
+
+  """
+  column name
+  """
+  id
+}
+
+"""
+aggregate stddev on columns
+"""
+type art_coin_holding_stddev_fields {
+  amount: Float
+}
+
+"""
+order by stddev() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_stddev_order_by {
+  amount: order_by
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type art_coin_holding_stddev_pop_fields {
+  amount: Float
+}
+
+"""
+order by stddev_pop() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_stddev_pop_order_by {
+  amount: order_by
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type art_coin_holding_stddev_samp_fields {
+  amount: Float
+}
+
+"""
+order by stddev_samp() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_stddev_samp_order_by {
+  amount: order_by
+}
+
+"""
+Streaming cursor of the table "art_coin_holding"
+"""
+input art_coin_holding_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_holding_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_holding_stream_cursor_value_input {
+  amount: numeric
+  art_coin_id: String
+  holder_id: String
+  id: String
+}
+
+"""
+aggregate sum on columns
+"""
+type art_coin_holding_sum_fields {
+  amount: numeric
+}
+
+"""
+order by sum() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_sum_order_by {
+  amount: order_by
+}
+
+"""
+aggregate var_pop on columns
+"""
+type art_coin_holding_var_pop_fields {
+  amount: Float
+}
+
+"""
+order by var_pop() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_var_pop_order_by {
+  amount: order_by
+}
+
+"""
+aggregate var_samp on columns
+"""
+type art_coin_holding_var_samp_fields {
+  amount: Float
+}
+
+"""
+order by var_samp() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_var_samp_order_by {
+  amount: order_by
+}
+
+"""
+aggregate variance on columns
+"""
+type art_coin_holding_variance_fields {
+  amount: Float
+}
+
+"""
+order by variance() on columns of table "art_coin_holding"
+"""
+input art_coin_holding_variance_order_by {
+  amount: order_by
+}
+
+"""
+columns and relationships of "art_coin_market_stats"
+"""
+type art_coin_market_stats {
+  art_coin_id: String!
+  from: timestamptz
+  market_cap: numeric
+  price: numeric
+  to: timestamptz
+  volume24: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_market_stats". All fields are combined with a logical 'AND'.
+"""
+input art_coin_market_stats_bool_exp {
+  _and: [art_coin_market_stats_bool_exp!]
+  _not: art_coin_market_stats_bool_exp
+  _or: [art_coin_market_stats_bool_exp!]
+  art_coin_id: String_comparison_exp
+  from: timestamptz_comparison_exp
+  market_cap: numeric_comparison_exp
+  price: numeric_comparison_exp
+  to: timestamptz_comparison_exp
+  volume24: numeric_comparison_exp
+}
+
+"""
+columns and relationships of "art_coin_market_stats_history"
+"""
+type art_coin_market_stats_history {
+  art_coin_id: String!
+  from: timestamptz!
+  id: Int!
+  market_cap: numeric
+  price: numeric
+  to: timestamptz!
+  volume24: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_market_stats_history". All fields are combined with a logical 'AND'.
+"""
+input art_coin_market_stats_history_bool_exp {
+  _and: [art_coin_market_stats_history_bool_exp!]
+  _not: art_coin_market_stats_history_bool_exp
+  _or: [art_coin_market_stats_history_bool_exp!]
+  art_coin_id: String_comparison_exp
+  from: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  market_cap: numeric_comparison_exp
+  price: numeric_comparison_exp
+  to: timestamptz_comparison_exp
+  volume24: numeric_comparison_exp
+}
+
+"""
+columns and relationships of "art_coin_market_stats_history_hourly"
+"""
+type art_coin_market_stats_history_hourly {
+  art_coin_id: String
+  market_cap: numeric
+  price: numeric
+  timestamp: timestamptz
+  volume24: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_market_stats_history_hourly". All fields are combined with a logical 'AND'.
+"""
+input art_coin_market_stats_history_hourly_bool_exp {
+  _and: [art_coin_market_stats_history_hourly_bool_exp!]
+  _not: art_coin_market_stats_history_hourly_bool_exp
+  _or: [art_coin_market_stats_history_hourly_bool_exp!]
+  art_coin_id: String_comparison_exp
+  market_cap: numeric_comparison_exp
+  price: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  volume24: numeric_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "art_coin_market_stats_history_hourly".
+"""
+input art_coin_market_stats_history_hourly_order_by {
+  art_coin_id: order_by
+  market_cap: order_by
+  price: order_by
+  timestamp: order_by
+  volume24: order_by
+}
+
+"""
+select columns of table "art_coin_market_stats_history_hourly"
+"""
+enum art_coin_market_stats_history_hourly_select_column {
+  """
+  column name
+  """
+  art_coin_id
+
+  """
+  column name
+  """
+  market_cap
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  timestamp
+
+  """
+  column name
+  """
+  volume24
+}
+
+"""
+Streaming cursor of the table "art_coin_market_stats_history_hourly"
+"""
+input art_coin_market_stats_history_hourly_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_market_stats_history_hourly_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_market_stats_history_hourly_stream_cursor_value_input {
+  art_coin_id: String
+  market_cap: numeric
+  price: numeric
+  timestamp: timestamptz
+  volume24: numeric
+}
+
+"""
+Ordering options when selecting data from "art_coin_market_stats_history".
+"""
+input art_coin_market_stats_history_order_by {
+  art_coin_id: order_by
+  from: order_by
+  id: order_by
+  market_cap: order_by
+  price: order_by
+  to: order_by
+  volume24: order_by
+}
+
+"""
+select columns of table "art_coin_market_stats_history"
+"""
+enum art_coin_market_stats_history_select_column {
+  """
+  column name
+  """
+  art_coin_id
+
+  """
+  column name
+  """
+  from
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  market_cap
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  to
+
+  """
+  column name
+  """
+  volume24
+}
+
+"""
+Streaming cursor of the table "art_coin_market_stats_history"
+"""
+input art_coin_market_stats_history_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_market_stats_history_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_market_stats_history_stream_cursor_value_input {
+  art_coin_id: String
+  from: timestamptz
+  id: Int
+  market_cap: numeric
+  price: numeric
+  to: timestamptz
+  volume24: numeric
+}
+
+"""
+Ordering options when selecting data from "art_coin_market_stats".
+"""
+input art_coin_market_stats_order_by {
+  art_coin_id: order_by
+  from: order_by
+  market_cap: order_by
+  price: order_by
+  to: order_by
+  volume24: order_by
+}
+
+"""
+select columns of table "art_coin_market_stats"
+"""
+enum art_coin_market_stats_select_column {
+  """
+  column name
+  """
+  art_coin_id
+
+  """
+  column name
+  """
+  from
+
+  """
+  column name
+  """
+  market_cap
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  to
+
+  """
+  column name
+  """
+  volume24
+}
+
+"""
+Streaming cursor of the table "art_coin_market_stats"
+"""
+input art_coin_market_stats_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_market_stats_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_market_stats_stream_cursor_value_input {
+  art_coin_id: String
+  from: timestamptz
+  market_cap: numeric
+  price: numeric
+  to: timestamptz
+  volume24: numeric
+}
+
+"""
+aggregate max on columns
+"""
+type art_coin_max_fields {
+  ascension_progress: float8
+  author_id: String
+  created_at: timestamptz
+  description: String
+  flag: art_coin_flag_enum
+  graduated_address: String
+  graduated_at: timestamptz
+  id: String
+  metadata_uri: String
+  name: String
+  opens_at: timestamptz
+  slug: String
+  supply: numeric
+  ticker: String
+}
+
+"""
+aggregate min on columns
+"""
+type art_coin_min_fields {
+  ascension_progress: float8
+  author_id: String
+  created_at: timestamptz
+  description: String
+  flag: art_coin_flag_enum
+  graduated_address: String
+  graduated_at: timestamptz
+  id: String
+  metadata_uri: String
+  name: String
+  opens_at: timestamptz
+  slug: String
+  supply: numeric
+  ticker: String
+}
+
+"""
+Ordering options when selecting data from "art_coin".
+"""
+input art_coin_order_by {
+  art_coin_holdings_aggregate: art_coin_holding_aggregate_order_by
+  art_coin_market_stats: art_coin_market_stats_order_by
+  ascension_progress: order_by
+  author_id: order_by
+  created_at: order_by
+  description: order_by
+  flag: order_by
+  graduated_address: order_by
+  graduated_at: order_by
+  id: order_by
+  metadata_uri: order_by
+  name: order_by
+  opens_at: order_by
+  projects_aggregate: generative_token_aggregate_order_by
+  slug: order_by
+  supply: order_by
+  ticker: order_by
+  user: user_order_by
+}
+
+"""
+select columns of table "art_coin"
+"""
+enum art_coin_select_column {
+  """
+  column name
+  """
+  ascension_progress
+
+  """
+  column name
+  """
+  author_id
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  description
+
+  """
+  column name
+  """
+  flag
+
+  """
+  column name
+  """
+  graduated_address
+
+  """
+  column name
+  """
+  graduated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata_uri
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  opens_at
+
+  """
+  column name
+  """
+  slug
+
+  """
+  column name
+  """
+  supply
+
+  """
+  column name
+  """
+  ticker
+}
+
+"""
+aggregate stddev on columns
+"""
+type art_coin_stddev_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type art_coin_stddev_pop_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type art_coin_stddev_samp_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
+Streaming cursor of the table "art_coin"
+"""
+input art_coin_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_stream_cursor_value_input {
+  ascension_progress: float8
+  author_id: String
+  created_at: timestamptz
+  description: String
+  flag: art_coin_flag_enum
+  graduated_address: String
+  graduated_at: timestamptz
+  id: String
+  metadata_uri: String
+  name: String
+  opens_at: timestamptz
+  slug: String
+  supply: numeric
+  ticker: String
+}
+
+"""
+aggregate sum on columns
+"""
+type art_coin_sum_fields {
+  ascension_progress: float8
+  supply: numeric
+}
+
+"""
+columns and relationships of "art_coin_transfer"
+"""
+type art_coin_transfer {
+  amount: numeric!
+  art_coin_id: String!
+  created_at: timestamptz!
+  id: Int!
+  op_hash: String!
+  sender_id: String!
+  target_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_transfer". All fields are combined with a logical 'AND'.
+"""
+input art_coin_transfer_bool_exp {
+  _and: [art_coin_transfer_bool_exp!]
+  _not: art_coin_transfer_bool_exp
+  _or: [art_coin_transfer_bool_exp!]
+  amount: numeric_comparison_exp
+  art_coin_id: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  op_hash: String_comparison_exp
+  sender_id: String_comparison_exp
+  target_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "art_coin_transfer".
+"""
+input art_coin_transfer_order_by {
+  amount: order_by
+  art_coin_id: order_by
+  created_at: order_by
+  id: order_by
+  op_hash: order_by
+  sender_id: order_by
+  target_id: order_by
+}
+
+"""
+select columns of table "art_coin_transfer"
+"""
+enum art_coin_transfer_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  art_coin_id
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  op_hash
+
+  """
+  column name
+  """
+  sender_id
+
+  """
+  column name
+  """
+  target_id
+}
+
+"""
+Streaming cursor of the table "art_coin_transfer"
+"""
+input art_coin_transfer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_transfer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_transfer_stream_cursor_value_input {
+  amount: numeric
+  art_coin_id: String
+  created_at: timestamptz
+  id: Int
+  op_hash: String
+  sender_id: String
+  target_id: String
+}
+
+"""
+aggregate var_pop on columns
+"""
+type art_coin_var_pop_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type art_coin_var_samp_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type art_coin_variance_fields {
+  ascension_progress: Float
+  supply: Float
+}
+
+"""
 columns and relationships of "article"
 """
 type article {
@@ -6154,7 +7889,7 @@ type article {
   created_at: timestamptz!
   description: String!
   display_uri: String!
-  editions: Int!
+  editions: bigint!
   flag: article_flag_enum!
   id: Int!
   language: String!
@@ -6424,7 +8159,7 @@ input article_bool_exp {
   created_at: timestamptz_comparison_exp
   description: String_comparison_exp
   display_uri: String_comparison_exp
-  editions: Int_comparison_exp
+  editions: bigint_comparison_exp
   flag: article_flag_enum_comparison_exp
   id: Int_comparison_exp
   language: String_comparison_exp
@@ -6963,7 +8698,7 @@ type article_max_fields {
   created_at: timestamptz
   description: String
   display_uri: String
-  editions: Int
+  editions: bigint
   flag: article_flag_enum
   id: Int
   language: String
@@ -7017,7 +8752,7 @@ type article_min_fields {
   created_at: timestamptz
   description: String
   display_uri: String
-  editions: Int
+  editions: bigint
   flag: article_flag_enum
   id: Int
   language: String
@@ -7521,7 +9256,7 @@ input article_stream_cursor_value_input {
   created_at: timestamptz
   description: String
   display_uri: String
-  editions: Int
+  editions: bigint
   flag: article_flag_enum
   id: Int
   language: String
@@ -7544,7 +9279,7 @@ input article_stream_cursor_value_input {
 aggregate sum on columns
 """
 type article_sum_fields {
-  editions: Int
+  editions: bigint
   id: Int
   royalties: Int
 }
@@ -10009,6 +11744,12 @@ type generative_token {
   """
   An object relationship
   """
+  art_coin: art_coin
+  art_coin_id: String
+
+  """
+  An object relationship
+  """
   author: user
   author_id: String
   balance: numeric!
@@ -10198,7 +11939,7 @@ type generative_token {
   id: String!
   input_bytes_size: Int!
   is_frame: Boolean!
-  iterations_count: numeric!
+  iterations_count: numeric
   labels: [Int!]!
   lock_end: timestamptz!
   lock_price_for_reserves: Boolean!
@@ -10646,12 +12387,6 @@ type generative_token {
   thumbnail_uri: String
 
   """
-  An object relationship
-  """
-  token: token
-  token_id: String
-
-  """
   An array relationship
   """
   transactions(
@@ -10804,6 +12539,8 @@ input generative_token_bool_exp {
   _reserves: reserve_bool_exp
   actions: action_bool_exp
   actions_aggregate: action_aggregate_bool_exp
+  art_coin: art_coin_bool_exp
+  art_coin_id: String_comparison_exp
   author: user_bool_exp
   author_id: String_comparison_exp
   balance: numeric_comparison_exp
@@ -10863,8 +12600,6 @@ input generative_token_bool_exp {
   supply: numeric_comparison_exp
   tags: String_array_comparison_exp
   thumbnail_uri: String_comparison_exp
-  token: token_bool_exp
-  token_id: String_comparison_exp
   transactions: transaction_bool_exp
   updated_at: timestamptz_comparison_exp
   user: user_bool_exp
@@ -11178,6 +12913,7 @@ input generative_token_flag_enum_comparison_exp {
 aggregate max on columns
 """
 type generative_token_max_fields {
+  art_coin_id: String
   author_id: String
   balance: numeric
   capture_media_id: bpchar
@@ -11215,7 +12951,6 @@ type generative_token_max_fields {
   supply: numeric
   tags: [String!]
   thumbnail_uri: String
-  token_id: String
   updated_at: timestamptz
   version: generative_token_version
 }
@@ -11224,6 +12959,7 @@ type generative_token_max_fields {
 order by max() on columns of table "generative_token"
 """
 input generative_token_max_order_by {
+  art_coin_id: order_by
   author_id: order_by
   balance: order_by
   capture_media_id: order_by
@@ -11251,7 +12987,6 @@ input generative_token_max_order_by {
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
-  token_id: order_by
   updated_at: order_by
   version: order_by
 }
@@ -11260,6 +12995,7 @@ input generative_token_max_order_by {
 aggregate min on columns
 """
 type generative_token_min_fields {
+  art_coin_id: String
   author_id: String
   balance: numeric
   capture_media_id: bpchar
@@ -11297,7 +13033,6 @@ type generative_token_min_fields {
   supply: numeric
   tags: [String!]
   thumbnail_uri: String
-  token_id: String
   updated_at: timestamptz
   version: generative_token_version
 }
@@ -11306,6 +13041,7 @@ type generative_token_min_fields {
 order by min() on columns of table "generative_token"
 """
 input generative_token_min_order_by {
+  art_coin_id: order_by
   author_id: order_by
   balance: order_by
   capture_media_id: order_by
@@ -11333,7 +13069,6 @@ input generative_token_min_order_by {
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
-  token_id: order_by
   updated_at: order_by
   version: order_by
 }
@@ -11344,6 +13079,8 @@ Ordering options when selecting data from "generative_token".
 input generative_token_order_by {
   _reserves_aggregate: reserve_aggregate_order_by
   actions_aggregate: action_aggregate_order_by
+  art_coin: art_coin_order_by
+  art_coin_id: order_by
   author: user_order_by
   author_id: order_by
   balance: order_by
@@ -11400,8 +13137,6 @@ input generative_token_order_by {
   supply: order_by
   tags: order_by
   thumbnail_uri: order_by
-  token: token_order_by
-  token_id: order_by
   transactions_aggregate: transaction_aggregate_order_by
   updated_at: order_by
   user: user_order_by
@@ -11413,6 +13148,11 @@ input generative_token_order_by {
 select columns of table "generative_token"
 """
 enum generative_token_select_column {
+  """
+  column name
+  """
+  art_coin_id
+
   """
   column name
   """
@@ -11577,11 +13317,6 @@ enum generative_token_select_column {
   column name
   """
   thumbnail_uri
-
-  """
-  column name
-  """
-  token_id
 
   """
   column name
@@ -11756,6 +13491,7 @@ input generative_token_stream_cursor_input {
 Initial value of the column from where the streaming should start
 """
 input generative_token_stream_cursor_value_input {
+  art_coin_id: String
   author_id: String
   balance: numeric
   capture_media_id: bpchar
@@ -11789,7 +13525,6 @@ input generative_token_stream_cursor_value_input {
   supply: numeric
   tags: [String!]
   thumbnail_uri: String
-  token_id: String
   updated_at: timestamptz
   version: generative_token_version
 }
@@ -15806,7 +17541,9 @@ type objkt {
     where: auction_bool_exp
   ): [auction!]!
   capture_media_id: bpchar
+  children_count: Int!
   created_at: timestamptz!
+  depth: Int!
   display_still_uri: bpchar
   display_uri: bpchar
   duplicate: Boolean
@@ -15830,7 +17567,7 @@ type objkt {
   id: String!
   input_bytes: String
   issuer_id: String!
-  iteration: Int!
+  iteration: numeric
 
   """
   An array relationship
@@ -15981,6 +17718,18 @@ type objkt {
   """
   owner: user
   owner_id: String
+
+  """
+  An object relationship
+  """
+  parent: objkt
+  parent_hashes(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
+  parent_id: String
   rarity: float8
 
   """
@@ -16263,6 +18012,8 @@ input objkt_aggregate_order_by {
 aggregate avg on columns
 """
 type objkt_avg_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16278,6 +18029,8 @@ type objkt_avg_fields {
 order by avg() on columns of table "objkt"
 """
 input objkt_avg_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16298,7 +18051,9 @@ input objkt_bool_exp {
   assigned_at: timestamptz_comparison_exp
   auctions: auction_bool_exp
   capture_media_id: bpchar_comparison_exp
+  children_count: Int_comparison_exp
   created_at: timestamptz_comparison_exp
+  depth: Int_comparison_exp
   display_still_uri: bpchar_comparison_exp
   display_uri: bpchar_comparison_exp
   duplicate: Boolean_comparison_exp
@@ -16309,7 +18064,7 @@ input objkt_bool_exp {
   id: String_comparison_exp
   input_bytes: String_comparison_exp
   issuer_id: String_comparison_exp
-  iteration: Int_comparison_exp
+  iteration: numeric_comparison_exp
   listings: listing_bool_exp
   listings_aggregate: listing_aggregate_bool_exp
   media_image: media_image_bool_exp
@@ -16323,6 +18078,9 @@ input objkt_bool_exp {
   offers_aggregate: offer_aggregate_bool_exp
   owner: user_bool_exp
   owner_id: String_comparison_exp
+  parent: objkt_bool_exp
+  parent_hashes: jsonb_comparison_exp
+  parent_id: String_comparison_exp
   rarity: float8_comparison_exp
   redemptions: redemption_bool_exp
   royalties: Int_comparison_exp
@@ -16344,14 +18102,16 @@ aggregate max on columns
 type objkt_max_fields {
   assigned_at: timestamptz
   capture_media_id: bpchar
+  children_count: Int
   created_at: timestamptz
+  depth: Int
   display_still_uri: bpchar
   display_uri: bpchar
   generation_hash: String
   id: String
   input_bytes: String
   issuer_id: String
-  iteration: Int
+  iteration: numeric
   metadata_uri: String
 
   """
@@ -16361,6 +18121,7 @@ type objkt_max_fields {
   minter_id: String
   name: String
   owner_id: String
+  parent_id: String
   rarity: float8
   royalties: Int
   slug: String
@@ -16377,7 +18138,9 @@ order by max() on columns of table "objkt"
 input objkt_max_order_by {
   assigned_at: order_by
   capture_media_id: order_by
+  children_count: order_by
   created_at: order_by
+  depth: order_by
   display_still_uri: order_by
   display_uri: order_by
   generation_hash: order_by
@@ -16389,6 +18152,7 @@ input objkt_max_order_by {
   minter_id: order_by
   name: order_by
   owner_id: order_by
+  parent_id: order_by
   rarity: order_by
   royalties: order_by
   slug: order_by
@@ -16405,14 +18169,16 @@ aggregate min on columns
 type objkt_min_fields {
   assigned_at: timestamptz
   capture_media_id: bpchar
+  children_count: Int
   created_at: timestamptz
+  depth: Int
   display_still_uri: bpchar
   display_uri: bpchar
   generation_hash: String
   id: String
   input_bytes: String
   issuer_id: String
-  iteration: Int
+  iteration: numeric
   metadata_uri: String
 
   """
@@ -16422,6 +18188,7 @@ type objkt_min_fields {
   minter_id: String
   name: String
   owner_id: String
+  parent_id: String
   rarity: float8
   royalties: Int
   slug: String
@@ -16438,7 +18205,9 @@ order by min() on columns of table "objkt"
 input objkt_min_order_by {
   assigned_at: order_by
   capture_media_id: order_by
+  children_count: order_by
   created_at: order_by
+  depth: order_by
   display_still_uri: order_by
   display_uri: order_by
   generation_hash: order_by
@@ -16450,6 +18219,7 @@ input objkt_min_order_by {
   minter_id: order_by
   name: order_by
   owner_id: order_by
+  parent_id: order_by
   rarity: order_by
   royalties: order_by
   slug: order_by
@@ -16470,7 +18240,9 @@ input objkt_order_by {
   assigned_at: order_by
   auctions_aggregate: auction_aggregate_order_by
   capture_media_id: order_by
+  children_count: order_by
   created_at: order_by
+  depth: order_by
   display_still_uri: order_by
   display_uri: order_by
   duplicate: order_by
@@ -16493,6 +18265,9 @@ input objkt_order_by {
   offers_aggregate: offer_aggregate_order_by
   owner: user_order_by
   owner_id: order_by
+  parent: objkt_order_by
+  parent_hashes: order_by
+  parent_id: order_by
   rarity: order_by
   redemptions_aggregate: redemption_aggregate_order_by
   royalties: order_by
@@ -16530,7 +18305,17 @@ enum objkt_select_column {
   """
   column name
   """
+  children_count
+
+  """
+  column name
+  """
   created_at
+
+  """
+  column name
+  """
+  depth
 
   """
   column name
@@ -16601,6 +18386,16 @@ enum objkt_select_column {
   column name
   """
   owner_id
+
+  """
+  column name
+  """
+  parent_hashes
+
+  """
+  column name
+  """
+  parent_id
 
   """
   column name
@@ -16757,6 +18552,8 @@ enum objkt_select_column_objkt_aggregate_bool_exp_var_samp_arguments_columns {
 aggregate stddev on columns
 """
 type objkt_stddev_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16772,6 +18569,8 @@ type objkt_stddev_fields {
 order by stddev() on columns of table "objkt"
 """
 input objkt_stddev_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16782,6 +18581,8 @@ input objkt_stddev_order_by {
 aggregate stddev_pop on columns
 """
 type objkt_stddev_pop_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16797,6 +18598,8 @@ type objkt_stddev_pop_fields {
 order by stddev_pop() on columns of table "objkt"
 """
 input objkt_stddev_pop_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16807,6 +18610,8 @@ input objkt_stddev_pop_order_by {
 aggregate stddev_samp on columns
 """
 type objkt_stddev_samp_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16822,6 +18627,8 @@ type objkt_stddev_samp_fields {
 order by stddev_samp() on columns of table "objkt"
 """
 input objkt_stddev_samp_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16850,7 +18657,9 @@ input objkt_stream_cursor_value_input {
   assigned: Boolean
   assigned_at: timestamptz
   capture_media_id: bpchar
+  children_count: Int
   created_at: timestamptz
+  depth: Int
   display_still_uri: bpchar
   display_uri: bpchar
   duplicate: Boolean
@@ -16859,12 +18668,14 @@ input objkt_stream_cursor_value_input {
   id: String
   input_bytes: String
   issuer_id: String
-  iteration: Int
+  iteration: numeric
   metadata: json
   metadata_uri: String
   minter_id: String
   name: String
   owner_id: String
+  parent_hashes: jsonb
+  parent_id: String
   rarity: float8
   royalties: Int
   slug: String
@@ -16879,7 +18690,9 @@ input objkt_stream_cursor_value_input {
 aggregate sum on columns
 """
 type objkt_sum_fields {
-  iteration: Int
+  children_count: Int
+  depth: Int
+  iteration: numeric
 
   """
   A computed field, executes function "objkt_minted_price"
@@ -16894,6 +18707,8 @@ type objkt_sum_fields {
 order by sum() on columns of table "objkt"
 """
 input objkt_sum_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16904,6 +18719,8 @@ input objkt_sum_order_by {
 aggregate var_pop on columns
 """
 type objkt_var_pop_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16919,6 +18736,8 @@ type objkt_var_pop_fields {
 order by var_pop() on columns of table "objkt"
 """
 input objkt_var_pop_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16929,6 +18748,8 @@ input objkt_var_pop_order_by {
 aggregate var_samp on columns
 """
 type objkt_var_samp_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16944,6 +18765,8 @@ type objkt_var_samp_fields {
 order by var_samp() on columns of table "objkt"
 """
 input objkt_var_samp_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -16954,6 +18777,8 @@ input objkt_var_samp_order_by {
 aggregate variance on columns
 """
 type objkt_variance_fields {
+  children_count: Float
+  depth: Float
   iteration: Float
 
   """
@@ -16969,6 +18794,8 @@ type objkt_variance_fields {
 order by variance() on columns of table "objkt"
 """
 input objkt_variance_order_by {
+  children_count: order_by
+  depth: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -17716,6 +19543,71 @@ type offchain_query {
   fetch data from the table: "Featured" using primary key columns
   """
   Featured_by_pk(id: Int!): Featured
+
+  """
+  fetch data from the table: "Library"
+  """
+  Library(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Library_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Library_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Library_bool_exp
+  ): [Library!]!
+
+  """
+  fetch data from the table: "LibraryVersion"
+  """
+  LibraryVersion(
+    """
+    distinct select on columns
+    """
+    distinct_on: [LibraryVersion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [LibraryVersion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: LibraryVersion_bool_exp
+  ): [LibraryVersion!]!
+
+  """
+  fetch data from the table: "Library" using primary key columns
+  """
+  Library_by_pk(id: String!): Library
 
   """
   fetch data from the table: "Media"
@@ -18805,6 +20697,111 @@ type offchain_subscription {
     """
     where: Featured_bool_exp
   ): [Featured!]!
+
+  """
+  fetch data from the table: "Library"
+  """
+  Library(
+    """
+    distinct select on columns
+    """
+    distinct_on: [Library_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [Library_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: Library_bool_exp
+  ): [Library!]!
+
+  """
+  fetch data from the table: "LibraryVersion"
+  """
+  LibraryVersion(
+    """
+    distinct select on columns
+    """
+    distinct_on: [LibraryVersion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [LibraryVersion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: LibraryVersion_bool_exp
+  ): [LibraryVersion!]!
+
+  """
+  fetch data from the table in a streaming manner: "LibraryVersion"
+  """
+  LibraryVersion_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [LibraryVersion_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: LibraryVersion_bool_exp
+  ): [LibraryVersion!]!
+
+  """
+  fetch data from the table: "Library" using primary key columns
+  """
+  Library_by_pk(id: String!): Library
+
+  """
+  fetch data from the table in a streaming manner: "Library"
+  """
+  Library_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [Library_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: Library_bool_exp
+  ): [Library!]!
 
   """
   fetch data from the table: "Media"
@@ -20192,6 +22189,336 @@ type onchain_query {
     """
     where: any_offer_bool_exp
   ): any_offer_aggregate!
+
+  """
+  fetch data from the table: "art_coin"
+  """
+  art_coin(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bool_exp
+  ): [art_coin!]!
+
+  """
+  fetch aggregated fields from the table: "art_coin"
+  """
+  art_coin_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bool_exp
+  ): art_coin_aggregate!
+
+  """
+  fetch data from the table: "art_coin_bonding_trade"
+  """
+  art_coin_bonding_trade(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_bonding_trade_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_bonding_trade_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bonding_trade_bool_exp
+  ): [art_coin_bonding_trade!]!
+
+  """
+  fetch aggregated fields from the table: "art_coin_bonding_trade"
+  """
+  art_coin_bonding_trade_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_bonding_trade_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_bonding_trade_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bonding_trade_bool_exp
+  ): art_coin_bonding_trade_aggregate!
+
+  """
+  fetch data from the table: "art_coin_bonding_trade" using primary key columns
+  """
+  art_coin_bonding_trade_by_pk(id: Int!): art_coin_bonding_trade
+
+  """
+  fetch data from the table: "art_coin" using primary key columns
+  """
+  art_coin_by_pk(id: String!): art_coin
+
+  """
+  fetch data from the table: "art_coin_holding"
+  """
+  art_coin_holding(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): [art_coin_holding!]!
+
+  """
+  fetch aggregated fields from the table: "art_coin_holding"
+  """
+  art_coin_holding_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): art_coin_holding_aggregate!
+
+  """
+  fetch data from the table: "art_coin_holding" using primary key columns
+  """
+  art_coin_holding_by_pk(id: String!): art_coin_holding
+
+  """
+  fetch data from the table: "art_coin_market_stats"
+  """
+  art_coin_market_stats(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_market_stats_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_market_stats_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_bool_exp
+  ): [art_coin_market_stats!]!
+
+  """
+  fetch data from the table: "art_coin_market_stats" using primary key columns
+  """
+  art_coin_market_stats_by_pk(art_coin_id: String!): art_coin_market_stats
+
+  """
+  fetch data from the table: "art_coin_market_stats_history"
+  """
+  art_coin_market_stats_history(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_market_stats_history_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_market_stats_history_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_history_bool_exp
+  ): [art_coin_market_stats_history!]!
+
+  """
+  fetch data from the table: "art_coin_market_stats_history" using primary key columns
+  """
+  art_coin_market_stats_history_by_pk(id: Int!): art_coin_market_stats_history
+
+  """
+  fetch data from the table: "art_coin_market_stats_history_hourly"
+  """
+  art_coin_market_stats_history_hourly(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_market_stats_history_hourly_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_market_stats_history_hourly_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_history_hourly_bool_exp
+  ): [art_coin_market_stats_history_hourly!]!
+
+  """
+  fetch data from the table: "art_coin_transfer"
+  """
+  art_coin_transfer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_transfer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_transfer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_transfer_bool_exp
+  ): [art_coin_transfer!]!
+
+  """
+  fetch data from the table: "art_coin_transfer" using primary key columns
+  """
+  art_coin_transfer_by_pk(id: Int!): art_coin_transfer
 
   """
   fetch data from the table: "article"
@@ -22024,336 +24351,6 @@ type onchain_query {
   split_by_pk(id: Int!): split
 
   """
-  fetch data from the table: "token"
-  """
-  token(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bool_exp
-  ): [token!]!
-
-  """
-  fetch aggregated fields from the table: "token"
-  """
-  token_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bool_exp
-  ): token_aggregate!
-
-  """
-  fetch data from the table: "token_bonding_trade"
-  """
-  token_bonding_trade(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_bonding_trade_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_bonding_trade_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bonding_trade_bool_exp
-  ): [token_bonding_trade!]!
-
-  """
-  fetch aggregated fields from the table: "token_bonding_trade"
-  """
-  token_bonding_trade_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_bonding_trade_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_bonding_trade_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bonding_trade_bool_exp
-  ): token_bonding_trade_aggregate!
-
-  """
-  fetch data from the table: "token_bonding_trade" using primary key columns
-  """
-  token_bonding_trade_by_pk(id: Int!): token_bonding_trade
-
-  """
-  fetch data from the table: "token" using primary key columns
-  """
-  token_by_pk(id: String!): token
-
-  """
-  fetch data from the table: "token_holding"
-  """
-  token_holding(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_holding_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_holding_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): [token_holding!]!
-
-  """
-  fetch aggregated fields from the table: "token_holding"
-  """
-  token_holding_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_holding_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_holding_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): token_holding_aggregate!
-
-  """
-  fetch data from the table: "token_holding" using primary key columns
-  """
-  token_holding_by_pk(id: String!): token_holding
-
-  """
-  fetch data from the table: "token_market_stats"
-  """
-  token_market_stats(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_market_stats_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_market_stats_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_bool_exp
-  ): [token_market_stats!]!
-
-  """
-  fetch data from the table: "token_market_stats" using primary key columns
-  """
-  token_market_stats_by_pk(token_id: String!): token_market_stats
-
-  """
-  fetch data from the table: "token_market_stats_history"
-  """
-  token_market_stats_history(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_market_stats_history_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_market_stats_history_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_history_bool_exp
-  ): [token_market_stats_history!]!
-
-  """
-  fetch data from the table: "token_market_stats_history" using primary key columns
-  """
-  token_market_stats_history_by_pk(id: Int!): token_market_stats_history
-
-  """
-  fetch data from the table: "token_market_stats_history_hourly"
-  """
-  token_market_stats_history_hourly(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_market_stats_history_hourly_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_market_stats_history_hourly_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_history_hourly_bool_exp
-  ): [token_market_stats_history_hourly!]!
-
-  """
-  fetch data from the table: "token_transfer"
-  """
-  token_transfer(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_transfer_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_transfer_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_transfer_bool_exp
-  ): [token_transfer!]!
-
-  """
-  fetch data from the table: "token_transfer" using primary key columns
-  """
-  token_transfer_by_pk(id: Int!): token_transfer
-
-  """
   fetch data from the table: "transaction"
   """
   transaction(
@@ -22759,6 +24756,476 @@ type onchain_subscription {
     """
     where: any_offer_bool_exp
   ): [any_offer!]!
+
+  """
+  fetch data from the table: "art_coin"
+  """
+  art_coin(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bool_exp
+  ): [art_coin!]!
+
+  """
+  fetch aggregated fields from the table: "art_coin"
+  """
+  art_coin_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bool_exp
+  ): art_coin_aggregate!
+
+  """
+  fetch data from the table: "art_coin_bonding_trade"
+  """
+  art_coin_bonding_trade(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_bonding_trade_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_bonding_trade_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bonding_trade_bool_exp
+  ): [art_coin_bonding_trade!]!
+
+  """
+  fetch aggregated fields from the table: "art_coin_bonding_trade"
+  """
+  art_coin_bonding_trade_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_bonding_trade_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_bonding_trade_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bonding_trade_bool_exp
+  ): art_coin_bonding_trade_aggregate!
+
+  """
+  fetch data from the table: "art_coin_bonding_trade" using primary key columns
+  """
+  art_coin_bonding_trade_by_pk(id: Int!): art_coin_bonding_trade
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_bonding_trade"
+  """
+  art_coin_bonding_trade_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_bonding_trade_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bonding_trade_bool_exp
+  ): [art_coin_bonding_trade!]!
+
+  """
+  fetch data from the table: "art_coin" using primary key columns
+  """
+  art_coin_by_pk(id: String!): art_coin
+
+  """
+  fetch data from the table: "art_coin_holding"
+  """
+  art_coin_holding(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): [art_coin_holding!]!
+
+  """
+  fetch aggregated fields from the table: "art_coin_holding"
+  """
+  art_coin_holding_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_holding_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_holding_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): art_coin_holding_aggregate!
+
+  """
+  fetch data from the table: "art_coin_holding" using primary key columns
+  """
+  art_coin_holding_by_pk(id: String!): art_coin_holding
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_holding"
+  """
+  art_coin_holding_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_holding_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_holding_bool_exp
+  ): [art_coin_holding!]!
+
+  """
+  fetch data from the table: "art_coin_market_stats"
+  """
+  art_coin_market_stats(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_market_stats_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_market_stats_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_bool_exp
+  ): [art_coin_market_stats!]!
+
+  """
+  fetch data from the table: "art_coin_market_stats" using primary key columns
+  """
+  art_coin_market_stats_by_pk(art_coin_id: String!): art_coin_market_stats
+
+  """
+  fetch data from the table: "art_coin_market_stats_history"
+  """
+  art_coin_market_stats_history(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_market_stats_history_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_market_stats_history_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_history_bool_exp
+  ): [art_coin_market_stats_history!]!
+
+  """
+  fetch data from the table: "art_coin_market_stats_history" using primary key columns
+  """
+  art_coin_market_stats_history_by_pk(id: Int!): art_coin_market_stats_history
+
+  """
+  fetch data from the table: "art_coin_market_stats_history_hourly"
+  """
+  art_coin_market_stats_history_hourly(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_market_stats_history_hourly_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_market_stats_history_hourly_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_history_hourly_bool_exp
+  ): [art_coin_market_stats_history_hourly!]!
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_market_stats_history_hourly"
+  """
+  art_coin_market_stats_history_hourly_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_market_stats_history_hourly_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_history_hourly_bool_exp
+  ): [art_coin_market_stats_history_hourly!]!
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_market_stats_history"
+  """
+  art_coin_market_stats_history_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_market_stats_history_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_history_bool_exp
+  ): [art_coin_market_stats_history!]!
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_market_stats"
+  """
+  art_coin_market_stats_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_market_stats_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_market_stats_bool_exp
+  ): [art_coin_market_stats!]!
+
+  """
+  fetch data from the table in a streaming manner: "art_coin"
+  """
+  art_coin_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_bool_exp
+  ): [art_coin!]!
+
+  """
+  fetch data from the table: "art_coin_transfer"
+  """
+  art_coin_transfer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_transfer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_transfer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_transfer_bool_exp
+  ): [art_coin_transfer!]!
+
+  """
+  fetch data from the table: "art_coin_transfer" using primary key columns
+  """
+  art_coin_transfer_by_pk(id: Int!): art_coin_transfer
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_transfer"
+  """
+  art_coin_transfer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_transfer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_transfer_bool_exp
+  ): [art_coin_transfer!]!
 
   """
   fetch data from the table: "article"
@@ -25491,476 +27958,6 @@ type onchain_subscription {
   ): [split!]!
 
   """
-  fetch data from the table: "token"
-  """
-  token(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bool_exp
-  ): [token!]!
-
-  """
-  fetch aggregated fields from the table: "token"
-  """
-  token_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bool_exp
-  ): token_aggregate!
-
-  """
-  fetch data from the table: "token_bonding_trade"
-  """
-  token_bonding_trade(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_bonding_trade_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_bonding_trade_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bonding_trade_bool_exp
-  ): [token_bonding_trade!]!
-
-  """
-  fetch aggregated fields from the table: "token_bonding_trade"
-  """
-  token_bonding_trade_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_bonding_trade_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_bonding_trade_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_bonding_trade_bool_exp
-  ): token_bonding_trade_aggregate!
-
-  """
-  fetch data from the table: "token_bonding_trade" using primary key columns
-  """
-  token_bonding_trade_by_pk(id: Int!): token_bonding_trade
-
-  """
-  fetch data from the table in a streaming manner: "token_bonding_trade"
-  """
-  token_bonding_trade_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_bonding_trade_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_bonding_trade_bool_exp
-  ): [token_bonding_trade!]!
-
-  """
-  fetch data from the table: "token" using primary key columns
-  """
-  token_by_pk(id: String!): token
-
-  """
-  fetch data from the table: "token_holding"
-  """
-  token_holding(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_holding_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_holding_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): [token_holding!]!
-
-  """
-  fetch aggregated fields from the table: "token_holding"
-  """
-  token_holding_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_holding_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_holding_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): token_holding_aggregate!
-
-  """
-  fetch data from the table: "token_holding" using primary key columns
-  """
-  token_holding_by_pk(id: String!): token_holding
-
-  """
-  fetch data from the table in a streaming manner: "token_holding"
-  """
-  token_holding_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_holding_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): [token_holding!]!
-
-  """
-  fetch data from the table: "token_market_stats"
-  """
-  token_market_stats(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_market_stats_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_market_stats_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_bool_exp
-  ): [token_market_stats!]!
-
-  """
-  fetch data from the table: "token_market_stats" using primary key columns
-  """
-  token_market_stats_by_pk(token_id: String!): token_market_stats
-
-  """
-  fetch data from the table: "token_market_stats_history"
-  """
-  token_market_stats_history(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_market_stats_history_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_market_stats_history_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_history_bool_exp
-  ): [token_market_stats_history!]!
-
-  """
-  fetch data from the table: "token_market_stats_history" using primary key columns
-  """
-  token_market_stats_history_by_pk(id: Int!): token_market_stats_history
-
-  """
-  fetch data from the table: "token_market_stats_history_hourly"
-  """
-  token_market_stats_history_hourly(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_market_stats_history_hourly_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_market_stats_history_hourly_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_history_hourly_bool_exp
-  ): [token_market_stats_history_hourly!]!
-
-  """
-  fetch data from the table in a streaming manner: "token_market_stats_history_hourly"
-  """
-  token_market_stats_history_hourly_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_market_stats_history_hourly_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_history_hourly_bool_exp
-  ): [token_market_stats_history_hourly!]!
-
-  """
-  fetch data from the table in a streaming manner: "token_market_stats_history"
-  """
-  token_market_stats_history_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_market_stats_history_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_history_bool_exp
-  ): [token_market_stats_history!]!
-
-  """
-  fetch data from the table in a streaming manner: "token_market_stats"
-  """
-  token_market_stats_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_market_stats_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_market_stats_bool_exp
-  ): [token_market_stats!]!
-
-  """
-  fetch data from the table in a streaming manner: "token"
-  """
-  token_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_bool_exp
-  ): [token!]!
-
-  """
-  fetch data from the table: "token_transfer"
-  """
-  token_transfer(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_transfer_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_transfer_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_transfer_bool_exp
-  ): [token_transfer!]!
-
-  """
-  fetch data from the table: "token_transfer" using primary key columns
-  """
-  token_transfer_by_pk(id: Int!): token_transfer
-
-  """
-  fetch data from the table in a streaming manner: "token_transfer"
-  """
-  token_transfer_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [token_transfer_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: token_transfer_bool_exp
-  ): [token_transfer!]!
-
-  """
   fetch data from the table: "transaction"
   """
   transaction(
@@ -27908,1467 +29905,6 @@ input timestamptz_comparison_exp {
   _lte: timestamptz
   _neq: timestamptz
   _nin: [timestamptz!]
-}
-
-"""
-columns and relationships of "token"
-"""
-type token {
-  ascension_progress: float8!
-  author_id: String!
-  created_at: timestamptz!
-  description: String!
-  flag: token_flag_enum!
-  graduated_address: String!
-  graduated_at: timestamptz
-  id: String!
-  metadata_uri: String!
-  name: String!
-  opens_at: timestamptz!
-
-  """
-  An array relationship
-  """
-  projects(
-    """
-    distinct select on columns
-    """
-    distinct_on: [generative_token_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [generative_token_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: generative_token_bool_exp
-  ): [generative_token!]!
-
-  """
-  An aggregate relationship
-  """
-  projects_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [generative_token_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [generative_token_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: generative_token_bool_exp
-  ): generative_token_aggregate!
-  slug: String!
-  supply: numeric!
-  ticker: String!
-
-  """
-  An array relationship
-  """
-  token_holdings(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_holding_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_holding_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): [token_holding!]!
-
-  """
-  An aggregate relationship
-  """
-  token_holdings_aggregate(
-    """
-    distinct select on columns
-    """
-    distinct_on: [token_holding_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [token_holding_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: token_holding_bool_exp
-  ): token_holding_aggregate!
-
-  """
-  An object relationship
-  """
-  token_market_stats: token_market_stats
-
-  """
-  An object relationship
-  """
-  user: user!
-}
-
-"""
-aggregated selection of "token"
-"""
-type token_aggregate {
-  aggregate: token_aggregate_fields
-  nodes: [token!]!
-}
-
-"""
-aggregate fields of "token"
-"""
-type token_aggregate_fields {
-  avg: token_avg_fields
-  count(columns: [token_select_column!], distinct: Boolean): Int!
-  max: token_max_fields
-  min: token_min_fields
-  stddev: token_stddev_fields
-  stddev_pop: token_stddev_pop_fields
-  stddev_samp: token_stddev_samp_fields
-  sum: token_sum_fields
-  var_pop: token_var_pop_fields
-  var_samp: token_var_samp_fields
-  variance: token_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type token_avg_fields {
-  ascension_progress: Float
-  supply: Float
-}
-
-"""
-columns and relationships of "token_bonding_trade"
-"""
-type token_bonding_trade {
-  amount_in: numeric!
-  amount_out: numeric!
-  created_at: timestamptz!
-  id: Int!
-  op_hash: String!
-  price: numeric!
-
-  """
-  An object relationship
-  """
-  token: token!
-  token_id: String!
-  type: token_bonding_trade_type_enum!
-
-  """
-  An object relationship
-  """
-  user: user!
-  user_id: String!
-}
-
-"""
-aggregated selection of "token_bonding_trade"
-"""
-type token_bonding_trade_aggregate {
-  aggregate: token_bonding_trade_aggregate_fields
-  nodes: [token_bonding_trade!]!
-}
-
-"""
-aggregate fields of "token_bonding_trade"
-"""
-type token_bonding_trade_aggregate_fields {
-  avg: token_bonding_trade_avg_fields
-  count(columns: [token_bonding_trade_select_column!], distinct: Boolean): Int!
-  max: token_bonding_trade_max_fields
-  min: token_bonding_trade_min_fields
-  stddev: token_bonding_trade_stddev_fields
-  stddev_pop: token_bonding_trade_stddev_pop_fields
-  stddev_samp: token_bonding_trade_stddev_samp_fields
-  sum: token_bonding_trade_sum_fields
-  var_pop: token_bonding_trade_var_pop_fields
-  var_samp: token_bonding_trade_var_samp_fields
-  variance: token_bonding_trade_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type token_bonding_trade_avg_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-Boolean expression to filter rows from the table "token_bonding_trade". All fields are combined with a logical 'AND'.
-"""
-input token_bonding_trade_bool_exp {
-  _and: [token_bonding_trade_bool_exp!]
-  _not: token_bonding_trade_bool_exp
-  _or: [token_bonding_trade_bool_exp!]
-  amount_in: numeric_comparison_exp
-  amount_out: numeric_comparison_exp
-  created_at: timestamptz_comparison_exp
-  id: Int_comparison_exp
-  op_hash: String_comparison_exp
-  price: numeric_comparison_exp
-  token: token_bool_exp
-  token_id: String_comparison_exp
-  type: token_bonding_trade_type_enum_comparison_exp
-  user: user_bool_exp
-  user_id: String_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type token_bonding_trade_max_fields {
-  amount_in: numeric
-  amount_out: numeric
-  created_at: timestamptz
-  id: Int
-  op_hash: String
-  price: numeric
-  token_id: String
-  type: token_bonding_trade_type_enum
-  user_id: String
-}
-
-"""
-aggregate min on columns
-"""
-type token_bonding_trade_min_fields {
-  amount_in: numeric
-  amount_out: numeric
-  created_at: timestamptz
-  id: Int
-  op_hash: String
-  price: numeric
-  token_id: String
-  type: token_bonding_trade_type_enum
-  user_id: String
-}
-
-"""
-Ordering options when selecting data from "token_bonding_trade".
-"""
-input token_bonding_trade_order_by {
-  amount_in: order_by
-  amount_out: order_by
-  created_at: order_by
-  id: order_by
-  op_hash: order_by
-  price: order_by
-  token: token_order_by
-  token_id: order_by
-  type: order_by
-  user: user_order_by
-  user_id: order_by
-}
-
-"""
-select columns of table "token_bonding_trade"
-"""
-enum token_bonding_trade_select_column {
-  """
-  column name
-  """
-  amount_in
-
-  """
-  column name
-  """
-  amount_out
-
-  """
-  column name
-  """
-  created_at
-
-  """
-  column name
-  """
-  id
-
-  """
-  column name
-  """
-  op_hash
-
-  """
-  column name
-  """
-  price
-
-  """
-  column name
-  """
-  token_id
-
-  """
-  column name
-  """
-  type
-
-  """
-  column name
-  """
-  user_id
-}
-
-"""
-aggregate stddev on columns
-"""
-type token_bonding_trade_stddev_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type token_bonding_trade_stddev_pop_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type token_bonding_trade_stddev_samp_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-Streaming cursor of the table "token_bonding_trade"
-"""
-input token_bonding_trade_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_bonding_trade_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_bonding_trade_stream_cursor_value_input {
-  amount_in: numeric
-  amount_out: numeric
-  created_at: timestamptz
-  id: Int
-  op_hash: String
-  price: numeric
-  token_id: String
-  type: token_bonding_trade_type_enum
-  user_id: String
-}
-
-"""
-aggregate sum on columns
-"""
-type token_bonding_trade_sum_fields {
-  amount_in: numeric
-  amount_out: numeric
-  id: Int
-  price: numeric
-}
-
-scalar token_bonding_trade_type_enum
-
-"""
-Boolean expression to compare columns of type "token_bonding_trade_type_enum". All fields are combined with logical 'AND'.
-"""
-input token_bonding_trade_type_enum_comparison_exp {
-  _eq: token_bonding_trade_type_enum
-  _gt: token_bonding_trade_type_enum
-  _gte: token_bonding_trade_type_enum
-  _in: [token_bonding_trade_type_enum!]
-  _is_null: Boolean
-  _lt: token_bonding_trade_type_enum
-  _lte: token_bonding_trade_type_enum
-  _neq: token_bonding_trade_type_enum
-  _nin: [token_bonding_trade_type_enum!]
-}
-
-"""
-aggregate var_pop on columns
-"""
-type token_bonding_trade_var_pop_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type token_bonding_trade_var_samp_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type token_bonding_trade_variance_fields {
-  amount_in: Float
-  amount_out: Float
-  id: Float
-  price: Float
-}
-
-"""
-Boolean expression to filter rows from the table "token". All fields are combined with a logical 'AND'.
-"""
-input token_bool_exp {
-  _and: [token_bool_exp!]
-  _not: token_bool_exp
-  _or: [token_bool_exp!]
-  ascension_progress: float8_comparison_exp
-  author_id: String_comparison_exp
-  created_at: timestamptz_comparison_exp
-  description: String_comparison_exp
-  flag: token_flag_enum_comparison_exp
-  graduated_address: String_comparison_exp
-  graduated_at: timestamptz_comparison_exp
-  id: String_comparison_exp
-  metadata_uri: String_comparison_exp
-  name: String_comparison_exp
-  opens_at: timestamptz_comparison_exp
-  projects: generative_token_bool_exp
-  projects_aggregate: generative_token_aggregate_bool_exp
-  slug: String_comparison_exp
-  supply: numeric_comparison_exp
-  ticker: String_comparison_exp
-  token_holdings: token_holding_bool_exp
-  token_holdings_aggregate: token_holding_aggregate_bool_exp
-  token_market_stats: token_market_stats_bool_exp
-  user: user_bool_exp
-}
-
-scalar token_flag_enum
-
-"""
-Boolean expression to compare columns of type "token_flag_enum". All fields are combined with logical 'AND'.
-"""
-input token_flag_enum_comparison_exp {
-  _eq: token_flag_enum
-  _gt: token_flag_enum
-  _gte: token_flag_enum
-  _in: [token_flag_enum!]
-  _is_null: Boolean
-  _lt: token_flag_enum
-  _lte: token_flag_enum
-  _neq: token_flag_enum
-  _nin: [token_flag_enum!]
-}
-
-"""
-columns and relationships of "token_holding"
-"""
-type token_holding {
-  amount: numeric!
-  holder_id: String!
-  id: String!
-  token_id: String!
-
-  """
-  An object relationship
-  """
-  user: user!
-}
-
-"""
-aggregated selection of "token_holding"
-"""
-type token_holding_aggregate {
-  aggregate: token_holding_aggregate_fields
-  nodes: [token_holding!]!
-}
-
-input token_holding_aggregate_bool_exp {
-  count: token_holding_aggregate_bool_exp_count
-}
-
-input token_holding_aggregate_bool_exp_count {
-  arguments: [token_holding_select_column!]
-  distinct: Boolean
-  filter: token_holding_bool_exp
-  predicate: Int_comparison_exp!
-}
-
-"""
-aggregate fields of "token_holding"
-"""
-type token_holding_aggregate_fields {
-  avg: token_holding_avg_fields
-  count(columns: [token_holding_select_column!], distinct: Boolean): Int!
-  max: token_holding_max_fields
-  min: token_holding_min_fields
-  stddev: token_holding_stddev_fields
-  stddev_pop: token_holding_stddev_pop_fields
-  stddev_samp: token_holding_stddev_samp_fields
-  sum: token_holding_sum_fields
-  var_pop: token_holding_var_pop_fields
-  var_samp: token_holding_var_samp_fields
-  variance: token_holding_variance_fields
-}
-
-"""
-order by aggregate values of table "token_holding"
-"""
-input token_holding_aggregate_order_by {
-  avg: token_holding_avg_order_by
-  count: order_by
-  max: token_holding_max_order_by
-  min: token_holding_min_order_by
-  stddev: token_holding_stddev_order_by
-  stddev_pop: token_holding_stddev_pop_order_by
-  stddev_samp: token_holding_stddev_samp_order_by
-  sum: token_holding_sum_order_by
-  var_pop: token_holding_var_pop_order_by
-  var_samp: token_holding_var_samp_order_by
-  variance: token_holding_variance_order_by
-}
-
-"""
-aggregate avg on columns
-"""
-type token_holding_avg_fields {
-  amount: Float
-}
-
-"""
-order by avg() on columns of table "token_holding"
-"""
-input token_holding_avg_order_by {
-  amount: order_by
-}
-
-"""
-Boolean expression to filter rows from the table "token_holding". All fields are combined with a logical 'AND'.
-"""
-input token_holding_bool_exp {
-  _and: [token_holding_bool_exp!]
-  _not: token_holding_bool_exp
-  _or: [token_holding_bool_exp!]
-  amount: numeric_comparison_exp
-  holder_id: String_comparison_exp
-  id: String_comparison_exp
-  token_id: String_comparison_exp
-  user: user_bool_exp
-}
-
-"""
-aggregate max on columns
-"""
-type token_holding_max_fields {
-  amount: numeric
-  holder_id: String
-  id: String
-  token_id: String
-}
-
-"""
-order by max() on columns of table "token_holding"
-"""
-input token_holding_max_order_by {
-  amount: order_by
-  holder_id: order_by
-  id: order_by
-  token_id: order_by
-}
-
-"""
-aggregate min on columns
-"""
-type token_holding_min_fields {
-  amount: numeric
-  holder_id: String
-  id: String
-  token_id: String
-}
-
-"""
-order by min() on columns of table "token_holding"
-"""
-input token_holding_min_order_by {
-  amount: order_by
-  holder_id: order_by
-  id: order_by
-  token_id: order_by
-}
-
-"""
-Ordering options when selecting data from "token_holding".
-"""
-input token_holding_order_by {
-  amount: order_by
-  holder_id: order_by
-  id: order_by
-  token_id: order_by
-  user: user_order_by
-}
-
-"""
-select columns of table "token_holding"
-"""
-enum token_holding_select_column {
-  """
-  column name
-  """
-  amount
-
-  """
-  column name
-  """
-  holder_id
-
-  """
-  column name
-  """
-  id
-
-  """
-  column name
-  """
-  token_id
-}
-
-"""
-aggregate stddev on columns
-"""
-type token_holding_stddev_fields {
-  amount: Float
-}
-
-"""
-order by stddev() on columns of table "token_holding"
-"""
-input token_holding_stddev_order_by {
-  amount: order_by
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type token_holding_stddev_pop_fields {
-  amount: Float
-}
-
-"""
-order by stddev_pop() on columns of table "token_holding"
-"""
-input token_holding_stddev_pop_order_by {
-  amount: order_by
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type token_holding_stddev_samp_fields {
-  amount: Float
-}
-
-"""
-order by stddev_samp() on columns of table "token_holding"
-"""
-input token_holding_stddev_samp_order_by {
-  amount: order_by
-}
-
-"""
-Streaming cursor of the table "token_holding"
-"""
-input token_holding_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_holding_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_holding_stream_cursor_value_input {
-  amount: numeric
-  holder_id: String
-  id: String
-  token_id: String
-}
-
-"""
-aggregate sum on columns
-"""
-type token_holding_sum_fields {
-  amount: numeric
-}
-
-"""
-order by sum() on columns of table "token_holding"
-"""
-input token_holding_sum_order_by {
-  amount: order_by
-}
-
-"""
-aggregate var_pop on columns
-"""
-type token_holding_var_pop_fields {
-  amount: Float
-}
-
-"""
-order by var_pop() on columns of table "token_holding"
-"""
-input token_holding_var_pop_order_by {
-  amount: order_by
-}
-
-"""
-aggregate var_samp on columns
-"""
-type token_holding_var_samp_fields {
-  amount: Float
-}
-
-"""
-order by var_samp() on columns of table "token_holding"
-"""
-input token_holding_var_samp_order_by {
-  amount: order_by
-}
-
-"""
-aggregate variance on columns
-"""
-type token_holding_variance_fields {
-  amount: Float
-}
-
-"""
-order by variance() on columns of table "token_holding"
-"""
-input token_holding_variance_order_by {
-  amount: order_by
-}
-
-"""
-columns and relationships of "token_market_stats"
-"""
-type token_market_stats {
-  from: timestamptz
-  market_cap: numeric
-  price: numeric
-  to: timestamptz
-  token_id: String!
-  volume24: numeric
-}
-
-"""
-Boolean expression to filter rows from the table "token_market_stats". All fields are combined with a logical 'AND'.
-"""
-input token_market_stats_bool_exp {
-  _and: [token_market_stats_bool_exp!]
-  _not: token_market_stats_bool_exp
-  _or: [token_market_stats_bool_exp!]
-  from: timestamptz_comparison_exp
-  market_cap: numeric_comparison_exp
-  price: numeric_comparison_exp
-  to: timestamptz_comparison_exp
-  token_id: String_comparison_exp
-  volume24: numeric_comparison_exp
-}
-
-"""
-columns and relationships of "token_market_stats_history"
-"""
-type token_market_stats_history {
-  from: timestamptz!
-  id: Int!
-  market_cap: numeric
-  price: numeric
-  to: timestamptz!
-  token_id: String!
-  volume24: numeric
-}
-
-"""
-Boolean expression to filter rows from the table "token_market_stats_history". All fields are combined with a logical 'AND'.
-"""
-input token_market_stats_history_bool_exp {
-  _and: [token_market_stats_history_bool_exp!]
-  _not: token_market_stats_history_bool_exp
-  _or: [token_market_stats_history_bool_exp!]
-  from: timestamptz_comparison_exp
-  id: Int_comparison_exp
-  market_cap: numeric_comparison_exp
-  price: numeric_comparison_exp
-  to: timestamptz_comparison_exp
-  token_id: String_comparison_exp
-  volume24: numeric_comparison_exp
-}
-
-"""
-columns and relationships of "token_market_stats_history_hourly"
-"""
-type token_market_stats_history_hourly {
-  market_cap: numeric
-  price: numeric
-  timestamp: timestamptz
-  token_id: String
-  volume24: numeric
-}
-
-"""
-Boolean expression to filter rows from the table "token_market_stats_history_hourly". All fields are combined with a logical 'AND'.
-"""
-input token_market_stats_history_hourly_bool_exp {
-  _and: [token_market_stats_history_hourly_bool_exp!]
-  _not: token_market_stats_history_hourly_bool_exp
-  _or: [token_market_stats_history_hourly_bool_exp!]
-  market_cap: numeric_comparison_exp
-  price: numeric_comparison_exp
-  timestamp: timestamptz_comparison_exp
-  token_id: String_comparison_exp
-  volume24: numeric_comparison_exp
-}
-
-"""
-Ordering options when selecting data from "token_market_stats_history_hourly".
-"""
-input token_market_stats_history_hourly_order_by {
-  market_cap: order_by
-  price: order_by
-  timestamp: order_by
-  token_id: order_by
-  volume24: order_by
-}
-
-"""
-select columns of table "token_market_stats_history_hourly"
-"""
-enum token_market_stats_history_hourly_select_column {
-  """
-  column name
-  """
-  market_cap
-
-  """
-  column name
-  """
-  price
-
-  """
-  column name
-  """
-  timestamp
-
-  """
-  column name
-  """
-  token_id
-
-  """
-  column name
-  """
-  volume24
-}
-
-"""
-Streaming cursor of the table "token_market_stats_history_hourly"
-"""
-input token_market_stats_history_hourly_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_market_stats_history_hourly_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_market_stats_history_hourly_stream_cursor_value_input {
-  market_cap: numeric
-  price: numeric
-  timestamp: timestamptz
-  token_id: String
-  volume24: numeric
-}
-
-"""
-Ordering options when selecting data from "token_market_stats_history".
-"""
-input token_market_stats_history_order_by {
-  from: order_by
-  id: order_by
-  market_cap: order_by
-  price: order_by
-  to: order_by
-  token_id: order_by
-  volume24: order_by
-}
-
-"""
-select columns of table "token_market_stats_history"
-"""
-enum token_market_stats_history_select_column {
-  """
-  column name
-  """
-  from
-
-  """
-  column name
-  """
-  id
-
-  """
-  column name
-  """
-  market_cap
-
-  """
-  column name
-  """
-  price
-
-  """
-  column name
-  """
-  to
-
-  """
-  column name
-  """
-  token_id
-
-  """
-  column name
-  """
-  volume24
-}
-
-"""
-Streaming cursor of the table "token_market_stats_history"
-"""
-input token_market_stats_history_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_market_stats_history_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_market_stats_history_stream_cursor_value_input {
-  from: timestamptz
-  id: Int
-  market_cap: numeric
-  price: numeric
-  to: timestamptz
-  token_id: String
-  volume24: numeric
-}
-
-"""
-Ordering options when selecting data from "token_market_stats".
-"""
-input token_market_stats_order_by {
-  from: order_by
-  market_cap: order_by
-  price: order_by
-  to: order_by
-  token_id: order_by
-  volume24: order_by
-}
-
-"""
-select columns of table "token_market_stats"
-"""
-enum token_market_stats_select_column {
-  """
-  column name
-  """
-  from
-
-  """
-  column name
-  """
-  market_cap
-
-  """
-  column name
-  """
-  price
-
-  """
-  column name
-  """
-  to
-
-  """
-  column name
-  """
-  token_id
-
-  """
-  column name
-  """
-  volume24
-}
-
-"""
-Streaming cursor of the table "token_market_stats"
-"""
-input token_market_stats_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_market_stats_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_market_stats_stream_cursor_value_input {
-  from: timestamptz
-  market_cap: numeric
-  price: numeric
-  to: timestamptz
-  token_id: String
-  volume24: numeric
-}
-
-"""
-aggregate max on columns
-"""
-type token_max_fields {
-  ascension_progress: float8
-  author_id: String
-  created_at: timestamptz
-  description: String
-  flag: token_flag_enum
-  graduated_address: String
-  graduated_at: timestamptz
-  id: String
-  metadata_uri: String
-  name: String
-  opens_at: timestamptz
-  slug: String
-  supply: numeric
-  ticker: String
-}
-
-"""
-aggregate min on columns
-"""
-type token_min_fields {
-  ascension_progress: float8
-  author_id: String
-  created_at: timestamptz
-  description: String
-  flag: token_flag_enum
-  graduated_address: String
-  graduated_at: timestamptz
-  id: String
-  metadata_uri: String
-  name: String
-  opens_at: timestamptz
-  slug: String
-  supply: numeric
-  ticker: String
-}
-
-"""
-Ordering options when selecting data from "token".
-"""
-input token_order_by {
-  ascension_progress: order_by
-  author_id: order_by
-  created_at: order_by
-  description: order_by
-  flag: order_by
-  graduated_address: order_by
-  graduated_at: order_by
-  id: order_by
-  metadata_uri: order_by
-  name: order_by
-  opens_at: order_by
-  projects_aggregate: generative_token_aggregate_order_by
-  slug: order_by
-  supply: order_by
-  ticker: order_by
-  token_holdings_aggregate: token_holding_aggregate_order_by
-  token_market_stats: token_market_stats_order_by
-  user: user_order_by
-}
-
-"""
-select columns of table "token"
-"""
-enum token_select_column {
-  """
-  column name
-  """
-  ascension_progress
-
-  """
-  column name
-  """
-  author_id
-
-  """
-  column name
-  """
-  created_at
-
-  """
-  column name
-  """
-  description
-
-  """
-  column name
-  """
-  flag
-
-  """
-  column name
-  """
-  graduated_address
-
-  """
-  column name
-  """
-  graduated_at
-
-  """
-  column name
-  """
-  id
-
-  """
-  column name
-  """
-  metadata_uri
-
-  """
-  column name
-  """
-  name
-
-  """
-  column name
-  """
-  opens_at
-
-  """
-  column name
-  """
-  slug
-
-  """
-  column name
-  """
-  supply
-
-  """
-  column name
-  """
-  ticker
-}
-
-"""
-aggregate stddev on columns
-"""
-type token_stddev_fields {
-  ascension_progress: Float
-  supply: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type token_stddev_pop_fields {
-  ascension_progress: Float
-  supply: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type token_stddev_samp_fields {
-  ascension_progress: Float
-  supply: Float
-}
-
-"""
-Streaming cursor of the table "token"
-"""
-input token_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_stream_cursor_value_input {
-  ascension_progress: float8
-  author_id: String
-  created_at: timestamptz
-  description: String
-  flag: token_flag_enum
-  graduated_address: String
-  graduated_at: timestamptz
-  id: String
-  metadata_uri: String
-  name: String
-  opens_at: timestamptz
-  slug: String
-  supply: numeric
-  ticker: String
-}
-
-"""
-aggregate sum on columns
-"""
-type token_sum_fields {
-  ascension_progress: float8
-  supply: numeric
-}
-
-"""
-columns and relationships of "token_transfer"
-"""
-type token_transfer {
-  amount: numeric!
-  created_at: timestamptz!
-  id: Int!
-  op_hash: String!
-  sender_id: String!
-  target_id: String!
-  token_id: String!
-}
-
-"""
-Boolean expression to filter rows from the table "token_transfer". All fields are combined with a logical 'AND'.
-"""
-input token_transfer_bool_exp {
-  _and: [token_transfer_bool_exp!]
-  _not: token_transfer_bool_exp
-  _or: [token_transfer_bool_exp!]
-  amount: numeric_comparison_exp
-  created_at: timestamptz_comparison_exp
-  id: Int_comparison_exp
-  op_hash: String_comparison_exp
-  sender_id: String_comparison_exp
-  target_id: String_comparison_exp
-  token_id: String_comparison_exp
-}
-
-"""
-Ordering options when selecting data from "token_transfer".
-"""
-input token_transfer_order_by {
-  amount: order_by
-  created_at: order_by
-  id: order_by
-  op_hash: order_by
-  sender_id: order_by
-  target_id: order_by
-  token_id: order_by
-}
-
-"""
-select columns of table "token_transfer"
-"""
-enum token_transfer_select_column {
-  """
-  column name
-  """
-  amount
-
-  """
-  column name
-  """
-  created_at
-
-  """
-  column name
-  """
-  id
-
-  """
-  column name
-  """
-  op_hash
-
-  """
-  column name
-  """
-  sender_id
-
-  """
-  column name
-  """
-  target_id
-
-  """
-  column name
-  """
-  token_id
-}
-
-"""
-Streaming cursor of the table "token_transfer"
-"""
-input token_transfer_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: token_transfer_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input token_transfer_stream_cursor_value_input {
-  amount: numeric
-  created_at: timestamptz
-  id: Int
-  op_hash: String
-  sender_id: String
-  target_id: String
-  token_id: String
-}
-
-"""
-aggregate var_pop on columns
-"""
-type token_var_pop_fields {
-  ascension_progress: Float
-  supply: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type token_var_samp_fields {
-  ascension_progress: Float
-  supply: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type token_variance_fields {
-  ascension_progress: Float
-  supply: Float
 }
 
 """

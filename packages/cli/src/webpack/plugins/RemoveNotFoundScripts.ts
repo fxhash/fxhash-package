@@ -4,14 +4,15 @@ import { JSDOM } from "jsdom"
 import fs from "fs"
 import { format } from "prettier"
 import path from "path"
-import { CWD_PATH } from "../../constants"
+import { CWD_PATH } from "../../constants.js"
 
 export class RemoveEntryJsPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.compilation.tap("RemoveNotFoundScripts", compilation => {
+      //@ts-ignore
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         "RemoveNotFoundScripts",
-        (data, cb) => {
+        async (data: any, cb: any) => {
           // Create a DOM from the generated HTML
           const { window } = new JSDOM(data.html)
 
@@ -24,7 +25,8 @@ export class RemoveEntryJsPlugin {
           const fileExists = (filePath: string) => {
             try {
               return fs.existsSync(filePath)
-            } catch (err) {
+            } catch (err: any) {
+              console.error(err.message)
               return false
             }
           }
@@ -33,7 +35,7 @@ export class RemoveEntryJsPlugin {
           scriptTags.forEach(scriptTag => {
             if (scriptTag.hasAttribute("src")) {
               const scriptSrc = scriptTag.getAttribute("src")
-              const localScriptPath = path.resolve(CWD_PATH, scriptSrc)
+              const localScriptPath = path.resolve(CWD_PATH, scriptSrc || "")
               console.log(localScriptPath)
               if (!fileExists(localScriptPath)) {
                 scriptTag.remove()
@@ -42,7 +44,7 @@ export class RemoveEntryJsPlugin {
           })
 
           // Update the HTML content with the modified DOM
-          data.html = format(window.document.documentElement.outerHTML)
+          data.html = await format(window.document.documentElement.outerHTML)
 
           cb(null, data)
         }

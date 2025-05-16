@@ -2,7 +2,7 @@ import AdmZip from "adm-zip"
 import chalk from "chalk"
 import { rmSync } from "fs"
 import { basename } from "path"
-import { logger } from "../../utils/logger"
+import { logger } from "../../utils/logger.js"
 
 interface ZipperPluginOptions {
   zipPath: string
@@ -15,29 +15,35 @@ interface ZipperPluginOptions {
  * https://webpack.js.org/contribute/writing-a-plugin/
  */
 export class ZipperPlugin {
-  options = null
+  options: ZipperPluginOptions | undefined = undefined
   constructor(options: ZipperPluginOptions) {
-    this.options = options
+    if (options) {
+      this.options = options
+    }
   }
 
-  apply(compiler) {
+  apply(compiler: any) {
     // Specify the event hook to attach to
-    compiler.hooks.done.tapAsync("ZipperPlugin", (stats, callback) => {
-      const zipPath = this.options.zipPath
-      const outputPath = stats.compilation.outputOptions.path
-      rmSync(zipPath, { force: true, recursive: true })
-      const zip = new AdmZip()
-      zip.addLocalFolder(outputPath)
-      zip.toBuffer()
-      zip.writeZip(zipPath)
-      logger.log(chalk.dim(`${zipPath} created`))
-      logger.log(
-        `Upload the ${basename(zipPath)} on ${logger.url(
-          "fxhash.xyz"
-        )} to mint your project.`
-      )
-      rmSync(outputPath, { force: true, recursive: true })
-      callback()
-    })
+    compiler.hooks.done.tapAsync(
+      "ZipperPlugin",
+      (stats: any, callback: any) => {
+        const zipPath = this.options?.zipPath
+        if (!zipPath) throw new Error("No zipPath provided to ZipperPlugin")
+        const outputPath = stats.compilation.outputOptions.path
+        rmSync(zipPath, { force: true, recursive: true })
+        const zip = new AdmZip()
+        zip.addLocalFolder(outputPath)
+        zip.toBuffer()
+        zip.writeZip(zipPath)
+        logger.log(chalk.dim(`${zipPath} created`))
+        logger.log(
+          `Upload the ${basename(zipPath)} on ${logger.url(
+            "fxhash.xyz"
+          )} to mint your project.`
+        )
+        rmSync(outputPath, { force: true, recursive: true })
+        callback()
+      }
+    )
   }
 }

@@ -1,0 +1,54 @@
+{
+  "name": "@fxhash/open-form-graph",
+  "description": "A react-force-graph visualizer for open form collections",
+  "version": "0.0.0",
+  "author": "fxhash",
+  "dependencies": {
+    "d3-force": "3.0.0",
+    "d3-scale": "4.0.2",
+    "d3-scale-chromatic": "3.1.0",
+    "lodash.debounce": "4.0.8",
+    "lodash.throttle": "4.1.1",
+    "react-force-graph-2d": "1.27.1",
+    "react-force-graph-3d": "1.26.1",
+    "three": "0.176.0",
+    "three-spritetext": "1.9.6"
+  },
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/d3-force": "3.0.10",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-scale-chromatic": "3.1.0",
+    "@types/lodash.debounce": "4.0.9",
+    "@types/lodash.throttle": "4.1.1",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@types/three": "0.176.0",
+    "esbuild-css-modules-plugin": "2.7.1",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module"
+}

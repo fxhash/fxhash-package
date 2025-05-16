@@ -1,10 +1,10 @@
 import axios from "axios"
 import path from "path"
 import fs from "fs"
-import { FXSTUDIO_PATH, getTmpPath } from "../../constants"
-import { readLockFile } from "../lockfile"
-import { ModuleUpdater } from "./toolkit"
-import { GHDownloader } from "../ghDownloader"
+import { getTmpPath, FXSTUDIO_PATH } from "../../constants.js"
+import { GHDownloader } from "../ghDownloader.js"
+import { readLockFile } from "../lockfile.js"
+import { ModuleUpdater } from "./toolkit.js"
 
 const ghDownloader = new GHDownloader({})
 

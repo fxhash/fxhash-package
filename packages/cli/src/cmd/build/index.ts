@@ -1,16 +1,13 @@
-import type { CommandModule } from "yargs"
+import type { CommandBuilder, CommandModule } from "yargs"
 import Webpack, { Configuration, Stats, WebpackError } from "webpack"
-import env, { CWD_PATH, WEBPACK_CONFIG_PROD_FILE_NAME } from "../../constants"
-import { createProdConfig } from "../../webpack/webpack.config.prod"
-import { logger } from "../../utils/logger"
-import {
-  isEjectedProject,
-  validateProjectStructure,
-} from "../../validate/index"
+import env, { CWD_PATH, WEBPACK_CONFIG_PROD_FILE_NAME } from "../../constants.js"
 import { existsSync } from "fs"
 import path from "path"
+import { createProdConfig } from "../../webpack/webpack.config.prod.js"
+import { isEjectedProject, validateProjectStructure } from "../../validate/index.js"
+import { logger } from "../../utils/logger.js"
 
-export function commandBuildBuilder(yargs) {
+export const commandBuildBuilder: CommandBuilder = (yargs) => {
   return yargs
     .option("minify", {
       type: "boolean",
@@ -68,7 +65,8 @@ export const commandBuild: CommandModule = {
     }
 
     // instanciate compiler and server
-    const compiler = Webpack(
+    //@ts-ignore
+    Webpack(
       webpackConfig,
       (err: WebpackError, stats: Stats) => {
         if (err || stats.hasErrors()) {
@@ -82,6 +80,7 @@ export const commandBuild: CommandModule = {
 
           if (stats && stats.hasErrors()) {
             const info = stats.toJson()
+            //@ts-ignore
             info.errors.forEach(error => logger.error(error))
           }
         } else {

@@ -51,10 +51,10 @@ export const baseTestnetContracts: IBaseContracts = {
   farcaster_frame_fixed_price_minter_v1:
     "0xB0905f81167bD90ABD5a583E029D27DA77568084",
   fx_token: "0xd89fdcB6c8D107f27CEe4452Ccfb70Dc4F9768a7",
-  fx_airdrop: "0x3be624a86987e70fbf21bd4618e6c06cee0131f1",
-  fx_tez_airdrop: "0x3b4c8052ff6092ba86b0a2983e1aeefbe98d3efb",
-  fx_token_launchpad: "0xC8b352C819B57F0991fAFcEDFdEf241A1950d0E4",
-  fx_project_factory: "0x7e535239AcE186c0d95e89F0c64f57481A987cE5",
+  fx_airdrop: "0x1e4e821216582f0771528b848b4a51c8474be2c7",
+  fx_tez_airdrop: "0x3c2b4c38d37affb023a1d2327af428909eb8a134",
+  fx_token_launchpad: "0x2b4544979786F53F3300136CE4B5B737021E43fB",
+  fx_project_factory: "0x492A2bFa7a821473c1B130EeAB9CcAd530675d93",
 }
 
 export const baseMainnetContracts: IBaseContracts = {

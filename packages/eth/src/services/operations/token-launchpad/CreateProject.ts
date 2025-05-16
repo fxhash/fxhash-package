@@ -19,6 +19,7 @@ export type TTokenLaunchpadCreateProjectEthOperationParams = {
   initialOwner: `0x${string}`
   // The base URI for the project
   baseURI: string
+  mintFee: bigint
   mintInfo: {
     price: bigint
     maxSupply: bigint
@@ -46,6 +47,7 @@ export class TokenLaunchpadCreateProjectEthOperation extends EthereumContractOpe
         this.params.baseURI,
         this.params.mintInfo,
         this.params.tagIds,
+        this.params.mintFee,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),

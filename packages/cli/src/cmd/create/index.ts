@@ -1,12 +1,18 @@
-import type { CommandModule } from "yargs"
-import { simpleTemplate } from "../../templates/simple/index"
-import { writeProjectToDisk } from "../../templates/writer"
-import { logger } from "../../utils/logger"
-import { ejectedTemplate } from "../../templates/ejected/index"
-import { chooseFromPrompt, prompt } from "../../utils/prompts"
+import { type CommandModule } from "yargs"
+import { ejectedTemplate } from "../../templates/ejected/index.js"
+import { simpleTemplate } from "../../templates/simple/index.js"
+import { TemplateFactoryResponse } from "../../templates/types.js"
+import { writeProjectToDisk } from "../../templates/writer.js"
+import { logger } from "../../utils/logger.js"
+import { chooseFromPrompt, prompt } from "../../utils/prompts.js"
+import { openFormTemplate } from "../../templates/openform/index.js"
 
-const TEMPLATE_CHOICES = {
-  "simple (recommended)": simpleTemplate,
+const TEMPLATE_CHOICES: Record<
+  string,
+  (options: { name?: string }) => Promise<TemplateFactoryResponse>
+> = {
+  "open form (NEW)": openFormTemplate,
+  simple: simpleTemplate,
   ejected: ejectedTemplate,
 }
 
@@ -15,6 +21,7 @@ export const commandCreate: CommandModule = {
   describe: "Create a new fx(hash) project",
   handler: async () => {
     const name = await prompt("Project name: ")
+    if (!name) throw new Error("Project name is required")
     if (!/^([\w\d\s#-])+$/.test(name)) {
       logger.error(
         "Project name may only include letters, numbers, spaces, underscores, hashes, and dashes"

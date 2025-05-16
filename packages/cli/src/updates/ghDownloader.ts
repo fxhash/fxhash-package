@@ -19,7 +19,7 @@ async function createDirectories(filepath: string) {
   return mkdir(dir, { recursive: true })
 }
 
-async function output(file) {
+async function output(file: any) {
   await createDirectories(file.path)
   await writeFile(file.path, file.contents)
 }
@@ -27,15 +27,18 @@ async function output(file) {
 export class GHDownloader {
   cache = null
   _octokit = null
-  constructor(options) {
+  constructor(options: any) {
     const cacheOpts = Object.assign({}, defaultCacheOpts, options?.cache)
 
+    // @ts-ignore
     this.cache = new Keyv(cacheOpts)
-
+    // @ts-ignore
     this._octokit = new Octokit(options?.github)
   }
 
+  // @ts-ignore
   async recurseTree(owner, repo, directory, options) {
+    // @ts-ignore
     const { data } = await this._octokit.repos.getContent({
       owner,
       repo,
@@ -43,6 +46,7 @@ export class GHDownloader {
       path: directory,
     })
 
+    // @ts-ignore
     const recurseDirs = data.map(node => {
       if (node.type === "dir") {
         return this.recurseTree(owner, repo, node.path, options)
@@ -57,10 +61,12 @@ export class GHDownloader {
     return Promise.all(recurseDirs).then(nodes => nodes.flat())
   }
 
+  // @ts-ignore
   async getTree(owner, repo, directory, options) {
     const sha = options?.sha
     const cacheKey = sha ? `${owner}/${repo}#${sha}` : `${owner}/${repo}`
 
+    // @ts-ignore
     const cachedTree = await this.cache.get(cacheKey)
     if (cachedTree) {
       return cachedTree
@@ -68,21 +74,28 @@ export class GHDownloader {
 
     const tree = await this.recurseTree(owner, repo, directory, options)
 
+    // @ts-ignore
     await this.cache.set(cacheKey, tree)
 
+    // @ts-ignore
     if (typeof this.cache.save === "function") {
+      // @ts-ignore
       await this.cache.save()
     }
 
     return tree
   }
 
+  // @ts-ignore
   async fetchFiles(owner, repo, directory, options) {
     const tree = await this.getTree(owner, repo, directory, options)
 
     const files = tree
+      // @ts-ignore
       .filter(node => node.path.startsWith(directory) && node.type === "file")
+      // @ts-ignore
       .map(async node => {
+        // @ts-ignore
         const { data } = await this._octokit.git.getBlob({
           owner,
           repo,
@@ -97,10 +110,12 @@ export class GHDownloader {
     return Promise.all(files)
   }
 
+  // @ts-ignore
   async download(owner, repo, directory, options) {
     const files = await this.fetchFiles(owner, repo, directory, options)
     return Promise.all(
       files
+        // @ts-ignore
         .map(file => ({
           ...file,
           path: path.join(options?.output || "", file.path),

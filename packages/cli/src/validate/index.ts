@@ -1,14 +1,14 @@
 import { existsSync, renameSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
-import parse, { HTMLElement } from "node-html-parser"
+import { HTMLElement, parse } from "node-html-parser"
+import { format } from "prettier"
 import {
   CWD_PATH,
   WEBPACK_CONFIG_DEV_FILE_NAME,
   WEBPACK_CONFIG_PROD_FILE_NAME,
-} from "../constants"
-import { getProjectPaths } from "../templates/paths"
-import { format } from "prettier"
-import { logger } from "../utils/logger"
+} from "../constants.js"
+import { getProjectPaths } from "../templates/paths.js"
+import { logger } from "../utils/logger.js"
 
 // Utility function to read and parse HTML
 function readAndParseHtml(filePath: string): Promise<HTMLElement> {
@@ -25,17 +25,14 @@ function readAndParseHtml(filePath: string): Promise<HTMLElement> {
 }
 
 // Utility function to format and write HTML
-function formatAndWriteHtml(root: any, filePath: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    try {
-      const newHtml = root.toString()
-      const pNewHtml = format(newHtml, { parser: "html" })
-      writeFileSync(filePath, pNewHtml)
-      resolve(pNewHtml)
-    } catch (error) {
-      reject(error)
-    }
-  })
+async function formatAndWriteHtml(
+  root: any,
+  filePath: string
+): Promise<string> {
+  const newHtml = root.toString()
+  const pNewHtml = await format(newHtml, { parser: "html" })
+  writeFileSync(filePath, pNewHtml)
+  return pNewHtml
 }
 
 export type ValidProjectSdkFiles = {
@@ -95,7 +92,7 @@ export async function validateProjectStructure(
       const scriptExists = htmlRoot.querySelector(
         `script[src="./${path.basename(fxhashSdkPathOld)}"]`
       )
-      scriptExists.setAttribute("src", `./${path.basename(fxhashSdkPath)}`)
+      scriptExists?.setAttribute("src", `./${path.basename(fxhashSdkPath)}`)
       await formatAndWriteHtml(htmlRoot, htmlEntryPath)
       logger.success("Renamed sdk file and updated script tag in html file")
     }

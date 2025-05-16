@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/sdk",
   "description": "Bundle of all the fxhash low & medium level packages exported as one.",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/client": "workspace:*",
@@ -35,9 +35,7 @@
     "dist"
   ],
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup && tsc --noEmit",

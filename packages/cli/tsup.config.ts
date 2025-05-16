@@ -14,7 +14,7 @@ export default defineConfig((options: Options) => [
       "src/capture.ts",
     ],
     outDir: "dist",
-    format: ["cjs"],
+    format: ["esm"],
     splitting: true,
     sourcemap: true,
     clean: !options.watch,
