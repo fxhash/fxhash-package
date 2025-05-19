@@ -80,9 +80,9 @@ export const baseMainnetContracts: IBaseContracts = {
   moderationSafe: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
   farcaster_frame_fixed_price_minter_v1:
     "0x6e625892C739bFD960671Db5544E260757480725",
-  fx_token: "0xTODO",
-  fx_airdrop: "0xTODO",
-  fx_tez_airdrop: "0xTODO",
+  fx_token: "0x051f39E9815eBeef8965FCe6ff36A93431C28724",
+  fx_airdrop: "0x5c940B78e708D269e0d9b149cAab0B87D33Ee954",
+  fx_tez_airdrop: "0xb1679c0b3589fF9813171403b8fec62C2d24EC6D",
   fx_token_launchpad: "0xTODO",
   fx_project_factory: "0xTODO",
 }
