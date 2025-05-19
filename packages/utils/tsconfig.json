@@ -3,10 +3,12 @@
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "rootDir": "src",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowJs": false,
+    "declaration": true,
+    "isolatedDeclarations": true
   }
 }

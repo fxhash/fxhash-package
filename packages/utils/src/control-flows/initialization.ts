@@ -50,19 +50,19 @@ export function intialization<Err extends Error = any>() {
      * The initialization state. **Note:** while exposed by the API it is not
      * recommended to use this value directly.
      */
-    get state() {
+    get state(): Init {
       return state
     },
     /**
      * Whether the initialization is finished.
      */
-    get finished() {
+    get finished(): boolean {
       return state === Init.FINISHED
     },
     /**
      * Whether the initialization has failed.
      */
-    failed() {
+    failed(): boolean {
       return state === Init.FAILED
     },
     /**
@@ -70,7 +70,7 @@ export function intialization<Err extends Error = any>() {
      * state as failed.
      * @param reason Failure reason
      */
-    fail(reason: Err) {
+    fail(reason: Err): InitializationError<Err> {
       invariant(reason, "a fail reason must be provided")
       state = Init.FAILED
       failReason = new InitializationError(reason)
@@ -79,14 +79,14 @@ export function intialization<Err extends Error = any>() {
     /**
      * The reason of failure, or null if no failure happened.
      */
-    get failReason() {
+    get failReason(): InitializationError<Err> | undefined {
       return failReason
     },
     /**
      * Throws an error if initialization is not finished.
      * @param message Optional message for thrown exception
      */
-    check(message?: string) {
+    check(message?: string): void {
       if (state === Init.FAILED) throw failReason
       invariant(
         state === Init.FINISHED,
@@ -99,7 +99,7 @@ export function intialization<Err extends Error = any>() {
      * module is only designed for only-once initialization processes.
      * @param message Optional message for thrown exception
      */
-    start(message?: string) {
+    start(message?: string): void {
       invariant(
         state === Init.NOT_STARTED,
         message ||
@@ -115,7 +115,7 @@ export function intialization<Err extends Error = any>() {
      * possible to finish an intialization which has started but isn't finished.
      * @param message Optional message for thrown exception
      */
-    finish(message?: string) {
+    finish(message?: string): void {
       invariant(
         state === Init.STARTED,
         message ||
@@ -155,7 +155,10 @@ export class InitializationError<Reason extends Error> extends Error {
  * await initOnce() // throws
  * ```
  */
-export function initOnce(init: Initialization, fn: () => Promise<void>) {
+export function initOnce(
+  init: Initialization,
+  fn: () => Promise<void>
+): () => Promise<void> {
   return async () => {
     try {
       init.start()

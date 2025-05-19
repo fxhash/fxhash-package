@@ -38,7 +38,10 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
    * @returns A function which can be used to remove the event listener which
    * was just set.
    */
-  public on<K extends EventKey<T>>(name: K, fn: EventReceiver<T[K]>) {
+  public on<K extends EventKey<T>>(
+    name: K,
+    fn: EventReceiver<T[K]>
+  ): () => void {
     if (!this._listeners.hasOwnProperty(name)) {
       this._listeners[name] = []
     }
@@ -54,7 +57,7 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
    * @param name Event name
    * @param fn Listener to remove
    */
-  public off<K extends EventKey<T>>(name: K, fn: EventReceiver<T[K]>) {
+  public off<K extends EventKey<T>>(name: K, fn: EventReceiver<T[K]>): void {
     const currentListeners = this._listeners[name]
     if (!currentListeners) return
     const listeners: EventReceiver<T[K]>[] = []
@@ -76,7 +79,7 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
   public async emit<K extends EventKey<T>>(
     name: K,
     ...[payload]: OptionalIfUndefined<T[K]>
-  ) {
+  ): Promise<void> {
     if (this._only && !this._only.includes(name)) return
     if (this._muted[name]) return
     const listeners = this._listeners[name]
@@ -95,7 +98,10 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
    * this emitter emits it.
    * @returns A function to clear the pipe.
    */
-  public pipe<K extends EventKey<T>>(name: K, emitter: EventEmitter<T>) {
+  public pipe<K extends EventKey<T>>(
+    name: K,
+    emitter: EventEmitter<T>
+  ): () => void {
     return this.on(name, payload => emitter.emit(name, payload))
   }
 
@@ -105,7 +111,7 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
    * @param event Event key to be muted
    * @param muted Whether the emitter should be muted or not
    */
-  public mute(event: EventKey<T>, muted: boolean = true) {
+  public mute(event: EventKey<T>, muted: boolean = true): this {
     this._muted[event] = muted
     return this
   }
@@ -118,7 +124,7 @@ export class EventEmitter<T extends EventMap> implements IEventEmitter<T> {
    *
    * @param events A list of the only events which can be emitted
    */
-  public only(...events: EventKey<T>[]) {
+  public only(...events: EventKey<T>[]): this {
     this._only = events
     return this
   }
