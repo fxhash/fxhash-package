@@ -10,8 +10,8 @@ export const DEFAULT_GRAPH_CONFIG: GraphConfig = {
   minZoom: 0.1,
   maxZoom: 10,
   focusPadding: 200,
-  minDagLevelDistance: 80,
-  maxDagLevelDistance: 400,
+  minDagLevelDistance: 20,
+  maxDagLevelDistance: 100,
   theme: {
     light: [255, 255, 255],
     dark: [0, 0, 0],
