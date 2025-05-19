@@ -12,7 +12,7 @@ import {
   logout,
   CredentialsRefreshError,
   AuthenticationError,
-  IStorageDriver,
+  type IStorageDriver,
   generateChallenge,
   WalletDoesntBelongAccountError,
 } from "@/index.js"
@@ -45,7 +45,7 @@ import {
   linkWalletToAccount,
   unlinkWalletFromAccount,
 } from "./actions/linking.js"
-import { TezosWalletManager } from "@fxhash/tez"
+import type { TezosWalletManager } from "@fxhash/tez"
 import { GraphQLErrors, LinkWalletErrors, isErrorOfKind } from "@fxhash/errors"
 
 /**
@@ -332,7 +332,7 @@ export function authWithWallets<AuthError extends IEquatableError>({
         // if we are during the initialization, and wallet doesn't require
         // user input, attempt to automatically connect with the wallet
         if (
-          init.state === Init.STARTED &&
+          init.state() === Init.STARTED &&
           !walletsSource.requirements().userInput
         ) {
           // here events not hooked, so no side-effects triggered
@@ -346,7 +346,7 @@ export function authWithWallets<AuthError extends IEquatableError>({
       // if we are during the initialization, and wallet doesn't belong to
       // the account, disconnect the wallet and propagate the state
       if (consistency.error instanceof WalletDoesntBelongAccountError) {
-        if (init.state === Init.STARTED) {
+        if (init.state() === Init.STARTED) {
           const network = consistency.error.network
           const wallet = walletsSource.getWallet(network)
           if (wallet) {
@@ -455,7 +455,7 @@ export function authWithWallets<AuthError extends IEquatableError>({
     getAccount: _account.get,
     refetchAccount: _account.sync,
     authenticated: () => !!_account.get(),
-    initialized: () => init.finished,
+    initialized: () => init.finished(),
     logoutAccount: _account.logoutAccount,
 
     unlinkWallet: async address => {
