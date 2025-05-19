@@ -17,6 +17,7 @@ export function useGraphNodes() {
     hasNodeChildren,
     config,
     getNodeSize,
+    focusNodes,
   } = useOpenFormGraph()
 
   const { color, colorContrast } = useColor()
@@ -92,6 +93,13 @@ export function useGraphNodes() {
           fill: true,
           fillStyle: color(dim(isDimmed ? 0.1 : 0.2, isLight))(),
         })
+        if (focusNodes.find(n => n.id === node.id)) {
+          circle(ctx, x, y, size + 1, {
+            stroke: true,
+            strokeStyle: color(dim(opacity, isLight))(),
+            fill: false,
+          })
+        }
 
         const showLabel = visibilityScale(node.clusterSize, scale)
 
@@ -123,14 +131,13 @@ export function useGraphNodes() {
           })
         }
         if (node.image) {
-          const PADDING = 0.5
           img(
             ctx,
             node.image,
-            x - (size - PADDING) / 2,
-            y - (size - PADDING) / 2,
-            size - PADDING,
-            size - PADDING,
+            x - size / 2,
+            y - size / 2,
+            size,
+            size,
             1,
             isDimmed ? 0.1 : 1,
             isLight ? "white" : "black"
@@ -142,6 +149,13 @@ export function useGraphNodes() {
           ctx.textAlign = "left"
           ctx.textBaseline = "middle"
           ctx.fillText(node.label, x + config.nodeSize, y)
+        }
+        if (focusNodes.find(n => n.id === node.id)) {
+          circle(ctx, x, y, (size * Math.sqrt(2)) / 2 + 1, {
+            stroke: true,
+            strokeStyle: color(dim(opacity, isLight))(),
+            fill: false,
+          })
         }
       }
     },
@@ -155,6 +169,7 @@ export function useGraphNodes() {
       visibilityScale,
       color,
       getNodeSize,
+      focusNodes,
     ]
   )
   return {

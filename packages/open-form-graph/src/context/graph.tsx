@@ -8,12 +8,16 @@ import {
   useRef,
   useEffect,
 } from "react"
-import { ForceGraphMethods, NodeObject, LinkObject } from "react-force-graph-2d"
+import {
+  type ForceGraphMethods,
+  type NodeObject,
+  type LinkObject,
+} from "react-force-graph-2d"
 import { scaleLinear } from "d3-scale"
 import { GraphConfig, OpenFormGraphApi } from "@/_interfaces"
-import { RawNode, RawLink, Link, GraphData, Node } from "@/_types"
+import { RawNode, RawLink, Link, GraphData, Node, ThemeMode } from "@/_types"
 import { preloadImage } from "@/util/img"
-import { DEFAULT_GRAPH_CONFIG } from "./constants"
+import { DEFAULT_GRAPH_CONFIG, DEFAULT_LAYOUT_CONFIG } from "./constants"
 import { normalize } from "@/util/math"
 import { collectChildren } from "@/util/data"
 
@@ -26,6 +30,7 @@ interface OpenFormGraphProviderProps {
     links: RawLink[]
   }
   rootId: string
+  focusNodes?: RawNode[]
 }
 
 const OpenFormGraphContext = createContext<OpenFormGraphApi | undefined>(
@@ -38,20 +43,15 @@ export function OpenFormGraphProvider({
   data,
   rootId: _rootId,
   children,
+  focusNodes = [],
 }: OpenFormGraphProviderProps) {
   const [rootId, setRootId] = useState<string>(_rootId)
   const [_config, setConfig] = useState<GraphConfig>({
     ...DEFAULT_GRAPH_CONFIG,
     ...config,
   })
-  const [_theme, setTheme] = useState<"dark" | "light">(theme)
-
-  const [layoutConfig, setLayoutConfig] = useState({
-    velocityDecay: 0.33,
-    alphaDecay: 0.17,
-    alphaMin: 0.00005,
-    dagLevelDistance: 100,
-  })
+  const [_theme, setTheme] = useState<ThemeMode>(theme)
+  const [layoutConfig, setLayoutConfig] = useState(DEFAULT_LAYOUT_CONFIG)
   const ref = useRef<
     ForceGraphMethods<NodeObject<Node>, LinkObject<Node, Link>> | undefined
   >()
@@ -430,6 +430,7 @@ export function OpenFormGraphProvider({
     getNodeSize,
     getNodeForce,
     search: breadthFirstSearch,
+    focusNodes: focusNodes,
   }
 
   return (
