@@ -29,8 +29,8 @@
 export function singleton<T, U extends unknown[]>(
   generator: (...args: U) => T,
   warning?: string
-) {
-  let instance: T | null = null
+): (...args: U) => T {
+  const instance: T | null = null
   return (...args: U) => {
     if (instance) {
       if (warning) console.warn(warning)

@@ -28,7 +28,7 @@ type IntervalFn = () => Promise<IntervalFnReturnType> | IntervalFnReturnType
 export async function setIntervalCapped(
   fn: IntervalFn,
   { delay = 0, maxSteps = 20 }: SetIntervalCappedOptions
-) {
+): Promise<void> {
   for (let i = 0; i < maxSteps; i++) {
     if ((await Promise.resolve(fn())) === true) return
     await sleep(delay)
