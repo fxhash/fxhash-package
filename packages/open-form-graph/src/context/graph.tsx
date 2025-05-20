@@ -16,7 +16,6 @@ import {
 import { scaleLinear } from "d3-scale"
 import { GraphConfig, OpenFormGraphApi } from "@/_interfaces"
 import { RawNode, RawLink, Link, GraphData, Node, ThemeMode } from "@/_types"
-import { preloadImage } from "@/util/img"
 import { DEFAULT_GRAPH_CONFIG, DEFAULT_LAYOUT_CONFIG } from "./constants"
 import { normalize } from "@/util/math"
 import { collectChildren } from "@/util/data"
@@ -65,10 +64,6 @@ export function OpenFormGraphProvider({
         childLinks: [],
         level: undefined,
         hide: false,
-      }
-
-      if ("imgSrc" in n && typeof n.imgSrc === "string") {
-        enhancedNode.image = preloadImage(n.imgSrc, ref)
       }
 
       return enhancedNode
