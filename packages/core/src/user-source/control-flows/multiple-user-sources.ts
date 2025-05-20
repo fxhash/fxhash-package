@@ -64,7 +64,7 @@ export function multipleUserSources({
   return {
     emitter,
     activeSource: () => _activeSource,
-    initialized: () => init.finished(),
+    initialized: () => init.finished,
 
     getAccount: () => _activeSource?.getAccount() || null,
     refetchAccount: () => {

@@ -232,7 +232,7 @@ abstract class IframeBDCommShared<
   >
 
   protected _init() {
-    if (this._intialization.finished()) {
+    if (this._intialization.finished) {
       // The <iframe> has already been initialized, but a new instance was
       //  received. The connection will be made with the new instance.`
       this._clean.clear()

@@ -274,7 +274,7 @@ export function createRuntimeController(
   }
 
   return {
-    initialized: () => init.finished(),
+    initialized: () => init.finished,
     init: (iframe: HTMLIFrameElement) => {
       try {
         init.start()

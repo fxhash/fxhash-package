@@ -79,7 +79,7 @@ export function web3AuthWallets({
 
   const source: IWeb3AuthWalletsSource = {
     emitter,
-    initialized: () => _init.finished(),
+    initialized: () => _init.finished,
     getAccount: () => null,
     refetchAccount: () => null,
     supports: network =>
