@@ -163,7 +163,6 @@ export function ClientPlugnPlayProvider({
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
-    onOperationSuccess,
     account: client.source.getAccount(),
     config: _config,
     client,
@@ -211,7 +210,12 @@ export function ClientPlugnPlayProvider({
 
   return (
     <Wrapper config={_config} client={state.client}>
-      <ClientPlugnPlayContext.Provider value={state}>
+      <ClientPlugnPlayContext.Provider
+        value={{
+          ...state,
+          onOperationSuccess,
+        }}
+      >
         {mounted && client.config.wagmi && (
           <ConnectKitDriver
             client={client}
