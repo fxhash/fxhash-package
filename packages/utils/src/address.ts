@@ -15,7 +15,7 @@ export function mockEthereumAddress(): string {
   return `0x${hexString}`
 }
 
-export const mockBaseAddress = mockEthereumAddress
+export const mockBaseAddress: () => string = mockEthereumAddress
 
 export function mockTezosAddress() {
   const randomSequence = Array.from(
@@ -25,7 +25,7 @@ export function mockTezosAddress() {
   return `tz1${randomSequence}`
 }
 
-export function mockBlockchainAddress(chain: Blockchain) {
+export function mockBlockchainAddress(chain: Blockchain): string {
   if (["ETHEREUM", "BASE"].includes(chain)) return mockEthereumAddress()
   return mockTezosAddress()
 }
@@ -47,7 +47,8 @@ export function isEthereumAddressValid(address: string): boolean {
   return /^(0x)?[0-9a-fA-F]{40}$/.test(address)
 }
 
-export const isBaseAddressValid = isEthereumAddressValid
+export const isBaseAddressValid: (address: string) => boolean =
+  isEthereumAddressValid
 
 export function getBlockchainFromAddress(address: string): Blockchain {
   if (isEthereumAddressValid(address)) return "ETHEREUM"
