@@ -113,6 +113,8 @@ export function ClientPlugnPlayProvider({
 
     // check if config has changed: we don't support that
     const configHash = xorshift64(config)
+    console.log("config", JSON.stringify(config))
+    console.log("configHash", configHash)
     if (configChecked.current && configChecked.current !== configHash) {
       throw Error(
         "The fxhash client plugnplay config should never change through the application life."

@@ -2,6 +2,7 @@ import { isRichErrorMessages } from "../../utils/rich-error.js"
 import { IRichErrorMessages, RichError, RichErrorUnion } from "../common.js"
 
 export class WalletAlreadyOtherAccountMainWalletError extends RichError {
+  static readonly errorType = "WalletAlreadyOtherAccountMainWalletError"
   name = "WalletAlreadyOtherAccountMainWalletError" as const
   messages = {
     dev: "Wallet is already the main wallet of another account.",
