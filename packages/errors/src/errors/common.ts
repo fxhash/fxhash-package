@@ -125,7 +125,6 @@ export class RichError extends Error implements IRichError, IEquatableError {
     serialized: IRichErrorSerialized,
     expected: T
   ): RichErrorUnion<T> | UnexpectedRichError {
-    console.log("parse")
     for (const RichErrorClass of expected) {
       const maybeError = new RichErrorClass(serialized.messages)
       if (maybeError.code === serialized.code) {
