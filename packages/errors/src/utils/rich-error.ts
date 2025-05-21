@@ -93,18 +93,14 @@ export function typedRichErrorFromGraphQLError<T extends (typeof RichError)[]>(
   graphQLError: CombinedError,
   expectedErrors: T
 ): WithGqlErrors<InstanceType<T[number]>> {
-  console.log("typedRichErrorFromGraphQLError")
   if (graphQLError.networkError) {
     return new NetworkRichError()
   }
   if (graphQLError.graphQLErrors.length > 0) {
     const gqlError = graphQLError.graphQLErrors[0]
-    console.log(gqlError)
     if (isFxhashErrorExtensions(gqlError.extensions)) {
-      console.log("returning RichError.parse")
       return RichError.parse(gqlError.extensions.richError, expectedErrors)
     }
-    console.log("returning UnexpectedRichError")
     return new UnexpectedRichError()
   }
   return new UnexpectedRichError()

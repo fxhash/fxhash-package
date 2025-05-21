@@ -94,8 +94,6 @@ export class RichError extends Error implements IRichError, IEquatableError {
   }
 
   get code(): string {
-    console.log("rich error code")
-    console.log("this.name", this.name)
     return this.name
   }
 
