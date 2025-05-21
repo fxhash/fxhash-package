@@ -10,6 +10,7 @@ import type { TezosWalletManager } from "@fxhash/tez"
 export class WalletDoesntBelongAccountError<
   Network extends BlockchainNetwork,
 > extends Error {
+  static readonly errorType = "WalletDoesntBelongAccountError"
   network: Network
   name = "WalletDoesntBelongAccountError" as const
   constructor(wallet: IWalletConnected<Network>, network: Network) {
