@@ -12,7 +12,7 @@ import {
   logout,
   CredentialsRefreshError,
   AuthenticationError,
-  IStorageDriver,
+  type IStorageDriver,
   generateChallenge,
   WalletDoesntBelongAccountError,
 } from "@/index.js"
@@ -45,7 +45,7 @@ import {
   linkWalletToAccount,
   unlinkWalletFromAccount,
 } from "./actions/linking.js"
-import { TezosWalletManager } from "@fxhash/tez"
+import type { TezosWalletManager } from "@fxhash/tez"
 import { GraphQLErrors, LinkWalletErrors, isErrorOfKind } from "@fxhash/errors"
 
 /**

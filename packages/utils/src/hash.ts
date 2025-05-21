@@ -34,7 +34,7 @@ export function mockEthereumTransactionHash(): string {
 /**
  * Alias for mockEthereumTransactionHash function because base is eth l2.
  */
-export const mockBaseTransactionHash = mockEthereumTransactionHash
+export const mockBaseTransactionHash: () => string = mockEthereumTransactionHash
 
 /**
  * Generates a mock transaction hash for a given blockchain.
@@ -58,7 +58,8 @@ export function isEthereumTransactionHashValid(hash: string): boolean {
 /**
  * Alias for isEthereumTransactionHashValid function because base is eth l2.
  */
-export const isBaseTransactionHashValid = isEthereumTransactionHashValid
+export const isBaseTransactionHashValid: (hash: string) => boolean =
+  isEthereumTransactionHashValid
 
 /**
  * Validates a Tezos transaction hash.

@@ -7,18 +7,18 @@ import {
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
 import { proxyConnector } from "./connectors.js"
-import { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
+import type { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
 import {
-  FxParamsData,
+  type FxParamsData,
   buildParamsObject,
   deserializeParams,
 } from "@fxhash/params"
 import {
-  IRuntimeContext,
-  IRuntimeController,
+  type IRuntimeContext,
+  type IRuntimeController,
   RuntimeControllerEventEmitter,
-  IRuntimeConnector,
-  ControlsChangedEventPayload,
+  type IRuntimeConnector,
+  type ControlsChangedEventPayload,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import debounce from "lodash.debounce"

@@ -7,10 +7,10 @@ import { BlockchainNetwork, BlockchainNetworks } from "@fxhash/shared"
 import { Web3AuthFrameManager } from "./FrameManager.js"
 import { evmWeb3AuthWallet } from "./utils/evm.js"
 import { tezosWeb3AuthWallet } from "./utils/tezos.js"
-import {
-  type SessionDetails,
-  type IWeb3AuthWalletsSource,
-  type IWeb3AuthWalletUtil,
+import type {
+  SessionDetails,
+  IWeb3AuthWalletsSource,
+  IWeb3AuthWalletUtil,
 } from "./_interfaces.js"
 import { cleanup, intialization } from "@fxhash/utils"
 import { type IGraphqlWrapper, UserSourceEventEmitter } from "@/index.js"

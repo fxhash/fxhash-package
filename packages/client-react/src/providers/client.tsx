@@ -91,7 +91,6 @@ const defaultContext: ClientBasicState = {
   refetchAccount: () => null,
   managers: defaultActiveManagers,
   userError: null,
-  onOperationSuccess: undefined,
 }
 
 export const ClientPlugnPlayContext = createContext(defaultContext)
@@ -104,6 +103,7 @@ export function ClientPlugnPlayProvider({
   config,
   safeDomContainer,
   socialLogin,
+  onOperationSuccess,
 }: PropsWithChildren<IReactClientPlugnPlayProviderProps>) {
   // parse the provided config, verify if it matches requirements and provide
   // default values where missing
@@ -113,6 +113,8 @@ export function ClientPlugnPlayProvider({
 
     // check if config has changed: we don't support that
     const configHash = xorshift64(config)
+    console.log("config", JSON.stringify(config))
+    console.log("configHash", configHash)
     if (configChecked.current && configChecked.current !== configHash) {
       throw Error(
         "The fxhash client plugnplay config should never change through the application life."
@@ -163,7 +165,6 @@ export function ClientPlugnPlayProvider({
 
   const [state, setState] = useState<ClientBasicState>({
     ...defaultContext,
-    onOperationSuccess: config.onOperationSuccess,
     account: client.source.getAccount(),
     config: _config,
     client,
@@ -211,7 +212,12 @@ export function ClientPlugnPlayProvider({
 
   return (
     <Wrapper config={_config} client={state.client}>
-      <ClientPlugnPlayContext.Provider value={state}>
+      <ClientPlugnPlayContext.Provider
+        value={{
+          ...state,
+          onOperationSuccess,
+        }}
+      >
         {mounted && client.config.wagmi && (
           <ConnectKitDriver
             client={client}
