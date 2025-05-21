@@ -20,6 +20,12 @@ export class WalletDoesntBelongAccountError<
   }
 }
 
+export const isWalletDoesntBelongAccountError = (
+  error: any
+): error is WalletDoesntBelongAccountError<BlockchainNetwork> => {
+  return error?.name === WalletDoesntBelongAccountError.name
+}
+
 /**
  * A wallet is connected but there isn't any account authenticated.
  */
