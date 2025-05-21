@@ -186,6 +186,8 @@ export function isErrorOfKind<
       if (isErrorOfKind(error, ...kind)) return true
     } else {
       if (error.name === kind.name) return true
+      // workaround for nextjs minification issue
+      if (error.name === (kind as any).errorType) return true
     }
   }
   return false

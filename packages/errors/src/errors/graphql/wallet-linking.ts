@@ -2,17 +2,12 @@ import { isRichErrorMessages } from "../../utils/rich-error.js"
 import { IRichErrorMessages, RichError, RichErrorUnion } from "../common.js"
 
 export class WalletAlreadyOtherAccountMainWalletError extends RichError {
+  static readonly errorType = "WalletAlreadyOtherAccountMainWalletError"
   name = "WalletAlreadyOtherAccountMainWalletError" as const
   messages = {
     dev: "Wallet is already the main wallet of another account.",
     user: "This wallet is already registered as the main wallet for another account. To link this wallet to your current account, you need to delete the account associated with this wallet first. Please log in to the other account and proceed to delete the account from the profile menu. After this, you can link the wallet to this account.",
   }
-}
-
-export const isWalletAlreadyOtherAccountMainWalletError = (
-  error: any
-): error is WalletAlreadyOtherAccountMainWalletError => {
-  return error?.name === WalletAlreadyOtherAccountMainWalletError.name
 }
 
 export class WalletAlreadyLinkedError extends RichError {
