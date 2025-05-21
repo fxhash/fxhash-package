@@ -251,7 +251,6 @@ export function createClientPlugnPlay({
     emitter,
 
     async connectWallet(network) {
-      console.log("DEBUG: clientPlugNPlay > connectWallet")
       try {
         const wallet = await requestConnection(network)
         return success(wallet as any)
