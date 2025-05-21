@@ -31,8 +31,6 @@ export function richError(params: {
 export function isFxhashErrorExtensions(
   ext: any
 ): ext is IFxhashGraphQLErrorExtensions {
-  console.log("isFxhashErrorExtensions")
-  console.log(ext)
   return typeof ext === "object" && ext.version === "fxhash@0.1.0"
 }
 
