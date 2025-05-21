@@ -11,7 +11,7 @@ export class WalletDoesntBelongAccountError<
   Network extends BlockchainNetwork,
 > extends Error {
   network: Network
-  name = "WalletDoesntBelongAccountError" as const
+  readonly name = "WalletDoesntBelongAccountError"
   constructor(wallet: IWalletConnected<Network>, network: Network) {
     super(
       `The wallet "${wallet.info.address}" doesn't belong to the currently authenticated user.`
