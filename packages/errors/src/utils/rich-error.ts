@@ -191,12 +191,9 @@ export function isErrorOfKind<
     if (Array.isArray(kind)) {
       if (isErrorOfKind(error, ...kind)) return true
     } else {
-      console.log({
-        checking: error.name,
-        against: kind.name,
-        result: error.name === kind.name,
-      })
-      if (error.name === kind.name) return true
+      // @ts-expect-error workaround for nextjs class name minification
+      const maybeInstance = new kind()
+      if (error.name === maybeInstance.name) return true
     }
   }
   return false
