@@ -230,9 +230,10 @@ export function createClientPlugnPlay({
         // on EVM use connectKit, need to bypass call to wallets source
         if (network === BlockchainNetwork.ETHEREUM && _manageConnectKit) {
           await _connectWithConnectKitModal()
+        } else {
+          // otherwise use native requestConnection from SDK
+          await client.walletSources.window.requestConnection(network)
         }
-        // otherwise use native requestConnection from SDK
-        await client.walletSources.window.requestConnection(network)
       } catch (err) {
         reject(err)
       }
@@ -250,6 +251,7 @@ export function createClientPlugnPlay({
     emitter,
 
     async connectWallet(network) {
+      console.log("DEBUG: clientPlugNPlay > connectWallet")
       try {
         const wallet = await requestConnection(network)
         return success(wallet as any)
