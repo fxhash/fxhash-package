@@ -318,16 +318,20 @@ export function authWithWallets<AuthError extends IEquatableError>({
       emitter.emit("user-changed")
     } else {
       if (
-        consistency.error instanceof
-        AccountAuthenticatedButNoWalletConnectedError
+        isErrorOfKind(
+          consistency.error,
+          AccountAuthenticatedButNoWalletConnectedError
+        )
       ) {
         _account.logoutAccount()
         return
       }
 
       if (
-        consistency.error instanceof
-        WalletConnectedButNoAccountAuthenticatedError
+        isErrorOfKind(
+          consistency.error,
+          WalletConnectedButNoAccountAuthenticatedError
+        )
       ) {
         // if we are during the initialization, and wallet doesn't require
         // user input, attempt to automatically connect with the wallet
@@ -345,7 +349,7 @@ export function authWithWallets<AuthError extends IEquatableError>({
 
       // if we are during the initialization, and wallet doesn't belong to
       // the account, disconnect the wallet and propagate the state
-      if (consistency.error instanceof WalletDoesntBelongAccountError) {
+      if (isErrorOfKind(consistency.error, WalletDoesntBelongAccountError)) {
         if (init.state === Init.STARTED) {
           const network = consistency.error.network
           const wallet = walletsSource.getWallet(network)
