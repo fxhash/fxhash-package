@@ -185,6 +185,11 @@ export function isErrorOfKind<
     if (Array.isArray(kind)) {
       if (isErrorOfKind(error, ...kind)) return true
     } else {
+      console.log({
+        checking: error.name,
+        against: kind.name,
+        result: error.name === kind.name,
+      })
       if (error.name === kind.name) return true
     }
   }
