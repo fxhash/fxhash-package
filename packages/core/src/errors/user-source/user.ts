@@ -23,7 +23,7 @@ export class WalletDoesntBelongAccountError<
 export const isWalletDoesntBelongAccountError = (
   error: any
 ): error is WalletDoesntBelongAccountError<BlockchainNetwork> => {
-  return error.name === WalletDoesntBelongAccountError.name
+  return error?.name === WalletDoesntBelongAccountError.name
 }
 
 /**
