@@ -12,6 +12,7 @@ export class WalletAlreadyOtherAccountMainWalletError extends RichError {
 export const isWalletAlreadyOtherAccountMainWalletError = (
   error: any
 ): error is WalletAlreadyOtherAccountMainWalletError => {
+  console.log(WalletAlreadyOtherAccountMainWalletError)
   console.log("received error:")
   console.log(JSON.stringify(error))
   console.log("received name:")

@@ -23,6 +23,7 @@ export class WalletDoesntBelongAccountError<
 export const isWalletDoesntBelongAccountError = (
   error: any
 ): error is WalletDoesntBelongAccountError<BlockchainNetwork> => {
+  console.log(WalletDoesntBelongAccountError)
   console.log("received error:")
   console.log(JSON.stringify(error))
   console.log("received name:")
