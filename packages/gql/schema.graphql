@@ -17685,7 +17685,9 @@ type mutation_root {
   prepare_redemption(input: PrepareRedemptionInput!): PrepareRedemptionOutput!
   refresh(input: RefreshInput!): AuthenticationResult
   request_mint(input: RequestMintInput!): [RequestMintResult!]
-  request_transfer_wallet(input: RequestTransferWalletInput!): RequestTransferWalletOutput!
+  request_transfer_wallet(
+    input: RequestTransferWalletInput!
+  ): RequestTransferWalletOutput!
 
   """
   given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile
