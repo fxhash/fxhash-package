@@ -4754,7 +4754,7 @@ export type Art_Coin = {
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
   created_at: Scalars['timestamptz']['output'];
   description: Scalars['String']['output'];
-  display_uri: Scalars['String']['output'];
+  display_uri?: Maybe<Scalars['String']['output']>;
   flag: Scalars['art_coin_flag_enum']['output'];
   graduated_address: Scalars['String']['output'];
   graduated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -5849,7 +5849,7 @@ export type Article = {
   created_at: Scalars['timestamptz']['output'];
   description: Scalars['String']['output'];
   display_uri: Scalars['String']['output'];
-  editions: Scalars['Int']['output'];
+  editions: Scalars['bigint']['output'];
   flag: Scalars['article_flag_enum']['output'];
   id: Scalars['Int']['output'];
   language: Scalars['String']['output'];
@@ -6094,7 +6094,7 @@ export type Article_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   display_uri?: InputMaybe<String_Comparison_Exp>;
-  editions?: InputMaybe<Int_Comparison_Exp>;
+  editions?: InputMaybe<Bigint_Comparison_Exp>;
   flag?: InputMaybe<Article_Flag_Enum_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   language?: InputMaybe<String_Comparison_Exp>;
@@ -6522,7 +6522,7 @@ export type Article_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   display_uri?: Maybe<Scalars['String']['output']>;
-  editions?: Maybe<Scalars['Int']['output']>;
+  editions?: Maybe<Scalars['bigint']['output']>;
   flag?: Maybe<Scalars['article_flag_enum']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   language?: Maybe<Scalars['String']['output']>;
@@ -6573,7 +6573,7 @@ export type Article_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   display_uri?: Maybe<Scalars['String']['output']>;
-  editions?: Maybe<Scalars['Int']['output']>;
+  editions?: Maybe<Scalars['bigint']['output']>;
   flag?: Maybe<Scalars['article_flag_enum']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   language?: Maybe<Scalars['String']['output']>;
@@ -6923,7 +6923,7 @@ export type Article_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   display_uri?: InputMaybe<Scalars['String']['input']>;
-  editions?: InputMaybe<Scalars['Int']['input']>;
+  editions?: InputMaybe<Scalars['bigint']['input']>;
   flag?: InputMaybe<Scalars['article_flag_enum']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   language?: InputMaybe<Scalars['String']['input']>;
@@ -6945,7 +6945,7 @@ export type Article_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Article_Sum_Fields = {
   __typename?: 'article_sum_fields';
-  editions?: Maybe<Scalars['Int']['output']>;
+  editions?: Maybe<Scalars['bigint']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   royalties?: Maybe<Scalars['Int']['output']>;
 };
@@ -8632,7 +8632,7 @@ export type Generative_Token = {
   id: Scalars['String']['output'];
   input_bytes_size: Scalars['Int']['output'];
   is_frame: Scalars['Boolean']['output'];
-  iterations_count: Scalars['numeric']['output'];
+  iterations_count?: Maybe<Scalars['numeric']['output']>;
   labels: Array<Scalars['Int']['output']>;
   lock_end: Scalars['timestamptz']['output'];
   lock_price_for_reserves: Scalars['Boolean']['output'];
@@ -12878,7 +12878,7 @@ export type Objkt = {
   id: Scalars['String']['output'];
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id: Scalars['String']['output'];
-  iteration: Scalars['Int']['output'];
+  iteration?: Maybe<Scalars['numeric']['output']>;
   /** An array relationship */
   listings: Array<Listing>;
   /** An aggregate relationship */
@@ -13268,7 +13268,7 @@ export type Objkt_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   input_bytes?: InputMaybe<String_Comparison_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
-  iteration?: InputMaybe<Int_Comparison_Exp>;
+  iteration?: InputMaybe<Numeric_Comparison_Exp>;
   listings?: InputMaybe<Listing_Bool_Exp>;
   listings_aggregate?: InputMaybe<Listing_Aggregate_Bool_Exp>;
   media_image?: InputMaybe<Media_Image_Bool_Exp>;
@@ -13314,7 +13314,7 @@ export type Objkt_Max_Fields = {
   id?: Maybe<Scalars['String']['output']>;
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id?: Maybe<Scalars['String']['output']>;
-  iteration?: Maybe<Scalars['Int']['output']>;
+  iteration?: Maybe<Scalars['numeric']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13375,7 +13375,7 @@ export type Objkt_Min_Fields = {
   id?: Maybe<Scalars['String']['output']>;
   input_bytes?: Maybe<Scalars['String']['output']>;
   issuer_id?: Maybe<Scalars['String']['output']>;
-  iteration?: Maybe<Scalars['Int']['output']>;
+  iteration?: Maybe<Scalars['numeric']['output']>;
   metadata_uri?: Maybe<Scalars['String']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13695,7 +13695,7 @@ export type Objkt_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
   issuer_id?: InputMaybe<Scalars['String']['input']>;
-  iteration?: InputMaybe<Scalars['Int']['input']>;
+  iteration?: InputMaybe<Scalars['numeric']['input']>;
   metadata?: InputMaybe<Scalars['json']['input']>;
   metadata_uri?: InputMaybe<Scalars['String']['input']>;
   minter_id?: InputMaybe<Scalars['String']['input']>;
@@ -13718,7 +13718,7 @@ export type Objkt_Sum_Fields = {
   __typename?: 'objkt_sum_fields';
   children_count?: Maybe<Scalars['Int']['output']>;
   depth?: Maybe<Scalars['Int']['output']>;
-  iteration?: Maybe<Scalars['Int']['output']>;
+  iteration?: Maybe<Scalars['numeric']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
   rarity?: Maybe<Scalars['float8']['output']>;

@@ -5463,7 +5463,7 @@ type art_coin {
   capture_media_id: bpchar
   created_at: timestamptz!
   description: String!
-  display_uri: String!
+  display_uri: String
   flag: art_coin_flag_enum!
   graduated_address: String!
   graduated_at: timestamptz
@@ -6742,7 +6742,7 @@ type article {
   created_at: timestamptz!
   description: String!
   display_uri: String!
-  editions: Int!
+  editions: bigint!
   flag: article_flag_enum!
   id: Int!
   language: String!
@@ -6952,7 +6952,7 @@ input article_bool_exp {
   created_at: timestamptz_comparison_exp
   description: String_comparison_exp
   display_uri: String_comparison_exp
-  editions: Int_comparison_exp
+  editions: bigint_comparison_exp
   flag: article_flag_enum_comparison_exp
   id: Int_comparison_exp
   language: String_comparison_exp
@@ -7435,7 +7435,7 @@ type article_max_fields {
   created_at: timestamptz
   description: String
   display_uri: String
-  editions: Int
+  editions: bigint
   flag: article_flag_enum
   id: Int
   language: String
@@ -7487,7 +7487,7 @@ type article_min_fields {
   created_at: timestamptz
   description: String
   display_uri: String
-  editions: Int
+  editions: bigint
   flag: article_flag_enum
   id: Int
   language: String
@@ -7907,7 +7907,7 @@ input article_stream_cursor_value_input {
   created_at: timestamptz
   description: String
   display_uri: String
-  editions: Int
+  editions: bigint
   flag: article_flag_enum
   id: Int
   language: String
@@ -7928,7 +7928,7 @@ input article_stream_cursor_value_input {
 
 """aggregate sum on columns"""
 type article_sum_fields {
-  editions: Int
+  editions: bigint
   id: Int
   royalties: Int
 }
@@ -10100,7 +10100,7 @@ type generative_token {
   id: String!
   input_bytes_size: Int!
   is_frame: Boolean!
-  iterations_count: numeric!
+  iterations_count: numeric
   labels: [Int!]!
   lock_end: timestamptz!
   lock_price_for_reserves: Boolean!
@@ -14822,7 +14822,7 @@ type objkt {
   id: String!
   input_bytes: String
   issuer_id: String!
-  iteration: Int!
+  iteration: numeric
 
   """An array relationship"""
   listings(
@@ -15209,7 +15209,7 @@ input objkt_bool_exp {
   id: String_comparison_exp
   input_bytes: String_comparison_exp
   issuer_id: String_comparison_exp
-  iteration: Int_comparison_exp
+  iteration: numeric_comparison_exp
   listings: listing_bool_exp
   listings_aggregate: listing_aggregate_bool_exp
   media_image: media_image_bool_exp
@@ -15254,7 +15254,7 @@ type objkt_max_fields {
   id: String
   input_bytes: String
   issuer_id: String
-  iteration: Int
+  iteration: numeric
   metadata_uri: String
 
   """
@@ -15319,7 +15319,7 @@ type objkt_min_fields {
   id: String
   input_bytes: String
   issuer_id: String
-  iteration: Int
+  iteration: numeric
   metadata_uri: String
 
   """
@@ -15712,7 +15712,7 @@ input objkt_stream_cursor_value_input {
   id: String
   input_bytes: String
   issuer_id: String
-  iteration: Int
+  iteration: numeric
   metadata: json
   metadata_uri: String
   minter_id: String
@@ -15734,7 +15734,7 @@ input objkt_stream_cursor_value_input {
 type objkt_sum_fields {
   children_count: Int
   depth: Int
-  iteration: Int
+  iteration: numeric
 
   """
   A computed field, executes function "objkt_minted_price"
