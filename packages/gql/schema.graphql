@@ -4370,6 +4370,15 @@ type RequestMintResult {
   hash: String!
 }
 
+input RequestTransferWalletInput {
+  address: String!
+}
+
+type RequestTransferWalletOutput {
+  id: String!
+  text: String!
+}
+
 """
 columns and relationships of "Retrospective"
 """
@@ -4783,6 +4792,11 @@ input String_comparison_exp {
   does the column match the given SQL regular expression
   """
   _similar: String
+}
+
+input TransferWalletInput {
+  id: String!
+  signature: String!
 }
 
 input UnlinkWalletInput {
@@ -17671,6 +17685,7 @@ type mutation_root {
   prepare_redemption(input: PrepareRedemptionInput!): PrepareRedemptionOutput!
   refresh(input: RefreshInput!): AuthenticationResult
   request_mint(input: RequestMintInput!): [RequestMintResult!]
+  request_transfer_wallet(input: RequestTransferWalletInput!): RequestTransferWalletOutput!
 
   """
   given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile
@@ -17683,6 +17698,7 @@ type mutation_root {
   updates the smart contract tied to a consumable
   """
   set_whitelist(whitelist: jsonb!): SetWhitelistOutput
+  transfer_wallet(input: TransferWalletInput!): Boolean!
   unlink_wallet_from_account(input: UnlinkWalletInput): Boolean!
   update_account(input: UpdateAccountInput!): UpdateAccountOutput
 
