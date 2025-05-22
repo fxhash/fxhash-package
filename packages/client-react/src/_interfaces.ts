@@ -47,11 +47,6 @@ export interface IClientPlugnPlayProviderCustomConfig {
    * will need to provide your application ID in here
    */
   web2SignIn?: false | IClientPlugnPlayProviderWeb2SignInOptions
-
-  /**
-   * A callback function that is called when an operation is successful.
-   */
-  onOperationSuccess?: (data: ContractOperationSuccess) => void
 }
 
 export interface IReactClientPlugnPlayConfig
@@ -60,6 +55,11 @@ export interface IReactClientPlugnPlayConfig
 
 export interface IReactClientPlugnPlayProviderProps {
   config: IReactClientPlugnPlayConfig
+
+  /**
+   * A callback function that is called when an operation is successful.
+   */
+  onOperationSuccess?: (data: ContractOperationSuccess) => void
 
   /**
    * Set this key if you want support for login via socials.

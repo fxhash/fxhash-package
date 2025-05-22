@@ -104,6 +104,15 @@ export const Mu_UpdateAccount = graphql(`
   }
 `)
 
+export const Mu_DeleteAccount = graphql(`
+  mutation DeleteAccount {
+    delete_account {
+      id
+      username
+    }
+  }
+`)
+
 /**
  * Sets the farcaster handle for an account's profile.
  */

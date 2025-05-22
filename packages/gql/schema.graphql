@@ -314,6 +314,272 @@ type AccountTokenAllocation {
 }
 
 """
+columns and relationships of "AccountTokenAllocationNonZero"
+"""
+type AccountTokenAllocationNonZero {
+  """
+  An object relationship
+  """
+  account: Account
+  accountId: uuid
+  earnedTotalUsd: numeric
+  monthsActive: Int
+  nbArtistsCollected: bigint
+  nbIterationsMinted: bigint
+  spentTotalUsd: numeric
+  tokenAllocation_sort: numeric
+}
+
+"""
+aggregated selection of "AccountTokenAllocationNonZero"
+"""
+type AccountTokenAllocationNonZero_aggregate {
+  aggregate: AccountTokenAllocationNonZero_aggregate_fields
+  nodes: [AccountTokenAllocationNonZero!]!
+}
+
+"""
+aggregate fields of "AccountTokenAllocationNonZero"
+"""
+type AccountTokenAllocationNonZero_aggregate_fields {
+  avg: AccountTokenAllocationNonZero_avg_fields
+  count(
+    columns: [AccountTokenAllocationNonZero_select_column!]
+    distinct: Boolean
+  ): Int!
+  max: AccountTokenAllocationNonZero_max_fields
+  min: AccountTokenAllocationNonZero_min_fields
+  stddev: AccountTokenAllocationNonZero_stddev_fields
+  stddev_pop: AccountTokenAllocationNonZero_stddev_pop_fields
+  stddev_samp: AccountTokenAllocationNonZero_stddev_samp_fields
+  sum: AccountTokenAllocationNonZero_sum_fields
+  var_pop: AccountTokenAllocationNonZero_var_pop_fields
+  var_samp: AccountTokenAllocationNonZero_var_samp_fields
+  variance: AccountTokenAllocationNonZero_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type AccountTokenAllocationNonZero_avg_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
+Boolean expression to filter rows from the table "AccountTokenAllocationNonZero". All fields are combined with a logical 'AND'.
+"""
+input AccountTokenAllocationNonZero_bool_exp {
+  _and: [AccountTokenAllocationNonZero_bool_exp!]
+  _not: AccountTokenAllocationNonZero_bool_exp
+  _or: [AccountTokenAllocationNonZero_bool_exp!]
+  account: Account_bool_exp
+  accountId: uuid_comparison_exp
+  earnedTotalUsd: numeric_comparison_exp
+  monthsActive: Int_comparison_exp
+  nbArtistsCollected: bigint_comparison_exp
+  nbIterationsMinted: bigint_comparison_exp
+  spentTotalUsd: numeric_comparison_exp
+  tokenAllocation_sort: numeric_comparison_exp
+}
+
+"""
+aggregate max on columns
+"""
+type AccountTokenAllocationNonZero_max_fields {
+  accountId: uuid
+  earnedTotalUsd: numeric
+  monthsActive: Int
+  nbArtistsCollected: bigint
+  nbIterationsMinted: bigint
+  spentTotalUsd: numeric
+  tokenAllocation_sort: numeric
+}
+
+"""
+aggregate min on columns
+"""
+type AccountTokenAllocationNonZero_min_fields {
+  accountId: uuid
+  earnedTotalUsd: numeric
+  monthsActive: Int
+  nbArtistsCollected: bigint
+  nbIterationsMinted: bigint
+  spentTotalUsd: numeric
+  tokenAllocation_sort: numeric
+}
+
+"""
+Ordering options when selecting data from "AccountTokenAllocationNonZero".
+"""
+input AccountTokenAllocationNonZero_order_by {
+  account: Account_order_by
+  accountId: order_by
+  earnedTotalUsd: order_by
+  monthsActive: order_by
+  nbArtistsCollected: order_by
+  nbIterationsMinted: order_by
+  spentTotalUsd: order_by
+  tokenAllocation_sort: order_by
+}
+
+"""
+select columns of table "AccountTokenAllocationNonZero"
+"""
+enum AccountTokenAllocationNonZero_select_column {
+  """
+  column name
+  """
+  accountId
+
+  """
+  column name
+  """
+  earnedTotalUsd
+
+  """
+  column name
+  """
+  monthsActive
+
+  """
+  column name
+  """
+  nbArtistsCollected
+
+  """
+  column name
+  """
+  nbIterationsMinted
+
+  """
+  column name
+  """
+  spentTotalUsd
+
+  """
+  column name
+  """
+  tokenAllocation_sort
+}
+
+"""
+aggregate stddev on columns
+"""
+type AccountTokenAllocationNonZero_stddev_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type AccountTokenAllocationNonZero_stddev_pop_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type AccountTokenAllocationNonZero_stddev_samp_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
+Streaming cursor of the table "AccountTokenAllocationNonZero"
+"""
+input AccountTokenAllocationNonZero_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: AccountTokenAllocationNonZero_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input AccountTokenAllocationNonZero_stream_cursor_value_input {
+  accountId: uuid
+  earnedTotalUsd: numeric
+  monthsActive: Int
+  nbArtistsCollected: bigint
+  nbIterationsMinted: bigint
+  spentTotalUsd: numeric
+  tokenAllocation_sort: numeric
+}
+
+"""
+aggregate sum on columns
+"""
+type AccountTokenAllocationNonZero_sum_fields {
+  earnedTotalUsd: numeric
+  monthsActive: Int
+  nbArtistsCollected: bigint
+  nbIterationsMinted: bigint
+  spentTotalUsd: numeric
+  tokenAllocation_sort: numeric
+}
+
+"""
+aggregate var_pop on columns
+"""
+type AccountTokenAllocationNonZero_var_pop_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type AccountTokenAllocationNonZero_var_samp_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type AccountTokenAllocationNonZero_variance_fields {
+  earnedTotalUsd: Float
+  monthsActive: Float
+  nbArtistsCollected: Float
+  nbIterationsMinted: Float
+  spentTotalUsd: Float
+  tokenAllocation_sort: Float
+}
+
+"""
 aggregated selection of "AccountTokenAllocation"
 """
 type AccountTokenAllocation_aggregate {
@@ -1222,6 +1488,11 @@ input Consumable_stream_cursor_value_input {
   publicDefinition: jsonb
   splits: jsonb
   successInfos: String
+}
+
+type DeleteAccountOutput {
+  id: String!
+  username: String!
 }
 
 enum EWalletOperatorState {
@@ -2961,22 +3232,25 @@ input OnboardingComponent_stream_cursor_value_input {
   id: Int
 }
 
-input OpenGraphInput {
+input OpenFormGraphInput {
+  filterNodeIds: [String]
+  maxDepth: Int
   rootId: String!
 }
 
-type OpenGraphLink {
+type OpenFormGraphLink {
   source: String!
   target: String!
 }
 
-type OpenGraphNode {
+type OpenFormGraphNode {
   id: String!
+  thumbnail_uri: String
 }
 
-type OpenGraphResponse {
-  links: [OpenGraphLink]!
-  nodes: [OpenGraphNode]!
+type OpenFormGraphResponse {
+  links: [OpenFormGraphLink!]!
+  nodes: [OpenFormGraphNode!]!
   rootId: String!
 }
 
@@ -4370,6 +4644,10 @@ input Retrospective_stream_cursor_value_input {
   walletAddress: String
 }
 
+type SearchAccountsOutput {
+  accounts: SearchEntityResult!
+}
+
 type SearchEntity {
   account: SearchEntityAccount
   height: Int
@@ -5082,7 +5360,7 @@ type action {
   """
   An object relationship
   """
-  issuer_wallet_account: foreign_wallet_account
+  issuer_wallet_account: wallet_account
   metadata(
     """
     JSON select path
@@ -5113,7 +5391,7 @@ type action {
   """
   An object relationship
   """
-  target_wallet_account: foreign_wallet_account
+  target_wallet_account: wallet_account
   ticket_id: String
   token_id: String
   type: action_type_enum!
@@ -5208,7 +5486,7 @@ input action_bool_exp {
   id: uuid_comparison_exp
   issuer: user_bool_exp
   issuer_id: String_comparison_exp
-  issuer_wallet_account: foreign_wallet_account_bool_exp
+  issuer_wallet_account: wallet_account_bool_exp
   metadata: jsonb_comparison_exp
   numeric_value: numeric_comparison_exp
   objkt: objkt_bool_exp
@@ -5218,7 +5496,7 @@ input action_bool_exp {
   redeemable_address: String_comparison_exp
   target: user_bool_exp
   target_id: String_comparison_exp
-  target_wallet_account: foreign_wallet_account_bool_exp
+  target_wallet_account: wallet_account_bool_exp
   ticket_id: String_comparison_exp
   token_id: String_comparison_exp
   type: action_type_enum_comparison_exp
@@ -5319,7 +5597,7 @@ input action_order_by {
   id: order_by
   issuer: user_order_by
   issuer_id: order_by
-  issuer_wallet_account: foreign_wallet_account_order_by
+  issuer_wallet_account: wallet_account_order_by
   metadata: order_by
   numeric_value: order_by
   objkt: objkt_order_by
@@ -5329,7 +5607,7 @@ input action_order_by {
   redeemable_address: order_by
   target: user_order_by
   target_id: order_by
-  target_wallet_account: foreign_wallet_account_order_by
+  target_wallet_account: wallet_account_order_by
   ticket_id: order_by
   token_id: order_by
   type: order_by
@@ -8098,7 +8376,7 @@ type article {
   """
   An object relationship
   """
-  wallet_account: foreign_wallet_account
+  wallet_account: wallet_account
 }
 
 """
@@ -8231,7 +8509,7 @@ input article_bool_exp {
   title: String_comparison_exp
   transactions: transaction_bool_exp
   user: user_bool_exp
-  wallet_account: foreign_wallet_account_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 scalar article_flag_enum
@@ -8445,7 +8723,7 @@ type article_ledger {
   """
   An object relationship
   """
-  wallet_account: foreign_wallet_account
+  wallet_account: wallet_account
 }
 
 """
@@ -8529,7 +8807,7 @@ input article_ledger_bool_exp {
   article_id: Int_comparison_exp
   owner_id: String_comparison_exp
   user: user_bool_exp
-  wallet_account: foreign_wallet_account_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 """
@@ -8577,7 +8855,7 @@ input article_ledger_order_by {
   article_id: order_by
   owner_id: order_by
   user: user_order_by
-  wallet_account: foreign_wallet_account_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -8881,7 +9159,7 @@ input article_order_by {
   title: order_by
   transactions_aggregate: transaction_aggregate_order_by
   user: user_order_by
-  wallet_account: foreign_wallet_account_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -10624,7 +10902,7 @@ type collaboration {
   """
   An object relationship
   """
-  wallet_account: foreign_wallet_account
+  wallet_account: wallet_account
 }
 
 """
@@ -10649,7 +10927,7 @@ input collaboration_bool_exp {
   contract: user_bool_exp
   user: user_bool_exp
   userByCollaboratorId: user_bool_exp
-  wallet_account: foreign_wallet_account_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 """
@@ -10678,7 +10956,7 @@ input collaboration_order_by {
   contract: user_order_by
   user: user_order_by
   userByCollaboratorId: user_order_by
-  wallet_account: foreign_wallet_account_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -11133,6 +11411,71 @@ Initial value of the column from where the streaming should start
 input eth_frame_data_stream_cursor_value_input {
   frame_minter_data: jsonb
   id: String
+}
+
+"""
+columns and relationships of "squid_processor.hot_block"
+"""
+type eth_indexer {
+  hash: String!
+  height: Int!
+}
+
+"""
+Boolean expression to filter rows from the table "squid_processor.hot_block". All fields are combined with a logical 'AND'.
+"""
+input eth_indexer_bool_exp {
+  _and: [eth_indexer_bool_exp!]
+  _not: eth_indexer_bool_exp
+  _or: [eth_indexer_bool_exp!]
+  hash: String_comparison_exp
+  height: Int_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "squid_processor.hot_block".
+"""
+input eth_indexer_order_by {
+  hash: order_by
+  height: order_by
+}
+
+"""
+select columns of table "squid_processor.hot_block"
+"""
+enum eth_indexer_select_column {
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  height
+}
+
+"""
+Streaming cursor of the table "eth_indexer"
+"""
+input eth_indexer_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: eth_indexer_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input eth_indexer_stream_cursor_value_input {
+  hash: String
+  height: Int
 }
 
 """
@@ -12409,7 +12752,7 @@ type generative_token {
   """
   An object relationship
   """
-  wallet_account: foreign_wallet_account
+  wallet_account: wallet_account
 }
 
 """
@@ -12587,7 +12930,7 @@ input generative_token_bool_exp {
   updated_at: timestamptz_comparison_exp
   user: user_bool_exp
   version: generative_token_version_comparison_exp
-  wallet_account: foreign_wallet_account_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 """
@@ -13124,7 +13467,7 @@ input generative_token_order_by {
   updated_at: order_by
   user: user_order_by
   version: order_by
-  wallet_account: foreign_wallet_account_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -17338,6 +17681,7 @@ type mutation_root {
   authenticate_web3auth(
     input: AuthenticationWeb3AuthInput!
   ): AuthenticationResult
+  delete_account: DeleteAccountOutput
   generate_challenge(input: ChallengeInput!): ChallengeResult
   link_wallet_to_account(input: LinkWalletInput): Boolean!
 
@@ -17905,7 +18249,7 @@ type objkt {
   """
   An object relationship
   """
-  wallet_account: foreign_wallet_account
+  wallet_account: wallet_account
 }
 
 """
@@ -18138,7 +18482,7 @@ input objkt_bool_exp {
   transactions: transaction_bool_exp
   updated_at: timestamptz_comparison_exp
   version: Int_comparison_exp
-  wallet_account: foreign_wallet_account_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 """
@@ -18326,7 +18670,7 @@ input objkt_order_by {
   transactions_aggregate: transaction_aggregate_order_by
   updated_at: order_by
   version: order_by
-  wallet_account: foreign_wallet_account_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -19243,6 +19587,66 @@ type offchain_query {
     """
     where: AccountTokenAllocation_bool_exp
   ): [AccountTokenAllocation!]!
+
+  """
+  fetch data from the table: "AccountTokenAllocationNonZero"
+  """
+  AccountTokenAllocationNonZero(
+    """
+    distinct select on columns
+    """
+    distinct_on: [AccountTokenAllocationNonZero_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [AccountTokenAllocationNonZero_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: AccountTokenAllocationNonZero_bool_exp
+  ): [AccountTokenAllocationNonZero!]!
+
+  """
+  fetch aggregated fields from the table: "AccountTokenAllocationNonZero"
+  """
+  AccountTokenAllocationNonZero_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [AccountTokenAllocationNonZero_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [AccountTokenAllocationNonZero_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: AccountTokenAllocationNonZero_bool_exp
+  ): AccountTokenAllocationNonZero_aggregate!
 
   """
   fetch aggregated fields from the table: "AccountTokenAllocation"
@@ -20217,6 +20621,86 @@ type offchain_subscription {
     """
     where: AccountTokenAllocation_bool_exp
   ): [AccountTokenAllocation!]!
+
+  """
+  fetch data from the table: "AccountTokenAllocationNonZero"
+  """
+  AccountTokenAllocationNonZero(
+    """
+    distinct select on columns
+    """
+    distinct_on: [AccountTokenAllocationNonZero_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [AccountTokenAllocationNonZero_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: AccountTokenAllocationNonZero_bool_exp
+  ): [AccountTokenAllocationNonZero!]!
+
+  """
+  fetch aggregated fields from the table: "AccountTokenAllocationNonZero"
+  """
+  AccountTokenAllocationNonZero_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [AccountTokenAllocationNonZero_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [AccountTokenAllocationNonZero_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: AccountTokenAllocationNonZero_bool_exp
+  ): AccountTokenAllocationNonZero_aggregate!
+
+  """
+  fetch data from the table in a streaming manner: "AccountTokenAllocationNonZero"
+  """
+  AccountTokenAllocationNonZero_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [AccountTokenAllocationNonZero_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: AccountTokenAllocationNonZero_bool_exp
+  ): [AccountTokenAllocationNonZero!]!
 
   """
   fetch aggregated fields from the table: "AccountTokenAllocation"
@@ -23087,6 +23571,41 @@ type onchain_query {
   eth_frame_data_by_pk(id: String!): eth_frame_data
 
   """
+  fetch data from the table: "squid_processor.hot_block"
+  """
+  eth_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [eth_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [eth_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor.hot_block" using primary key columns
+  """
+  eth_indexer_by_pk(height: Int!): eth_indexer
+
+  """
   fetch data from the table: "eth_minter_proceeds"
   """
   eth_minter_proceeds(
@@ -24465,6 +24984,41 @@ type onchain_query {
   fetch data from the table: "user_stats" using primary key columns
   """
   user_stats_by_pk(user_id: String!): user_stats
+
+  """
+  fetch data from the table: "wallet_account"
+  """
+  wallet_account(
+    """
+    distinct select on columns
+    """
+    distinct_on: [wallet_account_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [wallet_account_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: wallet_account_bool_exp
+  ): [wallet_account!]!
+
+  """
+  fetch data from the table: "wallet_account" using primary key columns
+  """
+  wallet_account_by_pk(address: String!): wallet_account
 }
 
 type onchain_subscription {
@@ -26017,6 +26571,61 @@ type onchain_subscription {
     """
     where: eth_frame_data_bool_exp
   ): [eth_frame_data!]!
+
+  """
+  fetch data from the table: "squid_processor.hot_block"
+  """
+  eth_indexer(
+    """
+    distinct select on columns
+    """
+    distinct_on: [eth_indexer_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [eth_indexer_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
+
+  """
+  fetch data from the table: "squid_processor.hot_block" using primary key columns
+  """
+  eth_indexer_by_pk(height: Int!): eth_indexer
+
+  """
+  fetch data from the table in a streaming manner: "squid_processor.hot_block"
+  """
+  eth_indexer_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [eth_indexer_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: eth_indexer_bool_exp
+  ): [eth_indexer!]!
 
   """
   fetch data from the table: "eth_minter_proceeds"
@@ -28077,6 +28686,61 @@ type onchain_subscription {
     """
     where: user_bool_exp
   ): [user!]!
+
+  """
+  fetch data from the table: "wallet_account"
+  """
+  wallet_account(
+    """
+    distinct select on columns
+    """
+    distinct_on: [wallet_account_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [wallet_account_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: wallet_account_bool_exp
+  ): [wallet_account!]!
+
+  """
+  fetch data from the table: "wallet_account" using primary key columns
+  """
+  wallet_account_by_pk(address: String!): wallet_account
+
+  """
+  fetch data from the table in a streaming manner: "wallet_account"
+  """
+  wallet_account_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [wallet_account_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: wallet_account_bool_exp
+  ): [wallet_account!]!
 }
 
 """
@@ -28572,13 +29236,10 @@ type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
-
-  """
-  Retrieve Open Graph Data
-  """
-  open_form_graph(input: OpenGraphInput!): OpenGraphResponse
+  open_form_graph(input: OpenFormGraphInput): OpenFormGraphResponse
   projectReserves(projectId: String!): [ProjectReserves!]!
   search(input: SearchInput!): SearchOutput!
+  searchAccounts(input: SearchInput!): SearchAccountsOutput!
   walletRpcs: [WalletRpc!]
 }
 
@@ -31128,7 +31789,7 @@ type user {
   """
   An object relationship
   """
-  wallet_account: foreign_wallet_account
+  wallet_account: wallet_account
 }
 
 """
@@ -31195,7 +31856,7 @@ input user_bool_exp {
   type: user_type_enum_comparison_exp
   updated_at: timestamptz_comparison_exp
   user_stat: user_stats_bool_exp
-  wallet_account: foreign_wallet_account_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 scalar user_flag_enum
@@ -31292,7 +31953,7 @@ input user_order_by {
   type: order_by
   updated_at: order_by
   user_stat: user_stats_order_by
-  wallet_account: foreign_wallet_account_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -31656,4 +32317,87 @@ input uuid_comparison_exp {
   _lte: uuid
   _neq: uuid
   _nin: [uuid!]
+}
+
+"""
+columns and relationships of "wallet_account"
+"""
+type wallet_account {
+  account: Account
+  account_id: String!
+  address: String!
+
+  """
+  An object relationship
+  """
+  user: user
+  username: String!
+  wallet: Wallet
+}
+
+"""
+Boolean expression to filter rows from the table "wallet_account". All fields are combined with a logical 'AND'.
+"""
+input wallet_account_bool_exp {
+  _and: [wallet_account_bool_exp!]
+  _not: wallet_account_bool_exp
+  _or: [wallet_account_bool_exp!]
+  account_id: String_comparison_exp
+  address: String_comparison_exp
+  user: user_bool_exp
+  username: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "wallet_account".
+"""
+input wallet_account_order_by {
+  account_id: order_by
+  address: order_by
+  user: user_order_by
+  username: order_by
+}
+
+"""
+select columns of table "wallet_account"
+"""
+enum wallet_account_select_column {
+  """
+  column name
+  """
+  account_id
+
+  """
+  column name
+  """
+  address
+
+  """
+  column name
+  """
+  username
+}
+
+"""
+Streaming cursor of the table "wallet_account"
+"""
+input wallet_account_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: wallet_account_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input wallet_account_stream_cursor_value_input {
+  account_id: String
+  address: String
+  username: String
 }

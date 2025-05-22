@@ -214,6 +214,226 @@ export type AccountTokenAllocation = {
   tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
 };
 
+/** columns and relationships of "AccountTokenAllocationNonZero" */
+export type AccountTokenAllocationNonZero = {
+  __typename?: 'AccountTokenAllocationNonZero';
+  /** An object relationship */
+  account?: Maybe<Account>;
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregated selection of "AccountTokenAllocationNonZero" */
+export type AccountTokenAllocationNonZero_Aggregate = {
+  __typename?: 'AccountTokenAllocationNonZero_aggregate';
+  aggregate?: Maybe<AccountTokenAllocationNonZero_Aggregate_Fields>;
+  nodes: Array<AccountTokenAllocationNonZero>;
+};
+
+/** aggregate fields of "AccountTokenAllocationNonZero" */
+export type AccountTokenAllocationNonZero_Aggregate_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_aggregate_fields';
+  avg?: Maybe<AccountTokenAllocationNonZero_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<AccountTokenAllocationNonZero_Max_Fields>;
+  min?: Maybe<AccountTokenAllocationNonZero_Min_Fields>;
+  stddev?: Maybe<AccountTokenAllocationNonZero_Stddev_Fields>;
+  stddev_pop?: Maybe<AccountTokenAllocationNonZero_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<AccountTokenAllocationNonZero_Stddev_Samp_Fields>;
+  sum?: Maybe<AccountTokenAllocationNonZero_Sum_Fields>;
+  var_pop?: Maybe<AccountTokenAllocationNonZero_Var_Pop_Fields>;
+  var_samp?: Maybe<AccountTokenAllocationNonZero_Var_Samp_Fields>;
+  variance?: Maybe<AccountTokenAllocationNonZero_Variance_Fields>;
+};
+
+
+/** aggregate fields of "AccountTokenAllocationNonZero" */
+export type AccountTokenAllocationNonZero_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<AccountTokenAllocationNonZero_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type AccountTokenAllocationNonZero_Avg_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_avg_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "AccountTokenAllocationNonZero". All fields are combined with a logical 'AND'. */
+export type AccountTokenAllocationNonZero_Bool_Exp = {
+  _and?: InputMaybe<Array<AccountTokenAllocationNonZero_Bool_Exp>>;
+  _not?: InputMaybe<AccountTokenAllocationNonZero_Bool_Exp>;
+  _or?: InputMaybe<Array<AccountTokenAllocationNonZero_Bool_Exp>>;
+  account?: InputMaybe<Account_Bool_Exp>;
+  accountId?: InputMaybe<Uuid_Comparison_Exp>;
+  earnedTotalUsd?: InputMaybe<Numeric_Comparison_Exp>;
+  monthsActive?: InputMaybe<Int_Comparison_Exp>;
+  nbArtistsCollected?: InputMaybe<Bigint_Comparison_Exp>;
+  nbIterationsMinted?: InputMaybe<Bigint_Comparison_Exp>;
+  spentTotalUsd?: InputMaybe<Numeric_Comparison_Exp>;
+  tokenAllocation_sort?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type AccountTokenAllocationNonZero_Max_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_max_fields';
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregate min on columns */
+export type AccountTokenAllocationNonZero_Min_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_min_fields';
+  accountId?: Maybe<Scalars['uuid']['output']>;
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** Ordering options when selecting data from "AccountTokenAllocationNonZero". */
+export type AccountTokenAllocationNonZero_Order_By = {
+  account?: InputMaybe<Account_Order_By>;
+  accountId?: InputMaybe<Order_By>;
+  earnedTotalUsd?: InputMaybe<Order_By>;
+  monthsActive?: InputMaybe<Order_By>;
+  nbArtistsCollected?: InputMaybe<Order_By>;
+  nbIterationsMinted?: InputMaybe<Order_By>;
+  spentTotalUsd?: InputMaybe<Order_By>;
+  tokenAllocation_sort?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "AccountTokenAllocationNonZero" */
+export enum AccountTokenAllocationNonZero_Select_Column {
+  /** column name */
+  AccountId = 'accountId',
+  /** column name */
+  EarnedTotalUsd = 'earnedTotalUsd',
+  /** column name */
+  MonthsActive = 'monthsActive',
+  /** column name */
+  NbArtistsCollected = 'nbArtistsCollected',
+  /** column name */
+  NbIterationsMinted = 'nbIterationsMinted',
+  /** column name */
+  SpentTotalUsd = 'spentTotalUsd',
+  /** column name */
+  TokenAllocationSort = 'tokenAllocation_sort'
+}
+
+/** aggregate stddev on columns */
+export type AccountTokenAllocationNonZero_Stddev_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_stddev_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type AccountTokenAllocationNonZero_Stddev_Pop_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_stddev_pop_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type AccountTokenAllocationNonZero_Stddev_Samp_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_stddev_samp_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "AccountTokenAllocationNonZero" */
+export type AccountTokenAllocationNonZero_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: AccountTokenAllocationNonZero_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type AccountTokenAllocationNonZero_Stream_Cursor_Value_Input = {
+  accountId?: InputMaybe<Scalars['uuid']['input']>;
+  earnedTotalUsd?: InputMaybe<Scalars['numeric']['input']>;
+  monthsActive?: InputMaybe<Scalars['Int']['input']>;
+  nbArtistsCollected?: InputMaybe<Scalars['bigint']['input']>;
+  nbIterationsMinted?: InputMaybe<Scalars['bigint']['input']>;
+  spentTotalUsd?: InputMaybe<Scalars['numeric']['input']>;
+  tokenAllocation_sort?: InputMaybe<Scalars['numeric']['input']>;
+};
+
+/** aggregate sum on columns */
+export type AccountTokenAllocationNonZero_Sum_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_sum_fields';
+  earnedTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  monthsActive?: Maybe<Scalars['Int']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['bigint']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['bigint']['output']>;
+  spentTotalUsd?: Maybe<Scalars['numeric']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregate var_pop on columns */
+export type AccountTokenAllocationNonZero_Var_Pop_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_var_pop_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type AccountTokenAllocationNonZero_Var_Samp_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_var_samp_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type AccountTokenAllocationNonZero_Variance_Fields = {
+  __typename?: 'AccountTokenAllocationNonZero_variance_fields';
+  earnedTotalUsd?: Maybe<Scalars['Float']['output']>;
+  monthsActive?: Maybe<Scalars['Float']['output']>;
+  nbArtistsCollected?: Maybe<Scalars['Float']['output']>;
+  nbIterationsMinted?: Maybe<Scalars['Float']['output']>;
+  spentTotalUsd?: Maybe<Scalars['Float']['output']>;
+  tokenAllocation_sort?: Maybe<Scalars['Float']['output']>;
+};
+
 /** aggregated selection of "AccountTokenAllocation" */
 export type AccountTokenAllocation_Aggregate = {
   __typename?: 'AccountTokenAllocation_aggregate';
@@ -899,6 +1119,12 @@ export type Consumable_Stream_Cursor_Value_Input = {
   publicDefinition?: InputMaybe<Scalars['jsonb']['input']>;
   splits?: InputMaybe<Scalars['jsonb']['input']>;
   successInfos?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type DeleteAccountOutput = {
+  __typename?: 'DeleteAccountOutput';
+  id: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 export enum EWalletOperatorState {
@@ -2125,25 +2351,28 @@ export type OnboardingComponent_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type OpenGraphInput = {
+export type OpenFormGraphInput = {
+  filterNodeIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  maxDepth?: InputMaybe<Scalars['Int']['input']>;
   rootId: Scalars['String']['input'];
 };
 
-export type OpenGraphLink = {
-  __typename?: 'OpenGraphLink';
+export type OpenFormGraphLink = {
+  __typename?: 'OpenFormGraphLink';
   source: Scalars['String']['output'];
   target: Scalars['String']['output'];
 };
 
-export type OpenGraphNode = {
-  __typename?: 'OpenGraphNode';
+export type OpenFormGraphNode = {
+  __typename?: 'OpenFormGraphNode';
   id: Scalars['String']['output'];
+  thumbnail_uri?: Maybe<Scalars['String']['output']>;
 };
 
-export type OpenGraphResponse = {
-  __typename?: 'OpenGraphResponse';
-  links: Array<Maybe<OpenGraphLink>>;
-  nodes: Array<Maybe<OpenGraphNode>>;
+export type OpenFormGraphResponse = {
+  __typename?: 'OpenFormGraphResponse';
+  links: Array<OpenFormGraphLink>;
+  nodes: Array<OpenFormGraphNode>;
   rootId: Scalars['String']['output'];
 };
 
@@ -3085,6 +3314,11 @@ export type Retrospective_Stream_Cursor_Value_Input = {
   walletAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type SearchAccountsOutput = {
+  __typename?: 'SearchAccountsOutput';
+  accounts: SearchEntityResult;
+};
+
 export type SearchEntity = {
   __typename?: 'SearchEntity';
   account?: Maybe<SearchEntityAccount>;
@@ -3595,7 +3829,7 @@ export type Action = {
   issuer?: Maybe<User>;
   issuer_id?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
-  issuer_wallet_account?: Maybe<Foreign_Wallet_Account>;
+  issuer_wallet_account?: Maybe<Wallet_Account>;
   metadata?: Maybe<Scalars['jsonb']['output']>;
   numeric_value?: Maybe<Scalars['numeric']['output']>;
   /** An object relationship */
@@ -3609,7 +3843,7 @@ export type Action = {
   target?: Maybe<User>;
   target_id?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
-  target_wallet_account?: Maybe<Foreign_Wallet_Account>;
+  target_wallet_account?: Maybe<Wallet_Account>;
   ticket_id?: Maybe<Scalars['String']['output']>;
   token_id?: Maybe<Scalars['String']['output']>;
   type: Scalars['action_type_enum']['output'];
@@ -3705,7 +3939,7 @@ export type Action_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   issuer?: InputMaybe<User_Bool_Exp>;
   issuer_id?: InputMaybe<String_Comparison_Exp>;
-  issuer_wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  issuer_wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
   numeric_value?: InputMaybe<Numeric_Comparison_Exp>;
   objkt?: InputMaybe<Objkt_Bool_Exp>;
@@ -3715,7 +3949,7 @@ export type Action_Bool_Exp = {
   redeemable_address?: InputMaybe<String_Comparison_Exp>;
   target?: InputMaybe<User_Bool_Exp>;
   target_id?: InputMaybe<String_Comparison_Exp>;
-  target_wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  target_wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
   ticket_id?: InputMaybe<String_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
   type?: InputMaybe<Action_Type_Enum_Comparison_Exp>;
@@ -3802,7 +4036,7 @@ export type Action_Order_By = {
   id?: InputMaybe<Order_By>;
   issuer?: InputMaybe<User_Order_By>;
   issuer_id?: InputMaybe<Order_By>;
-  issuer_wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  issuer_wallet_account?: InputMaybe<Wallet_Account_Order_By>;
   metadata?: InputMaybe<Order_By>;
   numeric_value?: InputMaybe<Order_By>;
   objkt?: InputMaybe<Objkt_Order_By>;
@@ -3812,7 +4046,7 @@ export type Action_Order_By = {
   redeemable_address?: InputMaybe<Order_By>;
   target?: InputMaybe<User_Order_By>;
   target_id?: InputMaybe<Order_By>;
-  target_wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  target_wallet_account?: InputMaybe<Wallet_Account_Order_By>;
   ticket_id?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
@@ -5657,7 +5891,7 @@ export type Article = {
   /** An object relationship */
   user: User;
   /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 
@@ -5894,7 +6128,7 @@ export type Article_Bool_Exp = {
   title?: InputMaybe<String_Comparison_Exp>;
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "article_flag_enum". All fields are combined with logical 'AND'. */
@@ -6048,7 +6282,7 @@ export type Article_Ledger = {
   /** An object relationship */
   user: User;
   /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 /** aggregated selection of "article_ledger" */
@@ -6130,7 +6364,7 @@ export type Article_Ledger_Bool_Exp = {
   article_id?: InputMaybe<Int_Comparison_Exp>;
   owner_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -6170,7 +6404,7 @@ export type Article_Ledger_Order_By = {
   article_id?: InputMaybe<Order_By>;
   owner_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** select columns of table "article_ledger" */
@@ -6426,7 +6660,7 @@ export type Article_Order_By = {
   title?: InputMaybe<Order_By>;
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   user?: InputMaybe<User_Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** columns and relationships of "article_revision" */
@@ -7611,7 +7845,7 @@ export type Collaboration = {
   /** An object relationship */
   userByCollaboratorId: User;
   /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 /** order by aggregate values of table "collaboration" */
@@ -7632,7 +7866,7 @@ export type Collaboration_Bool_Exp = {
   contract?: InputMaybe<User_Bool_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   userByCollaboratorId?: InputMaybe<User_Bool_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** order by max() on columns of table "collaboration" */
@@ -7655,7 +7889,7 @@ export type Collaboration_Order_By = {
   contract?: InputMaybe<User_Order_By>;
   user?: InputMaybe<User_Order_By>;
   userByCollaboratorId?: InputMaybe<User_Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** select columns of table "collaboration" */
@@ -7982,6 +8216,50 @@ export type Eth_Frame_Data_Stream_Cursor_Input = {
 export type Eth_Frame_Data_Stream_Cursor_Value_Input = {
   frame_minter_data?: InputMaybe<Scalars['jsonb']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** columns and relationships of "squid_processor.hot_block" */
+export type Eth_Indexer = {
+  __typename?: 'eth_indexer';
+  hash: Scalars['String']['output'];
+  height: Scalars['Int']['output'];
+};
+
+/** Boolean expression to filter rows from the table "squid_processor.hot_block". All fields are combined with a logical 'AND'. */
+export type Eth_Indexer_Bool_Exp = {
+  _and?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
+  _not?: InputMaybe<Eth_Indexer_Bool_Exp>;
+  _or?: InputMaybe<Array<Eth_Indexer_Bool_Exp>>;
+  hash?: InputMaybe<String_Comparison_Exp>;
+  height?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "squid_processor.hot_block". */
+export type Eth_Indexer_Order_By = {
+  hash?: InputMaybe<Order_By>;
+  height?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "squid_processor.hot_block" */
+export enum Eth_Indexer_Select_Column {
+  /** column name */
+  Hash = 'hash',
+  /** column name */
+  Height = 'height'
+}
+
+/** Streaming cursor of the table "eth_indexer" */
+export type Eth_Indexer_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Eth_Indexer_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Eth_Indexer_Stream_Cursor_Value_Input = {
+  hash?: InputMaybe<Scalars['String']['input']>;
+  height?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** columns and relationships of "eth_minter_proceeds" */
@@ -8426,7 +8704,7 @@ export type Generative_Token = {
   user?: Maybe<User>;
   version: Scalars['generative_token_version']['output'];
   /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 
@@ -8838,7 +9116,7 @@ export type Generative_Token_Bool_Exp = {
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** columns and relationships of "generative_token_collected" */
@@ -9294,7 +9572,7 @@ export type Generative_Token_Order_By = {
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** select columns of table "generative_token" */
@@ -12414,6 +12692,7 @@ export type Mutation_Root = {
   authenticate?: Maybe<AuthenticationResult>;
   /** Authenticate using a Web3Auth idToken */
   authenticate_web3auth?: Maybe<AuthenticationResult>;
+  delete_account?: Maybe<DeleteAccountOutput>;
   generate_challenge?: Maybe<ChallengeResult>;
   link_wallet_to_account: Scalars['Boolean']['output'];
   /** Logout the current logged in user. For cookie sessions, no need to pass any input. */
@@ -12638,7 +12917,7 @@ export type Objkt = {
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
   version: Scalars['Int']['output'];
   /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 
@@ -13014,7 +13293,7 @@ export type Objkt_Bool_Exp = {
   transactions?: InputMaybe<Transaction_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   version?: InputMaybe<Int_Comparison_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -13188,7 +13467,7 @@ export type Objkt_Order_By = {
   transactions_aggregate?: InputMaybe<Transaction_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** select columns of table "objkt" */
@@ -13693,6 +13972,10 @@ export type Offchain_Query = {
   AccountRole_by_pk?: Maybe<AccountRole>;
   /** fetch data from the table: "AccountTokenAllocation" */
   AccountTokenAllocation: Array<AccountTokenAllocation>;
+  /** fetch data from the table: "AccountTokenAllocationNonZero" */
+  AccountTokenAllocationNonZero: Array<AccountTokenAllocationNonZero>;
+  /** fetch aggregated fields from the table: "AccountTokenAllocationNonZero" */
+  AccountTokenAllocationNonZero_aggregate: AccountTokenAllocationNonZero_Aggregate;
   /** fetch aggregated fields from the table: "AccountTokenAllocation" */
   AccountTokenAllocation_aggregate: AccountTokenAllocation_Aggregate;
   /** fetch aggregated fields from the table: "Account" */
@@ -13813,6 +14096,24 @@ export type Offchain_QueryAccountTokenAllocationArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<AccountTokenAllocation_Order_By>>;
   where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
+};
+
+
+export type Offchain_QueryAccountTokenAllocationNonZeroArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocationNonZero_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocationNonZero_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocationNonZero_Bool_Exp>;
+};
+
+
+export type Offchain_QueryAccountTokenAllocationNonZero_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocationNonZero_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocationNonZero_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocationNonZero_Bool_Exp>;
 };
 
 
@@ -14151,6 +14452,12 @@ export type Offchain_Subscription = {
   AccountRole_stream: Array<AccountRole>;
   /** fetch data from the table: "AccountTokenAllocation" */
   AccountTokenAllocation: Array<AccountTokenAllocation>;
+  /** fetch data from the table: "AccountTokenAllocationNonZero" */
+  AccountTokenAllocationNonZero: Array<AccountTokenAllocationNonZero>;
+  /** fetch aggregated fields from the table: "AccountTokenAllocationNonZero" */
+  AccountTokenAllocationNonZero_aggregate: AccountTokenAllocationNonZero_Aggregate;
+  /** fetch data from the table in a streaming manner: "AccountTokenAllocationNonZero" */
+  AccountTokenAllocationNonZero_stream: Array<AccountTokenAllocationNonZero>;
   /** fetch aggregated fields from the table: "AccountTokenAllocation" */
   AccountTokenAllocation_aggregate: AccountTokenAllocation_Aggregate;
   /** fetch data from the table in a streaming manner: "AccountTokenAllocation" */
@@ -14326,6 +14633,31 @@ export type Offchain_SubscriptionAccountTokenAllocationArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<AccountTokenAllocation_Order_By>>;
   where?: InputMaybe<AccountTokenAllocation_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountTokenAllocationNonZeroArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocationNonZero_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocationNonZero_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocationNonZero_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountTokenAllocationNonZero_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<AccountTokenAllocationNonZero_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<AccountTokenAllocationNonZero_Order_By>>;
+  where?: InputMaybe<AccountTokenAllocationNonZero_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionAccountTokenAllocationNonZero_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<AccountTokenAllocationNonZero_Stream_Cursor_Input>>;
+  where?: InputMaybe<AccountTokenAllocationNonZero_Bool_Exp>;
 };
 
 
@@ -15293,6 +15625,10 @@ export type Onchain_Query = {
   eth_frame_data: Array<Eth_Frame_Data>;
   /** fetch data from the table: "eth_frame_data" using primary key columns */
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
+  /** fetch data from the table: "squid_processor.hot_block" */
+  eth_indexer: Array<Eth_Indexer>;
+  /** fetch data from the table: "squid_processor.hot_block" using primary key columns */
+  eth_indexer_by_pk?: Maybe<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
   /** fetch data from the table: "eth_minter_proceeds" using primary key columns */
@@ -15435,6 +15771,10 @@ export type Onchain_Query = {
   user_stats: Array<User_Stats>;
   /** fetch data from the table: "user_stats" using primary key columns */
   user_stats_by_pk?: Maybe<User_Stats>;
+  /** fetch data from the table: "wallet_account" */
+  wallet_account: Array<Wallet_Account>;
+  /** fetch data from the table: "wallet_account" using primary key columns */
+  wallet_account_by_pk?: Maybe<Wallet_Account>;
 };
 
 
@@ -15831,6 +16171,20 @@ export type Onchain_QueryEth_Frame_DataArgs = {
 
 export type Onchain_QueryEth_Frame_Data_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type Onchain_QueryEth_IndexerArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Indexer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Indexer_Order_By>>;
+  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
+};
+
+
+export type Onchain_QueryEth_Indexer_By_PkArgs = {
+  height: Scalars['Int']['input'];
 };
 
 
@@ -16354,6 +16708,20 @@ export type Onchain_QueryUser_Stats_By_PkArgs = {
   user_id: Scalars['String']['input'];
 };
 
+
+export type Onchain_QueryWallet_AccountArgs = {
+  distinct_on?: InputMaybe<Array<Wallet_Account_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Wallet_Account_Order_By>>;
+  where?: InputMaybe<Wallet_Account_Bool_Exp>;
+};
+
+
+export type Onchain_QueryWallet_Account_By_PkArgs = {
+  address: Scalars['String']['input'];
+};
+
 export type Onchain_Subscription = {
   __typename?: 'onchain_subscription';
   /** fetch data from the table: "action" */
@@ -16508,6 +16876,12 @@ export type Onchain_Subscription = {
   eth_frame_data_by_pk?: Maybe<Eth_Frame_Data>;
   /** fetch data from the table in a streaming manner: "eth_frame_data" */
   eth_frame_data_stream: Array<Eth_Frame_Data>;
+  /** fetch data from the table: "squid_processor.hot_block" */
+  eth_indexer: Array<Eth_Indexer>;
+  /** fetch data from the table: "squid_processor.hot_block" using primary key columns */
+  eth_indexer_by_pk?: Maybe<Eth_Indexer>;
+  /** fetch data from the table in a streaming manner: "squid_processor.hot_block" */
+  eth_indexer_stream: Array<Eth_Indexer>;
   /** fetch data from the table: "eth_minter_proceeds" */
   eth_minter_proceeds: Array<Eth_Minter_Proceeds>;
   /** fetch data from the table: "eth_minter_proceeds" using primary key columns */
@@ -16718,6 +17092,12 @@ export type Onchain_Subscription = {
   user_stats_stream: Array<User_Stats>;
   /** fetch data from the table in a streaming manner: "user" */
   user_stream: Array<User>;
+  /** fetch data from the table: "wallet_account" */
+  wallet_account: Array<Wallet_Account>;
+  /** fetch data from the table: "wallet_account" using primary key columns */
+  wallet_account_by_pk?: Maybe<Wallet_Account>;
+  /** fetch data from the table in a streaming manner: "wallet_account" */
+  wallet_account_stream: Array<Wallet_Account>;
 };
 
 
@@ -17282,6 +17662,27 @@ export type Onchain_SubscriptionEth_Frame_Data_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Eth_Frame_Data_Stream_Cursor_Input>>;
   where?: InputMaybe<Eth_Frame_Data_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_IndexerArgs = {
+  distinct_on?: InputMaybe<Array<Eth_Indexer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Eth_Indexer_Order_By>>;
+  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionEth_Indexer_By_PkArgs = {
+  height: Scalars['Int']['input'];
+};
+
+
+export type Onchain_SubscriptionEth_Indexer_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Eth_Indexer_Stream_Cursor_Input>>;
+  where?: InputMaybe<Eth_Indexer_Bool_Exp>;
 };
 
 
@@ -18043,6 +18444,27 @@ export type Onchain_SubscriptionUser_StreamArgs = {
   where?: InputMaybe<User_Bool_Exp>;
 };
 
+
+export type Onchain_SubscriptionWallet_AccountArgs = {
+  distinct_on?: InputMaybe<Array<Wallet_Account_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Wallet_Account_Order_By>>;
+  where?: InputMaybe<Wallet_Account_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionWallet_Account_By_PkArgs = {
+  address: Scalars['String']['input'];
+};
+
+
+export type Onchain_SubscriptionWallet_Account_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Wallet_Account_Stream_Cursor_Input>>;
+  where?: InputMaybe<Wallet_Account_Bool_Exp>;
+};
+
 /** column ordering options */
 export enum Order_By {
   /** in ascending order, nulls last */
@@ -18392,10 +18814,10 @@ export type Query_Root = {
   mediaFullUrl: Scalars['String']['output'];
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
-  /** Retrieve Open Graph Data */
-  open_form_graph?: Maybe<OpenGraphResponse>;
+  open_form_graph?: Maybe<OpenFormGraphResponse>;
   projectReserves: Array<ProjectReserves>;
   search: SearchOutput;
+  searchAccounts: SearchAccountsOutput;
   walletRpcs?: Maybe<Array<WalletRpc>>;
 };
 
@@ -18416,7 +18838,7 @@ export type Query_RootMediaFullUrlArgs = {
 
 
 export type Query_RootOpen_Form_GraphArgs = {
-  input: OpenGraphInput;
+  input?: InputMaybe<OpenFormGraphInput>;
 };
 
 
@@ -18426,6 +18848,11 @@ export type Query_RootProjectReservesArgs = {
 
 
 export type Query_RootSearchArgs = {
+  input: SearchInput;
+};
+
+
+export type Query_RootSearchAccountsArgs = {
   input: SearchInput;
 };
 
@@ -19623,7 +20050,7 @@ export type User = {
   user_stat?: Maybe<User_Stats>;
   wallet?: Maybe<Wallet>;
   /** An object relationship */
-  wallet_account?: Maybe<Foreign_Wallet_Account>;
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 
@@ -20002,7 +20429,7 @@ export type User_Bool_Exp = {
   type?: InputMaybe<User_Type_Enum_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user_stat?: InputMaybe<User_Stats_Bool_Exp>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "user_flag_enum". All fields are combined with logical 'AND'. */
@@ -20089,7 +20516,7 @@ export type User_Order_By = {
   type?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   user_stat?: InputMaybe<User_Stats_Order_By>;
-  wallet_account?: InputMaybe<Foreign_Wallet_Account_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** select columns of table "user" */
@@ -20323,6 +20750,62 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']['input']>>;
 };
 
+/** columns and relationships of "wallet_account" */
+export type Wallet_Account = {
+  __typename?: 'wallet_account';
+  account?: Maybe<Account>;
+  account_id: Scalars['String']['output'];
+  address: Scalars['String']['output'];
+  /** An object relationship */
+  user?: Maybe<User>;
+  username: Scalars['String']['output'];
+  wallet?: Maybe<Wallet>;
+};
+
+/** Boolean expression to filter rows from the table "wallet_account". All fields are combined with a logical 'AND'. */
+export type Wallet_Account_Bool_Exp = {
+  _and?: InputMaybe<Array<Wallet_Account_Bool_Exp>>;
+  _not?: InputMaybe<Wallet_Account_Bool_Exp>;
+  _or?: InputMaybe<Array<Wallet_Account_Bool_Exp>>;
+  account_id?: InputMaybe<String_Comparison_Exp>;
+  address?: InputMaybe<String_Comparison_Exp>;
+  user?: InputMaybe<User_Bool_Exp>;
+  username?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "wallet_account". */
+export type Wallet_Account_Order_By = {
+  account_id?: InputMaybe<Order_By>;
+  address?: InputMaybe<Order_By>;
+  user?: InputMaybe<User_Order_By>;
+  username?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "wallet_account" */
+export enum Wallet_Account_Select_Column {
+  /** column name */
+  AccountId = 'account_id',
+  /** column name */
+  Address = 'address',
+  /** column name */
+  Username = 'username'
+}
+
+/** Streaming cursor of the table "wallet_account" */
+export type Wallet_Account_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Wallet_Account_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Wallet_Account_Stream_Cursor_Value_Input = {
+  account_id?: InputMaybe<Scalars['String']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateWhitelistMutationVariables = Exact<{
   whitelist: Scalars['jsonb']['input'];
 }>;
@@ -20415,6 +20898,11 @@ export type UpdateAccountMutationVariables = Exact<{
 
 
 export type UpdateAccountMutation = { __typename?: 'mutation_root', update_account?: { __typename?: 'UpdateAccountOutput', id: string, username: string, profile?: { __typename?: 'UpdateProfileOutput', picture?: string | null, description?: string | null, website?: string | null, location?: string | null } | null } | null };
+
+export type DeleteAccountMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteAccountMutation = { __typename?: 'mutation_root', delete_account?: { __typename?: 'DeleteAccountOutput', id: string, username: string } | null };
 
 export type SetFarcasterHandleMutationVariables = Exact<{
   input: SetFarcasterHandleInput;
@@ -20637,6 +21125,7 @@ export const GetAccountsDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GetAccountWalletsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccountWallets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Account_bool_exp"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_Wallets"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_Wallets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mainWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetAccountWalletsQuery, GetAccountWalletsQueryVariables>;
 export const GetMyAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMyAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"UserAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_Wallets"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_Wallets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mainWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}}]} as unknown as DocumentNode<GetMyAccountQuery, GetMyAccountQueryVariables>;
 export const UpdateAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAccount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAccountInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateAccountMutation, UpdateAccountMutationVariables>;
+export const DeleteAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]} as unknown as DocumentNode<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const SetFarcasterHandleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SetFarcasterHandle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SetFarcasterHandleInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"set_farcaster_handle"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]} as unknown as DocumentNode<SetFarcasterHandleMutation, SetFarcasterHandleMutationVariables>;
 export const AirdropTezClaimDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AirdropTezClaim"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AirdropTezClaimInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airdrop_tez_claim"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signature"}}]}}]}}]} as unknown as DocumentNode<AirdropTezClaimMutation, AirdropTezClaimMutationVariables>;
 export const Get_LibrariesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Get_Libraries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Library"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"license"}},{"kind":"Field","name":{"kind":"Name","value":"versions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"onchfsPointer"}},{"kind":"Field","name":{"kind":"Name","value":"content"}}]}},{"kind":"Field","name":{"kind":"Name","value":"authors"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"docUrl"}}]}}]}}]}}]} as unknown as DocumentNode<Get_LibrariesQuery, Get_LibrariesQueryVariables>;

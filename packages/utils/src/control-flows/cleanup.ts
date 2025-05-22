@@ -16,7 +16,10 @@ type Cleaner = () => void
  * clean.clear()
  * ```
  */
-export function cleanup() {
+export function cleanup(): {
+  add: (...cleaners: Cleaner[]) => number
+  clear: () => void
+} {
   const _toClean: Cleaner[] = []
   return {
     add: (...cleaners: Cleaner[]) => _toClean.push(...cleaners),
