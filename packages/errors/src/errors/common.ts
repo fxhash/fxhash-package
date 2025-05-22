@@ -127,11 +127,6 @@ export class RichError extends Error implements IRichError, IEquatableError {
   ): RichErrorUnion<T> | UnexpectedRichError {
     for (const RichErrorClass of expected) {
       const maybeError = new RichErrorClass(serialized.messages)
-      console.log({
-        checking: maybeError.code,
-        against: serialized.code,
-        result: maybeError.code === serialized.code,
-      })
       if (maybeError.code === serialized.code) {
         return maybeError as InstanceType<T[number]>
       }

@@ -417,18 +417,6 @@ export function authWithWallets<AuthError extends IEquatableError>({
               throw linkResult.error
             }
           } catch (error: any) {
-            console.log("checking whether")
-            console.log(error)
-            console.log("is in:")
-            console.log([
-              [
-                PendingSigningRequestError,
-                UserRejectedError,
-                WalletConnectionError,
-              ],
-              LinkWalletErrors,
-              GraphQLErrors,
-            ])
             if (
               isErrorOfKind(
                 error,
@@ -441,13 +429,11 @@ export function authWithWallets<AuthError extends IEquatableError>({
                 GraphQLErrors
               )
             ) {
-              console.log("emitting error")
               emitter.emit("error", { error })
             }
             await walletsSource.disconnectWallet(walletChanged.network)
             return
           } finally {
-            console.log("syncing account")
             // this will emit "account-changed"
             await _account.sync()
           }
