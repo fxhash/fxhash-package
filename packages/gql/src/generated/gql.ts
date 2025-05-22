@@ -30,6 +30,7 @@ type Documents = {
     "\n  query GetMyAccount {\n    offchain {\n      UserAccount {\n        account {\n          ...Account_BaseDetails\n          ...Account_Wallets\n        }\n      }\n    }\n  }\n": typeof types.GetMyAccountDocument,
     "\n  mutation UpdateAccount($input: UpdateAccountInput!) {\n    update_account(input: $input) {\n      id\n      username\n      profile {\n        picture\n        description\n        website\n        location\n      }\n    }\n  }\n": typeof types.UpdateAccountDocument,
     "\n  mutation DeleteAccount {\n    delete_account {\n      id\n      username\n    }\n  }\n": typeof types.DeleteAccountDocument,
+    "\n  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {\n    request_transfer_wallet(input: $input) {\n      id\n      text\n    }\n  }\n": typeof types.RequestTransferWalletDocument,
     "\n  mutation TransferWallet($input: TransferWalletInput!) {\n    transfer_wallet(input: $input)\n  }\n": typeof types.TransferWalletDocument,
     "\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n": typeof types.SetFarcasterHandleDocument,
     "\n  mutation AirdropTezClaim($input: AirdropTezClaimInput!) {\n    airdrop_tez_claim(input: $input) {\n      signature\n    }\n  }\n": typeof types.AirdropTezClaimDocument,
@@ -83,6 +84,7 @@ const documents: Documents = {
     "\n  query GetMyAccount {\n    offchain {\n      UserAccount {\n        account {\n          ...Account_BaseDetails\n          ...Account_Wallets\n        }\n      }\n    }\n  }\n": types.GetMyAccountDocument,
     "\n  mutation UpdateAccount($input: UpdateAccountInput!) {\n    update_account(input: $input) {\n      id\n      username\n      profile {\n        picture\n        description\n        website\n        location\n      }\n    }\n  }\n": types.UpdateAccountDocument,
     "\n  mutation DeleteAccount {\n    delete_account {\n      id\n      username\n    }\n  }\n": types.DeleteAccountDocument,
+    "\n  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {\n    request_transfer_wallet(input: $input) {\n      id\n      text\n    }\n  }\n": types.RequestTransferWalletDocument,
     "\n  mutation TransferWallet($input: TransferWalletInput!) {\n    transfer_wallet(input: $input)\n  }\n": types.TransferWalletDocument,
     "\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n": types.SetFarcasterHandleDocument,
     "\n  mutation AirdropTezClaim($input: AirdropTezClaimInput!) {\n    airdrop_tez_claim(input: $input) {\n      signature\n    }\n  }\n": types.AirdropTezClaimDocument,
@@ -198,6 +200,10 @@ export function graphql(source: "\n  mutation UpdateAccount($input: UpdateAccoun
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation DeleteAccount {\n    delete_account {\n      id\n      username\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteAccount {\n    delete_account {\n      id\n      username\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {\n    request_transfer_wallet(input: $input) {\n      id\n      text\n    }\n  }\n"): (typeof documents)["\n  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {\n    request_transfer_wallet(input: $input) {\n      id\n      text\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

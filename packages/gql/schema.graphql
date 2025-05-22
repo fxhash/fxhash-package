@@ -3612,6 +3612,15 @@ type RequestMintResult {
   hash: String!
 }
 
+input RequestTransferWalletInput {
+  address: String!
+}
+
+type RequestTransferWalletOutput {
+  id: String!
+  text: String!
+}
+
 """
 columns and relationships of "Retrospective"
 """
@@ -3958,7 +3967,7 @@ input String_comparison_exp {
 }
 
 input TransferWalletInput {
-  publicKey: String!
+  id: String!
   signature: String!
 }
 
@@ -14630,6 +14639,7 @@ type mutation_root {
   prepare_redemption(input: PrepareRedemptionInput!): PrepareRedemptionOutput!
   refresh(input: RefreshInput!): AuthenticationResult
   request_mint(input: RequestMintInput!): [RequestMintResult!]
+  request_transfer_wallet(input: RequestTransferWalletInput!): RequestTransferWalletOutput!
 
   """
   given a sign in message from the farcaster account's wallet, sets the farcaster handle in the user profile

@@ -113,6 +113,15 @@ export const Mu_DeleteAccount = graphql(`
   }
 `)
 
+export const Mu_RequestTransferWallet = graphql(`
+  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {
+    request_transfer_wallet(input: $input) {
+      id
+      text
+    }
+  }
+`)
+
 export const Mu_TransferWallet = graphql(`
   mutation TransferWallet($input: TransferWalletInput!) {
     transfer_wallet(input: $input)
