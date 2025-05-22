@@ -38,8 +38,10 @@
     "vitest": "3.1.1"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./package.json": "./package.json"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "files": [
     "dist"
@@ -55,8 +57,7 @@
     "dev": "tsdown --watch",
     "test:local": "FXHASH_ENV=local vitest"
   },
+  "sideEffects": false,
   "type": "module",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js"
+  "types": "./dist/index.d.ts"
 }

@@ -7,5 +7,4 @@ export default defineConfig((options: Options) => ({
   sourcemap: true,
   clean: !options.watch,
   dts: true,
-  exports: true,
 }))
