@@ -185,6 +185,11 @@ export function isErrorOfKind<
     if (Array.isArray(kind)) {
       if (isErrorOfKind(error, ...kind)) return true
     } else {
+      console.log({
+        checking: error.name,
+        against: (kind as any).errorType,
+        result: error.name === (kind as any).errorType,
+      })
       if (error.name === kind.name) return true
       // workaround for nextjs minification issue
       if (error.name === (kind as any).errorType) return true
