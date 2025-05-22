@@ -3123,6 +3123,7 @@ export type RequestMintResult = {
 
 export type RequestTransferWalletInput = {
   address: Scalars['String']['input'];
+  publicKey?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RequestTransferWalletOutput = {

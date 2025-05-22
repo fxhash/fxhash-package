@@ -4372,6 +4372,7 @@ type RequestMintResult {
 
 input RequestTransferWalletInput {
   address: String!
+  publicKey: String
 }
 
 type RequestTransferWalletOutput {
