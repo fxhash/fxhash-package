@@ -4372,7 +4372,6 @@ type RequestMintResult {
 
 input RequestTransferWalletInput {
   address: String!
-  publicKey: String
 }
 
 type RequestTransferWalletOutput {
@@ -4798,6 +4797,7 @@ input String_comparison_exp {
 input TransferWalletInput {
   id: String!
   signature: String!
+  publicKey: String
 }
 
 input UnlinkWalletInput {
