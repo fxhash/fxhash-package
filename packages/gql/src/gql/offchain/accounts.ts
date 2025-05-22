@@ -113,6 +113,12 @@ export const Mu_DeleteAccount = graphql(`
   }
 `)
 
+export const Mu_TransferWallet = graphql(`
+  mutation TransferWallet($input: TransferWalletInput!) {
+    transfer_wallet(input: $input)
+  }
+`)
+
 /**
  * Sets the farcaster handle for an account's profile.
  */
