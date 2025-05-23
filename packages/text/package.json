@@ -42,7 +42,7 @@
     "@types/react-dom": "18.3.1",
     "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.57.0",
-    "tsup": "8.4.0",
+    "tsdown": "0.12.2",
     "typescript": "5.8.2"
   },
   "exports": {
@@ -65,10 +65,10 @@
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test:local": "FXHASH_ENV=local vitest"
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
   },
+  "sideEffects": false,
   "type": "module",
   "types": "./dist/index.d.ts"
 }

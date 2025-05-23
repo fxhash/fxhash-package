@@ -32,19 +32,15 @@
     "@types/lodash.mergewith": "4.6.9",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.57.0",
-    "tsup": "8.4.0",
-    "typescript": "5.8.2"
+    "tsdown": "0.12.2",
+    "typescript": "5.8.2",
+    "vitest": "3.1.1"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./getJsxFromMarkdown": {
-      "types": "./dist/getJsxFromMarkdown.d.ts",
-      "import": "./dist/getJsxFromMarkdown.js"
     }
   },
   "files": [
@@ -57,10 +53,11 @@
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch",
     "test:local": "FXHASH_ENV=local vitest"
   },
+  "sideEffects": false,
   "type": "module",
   "types": "./dist/index.d.ts"
 }
