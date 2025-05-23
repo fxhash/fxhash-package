@@ -50,6 +50,22 @@ export function OpenFormGraph(props: ProjectGraphProps) {
   }, [ref, config, hasNodeChildren, clusterSizeRange, rootId, getNodeForce])
   const reheated = useRef<boolean>(false)
 
+  // stupid fix for cursor pointer when using onBackgroundClick
+  // https://github.com/vasturiano/3d-force-graph/issues/476
+  function resetBackgroundCursor(obj: any) {
+    const container = document.querySelector(".force-graph-container")
+    if (container) {
+      const canvas = container.querySelector("canvas")
+      if (canvas) {
+        if (!obj) {
+          canvas.style.setProperty("cursor", "default", "important")
+        } else {
+          canvas.style.removeProperty("cursor")
+        }
+      }
+    }
+  }
+
   return (
     <ForceGraph2D
       ref={ref as any}
@@ -81,17 +97,11 @@ export function OpenFormGraph(props: ProjectGraphProps) {
           ? true
           : highlights.nodes.findIndex(n => n.id === node.id) > -1
       }
-      /*
       onBackgroundClick={() => {
         if (selectedNode) {
-          setSelectedNode(null)
-          ref.current?.zoomToFit(
-            400,
-            20,
-          )
+          onClickNode(rootId)
         }
       }}
-      */
       onNodeClick={n => onClickNode(n.id)}
       onNodeDrag={() => {
         if (!reheated.current) {
@@ -108,6 +118,9 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       }}
       nodeCanvasObject={renderNode}
       nodePointerAreaPaint={nodePointerAreaPaint}
+      onNodeHover={node => {
+        resetBackgroundCursor(node)
+      }}
       {...links}
     />
   )
