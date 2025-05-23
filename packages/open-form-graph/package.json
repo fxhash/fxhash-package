@@ -50,5 +50,6 @@
     "build": "tsdown",
     "dev": "tsdown --watch"
   },
+  "sideEffects": false,
   "type": "module"
 }
