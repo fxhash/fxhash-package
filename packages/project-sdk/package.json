@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/project-sdk",
-  "version": "4.0.0",
+  "version": "0.0.14",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/params": "workspace:*",
