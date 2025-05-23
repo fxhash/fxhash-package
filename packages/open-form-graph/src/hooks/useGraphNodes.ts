@@ -135,7 +135,7 @@ export function useGraphNodes() {
           )
         }
         const showLabel = false
-        if (showLabel) {
+        if (showLabel && node.label) {
           ctx.font = "6px Sans-Serif"
           ctx.textAlign = "left"
           ctx.textBaseline = "middle"
