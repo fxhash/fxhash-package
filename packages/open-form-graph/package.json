@@ -25,7 +25,7 @@
     "@types/react-dom": "18.3.1",
     "@types/three": "0.176.0",
     "esbuild-css-modules-plugin": "2.7.1",
-    "tsup": "8.4.0",
+    "tsdown": "0.12.2",
     "typescript": "5.8.2"
   },
   "exports": {
@@ -47,8 +47,8 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "build": "tsdown",
+    "dev": "tsdown --watch"
   },
   "type": "module"
 }

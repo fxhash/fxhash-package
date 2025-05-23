@@ -4,7 +4,7 @@ import { forceCollide } from "d3-force"
 import { useGraphLinks } from "@/hooks/useGraphLinks"
 import { useGraphNodes } from "@/hooks/useGraphNodes"
 import { useOpenFormGraph } from "@/context/graph"
-import { Node } from "@/_types"
+import type { Node } from "@/_types"
 
 interface ProjectGraphProps {
   width: number
