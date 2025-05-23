@@ -3429,6 +3429,7 @@ export type String_Comparison_Exp = {
 export type TransferWalletInput = {
   id: Scalars['String']['input'];
   signature: Scalars['String']['input'];
+  publicKey?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UnlinkWalletInput = {

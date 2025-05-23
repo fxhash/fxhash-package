@@ -11,6 +11,7 @@ export class WalletAlreadyOtherAccountMainWalletError extends RichError {
 }
 
 export class WalletAlreadyLinkedError extends RichError {
+  static readonly errorType = "WalletAlreadyLinkedError"
   name = "WalletAlreadyLinkedError" as const
   messages = {
     dev: "Wallet is already linked to another account (not as the main wallet)",
