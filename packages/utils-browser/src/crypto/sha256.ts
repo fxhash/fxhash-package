@@ -3,7 +3,7 @@
  * @param message A string to hash
  * @returns Hashed messaged
  */
-export async function sha256(message: string) {
+export async function sha256(message: string): Promise<string> {
   const buffer = new TextEncoder().encode(message)
   const hash = await crypto.subtle.digest("SHA-256", buffer)
   const hashArray = Array.from(new Uint8Array(hash))

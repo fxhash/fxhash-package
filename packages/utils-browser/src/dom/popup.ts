@@ -56,7 +56,7 @@ export function openPopup({
   status = false,
   menubar = false,
   scrollbars = true,
-}: IOpenPopupParams) {
+}: IOpenPopupParams): Window | null {
   // Fixes dual-screen position
   const dualScreenLeft =
     window.screenLeft !== undefined ? window.screenLeft : window.screenX
@@ -89,9 +89,9 @@ export function openPopup({
     ${opt("status", status)},
     ${opt("menubar", menubar)},
     ${opt("scrollbars", scrollbars)},
-    width=${w}, 
-    height=${h}, 
-    top=${top}, 
+    width=${w},
+    height=${h},
+    top=${top},
     left=${left}
     `
   )
