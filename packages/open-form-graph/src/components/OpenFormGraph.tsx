@@ -9,6 +9,7 @@ import { Node } from "@/_types"
 interface ProjectGraphProps {
   width: number
   height: number
+  onClickNode?: (nodeId: string) => void
 }
 
 export function OpenFormGraph(props: ProjectGraphProps) {
@@ -81,13 +82,15 @@ export function OpenFormGraph(props: ProjectGraphProps) {
       d3AlphaMin={layoutConfig.alphaMin}
       dagLevelDistance={layoutConfig.dagLevelDistance}
       cooldownTicks={4000}
-      onEngineStop={() => {
+      /*
+      onNodeDragEndEngineStop={() => {
         ref.current?.zoomToFit(400, config.focusPadding, node =>
           selectedNode
             ? highlights.nodes.findIndex(n => n.id === node.id) > -1
             : true
         )
       }}
+      */
       minZoom={config.minZoom}
       maxZoom={config.maxZoom}
       nodeRelSize={2}

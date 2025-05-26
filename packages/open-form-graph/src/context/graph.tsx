@@ -19,6 +19,13 @@ import { RawNode, RawLink, Link, GraphData, Node, ThemeMode } from "@/_types"
 import { DEFAULT_GRAPH_CONFIG, DEFAULT_LAYOUT_CONFIG } from "./constants"
 import { normalize } from "@/util/math"
 import { collectChildren } from "@/util/data"
+import {
+  forceSimulation,
+  forceLink,
+  SimulationNodeDatum,
+  Simulation,
+  SimulationLinkDatum,
+} from "d3-force"
 
 interface OpenFormGraphProviderProps {
   config?: Partial<GraphConfig>
@@ -69,7 +76,7 @@ export function OpenFormGraphProvider({
       return enhancedNode
     })
 
-    const nodesById: Record<string, Node> = Object.fromEntries(
+    const nodesById: Record<string, NodeObject<Node>> = Object.fromEntries(
       _nodes.map(node => [node.id, node])
     )
 
@@ -116,7 +123,7 @@ export function OpenFormGraphProvider({
     }
   }, [data, rootId])
 
-  const nodesById = useMemo<Record<string, Node>>(() => {
+  const nodesById = useMemo<Record<string, NodeObject<Node>>>(() => {
     const nodesById = Object.fromEntries(
       graphData.nodes.map(node => [node.id, node])
     )
@@ -295,6 +302,7 @@ export function OpenFormGraphProvider({
       const node = nodesById[nodeId]
       if (node.id === rootId) {
         setSelectedNodeId(null)
+        ref.current?.zoomToFit(400)
         return
       }
 
@@ -319,6 +327,7 @@ export function OpenFormGraphProvider({
           collapseFrom(selectedNode)
         }
         setSelectedNodeId(null)
+        ref.current?.zoomToFit(400)
       } else {
         const children = collectChildren(node, 25)
         children.nodes.forEach(n => {
@@ -326,6 +335,7 @@ export function OpenFormGraphProvider({
         })
 
         setSelectedNodeId(node.id)
+        ref.current?.centerAt(node.x, node.y, 400)
       }
     },
     [rootId, selectedNode, collectChildren, nodesById, setSelectedNodeId]
