@@ -27,7 +27,7 @@ export function useTransform(props: UseTransformProps) {
   const animateZoom = useCallback(() => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t
     // adjust for smoother/faster (0.15-0.4 works well)
-    const scaleSpeed = 0.25
+    const scaleSpeed = 0.1
     const { x: fx, y: fy } = zoomFocus.current
 
     const currentScale = transform.current.scale

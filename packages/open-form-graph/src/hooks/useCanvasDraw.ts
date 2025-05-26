@@ -3,7 +3,9 @@ import { Simulation } from "d3-force"
 import { MutableRefObject, RefObject, useCallback } from "react"
 import { SimNode, SimLink } from "./useForceSimulation"
 import { Transform } from "./useTransform"
-import { circle, hexagon } from "@/util/canvas"
+import { circle, hexagon, rect } from "@/util/canvas"
+import { dim } from "@/util/color"
+import { color } from "three/tsl"
 
 interface UseCanvasDrawProps {
   width: number
@@ -52,7 +54,8 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
         const y = node.y || 0
         const isSelected = selectedNode?.current?.id === node.id
         const isHovered = hoveredNode?.current?.id === node.id
-        const fill = isHovered ? "salmon" : "black"
+        const isCollapsed = !!node.state?.collapsed
+        const fill = isCollapsed ? "red" : isHovered ? "salmon" : "black"
         const stroke = "#fff"
         const size = 5
 
@@ -66,13 +69,24 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
             borderRadius: 1,
           })
         } else {
-          circle(context, x, y, size, {
-            stroke: true,
-            strokeStyle: stroke,
-            lineWidth: isSelected ? 1 : 0.2,
-            fill: true,
-            fillStyle: fill,
-          })
+          if (isCollapsed) {
+            circle(context, x, y, size, {
+              stroke: true,
+              strokeStyle: stroke,
+              lineWidth: isSelected ? 1 : 0.2,
+              fill: true,
+              fillStyle: fill,
+            })
+          } else {
+            rect(context, x - size / 2, y - size / 2, size, size, {
+              stroke: true,
+              strokeStyle: stroke,
+              lineWidth: isSelected ? 1 : 0.2,
+              fill: true,
+              fillStyle: fill,
+              borderRadius: 1,
+            })
+          }
         }
       })
       context.restore()
