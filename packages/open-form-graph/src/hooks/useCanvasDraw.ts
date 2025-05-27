@@ -57,7 +57,7 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
         const isCollapsed = !!node.state?.collapsed
         const fill = isCollapsed ? "red" : isHovered ? "salmon" : "black"
         const stroke = "#fff"
-        const size = 5
+        const size = isSelected ? 10 : 5
 
         if (node.id === rootId) {
           hexagon(context, x, y, size, {

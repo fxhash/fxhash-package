@@ -13,47 +13,60 @@ interface UseTransformProps {
 
 export function useTransform(props: UseTransformProps) {
   const { onUpdate, canvasRef } = props
-  const transform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
 
-  const targetScale = useRef(transform.current.scale)
+  const transform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
+  // NEW: Keep a full target transform for smooth animation of x/y/scale
+  const targetTransform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
+
   const zoomFocus = useRef({ x: 0, y: 0 }) // mouse pos at zoom center
 
-  const isZooming = useRef(false) // true while animating
+  const isAnimating = useRef(false)
   const animationFrame = useRef<number | null>(null)
 
   const isDragging = useRef(false)
   const lastMousePos = useRef({ x: 0, y: 0 })
 
-  const animateZoom = useCallback(() => {
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
-    // adjust for smoother/faster (0.15-0.4 works well)
-    const scaleSpeed = 0.1
-    const { x: fx, y: fy } = zoomFocus.current
+  // Lerp helper
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
-    const currentScale = transform.current.scale
-    const nextScale = lerp(currentScale, targetScale.current, scaleSpeed)
+  // Animation step for both zoom and transformTo
+  const animateTransform = useCallback(() => {
+    // Tweak speed here
+    const speed = 0.1
+    const prev = transform.current
+    const target = targetTransform.current
 
-    if (Math.abs(nextScale - targetScale.current) < 0.001) {
-      transform.current.scale = targetScale.current
-      isZooming.current = false
-    } else {
-      transform.current.scale = nextScale
-      isZooming.current = true
+    // Animate each property towards its target
+    const next: Transform = {
+      x: lerp(prev.x, target.x, speed),
+      y: lerp(prev.y, target.y, speed),
+      scale: lerp(prev.scale, target.scale, speed),
     }
 
-    const scaleChange = transform.current.scale / currentScale
-    transform.current.x = fx - (fx - transform.current.x) * scaleChange
-    transform.current.y = fy - (fy - transform.current.y) * scaleChange
+    // If close enough to target, snap and stop animating
+    const done =
+      Math.abs(next.x - target.x) < 0.5 &&
+      Math.abs(next.y - target.y) < 0.5 &&
+      Math.abs(next.scale - target.scale) < 0.001
+
+    if (done) {
+      transform.current = { ...target }
+      isAnimating.current = false
+    } else {
+      transform.current = next
+      isAnimating.current = true
+    }
 
     onUpdate?.(transform.current)
 
-    if (isZooming.current) {
-      animationFrame.current = requestAnimationFrame(animateZoom)
+    if (isAnimating.current) {
+      animationFrame.current = requestAnimationFrame(animateTransform)
     } else {
       animationFrame.current = null
     }
   }, [onUpdate])
 
+  // Wheel/zoom logic
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       e.preventDefault()
@@ -63,26 +76,35 @@ export function useTransform(props: UseTransformProps) {
       const rect = canvas.getBoundingClientRect()
       const mouseX = e.clientX - rect.left
       const mouseY = e.clientY - rect.top
-
-      // Record focal point for zoom adjustment
       zoomFocus.current = { x: mouseX, y: mouseY }
 
-      // Zoom logic: set a new target scale
       const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1
-      const nextTargetScale = Math.max(
+      const newScale = Math.max(
         0.1,
-        Math.min(5, targetScale.current * scaleFactor)
+        Math.min(5, targetTransform.current.scale * scaleFactor)
       )
-      targetScale.current = nextTargetScale
 
-      if (!isZooming.current) {
-        isZooming.current = true
-        animationFrame.current = requestAnimationFrame(animateZoom)
+      // Adjust x/y to zoom around mouse
+      const { x, y, scale } = transform.current
+      const dx = mouseX - x
+      const dy = mouseY - y
+      const scaleChange = newScale / scale
+
+      // Compute new target x/y so zoom centers on mouse
+      const newX = mouseX - dx * scaleChange
+      const newY = mouseY - dy * scaleChange
+
+      targetTransform.current = { x: newX, y: newY, scale: newScale }
+
+      if (!isAnimating.current) {
+        isAnimating.current = true
+        animationFrame.current = requestAnimationFrame(animateTransform)
       }
     },
-    [animateZoom, canvasRef]
+    [animateTransform, canvasRef]
   )
 
+  // Drag logic
   const handleMouseDown = useCallback((e: MouseEvent) => {
     isDragging.current = true
     lastMousePos.current = { x: e.clientX, y: e.clientY }
@@ -97,6 +119,8 @@ export function useTransform(props: UseTransformProps) {
 
       transform.current.x += deltaX
       transform.current.y += deltaY
+      targetTransform.current.x += deltaX
+      targetTransform.current.y += deltaY
 
       lastMousePos.current = { x: e.clientX, y: e.clientY }
 
@@ -124,21 +148,35 @@ export function useTransform(props: UseTransformProps) {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseup", handleMouseUp)
 
-      // Cancel animation on unmount
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current)
       }
     }
   }, [handleWheel, handleMouseDown, handleMouseMove, handleMouseUp, canvasRef])
 
+  // Reset zoom & pan
   const resetZoom = useCallback(() => {
     transform.current = { x: 0, y: 0, scale: 1 }
-    targetScale.current = 1
+    targetTransform.current = { x: 0, y: 0, scale: 1 }
     onUpdate?.(transform.current)
   }, [onUpdate])
 
+  // The new animated transformTo!
+  const transformTo = useCallback(
+    (update: Partial<Transform>) => {
+      // Animate to new target, not an instant jump
+      targetTransform.current = { ...transform.current, ...update }
+      if (!isAnimating.current) {
+        isAnimating.current = true
+        animationFrame.current = requestAnimationFrame(animateTransform)
+      }
+    },
+    [animateTransform]
+  )
+
   return {
     resetZoom,
+    transformTo,
     transform,
   }
 }
