@@ -13,6 +13,8 @@ export type TTokenLaunchpadSellEthOperationParams = {
   creatorToken: `0x${string}`
   // The amount of creator tokens being sold
   amountIn: bigint
+  // Minimum amount of creator tokens expected (slippage protection)
+  minAmountOut: bigint
 }
 
 export class TokenLaunchpadSellEthOperation extends EthereumContractOperation<TTokenLaunchpadSellEthOperationParams> {
@@ -27,7 +29,11 @@ export class TokenLaunchpadSellEthOperation extends EthereumContractOperation<TT
       address: config.base.contracts.fx_token_launchpad,
       abi: tokenLaunchpadAbi,
       functionName: "sell",
-      args: [this.params.creatorToken, this.params.amountIn],
+      args: [
+        this.params.creatorToken,
+        this.params.amountIn,
+        this.params.minAmountOut,
+      ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }
