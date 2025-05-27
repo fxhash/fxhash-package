@@ -1,6 +1,6 @@
 import { ForceGraphMethods } from "react-force-graph-2d"
 import { ForceGraphMethods as ForceGraphMethods3D } from "react-force-graph-3d"
-import { GraphData, Link, Node } from "./_types.js"
+import { GraphData, Link, Node, RawNode } from "./_types.js"
 
 export interface GraphConfig {
   debug: false
@@ -53,4 +53,5 @@ export interface OpenFormGraphApi {
     startNodeId: string,
     rootId: string
   ) => { nodes: Node[]; links: Link[] }
+  focusNodes: RawNode[]
 }

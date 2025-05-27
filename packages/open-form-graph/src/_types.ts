@@ -15,7 +15,6 @@ export type Link = {
 }
 
 export type Node = {
-  id: string
   collapsed: boolean
   hide: boolean
   clusterSize: number
@@ -27,5 +26,6 @@ export type Node = {
 export type RawGraphData = { nodes: RawNode[]; links: RawLink[] }
 export type GraphData = { nodes: Node[]; links: Link[] }
 
+export type ThemeMode = "dark" | "light"
 export type RGB = [number, number, number]
 export type ColorTransform = (rgb: RGB) => RGB

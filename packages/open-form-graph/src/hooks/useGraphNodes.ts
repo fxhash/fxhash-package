@@ -17,6 +17,7 @@ export function useGraphNodes() {
     hasNodeChildren,
     config,
     getNodeSize,
+    focusNodes,
   } = useOpenFormGraph()
 
   const { color, colorContrast } = useColor()
@@ -70,26 +71,35 @@ export function useGraphNodes() {
     (node: NodeObject<Node>, ctx: CanvasRenderingContext2D, scale: number) => {
       const isSelected = selectedNode?.id === node.id
       const isHighlighted = highlights.nodes.find(n => n.id === node.id)
-      const size = getNodeSize(node.id as string) + (isSelected ? 5 : 0)
+      const size = getNodeSize(node.id as string)
       const fontSize = 12 / scale
       const isLight = theme === "light"
 
       const x = node.x || 0
       const y = node.y || 0
 
-      let opacity = 1
+      let isDimmed = false
+      let opacity = 0.3
       if (selectedNode && !isHighlighted) {
         opacity = 0.1
+        isDimmed = true
       }
 
       const collapsed = node.collapsed && hasNodeChildren(node.id as string)
       if (collapsed) {
         circle(ctx, x, y, size, {
           stroke: true,
-          strokeStyle: colorContrast(dim(opacity, isLight))(),
+          strokeStyle: color(dim(opacity, isLight))(),
           fill: true,
-          fillStyle: color(dim(opacity, isLight))(),
+          fillStyle: color(dim(isDimmed ? 0.1 : 0.2, isLight))(),
         })
+        if (focusNodes.find(n => n.id === node.id)) {
+          circle(ctx, x, y, size + 1, {
+            stroke: true,
+            strokeStyle: color(dim(opacity, isLight))(),
+            fill: false,
+          })
+        }
 
         const showLabel = visibilityScale(node.clusterSize, scale)
 
@@ -97,7 +107,7 @@ export function useGraphNodes() {
           ctx.font = `${fontSize}px Sans-Serif`
           ctx.textAlign = "center"
           ctx.textBaseline = "middle"
-          ctx.fillStyle = colorContrast(opacity)
+          ctx.fillStyle = color(dim(isDimmed ? 0.1 : 0.4))()
           ctx.fillText(node.clusterSize.toString(), x, y)
         }
       } else {
@@ -116,21 +126,20 @@ export function useGraphNodes() {
             strokeStyle: color(dim(opacity, isLight))(),
             lineWidth: isSelected ? 1 : 0.2,
             fill: true,
-            fillStyle: color(dim(opacity, isLight))(),
+            fillStyle: color(dim(isDimmed ? 0.05 : 0.2, isLight))(),
             borderRadius: 1,
           })
         }
         if (node.image) {
-          const PADDING = 0.5
           img(
             ctx,
             node.image,
-            x - (size - PADDING) / 2,
-            y - (size - PADDING) / 2,
-            size - PADDING,
-            size - PADDING,
+            x - size / 2,
+            y - size / 2,
+            size,
+            size,
             1,
-            opacity,
+            isDimmed ? 0.1 : 1,
             isLight ? "white" : "black"
           )
         }
@@ -140,6 +149,13 @@ export function useGraphNodes() {
           ctx.textAlign = "left"
           ctx.textBaseline = "middle"
           ctx.fillText(node.label, x + config.nodeSize, y)
+        }
+        if (focusNodes.find(n => n.id === node.id)) {
+          circle(ctx, x, y, (size * Math.sqrt(2)) / 2 + 1, {
+            stroke: true,
+            strokeStyle: color(dim(opacity, isLight))(),
+            fill: false,
+          })
         }
       }
     },
@@ -153,6 +169,7 @@ export function useGraphNodes() {
       visibilityScale,
       color,
       getNodeSize,
+      focusNodes,
     ]
   )
   return {

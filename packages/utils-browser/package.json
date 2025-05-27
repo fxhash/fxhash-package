@@ -10,7 +10,7 @@
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "tsup": "8.4.0",
+    "tsdown": "0.12.2",
     "typescript": "5.8.2"
   },
   "exports": {
@@ -29,8 +29,9 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
   },
+  "sideEffects": false,
   "type": "module"
 }

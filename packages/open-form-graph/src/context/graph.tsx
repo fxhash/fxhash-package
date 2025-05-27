@@ -8,12 +8,15 @@ import {
   useRef,
   useEffect,
 } from "react"
-import { ForceGraphMethods, NodeObject, LinkObject } from "react-force-graph-2d"
+import {
+  type ForceGraphMethods,
+  type NodeObject,
+  type LinkObject,
+} from "react-force-graph-2d"
 import { scaleLinear } from "d3-scale"
 import { GraphConfig, OpenFormGraphApi } from "@/_interfaces"
-import { RawNode, RawLink, Link, GraphData, Node } from "@/_types"
-import { preloadImage } from "@/util/img"
-import { DEFAULT_GRAPH_CONFIG } from "./constants"
+import { RawNode, RawLink, Link, GraphData, Node, ThemeMode } from "@/_types"
+import { DEFAULT_GRAPH_CONFIG, DEFAULT_LAYOUT_CONFIG } from "./constants"
 import { normalize } from "@/util/math"
 import { collectChildren } from "@/util/data"
 
@@ -26,6 +29,7 @@ interface OpenFormGraphProviderProps {
     links: RawLink[]
   }
   rootId: string
+  focusNodes?: RawNode[]
 }
 
 const OpenFormGraphContext = createContext<OpenFormGraphApi | undefined>(
@@ -38,20 +42,15 @@ export function OpenFormGraphProvider({
   data,
   rootId: _rootId,
   children,
+  focusNodes = [],
 }: OpenFormGraphProviderProps) {
   const [rootId, setRootId] = useState<string>(_rootId)
   const [_config, setConfig] = useState<GraphConfig>({
     ...DEFAULT_GRAPH_CONFIG,
     ...config,
   })
-  const [_theme, setTheme] = useState<"dark" | "light">(theme)
-
-  const [layoutConfig, setLayoutConfig] = useState({
-    velocityDecay: 0.33,
-    alphaDecay: 0.17,
-    alphaMin: 0.00005,
-    dagLevelDistance: 100,
-  })
+  const [_theme, setTheme] = useState<ThemeMode>(theme)
+  const [layoutConfig, setLayoutConfig] = useState(DEFAULT_LAYOUT_CONFIG)
   const ref = useRef<
     ForceGraphMethods<NodeObject<Node>, LinkObject<Node, Link>> | undefined
   >()
@@ -65,10 +64,6 @@ export function OpenFormGraphProvider({
         childLinks: [],
         level: undefined,
         hide: false,
-      }
-
-      if ("imgSrc" in n && typeof n.imgSrc === "string") {
-        enhancedNode.image = preloadImage(n.imgSrc, ref)
       }
 
       return enhancedNode
@@ -295,7 +290,6 @@ export function OpenFormGraphProvider({
     return { nodes: visibleNodes, links: visibleLinks }
   }, [nodesById, rootId, highlights])
 
-  // Modified handleNodeClick that uses the memoized highlights
   const handleNodeClick = useCallback(
     (nodeId: string) => {
       const node = nodesById[nodeId]
@@ -325,16 +319,13 @@ export function OpenFormGraphProvider({
           collapseFrom(selectedNode)
         }
         setSelectedNodeId(null)
-        // No need to explicitly set highlights here as they will be updated via useMemo
       } else {
-        // Expand the children nodes
         const children = collectChildren(node, 25)
         children.nodes.forEach(n => {
           n.collapsed = false
         })
 
         setSelectedNodeId(node.id)
-        // No need to explicitly set highlights here as they will be updated via useMemo
       }
     },
     [rootId, selectedNode, collectChildren, nodesById, setSelectedNodeId]
@@ -365,6 +356,7 @@ export function OpenFormGraphProvider({
     (nodeId: string) => {
       const n = nodesById[nodeId]
       if (!n) return 0
+      if (n.id === selectedNodeId) return _config.nodeSize * 2
       if (!n.collapsed && hasNodeChildren(n.id)) return _config.nodeSize
       if (!n.collapsed || n.id === rootId) return _config.nodeSize
       return normalize(
@@ -382,6 +374,7 @@ export function OpenFormGraphProvider({
       rootId,
       hasNodeChildren,
       nodesById,
+      selectedNodeId,
     ]
   )
 
@@ -432,6 +425,7 @@ export function OpenFormGraphProvider({
     getNodeSize,
     getNodeForce,
     search: breadthFirstSearch,
+    focusNodes: focusNodes,
   }
 
   return (

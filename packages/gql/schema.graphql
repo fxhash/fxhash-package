@@ -3232,6 +3232,28 @@ input OnboardingComponent_stream_cursor_value_input {
   id: Int
 }
 
+input OpenFormGraphInput {
+  filterNodeIds: [String]
+  maxDepth: Int
+  rootId: String!
+}
+
+type OpenFormGraphLink {
+  source: String!
+  target: String!
+}
+
+type OpenFormGraphNode {
+  id: String!
+  thumbnail_uri: String
+}
+
+type OpenFormGraphResponse {
+  links: [OpenFormGraphLink!]!
+  nodes: [OpenFormGraphNode!]!
+  rootId: String!
+}
+
 input PrepareRedemptionInput {
   payload: String!
   publicKey: String!
@@ -6600,7 +6622,7 @@ type art_coin {
   capture_media_id: bpchar
   created_at: timestamptz!
   description: String!
-  display_uri: String
+  display_uri: String!
   flag: art_coin_flag_enum!
   graduated_address: String!
   graduated_at: timestamptz
@@ -29233,6 +29255,7 @@ type query_root {
   mediaFullUrl(s3key: String!): String!
   offchain: offchain_query
   onchain: onchain_query
+  open_form_graph(input: OpenFormGraphInput): OpenFormGraphResponse
   projectReserves(projectId: String!): [ProjectReserves!]!
   search(input: SearchInput!): SearchOutput!
   searchAccounts(input: SearchInput!): SearchAccountsOutput!
