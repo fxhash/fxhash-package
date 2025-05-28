@@ -9,13 +9,17 @@ export interface Transform {
 interface UseTransformProps {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>
   onUpdate?: (transform: Transform) => void
+  onClick?: (x: number, y: number) => void
+  onMove?: (x: number, y: number) => void
 }
 
+const MIN_ZOOM = 0.1
+const MAX_ZOOM = 10
+
 export function useTransform(props: UseTransformProps) {
-  const { onUpdate, canvasRef } = props
+  const { onUpdate, canvasRef, onClick, onMove } = props
 
   const transform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
-  // NEW: Keep a full target transform for smooth animation of x/y/scale
   const targetTransform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
 
   const zoomFocus = useRef({ x: 0, y: 0 }) // mouse pos at zoom center
@@ -24,26 +28,24 @@ export function useTransform(props: UseTransformProps) {
   const animationFrame = useRef<number | null>(null)
 
   const isDragging = useRef(false)
+  const dragStart = useRef<{ x: number; y: number } | null>(null)
+  const moved = useRef(false)
+  const CLICK_THRESHOLD = 5
   const lastMousePos = useRef({ x: 0, y: 0 })
 
-  // Lerp helper
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
-  // Animation step for both zoom and transformTo
   const animateTransform = useCallback(() => {
-    // Tweak speed here
-    const speed = 0.1
+    const speed = 0.2
     const prev = transform.current
     const target = targetTransform.current
 
-    // Animate each property towards its target
     const next: Transform = {
       x: lerp(prev.x, target.x, speed),
       y: lerp(prev.y, target.y, speed),
       scale: lerp(prev.scale, target.scale, speed),
     }
 
-    // If close enough to target, snap and stop animating
     const done =
       Math.abs(next.x - target.x) < 0.5 &&
       Math.abs(next.y - target.y) < 0.5 &&
@@ -66,7 +68,6 @@ export function useTransform(props: UseTransformProps) {
     }
   }, [onUpdate])
 
-  // Wheel/zoom logic
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       e.preventDefault()
@@ -78,19 +79,17 @@ export function useTransform(props: UseTransformProps) {
       const mouseY = e.clientY - rect.top
       zoomFocus.current = { x: mouseX, y: mouseY }
 
-      const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1
+      const scaleFactor = e.deltaY > 0 ? 0.95 : 1.05
       const newScale = Math.max(
-        0.1,
-        Math.min(5, targetTransform.current.scale * scaleFactor)
+        MIN_ZOOM,
+        Math.min(MAX_ZOOM, targetTransform.current.scale * scaleFactor)
       )
 
-      // Adjust x/y to zoom around mouse
       const { x, y, scale } = transform.current
       const dx = mouseX - x
       const dy = mouseY - y
       const scaleChange = newScale / scale
 
-      // Compute new target x/y so zoom centers on mouse
       const newX = mouseX - dx * scaleChange
       const newY = mouseY - dy * scaleChange
 
@@ -104,34 +103,60 @@ export function useTransform(props: UseTransformProps) {
     [animateTransform, canvasRef]
   )
 
-  // Drag logic
   const handleMouseDown = useCallback((e: MouseEvent) => {
     isDragging.current = true
+    moved.current = false
+    dragStart.current = { x: e.clientX, y: e.clientY }
     lastMousePos.current = { x: e.clientX, y: e.clientY }
   }, [])
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!isDragging.current) return
+      const rect = canvasRef.current?.getBoundingClientRect()
+      if (rect) {
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        onMove?.(x, y)
+      }
+      if (!isDragging.current || !dragStart.current) return
+      const dx = e.clientX - dragStart.current.x
+      const dy = e.clientY - dragStart.current.y
+      if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
+        moved.current = true
 
-      const deltaX = e.clientX - lastMousePos.current.x
-      const deltaY = e.clientY - lastMousePos.current.y
+        const deltaX = e.clientX - lastMousePos.current.x
+        const deltaY = e.clientY - lastMousePos.current.y
 
-      transform.current.x += deltaX
-      transform.current.y += deltaY
-      targetTransform.current.x += deltaX
-      targetTransform.current.y += deltaY
+        transform.current.x += deltaX
+        transform.current.y += deltaY
+        targetTransform.current.x += deltaX
+        targetTransform.current.y += deltaY
 
-      lastMousePos.current = { x: e.clientX, y: e.clientY }
+        lastMousePos.current = { x: e.clientX, y: e.clientY }
 
-      onUpdate?.(transform.current)
+        onUpdate?.(transform.current)
+      }
     },
-    [onUpdate]
+    [onUpdate, onMove]
   )
 
-  const handleMouseUp = useCallback(() => {
-    isDragging.current = false
-  }, [])
+  const handleMouseUp = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging.current) return
+      isDragging.current = false
+      if (!moved.current && onClick) {
+        const rect = canvasRef.current?.getBoundingClientRect()
+        if (rect) {
+          const x = e.clientX - rect.left
+          const y = e.clientY - rect.top
+          onClick(x, y)
+        }
+      }
+      dragStart.current = null
+      moved.current = false
+    },
+    [onClick]
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -154,17 +179,14 @@ export function useTransform(props: UseTransformProps) {
     }
   }, [handleWheel, handleMouseDown, handleMouseMove, handleMouseUp, canvasRef])
 
-  // Reset zoom & pan
   const resetZoom = useCallback(() => {
     transform.current = { x: 0, y: 0, scale: 1 }
     targetTransform.current = { x: 0, y: 0, scale: 1 }
     onUpdate?.(transform.current)
   }, [onUpdate])
 
-  // The new animated transformTo!
   const transformTo = useCallback(
     (update: Partial<Transform>) => {
-      // Animate to new target, not an instant jump
       targetTransform.current = { ...transform.current, ...update }
       if (!isAnimating.current) {
         isAnimating.current = true
@@ -178,5 +200,8 @@ export function useTransform(props: UseTransformProps) {
     resetZoom,
     transformTo,
     transform,
+    onMouseDown: handleMouseDown,
+    onMouseMove: handleMouseMove,
+    onMouseUp: handleMouseUp,
   }
 }

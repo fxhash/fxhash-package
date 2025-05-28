@@ -23,7 +23,12 @@ export interface SimNode extends RawNode, SimulationNodeDatum {
 export interface SimLink extends SimulationLinkDatum<SimNode> {}
 
 function getChildren(id: string, links: RawLink[]): string[] {
-  return links.filter(link => link.source === id).map(link => link.target)
+  return links
+    .filter(l => {
+      const sourceId = isSimNode(l.source) ? l.source.id : l.source
+      return sourceId === id
+    })
+    .map(link => link.target)
 }
 
 function getClusterSize(id: string, links: RawLink[]): number {
@@ -38,7 +43,7 @@ function hasOnlyLeafs(id: string, links: RawLink[]): boolean {
   return children.every(childId => getChildren(childId, links).length === 0)
 }
 
-function isSimNode(node: SimNode | string | number): node is SimNode {
+export function isSimNode(node: SimNode | string | number): node is SimNode {
   return typeof node === "object" && "id" in node
 }
 
@@ -48,6 +53,61 @@ function isSimLink(link: SimLink): link is SimLink {
     "source" in link &&
     typeof link.source !== "string"
   )
+}
+
+export function getNodeSubgraph(
+  nodeId: string,
+  nodes: SimNode[],
+  links: SimLink[],
+  rootId: string
+): { nodes: SimNode[]; links: SimLink[] } {
+  const nodesById = Object.fromEntries(nodes.map(n => [n.id, n]))
+  const parentSet = new Set<string>()
+  const childSet = new Set<string>()
+  const subLinks = new Set<SimLink>()
+
+  let currentId = nodeId
+  while (currentId !== rootId) {
+    const parentLink = links.find(l => {
+      const targetId = isSimNode(l.target) ? l.target.id : l.target
+      return targetId === currentId
+    })
+    if (!parentLink) break
+    const parentId = isSimNode(parentLink.source)
+      ? parentLink.source.id
+      : parentLink.source
+    if (parentSet.has(parentId.toString())) break
+    parentSet.add(parentId.toString())
+    subLinks.add(parentLink)
+    currentId = parentId.toString()
+  }
+
+  function collectChildren(id: string) {
+    for (const link of links) {
+      const sourceId = isSimNode(link.source) ? link.source.id : link.source
+      const targetId = isSimNode(link.target) ? link.target.id : link.target
+      if (sourceId === id && !childSet.has(targetId.toString())) {
+        childSet.add(targetId.toString())
+        subLinks.add(link)
+        collectChildren(targetId.toString())
+      }
+    }
+  }
+  collectChildren(nodeId)
+
+  const validIds = new Set<string>([...parentSet, nodeId, ...childSet])
+  const filteredLinks = Array.from(subLinks).filter(link => {
+    const sourceId = isSimNode(link.source) ? link.source.id : link.source
+    const targetId = isSimNode(link.target) ? link.target.id : link.target
+    return (
+      validIds.has(sourceId.toString()) && validIds.has(targetId.toString())
+    )
+  })
+
+  const allNodeIds = Array.from(validIds)
+  const subNodes = allNodeIds.map(id => nodesById[id]).filter(Boolean)
+
+  return { nodes: subNodes, links: filteredLinks }
 }
 
 function getPrunedData(startId: string, nodes: SimNode[], links: SimLink[]) {
@@ -99,6 +159,10 @@ export function useForceSimulation(props: UseForceSimulationProps) {
   const simulation = useRef<Simulation<SimNode, SimLink> | null>(null)
   const hoveredNode = useRef<SimNode | null>(null)
   const selectedNode = useRef<SimNode | null>(null)
+  const subGraph = useRef<{
+    nodes: SimNode[]
+    links: SimLink[]
+  }>({ nodes: [], links: [] })
 
   const fullData = useMemo(() => {
     const _links = data.links.map(l => ({ ...l }))
@@ -138,13 +202,72 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     hoveredNode,
     selectedNode,
     rootId,
+    subGraph,
   })
 
   const { transform, transformTo } = useTransform({
     canvasRef,
     onUpdate: transform => {
-      const context = canvasRef.current?.getContext("2d")!
+      const context = canvasRef.current?.getContext("2d")
+      if (!context) return
       draw(context, transform)
+    },
+    onMove: (x, y) => {
+      const canvas = canvasRef.current
+      const node = getNodeAtPosition(x, y)
+      hoveredNode.current = node
+      if (canvas) {
+        canvas.style.cursor = node ? "pointer" : "default"
+        const ctx = canvas.getContext("2d")
+        if (ctx) draw(ctx, transform.current)
+      }
+    },
+    onClick: (x, y) => {
+      const canvas = canvasRef.current
+      const node = getNodeAtPosition(x, y)
+      if (node) {
+        if (node.id === rootId) {
+          selectedNode.current = null
+          subGraph.current = {
+            nodes: [],
+            links: [],
+          }
+          return
+        }
+        if (node.state) {
+          const children = getChildren(node.id, fullData.links)
+          if (children.length > 0) {
+            if (selectedNode?.current?.id !== node.id) {
+              node.state.collapsed = false
+            } else {
+              node.state.collapsed = !node.state.collapsed
+            }
+            if (!node.state.collapsed) {
+              children.forEach(childId => {
+                const childNode = fullData.nodes.find(n => n.id === childId)
+                if (childNode) {
+                  childNode.x = node.x
+                  childNode.y = node.y
+                }
+              })
+            }
+          }
+        }
+        resetSimulation()
+        const nodePos = getNodePosition(node)
+        transformTo({ x: nodePos.x, y: nodePos.y })
+        subGraph.current = getNodeSubgraph(
+          node.id,
+          fullData.nodes,
+          fullData.links,
+          rootId
+        )
+      }
+      selectedNode.current = node
+      if (canvas) {
+        const ctx = canvas.getContext("2d")
+        if (ctx) draw(ctx, transform.current)
+      }
     },
   })
 
@@ -189,7 +312,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
         forceLink<SimNode, SimLink>(prunedData.links)
           .id(d => d.id)
           .distance(l => {
-            if (!l.target?.state?.collapsed) return 20
+            if (!l.target?.state?.collapsed) return 15
             return 30
           })
           .strength(l => {
@@ -197,15 +320,15 @@ export function useForceSimulation(props: UseForceSimulationProps) {
               prunedData.links.filter(x => x.source.id === l.source.id).length,
               prunedData.links.filter(x => x.source.id === l.target.id).length
             )
-            console.log("link strength", num)
-            return 1 / Math.max(num, 1)
+            return 1 / Math.max(num * 0.3, 1)
           })
       )
       .force("charge", forceManyBody())
       .force("center", forceCenter(width / 2, height / 2).strength(0.05))
 
     function _draw() {
-      const context = canvasRef.current?.getContext("2d")!
+      const context = canvasRef.current?.getContext("2d")
+      if (!context) return
       draw(context, transform.current)
     }
 
@@ -219,56 +342,6 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     simulation.current = _openFormSimulation
     return _openFormSimulation
   }, [fullData, rootId, width, height, draw, transform])
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      const mouseX = e.clientX - rect.left
-      const mouseY = e.clientY - rect.top
-      const node = getNodeAtPosition(mouseX, mouseY)
-      hoveredNode.current = node
-      canvas.style.cursor = node ? "pointer" : "default"
-      const ctx = canvas.getContext("2d")
-      if (ctx) draw(ctx, transform.current)
-    }
-
-    const handleClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      const mouseX = e.clientX - rect.left
-      const mouseY = e.clientY - rect.top
-      // TODO: handle proper selection logic
-      // - add highlight path
-      const node = getNodeAtPosition(mouseX, mouseY)
-      selectedNode.current = node
-      if (node) {
-        if (node.state) {
-          node.state.collapsed = !node.state.collapsed
-        }
-        resetSimulation()
-        const nodePos = getNodePosition(node)
-        transformTo({ x: nodePos.x, y: nodePos.y })
-      }
-      const ctx = canvas.getContext("2d")
-      if (ctx) draw(ctx, transform.current)
-    }
-
-    canvas.addEventListener("mousemove", handleMouseMove)
-    canvas.addEventListener("mouseup", handleClick)
-    return () => {
-      canvas.removeEventListener("mousemove", handleMouseMove)
-      canvas.removeEventListener("mouseup", handleClick)
-    }
-  }, [
-    getNodeAtPosition,
-    draw,
-    transform,
-    transformTo,
-    getNodePosition,
-    resetSimulation,
-  ])
 
   useEffect(() => {
     if (simulation.current) {
