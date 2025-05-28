@@ -1,11 +1,8 @@
-import { RawNode, RawLink } from "@/_types"
-import { Simulation } from "d3-force"
 import { MutableRefObject, RefObject, useCallback } from "react"
-import { SimNode, SimLink, isSimNode } from "./useForceSimulation"
+import { SimNode, SimLink } from "./useForceSimulation"
 import { Transform } from "./useTransform"
-import { circle, hexagon, rect } from "@/util/canvas"
+import { circle, img, rect } from "@/util/canvas"
 import { dim } from "@/util/color"
-import { color } from "three/tsl"
 import { useColor } from "./useColor"
 import { useOpenFormGraph } from "@/provider"
 
@@ -18,6 +15,7 @@ interface UseCanvasDrawProps {
   selectedNode?: MutableRefObject<SimNode | null>
   subGraph?: MutableRefObject<{ nodes: SimNode[]; links: SimLink[] }>
   rootId: string
+  rootImages?: MutableRefObject<HTMLImageElement[]>
 }
 function getNodeId(n: any) {
   return typeof n === "object" && n !== null && "id" in n ? n.id : n
@@ -33,6 +31,7 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
     hoveredNode,
     rootId,
     subGraph,
+    rootImages,
   } = props
   const { theme } = useOpenFormGraph()
   const { color, colorContrast } = useColor()
@@ -56,8 +55,8 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
           )
 
         const stroke = _dim
-          ? color(dim(0.1, isLight))()
-          : color(dim(0.2, isLight))()
+          ? color(dim(0.09, isLight))()
+          : color(dim(0.15, isLight))()
         context.globalAlpha = 0.5
         context.strokeStyle = stroke
         context.lineWidth = _dim ? 0.3 : 0.8
@@ -83,7 +82,7 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
         const fill = _dim
           ? color(dim(0.075, isLight))()
           : isCollapsed
-            ? color(dim(0.2, isLight))()
+            ? color(dim(0.15, isLight))()
             : isHovered
               ? color(dim(0.4))()
               : color()
@@ -91,13 +90,34 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
         const size = isSelected ? 10 : 5
 
         if (node.id === rootId) {
-          circle(context, x, y, size * 2, {
-            stroke: true,
+          const _size = size * 2
+          circle(context, x, y, size, {
+            stroke: false,
             strokeStyle: stroke,
             lineWidth: isSelected ? 1 : 0.2,
             fill: true,
-            fillStyle: color(dim(0.2, isLight))(),
+            fillStyle: color(dim(0.15, isLight))(),
           })
+          if (rootImages?.current) {
+            const _idx = Math.min(
+              isLight ? 0 : 1,
+              rootImages.current.length - 1
+            )
+            const _img = rootImages.current[_idx]
+            const _imgSize = _size * 0.55
+            if (_img) {
+              img(
+                context,
+                _img,
+                x - _imgSize / 2,
+                y - _imgSize / 2,
+                _imgSize,
+                _imgSize,
+                0,
+                _dim ? 0.1 : 1
+              )
+            }
+          }
         } else {
           if (isCollapsed) {
             circle(context, x, y, size, {
@@ -116,6 +136,19 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
               fillStyle: fill,
               borderRadius: 1,
             })
+            if (node.state?.image) {
+              const _size = size - 1
+              img(
+                context,
+                node.state?.image,
+                x - _size / 2,
+                y - _size / 2,
+                _size,
+                _size,
+                1,
+                _dim ? 0.1 : 1
+              )
+            }
           }
         }
       })

@@ -32,6 +32,7 @@ type _ForceGraphMethods =
 export interface OpenFormGraphApi {
   ref: React.MutableRefObject<_ForceGraphMethods | undefined>
   rootId: string
+  rootImages: [string, string?]
   data: GraphData
   onClickNode: (nodeId: string) => void
   hasNodeChildren: (nodeId: string) => boolean

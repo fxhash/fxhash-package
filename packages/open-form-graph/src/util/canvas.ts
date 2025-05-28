@@ -132,7 +132,7 @@ export function img(
     ctx.save()
     ctx.fillStyle = bgColor
     ctx.globalAlpha = 1.0
-    ctx.fillRect(x, y, width, height)
+    ctx.fill()
     ctx.restore()
   }
   ctx.clip()

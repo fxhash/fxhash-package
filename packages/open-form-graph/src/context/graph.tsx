@@ -36,6 +36,7 @@ interface OpenFormGraphProviderProps {
     links: RawLink[]
   }
   rootId: string
+  rootImages: [string, string?]
   focusNodes?: RawNode[]
 }
 
@@ -50,6 +51,7 @@ export function OpenFormGraphProvider({
   rootId: _rootId,
   children,
   focusNodes = [],
+  rootImages,
 }: OpenFormGraphProviderProps) {
   const [rootId, setRootId] = useState<string>(_rootId)
   const [_config, setConfig] = useState<GraphConfig>({
@@ -436,6 +438,7 @@ export function OpenFormGraphProvider({
     getNodeForce,
     search: breadthFirstSearch,
     focusNodes: focusNodes,
+    rootImages: rootImages,
   }
 
   return (

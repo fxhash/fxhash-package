@@ -11,15 +11,19 @@ import {
 import { useRef, useEffect, useMemo, useState, useCallback } from "react"
 import { useTransform } from "./useTransform"
 import { useCanvasDraw } from "./useCanvasDraw"
+import { useOpenFormGraph } from "@/provider"
 
-export interface NodeState {
+export type NodeState = {
   collapsed?: boolean
+  image?: HTMLImageElement
 }
 
-export interface SimNode extends RawNode, SimulationNodeDatum {
+export type SimNode = {
   state?: NodeState
   clusterSize?: number
-}
+} & RawNode &
+  SimulationNodeDatum
+
 export interface SimLink extends SimulationLinkDatum<SimNode> {}
 
 function getChildren(id: string, links: RawLink[]): string[] {
@@ -140,6 +144,15 @@ function getPrunedData(startId: string, nodes: SimNode[], links: SimLink[]) {
   }
 }
 
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
+}
+
 interface UseForceSimulationProps {
   rootId: string
   width: number
@@ -152,7 +165,9 @@ interface UseForceSimulationProps {
 
 export function useForceSimulation(props: UseForceSimulationProps) {
   const { data, width, height, rootId } = props
-
+  const { rootImages: rootImageSources } = useOpenFormGraph()
+  const rootImages = useRef<HTMLImageElement[]>([])
+  const imageCache = useRef<{ [src: string]: HTMLImageElement }>({})
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const nodes = useRef<SimNode[]>([])
   const links = useRef<SimLink[]>([])
@@ -171,7 +186,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       state: {
         collapsed:
           hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 0,
-      },
+      } as NodeState,
       clusterSize: getClusterSize(n.id, _links),
     }))
 
@@ -179,7 +194,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     if (!data.nodes.find(n => n.id === rootId)) {
       _nodes.push({
         id: rootId,
-        state: { collapsed: false },
+        state: { collapsed: false, image: undefined },
         clusterSize: 0,
       })
       const targetIds = new Set(_links.map(link => link.target))
@@ -203,6 +218,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     selectedNode,
     rootId,
     subGraph,
+    rootImages,
   })
 
   const { transform, transformTo } = useTransform({
@@ -244,10 +260,10 @@ export function useForceSimulation(props: UseForceSimulationProps) {
             }
             if (!node.state.collapsed) {
               children.forEach(childId => {
-                const childNode = fullData.nodes.find(n => n.id === childId)
-                if (childNode) {
-                  childNode.x = node.x
-                  childNode.y = node.y
+                const childNode = nodes.current.find(n => n.id === childId)
+                if (childNode && isSimNode(childNode)) {
+                  if (childNode.x === 0) childNode.x = node.x
+                  if (childNode.y === 0) childNode.y = node.y
                 }
               })
             }
@@ -342,6 +358,38 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     simulation.current = _openFormSimulation
     return _openFormSimulation
   }, [fullData, rootId, width, height, draw, transform])
+
+  useEffect(() => {
+    if (!fullData) return
+    fullData.nodes.forEach(node => {
+      if (node.imgSrc && !imageCache.current[node.imgSrc]) {
+        loadImage(node.imgSrc)
+          .then(img => {
+            imageCache.current[node.imgSrc!] = img
+            // Optionally attach to node.state.image:
+            node.state = node.state || {}
+            node.state.image = img
+            // TODO: determine if need to redraw the canvas
+            const ctx = canvasRef.current?.getContext("2d")
+            //            if (ctx) draw(ctx, transform.current)
+          })
+          .catch(() => {
+            // Handle failed image, maybe set a fallback
+          })
+      }
+    })
+  }, [fullData, draw, transform])
+
+  useEffect(() => {
+    rootImageSources.forEach((src, idx) => {
+      if (!src) return
+      loadImage(src).then(img => {
+        if (img) {
+          rootImages.current[idx] = img
+        }
+      })
+    })
+  }, [rootImageSources])
 
   useEffect(() => {
     if (simulation.current) {
