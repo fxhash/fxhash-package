@@ -31,6 +31,7 @@ import {
   UserRejectedError,
 } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
+import { waitForCallsStatus } from "viem/actions"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -220,6 +221,111 @@ export async function handleContractError(error: any): Promise<string> {
     }
   }
   throw error // Re-throwing error if it's not an instance of BaseError.
+}
+
+// Add to EthCommon.js
+
+export type BatchedCall = {
+  to: `0x${string}`
+  abi: any
+  functionName: string
+  args: any[]
+  value?: bigint
+}
+
+export type SimulateAndExecuteBatchedRequest = {
+  chain: Chain
+  calls: BatchedCall[]
+}
+
+/**
+ * Simulates and executes a batched transaction using sendCalls with proper error handling
+ * Falls back to individual transactions if sendCalls is not supported
+ */
+export async function simulateAndExecuteBatched(
+  walletManager: EthereumWalletManager,
+  args: SimulateAndExecuteBatchedRequest
+): Promise<string> {
+  const account = walletManager.walletClient.account
+  try {
+    // Check if wallet supports sendCalls (EIP-5792)
+    const supportsSendCalls = await supportsBatchedTransactions(
+      walletManager,
+      args.chain
+    )
+    if (!supportsSendCalls)
+      throw new Error("wallet does not support batched transactions")
+
+    // First, simulate each call individually to catch errors early
+    for (const call of args.calls) {
+      try {
+        await walletManager.publicClient.simulateContract({
+          address: call.to,
+          abi: call.abi,
+          functionName: call.functionName,
+          args: call.args,
+          account,
+          chain: args.chain,
+          value: call.value,
+        } as any)
+      } catch (error) {
+        // TODO: cleanup this horrible mess???
+        try {
+          const errorMessage = await handleContractError(error)
+          throw new Error(errorMessage)
+        } catch (error) {
+          // skip this error, it will happen frequently as we are batching approval calls
+          if (!error.message.includes("ERC20InsufficientAllowance")) throw error
+        }
+      }
+    }
+
+    // If all simulations pass, execute the batch
+    const { id } = await walletManager.walletClient.sendCalls({
+      account,
+      chain: args.chain,
+      calls: args.calls.map(call => ({
+        to: call.to,
+        abi: call.abi,
+        functionName: call.functionName,
+        args: call.args,
+        value: call.value,
+      })),
+    })
+
+    // Wait for the batch to complete
+    const status = await waitForCallsStatus(walletManager.walletClient, {
+      id,
+    })
+
+    if (!status.receipts) throw new Error("failed to get batch status")
+
+    // Check if any transaction in the batch failed
+    for (const receipt of status.receipts || []) {
+      if (receipt.status === "reverted") {
+        throw new TransactionRevertedError("Batched transaction reverted")
+      }
+    }
+
+    // Return the hash of the first transaction
+    return status.receipts[0].transactionHash
+  } catch (error) {
+    const errorMessage = await handleContractError(error)
+    throw new Error(errorMessage)
+  }
+}
+
+/**
+ * Helper function to check if a wallet supports batched transactions
+ */
+export async function supportsBatchedTransactions(
+  walletManager: EthereumWalletManager,
+  chain: Chain
+): Promise<boolean> {
+  const capabilities = await walletManager.walletClient.getCapabilities()
+  return ["supported", "ready"].includes(
+    (capabilities as Record<string, any>)[chain.id]?.atomic?.status
+  )
 }
 
 /**
