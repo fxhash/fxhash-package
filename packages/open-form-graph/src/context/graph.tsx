@@ -7,6 +7,7 @@ import {
   ReactNode,
   useRef,
   useEffect,
+  Dispatch,
 } from "react"
 import {
   type ForceGraphMethods,
@@ -53,6 +54,7 @@ export function OpenFormGraphProvider({
   focusNodes = [],
   rootImages,
 }: OpenFormGraphProviderProps) {
+  const [hideThumbnails, setHideThumbnails] = useState(false)
   const [rootId, setRootId] = useState<string>(_rootId)
   const [_config, setConfig] = useState<GraphConfig>({
     ...DEFAULT_GRAPH_CONFIG,
@@ -439,6 +441,8 @@ export function OpenFormGraphProvider({
     search: breadthFirstSearch,
     focusNodes: focusNodes,
     rootImages: rootImages,
+    hideThumbnails,
+    setHideThumbnails,
   }
 
   return (

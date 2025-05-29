@@ -1,6 +1,7 @@
 import { ForceGraphMethods } from "react-force-graph-2d"
 import { ForceGraphMethods as ForceGraphMethods3D } from "react-force-graph-3d"
 import { GraphData, Link, Node, RawNode } from "./_types.js"
+import { Dispatch } from "react"
 
 export interface GraphConfig {
   debug: false
@@ -30,6 +31,8 @@ type _ForceGraphMethods =
   | ForceGraphMethods3D<Node, Link>
 
 export interface OpenFormGraphApi {
+  hideThumbnails: boolean
+  setHideThumbnails?: Dispatch<boolean>
   ref: React.MutableRefObject<_ForceGraphMethods | undefined>
   rootId: string
   rootImages: [string, string?]

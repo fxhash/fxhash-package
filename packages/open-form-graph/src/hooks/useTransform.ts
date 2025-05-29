@@ -32,11 +32,12 @@ export function useTransform(props: UseTransformProps) {
   const moved = useRef(false)
   const CLICK_THRESHOLD = 5
   const lastMousePos = useRef({ x: 0, y: 0 })
+  const lastMoveMousePos = useRef({ x: 0, y: 0 })
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
   const animateTransform = useCallback(() => {
-    const speed = 0.2
+    const speed = 0.05
     const prev = transform.current
     const target = targetTransform.current
 
@@ -117,6 +118,7 @@ export function useTransform(props: UseTransformProps) {
         const x = e.clientX - rect.left
         const y = e.clientY - rect.top
         onMove?.(x, y)
+        lastMoveMousePos.current = { x: e.clientX, y: e.clientY }
       }
       if (!isDragging.current || !dragStart.current) return
       const dx = e.clientX - dragStart.current.x
@@ -196,6 +198,15 @@ export function useTransform(props: UseTransformProps) {
     [animateTransform]
   )
 
+  const trackCursor = useCallback(() => {
+    if (onMove && canvasRef.current) {
+      const rect = canvasRef.current.getBoundingClientRect()
+      const x = lastMoveMousePos.current.x - rect.left
+      const y = lastMoveMousePos.current.y - rect.top
+      onMove(x, y)
+    }
+  }, [onMove, canvasRef.current])
+
   return {
     resetZoom,
     transformTo,
@@ -203,5 +214,6 @@ export function useTransform(props: UseTransformProps) {
     onMouseDown: handleMouseDown,
     onMouseMove: handleMouseMove,
     onMouseUp: handleMouseUp,
+    trackCursor,
   }
 }

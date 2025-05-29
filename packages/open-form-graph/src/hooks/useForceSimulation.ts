@@ -8,10 +8,11 @@ import {
   forceManyBody,
   forceCenter,
 } from "d3-force"
-import { useRef, useEffect, useMemo, useState, useCallback } from "react"
+import { useRef, useEffect, useMemo, useCallback } from "react"
 import { useTransform } from "./useTransform"
 import { useCanvasDraw } from "./useCanvasDraw"
 import { useOpenFormGraph } from "@/provider"
+import { scaleLinear } from "d3-scale"
 
 export type NodeState = {
   collapsed?: boolean
@@ -26,13 +27,13 @@ export type SimNode = {
 
 export interface SimLink extends SimulationLinkDatum<SimNode> {}
 
-function getChildren(id: string, links: RawLink[]): string[] {
+function getChildren(id: string, links: SimLink[]): string[] {
   return links
     .filter(l => {
       const sourceId = isSimNode(l.source) ? l.source.id : l.source
       return sourceId === id
     })
-    .map(link => link.target)
+    .map(link => link.target.toString())
 }
 
 function getClusterSize(id: string, links: RawLink[]): number {
@@ -154,6 +155,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 interface UseForceSimulationProps {
+  nodeSize?: number
   rootId: string
   width: number
   height: number
@@ -164,7 +166,7 @@ interface UseForceSimulationProps {
 }
 
 export function useForceSimulation(props: UseForceSimulationProps) {
-  const { data, width, height, rootId } = props
+  const { data, width, height, rootId, nodeSize = 15 } = props
   const { rootImages: rootImageSources } = useOpenFormGraph()
   const rootImages = useRef<HTMLImageElement[]>([])
   const imageCache = useRef<{ [src: string]: HTMLImageElement }>({})
@@ -178,14 +180,18 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     nodes: SimNode[]
     links: SimLink[]
   }>({ nodes: [], links: [] })
+  const clusterSizeRange = useRef<[number, number]>([0, 0])
 
-  const fullData = useMemo(() => {
+  const fullData = useMemo<{
+    nodes: SimNode[]
+    links: SimLink[]
+  }>(() => {
     const _links = data.links.map(l => ({ ...l }))
     const _nodes = data.nodes.map(n => ({
       ...n,
       state: {
         collapsed:
-          hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 0,
+          hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
       } as NodeState,
       clusterSize: getClusterSize(n.id, _links),
     }))
@@ -195,7 +201,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       _nodes.push({
         id: rootId,
         state: { collapsed: false, image: undefined },
-        clusterSize: 0,
+        clusterSize: 1,
       })
       const targetIds = new Set(_links.map(link => link.target))
       const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
@@ -209,6 +215,23 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     return { nodes: _nodes, links: _links }
   }, [data])
 
+  const getNodeSize = useCallback(
+    (nodeId: string) => {
+      if (nodeId === rootId) return nodeSize * 2
+      const node = fullData.nodes.find(n => n.id === nodeId)
+      const isCollapsed = !!node?.state?.collapsed
+      if (isCollapsed) {
+        const scale = scaleLinear()
+          .domain(clusterSizeRange.current)
+          .range([nodeSize, nodeSize * 3])
+        return scale(node.clusterSize || 1)
+      }
+      const isSelected = selectedNode?.current?.id === nodeId
+      return isSelected ? nodeSize * 2 : nodeSize
+    },
+    [nodeSize, rootId, fullData]
+  )
+
   const { draw } = useCanvasDraw({
     width,
     height,
@@ -219,9 +242,11 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     rootId,
     subGraph,
     rootImages,
+    getNodeSize,
+    clusterSizeRange,
   })
 
-  const { transform, transformTo } = useTransform({
+  const { transform, transformTo, trackCursor } = useTransform({
     canvasRef,
     onUpdate: transform => {
       const context = canvasRef.current?.getContext("2d")
@@ -260,24 +285,27 @@ export function useForceSimulation(props: UseForceSimulationProps) {
             }
             if (!node.state.collapsed) {
               children.forEach(childId => {
-                const childNode = nodes.current.find(n => n.id === childId)
+                const childNode = fullData.nodes.find(n => n.id === childId)
                 if (childNode && isSimNode(childNode)) {
-                  if (childNode.x === 0) childNode.x = node.x
-                  if (childNode.y === 0) childNode.y = node.y
+                  if (!childNode.x || childNode.x === 0)
+                    childNode.x = (node.x || width / 2) + Math.random() * 50 - 5
+                  if (!childNode.y || childNode.y === 0)
+                    childNode.y =
+                      (node.y || height / 2) + Math.random() * 50 - 5
                 }
               })
             }
           }
         }
         resetSimulation()
-        const nodePos = getNodePosition(node)
-        transformTo({ x: nodePos.x, y: nodePos.y })
         subGraph.current = getNodeSubgraph(
           node.id,
           fullData.nodes,
           fullData.links,
           rootId
         )
+        const nodePos = getNodeScreenPosition(node)
+        transformTo({ x: nodePos.x, y: nodePos.y })
       }
       selectedNode.current = node
       if (canvas) {
@@ -287,7 +315,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     },
   })
 
-  const getNodePosition = useCallback(
+  const getNodeScreenPosition = useCallback(
     (node: SimNode) => {
       const _x = node.x || 0
       const _y = node.y || 0
@@ -304,8 +332,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       const x = (canvasX - tx) / scale
       const y = (canvasY - ty) / scale
       for (let node of nodes.current) {
-        //TODO: use node radius instead of hardcoded value
-        const r = 5 / 2
+        const r = getNodeSize(node.id) / 2
         if (node.x == null || node.y == null) continue
         const dx = node.x - x
         const dy = node.y - y
@@ -315,11 +342,20 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       }
       return null
     },
-    [transform.current]
+    [transform.current, getNodeSize, nodes.current]
   )
 
   const resetSimulation = useCallback(() => {
     const prunedData = getPrunedData(rootId, fullData.nodes, fullData.links)
+    clusterSizeRange.current = prunedData.nodes
+      .filter(n => n.state?.collapsed)
+      .reduce(
+        (acc, node) => [
+          Math.min(acc[0], node.clusterSize || 1),
+          Math.max(acc[1], node.clusterSize || 1),
+        ],
+        [Infinity, -Infinity] as [number, number]
+      )
     const _openFormSimulation = forceSimulation<SimNode, SimLink>(
       prunedData.nodes
     )
@@ -328,10 +364,11 @@ export function useForceSimulation(props: UseForceSimulationProps) {
         forceLink<SimNode, SimLink>(prunedData.links)
           .id(d => d.id)
           .distance(l => {
-            if (!l.target?.state?.collapsed) return 15
-            return 30
+            if (!l.target?.state?.collapsed) return nodeSize
+            return nodeSize * 3
           })
           .strength(l => {
+            return 0.6
             const num = Math.min(
               prunedData.links.filter(x => x.source.id === l.source.id).length,
               prunedData.links.filter(x => x.source.id === l.target.id).length
@@ -339,12 +376,18 @@ export function useForceSimulation(props: UseForceSimulationProps) {
             return 1 / Math.max(num * 0.3, 1)
           })
       )
-      .force("charge", forceManyBody())
-      .force("center", forceCenter(width / 2, height / 2).strength(0.05))
+      .force(
+        "charge",
+        forceManyBody().strength(n => {
+          return -130
+        })
+      )
+      .force("center", forceCenter(width / 2, height / 2).strength(0.01))
 
     function _draw() {
       const context = canvasRef.current?.getContext("2d")
       if (!context) return
+      trackCursor()
       draw(context, transform.current)
     }
 
@@ -357,25 +400,20 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     })
     simulation.current = _openFormSimulation
     return _openFormSimulation
-  }, [fullData, rootId, width, height, draw, transform])
+  }, [fullData, rootId, width, height, draw, transform, nodeSize, trackCursor])
 
   useEffect(() => {
     if (!fullData) return
     fullData.nodes.forEach(node => {
       if (node.imgSrc && !imageCache.current[node.imgSrc]) {
-        loadImage(node.imgSrc)
-          .then(img => {
-            imageCache.current[node.imgSrc!] = img
-            // Optionally attach to node.state.image:
-            node.state = node.state || {}
-            node.state.image = img
-            // TODO: determine if need to redraw the canvas
-            const ctx = canvasRef.current?.getContext("2d")
-            //            if (ctx) draw(ctx, transform.current)
-          })
-          .catch(() => {
-            // Handle failed image, maybe set a fallback
-          })
+        loadImage(node.imgSrc).then(img => {
+          imageCache.current[node.imgSrc!] = img
+          node.state = node.state || {}
+          node.state.image = img
+          // TODO: determine if need to redraw the canvas
+          // const ctx = canvasRef.current?.getContext("2d")
+          // if (ctx) draw(ctx, transform.current)
+        })
       }
     })
   }, [fullData, draw, transform])
