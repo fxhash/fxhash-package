@@ -1,11 +1,13 @@
 import { MutableRefObject, useCallback } from "react"
-import { SimNode, SimLink, isSimNode } from "./useForceSimulation"
 import { Transform } from "./useTransform"
 import { circle, img, rect } from "@/util/canvas"
 import { dim } from "@/util/color"
 import { useColor } from "./useColor"
 import { useOpenFormGraph } from "@/provider"
 import { scaleLog } from "d3-scale"
+import { SimNode, SimLink } from "@/_types"
+import { isSimNode } from "@/util/types"
+import { getNodeId } from "@/util/graph"
 
 interface UseCanvasDrawProps {
   width: number
@@ -19,9 +21,6 @@ interface UseCanvasDrawProps {
   rootImages?: MutableRefObject<HTMLImageElement[]>
   getNodeSize?: (nodeId: string) => number
   clusterSizeRange: MutableRefObject<[number, number]>
-}
-function getNodeId(n: any) {
-  return typeof n === "object" && n !== null && "id" in n ? n.id : n
 }
 
 export function useCanvasDraw(props: UseCanvasDrawProps) {

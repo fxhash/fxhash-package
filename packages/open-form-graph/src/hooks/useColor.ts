@@ -1,4 +1,4 @@
-import { useOpenFormGraph } from "@/context/graph"
+import { useOpenFormGraph } from "@/context/provider"
 import { color } from "@/util/color"
 
 export function useColor() {
