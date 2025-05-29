@@ -248,14 +248,6 @@ export async function simulateAndExecuteBatched(
 ): Promise<string> {
   const account = walletManager.walletClient.account
   try {
-    // Check if wallet supports sendCalls (EIP-5792)
-    const supportsSendCalls = await supportsBatchedTransactions(
-      walletManager,
-      args.chain
-    )
-    if (!supportsSendCalls)
-      throw new Error("wallet does not support batched transactions")
-
     // First, simulate each call individually to catch errors early
     for (const call of args.calls) {
       try {
@@ -291,6 +283,7 @@ export async function simulateAndExecuteBatched(
         args: call.args,
         value: call.value,
       })),
+      experimental_fallback: true,
     })
 
     // Wait for the batch to complete
