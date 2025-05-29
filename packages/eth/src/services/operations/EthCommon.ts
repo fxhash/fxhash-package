@@ -11,6 +11,7 @@ import {
   type ContractFunctionName,
   type ContractFunctionArgs,
   type ContractFunctionParameters,
+  erc20Abi,
 } from "viem"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
@@ -223,9 +224,27 @@ export async function handleContractError(error: any): Promise<string> {
   throw error // Re-throwing error if it's not an instance of BaseError.
 }
 
-// Add to EthCommon.js
+/**
+ * Helper function to check if a wallet supports batched transactions
+ */
+export async function supportsBatchedTransactions(
+  walletManager: EthereumWalletManager,
+  chain: Chain
+): Promise<boolean> {
+  const capabilities = await walletManager.walletClient.getCapabilities()
+  return ["supported", "ready"].includes(
+    (capabilities as Record<string, any>)[chain.id]?.atomic?.status
+  )
+}
 
-export type BatchedCall = {
+interface ApprovalArgs {
+  amount: bigint
+  spenderAddress: `0x${string}`
+  tokenAddress: `0x${string}`
+  useSmartAccount: boolean
+}
+
+type BatchedCall = {
   to: `0x${string}`
   abi: any
   functionName: string
@@ -233,23 +252,41 @@ export type BatchedCall = {
   value?: bigint
 }
 
-export type SimulateAndExecuteBatchedRequest = {
-  chain: Chain
-  calls: BatchedCall[]
-}
-
-/**
- * Simulates and executes a batched transaction using sendCalls with proper error handling
- * Falls back to individual transactions if sendCalls is not supported
- */
-export async function simulateAndExecuteBatched(
+export async function simulateAndExecuteContractWithApproval<
+  abi extends Abi | readonly unknown[] = Abi,
+  functionName extends ContractFunctionName<
+    abi,
+    "nonpayable" | "payable"
+  > = ContractFunctionName<abi, "nonpayable" | "payable">,
+>(
   walletManager: EthereumWalletManager,
-  args: SimulateAndExecuteBatchedRequest
+  args: SimulateAndExecuteContractRequest<abi, functionName>,
+  approvalArgs?: ApprovalArgs
 ): Promise<string> {
+  if (!approvalArgs) return simulateAndExecuteContract(walletManager, args)
+
   const account = walletManager.walletClient.account
-  try {
+
+  // if the consumer wants to use a smart account, we can batch the calls
+  if (approvalArgs.useSmartAccount) {
+    const calls: BatchedCall[] = [
+      {
+        to: approvalArgs.tokenAddress,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [approvalArgs.spenderAddress, approvalArgs.amount],
+      },
+      {
+        to: args.address,
+        abi: args.abi,
+        functionName: args.functionName,
+        args: args.args as any[],
+        value: args.value,
+      },
+    ]
+
     // First, simulate each call individually to catch errors early
-    for (const call of args.calls) {
+    for (const call of calls) {
       try {
         await walletManager.publicClient.simulateContract({
           address: call.to,
@@ -266,17 +303,17 @@ export async function simulateAndExecuteBatched(
           const errorMessage = await handleContractError(error)
           throw new Error(errorMessage)
         } catch (error) {
-          // skip this error, it will happen frequently as we are batching approval calls
+          // skip this error - it will happen every time an approval is required
           if (!error.message.includes("ERC20InsufficientAllowance")) throw error
         }
       }
     }
 
-    // If all simulations pass, execute the batch
+    // if all simulations pass, execute the batch
     const { id } = await walletManager.walletClient.sendCalls({
       account,
       chain: args.chain,
-      calls: args.calls.map(call => ({
+      calls: calls.map(call => ({
         to: call.to,
         abi: call.abi,
         functionName: call.functionName,
@@ -286,39 +323,36 @@ export async function simulateAndExecuteBatched(
       experimental_fallback: true,
     })
 
-    // Wait for the batch to complete
+    // wait for the batch to complete
     const status = await waitForCallsStatus(walletManager.walletClient, {
       id,
     })
 
+    // check if any transaction in the batch failed
     if (!status.receipts) throw new Error("failed to get batch status")
-
-    // Check if any transaction in the batch failed
     for (const receipt of status.receipts || []) {
       if (receipt.status === "reverted") {
         throw new TransactionRevertedError("Batched transaction reverted")
       }
     }
 
-    // Return the hash of the first transaction
+    // return the hash of the first transaction
     return status.receipts[0].transactionHash
-  } catch (error) {
-    const errorMessage = await handleContractError(error)
-    throw new Error(errorMessage)
   }
-}
 
-/**
- * Helper function to check if a wallet supports batched transactions
- */
-export async function supportsBatchedTransactions(
-  walletManager: EthereumWalletManager,
-  chain: Chain
-): Promise<boolean> {
-  const capabilities = await walletManager.walletClient.getCapabilities()
-  return ["supported", "ready"].includes(
-    (capabilities as Record<string, any>)[chain.id]?.atomic?.status
-  )
+  // otherwise, we approve + execute sequentially
+  const approvalTxHash = await simulateAndExecuteContract(walletManager, {
+    address: approvalArgs.tokenAddress,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [approvalArgs.spenderAddress, approvalArgs.amount],
+    account: args.account,
+    chain: args.chain,
+  })
+
+  // wait for the approval before executing the main transaction
+  await walletManager.waitForTransaction({ hash: approvalTxHash })
+  return simulateAndExecuteContract(walletManager, args)
 }
 
 /**
