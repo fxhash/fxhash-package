@@ -509,14 +509,17 @@ export class OpenGraphSimulation {
       if (b.id === this.selectedNode?.id) return -1
       return 0
     })
+    this.onDraw()
   }
 
   setHighlights = (highlights: string[]) => {
     this.highlights = highlights
+    this.onDraw()
   }
 
   setNoInteraction = (noInteraction: boolean) => {
     this.noInteraction = noInteraction
     this.transformCanvas.setNoInteraction(noInteraction)
+    this.onDraw()
   }
 }
