@@ -1,11 +1,11 @@
 import { useForceSimulation } from "@/hooks/useForceSimulation"
 
-interface CustomOpenFormGraphProps {
+interface OpenFormGraphProps {
   width: number
   height: number
 }
 
-export function CustomOpenFormGraph(props: CustomOpenFormGraphProps) {
+export function OpenFormGraph(props: OpenFormGraphProps) {
   const { width, height } = props
   const { canvasRef } = useForceSimulation({ width, height })
 

@@ -202,7 +202,6 @@ export function useForceSimulation(props: UseForceSimulationProps) {
           rootId
         )
         const nodePos = getNodeScreenPosition(node)
-        console.log(node, nodePos)
         transformTo({ x: nodePos.x, y: nodePos.y })
       }
       setSelectedNode(node)
@@ -344,7 +343,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       _openFormSimulation.on("end", null)
       simulation.current = null
     }
-  }, [])
+  }, [resetSimulation])
 
   return {
     simulation,

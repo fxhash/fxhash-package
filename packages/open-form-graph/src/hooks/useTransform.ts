@@ -171,7 +171,6 @@ export function useTransform(props: UseTransformProps) {
     window.addEventListener("mouseup", handleMouseUp)
 
     return () => {
-      console.log("CLEANING UP")
       canvas.removeEventListener("wheel", handleWheel)
       canvas.removeEventListener("mousedown", handleMouseDown)
       window.removeEventListener("mousemove", handleMouseMove)

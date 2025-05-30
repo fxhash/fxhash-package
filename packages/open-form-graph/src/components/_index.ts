@@ -1,1 +1,1 @@
-export * from "./CustomOpenFormGraph.js"
+export * from "./OpenFormGraph.js"

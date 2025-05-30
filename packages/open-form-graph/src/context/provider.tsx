@@ -26,14 +26,14 @@ interface OpenFormGraphProviderProps {
   children: ReactNode
   config?: GraphConfig
   data: RawGraphData
+  onSelectedNodeChange?: (node: SimNode | null) => void
+  onHoveredNodeChange?: (node: SimNode | null) => void
 }
 
 export interface OpenFormGraphApi {
   rootId: string
   rootImageSources: RootNodeImageSources
-  selectedNode: SimNode | null
   setSelectedNode: Dispatch<SimNode | null>
-  hoveredNode: SimNode | null
   setHoveredNode: Dispatch<SimNode | null>
   theme: ThemeMode
   setTheme: (theme: ThemeMode) => void
@@ -52,9 +52,7 @@ export interface OpenFormGraphApi {
 const OpenFormGraphContext = createContext<OpenFormGraphApi>({
   rootId: "",
   rootImageSources: [],
-  selectedNode: null,
   setSelectedNode: () => {},
-  hoveredNode: null,
   setHoveredNode: () => {},
   theme: "light",
   setTheme: () => {},
@@ -77,11 +75,11 @@ export function OpenFormGraphProvider({
   rootImageSources = [],
   config = DEFAULT_GRAPH_CONFIG,
   data,
+  onSelectedNodeChange,
+  onHoveredNodeChange,
 }: OpenFormGraphProviderProps) {
   const selectedNodeRef = useRef<SimNode | null>(null)
-  const [selectedNode, _setSelectedNode] = useState<SimNode | null>(null)
   const hoveredNodeRef = useRef<SimNode | null>(null)
-  const [hoveredNode, _setHoveredNode] = useState<SimNode | null>(null)
   const [hideThumbnails, setHideThumbnails] = useState(false)
   const [_theme, setTheme] = useState<ThemeMode>(theme)
 
@@ -92,32 +90,30 @@ export function OpenFormGraphProvider({
 
   const setSelectedNode = useCallback(
     (n: SimNode | null) => {
-      if (n !== selectedNode) {
+      if (n !== selectedNodeRef.current) {
         selectedNodeRef.current = n
-        _setSelectedNode(n)
+        onSelectedNodeChange?.(n)
       }
     },
-    [_setSelectedNode, selectedNode]
+    [onSelectedNodeChange]
   )
 
   const setHoveredNode = useCallback(
     (n: SimNode | null) => {
-      if (n !== hoveredNode) {
+      if (n !== hoveredNodeRef.current) {
         hoveredNodeRef.current = n
-        _setHoveredNode(n)
+        onHoveredNodeChange?.(n)
       }
     },
-    [_setHoveredNode, hoveredNode]
+    [onHoveredNodeChange]
   )
 
   const contextValue: OpenFormGraphApi = useMemo(() => {
     return {
       rootId,
       selectedNodeRef,
-      selectedNode,
       setSelectedNode,
       hoveredNodeRef,
-      hoveredNode,
       setHoveredNode,
       hideThumbnails,
       setHideThumbnails,
@@ -133,9 +129,7 @@ export function OpenFormGraphProvider({
     }
   }, [
     rootId,
-    selectedNode,
     setSelectedNode,
-    hoveredNode,
     setHoveredNode,
     hideThumbnails,
     setHideThumbnails,
