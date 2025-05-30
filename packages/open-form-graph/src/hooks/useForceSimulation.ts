@@ -57,7 +57,16 @@ interface UseForceSimulationProps {
 
 export function useForceSimulation(props: UseForceSimulationProps) {
   const { width, height } = props
-  const { rootImageSources, data, config, rootId } = useOpenFormGraph()
+  const {
+    rootImageSources,
+    data,
+    config,
+    rootId,
+    setSelectedNode,
+    setHoveredNode,
+    selectedNodeRef,
+    hoveredNodeRef,
+  } = useOpenFormGraph()
   const { nodeSize } = config
   const rootImages = useRef<HTMLImageElement[]>([])
   const imageCache = useRef<{ [src: string]: HTMLImageElement }>({})
@@ -65,8 +74,6 @@ export function useForceSimulation(props: UseForceSimulationProps) {
   const nodes = useRef<SimNode[]>([])
   const links = useRef<SimLink[]>([])
   const simulation = useRef<Simulation<SimNode, SimLink> | null>(null)
-  const hoveredNode = useRef<SimNode | null>(null)
-  const selectedNode = useRef<SimNode | null>(null)
   const subGraph = useRef<{
     nodes: SimNode[]
     links: SimLink[]
@@ -117,23 +124,22 @@ export function useForceSimulation(props: UseForceSimulationProps) {
           .range([nodeSize, nodeSize * 3])
         return scale(node.clusterSize || 1)
       }
-      const isSelected = selectedNode?.current?.id === nodeId
+      const isSelected = selectedNodeRef?.current?.id === nodeId
       return isSelected ? nodeSize * 2 : nodeSize
     },
     [nodeSize, rootId, fullData]
   )
 
   const { draw } = useCanvasDraw({
-    rootId,
     width,
     height,
     nodes,
     links,
-    hoveredNode,
-    selectedNode,
+    getNodeSize,
+    hoveredNode: hoveredNodeRef,
+    selectedNode: selectedNodeRef,
     subGraph,
     rootImages,
-    getNodeSize,
     clusterSizeRange,
   })
 
@@ -147,7 +153,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
     onMove: (x, y) => {
       const canvas = canvasRef.current
       const node = getNodeAtPosition(x, y)
-      hoveredNode.current = node
+      setHoveredNode(node)
       if (canvas) {
         canvas.style.cursor = node ? "pointer" : "default"
         const ctx = canvas.getContext("2d")
@@ -159,7 +165,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       const node = getNodeAtPosition(x, y)
       if (node) {
         if (node.id === rootId) {
-          selectedNode.current = null
+          setSelectedNode(null)
           subGraph.current = {
             nodes: [],
             links: [],
@@ -169,7 +175,7 @@ export function useForceSimulation(props: UseForceSimulationProps) {
         if (node.state) {
           const children = getChildren(node.id, fullData.links)
           if (children.length > 0) {
-            if (selectedNode?.current?.id !== node.id) {
+            if (selectedNodeRef?.current?.id !== node.id) {
               node.state.collapsed = false
             } else {
               node.state.collapsed = !node.state.collapsed
@@ -196,9 +202,10 @@ export function useForceSimulation(props: UseForceSimulationProps) {
           rootId
         )
         const nodePos = getNodeScreenPosition(node)
+        console.log(node, nodePos)
         transformTo({ x: nodePos.x, y: nodePos.y })
       }
-      selectedNode.current = node
+      setSelectedNode(node)
       if (canvas) {
         const ctx = canvas.getContext("2d")
         if (ctx) draw(ctx, transform.current)
@@ -337,12 +344,10 @@ export function useForceSimulation(props: UseForceSimulationProps) {
       _openFormSimulation.on("end", null)
       simulation.current = null
     }
-  }, [resetSimulation])
+  }, [])
 
   return {
     simulation,
     canvasRef,
-    hoveredNode,
-    selectedNode,
   }
 }

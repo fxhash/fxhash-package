@@ -1,3 +1,4 @@
+import { useOpenFormGraph } from "@/provider"
 import { MutableRefObject, useCallback, useEffect, useRef } from "react"
 
 export interface Transform {
@@ -18,14 +19,14 @@ const MAX_ZOOM = 10
 
 export function useTransform(props: UseTransformProps) {
   const { onUpdate, canvasRef, onClick, onMove } = props
-
-  const transform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
-  const targetTransform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
+  const {
+    transformRef: transform,
+    targetTransformRef: targetTransform,
+    isAnimatingRef: isAnimating,
+    animationFrameRef: animationFrame,
+  } = useOpenFormGraph()
 
   const zoomFocus = useRef({ x: 0, y: 0 }) // mouse pos at zoom center
-
-  const isAnimating = useRef(false)
-  const animationFrame = useRef<number | null>(null)
 
   const isDragging = useRef(false)
   const dragStart = useRef<{ x: number; y: number } | null>(null)
@@ -170,11 +171,12 @@ export function useTransform(props: UseTransformProps) {
     window.addEventListener("mouseup", handleMouseUp)
 
     return () => {
+      console.log("CLEANING UP")
       canvas.removeEventListener("wheel", handleWheel)
       canvas.removeEventListener("mousedown", handleMouseDown)
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseup", handleMouseUp)
-
+      isAnimating.current = false
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current)
       }

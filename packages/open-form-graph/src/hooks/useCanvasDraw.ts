@@ -14,12 +14,11 @@ interface UseCanvasDrawProps {
   height: number
   nodes: MutableRefObject<SimNode[]>
   links: MutableRefObject<SimLink[]>
+  getNodeSize?: (nodeId: string) => number
   hoveredNode?: MutableRefObject<SimNode | null>
   selectedNode?: MutableRefObject<SimNode | null>
   subGraph?: MutableRefObject<{ nodes: SimNode[]; links: SimLink[] }>
-  rootId: string
   rootImages?: MutableRefObject<HTMLImageElement[]>
-  getNodeSize?: (nodeId: string) => number
   clusterSizeRange: MutableRefObject<[number, number]>
 }
 
@@ -31,13 +30,12 @@ export function useCanvasDraw(props: UseCanvasDrawProps) {
     height,
     selectedNode,
     hoveredNode,
-    rootId,
     subGraph,
     rootImages,
     getNodeSize = () => 10,
     clusterSizeRange,
   } = props
-  const { theme, hideThumbnails } = useOpenFormGraph()
+  const { theme, hideThumbnails, rootId } = useOpenFormGraph()
   const { color, colorContrast } = useColor()
   const draw = useCallback(
     (context: CanvasRenderingContext2D, transform: Transform) => {
