@@ -6,10 +6,11 @@ interface OpenFormGraphProps {
   width: number
   height: number
   highlights?: string[]
+  className?: string
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
-  const { width, height, highlights = [] } = props
+  const { width, height, highlights = [], className } = props
   const {
     simulation,
     data,
@@ -67,6 +68,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
 
   return (
     <canvas
+      className={className}
       ref={canvasRef}
       width={`${width * dpi}px`}
       height={`${height * dpi}px`}
