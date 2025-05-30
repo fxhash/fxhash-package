@@ -217,6 +217,7 @@ export class OpenGraphSimulation {
   }
 
   restart = () => {
+    this.setSelectedNode(null)
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
@@ -262,7 +263,6 @@ export class OpenGraphSimulation {
         "center",
         forceCenter(this.width / 2, this.height / 2).strength(0.01)
       )
-
     this.simulation.on("tick", this.onDraw)
     this.simulation.on("end", this.onEnd)
   }
@@ -482,6 +482,7 @@ export class OpenGraphSimulation {
   resize = (width: number, height: number) => {
     this.width = width
     this.height = height
+    this.onDraw()
   }
 
   setTheme = (theme: ThemeMode) => {
@@ -491,10 +492,17 @@ export class OpenGraphSimulation {
 
   setHideThumbnails = (hide: boolean) => {
     this.hideThumbnails = hide
+    this.onDraw()
   }
 
   setSelectedNode = (node: SimNode | null) => {
     this.selectedNode = node
+    // sort the selected node to the end of the array
+    this.prunedData.nodes.sort((a, b) => {
+      if (a.id === this.selectedNode?.id) return 1
+      if (b.id === this.selectedNode?.id) return -1
+      return 0
+    })
   }
   setHighlights = (highlights: string[]) => {
     this.highlights = highlights
