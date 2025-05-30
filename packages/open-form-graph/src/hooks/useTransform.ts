@@ -1,4 +1,3 @@
-import { useOpenFormGraph } from "@/provider"
 import { MutableRefObject, useCallback, useEffect, useRef } from "react"
 
 export interface Transform {
@@ -19,14 +18,14 @@ const MAX_ZOOM = 10
 
 export function useTransform(props: UseTransformProps) {
   const { onUpdate, canvasRef, onClick, onMove } = props
-  const {
-    transformRef: transform,
-    targetTransformRef: targetTransform,
-    isAnimatingRef: isAnimating,
-    animationFrameRef: animationFrame,
-  } = useOpenFormGraph()
+
+  const transform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
+  const targetTransform = useRef<Transform>({ x: 0, y: 0, scale: 1 })
 
   const zoomFocus = useRef({ x: 0, y: 0 }) // mouse pos at zoom center
+
+  const isAnimating = useRef(false)
+  const animationFrame = useRef<number | null>(null)
 
   const isDragging = useRef(false)
   const dragStart = useRef<{ x: number; y: number } | null>(null)

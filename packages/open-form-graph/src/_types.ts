@@ -28,7 +28,7 @@ export type Node = {
 } & RawNode
 
 export type RawGraphData = { nodes: RawNode[]; links: RawLink[] }
-export type GraphData = { nodes: Node[]; links: Link[] }
+export type GraphData = { nodes: SimNode[]; links: SimLink[] }
 
 export type ThemeMode = "dark" | "light"
 export type RGB = [number, number, number]
