@@ -7,7 +7,6 @@ import {
   useMemo,
   useRef,
   MutableRefObject,
-  useCallback,
 } from "react"
 import {
   RawGraphData,
@@ -17,7 +16,6 @@ import {
 } from "@/_types"
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "./constants"
-import { Transform } from "@/hooks/useTransform"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
 
 interface OpenFormGraphProviderProps {
@@ -38,7 +36,7 @@ export interface OpenFormGraphApi {
   setHoveredNode: Dispatch<SimNode | null>
   theme: ThemeMode
   hideThumbnails: boolean
-  setHideThumbnails?: Dispatch<boolean>
+  setHideThumbnails: Dispatch<boolean>
   config: GraphConfig
   data: RawGraphData
   simulation: MutableRefObject<OpenGraphSimulation | null>

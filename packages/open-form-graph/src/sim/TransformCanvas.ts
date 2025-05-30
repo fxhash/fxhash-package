@@ -1,9 +1,8 @@
-import { Transform } from "@/hooks/useTransform"
-
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
 const CLICK_THRESHOLD = 5
 
+type Transform = { x: number; y: number; scale: number }
 type Point = { x: number; y: number }
 type TransformListener = (t: Transform) => void
 type MouseListener = (x: number, y: number) => void

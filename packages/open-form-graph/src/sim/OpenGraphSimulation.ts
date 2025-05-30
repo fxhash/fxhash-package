@@ -9,6 +9,7 @@ import {
   GraphData,
   NodeState,
   RawGraphData,
+  RGB,
   RootNodeImageSources,
   SimLink,
   SimNode,
@@ -21,7 +22,6 @@ import {
   getNodeSubgraph,
   getNodeId,
 } from "@/util/graph"
-import { getPrunedData } from "./util"
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "@/provider"
 import { isSimNode } from "@/util/types"
@@ -30,6 +30,7 @@ import { TransformCanvas } from "./TransformCanvas"
 import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
+import { getPrunedData } from "@/util/data"
 
 interface OpenGraphSimulationProps {
   width: number
@@ -66,6 +67,8 @@ export class OpenGraphSimulation {
   onSelectedNodeChange?: (node: SimNode | null) => void
   private hoveredNode: SimNode | null = null
   onHoveredNodeChange?: (node: SimNode | null) => void
+
+  private highlights: string[] = []
 
   constructor(props: OpenGraphSimulationProps) {
     this.theme = props.theme || "light"
@@ -350,7 +353,13 @@ export class OpenGraphSimulation {
             ? this.color(dim(0.4, isLight))()
             : this.color()
       const stroke = this.colorContrast()
+      const blue = [94, 112, 235] as RGB
+      const red = [238, 125, 121] as RGB
+      const highlightedStroke = _dim
+        ? color(red)(dim(0.4, isLight))()
+        : color(red)()
       const size = this.getNodeSize(node.id)
+      const highlighted = this.highlights.includes(node.id)
       if (node.id === this.rootId) {
         circle(context, x, y, size / 2, {
           stroke: false,
@@ -378,6 +387,16 @@ export class OpenGraphSimulation {
         }
       } else {
         if (isCollapsed) {
+          if (highlighted) {
+            const _size = size + 4
+            circle(context, x, y, _size / 2, {
+              stroke: true,
+              strokeStyle: highlightedStroke,
+              lineWidth: 1,
+              fill: false,
+              fillStyle: fill,
+            })
+          }
           circle(context, x, y, size / 2, {
             stroke: true,
             strokeStyle: stroke,
@@ -398,6 +417,17 @@ export class OpenGraphSimulation {
             context.fillText((node.clusterSize || 1).toString(), x, y)
           }
         } else {
+          if (highlighted) {
+            const _size = size + 4
+            rect(context, x - _size / 2, y - _size / 2, _size, _size, {
+              stroke: true,
+              strokeStyle: highlightedStroke,
+              lineWidth: 1,
+              fill: false,
+              fillStyle: fill,
+              borderRadius: 1,
+            })
+          }
           rect(context, x - size / 2, y - size / 2, size, size, {
             stroke: true,
             strokeStyle: stroke,
@@ -428,9 +458,7 @@ export class OpenGraphSimulation {
     this.transformCanvas.trackCursor()
   }
 
-  private onEnd = () => {
-    console.log("Simulation ended")
-  }
+  private onEnd = () => {}
 
   private loadNodeImages = () => {
     this.data.nodes.forEach((node: any) => {
@@ -467,5 +495,8 @@ export class OpenGraphSimulation {
 
   setSelectedNode = (node: SimNode | null) => {
     this.selectedNode = node
+  }
+  setHighlights = (highlights: string[]) => {
+    this.highlights = highlights
   }
 }
