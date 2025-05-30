@@ -194,6 +194,9 @@ export class OpenGraphSimulation {
           hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
       } as NodeState,
       clusterSize: getClusterSize(n.id, _links),
+      // set x and y to random values around the center
+      x: this.width / 2 + Math.random() * 200 - 5,
+      y: this.height / 2 + Math.random() * 200 - 5,
     }))
 
     // if rootId is not in the nodes, add it
@@ -202,6 +205,8 @@ export class OpenGraphSimulation {
         id: this.rootId,
         state: { collapsed: false, image: undefined },
         clusterSize: 1,
+        x: this.width / 2,
+        y: this.height / 2,
       })
       const targetIds = new Set(_links.map(link => link.target))
       const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
