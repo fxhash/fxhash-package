@@ -62,6 +62,7 @@ export class OpenGraphSimulation {
   private imageCache: Map<string, HTMLImageElement> = new Map()
   private rootImages: HTMLImageElement[] = []
   private hideThumbnails: boolean = false
+  private noInteraction: boolean = false
 
   private selectedNode: SimNode | null = null
   onSelectedNodeChange?: (node: SimNode | null) => void
@@ -504,7 +505,13 @@ export class OpenGraphSimulation {
       return 0
     })
   }
+
   setHighlights = (highlights: string[]) => {
     this.highlights = highlights
+  }
+
+  setNoInteraction = (noInteraction: boolean) => {
+    this.noInteraction = noInteraction
+    this.transformCanvas.setNoInteraction(noInteraction)
   }
 }

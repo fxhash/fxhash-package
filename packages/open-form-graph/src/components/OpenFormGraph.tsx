@@ -1,16 +1,25 @@
 import { useOpenFormGraph } from "@/provider"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
-import { useEffect, useRef } from "react"
+import { MouseEventHandler, useEffect, useRef } from "react"
 
 interface OpenFormGraphProps {
   width: number
   height: number
   highlights?: string[]
   className?: string
+  noInteraction?: boolean
+  onMouseEnter?: MouseEventHandler
+  onMouseLeave?: MouseEventHandler
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
-  const { width, height, highlights = [], className } = props
+  const {
+    width,
+    height,
+    highlights = [],
+    className,
+    noInteraction = false,
+  } = props
   const {
     simulation,
     data,
@@ -64,12 +73,19 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     simulation.current.setHighlights(highlights)
   }, [highlights])
 
+  useEffect(() => {
+    if (!simulation.current) return
+    simulation.current.setNoInteraction(noInteraction)
+  }, [noInteraction])
+
   const dpi = devicePixelRatio || 1
 
   return (
     <canvas
-      className={className}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
       ref={canvasRef}
+      className={className}
       width={`${width * dpi}px`}
       height={`${height * dpi}px`}
       style={{

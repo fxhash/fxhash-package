@@ -25,6 +25,8 @@ export class TransformCanvas {
   onClick?: MouseListener
   onMove?: MouseListener
 
+  noInteraction: boolean = false
+
   constructor(
     canvas: HTMLCanvasElement,
     options?: {
@@ -91,6 +93,7 @@ export class TransformCanvas {
   }
 
   handleWheel(e: WheelEvent) {
+    if (this.noInteraction) return
     e.preventDefault()
     const rect = this.canvas.getBoundingClientRect()
     const mouseX = e.clientX - rect.left
@@ -120,6 +123,7 @@ export class TransformCanvas {
   }
 
   handleMouseDown(e: MouseEvent) {
+    if (this.noInteraction) return
     this.isDragging = true
     this.moved = false
     this.dragStart = { x: e.clientX, y: e.clientY }
@@ -127,6 +131,7 @@ export class TransformCanvas {
   }
 
   handleMouseMove(e: MouseEvent) {
+    if (this.noInteraction) return
     const rect = this.canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
@@ -156,6 +161,7 @@ export class TransformCanvas {
   }
 
   handleMouseUp(e: MouseEvent) {
+    if (this.noInteraction) return
     if (!this.isDragging) return
     this.isDragging = false
     if (!this.moved && this.onClick) {
@@ -200,5 +206,9 @@ export class TransformCanvas {
       cancelAnimationFrame(this.animationFrame)
       this.animationFrame = null
     }
+  }
+
+  setNoInteraction = (noInteraction: boolean) => {
+    this.noInteraction = noInteraction
   }
 }
