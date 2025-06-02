@@ -27,6 +27,11 @@ export class TransformCanvas {
 
   noInteraction: boolean = false
 
+  touchStart: Point | null = null
+  lastTouchPos: Point = { x: 0, y: 0 }
+  pinchStartDist: number | null = null
+  pinchStartScale: number = 1
+
   constructor(
     canvas: HTMLCanvasElement,
     options?: {
@@ -50,6 +55,21 @@ export class TransformCanvas {
     canvas.addEventListener("mousedown", this.handleMouseDown)
     window.addEventListener("mousemove", this.handleMouseMove)
     window.addEventListener("mouseup", this.handleMouseUp)
+
+    this.handleTouchStart = this.handleTouchStart.bind(this)
+    this.handleTouchMove = this.handleTouchMove.bind(this)
+    this.handleTouchEnd = this.handleTouchEnd.bind(this)
+
+    canvas.addEventListener("touchstart", this.handleTouchStart, {
+      passive: false,
+    })
+    canvas.addEventListener("touchmove", this.handleTouchMove, {
+      passive: false,
+    })
+    canvas.addEventListener("touchend", this.handleTouchEnd, { passive: false })
+    canvas.addEventListener("touchcancel", this.handleTouchEnd, {
+      passive: false,
+    })
   }
 
   lerp(a: number, b: number, t: number) {
@@ -174,6 +194,101 @@ export class TransformCanvas {
     this.moved = false
   }
 
+  handleTouchStart(e: TouchEvent) {
+    if (this.noInteraction) return
+    if (e.touches.length === 1) {
+      const rect = this.canvas.getBoundingClientRect()
+      const touch = e.touches[0]
+      this.isDragging = true
+      this.moved = false
+      this.touchStart = { x: touch.clientX, y: touch.clientY }
+      this.lastTouchPos = { x: touch.clientX, y: touch.clientY }
+      this.lastMoveMousePos = { x: touch.clientX, y: touch.clientY }
+    } else if (e.touches.length === 2) {
+      this.isDragging = false
+      const [t1, t2] = [e.touches[0], e.touches[1]]
+      this.pinchStartDist = Math.hypot(
+        t2.clientX - t1.clientX,
+        t2.clientY - t1.clientY
+      )
+      this.pinchStartScale = this.targetTransform.scale
+      const rect = this.canvas.getBoundingClientRect()
+      this.zoomFocus = {
+        x: (t1.clientX + t2.clientX) / 2 - rect.left,
+        y: (t1.clientY + t2.clientY) / 2 - rect.top,
+      }
+    }
+  }
+
+  handleTouchMove(e: TouchEvent) {
+    if (this.noInteraction) return
+    e.preventDefault()
+    const rect = this.canvas.getBoundingClientRect()
+    if (e.touches.length === 1 && this.touchStart) {
+      const touch = e.touches[0]
+      const dx = touch.clientX - this.touchStart.x
+      const dy = touch.clientY - this.touchStart.y
+
+      if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
+        this.moved = true
+
+        const deltaX = touch.clientX - this.lastTouchPos.x
+        const deltaY = touch.clientY - this.lastTouchPos.y
+
+        this.transform.x += deltaX
+        this.transform.y += deltaY
+        this.targetTransform.x += deltaX
+        this.targetTransform.y += deltaY
+
+        this.lastTouchPos = { x: touch.clientX, y: touch.clientY }
+        this.lastMoveMousePos = { x: touch.clientX, y: touch.clientY }
+        this.onUpdate?.(this.transform)
+        this.onMove?.(touch.clientX - rect.left, touch.clientY - rect.top)
+      }
+    } else if (e.touches.length === 2 && this.pinchStartDist != null) {
+      const [t1, t2] = [e.touches[0], e.touches[1]]
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
+      let scale = (dist / this.pinchStartDist) * this.pinchStartScale
+      scale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, scale))
+
+      const { x, y, scale: prevScale } = this.transform
+      const dx = this.zoomFocus.x - x
+      const dy = this.zoomFocus.y - y
+      const scaleChange = scale / prevScale
+      const newX = this.zoomFocus.x - dx * scaleChange
+      const newY = this.zoomFocus.y - dy * scaleChange
+
+      this.targetTransform = { x: newX, y: newY, scale }
+      if (!this.isAnimating) {
+        this.isAnimating = true
+        this.animationFrame = requestAnimationFrame(this.animateTransform)
+      }
+    }
+  }
+
+  handleTouchEnd(e: TouchEvent) {
+    if (this.noInteraction) return
+    if (e.touches.length === 0) {
+      if (this.isDragging && !this.moved && this.onClick && this.touchStart) {
+        const rect = this.canvas.getBoundingClientRect()
+        this.onClick(
+          this.touchStart.x - rect.left,
+          this.touchStart.y - rect.top
+        )
+      }
+      this.isDragging = false
+      this.touchStart = null
+      this.moved = false
+      this.pinchStartDist = null
+    } else if (e.touches.length === 1) {
+      const touch = e.touches[0]
+      this.isDragging = true
+      this.touchStart = { x: touch.clientX, y: touch.clientY }
+      this.lastTouchPos = { x: touch.clientX, y: touch.clientY }
+      this.pinchStartDist = null
+    }
+  }
+
   resetZoom() {
     this.transform = { x: 0, y: 0, scale: 1 }
     this.targetTransform = { x: 0, y: 0, scale: 1 }
@@ -195,10 +310,13 @@ export class TransformCanvas {
     this.onMove?.(x, y)
   }
 
-  // Call this when cleaning up (like componentWillUnmount)
   destroy() {
     this.canvas.removeEventListener("wheel", this.handleWheel)
     this.canvas.removeEventListener("mousedown", this.handleMouseDown)
+    this.canvas.removeEventListener("touchstart", this.handleTouchStart)
+    this.canvas.removeEventListener("touchmove", this.handleTouchMove)
+    this.canvas.removeEventListener("touchend", this.handleTouchEnd)
+    this.canvas.removeEventListener("touchcancel", this.handleTouchEnd)
     window.removeEventListener("mousemove", this.handleMouseMove)
     window.removeEventListener("mouseup", this.handleMouseUp)
     this.isAnimating = false
