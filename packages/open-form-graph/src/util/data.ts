@@ -1,5 +1,14 @@
-import { RawGraphData, RawNode, RawLink, Node, Link } from "@/_types"
+import {
+  RawGraphData,
+  RawNode,
+  RawLink,
+  Node,
+  Link,
+  SimLink,
+  SimNode,
+} from "@/_types"
 import { VOID_ROOT_ID } from "@/context/constants"
+import { isSimNode } from "./types"
 
 const images: string[] = []
 
@@ -47,28 +56,36 @@ export function generateTree(
   return { nodes, links }
 }
 
-export function collectChildren(
-  node: Node,
-  threshold: number,
-  visited = new Set<string>()
-): { nodes: Node[]; links: Link[] } {
-  const collectedNodes: Node[] = []
-  const collectedLinks: Link[] = []
+export function getPrunedData(
+  startId: string,
+  nodes: SimNode[],
+  links: SimLink[]
+) {
+  const nodesById = Object.fromEntries(nodes.map(node => [node.id, node]))
+  const visibleNodes = []
+  const visibleLinks = []
+  const visited = new Set()
 
-  function collect(n: Node) {
-    for (const link of n.childLinks) {
-      const child = link.target
-      if (visited.has(child.id)) continue
-      if (child.clusterSize <= threshold) {
-        visited.add(child.id)
-        collectedNodes.push(child)
-        collectedLinks.push(link)
-        collect(child)
-      }
-    }
+  ;(function traverseTree(node = nodesById[startId]) {
+    // avoid circles
+    if (!node || visited.has(node.id)) return
+    visited.add(node.id)
+
+    visibleNodes.push(node)
+    if (node?.state?.collapsed) return
+
+    const childLinks = links.filter(
+      l => (isSimNode(l.source) ? l.source.id : l.source) === node.id
+    )
+    visibleLinks.push(...childLinks)
+
+    childLinks
+      .map(link => link.target)
+      .forEach(n => traverseTree(isSimNode(n) ? n : nodesById[n.toString()]))
+  })()
+
+  return {
+    nodes: visibleNodes,
+    links: visibleLinks,
   }
-
-  collect(node)
-
-  return { nodes: collectedNodes, links: collectedLinks }
 }
