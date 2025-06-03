@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   MutableRefObject,
+  useCallback,
 } from "react"
 import {
   RawGraphData,
@@ -42,6 +43,7 @@ export interface OpenFormGraphApi {
   simulation: MutableRefObject<OpenGraphSimulation | null>
   selectedNode: SimNode | null
   hoveredNode: SimNode | null
+  setSelectedNodeById: (nodeId: string) => void
 }
 
 const OpenFormGraphContext = createContext<OpenFormGraphApi>({
@@ -57,6 +59,7 @@ const OpenFormGraphContext = createContext<OpenFormGraphApi>({
   selectedNode: null,
   hoveredNode: null,
   simulation: { current: null },
+  setSelectedNodeById: () => {},
 })
 
 export function OpenFormGraphProvider({
@@ -68,18 +71,34 @@ export function OpenFormGraphProvider({
   data,
 }: OpenFormGraphProviderProps) {
   const simulation = useRef<OpenGraphSimulation | null>(null)
-  const [selectedNode, setSelectedNode] = useState<SimNode | null>(null)
+  const [selectedNode, _setSelectedNode] = useState<SimNode | null>(null)
   const [hoveredNode, setHoveredNode] = useState<SimNode | null>(null)
   const [hideThumbnails, setHideThumbnails] = useState(false)
+
+  const setSelectedNode = useCallback(
+    (node: SimNode | null) => {
+      _setSelectedNode(node)
+      simulation.current?.setSelectedNode(node)
+    },
+    [_setSelectedNode]
+  )
+
+  const setSelectedNodeById = useCallback(
+    (nodeId: string) => {
+      const node = simulation.current?.getNodeById(nodeId)
+      if (node) {
+        simulation.current?.handleClickNode(node)
+      }
+    },
+    [setSelectedNode]
+  )
 
   const contextValue: OpenFormGraphApi = useMemo(() => {
     return {
       rootId,
       selectedNode,
-      setSelectedNode: n => {
-        setSelectedNode(n)
-        simulation.current?.setSelectedNode(n)
-      },
+      setSelectedNode,
+      setSelectedNodeById,
       hoveredNode,
       setHoveredNode,
       hideThumbnails,
@@ -94,6 +113,7 @@ export function OpenFormGraphProvider({
     rootId,
     selectedNode,
     setSelectedNode,
+    setSelectedNodeById,
     hoveredNode,
     setHoveredNode,
     hideThumbnails,
