@@ -95,8 +95,8 @@ export type GenerativeTokenMetadataV5 = GenerativeTokenMetadataV4 & {
   chain: string
 }
 
-export type GenerativeTokenMetadataV6 = GenerativeTokenMetadataV4 & {
-  previewParentHashes: string
+export type GenerativeTokenMetadataV6 = GenerativeTokenMetadataV5 & {
+  previewParentHashes?: string
 }
 
 export type GenerativeTokenMetadata =
