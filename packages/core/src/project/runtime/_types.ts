@@ -23,6 +23,7 @@ export type ProjectState = {
   context?: ExecutionContext
   inputBytes?: string
   definition?: FxParamDefinitions
+  parentHashes?: string[]
 }
 
 /**

@@ -8,6 +8,10 @@ export type RawNode = {
   imgSrc?: string
 }
 
+export type NestedRawNode<N extends RawNode> = {
+  children: NestedRawNode<N>[]
+} & N
+
 export type RawLink = {
   source: string
   target: string
