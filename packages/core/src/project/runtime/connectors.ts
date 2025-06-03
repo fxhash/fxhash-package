@@ -34,7 +34,7 @@ export function getURLSearchParams(
     noFxParamsUpdateQuery?: boolean
     additionalParams?: URLSearchParams
     noParentHashUpdateQuery?: boolean
-  }
+  } = {}
 ): string {
   const { inputBytes, parentHashes, ...stateWithoutParamsAndLineage } = state
   const urlSearchParams = new URLSearchParams({
