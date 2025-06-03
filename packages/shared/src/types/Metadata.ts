@@ -95,12 +95,17 @@ export type GenerativeTokenMetadataV5 = GenerativeTokenMetadataV4 & {
   chain: string
 }
 
+export type GenerativeTokenMetadataV6 = GenerativeTokenMetadataV4 & {
+  previewParentHashes: string
+}
+
 export type GenerativeTokenMetadata =
   | GenerativeTokenMetadataV1
   | (GenerativeTokenMetadataV2 & { version: "0.2" })
   | (GenerativeTokenMetadataV3 & { version: "0.3" })
   | (GenerativeTokenMetadataV4 & { version: "0.4" })
   | (GenerativeTokenMetadataV5 & { version: "0.5" })
+  | (GenerativeTokenMetadataV6 & { version: "0.6" })
 
 export type ObjktMetadata = {
   features?: TokenMetadataFeature[] | null
