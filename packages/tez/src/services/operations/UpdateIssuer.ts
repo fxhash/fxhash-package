@@ -53,8 +53,8 @@ export class TezosUpdateIssuerOperation extends TezosContractOperation<TUpdateIs
       issuer_id: this.params.projectId,
       enabled: numbered.enabled,
       royalties: numbered.royalties,
-      primary_split: this.params.data.splitsPrimary,
-      royalties_split: this.params.data.splitsSecondary,
+      primary_split: numbered.splitsPrimary,
+      royalties_split: numbered.splitsSecondary,
     }
 
     // if the author is a collab contract, we have to call the collab contract
