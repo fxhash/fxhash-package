@@ -19,7 +19,7 @@
     "multiformats": "13.1.0",
     "onchfs": "workspace:*",
     "path": "0.12.7",
-    "viem": "2.29.2"
+    "viem": "2.30.5"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
