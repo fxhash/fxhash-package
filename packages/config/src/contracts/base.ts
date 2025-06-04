@@ -83,6 +83,6 @@ export const baseMainnetContracts: IBaseContracts = {
   fx_token: "0xD78CaC09f62d19Eec389f1c5eAfe02DCb6f6DD43",
   fx_airdrop: "0x45BB9DF166Fda4afD7e533DE42B11579a1F09d43",
   fx_tez_airdrop: "0x5021910a5762F9C872Bf7D6CD5F09127aE8cCA84",
-  fx_token_launchpad: "0x63e262CCF023a1A51596EE4cc85155866Ec2810",
+  fx_token_launchpad: "0x63e262CCF023a1A51596EE4cc85155866Ec2810b",
   fx_project_factory: "0x734c198a613DD76c4993619aC7a1a6d97b3Ff022",
 }
