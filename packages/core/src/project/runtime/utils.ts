@@ -139,13 +139,18 @@ export function hashRuntimeHardState(
 }
 
 /**
- * Lodash mergeWith customizer that keeps Uint8Array types alive.
+ * Lodash mergeWith customizer that
+ * - keeps Uint8Array types alive
+ * - avoids merging arrays just use source
  * @internal
  */
 
 function mergeCustomizer(_: any, source: any) {
   if (source instanceof Uint8Array) {
     return new Uint8Array(source)
+  }
+  if (Array.isArray(source)) {
+    return source
   }
   return undefined
 }

@@ -1,4 +1,5 @@
-import { UpdateIssuerForm } from "@/types/UpdateIssuer"
+import { UpdateIssuerForm } from "@fxhash/shared"
+import { transformEditionsFormToNumbers } from "./gen-tok-input-form"
 
 /**
  * Given a Generative Token Distribution string input, outputs its numbered
@@ -9,7 +10,7 @@ export function transformUpdateIssuerFormToNumbers(
 ): UpdateIssuerForm<number> {
   return {
     ...input,
-    editions: parseInt(input.editions!),
+    editions: transformEditionsFormToNumbers(input.editions),
     royalties: Math.floor(parseFloat(input.royalties!) * 10),
   }
 }

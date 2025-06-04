@@ -47,7 +47,6 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
         setSelectedNode(n)
       },
     })
-    simulation.current.initialize(data, rootId)
     return () => {
       simulation.current?.destroy()
     }
@@ -77,6 +76,11 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     simulation.current.setNoInteraction(noInteraction)
   }, [noInteraction])
+
+  useEffect(() => {
+    if (!simulation.current) return
+    simulation.current.initialize(data, rootId)
+  }, [data])
 
   const dpi = devicePixelRatio || 1
 

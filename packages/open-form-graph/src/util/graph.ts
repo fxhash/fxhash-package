@@ -5,6 +5,17 @@ export function getNodeId(n: any) {
   return typeof n === "object" && n !== null && "id" in n ? n.id : n
 }
 
+export function getParents(id: string, links: SimLink[]): string[] {
+  return links
+    .filter(l => {
+      const targetId = isSimNode(l.target) ? l.target.id : l.target
+      return targetId === id
+    })
+    .map(link =>
+      isSimNode(link.source) ? link.source.id : link.source.toString()
+    )
+}
+
 export function getChildren(id: string, links: SimLink[]): string[] {
   return links
     .filter(l => {

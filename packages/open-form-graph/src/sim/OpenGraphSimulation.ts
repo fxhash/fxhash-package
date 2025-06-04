@@ -21,6 +21,7 @@ import {
   getClusterSize,
   getNodeSubgraph,
   getNodeId,
+  getParents,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "@/provider"
@@ -126,6 +127,10 @@ export class OpenGraphSimulation {
 
   handleClick = (x: number, y: number) => {
     const node = this.getNodeAtPosition(x, y)
+    this.handleClickNode(node)
+  }
+
+  handleClickNode = (node: SimNode | null) => {
     if (node) {
       if (node.id === this.rootId) {
         this.selectedNode = null
@@ -138,6 +143,7 @@ export class OpenGraphSimulation {
       }
       if (node.state) {
         const children = getChildren(node.id, this.data.links)
+        console.log("Children of node", node.id, children, node.clusterSize)
         if (children.length > 0) {
           if (this.selectedNode?.id !== node.id) {
             node.state.collapsed = false
@@ -158,6 +164,16 @@ export class OpenGraphSimulation {
             })
           }
         }
+      }
+      // if the node is not collapsed, we need to expand its parents
+      if (!node.state?.collapsed) {
+        const parents = getParents(node.id, this.data.links)
+        parents.forEach(parentId => {
+          const parentNode = this.data.nodes.find(n => n.id === parentId)
+          if (parentNode && isSimNode(parentNode) && parentNode.state) {
+            parentNode.state.collapsed = false
+          }
+        })
       }
       this.restart()
       this.subGraph = getNodeSubgraph(
@@ -187,17 +203,20 @@ export class OpenGraphSimulation {
   initialize = (data: RawGraphData, rootId: string) => {
     this.rootId = rootId
     const _links = data.links.map(l => ({ ...l }))
-    const _nodes = data.nodes.map(n => ({
-      ...n,
-      state: {
-        collapsed:
-          hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
-      } as NodeState,
-      clusterSize: getClusterSize(n.id, _links),
-      // set x and y to random values around the center
-      x: this.width / 2 + Math.random() * 200 - 5,
-      y: this.height / 2 + Math.random() * 200 - 5,
-    }))
+    const _nodes = data.nodes.map(n => {
+      const existingData = this.data.nodes.find(x => x.id === n.id)
+      return {
+        ...n,
+        state: {
+          collapsed:
+            hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
+        } as NodeState,
+        clusterSize: getClusterSize(n.id, _links),
+        // set x and y to random values around the center
+        x: existingData?.x || this.width / 2 + Math.random() * 200 - 5,
+        y: existingData?.y || this.height / 2 + Math.random() * 200 - 5,
+      }
+    })
 
     // if rootId is not in the nodes, add it
     if (!data.nodes.find(n => n.id === rootId)) {
@@ -519,7 +538,11 @@ export class OpenGraphSimulation {
 
   setNoInteraction = (noInteraction: boolean) => {
     this.noInteraction = noInteraction
-    this.transformCanvas.setNoInteraction(noInteraction)
+    this.transformCanvas.setNoInteraction(this.noInteraction)
     this.onDraw()
+  }
+
+  getNodeById = (nodeId: string): SimNode | null => {
+    return this.data.nodes.find(n => n.id === nodeId) || null
   }
 }
