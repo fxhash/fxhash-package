@@ -1,14 +1,17 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import {
   simulateAndExecuteContract,
+  simulateAndExecuteContractWithApproval,
   type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 import { projectTokenAbi } from "@/__generated__/wagmi.js"
 import { zeroAddress } from "viem"
+import { ApprovalParams } from "@/types/approval"
 
-export type TProjectTokenRegenerateEthOperationParams = {
+export interface TProjectTokenRegenerateEthOperationParams
+  extends ApprovalParams {
   // The address of the project token
   projectToken: `0x${string}`
   // The token ID to regenerate
@@ -41,7 +44,11 @@ export class ProjectTokenRegenerateEthOperation extends EthereumContractOperatio
           ? this.params.mintFeeAmount
           : undefined,
     }
-    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContractWithApproval(
+      this.manager,
+      args,
+      this.params.approval
+    )
     return {
       type: TransactionType.ONCHAIN,
       hash: transactionHash,
