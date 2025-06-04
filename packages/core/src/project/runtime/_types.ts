@@ -7,7 +7,11 @@ import { FxParamDefinitions, FxParamsData } from "@fxhash/params"
  * - minting: The runtime is used for minting
  * - capture: The runtime is used for capture
  */
-export type ExecutionContext = "minting" | "standalone" | "capture"
+export type ExecutionContext =
+  | "minting"
+  | "standalone"
+  | "capture"
+  | "fast-capture"
 
 /**
  * The state of the project that is needed to connect a project
