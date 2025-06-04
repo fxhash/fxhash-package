@@ -104,6 +104,7 @@ export function createRuntimeController(
         _initial.inputBytes &&
         deserializeParams(_initial.inputBytes, _initial.definition, {})) ||
       {},
+    parentHashes: _initial.parentHashes,
   }
 
   const _runtime = runtimeContext({
@@ -257,6 +258,7 @@ export function createRuntimeController(
       context: runtimeState.context,
       snippetVersion: runtimeDefinition.version || "",
       chain: runtimeState.chain,
+      parentHashes: runtimeState.parentHashes,
     })
   }
 

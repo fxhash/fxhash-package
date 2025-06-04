@@ -1,3 +1,17 @@
+/**
+ * draws a circle on the canvas
+ * @param ctx - The canvas rendering context
+ * @param x - The x-coordinate of the circle's center
+ * @param y - The y-coordinate of the circle's center
+ * @param radius - The radius of the circle (default is 5)
+ * @param options - Optional parameters for styling the circle
+ * @param options.fill - Whether to fill the circle (default is true)
+ * @param options.fillStyle - The fill color of the circle
+ * @param options.stroke - Whether to stroke the circle (default is false)
+ * @param options.strokeStyle - The stroke color of the circle
+ * @param options.lineWidth - The width of the stroke (default is 0.2)
+ * @returns void
+ */
 export function circle(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -39,6 +53,22 @@ export function circle(
   ctx.restore()
 }
 
+/**
+ * draws a rectangle on the canvas
+ * @param ctx - The canvas rendering context
+ * @param x - The x-coordinate of the rectangle's top-left corner
+ * @param y - The y-coordinate of the rectangle's top-left corner
+ * @param width - The width of the rectangle
+ * @param height - The height of the rectangle
+ * @param options - Optional parameters for styling the rectangle
+ * @param options.fill - Whether to fill the rectangle (default is true)
+ * @param options.fillStyle - The fill color of the rectangle
+ * @param options.stroke - Whether to stroke the rectangle (default is false)
+ * @param options.strokeStyle - The stroke color of the rectangle
+ * @param options.lineWidth - The width of the stroke (default is 0.2)
+ * @param options.borderRadius - The radius of the corners (default is 0)
+ * @returns void
+ */
 export function rect(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -100,6 +130,19 @@ export function rect(
   ctx.restore()
 }
 
+/**
+ * draws an image on the canvas with optional border radius and opacity
+ * @param ctx - The canvas rendering context
+ * @param image - The HTMLImageElement to draw
+ * @param x - The x-coordinate of the image's top-left corner
+ * @param y - The y-coordinate of the image's top-left corner
+ * @param width - The width of the image
+ * @param height - The height of the image
+ * @param borderRadius - The radius of the corners (default is 0)
+ * @param opacity - The opacity of the image (default is 1.0)
+ * @param bgColor - Optional background color to fill the clipped area
+ * @returns void
+ */
 export function img(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement,
@@ -132,7 +175,7 @@ export function img(
     ctx.save()
     ctx.fillStyle = bgColor
     ctx.globalAlpha = 1.0
-    ctx.fillRect(x, y, width, height)
+    ctx.fill()
     ctx.restore()
   }
   ctx.clip()
@@ -140,7 +183,22 @@ export function img(
   ctx.drawImage(image, x, y, width, height)
   ctx.restore()
 }
-
+/*
+ * draws a hexagon on the canvas
+ * @param ctx - The canvas rendering context
+ * @param x - The x-coordinate of the hexagon's center
+ * @param y - The y-coordinate of the hexagon's center
+ * @param radius - The radius of the hexagon
+ * @param options - Optional parameters for styling the hexagon
+ * @param options.fill - Whether to fill the hexagon (default is true)
+ * @param options.fillStyle - The fill color of the hexagon
+ * @param options.stroke - Whether to stroke the hexagon (default is false)
+ * @param options.strokeStyle - The stroke color of the hexagon
+ * @param options.lineWidth - The width of the stroke (default is 0.2)
+ * @param options.rotation - The rotation angle of the hexagon in radians (default is 0)
+ * @param options.borderRadius - The radius of the corners (default is 0)
+ * @returns void
+ */
 export function hexagon(
   ctx: CanvasRenderingContext2D,
   x: number,
