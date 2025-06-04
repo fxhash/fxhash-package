@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
     "@fxhash/errors": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",
@@ -20,6 +19,7 @@
     "semver": "7.6.0"
   },
   "devDependencies": {
+    "@fxhash/config": "workspace:*",
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
