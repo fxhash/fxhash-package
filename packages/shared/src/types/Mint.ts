@@ -154,10 +154,9 @@ export type GenTokEditionsForm<N> = {
 }
 
 export interface GenTokDistributionForm<N> {
-  editions?: GenTokEditionsForm<N>
+  editions: GenTokEditionsForm<N>
   enabled: boolean
   reserves: IReserve<N>[]
-  royalties?: N
   gracingPeriod?: N
   frameMinting?: FrameMintingFormValues
 }
