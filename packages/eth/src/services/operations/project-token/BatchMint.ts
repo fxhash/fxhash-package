@@ -4,15 +4,7 @@ import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 import { projectTokenAbi } from "@/__generated__/wagmi.js"
 import { zeroAddress } from "viem"
-
-interface ApprovalParams {
-  approval?: {
-    tokenAddress: `0x${string}`
-    spenderAddress: `0x${string}`
-    amount: bigint
-    useSmartAccount: boolean
-  }
-}
+import { ApprovalParams } from "@/types/approval"
 
 export interface TProjectTokenBatchMintEthOperationParams
   extends ApprovalParams {

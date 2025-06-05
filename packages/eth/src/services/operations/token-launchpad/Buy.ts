@@ -1,14 +1,15 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import {
-  simulateAndExecuteContract,
+  simulateAndExecuteContractWithApproval,
   type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 import { tokenLaunchpadAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
+import { ApprovalParams } from "@/types/approval"
 
-export type TTokenLaunchpadBuyEthOperationParams = {
+export interface TTokenLaunchpadBuyEthOperationParams extends ApprovalParams {
   // The address of the creator token
   creatorToken: `0x${string}`
   // The amount of FxTokens being used to purchase creator tokens
@@ -37,7 +38,11 @@ export class TokenLaunchpadBuyEthOperation extends EthereumContractOperation<TTo
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }
-    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContractWithApproval(
+      this.manager,
+      args,
+      this.params.approval
+    )
     return {
       type: TransactionType.ONCHAIN,
       hash: transactionHash,
