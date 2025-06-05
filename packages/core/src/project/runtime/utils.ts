@@ -32,15 +32,15 @@ export function fxParamsAsQueryParams(
 export function isValidSnippetVersionInVersion(
   snippetVersion: string
 ): boolean {
-  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.0.0")
+  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.0.1")
 }
 
 /**
  * Given a project with its metadata this function will return the
  * snippetVersion if it exists.
  *
- * Why is this relevant? Starting with version 3.0.0 we actually expect to pass
- * the snippetVersion to the runtime because before version 3.0.0 there was
+ * Why is this relevant? Starting with version 3.0.1 we actually expect to pass
+ * the snippetVersion to the runtime because before version 3.0.1 there was
  * a max of 64 characters on byte params. therefore to compute the right
  * inputbytes from the actual params we need to pass the snippeVersion
  * to the runtime.
