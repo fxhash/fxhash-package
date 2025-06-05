@@ -22,6 +22,7 @@ import {
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import debounce from "lodash.debounce"
+import { addVersionToParamsDefinition } from "./utils.js"
 
 /**
  * This function is used to handle old snippet events for projects
@@ -102,7 +103,14 @@ export function createRuntimeController(
     params:
       (_initial.definition &&
         _initial.inputBytes &&
-        deserializeParams(_initial.inputBytes, _initial.definition, {})) ||
+        deserializeParams(
+          _initial.inputBytes,
+          addVersionToParamsDefinition(
+            _initial.definition,
+            _initial.snippetVersion
+          ),
+          {}
+        )) ||
       {},
     parentHashes: _initial.parentHashes,
   }

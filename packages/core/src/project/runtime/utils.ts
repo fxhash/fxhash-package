@@ -1,5 +1,6 @@
 import {
   FxParamDefinition,
+  FxParamDefinitions,
   FxParamType,
   FxParamsData,
   jsonStringifyBigint,
@@ -74,6 +75,19 @@ export function getCidFromProject(project: {
 }
 
 /**
+ * Enhance param definitions with a version number.
+ */
+export function addVersionToParamsDefinition(
+  definition: FxParamDefinitions,
+  version: string | null | undefined
+) {
+  return definition.map(p => ({
+    ...p,
+    version: version || undefined,
+  }))
+}
+
+/**
  * Enhances the runtime definition with the version of the runtime.
  * Adding the version number to each control definition can be useful for
  * granular control of the runtime controls.
@@ -85,13 +99,10 @@ export function enhanceRuntimeDefinition(
 ): RuntimeDefinition {
   return {
     ...runtime.definition,
-    params:
-      runtime.definition.params?.map(p => ({
-        ...p,
-        ...(runtime.definition.version && {
-          version: runtime.definition.version,
-        }),
-      })) || null,
+    params: addVersionToParamsDefinition(
+      runtime.definition.params || [],
+      runtime.definition.version || null
+    ),
   }
 }
 
