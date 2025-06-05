@@ -75,4 +75,18 @@ export interface IReactClientPlugnPlayProviderProps {
    * @default document.body
    */
   safeDomContainer?: HTMLElement
+
+  /**
+   * If false (default), when the react <Provider> is called **on the
+   * client-side**, a global unique instance of the client will be used. If you
+   * need multiple instances for specific use-cases, you can turn this flag on.
+   * **Not recommended when browser wallets are used !!!**
+   *
+   * This behaviour is only affecting the client, as we purposely want unique
+   * instances on the server (for user hydration). On the server, a react
+   * reference is used instead.
+   *
+   * @default false
+   */
+  unsafeAllowManyClientInstances?: boolean
 }
