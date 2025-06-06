@@ -386,6 +386,7 @@ export class EthereumWalletManager extends WalletManager {
         hash: hash as `0x${string}`,
         confirmations: 2,
         timeout: 120_000,
+        retryDelay: ({ count }) => count * 1_000,
       })
       if (receipt.status !== "success") {
         console.error("Transaction failed", receipt)
