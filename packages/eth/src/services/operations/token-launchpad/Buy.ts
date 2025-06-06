@@ -1,6 +1,5 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import {
-  simulateAndExecuteContract,
   simulateAndExecuteContractWithApproval,
   type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
