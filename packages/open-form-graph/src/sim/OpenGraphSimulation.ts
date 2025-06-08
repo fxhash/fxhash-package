@@ -143,7 +143,6 @@ export class OpenGraphSimulation {
       }
       if (node.state) {
         const children = getChildren(node.id, this.data.links)
-        console.log("Children of node", node.id, children, node.clusterSize)
         if (children.length > 0) {
           if (this.selectedNode?.id !== node.id) {
             node.state.collapsed = false
@@ -184,6 +183,14 @@ export class OpenGraphSimulation {
       )
       const nodePos = this.getNodeScreenPosition(node)
       this.transformCanvas.transformTo({ x: nodePos.x, y: nodePos.y })
+      this.transformCanvas.focusOn(() => {
+        const nodePos = this.getNodeScreenPosition(node)
+        return {
+          x: nodePos.x,
+          y: nodePos.y,
+          scale: this.transformCanvas.transform.scale,
+        }
+      })
     }
     if (this.selectedNode?.id !== node?.id) {
       this.selectedNode = node
