@@ -7,6 +7,8 @@ type Point = { x: number; y: number }
 type TransformListener = (t: Transform) => void
 type MouseListener = (x: number, y: number) => void
 
+type Focus = () => Transform
+
 export class TransformCanvas {
   canvas: HTMLCanvasElement
   transform: Transform = { x: 0, y: 0, scale: 1 }
@@ -31,6 +33,8 @@ export class TransformCanvas {
   lastTouchPos: Point = { x: 0, y: 0 }
   pinchStartDist: number | null = null
   pinchStartScale: number = 1
+
+  focus: Focus | null = null
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -79,7 +83,7 @@ export class TransformCanvas {
   animateTransform = () => {
     const speed = 0.05
     const prev = this.transform
-    const target = this.targetTransform
+    const target = this.focus?.() || this.targetTransform
 
     const next: Transform = {
       x: this.lerp(prev.x, target.x, speed),
@@ -95,6 +99,7 @@ export class TransformCanvas {
     if (done) {
       this.transform = { ...target }
       this.isAnimating = false
+      this.focus = null
     } else {
       this.transform = next
       this.isAnimating = true
@@ -114,6 +119,14 @@ export class TransformCanvas {
 
   handleWheel(e: WheelEvent) {
     if (this.noInteraction) return
+    if (this.isAnimating) {
+      this.isAnimating = false
+      this.focus = null
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame)
+        this.animationFrame = null
+      }
+    }
     e.preventDefault()
     const rect = this.canvas.getBoundingClientRect()
     const mouseX = e.clientX - rect.left
@@ -144,6 +157,14 @@ export class TransformCanvas {
 
   handleMouseDown(e: MouseEvent) {
     if (this.noInteraction) return
+    if (this.isAnimating) {
+      this.isAnimating = false
+      this.focus = null
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame)
+        this.animationFrame = null
+      }
+    }
     this.isDragging = true
     this.moved = false
     this.dragStart = { x: e.clientX, y: e.clientY }
@@ -155,8 +176,8 @@ export class TransformCanvas {
     const rect = this.canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    this.onMove?.(x, y)
     this.lastMoveMousePos = { x: e.clientX, y: e.clientY }
+    this.onMove?.(x, y)
 
     if (!this.isDragging || !this.dragStart) return
 
@@ -181,21 +202,28 @@ export class TransformCanvas {
   }
 
   handleMouseUp(e: MouseEvent) {
-    if (this.noInteraction) return
-    if (!this.isDragging) return
     this.isDragging = false
+    this.dragStart = null
+    this.moved = false
+    if (this.noInteraction) return
     if (!this.moved && this.onClick) {
       const rect = this.canvas.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
       this.onClick(x, y)
     }
-    this.dragStart = null
-    this.moved = false
   }
 
   handleTouchStart(e: TouchEvent) {
     if (this.noInteraction) return
+    if (this.isAnimating) {
+      this.isAnimating = false
+      this.focus = null
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame)
+        this.animationFrame = null
+      }
+    }
     if (e.touches.length === 1) {
       const rect = this.canvas.getBoundingClientRect()
       const touch = e.touches[0]
@@ -320,6 +348,7 @@ export class TransformCanvas {
     window.removeEventListener("mousemove", this.handleMouseMove)
     window.removeEventListener("mouseup", this.handleMouseUp)
     this.isAnimating = false
+    this.focus = null
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame)
       this.animationFrame = null
@@ -328,5 +357,9 @@ export class TransformCanvas {
 
   setNoInteraction = (noInteraction: boolean) => {
     this.noInteraction = noInteraction
+  }
+
+  focusOn = (focus: Focus | null) => {
+    this.focus = focus
   }
 }
