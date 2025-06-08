@@ -10,6 +10,8 @@ export const packageJson = {
     build: "fxhash build",
   },
   devDependencies: {
+    "@fxhash/cli": "latest",
     fxhash: "latest",
   },
+  type: "module",
 }
