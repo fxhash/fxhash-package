@@ -1,8 +1,16 @@
+import { SimulationNodeDatum, SimulationLinkDatum } from "d3-force"
+
+export type RootNodeImageSources = [string?, string?]
+
 export type RawNode = {
   id: string
   label?: string
   imgSrc?: string
 }
+
+export type NestedRawNode<N extends RawNode> = {
+  children: NestedRawNode<N>[]
+} & N
 
 export type RawLink = {
   source: string
@@ -15,7 +23,6 @@ export type Link = {
 }
 
 export type Node = {
-  id: string
   collapsed: boolean
   hide: boolean
   clusterSize: number
@@ -25,7 +32,21 @@ export type Node = {
 } & RawNode
 
 export type RawGraphData = { nodes: RawNode[]; links: RawLink[] }
-export type GraphData = { nodes: Node[]; links: Link[] }
+export type GraphData = { nodes: SimNode[]; links: SimLink[] }
 
+export type ThemeMode = "dark" | "light"
 export type RGB = [number, number, number]
 export type ColorTransform = (rgb: RGB) => RGB
+
+export type NodeState = {
+  collapsed?: boolean
+  image?: HTMLImageElement
+}
+
+export type SimNode = {
+  state?: NodeState
+  clusterSize?: number
+} & RawNode &
+  SimulationNodeDatum
+
+export type SimLink = {} & SimulationLinkDatum<SimNode>

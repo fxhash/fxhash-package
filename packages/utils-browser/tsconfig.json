@@ -7,6 +7,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowJs": false,
+    "declaration": true,
+    "isolatedDeclarations": true
   }
 }

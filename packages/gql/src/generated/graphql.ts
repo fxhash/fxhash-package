@@ -2351,6 +2351,31 @@ export type OnboardingComponent_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type OpenFormGraphInput = {
+  filterNodeIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  maxDepth?: InputMaybe<Scalars['Int']['input']>;
+  rootId: Scalars['String']['input'];
+};
+
+export type OpenFormGraphLink = {
+  __typename?: 'OpenFormGraphLink';
+  source: Scalars['String']['output'];
+  target: Scalars['String']['output'];
+};
+
+export type OpenFormGraphNode = {
+  __typename?: 'OpenFormGraphNode';
+  id: Scalars['String']['output'];
+  thumbnail_uri?: Maybe<Scalars['String']['output']>;
+};
+
+export type OpenFormGraphResponse = {
+  __typename?: 'OpenFormGraphResponse';
+  links: Array<OpenFormGraphLink>;
+  nodes: Array<OpenFormGraphNode>;
+  rootId: Scalars['String']['output'];
+};
+
 export type PrepareRedemptionInput = {
   payload: Scalars['String']['input'];
   publicKey: Scalars['String']['input'];
@@ -4755,7 +4780,7 @@ export type Art_Coin = {
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
   created_at: Scalars['timestamptz']['output'];
   description: Scalars['String']['output'];
-  display_uri?: Maybe<Scalars['String']['output']>;
+  display_uri: Scalars['String']['output'];
   flag: Scalars['art_coin_flag_enum']['output'];
   graduated_address: Scalars['String']['output'];
   graduated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -18819,6 +18844,7 @@ export type Query_Root = {
   mediaFullUrl: Scalars['String']['output'];
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
+  open_form_graph?: Maybe<OpenFormGraphResponse>;
   projectReserves: Array<ProjectReserves>;
   search: SearchOutput;
   searchAccounts: SearchAccountsOutput;
@@ -18838,6 +18864,11 @@ export type Query_RootManagedWalletStateArgs = {
 
 export type Query_RootMediaFullUrlArgs = {
   s3key: Scalars['String']['input'];
+};
+
+
+export type Query_RootOpen_Form_GraphArgs = {
+  input?: InputMaybe<OpenFormGraphInput>;
 };
 
 

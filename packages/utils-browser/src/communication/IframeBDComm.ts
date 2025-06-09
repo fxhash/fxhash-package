@@ -231,7 +231,7 @@ abstract class IframeBDCommShared<
     WithIframeErrors<OtherDirErrors>
   >
 
-  protected _init() {
+  protected _init(): void {
     if (this._intialization.finished) {
       // The <iframe> has already been initialized, but a new instance was
       //  received. The connection will be made with the new instance.`
@@ -262,7 +262,7 @@ abstract class IframeBDCommShared<
    * Send a payload through the protocol
    * @param payload
    */
-  protected _sendPayload(payload: Payload<_Key<MessageTypes[Dir]>>) {
+  protected _sendPayload(payload: Payload<_Key<MessageTypes[Dir]>>): void {
     this._postMessage({
       // some sort of unique identifier to mark message as part of protocol
       [PAYLOAD_IDENTIFYING_KEY]: true,
@@ -475,7 +475,7 @@ export abstract class IframeBDCommFrame<
     super._init()
   }
 
-  get connected() {
+  get connected(): boolean {
     return !!this.connection
   }
 
