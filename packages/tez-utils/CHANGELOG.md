@@ -1,5 +1,13 @@
 # @fxhash/react
 
+## 0.0.2
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+- Updated dependencies [585be2f4]
+  - @fxhash/utils@0.0.4
+
 ## 0.0.1
 
 ### Patch Changes

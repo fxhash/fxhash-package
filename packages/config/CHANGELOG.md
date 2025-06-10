@@ -1,5 +1,14 @@
 # @fxhash/config
 
+## 0.0.11
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+- Updated dependencies [585be2f4]
+  - @fxhash/errors@0.0.11
+  - @fxhash/utils@0.0.4
+
 ## 0.0.10
 
 ### Patch Changes

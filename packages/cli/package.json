@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "author": "fxhash",
   "bin": {
     "@fxhash/cli": "./dist/fxhashCli.js",

@@ -1,5 +1,17 @@
 # @fxhash/cli
 
+## 0.0.20
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+- Updated dependencies [585be2f4]
+  - @fxhash/project-sdk@0.0.15
+  - @fxhash/gql-client@0.0.2
+  - @fxhash/snippet@0.0.10
+  - @fxhash/config@0.0.11
+  - @fxhash/gql@0.0.11
+
 ## 0.0.19
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.14
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+- Updated dependencies [585be2f4]
+  - @fxhash/cli@0.0.20
+
 ## 0.0.13
 
 ### Patch Changes

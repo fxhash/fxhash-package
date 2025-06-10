@@ -1,5 +1,11 @@
 # @fxhash/fxhash-snippet
 
+## 0.0.10
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+
 ## 0.0.9
 
 ### Patch Changes

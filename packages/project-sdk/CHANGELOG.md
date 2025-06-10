@@ -1,5 +1,14 @@
 # @fxhash/project-sdk
 
+## 0.0.15
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+- Updated dependencies [585be2f4]
+  - @fxhash/params@0.0.12
+  - @fxhash/utils@0.0.4
+
 ## 0.0.14
 
 ### Patch Changes
