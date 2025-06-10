@@ -6,5 +6,5 @@ export const onchfsRegex: RegExp = new RegExp("^onchfs://")
  */
 export function onchfsCidFromUriOrCid(resource: string): string {
   if (!onchfsRegex.test(resource)) return resource
-  return resource.slice(7)
+  return resource.slice(9)
 }
