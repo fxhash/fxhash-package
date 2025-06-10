@@ -53,12 +53,14 @@ export class TransformCanvas {
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseUp = this.handleMouseUp.bind(this)
+    this.handleMouseUpCanvas = this.handleMouseUpCanvas.bind(this)
 
     // Attach events
     canvas.addEventListener("wheel", this.handleWheel, { passive: false })
     canvas.addEventListener("mousedown", this.handleMouseDown)
     window.addEventListener("mousemove", this.handleMouseMove)
     window.addEventListener("mouseup", this.handleMouseUp)
+    canvas.addEventListener("mouseup", this.handleMouseUpCanvas)
 
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
@@ -201,10 +203,7 @@ export class TransformCanvas {
     }
   }
 
-  handleMouseUp(e: MouseEvent) {
-    this.isDragging = false
-    this.dragStart = null
-    this.moved = false
+  handleMouseUpCanvas(e: MouseEvent) {
     if (this.noInteraction) return
     if (!this.moved && this.onClick) {
       const rect = this.canvas.getBoundingClientRect()
@@ -212,6 +211,12 @@ export class TransformCanvas {
       const y = e.clientY - rect.top
       this.onClick(x, y)
     }
+  }
+
+  handleMouseUp(e: MouseEvent) {
+    this.isDragging = false
+    this.dragStart = null
+    this.moved = false
   }
 
   handleTouchStart(e: TouchEvent) {
@@ -345,6 +350,7 @@ export class TransformCanvas {
     this.canvas.removeEventListener("touchmove", this.handleTouchMove)
     this.canvas.removeEventListener("touchend", this.handleTouchEnd)
     this.canvas.removeEventListener("touchcancel", this.handleTouchEnd)
+    this.canvas.removeEventListener("mouseup", this.handleMouseUpCanvas)
     window.removeEventListener("mousemove", this.handleMouseMove)
     window.removeEventListener("mouseup", this.handleMouseUp)
     this.isAnimating = false
