@@ -164,8 +164,8 @@ importers:
         version: 17.7.2
     devDependencies:
       '@fxhash/eslint-config':
-        specifier: 1.0.2
-        version: 1.0.2
+        specifier: workspace:*
+        version: link:../eslint-config
       '@fxhash/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -787,8 +787,8 @@ importers:
   packages/libraries:
     dependencies:
       '@fxhash/config':
-        specifier: 0.0.9
-        version: 0.0.9
+        specifier: workspace:*
+        version: link:../config
     devDependencies:
       '@fxhash/tsconfig':
         specifier: workspace:*
@@ -910,11 +910,11 @@ importers:
   packages/project-sdk:
     dependencies:
       '@fxhash/params':
-        specifier: 0.0.10
-        version: 0.0.10(@fortawesome/fontawesome-svg-core@6.7.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: workspace:*
+        version: link:../params
       '@fxhash/utils':
-        specifier: 0.0.2
-        version: 0.0.2
+        specifier: workspace:*
+        version: link:../utils
     devDependencies:
       '@esbuild-plugins/node-modules-polyfill':
         specifier: 0.2.2
@@ -2136,43 +2136,6 @@ packages:
 
   '@fastify/busboy@3.1.1':
     resolution: {integrity: sha512-5DGmA8FTdB2XbDeEwc/5ZXBl6UbBAyBOOLlPuBnZ/N1SwdH9Ii+cOX3tBROlDgcTXxjOYnLMVoKk9+FXAw0CJw==}
-
-  '@fortawesome/fontawesome-common-types@6.4.0':
-    resolution: {integrity: sha512-HNii132xfomg5QVZw0HwXXpN22s7VBHQBv9CeOu9tfJnhsWQNd2lmTNi8CSrnw5B+5YOmzu1UoPAyxaXsJ6RgQ==}
-    engines: {node: '>=6'}
-
-  '@fortawesome/fontawesome-common-types@6.7.2':
-    resolution: {integrity: sha512-Zs+YeHUC5fkt7Mg1l6XTniei3k4bwG/yo3iFUtZWd/pMx9g3fdvkSK9E0FOC+++phXOka78uJcYb8JaFkW52Xg==}
-    engines: {node: '>=6'}
-
-  '@fortawesome/fontawesome-svg-core@6.7.2':
-    resolution: {integrity: sha512-yxtOBWDrdi5DD5o1pmVdq3WMCvnobT0LU6R8RyyVXPvFRd2o79/0NCuQoCjNTeZz9EzA9xS3JxNWfv54RIHFEA==}
-    engines: {node: '>=6'}
-
-  '@fortawesome/free-solid-svg-icons@6.4.0':
-    resolution: {integrity: sha512-kutPeRGWm8V5dltFP1zGjQOEAzaLZj4StdQhWVZnfGFCvAPVvHh8qk5bRrU4KXnRRRNni5tKQI9PBAdI6MP8nQ==}
-    engines: {node: '>=6'}
-
-  '@fortawesome/react-fontawesome@0.2.0':
-    resolution: {integrity: sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw==}
-    peerDependencies:
-      '@fortawesome/fontawesome-svg-core': ~1 || ~6
-      react: '>=16.3'
-
-  '@fxhash/config@0.0.9':
-    resolution: {integrity: sha512-sKBVOH1O2F4Fybtfcxwx7v1zS9ozwP8KnU+k6kmobtmMHBR1d+LHr3mtF9vRi4QAjtXy/D4DXcLrgwEgTBXs5g==}
-
-  '@fxhash/eslint-config@1.0.2':
-    resolution: {integrity: sha512-f+yx1BM07jSmB6WPjKjw/xoenZdDLial2fARVBvN7AeToPUgdVhfWW6Rlofu3i4RDPySVOV/YoRHy3BTkqHe1Q==}
-
-  '@fxhash/params@0.0.10':
-    resolution: {integrity: sha512-nw7Okwa1hjWG9FqjTpyEF+Z6aSZEudfnAkQcNWG/zjldCsm036Jsr4SBjegK5aozIT3R6cVNxvKlEAfLhS9Avw==}
-    peerDependencies:
-      react: ^18.0.0
-      react-dom: ^18.0.0
-
-  '@fxhash/utils@0.0.2':
-    resolution: {integrity: sha512-oYWVw/o/IsCqRe5LAOrbfB/WtubvzRCsVAQgPy0iEMjpLchaWaBOp89g8BjhBz8NKwhE5fod0OSlLgTBao6lUw==}
 
   '@graphql-codegen/add@5.0.3':
     resolution: {integrity: sha512-SxXPmramkth8XtBlAHu4H4jYcYXM/o3p01+psU+0NADQowA8jtYkK6MW5rV6T+CxkEaNZItfSmZRPgIuypcqnA==}
@@ -4801,9 +4764,6 @@ packages:
 
   class-is@1.1.0:
     resolution: {integrity: sha512-rhjH9AG1fvabIDoGRVH587413LPjTZgmDF9fOFCbFJQV4yuocX1mHxxvXI4g3cGwbVY9wAYIoKlg1N79frJKQw==}
-
-  classnames@2.3.2:
-    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
 
   clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -8050,12 +8010,6 @@ packages:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
     engines: {node: '>= 0.8'}
 
-  react-colorful@5.6.1:
-    resolution: {integrity: sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==}
-    peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
@@ -9991,9 +9945,6 @@ packages:
   zen-observable@0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
 
-  zod@3.21.4:
-    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
@@ -11039,44 +10990,6 @@ snapshots:
       '@ethersproject/strings': 5.8.0
 
   '@fastify/busboy@3.1.1': {}
-
-  '@fortawesome/fontawesome-common-types@6.4.0': {}
-
-  '@fortawesome/fontawesome-common-types@6.7.2': {}
-
-  '@fortawesome/fontawesome-svg-core@6.7.2':
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 6.7.2
-
-  '@fortawesome/free-solid-svg-icons@6.4.0':
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 6.4.0
-
-  '@fortawesome/react-fontawesome@0.2.0(@fortawesome/fontawesome-svg-core@6.7.2)(react@19.1.0)':
-    dependencies:
-      '@fortawesome/fontawesome-svg-core': 6.7.2
-      prop-types: 15.8.1
-      react: 19.1.0
-
-  '@fxhash/config@0.0.9': {}
-
-  '@fxhash/eslint-config@1.0.2': {}
-
-  '@fxhash/params@0.0.10(@fortawesome/fontawesome-svg-core@6.7.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      '@fortawesome/free-solid-svg-icons': 6.4.0
-      '@fortawesome/react-fontawesome': 0.2.0(@fortawesome/fontawesome-svg-core@6.7.2)(react@19.1.0)
-      classnames: 2.3.2
-      lodash.debounce: 4.0.8
-      react: 19.1.0
-      react-colorful: 5.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-dom: 19.1.0(react@19.1.0)
-      sha1: 1.1.1
-      zod: 3.21.4
-    transitivePeerDependencies:
-      - '@fortawesome/fontawesome-svg-core'
-
-  '@fxhash/utils@0.0.2': {}
 
   '@graphql-codegen/add@5.0.3(graphql@16.10.0)':
     dependencies:
@@ -15304,8 +15217,6 @@ snapshots:
 
   class-is@1.1.0: {}
 
-  classnames@2.3.2: {}
-
   clean-stack@2.2.0: {}
 
   cli-boxes@3.0.0: {}
@@ -19129,11 +19040,6 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
-  react-colorful@5.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
-    dependencies:
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -21537,8 +21443,6 @@ snapshots:
       zen-observable: 0.8.15
 
   zen-observable@0.8.15: {}
-
-  zod@3.21.4: {}
 
   zod@3.22.4: {}
 
