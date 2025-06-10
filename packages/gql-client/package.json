@@ -9,10 +9,10 @@
     "graphql": "16.10.0"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "20.11.30",
     "tsdown": "0.12.2",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "workspace:*"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -28,10 +28,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "sideEffects": false,
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

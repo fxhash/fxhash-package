@@ -4,21 +4,24 @@
   "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
-    "lodash.clonedeep": "4.5.0",
-    "lodash.debounce": "4.0.8",
-    "lodash.mergewith": "4.6.2",
-    "semver": "7.6.0",
     "@fxhash/errors": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",
-    "@fxhash/params": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
+    "@fxhash/params": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@fxhash/utils-browser": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "lodash.clonedeep": "4.5.0",
+    "lodash.debounce": "4.0.8",
+    "lodash.mergewith": "4.6.2",
+    "semver": "7.6.0"
   },
   "devDependencies": {
+    "@fxhash/config": "workspace:*",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/lodash.debounce": "4.0.9",
@@ -35,10 +38,7 @@
     "react-dom": "18.3.1",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.1.1",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*"
+    "vitest": "3.1.1"
   },
   "exports": {
     ".": {
@@ -73,11 +73,11 @@
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:local": "FXHASH_ENV=local vitest"
-  }
+  },
+  "type": "module"
 }
