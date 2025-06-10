@@ -1,5 +1,6 @@
 import {
   FxParamDefinition,
+  FxParamDefinitions,
   FxParamType,
   FxParamsData,
   jsonStringifyBigint,
@@ -32,15 +33,15 @@ export function fxParamsAsQueryParams(
 export function isValidSnippetVersionInVersion(
   snippetVersion: string
 ): boolean {
-  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.0.0")
+  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.0.1")
 }
 
 /**
  * Given a project with its metadata this function will return the
  * snippetVersion if it exists.
  *
- * Why is this relevant? Starting with version 3.0.0 we actually expect to pass
- * the snippetVersion to the runtime because before version 3.0.0 there was
+ * Why is this relevant? Starting with version 3.0.1 we actually expect to pass
+ * the snippetVersion to the runtime because before version 3.0.1 there was
  * a max of 64 characters on byte params. therefore to compute the right
  * inputbytes from the actual params we need to pass the snippeVersion
  * to the runtime.
@@ -74,6 +75,19 @@ export function getCidFromProject(project: {
 }
 
 /**
+ * Enhance param definitions with a version number.
+ */
+export function addVersionToParamsDefinition(
+  definition: FxParamDefinitions,
+  version: string | null | undefined
+) {
+  return definition.map(p => ({
+    ...p,
+    version: version || undefined,
+  }))
+}
+
+/**
  * Enhances the runtime definition with the version of the runtime.
  * Adding the version number to each control definition can be useful for
  * granular control of the runtime controls.
@@ -85,13 +99,10 @@ export function enhanceRuntimeDefinition(
 ): RuntimeDefinition {
   return {
     ...runtime.definition,
-    params:
-      runtime.definition.params?.map(p => ({
-        ...p,
-        ...(runtime.definition.version && {
-          version: runtime.definition.version,
-        }),
-      })) || null,
+    params: addVersionToParamsDefinition(
+      runtime.definition.params || [],
+      runtime.definition.version || null
+    ),
   }
 }
 
@@ -139,13 +150,18 @@ export function hashRuntimeHardState(
 }
 
 /**
- * Lodash mergeWith customizer that keeps Uint8Array types alive.
+ * Lodash mergeWith customizer that
+ * - keeps Uint8Array types alive
+ * - avoids merging arrays just use source
  * @internal
  */
 
 function mergeCustomizer(_: any, source: any) {
   if (source instanceof Uint8Array) {
     return new Uint8Array(source)
+  }
+  if (Array.isArray(source)) {
+    return source
   }
   return undefined
 }

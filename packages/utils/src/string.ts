@@ -35,7 +35,7 @@ export function truncateMiddle(
  *
  * @returns A *unique* string ID
  */
-export function uniqueId() {
+export function uniqueId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 

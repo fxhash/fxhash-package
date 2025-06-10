@@ -1,5 +1,5 @@
 import { cleanup, initOnce, intialization } from "@fxhash/utils"
-import { IUserSource, UserSourceEventEmitter } from "../_interfaces.js"
+import { type IUserSource, UserSourceEventEmitter } from "../_interfaces.js"
 import { anyActiveManager } from "../wallets/common/utils.js"
 
 type Options = {

@@ -48,7 +48,13 @@ export class IframeUnsupportedRequestError extends RichError {
   }
 }
 
-export const IframeBDErrors = [
+export const IframeBDErrors: (
+  | typeof IframeRequestTimeoutError
+  | typeof IframeDisconnectedError
+  | typeof ConnectionAlreadyEstablishedError
+  | typeof IframeUnsupportedRequestError
+  | typeof UnexpectedRichError
+)[] = [
   IframeRequestTimeoutError,
   IframeDisconnectedError,
   ConnectionAlreadyEstablishedError,

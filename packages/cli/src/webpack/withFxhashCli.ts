@@ -1,7 +1,7 @@
 import { Configuration } from "webpack"
 import { WebpackConfigFactoryOptions } from "./webpack.config.js"
 import { createDevConfig } from "./webpack.config.dev.js"
-import { merge } from "lodash"
+import merge from "lodash.merge"
 import { createProdConfig } from "./webpack.config.prod.js"
 import env from "../constants.js"
 import yargs, { Arguments } from "yargs"
@@ -24,8 +24,10 @@ export function withFxhashCli(
   const { mode, ...webpackConfigFactoryOptions } = options
   const createConfig = mode === "prd" ? createProdConfig : createDevConfig
   // receive parsed cli args
-  const { noZip, ...buildYargv } = devCommandBuilder(yargs).parse() as Arguments
-  const devYargv = devCommandBuilder(yargs).parse() as Arguments
+  const { noZip, ...buildYargv } = devCommandBuilder(
+    yargs()
+  ).parse() as Arguments
+  const devYargv = devCommandBuilder(yargs()).parse() as Arguments
   const fxhashCliConfig = createConfig({
     ...devYargv,
     ...buildYargv,

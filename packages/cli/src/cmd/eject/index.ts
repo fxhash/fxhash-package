@@ -9,7 +9,6 @@ import {
   writeFileSync,
 } from "fs"
 import path from "path"
-import yesno from "yesno"
 import env, {
   CWD_PATH,
   WEBPACK_CONFIG_DEV_FILE_NAME,
@@ -20,6 +19,7 @@ import { packageJson } from "../../templates/ejected/packageJson.js"
 import { getProjectPaths } from "../../templates/paths.js"
 import { logger } from "../../utils/logger.js"
 import { isProjectEjectable } from "../../validate/index.js"
+import { yesno } from "../../utils/prompts.js"
 
 export const commandEject: CommandModule = {
   command: "eject",
@@ -35,7 +35,6 @@ export const commandEject: CommandModule = {
     try {
       await isProjectEjectable("")
       const wantToEject = await yesno({
-        // @ts-ignore
         title: "Are you sure you want to eject the project?",
         description: "The change can't be reversed.",
         hideIndex: true,

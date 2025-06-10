@@ -5,32 +5,32 @@
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.5.2",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
     "@tanstack/react-query": "5.69.0",
     "@taquito/beacon-wallet": "20.1.2",
-    "@taquito/taquito": "20.1.2",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/core": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*"
+    "@taquito/taquito": "20.1.2"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.8.5",
+    "@wagmi/core": "2.17.3",
     "connectkit": "1.8.2",
     "eslint": "8.57.0",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "viem": "2.22.5",
-    "wagmi": "2.14.7",
-    "@fxhash/tsconfig": "workspace:*",
-    "@fxhash/eslint-config": "workspace:*"
+    "viem": "2.31.0",
+    "wagmi": "2.15.6"
   },
   "exports": {
     ".": {
@@ -43,19 +43,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@wagmi/connectors": "5.7.3",
-    "@wagmi/core": "2.16.3",
+    "@wagmi/connectors": "5.8.5",
+    "@wagmi/core": "2.17.3",
     "connectkit": "1.8.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "viem": "2.22.5",
-    "wagmi": "2.14.7"
+    "viem": "2.31.0",
+    "wagmi": "2.15.6"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  }
+  },
+  "type": "module"
 }

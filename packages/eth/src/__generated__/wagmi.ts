@@ -899,9 +899,10 @@ export const projectFactoryAbi = [
     type: "constructor",
     inputs: [
       { name: "_owner", internalType: "address", type: "address" },
+      { name: "_fxToken", internalType: "address", type: "address" },
+      { name: "_weth", internalType: "address", type: "address" },
       { name: "_admin", internalType: "address", type: "address" },
       { name: "_renderer", internalType: "address", type: "address" },
-      { name: "_fxToken", internalType: "address", type: "address" },
       { name: "_tokenLaunchpad", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
@@ -931,6 +932,7 @@ export const projectFactoryAbi = [
         ],
       },
       { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
     ],
     name: "createProject",
     outputs: [
@@ -963,6 +965,8 @@ export const projectFactoryAbi = [
       },
       { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
       { name: "_fxAmount", internalType: "uint256", type: "uint256" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_contractURI", internalType: "string", type: "string" },
     ],
     name: "launchTokenAndCreateProject",
     outputs: [
@@ -987,8 +991,22 @@ export const projectFactoryAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "pauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    name: "pausedSelectors",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
@@ -1063,6 +1081,20 @@ export const projectFactoryAbi = [
     name: "unpause",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "unpauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "weth",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
   },
   {
     type: "event",
@@ -1171,6 +1203,32 @@ export const projectFactoryAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorPaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorUnpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "oldTokenLaunchpad",
         internalType: "address",
         type: "address",
@@ -1217,6 +1275,16 @@ export const projectFactoryAbi = [
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "SafeERC20FailedOperation",
   },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorNotPausedError",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorPausedError",
+  },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1230,6 +1298,7 @@ export const projectTokenAbi = [
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_creatorToken", internalType: "address", type: "address" },
+      { name: "_weth", internalType: "address", type: "address" },
       { name: "_admin", internalType: "address", type: "address" },
       { name: "_owner", internalType: "address", type: "address" },
       { name: "_baseURI", internalType: "string", type: "string" },
@@ -1244,6 +1313,7 @@ export const projectTokenAbi = [
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
         ],
       },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
     ],
     stateMutability: "nonpayable",
   },
@@ -1305,6 +1375,15 @@ export const projectTokenAbi = [
     name: "balanceOf",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_tokenIds", internalType: "uint256[]", type: "uint256[]" },
+    ],
+    name: "batchLiquidate",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -1388,6 +1467,32 @@ export const projectTokenAbi = [
       { name: "_amount", internalType: "uint256", type: "uint256" },
     ],
     name: "evolve",
+    outputs: [
+      { name: "tokenIds", internalType: "uint256[]", type: "uint256[]" },
+    ],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_parentId", internalType: "uint256", type: "uint256" },
+      { name: "_to", internalType: "address", type: "address" },
+      { name: "_amount", internalType: "uint256", type: "uint256" },
+    ],
+    name: "evolveWithCustom",
+    outputs: [
+      { name: "tokenIds", internalType: "uint256[]", type: "uint256[]" },
+    ],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_parentId", internalType: "uint256", type: "uint256" },
+      { name: "_to", internalType: "address", type: "address" },
+      { name: "_amount", internalType: "uint256", type: "uint256" },
+    ],
+    name: "evolveWithEveryone",
     outputs: [
       { name: "tokenIds", internalType: "uint256[]", type: "uint256[]" },
     ],
@@ -1560,8 +1665,22 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "pauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    name: "pausedSelectors",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
@@ -1866,6 +1985,13 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "unpauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     name: "versionInfo",
     outputs: [
@@ -1873,6 +1999,13 @@ export const projectTokenAbi = [
       { name: "immutableURI", internalType: "string", type: "string" },
       { name: "lastIteration", internalType: "uint256", type: "uint256" },
     ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "weth",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
@@ -1920,6 +2053,7 @@ export const projectTokenAbi = [
     ],
     name: "ApprovalForAll",
   },
+  { type: "event", anonymous: false, inputs: [], name: "ContractURIUpdated" },
   {
     type: "event",
     anonymous: false,
@@ -1995,6 +2129,12 @@ export const projectTokenAbi = [
         indexed: true,
       },
       {
+        name: "totalFeeAmount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
         name: "fxAmount",
         internalType: "uint256",
         type: "uint256",
@@ -2056,7 +2196,21 @@ export const projectTokenAbi = [
         indexed: false,
       },
     ],
-    name: "EthFeesDistributed",
+    name: "ETHFeesDistributed",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "to", internalType: "address", type: "address", indexed: true },
+      {
+        name: "value",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "ETHTransferFailed",
   },
   {
     type: "event",
@@ -2304,6 +2458,32 @@ export const projectTokenAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorPaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorUnpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "currency",
         internalType: "address",
         type: "address",
@@ -2544,15 +2724,6 @@ export const projectTokenAbi = [
   },
   { type: "error", inputs: [], name: "EnforcedPause" },
   { type: "error", inputs: [], name: "ExpectedPause" },
-  { type: "error", inputs: [], name: "FailedCall" },
-  {
-    type: "error",
-    inputs: [
-      { name: "balance", internalType: "uint256", type: "uint256" },
-      { name: "needed", internalType: "uint256", type: "uint256" },
-    ],
-    name: "InsufficientBalance",
-  },
   {
     type: "error",
     inputs: [{ name: "owner", internalType: "address", type: "address" }],
@@ -2573,6 +2744,7 @@ export const projectTokenAbi = [
     inputs: [{ name: "currency", internalType: "address", type: "address" }],
     name: "ProjectToken__CurrencyNotSupported",
   },
+  { type: "error", inputs: [], name: "ProjectToken__ETHTransferFailed" },
   {
     type: "error",
     inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
@@ -2580,11 +2752,8 @@ export const projectTokenAbi = [
   },
   {
     type: "error",
-    inputs: [
-      { name: "provided", internalType: "uint256", type: "uint256" },
-      { name: "required", internalType: "uint256", type: "uint256" },
-    ],
-    name: "ProjectToken__InsufficientFee",
+    inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
+    name: "ProjectToken__EvolutionNotCustom",
   },
   { type: "error", inputs: [], name: "ProjectToken__InsufficientSupply" },
   { type: "error", inputs: [], name: "ProjectToken__InvalidAmount" },
@@ -2593,9 +2762,7 @@ export const projectTokenAbi = [
     inputs: [{ name: "currency", internalType: "address", type: "address" }],
     name: "ProjectToken__InvalidCurrency",
   },
-  { type: "error", inputs: [], name: "ProjectToken__InvalidFeeReceiver" },
   { type: "error", inputs: [], name: "ProjectToken__InvalidFeeSplit" },
-  { type: "error", inputs: [], name: "ProjectToken__InvalidRenderer" },
   {
     type: "error",
     inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
@@ -2607,11 +2774,22 @@ export const projectTokenAbi = [
     name: "ProjectToken__MetadataNotLocked",
   },
   { type: "error", inputs: [], name: "ProjectToken__UnexpectedETH" },
+  { type: "error", inputs: [], name: "ProjectToken__ZeroAddress" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
   {
     type: "error",
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "SafeERC20FailedOperation",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorNotPausedError",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorPausedError",
   },
 ] as const
 
@@ -2962,13 +3140,6 @@ export const tokenLaunchpadAbi = [
   {
     type: "function",
     inputs: [],
-    name: "INITIAL_MIN_SEED_AMOUNT",
-    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
     name: "INITIAL_SUPPLY",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
@@ -2992,6 +3163,7 @@ export const tokenLaunchpadAbi = [
     inputs: [
       { name: "_creatorToken", internalType: "address", type: "address" },
       { name: "_amountIn", internalType: "uint256", type: "uint256" },
+      { name: "_minAmountOut", internalType: "uint256", type: "uint256" },
     ],
     name: "buy",
     outputs: [],
@@ -3201,6 +3373,7 @@ export const tokenLaunchpadAbi = [
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
+      { name: "_contractURI", internalType: "string", type: "string" },
     ],
     name: "launch",
     outputs: [
@@ -3215,6 +3388,7 @@ export const tokenLaunchpadAbi = [
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
+      { name: "_contractURI", internalType: "string", type: "string" },
     ],
     name: "launchFor",
     outputs: [
@@ -3284,8 +3458,22 @@ export const tokenLaunchpadAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "pauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    name: "pausedSelectors",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
@@ -3350,6 +3538,7 @@ export const tokenLaunchpadAbi = [
     inputs: [
       { name: "_creatorToken", internalType: "address", type: "address" },
       { name: "_amountIn", internalType: "uint256", type: "uint256" },
+      { name: "_minAmountOut", internalType: "uint256", type: "uint256" },
     ],
     name: "sell",
     outputs: [],
@@ -3396,13 +3585,6 @@ export const tokenLaunchpadAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "_newAmount", internalType: "uint256", type: "uint256" }],
-    name: "setMinSeedAmount",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     inputs: [{ name: "interfaceId", internalType: "bytes4", type: "bytes4" }],
     name: "supportsInterface",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
@@ -3441,6 +3623,13 @@ export const tokenLaunchpadAbi = [
     type: "function",
     inputs: [],
     name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "unpauseSelector",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -3863,6 +4052,32 @@ export const tokenLaunchpadAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorPaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorUnpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "creatorToken",
         internalType: "address",
         type: "address",
@@ -3948,8 +4163,19 @@ export const tokenLaunchpadAbi = [
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "SafeERC20FailedOperation",
   },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorNotPausedError",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorPausedError",
+  },
   { type: "error", inputs: [], name: "TokenLaunchpad__CalculationOverflow" },
   { type: "error", inputs: [], name: "TokenLaunchpad__FeeExceedsMaximum" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__InsufficientAmountOut" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InsufficientLiquidity" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidCreatorAddress" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidGraduation" },

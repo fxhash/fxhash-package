@@ -8,10 +8,10 @@
     "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
-    "tsup": "8.4.0",
-    "typescript": "5.8.2",
+    "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@fxhash/eslint-config": "workspace:*"
+    "tsdown": "0.12.2",
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -28,9 +28,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  }
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
+  },
+  "sideEffects": false,
+  "type": "module"
 }

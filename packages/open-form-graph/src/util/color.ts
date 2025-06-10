@@ -5,7 +5,9 @@ export interface ColorHandler {
   (arg: ColorTransform): ColorHandler
   rgb: RGB
 }
-
+/**
+ * Some utility functions to handle colors
+ */
 export function color(rgb: RGB): ColorHandler {
   const colorHandler = function (
     arg: number | ColorTransform

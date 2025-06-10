@@ -13,6 +13,7 @@
     "fxhash-update": "./dist/update.js"
   },
   "dependencies": {
+    "@apollo/client": "3.7.17",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
@@ -32,7 +33,7 @@
     "jsdom": "22.1.0",
     "keypress": "0.2.1",
     "keyv": "4.5.3",
-    "lodash": "4.17.21",
+    "lodash.merge": "4.6.2",
     "minimatch": "9.0.3",
     "node-html-parser": "6.1.9",
     "open": "8.4.2",
@@ -45,8 +46,7 @@
     "terser-webpack-plugin": "5.3.9",
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
-    "yargs": "17.7.2",
-    "yesno": "0.4.0"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
@@ -62,7 +62,7 @@
     "@types/jsdom": "21.1.2",
     "@types/keypress": "2.0.30",
     "@types/keypress.js": "2.1.1",
-    "@types/lodash": "4.14.195",
+    "@types/lodash.merge": "4.6.9",
     "@types/node": "20.6.0",
     "@types/prettier": "2.7.3",
     "@types/sha1": "1.1.3",

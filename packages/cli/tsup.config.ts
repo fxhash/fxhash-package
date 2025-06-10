@@ -25,7 +25,7 @@ export default defineConfig((options: Options) => [
     entry: {
       webpack: "src/webpack/withFxhashCli.ts",
     },
-    format: ["esm", "cjs"],
+    format: ["esm"],
     splitting: true,
     sourcemap: true,
     clean: !options.watch,

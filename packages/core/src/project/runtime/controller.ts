@@ -7,21 +7,22 @@ import {
 } from "@fxhash/utils"
 import { runtimeContext } from "./context.js"
 import { proxyConnector } from "./connectors.js"
-import { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
+import type { ControlState, ProjectState, RuntimeWholeState } from "./_types.js"
 import {
-  FxParamsData,
+  type FxParamsData,
   buildParamsObject,
   deserializeParams,
 } from "@fxhash/params"
 import {
-  IRuntimeContext,
-  IRuntimeController,
+  type IRuntimeContext,
+  type IRuntimeController,
   RuntimeControllerEventEmitter,
-  IRuntimeConnector,
-  ControlsChangedEventPayload,
+  type IRuntimeConnector,
+  type ControlsChangedEventPayload,
 } from "./_interfaces.js"
 import { runtimeControls } from "./controls.js"
 import debounce from "lodash.debounce"
+import { addVersionToParamsDefinition } from "./utils.js"
 
 /**
  * This function is used to handle old snippet events for projects
@@ -102,8 +103,16 @@ export function createRuntimeController(
     params:
       (_initial.definition &&
         _initial.inputBytes &&
-        deserializeParams(_initial.inputBytes, _initial.definition, {})) ||
+        deserializeParams(
+          _initial.inputBytes,
+          addVersionToParamsDefinition(
+            _initial.definition,
+            _initial.snippetVersion
+          ),
+          {}
+        )) ||
       {},
+    parentHashes: _initial.parentHashes,
   }
 
   const _runtime = runtimeContext({
@@ -257,6 +266,7 @@ export function createRuntimeController(
       context: runtimeState.context,
       snippetVersion: runtimeDefinition.version || "",
       chain: runtimeState.chain,
+      parentHashes: runtimeState.parentHashes,
     })
   }
 
