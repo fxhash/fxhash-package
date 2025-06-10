@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/cli",
-  "version": "0.0.16",
+  "version": "0.0.19",
   "author": "fxhash",
   "bin": {
     "@fxhash/cli": "./dist/fxhashCli.js",
@@ -14,6 +14,11 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.17",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/project-sdk": "workspace:*",
+    "@fxhash/snippet": "workspace:*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
@@ -41,12 +46,7 @@
     "terser-webpack-plugin": "5.3.9",
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
-    "yargs": "17.7.2",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/snippet": "0.0.8",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/project-sdk": "0.0.14"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "@types/adm-zip": "0.5.0",
@@ -77,7 +77,7 @@
     "tsup": "8.4.0",
     "typescript": "5.8.2",
     "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "engines": {
     "npm": ">=9.0.0",
@@ -110,3 +110,4 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
+

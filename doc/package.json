@@ -26,8 +26,8 @@
     "unified": "11.0.5",
     "vitepress": "1.6.3",
     "vitepress-plugin-mermaid": "2.0.17",
-    "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "keywords": [],
   "license": "MIT",
@@ -40,3 +40,4 @@
     "watch": "tsx ./scripts/watch.ts"
   }
 }
+

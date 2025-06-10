@@ -1,20 +1,20 @@
 {
   "name": "@fxhash/sdk",
   "description": "Bundle of all the fxhash low & medium level packages exported as one.",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/client": "0.0.0",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/eth": "0.0.9",
-    "@fxhash/core": "0.0.1",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/params": "0.0.10",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/tez": "0.0.0",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/client": "workspace:*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/params": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/eslint": "8.44.0",
@@ -22,8 +22,8 @@
     "tsup": "8.4.0",
     "typescript": "5.8.2",
     "unplugin-isolated-decl": "0.13.6",
-    "@fxhash/tsconfig": "0.0.0",
-    "@fxhash/eslint-config": "1.0.2"
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/eslint-config": "workspace:*"
   },
   "exports": {
     ".": {

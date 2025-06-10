@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/open-form-graph",
   "description": "A react-force-graph visualizer for open form collections",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "d3-force": "3.0.0",
@@ -24,7 +24,7 @@
     "esbuild-css-modules-plugin": "2.7.1",
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
