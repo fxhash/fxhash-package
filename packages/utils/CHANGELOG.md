@@ -1,5 +1,11 @@
 # @fxhash/utils
 
+## 0.0.4
+
+### Patch Changes
+
+- 585be2f4: Release latest toolkit
+
 ## 0.0.3
 
 ### Patch Changes

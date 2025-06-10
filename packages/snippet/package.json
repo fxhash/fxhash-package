@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/snippet",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "fxhash",
   "dependencies": {
     "node-html-parser": "6.1.9"
