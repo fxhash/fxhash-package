@@ -4,12 +4,6 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/text": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "gray-matter": "4.0.3",
     "is-hotkey": "0.2.0",
     "lodash.mergewith": "4.6.2",
@@ -22,11 +16,15 @@
     "slate": "0.110.2",
     "slate-history": "0.110.3",
     "slate-react": "0.111.0",
-    "unified": "11.0.5"
+    "unified": "11.0.5",
+    "@fxhash/config": "0.0.9",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/text": "0.0.0",
+    "@fxhash/utils": "0.0.2",
+    "@fxhash/utils-browser": "0.0.0"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/is-hotkey": "0.1.7",
     "@types/lodash.mergewith": "4.6.9",
@@ -35,7 +33,9 @@
     "eslint": "8.57.0",
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "vitest": "3.1.1"
+    "vitest": "3.1.1",
+    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/tsconfig": "0.0.0"
   },
   "exports": {
     ".": {
@@ -52,12 +52,12 @@
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch",
     "test:local": "FXHASH_ENV=local vitest"
-  },
-  "sideEffects": false,
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }
