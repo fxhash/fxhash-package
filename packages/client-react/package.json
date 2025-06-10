@@ -14,12 +14,12 @@
     "@fxhash/utils-browser": "workspace:*",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@wagmi/connectors": "5.8.2",
-    "@wagmi/core": "2.17.2",
+    "@wagmi/connectors": "5.8.5",
+    "@wagmi/core": "2.17.3",
     "esbuild-css-modules-plugin": "2.7.1",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "viem": "2.30.5"
+    "viem": "2.31.0"
   },
   "exports": {
     ".": {
