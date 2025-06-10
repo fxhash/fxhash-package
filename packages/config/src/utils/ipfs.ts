@@ -6,7 +6,7 @@ export enum EGatewayIpfs {
   IPFSIO = "IPFSIO",
 }
 
-const ipfsRegex = new RegExp("^ipfs://")
+export const ipfsRegex: RegExp = new RegExp("^ipfs://")
 
 /**
  * Given a gateway enum, outputs the http url root of the gateway
