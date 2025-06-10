@@ -96,7 +96,7 @@ export type GenerativeTokenMetadataV5 = GenerativeTokenMetadataV4 & {
 }
 
 export type GenerativeTokenMetadataV6 = GenerativeTokenMetadataV5 & {
-  previewParentHashes?: string
+  previewParentHashes?: string[]
 }
 
 export type GenerativeTokenMetadata =
