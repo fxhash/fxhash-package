@@ -42,5 +42,6 @@
     "build-sdk": "pnpm run build && tsup --config tsup.config.sdk.ts",
     "dev-sdk": "tsup --watch"
   },
+  "type": "module",
   "types": "./dist/fxhash.d.ts"
 }
