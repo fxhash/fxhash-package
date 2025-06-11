@@ -33,17 +33,28 @@ export function getURLSearchParams(
     fxParamsAsQueryParams?: boolean
     noFxParamsUpdateQuery?: boolean
     additionalParams?: URLSearchParams
-  }
+    noParentHashUpdateQuery?: boolean
+  } = {}
 ): string {
-  const { inputBytes, ...stateWithoutParams } = state
+  const { inputBytes, parentHashes, ...stateWithoutParamsAndLineage } = state
   const urlSearchParams = new URLSearchParams({
-    ...Object.entries(stateWithoutParams).reduce((acc, [key, value]) => {
-      const newKey = QUERY_KEYS[key] || key
-      return { ...acc, [newKey]: value }
-    }, {}),
+    ...Object.entries(stateWithoutParamsAndLineage).reduce(
+      (acc, [key, value]) => {
+        const newKey = QUERY_KEYS[key] || key
+        return { ...acc, [newKey]: value }
+      },
+      {}
+    ),
     ...Object.fromEntries(options.additionalParams || []),
   })
   let paramsString = urlSearchParams.toString()
+  const hasLineage = parentHashes && parentHashes.length > 0
+  if (hasLineage) {
+    if (!options.noParentHashUpdateQuery) {
+      paramsString += `&parentHashesUpdate=${quickHash(parentHashes.join(""))}`
+    }
+    paramsString += `#lineage=${parentHashes.join(",")}`
+  }
   if (inputBytes) {
     // I older version params where query params
     // in newer version they are in hash
@@ -53,7 +64,11 @@ export function getURLSearchParams(
       if (!options.noFxParamsUpdateQuery) {
         paramsString += `&fxparamsUpdate=${quickHash(inputBytes)}`
       }
-      paramsString += `#0x${inputBytes}`
+      if (!hasLineage) {
+        paramsString += `#0x${inputBytes}`
+      } else {
+        paramsString += `&params=0x${inputBytes}`
+      }
     }
   }
   return paramsString

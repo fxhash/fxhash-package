@@ -40,8 +40,8 @@
   "scripts": {
     "build": "tsup --config tsup.config.version.ts",
     "build-sdk": "pnpm run build && tsup --config tsup.config.sdk.ts",
-    "dev-sdk": "tsup --watch",
-    "prebuild": "node ./version-gen.js"
+    "dev-sdk": "tsup --watch"
   },
+  "type": "module",
   "types": "./dist/fxhash.d.ts"
 }

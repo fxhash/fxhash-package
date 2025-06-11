@@ -11,6 +11,7 @@ import {
   type ContractFunctionName,
   type ContractFunctionArgs,
   type ContractFunctionParameters,
+  erc20Abi,
 } from "viem"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
@@ -31,6 +32,7 @@ import {
   UserRejectedError,
 } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
+import { waitForCallsStatus } from "viem/actions"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -165,15 +167,39 @@ export const onchainConfig: ConfigInfo = {
   defaultMetadataURI: config.apis.ethMetadata,
 }
 
+// Error codes for insufficient allowance
+const INSUFFICIENT_ALLOWANCE_ERROR = "ERC20InsufficientAllowance"
+const INSUFFICIENT_ALLOWANCE_ERROR_CODE = "0xfb8f41b2"
+
 /**
  * `handleContractError`
  * The function `handleContractError` handles contract errors by checking if the error is an instance
  * of `BaseError` and if it is, it checks if it is an instance of `ContractFunctionRevertedError` and
  * throws an error message based on the error name.
  * @param {any} error - The `error` parameter from the simulation of the contract function call.
- * object.
+ * @param {object} options - Optional object that can contain property `ignoreInsufficientAllowance`.
+ * If set to `true`, it will not rethrow if the error is an insufficient allowance error.
+ * @returns a Promise that resolves to a string.
  */
-export async function handleContractError(error: any): Promise<string> {
+export async function handleContractError(
+  error: any,
+  options?: { ignoreInsufficientAllowance?: boolean }
+): Promise<string> {
+  if (options?.ignoreInsufficientAllowance && error instanceof BaseError) {
+    const revertError = error.walk(
+      err => err instanceof ContractFunctionRevertedError
+    )
+    if (revertError instanceof ContractFunctionRevertedError) {
+      const errorName = revertError.data?.errorName ?? revertError.signature
+      if (
+        [INSUFFICIENT_ALLOWANCE_ERROR, INSUFFICIENT_ALLOWANCE_ERROR_CODE].some(
+          e => e === errorName
+        )
+      )
+        return INSUFFICIENT_ALLOWANCE_ERROR // Return without throwing
+    }
+  }
+
   // This can be thrown by the simulateContract function
   if (error instanceof ContractFunctionExecutionError) {
     const isInsufficientFundsError = error.walk(
@@ -220,6 +246,134 @@ export async function handleContractError(error: any): Promise<string> {
     }
   }
   throw error // Re-throwing error if it's not an instance of BaseError.
+}
+
+/**
+ * Helper function to check if a wallet supports batched transactions
+ */
+export async function supportsBatchedTransactions(
+  walletManager: EthereumWalletManager,
+  chain: Chain
+): Promise<boolean> {
+  const capabilities = await walletManager.walletClient.getCapabilities()
+  return ["supported", "ready"].includes(
+    (capabilities as Record<string, any>)[chain.id]?.atomic?.status
+  )
+}
+
+interface ApprovalArgs {
+  amount: bigint
+  spenderAddress: `0x${string}`
+  tokenAddress: `0x${string}`
+  useSmartAccount: boolean
+}
+
+type BatchedCall = {
+  to: `0x${string}`
+  abi: any
+  functionName: string
+  args: any[]
+  value?: bigint
+}
+
+export async function simulateAndExecuteContractWithApproval<
+  abi extends Abi | readonly unknown[] = Abi,
+  functionName extends ContractFunctionName<
+    abi,
+    "nonpayable" | "payable"
+  > = ContractFunctionName<abi, "nonpayable" | "payable">,
+>(
+  walletManager: EthereumWalletManager,
+  args: SimulateAndExecuteContractRequest<abi, functionName>,
+  approvalArgs?: ApprovalArgs
+): Promise<string> {
+  if (!approvalArgs) return simulateAndExecuteContract(walletManager, args)
+
+  const account = walletManager.walletClient.account
+
+  // if the consumer wants to use a smart account, we can batch the calls
+  if (approvalArgs.useSmartAccount) {
+    const calls: BatchedCall[] = [
+      {
+        to: approvalArgs.tokenAddress,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [approvalArgs.spenderAddress, approvalArgs.amount],
+      },
+      {
+        to: args.address,
+        abi: args.abi,
+        functionName: args.functionName,
+        args: args.args as any[],
+        value: args.value,
+      },
+    ]
+
+    // First, simulate each call individually to catch errors early
+    for (const call of calls) {
+      try {
+        await walletManager.publicClient.simulateContract({
+          address: call.to,
+          abi: call.abi,
+          functionName: call.functionName,
+          args: call.args,
+          account,
+          chain: args.chain,
+          value: call.value,
+        } as any)
+      } catch (error) {
+        const errorMessage = await handleContractError(error, {
+          ignoreInsufficientAllowance: true,
+        })
+        if (errorMessage === INSUFFICIENT_ALLOWANCE_ERROR) continue
+        throw new Error(errorMessage)
+      }
+    }
+
+    // if all simulations pass, execute the batch
+    const { id } = await walletManager.walletClient.sendCalls({
+      account,
+      chain: args.chain,
+      calls: calls.map(call => ({
+        to: call.to,
+        abi: call.abi,
+        functionName: call.functionName,
+        args: call.args,
+        value: call.value,
+      })),
+      experimental_fallback: true,
+    })
+
+    // wait for the batch to complete
+    const status = await waitForCallsStatus(walletManager.walletClient, {
+      id,
+    })
+
+    // check if any transaction in the batch failed
+    if (!status.receipts) throw new Error("failed to get batch status")
+    for (const receipt of status.receipts || []) {
+      if (receipt.status === "reverted") {
+        throw new TransactionRevertedError("Batched transaction reverted")
+      }
+    }
+
+    // return the hash of the first transaction
+    return status.receipts[0].transactionHash
+  }
+
+  // otherwise, we approve + execute sequentially
+  const approvalTxHash = await simulateAndExecuteContract(walletManager, {
+    address: approvalArgs.tokenAddress,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [approvalArgs.spenderAddress, approvalArgs.amount],
+    account: args.account,
+    chain: args.chain,
+  })
+
+  // wait for the approval before executing the main transaction
+  await walletManager.waitForTransaction({ hash: approvalTxHash })
+  return simulateAndExecuteContract(walletManager, args)
 }
 
 /**

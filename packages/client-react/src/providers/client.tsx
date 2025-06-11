@@ -29,6 +29,7 @@ import {
 import { isProviderCustomConfigValid } from "@/utils/validate.js"
 import { Wrapper } from "./Wrapper.js"
 import { ContractOperationSuccess } from "@/hooks/useContractOperation.js"
+import { isBrowser } from "@fxhash/utils-browser"
 
 interface ConnectKitDriverProps {
   openConnectKitModalRef: React.MutableRefObject<(() => void) | null>
@@ -79,6 +80,15 @@ export type ClientBasicState = {
   onOperationSuccess?: (data: ContractOperationSuccess) => void
 }
 
+interface CachedValues {
+  configChecked: number | null
+  client: IClientPlugnPlay | null
+}
+const globalClosureCache: CachedValues = {
+  configChecked: null,
+  client: null,
+}
+
 const defaultActiveManagers = {
   [BlockchainNetwork.ETHEREUM]: null,
   [BlockchainNetwork.TEZOS]: null,
@@ -104,10 +114,19 @@ export function ClientPlugnPlayProvider({
   safeDomContainer,
   socialLogin,
   onOperationSuccess,
+  unsafeAllowManyClientInstances = false,
 }: PropsWithChildren<IReactClientPlugnPlayProviderProps>) {
+  const reactCache = useRef<CachedValues>({
+    configChecked: null,
+    client: null,
+  })
+  const cache =
+    isBrowser() && !unsafeAllowManyClientInstances
+      ? globalClosureCache
+      : reactCache.current
+
   // parse the provided config, verify if it matches requirements and provide
   // default values where missing
-  const configChecked = useRef<number>()
   const _config = useMemo(() => {
     invariant(config, "missing config")
 
@@ -115,12 +134,12 @@ export function ClientPlugnPlayProvider({
     const configHash = xorshift64(config)
     console.log("config", JSON.stringify(config))
     console.log("configHash", configHash)
-    if (configChecked.current && configChecked.current !== configHash) {
+    if (cache.configChecked && cache.configChecked !== configHash) {
       throw Error(
         "The fxhash client plugnplay config should never change through the application life."
       )
     }
-    configChecked.current = configHash
+    cache.configChecked = configHash
 
     // extend with default values if missing
     const out: IReactClientPlugnPlayConfig = {
@@ -137,12 +156,11 @@ export function ClientPlugnPlayProvider({
     return out
   }, [config])
 
-  const clientRef = useRef<IClientPlugnPlay | null>(null)
   const openConnectKitModalRef = useRef<(() => void) | null>(null)
 
   const client = useMemo(() => {
-    if (clientRef.current) return clientRef.current
-    const client = (clientRef.current = createClientPlugnPlay({
+    if (cache.client) return cache.client
+    const client = (cache.client = createClientPlugnPlay({
       metadata: config.metadata,
       wallets: config.wallets,
       credentials: config.credentials,

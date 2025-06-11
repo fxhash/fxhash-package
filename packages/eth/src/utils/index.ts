@@ -1,3 +1,4 @@
+export * from "./artcoin.js"
 export * from "./chain.js"
 export * from "./constants.js"
 export * from "./minters.js"
