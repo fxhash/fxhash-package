@@ -42,6 +42,7 @@ interface OpenGraphSimulationProps {
   theme?: ThemeMode
   onHoveredNodeChange?: (node: SimNode | null) => void
   onSelectedNodeChange?: (node: SimNode | null) => void
+  centerOffset?: { x: number; y: number }
 }
 
 export class OpenGraphSimulation {
@@ -52,6 +53,8 @@ export class OpenGraphSimulation {
   canvas: HTMLCanvasElement
   transformCanvas: TransformCanvas
   theme: ThemeMode
+
+  private centerOffset: { x: number; y: number } = { x: 0, y: 0 }
 
   private data: GraphData = { nodes: [], links: [] }
   private prunedData: GraphData = { nodes: [], links: [] }
@@ -79,6 +82,8 @@ export class OpenGraphSimulation {
     this.config = props.config || DEFAULT_GRAPH_CONFIG
     this.rootImageSources = props.rootImageSources || []
     this.canvas = props.canvas
+
+    this.centerOffset = props.centerOffset || { x: 0, y: 0 }
 
     this.onHoveredNodeChange = props.onHoveredNodeChange
     this.onSelectedNodeChange = props.onSelectedNodeChange
@@ -182,12 +187,15 @@ export class OpenGraphSimulation {
         this.rootId
       )
       const nodePos = this.getNodeScreenPosition(node)
-      this.transformCanvas.transformTo({ x: nodePos.x, y: nodePos.y })
+      this.transformCanvas.transformTo({
+        x: nodePos.x + this.centerOffset.x,
+        y: nodePos.y + this.centerOffset.y,
+      })
       this.transformCanvas.focusOn(() => {
         const nodePos = this.getNodeScreenPosition(node)
         return {
-          x: nodePos.x,
-          y: nodePos.y,
+          x: nodePos.x + this.centerOffset.x,
+          y: nodePos.y + this.centerOffset.y,
           scale: this.transformCanvas.transform.scale,
         }
       })
@@ -293,10 +301,25 @@ export class OpenGraphSimulation {
       )
       .force(
         "center",
-        forceCenter(this.width / 2, this.height / 2).strength(0.01)
+        forceCenter(
+          this.width / 2 + this.centerOffset.x,
+          this.height / 2 + this.centerOffset.y
+        ).strength(0.01)
       )
     this.simulation.on("tick", this.onDraw)
     this.simulation.on("end", this.onEnd)
+  }
+
+  setCenterOffset({ x, y }: { x: number; y: number }) {
+    this.centerOffset = { x, y }
+    this.simulation?.force(
+      "center",
+      forceCenter(
+        this.width / 2 + this.centerOffset.x,
+        this.height / 2 + this.centerOffset.y
+      ).strength(0.01)
+    )
+    this.simulation?.alpha(0.5).restart()
   }
 
   get visiblityScale() {

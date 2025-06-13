@@ -10,6 +10,7 @@ interface OpenFormGraphProps {
   noInteraction?: boolean
   onMouseEnter?: MouseEventHandler
   onMouseLeave?: MouseEventHandler
+  centerOffset?: { x: number; y: number }
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -19,6 +20,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     highlights = [],
     className,
     noInteraction = false,
+    centerOffset,
   } = props
   const {
     simulation,
@@ -46,6 +48,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       onSelectedNodeChange: n => {
         setSelectedNode(n)
       },
+      centerOffset,
     })
     return () => {
       simulation.current?.destroy()
@@ -81,6 +84,12 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     simulation.current.initialize(data, rootId)
   }, [data])
+
+  useEffect(() => {
+    if (!simulation.current) return
+    if (!centerOffset) return
+    simulation.current.setCenterOffset(centerOffset)
+  }, [centerOffset])
 
   const dpi = devicePixelRatio || 1
 
