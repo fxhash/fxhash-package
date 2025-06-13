@@ -89,7 +89,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     if (!centerOffset) return
     simulation.current.setCenterOffset(centerOffset)
-  }, [centerOffset])
+  }, [centerOffset?.y, centerOffset?.x])
 
   const dpi = devicePixelRatio || 1
 
