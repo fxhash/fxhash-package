@@ -26,7 +26,7 @@ import {
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "@/provider"
 import { isSimNode } from "@/util/types"
-import { loadImage } from "@/util/img"
+import { loadHTMLImageElement } from "@/util/img"
 import { TransformCanvas } from "./TransformCanvas"
 import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
@@ -40,6 +40,7 @@ interface OpenGraphSimulationProps {
   rootImageSources?: RootNodeImageSources
   canvas: HTMLCanvasElement
   theme?: ThemeMode
+  loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   onHoveredNodeChange?: (node: SimNode | null) => void
   onSelectedNodeChange?: (node: SimNode | null) => void
 }
@@ -60,6 +61,7 @@ export class OpenGraphSimulation {
   private simulation: Simulation<SimNode, SimLink> | null = null
   private clusterSizeRange: [number, number] = [0, 1]
 
+  private loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   private imageCache: Map<string, HTMLImageElement> = new Map()
   private rootImages: HTMLImageElement[] = []
   private hideThumbnails: boolean = false
@@ -80,6 +82,8 @@ export class OpenGraphSimulation {
     this.rootImageSources = props.rootImageSources || []
     this.canvas = props.canvas
 
+    this.loadNodeImage = props.loadNodeImage
+
     this.onHoveredNodeChange = props.onHoveredNodeChange
     this.onSelectedNodeChange = props.onSelectedNodeChange
 
@@ -91,7 +95,7 @@ export class OpenGraphSimulation {
 
     this.rootImageSources.forEach((src, idx) => {
       if (src && !this.imageCache.get(src)) {
-        loadImage(src).then(img => {
+        loadHTMLImageElement(src).then(img => {
           this.imageCache.set(src, img)
           this.rootImages[idx] = img
         })
@@ -494,13 +498,20 @@ export class OpenGraphSimulation {
 
   private loadNodeImages = () => {
     this.data.nodes.forEach((node: any) => {
-      if (node.imgSrc && !this.imageCache.get(node.imgSrc)) {
-        loadImage(node.imgSrc).then(img => {
-          this.imageCache.set(node.imgSrc!, img)
-          node.state = node.state || {}
-          node.state.image = img
-        })
+      // root node images are loaded separately
+      if (node.id === this.rootId) return
+      if (node.imgSrc && this.imageCache.get(node.imgSrc)) return
+      const loadImage = async () => {
+        const src = this.loadNodeImage
+          ? await this.loadNodeImage(node)
+          : node.imgSrc
+        if (!src) return
+        const html = await loadHTMLImageElement(src)
+        this.imageCache.set(src, html)
+        node.state = node.state || {}
+        node.state.image = html
       }
+      loadImage()
     })
   }
 

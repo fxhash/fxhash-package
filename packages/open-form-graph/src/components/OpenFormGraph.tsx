@@ -1,3 +1,4 @@
+import { SimNode } from "@/_types"
 import { useOpenFormGraph } from "@/provider"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
 import { MouseEventHandler, useEffect, useRef } from "react"
@@ -10,6 +11,7 @@ interface OpenFormGraphProps {
   noInteraction?: boolean
   onMouseEnter?: MouseEventHandler
   onMouseLeave?: MouseEventHandler
+  loadNodeImage?: (node: SimNode) => Promise<string | undefined>
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -19,6 +21,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     highlights = [],
     className,
     noInteraction = false,
+    loadNodeImage,
   } = props
   const {
     simulation,
@@ -39,6 +42,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       height,
       canvas: canvasRef.current,
       rootImageSources,
+      loadNodeImage,
       theme,
       onHoveredNodeChange: n => {
         setHoveredNode(n)
