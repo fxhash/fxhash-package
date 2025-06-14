@@ -107,8 +107,8 @@ export class OpenGraphSimulation {
   private getNodeAtPosition = (cx: number, cy: number): SimNode | null => {
     const transform = this.transformCanvas.transform
     const { x: tx, y: ty, scale } = transform
-    const x = (cx - tx) / scale
-    const y = (cy - ty) / scale
+    const x = (cx - this.centerOffset.x - tx) / scale
+    const y = (cy - this.centerOffset.y - ty) / scale
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
@@ -188,14 +188,14 @@ export class OpenGraphSimulation {
       )
       const nodePos = this.getNodeScreenPosition(node)
       this.transformCanvas.transformTo({
-        x: nodePos.x + this.centerOffset.x,
-        y: nodePos.y + this.centerOffset.y,
+        x: nodePos.x,
+        y: nodePos.y,
       })
       this.transformCanvas.focusOn(() => {
         const nodePos = this.getNodeScreenPosition(node)
         return {
-          x: nodePos.x + this.centerOffset.x,
-          y: nodePos.y + this.centerOffset.y,
+          x: nodePos.x,
+          y: nodePos.y,
           scale: this.transformCanvas.transform.scale,
         }
       })
@@ -301,10 +301,7 @@ export class OpenGraphSimulation {
       )
       .force(
         "center",
-        forceCenter(
-          this.width / 2 + this.centerOffset.x,
-          this.height / 2 + this.centerOffset.y
-        ).strength(0.01)
+        forceCenter(this.width / 2, this.height / 2).strength(0.01)
       )
     this.simulation.on("tick", this.onDraw)
     this.simulation.on("end", this.onEnd)
@@ -312,14 +309,6 @@ export class OpenGraphSimulation {
 
   setCenterOffset({ x, y }: { x: number; y: number }) {
     this.centerOffset = { x, y }
-    this.simulation?.force(
-      "center",
-      forceCenter(
-        this.width / 2 + this.centerOffset.x,
-        this.height / 2 + this.centerOffset.y
-      ).strength(0.01)
-    )
-    this.simulation?.alpha(0.5).restart()
   }
 
   get visiblityScale() {
@@ -360,6 +349,7 @@ export class OpenGraphSimulation {
     context.save()
     context.scale(dpi, dpi)
     context.clearRect(0, 0, this.width, this.height)
+    context.translate(this.centerOffset.x, this.centerOffset.y)
     context.translate(transform.x, transform.y)
     context.scale(transform.scale, transform.scale)
     context.save()
