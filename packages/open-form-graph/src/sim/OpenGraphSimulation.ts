@@ -32,6 +32,8 @@ import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
+import { Transform } from "./_types"
+import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 
 interface OpenGraphSimulationProps {
   width: number
@@ -40,12 +42,10 @@ interface OpenGraphSimulationProps {
   rootImageSources?: RootNodeImageSources
   canvas: HTMLCanvasElement
   theme?: ThemeMode
-  onHoveredNodeChange?: (node: SimNode | null) => void
-  onSelectedNodeChange?: (node: SimNode | null) => void
-  centerOffset?: { x: number; y: number }
+  translate?: { x: number; y: number }
 }
 
-export class OpenGraphSimulation {
+export class OpenGraphSimulation implements IOpenGraphSimulation {
   width: number
   height: number
   config: GraphConfig
@@ -54,7 +54,9 @@ export class OpenGraphSimulation {
   transformCanvas: TransformCanvas
   theme: ThemeMode
 
-  private centerOffset: { x: number; y: number } = { x: 0, y: 0 }
+  public emitter: OpenGraphEventEmitter
+
+  private translate: { x: number; y: number } = { x: 0, y: 0 }
 
   private data: GraphData = { nodes: [], links: [] }
   private prunedData: GraphData = { nodes: [], links: [] }
@@ -69,13 +71,13 @@ export class OpenGraphSimulation {
   private noInteraction: boolean = false
 
   private selectedNode: SimNode | null = null
-  onSelectedNodeChange?: (node: SimNode | null) => void
   private hoveredNode: SimNode | null = null
-  onHoveredNodeChange?: (node: SimNode | null) => void
 
   private highlights: string[] = []
 
   constructor(props: OpenGraphSimulationProps) {
+    this.emitter = new OpenGraphEventEmitter()
+
     this.theme = props.theme || "light"
     this.width = props.width
     this.height = props.height
@@ -83,13 +85,10 @@ export class OpenGraphSimulation {
     this.rootImageSources = props.rootImageSources || []
     this.canvas = props.canvas
 
-    this.centerOffset = props.centerOffset || { x: 0, y: 0 }
-
-    this.onHoveredNodeChange = props.onHoveredNodeChange
-    this.onSelectedNodeChange = props.onSelectedNodeChange
+    this.translate = props.translate || { x: 0, y: 0 }
 
     this.transformCanvas = new TransformCanvas(this.canvas, {
-      onUpdate: this.onDraw,
+      onUpdate: this.handleTransform,
       onClick: this.handleClick,
       onMove: this.handleMove,
     })
@@ -104,11 +103,18 @@ export class OpenGraphSimulation {
     })
   }
 
+  private get center() {
+    return {
+      x: this.width / 2,
+      y: this.height / 2,
+    }
+  }
+
   private getNodeAtPosition = (cx: number, cy: number): SimNode | null => {
     const transform = this.transformCanvas.transform
     const { x: tx, y: ty, scale } = transform
-    const x = (cx - this.centerOffset.x - tx) / scale
-    const y = (cy - this.centerOffset.y - ty) / scale
+    const x = (cx - this.translate.x - tx) / scale
+    const y = (cy - this.translate.y - ty) / scale
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
@@ -121,12 +127,12 @@ export class OpenGraphSimulation {
     return null
   }
 
-  private getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
+  public getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
     const _x = node.x || 0
     const _y = node.y || 0
     const transform = this.transformCanvas.transform
-    const x = this.width / 2 - _x * transform.scale
-    const y = this.height / 2 - _y * transform.scale
+    const x = this.center.x - _x * transform.scale
+    const y = this.center.y - _y * transform.scale
     return { x, y }
   }
 
@@ -139,7 +145,7 @@ export class OpenGraphSimulation {
     if (node) {
       if (node.id === this.rootId) {
         this.selectedNode = null
-        this.onSelectedNodeChange?.(null)
+        this.emitter.emit("selected-node-changed", null)
         this.subGraph = {
           nodes: [],
           links: [],
@@ -160,10 +166,10 @@ export class OpenGraphSimulation {
               if (childNode && isSimNode(childNode)) {
                 if (!childNode.x || childNode.x === 0)
                   childNode.x =
-                    (node.x || this.width / 2) + Math.random() * 50 - 5
+                    (node.x || this.center.x) + Math.random() * 50 - 5
                 if (!childNode.y || childNode.y === 0)
                   childNode.y =
-                    (node.y || this.height / 2) + Math.random() * 50 - 5
+                    (node.y || this.center.y) + Math.random() * 50 - 5
               }
             })
           }
@@ -202,7 +208,7 @@ export class OpenGraphSimulation {
     }
     if (this.selectedNode?.id !== node?.id) {
       this.selectedNode = node
-      this.onSelectedNodeChange?.(node)
+      this.emitter.emit("selected-node-changed", node)
     }
   }
 
@@ -210,8 +216,13 @@ export class OpenGraphSimulation {
     const node = this.getNodeAtPosition(x, y)
     if (this.hoveredNode === node) return
     this.hoveredNode = node
-    this.onHoveredNodeChange?.(node)
+    this.emitter.emit("hovered-node-changed", node)
     this.canvas.style.cursor = node ? "pointer" : "default"
+    this.onDraw()
+  }
+
+  handleTransform = (t: Transform) => {
+    this.emitter.emit("transform-changed", t)
     this.onDraw()
   }
 
@@ -228,8 +239,8 @@ export class OpenGraphSimulation {
         } as NodeState,
         clusterSize: getClusterSize(n.id, _links),
         // set x and y to random values around the center
-        x: existingData?.x || this.width / 2 + Math.random() * 200 - 5,
-        y: existingData?.y || this.height / 2 + Math.random() * 200 - 5,
+        x: existingData?.x || this.center.x + Math.random() * 200 - 5,
+        y: existingData?.y || this.center.y + Math.random() * 200 - 5,
       }
     })
 
@@ -239,8 +250,8 @@ export class OpenGraphSimulation {
         id: this.rootId,
         state: { collapsed: false, image: undefined },
         clusterSize: 1,
-        x: this.width / 2,
-        y: this.height / 2,
+        x: this.center.x,
+        y: this.center.y,
       })
       const targetIds = new Set(_links.map(link => link.target))
       const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
@@ -299,16 +310,13 @@ export class OpenGraphSimulation {
           return -130
         })
       )
-      .force(
-        "center",
-        forceCenter(this.width / 2, this.height / 2).strength(0.01)
-      )
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.01))
     this.simulation.on("tick", this.onDraw)
     this.simulation.on("end", this.onEnd)
   }
 
-  setCenterOffset({ x, y }: { x: number; y: number }) {
-    this.centerOffset = { x, y }
+  setTranslate({ x, y }: { x: number; y: number }) {
+    this.translate = { x, y }
   }
 
   get visiblityScale() {
@@ -349,7 +357,7 @@ export class OpenGraphSimulation {
     context.save()
     context.scale(dpi, dpi)
     context.clearRect(0, 0, this.width, this.height)
-    context.translate(this.centerOffset.x, this.centerOffset.y)
+    context.translate(this.translate.x, this.translate.y)
     context.translate(transform.x, transform.y)
     context.scale(transform.scale, transform.scale)
     context.save()
@@ -501,6 +509,7 @@ export class OpenGraphSimulation {
     context.restore()
     context.restore()
     this.transformCanvas.trackCursor()
+    this.emitter.emit("draw", this)
   }
 
   private onEnd = () => {}

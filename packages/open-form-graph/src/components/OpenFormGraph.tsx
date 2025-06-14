@@ -1,4 +1,5 @@
 import { useOpenFormGraph } from "@/provider"
+import { Transform } from "@/sim/_types"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
 import { MouseEventHandler, useEffect, useRef } from "react"
 
@@ -10,7 +11,8 @@ interface OpenFormGraphProps {
   noInteraction?: boolean
   onMouseEnter?: MouseEventHandler
   onMouseLeave?: MouseEventHandler
-  centerOffset?: { x: number; y: number }
+  translate?: { x: number; y: number }
+  onTransform?: (transform: Transform) => void
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -20,7 +22,8 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     highlights = [],
     className,
     noInteraction = false,
-    centerOffset,
+    translate,
+    onTransform,
   } = props
   const {
     simulation,
@@ -42,18 +45,25 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       canvas: canvasRef.current,
       rootImageSources,
       theme,
-      onHoveredNodeChange: n => {
-        setHoveredNode(n)
-      },
-      onSelectedNodeChange: n => {
-        setSelectedNode(n)
-      },
-      centerOffset,
+      translate,
     })
+    simulation.current.emitter.on("selected-node-changed", setSelectedNode)
+    simulation.current.emitter.on("hovered-node-changed", setHoveredNode)
     return () => {
+      simulation.current?.emitter.off("selected-node-changed", setSelectedNode)
+      simulation.current?.emitter.off("hovered-node-changed", setHoveredNode)
       simulation.current?.destroy()
     }
   }, [])
+
+  useEffect(() => {
+    if (!simulation.current) return
+    if (!onTransform) return
+    simulation.current.emitter.on("transform-changed", onTransform)
+    return () => {
+      simulation.current?.emitter.off("transform-changed", onTransform)
+    }
+  }, [onTransform])
 
   useEffect(() => {
     if (!simulation.current) return
@@ -87,9 +97,9 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
 
   useEffect(() => {
     if (!simulation.current) return
-    if (!centerOffset) return
-    simulation.current.setCenterOffset(centerOffset)
-  }, [centerOffset?.y, centerOffset?.x])
+    if (!translate) return
+    simulation.current.setTranslate(translate)
+  }, [translate?.y, translate?.x])
 
   const dpi = devicePixelRatio || 1
 
