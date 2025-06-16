@@ -41,11 +41,6 @@ export function evmWeb3AuthWallet(
           public: createPublicClient({
             chain,
             transport: http(),
-            batch: {
-              multicall: {
-                wait: 100,
-              },
-            },
           }),
           wallet: createWalletClient({
             account: info.address,
