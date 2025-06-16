@@ -574,11 +574,15 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private loadNodeImages = () => {
     this.data.nodes.forEach((node: any) => {
       if (node.imgSrc && !this.imageCache.get(node.imgSrc)) {
-        loadImage(node.imgSrc).then(img => {
-          this.imageCache.set(node.imgSrc!, img)
-          node.state = node.state || {}
-          node.state.image = img
-        })
+        try {
+          loadImage(node.imgSrc).then(img => {
+            this.imageCache.set(node.imgSrc!, img)
+            node.state = node.state || {}
+            node.state.image = img
+          })
+        } catch (e) {
+          console.error("Error loading image for node", node.id, e)
+        }
       } else if (node.imgSrc && this.imageCache.get(node.imgSrc)) {
         node.state = node.state || {}
         node.state.image = this.imageCache.get(node.imgSrc)
