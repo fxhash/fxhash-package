@@ -6,6 +6,7 @@ export type RawNode = {
   id: string
   label?: string
   imgSrc?: string
+  status?: string
 }
 
 export type NestedRawNode<N extends RawNode> = {

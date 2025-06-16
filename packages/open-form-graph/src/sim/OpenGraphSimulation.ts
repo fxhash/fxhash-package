@@ -444,6 +444,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const isSelected = this.selectedNode?.id === node.id
       const isHovered = this.hoveredNode?.id === node.id
       const isCollapsed = !!node.state?.collapsed
+      const isLiquidated = node.status === "LIQUIDATED"
       const _dim =
         !!this.selectedNode && !this.subGraph?.nodes.some(n => n.id === node.id)
       const fill = _dim
@@ -457,7 +458,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const highlightedStroke = _dim
         ? color(red)(dim(0.4, isLight))()
         : color(red)()
-      const size = this.getNodeSize(node.id)
+      const nodeSize = this.getNodeSize(node.id)
       const highlight = this.highlights.find(h => {
         if (isCustomHighlight(h)) {
           return h.id === node.id
@@ -467,7 +468,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       })
       const highlighted = !!highlight
       if (node.id === this.rootId) {
-        circle(context, x, y, size / 2, {
+        circle(context, x, y, nodeSize / 2, {
           stroke: false,
           strokeStyle: stroke,
           lineWidth: isSelected ? 1 : 0.2,
@@ -477,7 +478,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         if (this.rootImages) {
           const _idx = Math.min(isLight ? 0 : 1, this.rootImages.length - 1)
           const _img = this.rootImages[_idx]
-          const _imgSize = size * 0.55
+          const _imgSize = nodeSize * 0.55
           if (_img) {
             img(
               context,
@@ -494,7 +495,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       } else {
         if (isCollapsed) {
           if (highlighted) {
-            const _size = size + 4
+            const _size = nodeSize + 4
             circle(context, x, y, _size / 2, {
               stroke: true,
               strokeStyle: highlightedStroke,
@@ -503,7 +504,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
               fillStyle: fill,
             })
           }
-          circle(context, x, y, size / 2, {
+          circle(context, x, y, nodeSize / 2, {
             stroke: true,
             strokeStyle: stroke,
             lineWidth: isSelected ? 1 : 0.2,
@@ -523,6 +524,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             context.fillText((node.clusterSize || 1).toString(), x, y)
           }
         } else {
+          const size = isLiquidated ? nodeSize * 0.2 : nodeSize
           if (highlighted) {
             const _size = size + 4
             rect(context, x - _size / 2, y - _size / 2, _size, _size, {
@@ -542,7 +544,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             fillStyle: fill,
             borderRadius: 1,
           })
-          if (node.state?.image && !this.hideThumbnails) {
+          if (node.state?.image && !this.hideThumbnails && !isLiquidated) {
             const _size = size - 1
             img(
               context,
