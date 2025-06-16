@@ -1,5 +1,5 @@
 import { EventEmitter } from "@fxhash/utils"
-import { Transform } from "./_types"
+import { Highlight, Transform } from "./_types"
 import {
   RawGraphData,
   RootNodeImageSources,
@@ -7,6 +7,7 @@ import {
   ThemeMode,
 } from "@/_types"
 import { GraphConfig } from "@/_interfaces"
+import { TransformCanvas } from "./TransformCanvas"
 
 export interface IOpenGraphSimulation {
   width: number
@@ -16,6 +17,10 @@ export interface IOpenGraphSimulation {
   canvas: HTMLCanvasElement
   theme: ThemeMode
   emitter: OpenGraphEventEmitter
+  selectedNode: SimNode | null
+  hoveredNode: SimNode | null
+  highlights: Highlight[]
+  transformCanvas: TransformCanvas
 
   initialize(data: RawGraphData, rootId: string): void
   restart(): void
@@ -23,9 +28,11 @@ export interface IOpenGraphSimulation {
   setTheme(theme: ThemeMode): void
   setHideThumbnails(hide: boolean): void
   setSelectedNode(node: SimNode | null): void
-  setHighlights(highlights: string[]): void
+  setHighlights(highlights: Highlight[]): void
   setNoInteraction(noInteraction: boolean): void
   getNodeById(nodeId: string): SimNode | null
+  getNodeScreenPosition(node: SimNode): { x: number; y: number }
+  getNodeSize(nodeId: string): number
   destroy(): void
 }
 

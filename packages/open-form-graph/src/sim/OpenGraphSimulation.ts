@@ -25,14 +25,14 @@ import {
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "@/provider"
-import { isSimNode } from "@/util/types"
+import { isCustomHighlight, isSimNode } from "@/util/types"
 import { loadImage } from "@/util/img"
 import { TransformCanvas } from "./TransformCanvas"
 import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
-import { Transform } from "./_types"
+import { Transform, Highlight } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 
 interface OpenGraphSimulationProps {
@@ -65,15 +65,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private simulation: Simulation<SimNode, SimLink> | null = null
   private clusterSizeRange: [number, number] = [0, 1]
 
+  private isTicking: boolean = false
+
   private imageCache: Map<string, HTMLImageElement> = new Map()
   private rootImages: HTMLImageElement[] = []
   private hideThumbnails: boolean = false
   private noInteraction: boolean = false
 
-  private selectedNode: SimNode | null = null
-  private hoveredNode: SimNode | null = null
+  public selectedNode: SimNode | null = null
+  public hoveredNode: SimNode | null = null
 
-  private highlights: string[] = []
+  public highlights: Highlight[] = []
 
   constructor(props: OpenGraphSimulationProps) {
     this.emitter = new OpenGraphEventEmitter()
@@ -128,6 +130,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   public getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
+    const transform = this.transformCanvas.transform
+    const scale = transform.scale
+    const x = this.translate.x + transform.x + (node.x || 0) * scale
+    const y = this.translate.y + transform.y + (node.y || 0) * scale
+    return {
+      x,
+      y,
+    }
+  }
+
+  public getNodeCanvasPosition = (node: SimNode): { x: number; y: number } => {
     const _x = node.x || 0
     const _y = node.y || 0
     const transform = this.transformCanvas.transform
@@ -141,7 +154,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.handleClickNode(node)
   }
 
-  handleClickNode = (node: SimNode | null) => {
+  handleClickNode = (
+    node: SimNode | null,
+    options: { noToggle: boolean } = { noToggle: false }
+  ) => {
     if (node) {
       if (node.id === this.rootId) {
         this.selectedNode = null
@@ -154,7 +170,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       }
       if (node.state) {
         const children = getChildren(node.id, this.data.links)
-        if (children.length > 0) {
+        console.log(options.noToggle)
+        if (children.length > 0 && !options?.noToggle) {
+          console.log("toggling node", node.id)
           if (this.selectedNode?.id !== node.id) {
             node.state.collapsed = false
           } else {
@@ -192,13 +210,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.data.links,
         this.rootId
       )
-      const nodePos = this.getNodeScreenPosition(node)
+      const nodePos = this.getNodeCanvasPosition(node)
       this.transformCanvas.transformTo({
         x: nodePos.x,
         y: nodePos.y,
       })
       this.transformCanvas.focusOn(() => {
-        const nodePos = this.getNodeScreenPosition(node)
+        const nodePos = this.getNodeCanvasPosition(node)
         return {
           x: nodePos.x,
           y: nodePos.y,
@@ -236,6 +254,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         state: {
           collapsed:
             hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
+          ...existingData?.state,
         } as NodeState,
         clusterSize: getClusterSize(n.id, _links),
         // set x and y to random values around the center
@@ -265,10 +284,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.data = { nodes: _nodes, links: _links }
     this.loadNodeImages()
     this.restart()
+    const selectedNode = this.selectedNode
+    if (selectedNode && this.getNodeById(selectedNode.id)) {
+      this.handleClickNode(this.getNodeById(selectedNode.id), {
+        noToggle: true,
+      })
+    } else {
+      this.setSelectedNode(null)
+    }
   }
 
   restart = () => {
-    this.setSelectedNode(null)
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
@@ -311,8 +337,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.01))
-    this.simulation.on("tick", this.onDraw)
+    this.simulation.on("tick", this.handleTick)
     this.simulation.on("end", this.onEnd)
+  }
+
+  handleTick = () => {
+    this.isTicking = true
+    this.onDraw()
   }
 
   setTranslate({ x, y }: { x: number; y: number }) {
@@ -362,6 +393,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     context.scale(transform.scale, transform.scale)
     context.save()
 
+    const blue = [94, 112, 235] as RGB
+    const red = [238, 125, 121] as RGB
     const isLight = this.theme === "light"
     this.prunedData.links.forEach(l => {
       const _dim =
@@ -372,12 +405,27 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             getNodeId(sl.target) === getNodeId(l.target)
         )
 
+      const highlight = this.highlights.find(h => {
+        const sourceid = isSimNode(l.source) ? l.source.id : l.source
+        const targetid = isSimNode(l.target) ? l.target.id : l.target
+        if (isCustomHighlight(h)) {
+          return h.id === sourceid || h.id === targetid
+        } else {
+          return h === sourceid || h === targetid
+        }
+      })
+
       const stroke = _dim
         ? this.color(dim(0.09, isLight))()
         : this.color(dim(0.18, isLight))()
-      context.globalAlpha = 0.5
-      context.strokeStyle = stroke
-      context.lineWidth = _dim ? 0.3 : 0.8
+      context.globalAlpha = highlight ? 1 : 0.5
+      if (highlight && isCustomHighlight(highlight)) {
+        context.strokeStyle = highlight.strokeStyle || stroke
+        context.lineWidth = highlight.strokeWidth || _dim ? 0.3 : 0.8
+      } else {
+        context.strokeStyle = stroke
+        context.lineWidth = _dim ? 0.3 : 0.8
+      }
       context.beginPath()
       const sx = (isSimNode(l.source) && l.source.x) || 0
       const sy = (isSimNode(l.source) && l.source.y) || 0
@@ -406,13 +454,18 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             ? this.color(dim(0.4, isLight))()
             : this.color()
       const stroke = this.colorContrast()
-      const blue = [94, 112, 235] as RGB
-      const red = [238, 125, 121] as RGB
       const highlightedStroke = _dim
         ? color(red)(dim(0.4, isLight))()
         : color(red)()
       const size = this.getNodeSize(node.id)
-      const highlighted = this.highlights.includes(node.id)
+      const highlight = this.highlights.find(h => {
+        if (isCustomHighlight(h)) {
+          return h.id === node.id
+        } else {
+          return h === node.id
+        }
+      })
+      const highlighted = !!highlight
       if (node.id === this.rootId) {
         circle(context, x, y, size / 2, {
           stroke: false,
@@ -509,10 +562,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     context.restore()
     context.restore()
     this.transformCanvas.trackCursor()
-    this.emitter.emit("draw", this)
+    //  this.emitter.emit("draw", this)
   }
 
-  private onEnd = () => {}
+  private onEnd = () => {
+    this.isTicking = false
+  }
 
   private loadNodeImages = () => {
     this.data.nodes.forEach((node: any) => {
@@ -522,6 +577,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           node.state = node.state || {}
           node.state.image = img
         })
+      } else if (node.imgSrc && this.imageCache.get(node.imgSrc)) {
+        node.state = node.state || {}
+        node.state.image = this.imageCache.get(node.imgSrc)
       }
     })
   }
@@ -560,7 +618,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.onDraw()
   }
 
-  setHighlights = (highlights: string[]) => {
+  setHighlights = (highlights: Highlight[]) => {
     this.highlights = highlights
     this.onDraw()
   }
