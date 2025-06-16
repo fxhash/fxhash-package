@@ -315,9 +315,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         forceLink<SimNode, SimLink>(this.prunedData.links)
           .id(d => d.id)
           .distance(l => {
-            if (isSimNode(l.target) && !l.target?.state?.collapsed)
-              return this.config.nodeSize
-            return this.config.nodeSize * 3
+            const size = this.getNodeSize(
+              isSimNode(l.target) ? l.target.id : l.target.toString()
+            )
+            if (isSimNode(l.target) && !l.target?.state?.collapsed) return size
+            return size * 3
           })
           .strength(l => {
             return 0.6
@@ -377,7 +379,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       return scale(node.clusterSize || 1)
     }
     const isSelected = this.selectedNode?.id === nodeId
-    return isSelected ? nodeSize * 2 : nodeSize
+    const isLiquidated = node?.status === "LIQUIDATED"
+    const _size = isLiquidated ? nodeSize * 0.2 : nodeSize
+    return isSelected ? _size * 2 : _size
   }
 
   onDraw = () => {
@@ -524,7 +528,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             context.fillText((node.clusterSize || 1).toString(), x, y)
           }
         } else {
-          const size = isLiquidated ? nodeSize * 0.2 : nodeSize
+          const size = nodeSize
           if (highlighted) {
             const _size = size + 4
             rect(context, x - _size / 2, y - _size / 2, _size, _size, {
