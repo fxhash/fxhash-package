@@ -461,6 +461,11 @@ export class EthereumWalletManager extends WalletManager {
       this.publicClient = createPublicClient<HttpTransport, Chain>({
         chain: chain,
         transport: http(),
+        batch: {
+          multicall: {
+            wait: 100,
+          },
+        },
       })
       return success()
     } catch (error) {
@@ -507,6 +512,11 @@ export class EthereumWalletManager extends WalletManager {
     const publicClient = createPublicClient({
       chain,
       transport,
+      batch: {
+        multicall: {
+          wait: 100,
+        },
+      },
     })
     const account = privateKeyToAccount(privateKey)
     const walletClient = createWalletClient({ account, chain, transport })
