@@ -8,6 +8,7 @@ import {
 } from "@/_types"
 import { VOID_ROOT_ID } from "@/context/constants"
 import { isSimNode } from "./types"
+import { HighlightStyle } from "@/sim/_types"
 
 const images: string[] = []
 
@@ -58,7 +59,8 @@ export function generateTree(
 export function getPrunedData(
   startId: string,
   nodes: SimNode[],
-  links: SimLink[]
+  links: SimLink[],
+  highlights: HighlightStyle[] = []
 ) {
   const nodesById = Object.fromEntries(nodes.map(node => [node.id, node]))
   const visibleNodes = []
@@ -70,17 +72,37 @@ export function getPrunedData(
     if (!node || visited.has(node.id)) return
     visited.add(node.id)
 
+    // Skip liquidated nodes unless they are highlighted
+    if (
+      node.status === "LIQUIDATED" &&
+      !highlights.find(h => h.id === node.id)
+    ) {
+      return
+    }
+
     visibleNodes.push(node)
     if (node?.state?.collapsed) return
 
     const childLinks = links.filter(
       l => (isSimNode(l.source) ? l.source.id : l.source) === node.id
     )
-    visibleLinks.push(...childLinks)
 
-    childLinks
-      .map(link => link.target)
-      .forEach(n => traverseTree(isSimNode(n) ? n : nodesById[n.toString()]))
+    for (const link of childLinks) {
+      const targetNode = isSimNode(link.target)
+        ? link.target
+        : nodesById[link.target.toString()]
+
+      // Check whether child should be included before adding link
+      if (
+        targetNode?.status === "LIQUIDATED" &&
+        !highlights.find(h => h.id === targetNode.id)
+      ) {
+        continue // skip adding link to liquidated non-highlighted child
+      }
+
+      visibleLinks.push(link)
+      traverseTree(targetNode)
+    }
   })()
 
   return {

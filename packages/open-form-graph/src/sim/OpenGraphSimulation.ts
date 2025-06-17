@@ -315,7 +315,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
-      this.data.links
+      this.data.links,
+      this.highlights
     )
     this.clusterSizeRange = this.prunedData.nodes
       .filter(n => n.state?.collapsed)
@@ -558,7 +559,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             stroke: highlighted,
             strokeStyle: isHovered ? fill : highlightedStroke,
             lineWidth: 0.5,
-            fill: this.hideThumbnails,
+            fill: this.hideThumbnails || isLiquidated,
             fillStyle: fill,
             borderRadius: 1,
           })
