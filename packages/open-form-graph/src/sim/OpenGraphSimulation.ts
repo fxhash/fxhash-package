@@ -570,7 +570,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             stroke: highlighted || isHovered,
             strokeStyle: isHovered ? fill : highlightedStroke,
             lineWidth: 0.5,
-            fill: this.hideThumbnails || isLiquidated,
+            fill: this.hideThumbnails || isLiquidated || !node.state?.image,
             fillStyle: fill,
             borderRadius: 1,
           })
