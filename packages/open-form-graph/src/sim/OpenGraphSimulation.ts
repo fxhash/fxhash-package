@@ -266,6 +266,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const _links = data.links.map(l => ({ ...l }))
     const _nodes = data.nodes.map(n => {
       const existingData = this.data.nodes.find(x => x.id === n.id)
+      const parents = getParents(n.id, _links)
+      const parentNode = this.data.nodes.find(p => p.id === parents[0])
       return {
         ...n,
         state: {
@@ -274,9 +276,18 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           ...existingData?.state,
         } as NodeState,
         clusterSize: getClusterSize(n.id, _links),
-        // set x and y to random values around the center
-        x: existingData?.x || this.center.x + Math.random() * 200 - 5,
-        y: existingData?.y || this.center.y + Math.random() * 200 - 5,
+        // we either use:
+        // - the existing position
+        // - the parent node position
+        // - or a random position around the center
+        x:
+          existingData?.x ||
+          parentNode?.x ||
+          this.center.x + Math.random() * 200 - 5,
+        y:
+          existingData?.y ||
+          parentNode?.y ||
+          this.center.y + Math.random() * 200 - 5,
       }
     })
 
