@@ -128,6 +128,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const dx = node.x - x
       const dy = node.y - y
       if (dx * dx + dy * dy < r * r) {
+        if (!this.prunedData.nodes.find(n => n.id === node.id)) continue
         return node
       }
     }
@@ -175,10 +176,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       }
       if (node.state) {
         const children = getChildren(node.id, this.data.links)
-        console.log(options.noToggle)
         if (children.length > 0 && !options?.noToggle) {
-          console.log("toggling node", node.id)
-          console.log(node.x, node.y)
           if (this.selectedNode?.id !== node.id) {
             node.state.collapsed = false
           } else {
@@ -187,8 +185,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           if (!node.state.collapsed) {
             children.forEach(childId => {
               const childNode = this.data.nodes.find(n => n.id === childId)
-              console.log("setting childNode", childNode)
-              console.log(node)
               if (childNode && isSimNode(childNode)) {
                 const dist = distance(
                   { x: node.x || this.center.x, y: node.y || this.center.y },
@@ -357,7 +353,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
-          return -110
+          return -120
           const size = this.getNodeSize(node.id)
           return -Math.pow(size, 1.5) // non-linear scaling
         })
@@ -556,28 +552,18 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           }
         } else {
           const size = nodeSize
-          if (highlighted) {
-            const _size = size + 2
-            rect(context, x - _size / 2, y - _size / 2, _size, _size, {
-              stroke: true,
-              strokeStyle: highlightedStroke,
-              lineWidth: 1,
-              fill: false,
-              fillStyle: fill,
-              borderRadius: 1,
-            })
-          }
-          const _size = size + Math.min(transform.scale - 4, 0)
+          const _size = size + 1
+          // outline
           rect(context, x - _size / 2, y - _size / 2, _size, _size, {
-            stroke: false,
-            strokeStyle: stroke,
-            lineWidth: isSelected ? 0.3 : 0.2,
-            fill: true,
+            stroke: highlighted,
+            strokeStyle: isHovered ? fill : highlightedStroke,
+            lineWidth: 0.5,
+            fill: this.hideThumbnails,
             fillStyle: fill,
             borderRadius: 1,
           })
           if (node.state?.image && !this.hideThumbnails && !isLiquidated) {
-            const _size = size - 2
+            const _size = size
             img(
               context,
               node.state?.image,
@@ -649,14 +635,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.selectedNode = node
     // sort the selected node to the end of the array
     this.prunedData.nodes.sort((a, b) => {
-      if (
-        this.highlights.find(h => h.id === a.id) ||
-        this.highlights.find(h => h.id === b.id)
-      )
-        return 1
-      if (a.id === this.selectedNode?.id) return 1
-      if (b.id === this.selectedNode?.id) return -1
-      return 0
+      const getPriority = (node: SimNode) => {
+        if (node.id === this.selectedNode?.id) return 2
+        if (this.highlights.find(h => h.id === node.id)) return 1
+        return 0
+      }
+
+      return getPriority(a) - getPriority(b)
     })
     this.updateScene()
   }
