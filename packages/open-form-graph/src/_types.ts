@@ -7,6 +7,7 @@ export type RawNode = {
   label?: string
   imgSrc?: string
   status?: string
+  depth?: number
 }
 
 export type NestedRawNode<N extends RawNode> = {

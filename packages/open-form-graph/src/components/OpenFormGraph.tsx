@@ -1,12 +1,12 @@
 import { useOpenFormGraph } from "@/provider"
-import { Highlight, Transform } from "@/sim/_types"
+import { HighlightStyle, Transform } from "@/sim/_types"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
 import { MouseEventHandler, useEffect, useRef } from "react"
 
 interface OpenFormGraphProps {
   width: number
   height: number
-  highlights?: Highlight[]
+  highlights?: HighlightStyle[]
   className?: string
   noInteraction?: boolean
   onMouseEnter?: MouseEventHandler

@@ -32,9 +32,10 @@ import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
-import { Transform, Highlight } from "./_types"
+import { Transform, HighlightStyle } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 import { distance } from "@/util/math"
+import { red } from "@/util/highlights"
 
 interface OpenGraphSimulationProps {
   width: number
@@ -76,7 +77,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   public selectedNode: SimNode | null = null
   public hoveredNode: SimNode | null = null
 
-  public highlights: Highlight[] = []
+  public highlights: HighlightStyle[] = []
 
   constructor(props: OpenGraphSimulationProps) {
     this.emitter = new OpenGraphEventEmitter()
@@ -114,10 +115,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   private getNodeAtPosition = (cx: number, cy: number): SimNode | null => {
+    const dpi = devicePixelRatio || 1
+    const realX = cx * dpi
+    const realY = cy * dpi
     const transform = this.transformCanvas.transform
     const { x: tx, y: ty, scale } = transform
-    const x = (cx - tx) / scale - this.translate.x
-    const y = (cy - ty) / scale - this.translate.y
+    const x = (realX - tx) / scale - this.translate.x
+    const y = (realY - ty) / scale - this.translate.y
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
@@ -242,18 +246,23 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
+  updateScene = () => {
+    if (this.isTicking) return
+    this.onDraw()
+  }
+
   handleMove = (x: number, y: number) => {
     const node = this.getNodeAtPosition(x, y)
     if (this.hoveredNode === node) return
     this.hoveredNode = node
     this.emitter.emit("hovered-node-changed", node)
     this.canvas.style.cursor = node ? "pointer" : "default"
-    this.onDraw()
+    this.updateScene()
   }
 
   handleTransform = (t: Transform) => {
     this.emitter.emit("transform-changed", t)
-    this.onDraw()
+    this.updateScene()
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
@@ -347,8 +356,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       )
       .force(
         "charge",
-        forceManyBody().strength(() => {
-          return -130
+        forceManyBody<SimNode>().strength(node => {
+          return -110
+          const size = this.getNodeSize(node.id)
+          return -Math.pow(size, 1.5) // non-linear scaling
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.01))
@@ -385,7 +396,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   getNodeSize = (nodeId: string): number => {
     const { nodeSize } = this.config
-    if (nodeId === this.rootId) return nodeSize * 2
+    const highlight = this.highlights.find(h => h.id === nodeId)
+    const sizeScale = highlight?.scale || 1
+    if (nodeId === this.rootId) return nodeSize * 2 * sizeScale
     const node = this.data.nodes.find(n => n.id === nodeId)
     const isCollapsed = !!node?.state?.collapsed
     if (isCollapsed) {
@@ -397,7 +410,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const isSelected = this.selectedNode?.id === nodeId
     const isLiquidated = node?.status === "LIQUIDATED"
     const _size = isLiquidated ? nodeSize * 0.2 : nodeSize
-    return isSelected ? _size * 2 : _size
+    return isSelected ? _size * 2 * sizeScale : _size * sizeScale
   }
 
   onDraw = () => {
@@ -406,8 +419,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (!context) return
     const dpi = devicePixelRatio || 1
     context.save()
-    context.clearRect(0, 0, this.width, this.height)
     context.scale(dpi, dpi)
+    context.clearRect(0, 0, this.width, this.height)
     context.setTransform(
       transform.scale,
       0,
@@ -419,8 +432,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     context.translate(this.translate.x, this.translate.y)
     context.save()
 
-    const blue = [94, 112, 235] as RGB
-    const red = [238, 125, 121] as RGB
     const isLight = this.theme === "light"
     this.prunedData.links.forEach(l => {
       const _dim =
@@ -441,17 +452,15 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         }
       })
 
-      const stroke = _dim
+      let stroke = _dim
         ? this.color(dim(0.09, isLight))()
         : this.color(dim(0.18, isLight))()
       context.globalAlpha = highlight ? 1 : 0.5
-      if (highlight && isCustomHighlight(highlight)) {
-        context.strokeStyle = highlight.strokeStyle || stroke
-        context.lineWidth = highlight.strokeWidth || _dim ? 0.3 : 0.8
-      } else {
-        context.strokeStyle = stroke
-        context.lineWidth = _dim ? 0.3 : 0.8
+      if (highlight?.linkColor) {
+        stroke = color(highlight.linkColor)()
       }
+      context.strokeStyle = stroke
+      context.lineWidth = _dim ? 0.3 : 0.8
       context.beginPath()
       const sx = (isSimNode(l.source) && l.source.x) || 0
       const sy = (isSimNode(l.source) && l.source.y) || 0
@@ -481,18 +490,14 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             ? this.color(dim(0.4, isLight))()
             : this.color()
       const stroke = this.colorContrast()
-      const highlightedStroke = _dim
-        ? color(red)(dim(0.4, isLight))()
-        : color(red)()
       const nodeSize = this.getNodeSize(node.id)
       const highlight = this.highlights.find(h => {
-        if (isCustomHighlight(h)) {
-          return h.id === node.id
-        } else {
-          return h === node.id
-        }
+        return h.id === node.id
       })
       const highlighted = !!highlight
+      let highlightedStroke = _dim
+        ? color(highlight?.strokeColor || red)(dim(0.4, isLight))()
+        : color(highlight?.strokeColor || red)()
       if (node.id === this.rootId) {
         circle(context, x, y, nodeSize / 2, {
           stroke: false,
@@ -552,7 +557,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         } else {
           const size = nodeSize
           if (highlighted) {
-            const _size = size + 4
+            const _size = size + 2
             rect(context, x - _size / 2, y - _size / 2, _size, _size, {
               stroke: true,
               strokeStyle: highlightedStroke,
@@ -562,8 +567,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
               borderRadius: 1,
             })
           }
-          rect(context, x - size / 2, y - size / 2, size, size, {
-            stroke: true,
+          const _size = size + Math.min(transform.scale - 4, 0)
+          rect(context, x - _size / 2, y - _size / 2, _size, _size, {
+            stroke: false,
             strokeStyle: stroke,
             lineWidth: isSelected ? 0.3 : 0.2,
             fill: true,
@@ -571,7 +577,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             borderRadius: 1,
           })
           if (node.state?.image && !this.hideThumbnails && !isLiquidated) {
-            const _size = size - 1
+            const _size = size - 2
             img(
               context,
               node.state?.image,
@@ -626,39 +632,44 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   resize = (width: number, height: number) => {
     this.width = width
     this.height = height
-    this.onDraw()
+    this.updateScene()
   }
 
   setTheme = (theme: ThemeMode) => {
     this.theme = theme
-    this.onDraw()
+    this.updateScene()
   }
 
   setHideThumbnails = (hide: boolean) => {
     this.hideThumbnails = hide
-    this.onDraw()
+    this.updateScene()
   }
 
   setSelectedNode = (node: SimNode | null) => {
     this.selectedNode = node
     // sort the selected node to the end of the array
     this.prunedData.nodes.sort((a, b) => {
+      if (
+        this.highlights.find(h => h.id === a.id) ||
+        this.highlights.find(h => h.id === b.id)
+      )
+        return 1
       if (a.id === this.selectedNode?.id) return 1
       if (b.id === this.selectedNode?.id) return -1
       return 0
     })
-    this.onDraw()
+    this.updateScene()
   }
 
-  setHighlights = (highlights: Highlight[]) => {
+  setHighlights = (highlights: HighlightStyle[]) => {
     this.highlights = highlights
-    this.onDraw()
+    this.updateScene()
   }
 
   setNoInteraction = (noInteraction: boolean) => {
     this.noInteraction = noInteraction
     this.transformCanvas.setNoInteraction(this.noInteraction)
-    this.onDraw()
+    this.updateScene()
   }
 
   getNodeById = (nodeId: string): SimNode | null => {

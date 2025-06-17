@@ -10,8 +10,8 @@ export type CustomHighlight = {
   id: string
   linkFrom?: string
   linkTo?: string
-  nodeColor?: string
-  strokeStyle?: string
-  strokeWidth?: number
+  strokeColor?: RGB
+  linkColor?: RGB
+  scale?: number
 }
-export type Highlight = SimpleHighlight | CustomHighlight
+export type HighlightStyle = CustomHighlight

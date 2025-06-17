@@ -132,8 +132,11 @@ export class TransformCanvas {
     }
     e.preventDefault()
     const rect = this.canvas.getBoundingClientRect()
-    const mouseX = e.clientX - rect.left
-    const mouseY = e.clientY - rect.top
+    const { x: mouseX, y: mouseY } = this.toCanvasCoords(
+      e.clientX,
+      e.clientY,
+      rect
+    )
     this.zoomFocus = { x: mouseX, y: mouseY }
 
     const scaleFactor = e.deltaY > 0 ? 0.95 : 1.05
@@ -368,5 +371,17 @@ export class TransformCanvas {
 
   focusOn = (focus: Focus | null) => {
     this.focus = focus
+  }
+
+  private toCanvasCoords = (
+    clientX: number,
+    clientY: number,
+    rect: DOMRect
+  ): Point => {
+    const dpi = devicePixelRatio || 1
+    return {
+      x: (clientX - rect.left) * dpi,
+      y: (clientY - rect.top) * dpi,
+    }
   }
 }
