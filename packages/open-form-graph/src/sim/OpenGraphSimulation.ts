@@ -116,8 +116,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private getNodeAtPosition = (cx: number, cy: number): SimNode | null => {
     const transform = this.transformCanvas.transform
     const { x: tx, y: ty, scale } = transform
-    const x = (cx - this.translate.x - tx) / scale
-    const y = (cy - this.translate.y - ty) / scale
+    const x = (cx - tx) / scale - this.translate.x
+    const y = (cy - ty) / scale - this.translate.y
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
@@ -219,8 +219,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.data.links,
         this.rootId
       )
-      const nodePos = this.getNodeCanvasPosition(node)
       /*
+      const nodePos = this.getNodeCanvasPosition(node)
       this.transformCanvas.transformTo({
         x: nodePos.x,
         y: nodePos.y,
@@ -406,11 +406,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (!context) return
     const dpi = devicePixelRatio || 1
     context.save()
-    context.scale(dpi, dpi)
     context.clearRect(0, 0, this.width, this.height)
+    context.scale(dpi, dpi)
+    context.setTransform(
+      transform.scale,
+      0,
+      0,
+      transform.scale,
+      transform.x,
+      transform.y
+    )
     context.translate(this.translate.x, this.translate.y)
-    context.translate(transform.x, transform.y)
-    context.scale(transform.scale, transform.scale)
     context.save()
 
     const blue = [94, 112, 235] as RGB
