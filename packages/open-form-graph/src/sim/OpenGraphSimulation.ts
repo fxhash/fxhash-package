@@ -556,7 +556,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           const _size = size + 1
           // outline
           rect(context, x - _size / 2, y - _size / 2, _size, _size, {
-            stroke: highlighted,
+            stroke: highlighted || isHovered,
             strokeStyle: isHovered ? fill : highlightedStroke,
             lineWidth: 0.5,
             fill: this.hideThumbnails || isLiquidated,
