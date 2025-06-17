@@ -34,6 +34,7 @@ import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
 import { Transform, Highlight } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
+import { distance } from "@/util/math"
 
 interface OpenGraphSimulationProps {
   width: number
@@ -173,6 +174,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         console.log(options.noToggle)
         if (children.length > 0 && !options?.noToggle) {
           console.log("toggling node", node.id)
+          console.log(node.x, node.y)
           if (this.selectedNode?.id !== node.id) {
             node.state.collapsed = false
           } else {
@@ -181,13 +183,20 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           if (!node.state.collapsed) {
             children.forEach(childId => {
               const childNode = this.data.nodes.find(n => n.id === childId)
+              console.log("setting childNode", childNode)
+              console.log(node)
               if (childNode && isSimNode(childNode)) {
-                if (!childNode.x || childNode.x === 0)
-                  childNode.x =
-                    (node.x || this.center.x) + Math.random() * 50 - 5
-                if (!childNode.y || childNode.y === 0)
-                  childNode.y =
-                    (node.y || this.center.y) + Math.random() * 50 - 5
+                const dist = distance(
+                  { x: node.x || this.center.x, y: node.y || this.center.y },
+                  {
+                    x: childNode.x || this.center.x,
+                    y: childNode.y || this.center.y,
+                  }
+                )
+                if (dist > 10) {
+                  childNode.x = (node.x || this.center.x) + Math.random() * 50
+                  childNode.y = (node.y || this.center.y) + Math.random() * 50
+                }
               }
             })
           }
@@ -211,10 +220,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.rootId
       )
       const nodePos = this.getNodeCanvasPosition(node)
+      /*
       this.transformCanvas.transformTo({
         x: nodePos.x,
         y: nodePos.y,
       })
+
       this.transformCanvas.focusOn(() => {
         const nodePos = this.getNodeCanvasPosition(node)
         return {
@@ -223,6 +234,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           scale: this.transformCanvas.transform.scale,
         }
       })
+      */
     }
     if (this.selectedNode?.id !== node?.id) {
       this.selectedNode = node
@@ -310,6 +322,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         [Infinity, -Infinity] as [number, number]
       )
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
+      .alpha(this.simulation ? 0.1 : 1)
       .force(
         "link",
         forceLink<SimNode, SimLink>(this.prunedData.links)
@@ -353,7 +366,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   get visiblityScale() {
-    return scaleLog().domain(this.clusterSizeRange).range([3, 1.5]).clamp(true)
+    return scaleLog()
+      .domain(this.clusterSizeRange)
+      .range([1.5, 0.9])
+      .clamp(true)
   }
 
   get color() {
