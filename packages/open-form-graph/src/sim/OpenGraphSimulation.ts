@@ -584,7 +584,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
               _size,
               _size,
               1,
-              _dim ? 0.1 : 1
+              _dim ? 0.1 : 1,
+              fill
             )
           }
         }
