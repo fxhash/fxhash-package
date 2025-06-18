@@ -168,6 +168,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     node: SimNode | null,
     options: { noToggle: boolean } = { noToggle: false }
   ) => {
+    let wasOpened = false
     if (node) {
       if (node.id === this.rootId) {
         this.selectedNode = null
@@ -182,6 +183,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         const children = getChildren(node.id, this.data.links)
         if (children.length > 0 && !options?.noToggle) {
           if (this.selectedNode?.id !== node.id) {
+            if (node.state.collapsed) {
+              wasOpened = true
+            }
             node.state.collapsed = false
           } else {
             node.state.collapsed = !node.state.collapsed
@@ -216,13 +220,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           }
         })
       }
-      this.restart()
       this.subGraph = getNodeSubgraph(
         node.id,
         this.data.nodes,
         this.data.links,
         this.rootId
       )
+      this.restart(wasOpened ? 0.05 : 0)
       /*
       const nodePos = this.getNodeCanvasPosition(node)
       this.transformCanvas.transformTo({
@@ -342,7 +346,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  restart = () => {
+  restart = (alpha: number = 0.1) => {
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
@@ -359,7 +363,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         [Infinity, -Infinity] as [number, number]
       )
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
-      .alpha(this.simulation ? 0.1 : 1)
+      .alpha(this.simulation ? alpha : 1)
       .force(
         "link",
         forceLink<SimNode, SimLink>(this.prunedData.links)
