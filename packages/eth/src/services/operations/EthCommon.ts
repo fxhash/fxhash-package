@@ -315,23 +315,26 @@ export async function simulateAndExecuteContractWithApproval<
     }
 
     // First, simulate each call individually to catch errors early
-    for (const call of calls) {
-      try {
-        await walletManager.publicClient.simulateContract({
-          address: call.to,
-          abi: call.abi,
-          functionName: call.functionName,
-          args: call.args,
-          account,
-          chain: args.chain,
-          value: call.value,
-        } as any)
-      } catch (error) {
-        const errorMessage = await handleContractError(error, {
-          ignoreInsufficientAllowance: true,
-        })
-        if (errorMessage === INSUFFICIENT_ALLOWANCE_ERROR) continue
-        throw new Error(errorMessage)
+    // We don't simulate additional operations as they will fail without throwing
+    if (!additionalOperations || additionalOperations.length === 0) {
+      for (const call of calls) {
+        try {
+          await walletManager.publicClient.simulateContract({
+            address: call.to,
+            abi: call.abi,
+            functionName: call.functionName,
+            args: call.args,
+            account,
+            chain: args.chain,
+            value: call.value,
+          } as any)
+        } catch (error) {
+          const errorMessage = await handleContractError(error, {
+            ignoreInsufficientAllowance: true,
+          })
+          if (errorMessage === INSUFFICIENT_ALLOWANCE_ERROR) continue
+          throw new Error(errorMessage)
+        }
       }
     }
 
@@ -345,6 +348,10 @@ export async function simulateAndExecuteContractWithApproval<
         functionName: call.functionName,
         args: call.args,
         value: call.value,
+        data: (call as any).data,
+        gas: (call as any).gas,
+        maxFeePerGas: (call as any).maxFeePerGas,
+        maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
       })),
       experimental_fallback: true,
     })
