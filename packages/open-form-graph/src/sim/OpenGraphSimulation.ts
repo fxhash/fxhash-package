@@ -22,6 +22,7 @@ import {
   getNodeSubgraph,
   getNodeId,
   getParents,
+  getNodeDepth,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "@/provider"
@@ -36,6 +37,8 @@ import { Transform, HighlightStyle } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
+
+const RADIUS = 100
 
 interface OpenGraphSimulationProps {
   width: number
