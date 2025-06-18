@@ -285,7 +285,8 @@ export async function simulateAndExecuteContractWithApproval<
 >(
   walletManager: EthereumWalletManager,
   args: SimulateAndExecuteContractRequest<abi, functionName>,
-  approvalArgs?: ApprovalArgs
+  approvalArgs?: ApprovalArgs,
+  additionalOperations?: any[]
 ): Promise<string> {
   if (!approvalArgs) return simulateAndExecuteContract(walletManager, args)
 
@@ -308,6 +309,10 @@ export async function simulateAndExecuteContractWithApproval<
         value: args.value,
       },
     ]
+
+    if (additionalOperations) {
+      calls.unshift(...additionalOperations)
+    }
 
     // First, simulate each call individually to catch errors early
     for (const call of calls) {
@@ -357,8 +362,8 @@ export async function simulateAndExecuteContractWithApproval<
       }
     }
 
-    // return the hash of the first transaction
-    return status.receipts[0].transactionHash
+    // return the hash of the last transaction, we assume that the last tx will always be the action we index
+    return status.receipts[status.receipts.length - 1].transactionHash
   }
 
   // otherwise, we approve + execute sequentially
