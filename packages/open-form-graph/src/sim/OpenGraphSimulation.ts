@@ -34,7 +34,7 @@ import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
 import { Transform, HighlightStyle } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
-import { distance } from "@/util/math"
+import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
 
 interface OpenGraphSimulationProps {
@@ -66,6 +66,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private rootId: string = ""
   private simulation: Simulation<SimNode, SimLink> | null = null
   private clusterSizeRange: [number, number] = [0, 1]
+  private maxDepth: number = 0
 
   private isTicking: boolean = false
 
@@ -268,6 +269,24 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const existingData = this.data.nodes.find(x => x.id === n.id)
       const parents = getParents(n.id, _links)
       const parentNode = this.data.nodes.find(p => p.id === parents[0])
+      const clusterSize = getClusterSize(n.id, _links)
+      const depth = getNodeDepth(n.id, _links)
+      const parentAngle =
+        depth > 0
+          ? getAngle(
+              this.center.x,
+              this.center.y,
+              parentNode?.x!,
+              parentNode?.y!
+            )
+          : undefined
+
+      const circlePos = getRadialPoint(
+        (depth + 1) * RADIUS,
+        this.center.x,
+        this.center.y,
+        parentAngle
+      )
       return {
         ...n,
         state: {
@@ -275,27 +294,23 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
           ...existingData?.state,
         } as NodeState,
-        clusterSize: getClusterSize(n.id, _links),
+        clusterSize,
+        depth,
         // we either use:
         // - the existing position
         // - the parent node position
         // - or a random position around the center
-        x:
-          existingData?.x ||
-          parentNode?.x ||
-          this.center.x + Math.random() * 200 - 5,
-        y:
-          existingData?.y ||
-          parentNode?.y ||
-          this.center.y + Math.random() * 200 - 5,
+        x: existingData?.x || parentNode?.x || circlePos.x,
+        y: existingData?.y || parentNode?.y || circlePos.y,
       }
     })
 
     // if rootId is not in the nodes, add it
-    if (!data.nodes.find(n => n.id === rootId)) {
+    if (!data.nodes.find(n => n.id === this.rootId)) {
       _nodes.push({
         id: this.rootId,
         state: { collapsed: false, image: undefined },
+        depth: -1,
         clusterSize: 1,
         x: this.center.x,
         y: this.center.y,
@@ -304,11 +319,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
       for (const node of rootNodes) {
         _links.push({
-          source: rootId,
+          source: this.rootId,
           target: node.id,
         })
       }
     }
+    this.maxDepth = Math.max(..._nodes.map(n => n.depth || 0))
+
     this.data = { nodes: _nodes, links: _links }
     this.loadNodeImages()
     this.restart()
@@ -651,6 +668,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const getPriority = (node: SimNode) => {
         if (node.id === this.selectedNode?.id) return 2
         if (this.highlights.find(h => h.id === node.id)) return 1
+        if (this.subGraph.nodes.find(n => n.id === node.id)) return 1
         return 0
       }
 

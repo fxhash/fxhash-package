@@ -7,7 +7,6 @@ export type RawNode = {
   label?: string
   imgSrc?: string
   status?: string
-  depth?: number
 }
 
 export type NestedRawNode<N extends RawNode> = {
@@ -48,6 +47,7 @@ export type NodeState = {
 export type SimNode = {
   state?: NodeState
   clusterSize?: number
+  depth?: number
 } & RawNode &
   SimulationNodeDatum
 
