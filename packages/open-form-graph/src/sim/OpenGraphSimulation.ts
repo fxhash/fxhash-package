@@ -4,6 +4,7 @@ import {
   forceLink,
   forceManyBody,
   forceCenter,
+  forceRadial,
 } from "d3-force"
 import {
   GraphData,
@@ -25,7 +26,7 @@ import {
   getNodeDepth,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
-import { DEFAULT_GRAPH_CONFIG } from "@/provider"
+import { DEFAULT_GRAPH_CONFIG, VOID_ROOT_ID } from "@/provider"
 import { isCustomHighlight, isSimNode } from "@/util/types"
 import { loadImage } from "@/util/img"
 import { TransformCanvas } from "./TransformCanvas"
@@ -38,7 +39,8 @@ import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
 
-const RADIUS = 100
+const RADIAL_FORCES = true
+const RADIUS = 300
 
 interface OpenGraphSimulationProps {
   width: number
@@ -395,6 +397,33 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.01))
+
+    for (let i = 0; i < this.maxDepth; i++) {
+      const depth = i
+      const r = RADIUS * (depth + 1)
+      const x = this.center.x
+      const y = this.center.y
+      console.log(
+        "Adding radial force for depth",
+        depth,
+        "with radius",
+        r,
+        x,
+        y
+      )
+
+      if (RADIAL_FORCES) {
+        this.simulation.force(
+          `radial-${depth}`,
+          forceRadial<SimNode>(r, x, y).strength(n => {
+            if (n.id === this.rootId) return 0
+            if (n.depth === 0) return 0
+            if (n.depth === depth) return 0.1
+            return 0
+          })
+        )
+      }
+    }
     this.simulation.on("tick", this.handleTick)
     this.simulation.on("end", this.onEnd)
   }
@@ -614,7 +643,29 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           }
         }
       }
+
+      context.font = `${14 / transform.scale}px Sans-Serif`
+      context.textAlign = "center"
+      context.textBaseline = "middle"
+      context.fillStyle = this.colorContrast()
+      context.fillText((node.depth || 0).toString(), x, y)
     })
+    for (let i = 0; i < this.maxDepth; i++) {
+      const depth = i
+      const r = RADIUS * (depth + 1)
+      const x = this.center.x
+      const y = this.center.y
+      circle(context, x, y, r, {
+        fill: false,
+        stroke: true,
+        strokeStyle: "#00ff00",
+      })
+      context.font = `${40 / transform.scale}px Sans-Serif`
+      context.textAlign = "center"
+      context.textBaseline = "middle"
+      context.fillStyle = this.color()
+      context.fillText(depth.toString(), x + r, y)
+    }
 
     context.restore()
     context.restore()
