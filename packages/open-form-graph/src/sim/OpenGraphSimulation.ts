@@ -273,6 +273,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
+    console.log({ data, lol: "e" })
     this.rootId = rootId
     const _links = data.links.map(l => ({ ...l }))
     const _nodes = data.nodes.map(n => {
@@ -334,6 +335,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       }
     }
+
+    const voidRootNode = _nodes.find(node => node.id === "void-root")
+    if (voidRootNode) {
+      voidRootNode.fx = this.center.x
+      voidRootNode.fy = this.center.y
+    }
+
     this.maxDepth = Math.max(..._nodes.map(n => n.depth || 0))
 
     this.data = { nodes: _nodes, links: _links }
