@@ -38,6 +38,7 @@ import { Transform, HighlightStyle } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
+import { asymmetricLinks } from "./asymmetric-link"
 
 const RADIAL_FORCES = true
 const RADIUS = 300
@@ -366,9 +367,41 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       )
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
       .alpha(this.simulation ? alpha : 1)
+      // .force(
+      //   "link",
+      //   forceLink<SimNode, SimLink>(this.prunedData.links)
+      //     .id(d => d.id)
+      //     .distance(l => {
+      //       const size = this.getNodeSize(
+      //         isSimNode(l.target) ? l.target.id : l.target.toString()
+      //       )
+      //       if (isSimNode(l.target) && !l.target?.state?.collapsed) return size
+      //       return size * 3
+      //     })
+      //     .strength(l => {
+      //       // console.log("compute link strength")
+      //       // console.log(l)
+
+      //       // here we want to check
+
+      //       const nb = this.prunedData.links.filter(
+      //         inp => l.source.id !== "-1" && inp.source.id === l.source.id
+      //       )
+      //       // console.log(nb)
+
+      //       return 0.6
+      //       /* const num = Math.min(
+      //         this.prunedData.links.filter(x => x.source.id === l.source.id)
+      //           .length,
+      //         this.prunedData.links.filter(x => x.source.id === l.target.id)
+      //           .length
+      //       )
+      //       return 1 / Math.max(num * 0.3, 1)*/
+      //     })
+      // )
       .force(
         "link",
-        forceLink<SimNode, SimLink>(this.prunedData.links)
+        asymmetricLinks(this.prunedData.links)
           .id(d => d.id)
           .distance(l => {
             const size = this.getNodeSize(
@@ -378,25 +411,18 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             return size * 3
           })
           .strength(l => {
-            return 0.6
-            /* const num = Math.min(
-              this.prunedData.links.filter(x => x.source.id === l.source.id)
-                .length,
-              this.prunedData.links.filter(x => x.source.id === l.target.id)
-                .length
-            )
-            return 1 / Math.max(num * 0.3, 1)*/
+            return [0.6, 0.05]
           })
       )
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
-          return -120
+          return -300
           const size = this.getNodeSize(node.id)
           return -Math.pow(size, 1.5) // non-linear scaling
         })
       )
-      .force("center", forceCenter(this.center.x, this.center.y).strength(0.01))
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.03))
 
     for (let i = 0; i < this.maxDepth; i++) {
       const depth = i
@@ -418,7 +444,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           forceRadial<SimNode>(r, x, y).strength(n => {
             if (n.id === this.rootId) return 0
             if (n.depth === 0) return 0
-            if (n.depth === depth) return 0.1
+            if (n.depth === depth) return 1.0
             return 0
           })
         )
