@@ -133,7 +133,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const dpi = devicePixelRatio || 1
     const realX = cx * dpi
     const realY = cy * dpi
-    const transform = this.transformCanvas.transform
+    const transform = this.transformCanvas.getTransform()
     const { x: tx, y: ty, scale } = transform
     const x = (realX - tx) / scale - this.translate.x
     const y = (realY - ty) / scale - this.translate.y
@@ -151,7 +151,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   public getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
-    const transform = this.transformCanvas.transform
+    const transform = this.transformCanvas.getTransform()
     const scale = transform.scale
     const x = this.translate.x + transform.x + (node.x || 0) * scale
     const y = this.translate.y + transform.y + (node.y || 0) * scale
@@ -164,7 +164,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   public getNodeCanvasPosition = (node: SimNode): { x: number; y: number } => {
     const _x = node.x || 0
     const _y = node.y || 0
-    const transform = this.transformCanvas.transform
+    const transform = this.transformCanvas.getTransform()
     const x = this.center.x - _x * transform.scale
     const y = this.center.y - _y * transform.scale
     return { x, y }
@@ -239,7 +239,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       )
       this.restart(wasOpened ? 0.05 : 0)
       /*
-      const nodePos = this.getNodeCanvasPosition(node)
+      colorContrastnst nodePos = this.getNodeCanvasPosition(node)
       this.transformCanvas.transformTo({
         x: nodePos.x,
         y: nodePos.y,
@@ -250,7 +250,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         return {
           x: nodePos.x,
           y: nodePos.y,
-          scale: this.transformCanvas.transform.scale,
+          scale: this.transformCanvas.getTransform().scale,
         }
       })
       */
@@ -552,7 +552,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   onDraw = () => {
     const context = this.canvas?.getContext("2d")
-    const transform = this.transformCanvas.transform
+    const transform = this.transformCanvas.getTransform()
     if (!context) return
     const dpi = devicePixelRatio || 1
     context.save()
