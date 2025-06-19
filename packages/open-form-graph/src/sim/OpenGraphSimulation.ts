@@ -40,8 +40,16 @@ import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
 import { asymmetricLinks } from "./asymmetric-link"
 
-const RADIAL_FORCES = true
-const RADIUS = 300
+const RADIAL_FORCES = false
+
+// TODO: implement strategy to retrieve radius based on number of nodes
+// per depth
+const INITIAL_RADIUS = 500
+const INCREMENTAL = 200
+function getRadius(depth: number) {
+  if (depth === 0) return INITIAL_RADIUS
+  return INCREMENTAL * depth + INITIAL_RADIUS
+}
 
 interface OpenGraphSimulationProps {
   width: number
@@ -273,15 +281,49 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
-    console.log({ data, lol: "e" })
     this.rootId = rootId
     const _links = data.links.map(l => ({ ...l }))
-    const _nodes = data.nodes.map(n => {
-      const existingData = this.data.nodes.find(x => x.id === n.id)
+    const _nodes = data.nodes
+      .map(n => {
+        const existingData = this.data.nodes.find(x => x.id === n.id)
+        const parents = getParents(n.id, _links)
+        const parentNode = this.data.nodes.find(p => p.id === parents[0])
+        const clusterSize = getClusterSize(n.id, _links)
+        const depth = getNodeDepth(n.id, _links)
+        const circlePos = getRadialPoint(
+          getRadius(depth),
+          this.center.x,
+          this.center.y
+        )
+
+        const x =
+          depth > 0 ? null : existingData?.x || parentNode?.x || circlePos.x
+        const y =
+          depth > 0 ? null : existingData?.y || parentNode?.y || circlePos.y
+        return {
+          ...n,
+          state: {
+            collapsed:
+              hasOnlyLeafs(n.id, _links) &&
+              getChildren(n.id, _links).length > 1,
+            ...existingData?.state,
+          } as NodeState,
+          clusterSize,
+          depth,
+          // we either use:
+          // - the existing position
+          // - the parent node position
+          // - or a random position around the center
+          x,
+          y,
+        }
+      })
+      .sort((a, b) => a.depth - b.depth)
+    _nodes.forEach((n, i, arr) => {
+      const existingData = _nodes.find(x => x.id === n.id)
       const parents = getParents(n.id, _links)
-      const parentNode = this.data.nodes.find(p => p.id === parents[0])
-      const clusterSize = getClusterSize(n.id, _links)
-      const depth = getNodeDepth(n.id, _links)
+      const parentNode = _nodes.find(p => p.id === parents[0])
+      const depth = n.depth
       const parentAngle =
         depth > 0
           ? getAngle(
@@ -293,27 +335,22 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           : undefined
 
       const circlePos = getRadialPoint(
-        (depth + 1) * RADIUS,
+        getRadius(depth),
         this.center.x,
         this.center.y,
         parentAngle
       )
-      return {
-        ...n,
-        state: {
-          collapsed:
-            hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
-          ...existingData?.state,
-        } as NodeState,
-        clusterSize,
-        depth,
-        // we either use:
-        // - the existing position
-        // - the parent node position
-        // - or a random position around the center
-        x: existingData?.x || parentNode?.x || circlePos.x,
-        y: existingData?.y || parentNode?.y || circlePos.y,
-      }
+      const x =
+        depth > 0
+          ? existingData?.x || circlePos.x
+          : existingData?.x || parentNode?.x || circlePos.x
+      const y =
+        depth > 0
+          ? existingData?.y || circlePos.y
+          : existingData?.y || parentNode?.y || circlePos.y
+
+      _nodes[i].x = x
+      _nodes[i].y = y
     })
 
     // if rootId is not in the nodes, add it
@@ -411,7 +448,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         "link",
         asymmetricLinks(this.prunedData.links)
           .id(d => d.id)
-          .distance(l => {
+          .distance((_l: any) => {
+            const l = _l as SimLink
             const size = this.getNodeSize(
               isSimNode(l.target) ? l.target.id : l.target.toString()
             )
@@ -420,21 +458,25 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           })
           .strength(l => {
             return [0.6, 0.05]
+            if (l.target.depth === 0) return 0.5
+            return 1 / l.target.depth
           })
       )
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
           return -100
+          if (node.depth === 0) return -100
+          return (1 + node.depth) * -1
           const size = this.getNodeSize(node.id)
-          return -Math.pow(size, 1.5) // non-linear scaling
+          return -Math.pow(node.depth, 1.6) // non-linear scaling
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.03))
 
     for (let i = 0; i < this.maxDepth; i++) {
       const depth = i
-      const r = RADIUS * (depth + 1)
+      const r = getRadius(depth)
       const x = this.center.x
       const y = this.center.y
       console.log(
@@ -540,16 +582,16 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const highlight = this.highlights.find(h => {
         const sourceid = isSimNode(l.source) ? l.source.id : l.source
         const targetid = isSimNode(l.target) ? l.target.id : l.target
-        if (isCustomHighlight(h)) {
-          return h.id === sourceid || h.id === targetid
-        } else {
-          return h === sourceid || h === targetid
-        }
+        return h.id === sourceid || h.id === targetid
       })
+
+      const hasSelection = !!this.selectedNode
 
       let stroke = _dim
         ? this.color(dim(0.09, isLight))()
-        : this.color(dim(0.18, isLight))()
+        : hasSelection
+          ? this.color(dim(0.4, isLight))()
+          : this.color(dim(0.18, isLight))()
       context.globalAlpha = highlight ? 1 : 0.5
       if (highlight?.linkColor) {
         stroke = color(highlight.linkColor)()
@@ -686,7 +728,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     })
     for (let i = 0; i < this.maxDepth; i++) {
       const depth = i
-      const r = RADIUS * (depth + 1)
+      const r = getRadius(depth)
       const x = this.center.x
       const y = this.center.y
       circle(context, x, y, r, {
