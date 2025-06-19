@@ -18,7 +18,7 @@ export interface TProjectTokenBatchMintEthOperationParams
   mintFeeAmount?: bigint
   // The optional mint fee currency
   mintFeeCurrency?: string
-  // Additional operations to add to the batched tranaction
+  // Additional operations to add to the batched transaction
   additionalOperations?: any[]
 }
 
