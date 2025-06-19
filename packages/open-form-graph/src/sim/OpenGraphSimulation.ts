@@ -417,7 +417,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
-          return -300
+          return -100
           const size = this.getNodeSize(node.id)
           return -Math.pow(size, 1.5) // non-linear scaling
         })
@@ -444,7 +444,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           forceRadial<SimNode>(r, x, y).strength(n => {
             if (n.id === this.rootId) return 0
             if (n.depth === 0) return 0
-            if (n.depth === depth) return 1.0
+            if (n.depth === depth) return 0.5
             return 0
           })
         )
