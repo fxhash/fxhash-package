@@ -11,6 +11,8 @@ const MAX_ZOOM = 10
 const CLICK_THRESHOLD = 5
 const ANIMATION_SPEED = 0.05
 const ANIMATION_THRESHOLD = { x: 0.5, y: 0.5, scale: 0.001 }
+const MOMENTUM_DAMPING = 0.92
+const MIN_VELOCITY = 0.5
 
 export class TransformCanvas {
   private canvas: HTMLCanvasElement
@@ -25,6 +27,10 @@ export class TransformCanvas {
   private hasMoved = false
   private lastPointerPos: Point = { x: 0, y: 0 }
   private lastMovePos: Point = { x: 0, y: 0 }
+
+  private velocity: Point = { x: 0, y: 0 }
+  private lastDragTime: number = 0
+  private momentumFrame: number | null = null
 
   private touchStart: Point | null = null
   private pinchStartDist: number | null = null
@@ -163,6 +169,39 @@ export class TransformCanvas {
     }
   }
 
+  private startMomentum() {
+    if (
+      Math.abs(this.velocity.x) > MIN_VELOCITY ||
+      Math.abs(this.velocity.y) > MIN_VELOCITY
+    ) {
+      if (!this.momentumFrame) {
+        this.momentumFrame = requestAnimationFrame(this.applyMomentum)
+      }
+    }
+  }
+
+  private applyMomentum = () => {
+    this.transform.x += this.velocity.x
+    this.transform.y += this.velocity.y
+    this.targetTransform.x = this.transform.x
+    this.targetTransform.y = this.transform.y
+
+    this.velocity.x *= MOMENTUM_DAMPING
+    this.velocity.y *= MOMENTUM_DAMPING
+
+    if (
+      Math.abs(this.velocity.x) > MIN_VELOCITY ||
+      Math.abs(this.velocity.y) > MIN_VELOCITY
+    ) {
+      this.onUpdate?.(this.transform)
+      this.momentumFrame = requestAnimationFrame(this.applyMomentum)
+    } else {
+      this.velocity = { x: 0, y: 0 }
+      this.momentumFrame = null
+      this.targetTransform = { ...this.transform }
+    }
+  }
+
   private lerp(a: number, b: number, t: number): number {
     return a + (b - a) * t
   }
@@ -213,11 +252,22 @@ export class TransformCanvas {
       this.stopAnimation()
       this.targetTransform = { ...this.transform }
     }
+    if (this.momentumFrame) {
+      cancelAnimationFrame(this.momentumFrame)
+      this.momentumFrame = null
+      this.velocity = { x: 0, y: 0 }
+    }
   }
 
   private handleWheel(e: WheelEvent) {
     if (this.noInteraction) return
     e.preventDefault()
+
+    if (this.momentumFrame) {
+      cancelAnimationFrame(this.momentumFrame)
+      this.momentumFrame = null
+      this.velocity = { x: 0, y: 0 }
+    }
 
     if (this.focus) {
       this.focus = null
@@ -225,19 +275,23 @@ export class TransformCanvas {
 
     const canvasCoords = this.toCanvasCoords(e.clientX, e.clientY)
     const scaleFactor = e.deltaY > 0 ? 0.95 : 1.05
+
     const newScale = Math.max(
       MIN_ZOOM,
       Math.min(MAX_ZOOM, this.targetTransform.scale * scaleFactor)
     )
 
-    const { x, y, scale } = this.targetTransform
-    const dx = canvasCoords.x - x
-    const dy = canvasCoords.y - y
-    const scaleChange = newScale / scale
+    const { x: targetX, y: targetY, scale: targetScale } = this.targetTransform
+
+    const worldX = (canvasCoords.x - targetX) / targetScale
+    const worldY = (canvasCoords.y - targetY) / targetScale
+
+    const newX = canvasCoords.x - worldX * newScale
+    const newY = canvasCoords.y - worldY * newScale
 
     this.targetTransform = {
-      x: canvasCoords.x - dx * scaleChange,
-      y: canvasCoords.y - dy * scaleChange,
+      x: newX,
+      y: newY,
       scale: newScale,
     }
 
@@ -275,15 +329,26 @@ export class TransformCanvas {
 
       this.transform.x += deltaX
       this.transform.y += deltaY
-      this.targetTransform.x += deltaX
-      this.targetTransform.y += deltaY
+      this.targetTransform.x = this.transform.x
+      this.targetTransform.y = this.transform.y
+
+      const now = Date.now()
+      const dt = now - this.lastDragTime
+      if (dt > 0 && dt < 100) {
+        this.velocity.x = (deltaX / dt) * 16
+        this.velocity.y = (deltaY / dt) * 16
+      }
 
       this.lastPointerPos = { x: e.clientX, y: e.clientY }
+      this.lastDragTime = now
       this.onUpdate?.(this.transform)
     }
   }
 
   private handleMouseUp(e: MouseEvent) {
+    if (this.isDragging && this.hasMoved) {
+      this.startMomentum()
+    }
     this.isDragging = false
     this.dragStart = null
   }
@@ -336,11 +401,19 @@ export class TransformCanvas {
 
         this.transform.x += deltaX
         this.transform.y += deltaY
-        this.targetTransform.x += deltaX
-        this.targetTransform.y += deltaY
+        this.targetTransform.x = this.transform.x
+        this.targetTransform.y = this.transform.y
+
+        const now = Date.now()
+        const dt = now - this.lastDragTime
+        if (dt > 0 && dt < 100) {
+          this.velocity.x = (deltaX / dt) * 16
+          this.velocity.y = (deltaY / dt) * 16
+        }
 
         this.lastPointerPos = { x: touch.clientX, y: touch.clientY }
         this.lastMovePos = { x: touch.clientX, y: touch.clientY }
+        this.lastDragTime = now
 
         this.onUpdate?.(this.transform)
 
@@ -357,14 +430,20 @@ export class TransformCanvas {
       const centerY = (t1.clientY + t2.clientY) / 2
       const canvasCenter = this.toCanvasCoords(centerX, centerY)
 
-      const { x, y, scale: prevScale } = this.transform
-      const dx = canvasCenter.x - x
-      const dy = canvasCenter.y - y
-      const scaleChange = scale / prevScale
+      const {
+        x: targetX,
+        y: targetY,
+        scale: targetScale,
+      } = this.targetTransform
+      const worldX = (canvasCenter.x - targetX) / targetScale
+      const worldY = (canvasCenter.y - targetY) / targetScale
+
+      const newX = canvasCenter.x - worldX * scale
+      const newY = canvasCenter.y - worldY * scale
 
       this.targetTransform = {
-        x: canvasCenter.x - dx * scaleChange,
-        y: canvasCenter.y - dy * scaleChange,
+        x: newX,
+        y: newY,
         scale,
       }
 
@@ -376,7 +455,9 @@ export class TransformCanvas {
     if (this.noInteraction) return
 
     if (e.touches.length === 0) {
-      if (
+      if (this.isDragging && this.hasMoved) {
+        this.startMomentum()
+      } else if (
         this.isDragging &&
         !this.hasMoved &&
         this.onClick &&
@@ -389,6 +470,7 @@ export class TransformCanvas {
       this.touchStart = null
       this.hasMoved = false
       this.pinchStartDist = null
+      this.velocity = { x: 0, y: 0 }
     } else if (e.touches.length === 1) {
       const touch = e.touches[0]
       this.isDragging = true
@@ -396,6 +478,8 @@ export class TransformCanvas {
       this.touchStart = { x: touch.clientX, y: touch.clientY }
       this.lastPointerPos = { x: touch.clientX, y: touch.clientY }
       this.pinchStartDist = null
+      this.velocity = { x: 0, y: 0 }
+      this.lastDragTime = Date.now()
     }
   }
 
@@ -431,6 +515,11 @@ export class TransformCanvas {
 
   destroy() {
     this.stopAnimation()
+
+    if (this.momentumFrame) {
+      cancelAnimationFrame(this.momentumFrame)
+      this.momentumFrame = null
+    }
 
     this.canvas.removeEventListener("wheel", this.handleWheel)
     this.canvas.removeEventListener("mousedown", this.handleMouseDown)
