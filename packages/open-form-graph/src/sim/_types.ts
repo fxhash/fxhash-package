@@ -13,5 +13,7 @@ export type CustomHighlight = {
   strokeColor?: RGB
   linkColor?: RGB
   scale?: number
+  isDetached?: boolean
+  onTop?: boolean
 }
 export type HighlightStyle = CustomHighlight

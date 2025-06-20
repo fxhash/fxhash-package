@@ -12,13 +12,25 @@ export class Highlight {
       strokeColor: red,
     }
   }
-  static minted = (id: string): CustomHighlight => {
+  static evolved = (id: string): CustomHighlight => {
     return {
       id,
       linkTo: id,
       scale: 2.1,
       strokeColor: redred,
       linkColor: redred,
+      onTop: true,
+    }
+  }
+  static minted = (id: string): CustomHighlight => {
+    return {
+      id,
+      linkTo: id,
+      scale: 1.5,
+      strokeColor: redred,
+      linkColor: redred,
+      isDetached: true,
+      onTop: true,
     }
   }
 }

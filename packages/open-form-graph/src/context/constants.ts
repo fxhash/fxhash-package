@@ -1,6 +1,7 @@
 import { GraphConfig } from "@/_interfaces"
 
 export const VOID_ROOT_ID = "void-root"
+export const VOID_DETACH_ID = "void-detach"
 
 export const DEFAULT_GRAPH_CONFIG: GraphConfig = {
   debug: false,

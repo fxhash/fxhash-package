@@ -24,7 +24,7 @@ import {
   getNodeDepth,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
-import { DEFAULT_GRAPH_CONFIG } from "@/provider"
+import { DEFAULT_GRAPH_CONFIG, VOID_DETACH_ID } from "@/provider"
 import { isSimNode } from "@/util/types"
 import { loadHTMLImageElement } from "@/util/img"
 import { TransformCanvas } from "./TransformCanvas"
@@ -58,6 +58,12 @@ interface OpenGraphSimulationProps {
   theme?: ThemeMode
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
+}
+
+// Types for render layers
+interface RenderLayer<T> {
+  regular: T[]
+  highlighted: T[]
 }
 
 export class OpenGraphSimulation implements IOpenGraphSimulation {
@@ -94,6 +100,15 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   public hoveredNode: SimNode | null = null
 
   public highlights: HighlightStyle[] = []
+
+  // Render layers for proper z-ordering
+  private renderLayers: {
+    links: RenderLayer<SimLink>
+    nodes: RenderLayer<SimNode>
+  } = {
+    links: { regular: [], highlighted: [] },
+    nodes: { regular: [], highlighted: [] },
+  }
 
   constructor(props: OpenGraphSimulationProps) {
     this.emitter = new OpenGraphEventEmitter()
@@ -191,6 +206,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           nodes: [],
           links: [],
         }
+        this.updateRenderLayers()
+        this.updateScene()
         return
       }
       if (node.state) {
@@ -240,29 +257,24 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.data.links,
         this.rootId
       )
-      /*
-      colorContrastnst nodePos = this.getNodeCanvasPosition(node)
-      this.transformCanvas.transformTo({
-        x: nodePos.x,
-        y: nodePos.y,
-      })
-
-      this.transformCanvas.focusOn(() => {
-        const nodePos = this.getNodeCanvasPosition(node)
-        return {
-          x: nodePos.x,
-          y: nodePos.y,
-          scale: this.transformCanvas.getTransform().scale,
-        }
-      })
-      */
     }
     if (this.selectedNode?.id !== node?.id) {
       this.selectedNode = node
       this.emitter.emit("selected-node-changed", node)
+      this.updateRenderLayers()
     }
     if (node) {
       this.restart(wasOpened ? 0.05 : 0)
+    } else if (!node && this.selectedNode) {
+      // Handle deselection
+      this.selectedNode = null
+      this.emitter.emit("selected-node-changed", null)
+      this.subGraph = {
+        nodes: [],
+        links: [],
+      }
+      this.updateRenderLayers()
+      this.updateScene()
     }
   }
 
@@ -348,11 +360,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const x =
         depth > 0
           ? existingData?.x || circlePos.x
-          : existingData?.x || parentNode?.x || circlePos.x
+          : existingData?.x || circlePos.x
       const y =
         depth > 0
           ? existingData?.y || circlePos.y
-          : existingData?.y || parentNode?.y || circlePos.y
+          : existingData?.y || circlePos.y
 
       _nodes[i].x = x
       _nodes[i].y = y
@@ -368,20 +380,45 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         x: this.center.x,
         y: this.center.y,
       })
-      const targetIds = new Set(_links.map(link => link.target))
-      const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
-      for (const node of rootNodes) {
+    }
+
+    // We create a VOID_DETACH_ID node to allow connecting new mints to it
+    // this will detach the new mints on the root from the rest of the root
+    // nodes in case there is a larger cluster
+    _nodes.push({
+      id: VOID_DETACH_ID,
+      state: { collapsed: false, image: undefined },
+      depth: -1,
+      clusterSize: 1,
+      x: this.center.x,
+      y: this.center.y,
+    })
+
+    _links.push({
+      source: this.rootId,
+      target: VOID_DETACH_ID,
+    })
+
+    const targetIds = new Set(_links.map(link => link.target))
+    // all nodes without a target in the links are root nodes
+    const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
+    for (const node of rootNodes) {
+      const highlight = this.highlights.find(h => h.id === node.id)
+      // highlights can be specified to detach the nodes from the root
+      // usefull for detaching new mints from the root node
+      if (highlight?.isDetached) {
+        _links.push({
+          source: VOID_DETACH_ID,
+          target: node.id,
+        })
+      }
+      // otherwise, we connect them to the root node
+      else {
         _links.push({
           source: this.rootId,
           target: node.id,
         })
       }
-    }
-
-    const voidRootNode = _nodes.find(node => node.id === "void-root")
-    if (voidRootNode) {
-      // voidRootNode.fx = this.center.x
-      // voidRootNode.fy = this.center.y
     }
 
     this.maxDepth = Math.max(..._nodes.map(n => n.depth || 0))
@@ -407,7 +444,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.data.links,
       this.highlights
     )
-    this.sortPrunedData()
+    this.updateRenderLayers()
     this.clusterSizeRange = this.prunedData.nodes
       .filter(n => n.state?.collapsed)
       .reduce(
@@ -419,38 +456,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       )
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
       .alpha(this.simulation ? alpha : 0.5)
-      // .force(
-      //   "link",
-      //   forceLink<SimNode, SimLink>(this.prunedData.links)
-      //     .id(d => d.id)
-      //     .distance(l => {
-      //       const size = this.getNodeSize(
-      //         isSimNode(l.target) ? l.target.id : l.target.toString()
-      //       )
-      //       if (isSimNode(l.target) && !l.target?.state?.collapsed) return size
-      //       return size * 3
-      //     })
-      //     .strength(l => {
-      //       // console.log("compute link strength")
-      //       // console.log(l)
-
-      //       // here we want to check
-
-      //       const nb = this.prunedData.links.filter(
-      //         inp => l.source.id !== "-1" && inp.source.id === l.source.id
-      //       )
-      //       // console.log(nb)
-
-      //       return 0.6
-      //       /* const num = Math.min(
-      //         this.prunedData.links.filter(x => x.source.id === l.source.id)
-      //           .length,
-      //         this.prunedData.links.filter(x => x.source.id === l.target.id)
-      //           .length
-      //       )
-      //       return 1 / Math.max(num * 0.3, 1)*/
-      //     })
-      // )
       .force(
         "link",
         asymmetricLinks<SimNode, SimLink>(this.prunedData.links)
@@ -464,22 +469,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           })
           .strength(l => {
             return [0.66, 0.08]
-            /*
-            if (l.target.depth === 0) return 0.5
-            return 1 / l.target.depth
-              */
           })
       )
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
           return -100
-          /*
-          if (node.depth === 0) return -100
-          return (1 + node.depth) * -1
-          const size = this.getNodeSize(node.id)
-          return -Math.pow(node.depth, 1.6) // non-linear scaling
-          */
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
@@ -516,6 +511,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   get rootNode() {
     return this.data.nodes.find(n => n.id === this.rootId) || null
+  }
+
+  get detachNode() {
+    return this.data.nodes.find(n => n.id === VOID_DETACH_ID) || null
   }
 
   handleTick = () => {
@@ -565,10 +564,333 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     return isSelected ? _size * 2 * sizeScale : _size * sizeScale
   }
 
+  private updateRenderLayers() {
+    const isHighlighted = (id: string) => {
+      // Helper to determine if element should be highlighted
+      const highlight = this.highlights.find(h => h.id === id)
+      return (
+        highlight?.onTop ||
+        this.selectedNode?.id === id ||
+        this.subGraph.nodes.find(n => n.id === id)
+      )
+    }
+
+    this.renderLayers.nodes.regular = []
+    this.renderLayers.nodes.highlighted = []
+
+    this.prunedData.nodes.forEach(node => {
+      if (isHighlighted(node.id)) {
+        this.renderLayers.nodes.highlighted.push(node)
+      } else {
+        this.renderLayers.nodes.regular.push(node)
+      }
+    })
+
+    this.renderLayers.links.regular = []
+    this.renderLayers.links.highlighted = []
+
+    this.prunedData.links.forEach(link => {
+      const sourceId = isSimNode(link.source) ? link.source.id : link.source
+      const targetId = isSimNode(link.target) ? link.target.id : link.target
+
+      const inSubgraph =
+        this.selectedNode &&
+        this.subGraph.links.find(
+          l =>
+            getNodeId(l.source) === sourceId && getNodeId(l.target) === targetId
+        )
+
+      if (inSubgraph) {
+        this.renderLayers.links.highlighted.push(link)
+      } else {
+        this.renderLayers.links.regular.push(link)
+      }
+    })
+    this.renderLayers.nodes.highlighted.sort((a, b) => {
+      // Sort highlighted nodes by priority
+      if (a.id === this.selectedNode?.id) return 1
+      if (b.id === this.selectedNode?.id) return -1
+      return 0
+    })
+  }
+
+  private renderLink(
+    ctx: CanvasRenderingContext2D,
+    link: SimLink,
+    options: {
+      dim: boolean
+      hasSelection: boolean
+      highlight?: HighlightStyle
+    }
+  ) {
+    const sourceId = isSimNode(link.source) ? link.source.id : link.source
+    const targetId = isSimNode(link.target) ? link.target.id : link.target
+
+    let sourceNode = this.data.nodes.find(n => n.id === sourceId)
+
+    // Skip void detach links
+    if (targetId === VOID_DETACH_ID) return
+    if (sourceId === VOID_DETACH_ID) {
+      sourceNode = this.rootNode!
+    }
+
+    const isLight = this.theme === "light"
+    const { dim: _dim, hasSelection, highlight } = options
+
+    let stroke = _dim
+      ? this.color(dim(0.09, isLight))()
+      : hasSelection
+        ? this.color(dim(0.4, isLight))()
+        : this.color(dim(0.18, isLight))()
+
+    ctx.globalAlpha = highlight ? 1 : 0.5
+
+    const sx = (sourceNode && sourceNode.x) || 0
+    const sy = (sourceNode && sourceNode.y) || 0
+    const tx = (isSimNode(link.target) && link.target.x) || 0
+    const ty = (isSimNode(link.target) && link.target.y) || 0
+
+    // Create gradient if highlighted
+    if (highlight?.linkColor) {
+      const gradient = ctx.createLinearGradient(sx, sy, tx, ty)
+      gradient.addColorStop(0, stroke) // Normal color at source
+      gradient.addColorStop(1, color(highlight.linkColor)()) // Highlight color at target
+      ctx.strokeStyle = gradient
+    } else {
+      ctx.strokeStyle = stroke
+    }
+
+    ctx.lineWidth = _dim ? 0.3 : 0.8
+    ctx.beginPath()
+    ctx.moveTo(sx, sy)
+    ctx.lineTo(tx, ty)
+    ctx.stroke()
+    ctx.closePath()
+  }
+
+  // Render a single node
+  private renderNode(
+    ctx: CanvasRenderingContext2D,
+    node: SimNode,
+    options: {
+      dim: boolean
+      transform: Transform
+    }
+  ) {
+    if (node.id === VOID_DETACH_ID) return
+
+    const x = node.x || 0
+    const y = node.y || 0
+    const isSelected = this.selectedNode?.id === node.id
+    const isHovered = this.hoveredNode?.id === node.id
+    const isCollapsed = !!node.state?.collapsed
+    const isLiquidated = node.status === "LIQUIDATED"
+    const isLight = this.theme === "light"
+    const { dim: _dim, transform } = options
+
+    const fill = _dim
+      ? this.color(dim(0.075, isLight))()
+      : isCollapsed
+        ? this.color(dim(0.18, isLight))()
+        : isHovered
+          ? this.color(dim(0.4, isLight))()
+          : this.color()
+
+    const stroke = this.colorContrast()
+    const nodeSize = this.getNodeSize(node.id)
+    const highlight = this.highlights.find(h => h.id === node.id)
+    const highlighted = !!highlight
+
+    let highlightedStroke = _dim
+      ? color(highlight?.strokeColor || red)(dim(0.4, isLight))()
+      : color(highlight?.strokeColor || red)()
+
+    if (node.id === this.rootId) {
+      this.renderRootNode(ctx, x, y, nodeSize, _dim, isLight)
+    } else if (isCollapsed) {
+      this.renderCollapsedNode(ctx, x, y, nodeSize, {
+        fill,
+        stroke,
+        highlighted,
+        highlightedStroke,
+        isSelected,
+        dim: _dim,
+        transform,
+        clusterSize: node.clusterSize || 1,
+        isLight,
+      })
+    } else {
+      this.renderExpandedNode(ctx, x, y, nodeSize, {
+        fill,
+        stroke,
+        highlighted,
+        highlightedStroke,
+        isHovered,
+        isLiquidated,
+        dim: _dim,
+        image: node.state?.image,
+      })
+    }
+  }
+
+  // Render root node
+  private renderRootNode(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number,
+    dimmed: boolean,
+    isLight: boolean
+  ) {
+    circle(ctx, x, y, size / 2, {
+      stroke: false,
+      strokeStyle: this.colorContrast(),
+      lineWidth: 0.2,
+      fill: true,
+      fillStyle: this.color(dim(0.18, isLight))(),
+    })
+
+    if (this.rootImages) {
+      const _idx = Math.min(isLight ? 0 : 1, this.rootImages.length - 1)
+      const _img = this.rootImages[_idx]
+      const _imgSize = size * 0.55
+      if (_img) {
+        img(
+          ctx,
+          _img,
+          x - _imgSize / 2,
+          y - _imgSize / 2,
+          _imgSize,
+          _imgSize,
+          0,
+          dimmed ? 0.1 : 1
+        )
+      }
+    }
+  }
+
+  // Render collapsed node
+  private renderCollapsedNode(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number,
+    options: {
+      fill: string
+      stroke: string
+      highlighted: boolean
+      highlightedStroke: string
+      isSelected: boolean
+      dim: boolean
+      transform: Transform
+      clusterSize: number
+      isLight: boolean
+    }
+  ) {
+    const {
+      fill,
+      stroke,
+      highlighted,
+      highlightedStroke,
+      isSelected,
+      dim: _dim,
+      transform,
+      clusterSize,
+      isLight,
+    } = options
+
+    if (highlighted) {
+      const _size = size + 4
+      circle(ctx, x, y, _size / 2, {
+        stroke: true,
+        strokeStyle: highlightedStroke,
+        lineWidth: 1,
+        fill: false,
+        fillStyle: fill,
+      })
+    }
+
+    circle(ctx, x, y, size / 2, {
+      stroke: true,
+      strokeStyle: stroke,
+      lineWidth: isSelected ? 1 : 0.2,
+      fill: true,
+      fillStyle: fill,
+    })
+
+    const showLabel =
+      transform.scale >= this.visiblityScale(clusterSize) ? 1 : 0
+
+    if (showLabel) {
+      ctx.font = `${14 / transform.scale}px Sans-Serif`
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle"
+      ctx.fillStyle = this.color(dim(_dim ? 0.2 : 0.5, isLight))()
+      ctx.fillText(clusterSize.toString(), x, y)
+    }
+  }
+
+  // Render expanded node
+  private renderExpandedNode(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number,
+    options: {
+      fill: string
+      stroke: string
+      highlighted: boolean
+      highlightedStroke: string
+      isHovered: boolean
+      isLiquidated: boolean
+      dim: boolean
+      image?: HTMLImageElement
+    }
+  ) {
+    const {
+      fill,
+      highlighted,
+      highlightedStroke,
+      isHovered,
+      isLiquidated,
+      dim: _dim,
+      image,
+    } = options
+
+    const _size = size + 1
+
+    // Outline
+    rect(ctx, x - _size / 2, y - _size / 2, _size, _size, {
+      stroke: highlighted || isHovered,
+      strokeStyle: isHovered ? fill : highlightedStroke,
+      lineWidth: 0.5,
+      fill: this.hideThumbnails || isLiquidated || !image,
+      fillStyle: fill,
+      borderRadius: 1,
+    })
+
+    // Image
+    if (image && !this.hideThumbnails && !isLiquidated) {
+      img(
+        ctx,
+        image,
+        x - size / 2,
+        y - size / 2,
+        size,
+        size,
+        1,
+        _dim ? 0.1 : 1,
+        fill
+      )
+    }
+  }
+
+  // Main draw function - now much cleaner
   onDraw = () => {
     const context = this.canvas?.getContext("2d")
     const transform = this.transformCanvas.getTransform()
     if (!context) return
+
     const dpi = devicePixelRatio || 1
     context.save()
     context.scale(dpi, dpi)
@@ -584,170 +906,66 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     context.translate(this.translate.x, this.translate.y)
     context.save()
 
-    const isLight = this.theme === "light"
-    this.prunedData.links.forEach(l => {
+    const hasSelection = !!this.selectedNode
+
+    // Layer 1: Regular links (bottom layer)
+    this.renderLayers.links.regular.forEach(link => {
+      const sourceId = isSimNode(link.source) ? link.source.id : link.source
+      const targetId = isSimNode(link.target) ? link.target.id : link.target
+
       const _dim =
-        !!this.selectedNode &&
+        hasSelection &&
         !this.subGraph.links.find(
           sl =>
-            getNodeId(sl.source) === getNodeId(l.source) &&
-            getNodeId(sl.target) === getNodeId(l.target)
+            getNodeId(sl.source) === sourceId &&
+            getNodeId(sl.target) === targetId
         )
 
-      const highlight = this.highlights.find(h => {
-        const sourceid = isSimNode(l.source) ? l.source.id : l.source
-        const targetid = isSimNode(l.target) ? l.target.id : l.target
-        return h.id === sourceid || h.id === targetid
-      })
-
-      const hasSelection = !!this.selectedNode
-
-      let stroke = _dim
-        ? this.color(dim(0.09, isLight))()
-        : hasSelection
-          ? this.color(dim(0.4, isLight))()
-          : this.color(dim(0.18, isLight))()
-      context.globalAlpha = highlight ? 1 : 0.5
-      if (highlight?.linkColor) {
-        stroke = color(highlight.linkColor)()
-      }
-      context.strokeStyle = stroke
-      context.lineWidth = _dim ? 0.3 : 0.8
-      context.beginPath()
-      const sx = (isSimNode(l.source) && l.source.x) || 0
-      const sy = (isSimNode(l.source) && l.source.y) || 0
-      context.moveTo(sx, sy)
-      const tx = (isSimNode(l.target) && l.target.x) || 0
-      const ty = (isSimNode(l.target) && l.target.y) || 0
-      context.lineTo(tx, ty)
-      context.stroke()
-      context.closePath()
+      this.renderLink(context, link, { dim: _dim, hasSelection })
     })
 
+    // Layer 2: Regular nodes
     context.globalAlpha = 1
-    this.prunedData.nodes.forEach(node => {
-      const x = node.x || 0
-      const y = node.y || 0
-      const isSelected = this.selectedNode?.id === node.id
-      const isHovered = this.hoveredNode?.id === node.id
-      const isCollapsed = !!node.state?.collapsed
-      const isLiquidated = node.status === "LIQUIDATED"
+    this.renderLayers.nodes.regular.forEach(node => {
       const _dim =
-        !!this.selectedNode && !this.subGraph?.nodes.some(n => n.id === node.id)
-      const fill = _dim
-        ? this.color(dim(0.075, isLight))()
-        : isCollapsed
-          ? this.color(dim(0.18, isLight))()
-          : isHovered
-            ? this.color(dim(0.4, isLight))()
-            : this.color()
-      const stroke = this.colorContrast()
-      const nodeSize = this.getNodeSize(node.id)
-      const highlight = this.highlights.find(h => {
-        return h.id === node.id
-      })
-      const highlighted = !!highlight
-      let highlightedStroke = _dim
-        ? color(highlight?.strokeColor || red)(dim(0.4, isLight))()
-        : color(highlight?.strokeColor || red)()
-      if (node.id === this.rootId) {
-        circle(context, x, y, nodeSize / 2, {
-          stroke: false,
-          strokeStyle: stroke,
-          lineWidth: isSelected ? 1 : 0.2,
-          fill: true,
-          fillStyle: this.color(dim(0.18, isLight))(),
-        })
-        if (this.rootImages) {
-          const _idx = Math.min(isLight ? 0 : 1, this.rootImages.length - 1)
-          const _img = this.rootImages[_idx]
-          const _imgSize = nodeSize * 0.55
-          if (_img) {
-            img(
-              context,
-              _img,
-              x - _imgSize / 2,
-              y - _imgSize / 2,
-              _imgSize,
-              _imgSize,
-              0,
-              _dim ? 0.1 : 1
-            )
-          }
-        }
-      } else {
-        if (isCollapsed) {
-          if (highlighted) {
-            const _size = nodeSize + 4
-            circle(context, x, y, _size / 2, {
-              stroke: true,
-              strokeStyle: highlightedStroke,
-              lineWidth: 1,
-              fill: false,
-              fillStyle: fill,
-            })
-          }
-          circle(context, x, y, nodeSize / 2, {
-            stroke: true,
-            strokeStyle: stroke,
-            lineWidth: isSelected ? 1 : 0.2,
-            fill: true,
-            fillStyle: fill,
-          })
-          const showLabel =
-            transform.scale >= this.visiblityScale(node.clusterSize || 1)
-              ? 1
-              : 0
-
-          if (showLabel) {
-            context.font = `${14 / transform.scale}px Sans-Serif`
-            context.textAlign = "center"
-            context.textBaseline = "middle"
-            context.fillStyle = this.color(dim(_dim ? 0.2 : 0.5, isLight))()
-            context.fillText((node.clusterSize || 1).toString(), x, y)
-          }
-        } else {
-          const size = nodeSize
-          const _size = size + 1
-          // outline
-          rect(context, x - _size / 2, y - _size / 2, _size, _size, {
-            stroke: highlighted || isHovered,
-            strokeStyle: isHovered ? fill : highlightedStroke,
-            lineWidth: 0.5,
-            fill: this.hideThumbnails || isLiquidated || !node.state?.image,
-            fillStyle: fill,
-            borderRadius: 1,
-          })
-          if (node.state?.image && !this.hideThumbnails && !isLiquidated) {
-            const _size = size
-            img(
-              context,
-              node.state?.image,
-              x - _size / 2,
-              y - _size / 2,
-              _size,
-              _size,
-              1,
-              _dim ? 0.1 : 1,
-              fill
-            )
-          }
-        }
-      }
-      /*
-      draw depth as debug message
-      context.font = `${14 / transform.scale}px Sans-Serif`
-      context.textAlign = "center"
-      context.textBaseline = "middle"
-      context.fillStyle = this.colorContrast()
-      context.fillText((node.depth || 0).toString(), x, y)
-      */
+        hasSelection && !this.subGraph.nodes.some(n => n.id === node.id)
+      this.renderNode(context, node, { dim: _dim, transform })
     })
+
+    // Layer 3: Highlighted links (above regular nodes)
+    this.renderLayers.links.highlighted.forEach(link => {
+      const sourceId = isSimNode(link.source) ? link.source.id : link.source
+      const targetId = isSimNode(link.target) ? link.target.id : link.target
+
+      const _dim =
+        hasSelection &&
+        !this.subGraph.links.find(
+          sl =>
+            getNodeId(sl.source) === sourceId &&
+            getNodeId(sl.target) === targetId
+        )
+
+      const highlight = this.highlights.find(
+        h => h.id === sourceId || h.id === targetId
+      )
+
+      this.renderLink(context, link, { dim: _dim, hasSelection, highlight })
+    })
+
+    // Layer 4: Highlighted nodes (top layer)
+    context.globalAlpha = 1
+    this.renderLayers.nodes.highlighted.forEach(node => {
+      const _dim =
+        hasSelection && !this.subGraph.nodes.some(n => n.id === node.id)
+      this.renderNode(context, node, { dim: _dim, transform })
+    })
+
+    // Debug circles if needed
     // this.drawDebugDepthCircles(context)
+
     context.restore()
     context.restore()
     this.transformCanvas.trackCursor()
-    //  this.emitter.emit("draw", this)
   }
 
   private drawDebugDepthCircles(context: CanvasRenderingContext2D) {
@@ -824,25 +1042,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   setSelectedNode = (node: SimNode | null) => {
     console.log("Setting selected node", node?.id || "null")
     this.selectedNode = node
-    // sort the selected node to the end of the array
+    this.updateRenderLayers()
     this.updateScene()
-  }
-
-  private sortPrunedData() {
-    this.prunedData.nodes.sort((a, b) => {
-      const getPriority = (node: SimNode) => {
-        if (node.id === this.selectedNode?.id) return 2
-        if (this.highlights.find(h => h.id === node.id)) return 1
-        if (this.subGraph.nodes.find(n => n.id === node.id)) return 1
-        return 0
-      }
-
-      return getPriority(a) - getPriority(b)
-    })
   }
 
   setHighlights = (highlights: HighlightStyle[]) => {
     this.highlights = highlights
+    this.updateRenderLayers()
     this.updateScene()
   }
 
