@@ -491,11 +491,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
-          return -100
+          return -150
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
-
     if (RADIAL_FORCES) {
       for (let i = 0; i < this.maxDepth; i++) {
         const depth = i
