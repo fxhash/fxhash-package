@@ -60,7 +60,6 @@ interface OpenGraphSimulationProps {
   translate?: { x: number; y: number }
 }
 
-// Types for render layers
 interface RenderLayer<T> {
   regular: T[]
   highlighted: T[]
@@ -101,7 +100,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   public highlights: HighlightStyle[] = []
 
-  // Render layers for proper z-ordering
   private renderLayers: {
     links: RenderLayer<SimLink>
     nodes: RenderLayer<SimNode>
@@ -327,10 +325,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           } as NodeState,
           clusterSize,
           depth,
-          // we either use:
-          // - the existing position
-          // - the parent node position
-          // - or a random position around the center
           x,
           y,
         }
@@ -566,7 +560,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   private updateRenderLayers() {
     const isHighlighted = (id: string) => {
-      // Helper to determine if element should be highlighted
       const highlight = this.highlights.find(h => h.id === id)
       return (
         highlight?.onTop ||
@@ -607,7 +600,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       }
     })
     this.renderLayers.nodes.highlighted.sort((a, b) => {
-      // Sort highlighted nodes by priority
       if (a.id === this.selectedNode?.id) return 1
       if (b.id === this.selectedNode?.id) return -1
       return 0
@@ -628,7 +620,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     let sourceNode = this.data.nodes.find(n => n.id === sourceId)
 
-    // Skip void detach links
     if (targetId === VOID_DETACH_ID) return
     if (sourceId === VOID_DETACH_ID) {
       sourceNode = this.rootNode!
@@ -650,11 +641,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const tx = (isSimNode(link.target) && link.target.x) || 0
     const ty = (isSimNode(link.target) && link.target.y) || 0
 
-    // Create gradient if highlighted
     if (highlight?.linkColor) {
       const gradient = ctx.createLinearGradient(sx, sy, tx, ty)
-      gradient.addColorStop(0, stroke) // Normal color at source
-      gradient.addColorStop(1, color(highlight.linkColor)()) // Highlight color at target
+      gradient.addColorStop(0, stroke)
+      gradient.addColorStop(1, color(highlight.linkColor)())
       ctx.strokeStyle = gradient
     } else {
       ctx.strokeStyle = stroke
@@ -668,7 +658,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     ctx.closePath()
   }
 
-  // Render a single node
   private renderNode(
     ctx: CanvasRenderingContext2D,
     node: SimNode,
@@ -733,7 +722,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  // Render root node
   private renderRootNode(
     ctx: CanvasRenderingContext2D,
     x: number,
@@ -769,7 +757,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  // Render collapsed node
   private renderCollapsedNode(
     ctx: CanvasRenderingContext2D,
     x: number,
@@ -830,7 +817,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  // Render expanded node
   private renderExpandedNode(
     ctx: CanvasRenderingContext2D,
     x: number,
@@ -859,7 +845,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     const _size = size + 1
 
-    // Outline
     rect(ctx, x - _size / 2, y - _size / 2, _size, _size, {
       stroke: highlighted || isHovered,
       strokeStyle: isHovered ? fill : highlightedStroke,
@@ -869,7 +854,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       borderRadius: 1,
     })
 
-    // Image
     if (image && !this.hideThumbnails && !isLiquidated) {
       img(
         ctx,
@@ -885,7 +869,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  // Main draw function - now much cleaner
   onDraw = () => {
     const context = this.canvas?.getContext("2d")
     const transform = this.transformCanvas.getTransform()
@@ -908,7 +891,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     const hasSelection = !!this.selectedNode
 
-    // Layer 1: Regular links (bottom layer)
     this.renderLayers.links.regular.forEach(link => {
       const sourceId = isSimNode(link.source) ? link.source.id : link.source
       const targetId = isSimNode(link.target) ? link.target.id : link.target
@@ -924,7 +906,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.renderLink(context, link, { dim: _dim, hasSelection })
     })
 
-    // Layer 2: Regular nodes
     context.globalAlpha = 1
     this.renderLayers.nodes.regular.forEach(node => {
       const _dim =
@@ -932,7 +913,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.renderNode(context, node, { dim: _dim, transform })
     })
 
-    // Layer 3: Highlighted links (above regular nodes)
     this.renderLayers.links.highlighted.forEach(link => {
       const sourceId = isSimNode(link.source) ? link.source.id : link.source
       const targetId = isSimNode(link.target) ? link.target.id : link.target
@@ -952,7 +932,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.renderLink(context, link, { dim: _dim, hasSelection, highlight })
     })
 
-    // Layer 4: Highlighted nodes (top layer)
     context.globalAlpha = 1
     this.renderLayers.nodes.highlighted.forEach(node => {
       const _dim =
@@ -960,7 +939,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.renderNode(context, node, { dim: _dim, transform })
     })
 
-    // Debug circles if needed
     // this.drawDebugDepthCircles(context)
 
     context.restore()
