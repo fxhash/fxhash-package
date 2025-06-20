@@ -1,17 +1,20 @@
 import { SimNode } from "@/_types"
 import { useOpenFormGraph } from "@/provider"
+import { HighlightStyle, Transform } from "@/sim/_types"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
 import { MouseEventHandler, useEffect, useRef } from "react"
 
 interface OpenFormGraphProps {
   width: number
   height: number
-  highlights?: string[]
+  highlights?: HighlightStyle[]
   className?: string
   noInteraction?: boolean
   onMouseEnter?: MouseEventHandler
   onMouseLeave?: MouseEventHandler
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
+  translate?: { x: number; y: number }
+  onTransform?: (transform: Transform) => void
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -22,6 +25,8 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     className,
     noInteraction = false,
     loadNodeImage,
+    translate,
+    onTransform,
   } = props
   const {
     simulation,
@@ -44,17 +49,25 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       rootImageSources,
       loadNodeImage,
       theme,
-      onHoveredNodeChange: n => {
-        setHoveredNode(n)
-      },
-      onSelectedNodeChange: n => {
-        setSelectedNode(n)
-      },
+      translate,
     })
+    simulation.current.emitter.on("selected-node-changed", setSelectedNode)
+    simulation.current.emitter.on("hovered-node-changed", setHoveredNode)
     return () => {
+      simulation.current?.emitter.off("selected-node-changed", setSelectedNode)
+      simulation.current?.emitter.off("hovered-node-changed", setHoveredNode)
       simulation.current?.destroy()
     }
   }, [])
+
+  useEffect(() => {
+    if (!simulation.current) return
+    if (!onTransform) return
+    simulation.current.emitter.on("transform-changed", onTransform)
+    return () => {
+      simulation.current?.emitter.off("transform-changed", onTransform)
+    }
+  }, [onTransform])
 
   useEffect(() => {
     if (!simulation.current) return
@@ -85,6 +98,12 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     simulation.current.initialize(data, rootId)
   }, [data])
+
+  useEffect(() => {
+    if (!simulation.current) return
+    if (!translate) return
+    simulation.current.setTranslate(translate)
+  }, [translate?.y, translate?.x])
 
   const dpi = devicePixelRatio || 1
 

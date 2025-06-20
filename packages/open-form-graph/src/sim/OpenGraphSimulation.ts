@@ -1,15 +1,14 @@
 import {
   Simulation,
   forceSimulation,
-  forceLink,
   forceManyBody,
   forceCenter,
+  forceRadial,
 } from "d3-force"
 import {
   GraphData,
   NodeState,
   RawGraphData,
-  RGB,
   RootNodeImageSources,
   SimLink,
   SimNode,
@@ -22,6 +21,7 @@ import {
   getNodeSubgraph,
   getNodeId,
   getParents,
+  getNodeDepth,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
 import { DEFAULT_GRAPH_CONFIG } from "@/provider"
@@ -32,6 +32,22 @@ import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
+import { Transform, HighlightStyle } from "./_types"
+import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
+import { distance, getAngle, getRadialPoint } from "@/util/math"
+import { red } from "@/util/highlights"
+import { asymmetricLinks } from "./asymmetric-link"
+
+const RADIAL_FORCES = false
+
+// TODO: potentially implement strategy to retrieve radius based
+// on number of nodes per depth
+const INITIAL_RADIUS = 100
+const INCREMENTAL = 100
+function getRadius(depth: number) {
+  if (depth === 0) return INITIAL_RADIUS
+  return INCREMENTAL * depth + INITIAL_RADIUS
+}
 
 interface OpenGraphSimulationProps {
   width: number
@@ -41,11 +57,10 @@ interface OpenGraphSimulationProps {
   canvas: HTMLCanvasElement
   theme?: ThemeMode
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
-  onHoveredNodeChange?: (node: SimNode | null) => void
-  onSelectedNodeChange?: (node: SimNode | null) => void
+  translate?: { x: number; y: number }
 }
 
-export class OpenGraphSimulation {
+export class OpenGraphSimulation implements IOpenGraphSimulation {
   width: number
   height: number
   config: GraphConfig
@@ -54,12 +69,20 @@ export class OpenGraphSimulation {
   transformCanvas: TransformCanvas
   theme: ThemeMode
 
+  public emitter: OpenGraphEventEmitter
+
+  private translate: { x: number; y: number } = { x: 0, y: 0 }
+
   private data: GraphData = { nodes: [], links: [] }
   private prunedData: GraphData = { nodes: [], links: [] }
   private subGraph: GraphData = { nodes: [], links: [] }
   private rootId: string = ""
   private simulation: Simulation<SimNode, SimLink> | null = null
   private clusterSizeRange: [number, number] = [0, 1]
+  private maxDepth: number = 0
+
+  private isTicking: boolean = false
+  private tickCount = 0
 
   private loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   private imageCache: Map<string, HTMLImageElement> = new Map()
@@ -67,14 +90,14 @@ export class OpenGraphSimulation {
   private hideThumbnails: boolean = false
   private noInteraction: boolean = false
 
-  private selectedNode: SimNode | null = null
-  onSelectedNodeChange?: (node: SimNode | null) => void
-  private hoveredNode: SimNode | null = null
-  onHoveredNodeChange?: (node: SimNode | null) => void
+  public selectedNode: SimNode | null = null
+  public hoveredNode: SimNode | null = null
 
-  private highlights: string[] = []
+  public highlights: HighlightStyle[] = []
 
   constructor(props: OpenGraphSimulationProps) {
+    this.emitter = new OpenGraphEventEmitter()
+
     this.theme = props.theme || "light"
     this.width = props.width
     this.height = props.height
@@ -84,11 +107,10 @@ export class OpenGraphSimulation {
 
     this.loadNodeImage = props.loadNodeImage
 
-    this.onHoveredNodeChange = props.onHoveredNodeChange
-    this.onSelectedNodeChange = props.onSelectedNodeChange
+    this.translate = props.translate || { x: 0, y: 0 }
 
     this.transformCanvas = new TransformCanvas(this.canvas, {
-      onUpdate: this.onDraw,
+      onUpdate: this.handleTransform,
       onClick: this.handleClick,
       onMove: this.handleMove,
     })
@@ -103,29 +125,51 @@ export class OpenGraphSimulation {
     })
   }
 
+  private get center() {
+    return {
+      x: this.width / 2,
+      y: this.height / 2,
+    }
+  }
+
   private getNodeAtPosition = (cx: number, cy: number): SimNode | null => {
-    const transform = this.transformCanvas.transform
+    const dpi = devicePixelRatio || 1
+    const realX = cx * dpi
+    const realY = cy * dpi
+    const transform = this.transformCanvas.getTransform()
     const { x: tx, y: ty, scale } = transform
-    const x = (cx - tx) / scale
-    const y = (cy - ty) / scale
+    const x = (realX - tx) / scale - this.translate.x
+    const y = (realY - ty) / scale - this.translate.y
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
       const dx = node.x - x
       const dy = node.y - y
       if (dx * dx + dy * dy < r * r) {
+        if (!this.prunedData.nodes.find(n => n.id === node.id)) continue
         return node
       }
     }
     return null
   }
 
-  private getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
+  public getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
+    const transform = this.transformCanvas.getTransform()
+    const scale = transform.scale
+    const x = this.translate.x + transform.x + (node.x || 0) * scale
+    const y = this.translate.y + transform.y + (node.y || 0) * scale
+    return {
+      x,
+      y,
+    }
+  }
+
+  public getNodeCanvasPosition = (node: SimNode): { x: number; y: number } => {
     const _x = node.x || 0
     const _y = node.y || 0
-    const transform = this.transformCanvas.transform
-    const x = this.width / 2 - _x * transform.scale
-    const y = this.height / 2 - _y * transform.scale
+    const transform = this.transformCanvas.getTransform()
+    const x = this.center.x - _x * transform.scale
+    const y = this.center.y - _y * transform.scale
     return { x, y }
   }
 
@@ -134,11 +178,15 @@ export class OpenGraphSimulation {
     this.handleClickNode(node)
   }
 
-  handleClickNode = (node: SimNode | null) => {
+  handleClickNode = (
+    node: SimNode | null,
+    options: { noToggle: boolean } = { noToggle: false }
+  ) => {
+    let wasOpened = false
     if (node) {
       if (node.id === this.rootId) {
         this.selectedNode = null
-        this.onSelectedNodeChange?.(null)
+        this.emitter.emit("selected-node-changed", null)
         this.subGraph = {
           nodes: [],
           links: [],
@@ -147,8 +195,11 @@ export class OpenGraphSimulation {
       }
       if (node.state) {
         const children = getChildren(node.id, this.data.links)
-        if (children.length > 0) {
+        if (children.length > 0 && !options?.noToggle) {
           if (this.selectedNode?.id !== node.id) {
+            if (node.state.collapsed) {
+              wasOpened = true
+            }
             node.state.collapsed = false
           } else {
             node.state.collapsed = !node.state.collapsed
@@ -157,12 +208,17 @@ export class OpenGraphSimulation {
             children.forEach(childId => {
               const childNode = this.data.nodes.find(n => n.id === childId)
               if (childNode && isSimNode(childNode)) {
-                if (!childNode.x || childNode.x === 0)
-                  childNode.x =
-                    (node.x || this.width / 2) + Math.random() * 50 - 5
-                if (!childNode.y || childNode.y === 0)
-                  childNode.y =
-                    (node.y || this.height / 2) + Math.random() * 50 - 5
+                const dist = distance(
+                  { x: node.x || this.center.x, y: node.y || this.center.y },
+                  {
+                    x: childNode.x || this.center.x,
+                    y: childNode.y || this.center.y,
+                  }
+                )
+                if (dist > 10) {
+                  childNode.x = (node.x || this.center.x) + Math.random() * 50
+                  childNode.y = (node.y || this.center.y) + Math.random() * 50
+                }
               }
             })
           }
@@ -178,87 +234,180 @@ export class OpenGraphSimulation {
           }
         })
       }
-      this.restart()
       this.subGraph = getNodeSubgraph(
         node.id,
         this.data.nodes,
         this.data.links,
         this.rootId
       )
-      const nodePos = this.getNodeScreenPosition(node)
-      this.transformCanvas.transformTo({ x: nodePos.x, y: nodePos.y })
+      /*
+      colorContrastnst nodePos = this.getNodeCanvasPosition(node)
+      this.transformCanvas.transformTo({
+        x: nodePos.x,
+        y: nodePos.y,
+      })
+
       this.transformCanvas.focusOn(() => {
-        const nodePos = this.getNodeScreenPosition(node)
+        const nodePos = this.getNodeCanvasPosition(node)
         return {
           x: nodePos.x,
           y: nodePos.y,
-          scale: this.transformCanvas.transform.scale,
+          scale: this.transformCanvas.getTransform().scale,
         }
       })
+      */
     }
     if (this.selectedNode?.id !== node?.id) {
       this.selectedNode = node
-      this.onSelectedNodeChange?.(node)
+      this.emitter.emit("selected-node-changed", node)
     }
+    if (node) {
+      this.restart(wasOpened ? 0.05 : 0)
+    }
+  }
+
+  updateScene = () => {
+    if (this.isTicking) return
+    this.onDraw()
   }
 
   handleMove = (x: number, y: number) => {
     const node = this.getNodeAtPosition(x, y)
     if (this.hoveredNode === node) return
     this.hoveredNode = node
-    this.onHoveredNodeChange?.(node)
+    this.emitter.emit("hovered-node-changed", node)
     this.canvas.style.cursor = node ? "pointer" : "default"
-    this.onDraw()
+    this.updateScene()
+  }
+
+  handleTransform = (t: Transform) => {
+    this.emitter.emit("transform-changed", t)
+    this.updateScene()
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
     this.rootId = rootId
     const _links = data.links.map(l => ({ ...l }))
-    const _nodes = data.nodes.map(n => {
-      const existingData = this.data.nodes.find(x => x.id === n.id)
-      return {
-        ...n,
-        state: {
-          collapsed:
-            hasOnlyLeafs(n.id, _links) && getChildren(n.id, _links).length > 1,
-        } as NodeState,
-        clusterSize: getClusterSize(n.id, _links),
-        // set x and y to random values around the center
-        x: existingData?.x || this.width / 2 + Math.random() * 200 - 5,
-        y: existingData?.y || this.height / 2 + Math.random() * 200 - 5,
-      }
+    const _nodes = data.nodes
+      .map(n => {
+        const existingData = this.data.nodes.find(x => x.id === n.id)
+        const parents = getParents(n.id, _links)
+        const parentNode = this.data.nodes.find(p => p.id === parents[0])
+        const clusterSize = getClusterSize(n.id, _links)
+        const depth = getNodeDepth(n.id, _links)
+        const circlePos = getRadialPoint(
+          getRadius(depth),
+          this.center.x,
+          this.center.y
+        )
+
+        const x =
+          depth > 0 ? null : existingData?.x || parentNode?.x || circlePos.x
+        const y =
+          depth > 0 ? null : existingData?.y || parentNode?.y || circlePos.y
+        return {
+          ...n,
+          state: {
+            collapsed:
+              hasOnlyLeafs(n.id, _links) &&
+              getChildren(n.id, _links).length > 1,
+            ...existingData?.state,
+          } as NodeState,
+          clusterSize,
+          depth,
+          // we either use:
+          // - the existing position
+          // - the parent node position
+          // - or a random position around the center
+          x,
+          y,
+        }
+      })
+      .sort((a, b) => a.depth - b.depth)
+    _nodes.forEach((n, i, arr) => {
+      const existingData = _nodes.find(x => x.id === n.id)
+      const parents = getParents(n.id, _links)
+      const parentNode = _nodes.find(p => p.id === parents[0])
+      const depth = n.depth
+      const parentAngle =
+        depth > 0
+          ? getAngle(
+              this.center.x,
+              this.center.y,
+              parentNode?.x!,
+              parentNode?.y!
+            )
+          : undefined
+
+      const circlePos = getRadialPoint(
+        getRadius(depth),
+        this.center.x,
+        this.center.y,
+        parentAngle
+      )
+      const x =
+        depth > 0
+          ? existingData?.x || circlePos.x
+          : existingData?.x || parentNode?.x || circlePos.x
+      const y =
+        depth > 0
+          ? existingData?.y || circlePos.y
+          : existingData?.y || parentNode?.y || circlePos.y
+
+      _nodes[i].x = x
+      _nodes[i].y = y
     })
 
     // if rootId is not in the nodes, add it
-    if (!data.nodes.find(n => n.id === rootId)) {
+    if (!data.nodes.find(n => n.id === this.rootId)) {
       _nodes.push({
         id: this.rootId,
         state: { collapsed: false, image: undefined },
+        depth: -1,
         clusterSize: 1,
-        x: this.width / 2,
-        y: this.height / 2,
+        x: this.center.x,
+        y: this.center.y,
       })
       const targetIds = new Set(_links.map(link => link.target))
       const rootNodes = _nodes.filter(node => !targetIds.has(node.id))
       for (const node of rootNodes) {
         _links.push({
-          source: rootId,
+          source: this.rootId,
           target: node.id,
         })
       }
     }
-    this.data = { nodes: _nodes, links: _links }
+
+    const voidRootNode = _nodes.find(node => node.id === "void-root")
+    if (voidRootNode) {
+      // voidRootNode.fx = this.center.x
+      // voidRootNode.fy = this.center.y
+    }
+
+    this.maxDepth = Math.max(..._nodes.map(n => n.depth || 0))
+
+    this.data = { nodes: _nodes as SimNode[], links: _links }
     this.loadNodeImages()
     this.restart()
+    const selectedNode = this.selectedNode
+    if (selectedNode && this.getNodeById(selectedNode.id)) {
+      this.handleClickNode(this.getNodeById(selectedNode.id), {
+        noToggle: true,
+      })
+    } else {
+      this.setSelectedNode(null)
+    }
   }
 
-  restart = () => {
-    this.setSelectedNode(null)
+  restart = (alpha: number = 0.1) => {
+    this.tickCount = 0
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
-      this.data.links
+      this.data.links,
+      this.highlights
     )
+    this.sortPrunedData()
     this.clusterSizeRange = this.prunedData.nodes
       .filter(n => n.state?.collapsed)
       .reduce(
@@ -269,42 +418,121 @@ export class OpenGraphSimulation {
         [Infinity, -Infinity] as [number, number]
       )
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
+      .alpha(this.simulation ? alpha : 0.5)
+      // .force(
+      //   "link",
+      //   forceLink<SimNode, SimLink>(this.prunedData.links)
+      //     .id(d => d.id)
+      //     .distance(l => {
+      //       const size = this.getNodeSize(
+      //         isSimNode(l.target) ? l.target.id : l.target.toString()
+      //       )
+      //       if (isSimNode(l.target) && !l.target?.state?.collapsed) return size
+      //       return size * 3
+      //     })
+      //     .strength(l => {
+      //       // console.log("compute link strength")
+      //       // console.log(l)
+
+      //       // here we want to check
+
+      //       const nb = this.prunedData.links.filter(
+      //         inp => l.source.id !== "-1" && inp.source.id === l.source.id
+      //       )
+      //       // console.log(nb)
+
+      //       return 0.6
+      //       /* const num = Math.min(
+      //         this.prunedData.links.filter(x => x.source.id === l.source.id)
+      //           .length,
+      //         this.prunedData.links.filter(x => x.source.id === l.target.id)
+      //           .length
+      //       )
+      //       return 1 / Math.max(num * 0.3, 1)*/
+      //     })
+      // )
       .force(
         "link",
-        forceLink<SimNode, SimLink>(this.prunedData.links)
+        asymmetricLinks<SimNode, SimLink>(this.prunedData.links)
           .id(d => d.id)
           .distance(l => {
-            if (isSimNode(l.target) && !l.target?.state?.collapsed)
-              return this.config.nodeSize
-            return this.config.nodeSize * 3
+            const size = this.getNodeSize(
+              isSimNode(l.target) ? l.target.id : l.target.toString()
+            )
+            if (isSimNode(l.target) && !l.target?.state?.collapsed) return size
+            return size * 3
           })
           .strength(l => {
-            return 0.6
-            /* const num = Math.min(
-              this.prunedData.links.filter(x => x.source.id === l.source.id)
-                .length,
-              this.prunedData.links.filter(x => x.source.id === l.target.id)
-                .length
-            )
-            return 1 / Math.max(num * 0.3, 1)*/
+            return [0.66, 0.08]
+            /*
+            if (l.target.depth === 0) return 0.5
+            return 1 / l.target.depth
+              */
           })
       )
       .force(
         "charge",
-        forceManyBody().strength(() => {
-          return -130
+        forceManyBody<SimNode>().strength(node => {
+          return -100
+          /*
+          if (node.depth === 0) return -100
+          return (1 + node.depth) * -1
+          const size = this.getNodeSize(node.id)
+          return -Math.pow(node.depth, 1.6) // non-linear scaling
+          */
         })
       )
-      .force(
-        "center",
-        forceCenter(this.width / 2, this.height / 2).strength(0.01)
-      )
-    this.simulation.on("tick", this.onDraw)
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
+
+    if (RADIAL_FORCES) {
+      for (let i = 0; i < this.maxDepth; i++) {
+        const depth = i
+        const r = getRadius(depth)
+        const x = this.center.x
+        const y = this.center.y
+        console.log(
+          "Adding radial force for depth",
+          depth,
+          "with radius",
+          r,
+          x,
+          y
+        )
+
+        this.simulation.force(
+          `radial-${depth}`,
+          forceRadial<SimNode>(r, x, y).strength(n => {
+            if (n.id === this.rootId) return 0
+            if (n.depth === 0) return 0
+            if (n.depth === depth) return 0.01
+            return 0
+          })
+        )
+      }
+    }
+    this.simulation.on("tick", this.handleTick)
     this.simulation.on("end", this.onEnd)
   }
 
+  get rootNode() {
+    return this.data.nodes.find(n => n.id === this.rootId) || null
+  }
+
+  handleTick = () => {
+    this.isTicking = true
+    this.onDraw()
+    this.tickCount++
+  }
+
+  setTranslate({ x, y }: { x: number; y: number }) {
+    this.translate = { x, y }
+  }
+
   get visiblityScale() {
-    return scaleLog().domain(this.clusterSizeRange).range([3, 1.5]).clamp(true)
+    return scaleLog()
+      .domain(this.clusterSizeRange)
+      .range([1.5, 0.9])
+      .clamp(true)
   }
 
   get color() {
@@ -320,7 +548,9 @@ export class OpenGraphSimulation {
 
   getNodeSize = (nodeId: string): number => {
     const { nodeSize } = this.config
-    if (nodeId === this.rootId) return nodeSize * 2
+    const highlight = this.highlights.find(h => h.id === nodeId)
+    const sizeScale = highlight?.scale || 1
+    if (nodeId === this.rootId) return nodeSize * 2 * sizeScale
     const node = this.data.nodes.find(n => n.id === nodeId)
     const isCollapsed = !!node?.state?.collapsed
     if (isCollapsed) {
@@ -330,19 +560,28 @@ export class OpenGraphSimulation {
       return scale(node.clusterSize || 1)
     }
     const isSelected = this.selectedNode?.id === nodeId
-    return isSelected ? nodeSize * 2 : nodeSize
+    const isLiquidated = node?.status === "LIQUIDATED"
+    const _size = isLiquidated ? nodeSize * 0.2 : nodeSize
+    return isSelected ? _size * 2 * sizeScale : _size * sizeScale
   }
 
   onDraw = () => {
     const context = this.canvas?.getContext("2d")
-    const transform = this.transformCanvas.transform
+    const transform = this.transformCanvas.getTransform()
     if (!context) return
     const dpi = devicePixelRatio || 1
     context.save()
     context.scale(dpi, dpi)
     context.clearRect(0, 0, this.width, this.height)
-    context.translate(transform.x, transform.y)
-    context.scale(transform.scale, transform.scale)
+    context.setTransform(
+      transform.scale,
+      0,
+      0,
+      transform.scale,
+      transform.x,
+      transform.y
+    )
+    context.translate(this.translate.x, this.translate.y)
     context.save()
 
     const isLight = this.theme === "light"
@@ -355,10 +594,23 @@ export class OpenGraphSimulation {
             getNodeId(sl.target) === getNodeId(l.target)
         )
 
-      const stroke = _dim
+      const highlight = this.highlights.find(h => {
+        const sourceid = isSimNode(l.source) ? l.source.id : l.source
+        const targetid = isSimNode(l.target) ? l.target.id : l.target
+        return h.id === sourceid || h.id === targetid
+      })
+
+      const hasSelection = !!this.selectedNode
+
+      let stroke = _dim
         ? this.color(dim(0.09, isLight))()
-        : this.color(dim(0.18, isLight))()
-      context.globalAlpha = 0.5
+        : hasSelection
+          ? this.color(dim(0.4, isLight))()
+          : this.color(dim(0.18, isLight))()
+      context.globalAlpha = highlight ? 1 : 0.5
+      if (highlight?.linkColor) {
+        stroke = color(highlight.linkColor)()
+      }
       context.strokeStyle = stroke
       context.lineWidth = _dim ? 0.3 : 0.8
       context.beginPath()
@@ -379,6 +631,7 @@ export class OpenGraphSimulation {
       const isSelected = this.selectedNode?.id === node.id
       const isHovered = this.hoveredNode?.id === node.id
       const isCollapsed = !!node.state?.collapsed
+      const isLiquidated = node.status === "LIQUIDATED"
       const _dim =
         !!this.selectedNode && !this.subGraph?.nodes.some(n => n.id === node.id)
       const fill = _dim
@@ -389,15 +642,16 @@ export class OpenGraphSimulation {
             ? this.color(dim(0.4, isLight))()
             : this.color()
       const stroke = this.colorContrast()
-      const blue = [94, 112, 235] as RGB
-      const red = [238, 125, 121] as RGB
-      const highlightedStroke = _dim
-        ? color(red)(dim(0.4, isLight))()
-        : color(red)()
-      const size = this.getNodeSize(node.id)
-      const highlighted = this.highlights.includes(node.id)
+      const nodeSize = this.getNodeSize(node.id)
+      const highlight = this.highlights.find(h => {
+        return h.id === node.id
+      })
+      const highlighted = !!highlight
+      let highlightedStroke = _dim
+        ? color(highlight?.strokeColor || red)(dim(0.4, isLight))()
+        : color(highlight?.strokeColor || red)()
       if (node.id === this.rootId) {
-        circle(context, x, y, size / 2, {
+        circle(context, x, y, nodeSize / 2, {
           stroke: false,
           strokeStyle: stroke,
           lineWidth: isSelected ? 1 : 0.2,
@@ -407,7 +661,7 @@ export class OpenGraphSimulation {
         if (this.rootImages) {
           const _idx = Math.min(isLight ? 0 : 1, this.rootImages.length - 1)
           const _img = this.rootImages[_idx]
-          const _imgSize = size * 0.55
+          const _imgSize = nodeSize * 0.55
           if (_img) {
             img(
               context,
@@ -424,7 +678,7 @@ export class OpenGraphSimulation {
       } else {
         if (isCollapsed) {
           if (highlighted) {
-            const _size = size + 4
+            const _size = nodeSize + 4
             circle(context, x, y, _size / 2, {
               stroke: true,
               strokeStyle: highlightedStroke,
@@ -433,7 +687,7 @@ export class OpenGraphSimulation {
               fillStyle: fill,
             })
           }
-          circle(context, x, y, size / 2, {
+          circle(context, x, y, nodeSize / 2, {
             stroke: true,
             strokeStyle: stroke,
             lineWidth: isSelected ? 1 : 0.2,
@@ -453,27 +707,19 @@ export class OpenGraphSimulation {
             context.fillText((node.clusterSize || 1).toString(), x, y)
           }
         } else {
-          if (highlighted) {
-            const _size = size + 4
-            rect(context, x - _size / 2, y - _size / 2, _size, _size, {
-              stroke: true,
-              strokeStyle: highlightedStroke,
-              lineWidth: 1,
-              fill: false,
-              fillStyle: fill,
-              borderRadius: 1,
-            })
-          }
-          rect(context, x - size / 2, y - size / 2, size, size, {
-            stroke: true,
-            strokeStyle: stroke,
-            lineWidth: isSelected ? 0.3 : 0.2,
-            fill: true,
+          const size = nodeSize
+          const _size = size + 1
+          // outline
+          rect(context, x - _size / 2, y - _size / 2, _size, _size, {
+            stroke: highlighted || isHovered,
+            strokeStyle: isHovered ? fill : highlightedStroke,
+            lineWidth: 0.5,
+            fill: this.hideThumbnails || isLiquidated || !node.state?.image,
             fillStyle: fill,
             borderRadius: 1,
           })
-          if (node.state?.image && !this.hideThumbnails) {
-            const _size = size - 1
+          if (node.state?.image && !this.hideThumbnails && !isLiquidated) {
+            const _size = size
             img(
               context,
               node.state?.image,
@@ -482,31 +728,68 @@ export class OpenGraphSimulation {
               _size,
               _size,
               1,
-              _dim ? 0.1 : 1
+              _dim ? 0.1 : 1,
+              fill
             )
           }
         }
       }
+      /*
+      draw depth as debug message
+      context.font = `${14 / transform.scale}px Sans-Serif`
+      context.textAlign = "center"
+      context.textBaseline = "middle"
+      context.fillStyle = this.colorContrast()
+      context.fillText((node.depth || 0).toString(), x, y)
+      */
     })
-
+    // this.drawDebugDepthCircles(context)
     context.restore()
     context.restore()
     this.transformCanvas.trackCursor()
+    //  this.emitter.emit("draw", this)
   }
 
-  private onEnd = () => {}
+  private drawDebugDepthCircles(context: CanvasRenderingContext2D) {
+    const transform = this.transformCanvas.getTransform()
+    for (let i = 0; i < this.maxDepth; i++) {
+      const depth = i
+      const r = getRadius(depth)
+      const x = this.center.x
+      const y = this.center.y
+      circle(context, x, y, r, {
+        fill: false,
+        stroke: true,
+        strokeStyle: "#00ff00",
+      })
+      context.font = `${40 / transform.scale}px Sans-Serif`
+      context.textAlign = "center"
+      context.textBaseline = "middle"
+      context.fillStyle = this.color()
+      context.fillText(depth.toString(), x + r, y)
+    }
+  }
+
+  private onEnd = () => {
+    this.isTicking = false
+  }
 
   private loadNodeImages = () => {
     this.data.nodes.forEach((node: any) => {
       // root node images are loaded separately
       if (node.id === this.rootId) return
-      if (node.imgSrc && this.imageCache.get(node.imgSrc)) return
+      if (node.imgSrc && this.imageCache.get(node.imgSrc)) {
+        node.state = node.state || {}
+        node.state.image = this.imageCache.get(node.imgSrc)
+        return
+      }
       const loadImage = async () => {
         const src = this.loadNodeImage
           ? await this.loadNodeImage(node)
           : node.imgSrc
         if (!src) return
-        const html = await loadHTMLImageElement(src)
+        const html =
+          this.imageCache.get(src) || (await loadHTMLImageElement(src))
         this.imageCache.set(src, html)
         node.state = node.state || {}
         node.state.image = html
@@ -525,39 +808,48 @@ export class OpenGraphSimulation {
   resize = (width: number, height: number) => {
     this.width = width
     this.height = height
-    this.onDraw()
+    this.updateScene()
   }
 
   setTheme = (theme: ThemeMode) => {
     this.theme = theme
-    this.onDraw()
+    this.updateScene()
   }
 
   setHideThumbnails = (hide: boolean) => {
     this.hideThumbnails = hide
-    this.onDraw()
+    this.updateScene()
   }
 
   setSelectedNode = (node: SimNode | null) => {
+    console.log("Setting selected node", node?.id || "null")
     this.selectedNode = node
     // sort the selected node to the end of the array
-    this.prunedData.nodes.sort((a, b) => {
-      if (a.id === this.selectedNode?.id) return 1
-      if (b.id === this.selectedNode?.id) return -1
-      return 0
-    })
-    this.onDraw()
+    this.updateScene()
   }
 
-  setHighlights = (highlights: string[]) => {
+  private sortPrunedData() {
+    this.prunedData.nodes.sort((a, b) => {
+      const getPriority = (node: SimNode) => {
+        if (node.id === this.selectedNode?.id) return 2
+        if (this.highlights.find(h => h.id === node.id)) return 1
+        if (this.subGraph.nodes.find(n => n.id === node.id)) return 1
+        return 0
+      }
+
+      return getPriority(a) - getPriority(b)
+    })
+  }
+
+  setHighlights = (highlights: HighlightStyle[]) => {
     this.highlights = highlights
-    this.onDraw()
+    this.updateScene()
   }
 
   setNoInteraction = (noInteraction: boolean) => {
     this.noInteraction = noInteraction
     this.transformCanvas.setNoInteraction(this.noInteraction)
-    this.onDraw()
+    this.updateScene()
   }
 
   getNodeById = (nodeId: string): SimNode | null => {
