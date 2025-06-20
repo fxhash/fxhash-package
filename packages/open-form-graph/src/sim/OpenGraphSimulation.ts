@@ -153,17 +153,39 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const { x: tx, y: ty, scale } = transform
     const x = (realX - tx) / scale - this.translate.x
     const y = (realY - ty) / scale - this.translate.y
+
+    const candidates: SimNode[] = []
+
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
       const dx = node.x - x
       const dy = node.y - y
       if (dx * dx + dy * dy < r * r) {
+        // only consider nodes that are in the pruned data (visible)
         if (!this.prunedData.nodes.find(n => n.id === node.id)) continue
+        candidates.push(node)
+      }
+    }
+
+    if (candidates.length === 0) return null
+
+    if (candidates.length === 1) return candidates[0]
+
+    for (let i = this.renderLayers.nodes.highlighted.length - 1; i >= 0; i--) {
+      const node = this.renderLayers.nodes.highlighted[i]
+      if (candidates.find(c => c.id === node.id)) {
         return node
       }
     }
-    return null
+
+    for (let node of this.renderLayers.nodes.regular) {
+      if (candidates.find(c => c.id === node.id)) {
+        return node
+      }
+    }
+
+    return candidates[0]
   }
 
   public getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
@@ -556,7 +578,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const isSelected = this.selectedNode?.id === nodeId
     const isLiquidated = node?.status === "LIQUIDATED"
     const _size = isLiquidated ? nodeSize * 0.2 : nodeSize
-    return isSelected ? _size * 2 * sizeScale : _size * sizeScale
+    return isSelected ? _size * 2 : _size * sizeScale
   }
 
   private updateRenderLayers() {
@@ -604,7 +626,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const highlightA = this.highlights.find(h => h.id === a.id)
       const highlightB = this.highlights.find(h => h.id === b.id)
       if (a.id === this.selectedNode?.id || b.id === this.selectedNode?.id)
-        return 1
+        return 2
       if (highlightA?.onTop || highlightB?.onTop) return 1
       return -1
     })
