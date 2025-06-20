@@ -1,13 +1,13 @@
 import { failure } from "@fxhash/utils"
 import { type ICredentialsDriver } from "./_interfaces.js"
 import { CredentialsRefreshError } from "@/index.js"
-import fxhashConfig, { config } from "@fxhash/config"
+import { config } from "@fxhash/config"
 
 function getHost(url: string) {
   return new URL(url).host.split(".").slice(-2).join(".")
 }
 
-const envApiHost = getHost(fxhashConfig.envs.dev.apis.hasura)
+const envApiHost = getHost(config.apis.hasura)
 
 /**
  * Cookie authentication doesn't really need any kind of processing as cookies
