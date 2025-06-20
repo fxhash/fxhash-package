@@ -7,6 +7,7 @@ export type RawNode = {
   label?: string
   imgSrc?: string
   status?: string
+  signed?: boolean
 }
 
 export type NestedRawNode<N extends RawNode> = {
