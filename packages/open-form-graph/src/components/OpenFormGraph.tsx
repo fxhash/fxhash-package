@@ -1,3 +1,4 @@
+import { SimNode } from "@/_types"
 import { useOpenFormGraph } from "@/provider"
 import { HighlightStyle, Transform } from "@/sim/_types"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
@@ -11,6 +12,7 @@ interface OpenFormGraphProps {
   noInteraction?: boolean
   onMouseEnter?: MouseEventHandler
   onMouseLeave?: MouseEventHandler
+  loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
   onTransform?: (transform: Transform) => void
 }
@@ -22,6 +24,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     highlights = [],
     className,
     noInteraction = false,
+    loadNodeImage,
     translate,
     onTransform,
   } = props
@@ -44,6 +47,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       height,
       canvas: canvasRef.current,
       rootImageSources,
+      loadNodeImage,
       theme,
       translate,
     })

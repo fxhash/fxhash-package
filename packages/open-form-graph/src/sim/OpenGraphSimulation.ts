@@ -1,7 +1,6 @@
 import {
   Simulation,
   forceSimulation,
-  forceLink,
   forceManyBody,
   forceCenter,
   forceRadial,
@@ -10,7 +9,6 @@ import {
   GraphData,
   NodeState,
   RawGraphData,
-  RGB,
   RootNodeImageSources,
   SimLink,
   SimNode,
@@ -26,9 +24,9 @@ import {
   getNodeDepth,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
-import { DEFAULT_GRAPH_CONFIG, VOID_ROOT_ID } from "@/provider"
-import { isCustomHighlight, isSimLink, isSimNode } from "@/util/types"
-import { loadImage } from "@/util/img"
+import { DEFAULT_GRAPH_CONFIG } from "@/provider"
+import { isSimNode } from "@/util/types"
+import { loadHTMLImageElement } from "@/util/img"
 import { TransformCanvas } from "./TransformCanvas"
 import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
@@ -42,8 +40,8 @@ import { asymmetricLinks } from "./asymmetric-link"
 
 const RADIAL_FORCES = false
 
-// TODO: implement strategy to retrieve radius based on number of nodes
-// per depth
+// TODO: potentially implement strategy to retrieve radius based
+// on number of nodes per depth
 const INITIAL_RADIUS = 100
 const INCREMENTAL = 100
 function getRadius(depth: number) {
@@ -58,6 +56,7 @@ interface OpenGraphSimulationProps {
   rootImageSources?: RootNodeImageSources
   canvas: HTMLCanvasElement
   theme?: ThemeMode
+  loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
 }
 
@@ -85,6 +84,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private isTicking: boolean = false
   private tickCount = 0
 
+  private loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   private imageCache: Map<string, HTMLImageElement> = new Map()
   private rootImages: HTMLImageElement[] = []
   private hideThumbnails: boolean = false
@@ -105,6 +105,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.rootImageSources = props.rootImageSources || []
     this.canvas = props.canvas
 
+    this.loadNodeImage = props.loadNodeImage
+
     this.translate = props.translate || { x: 0, y: 0 }
 
     this.transformCanvas = new TransformCanvas(this.canvas, {
@@ -115,7 +117,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     this.rootImageSources.forEach((src, idx) => {
       if (src && !this.imageCache.get(src)) {
-        loadImage(src).then(img => {
+        loadHTMLImageElement(src).then(img => {
           this.imageCache.set(src, img)
           this.rootImages[idx] = img
         })
@@ -774,20 +776,25 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   private loadNodeImages = () => {
     this.data.nodes.forEach((node: any) => {
-      if (node.imgSrc && !this.imageCache.get(node.imgSrc)) {
-        try {
-          loadImage(node.imgSrc).then(img => {
-            this.imageCache.set(node.imgSrc!, img)
-            node.state = node.state || {}
-            node.state.image = img
-          })
-        } catch (e) {
-          console.error("Error loading image for node", node.id, e)
-        }
-      } else if (node.imgSrc && this.imageCache.get(node.imgSrc)) {
+      // root node images are loaded separately
+      if (node.id === this.rootId) return
+      if (node.imgSrc && this.imageCache.get(node.imgSrc)) {
         node.state = node.state || {}
         node.state.image = this.imageCache.get(node.imgSrc)
+        return
       }
+      const loadImage = async () => {
+        const src = this.loadNodeImage
+          ? await this.loadNodeImage(node)
+          : node.imgSrc
+        if (!src) return
+        const html =
+          this.imageCache.get(src) || (await loadHTMLImageElement(src))
+        this.imageCache.set(src, html)
+        node.state = node.state || {}
+        node.state.image = html
+      }
+      loadImage()
     })
   }
 
