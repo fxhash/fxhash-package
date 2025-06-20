@@ -260,6 +260,8 @@ export class TransformCanvas {
   }
 
   private handleWheel(e: WheelEvent) {
+    e.preventDefault()
+    e.stopPropagation()
     if (this.noInteraction) return
     e.preventDefault()
 
@@ -557,5 +559,8 @@ export class TransformCanvas {
 
   getTargetTransform(): Readonly<Transform> {
     return { ...this.targetTransform }
+  }
+  getFocus(): Readonly<Focus | null> {
+    return this.focus ? { ...this.focus } : null
   }
 }

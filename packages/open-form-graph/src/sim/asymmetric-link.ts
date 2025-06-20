@@ -1,142 +1,247 @@
-// @ts-nocheck
+import { SimulationNodeDatum, SimulationLinkDatum, Force } from "d3-force"
 
-function constant(x) {
+// Type definitions
+export interface AsymmetricLink<
+  NodeDatum extends SimulationNodeDatum = SimulationNodeDatum,
+> extends SimulationLinkDatum<NodeDatum> {
+  index?: number
+}
+
+export interface AsymmetricLinkForce<
+  NodeDatum extends SimulationNodeDatum,
+  LinkDatum extends AsymmetricLink<NodeDatum> = AsymmetricLink<NodeDatum>,
+> extends Force<NodeDatum, LinkDatum> {
+  links(): LinkDatum[]
+  links(links: LinkDatum[]): this
+
+  id(): (node: NodeDatum, i: number, nodes: NodeDatum[]) => string | number
+  id(
+    id: (node: NodeDatum, i: number, nodes: NodeDatum[]) => string | number
+  ): this
+
+  iterations(): number
+  iterations(iterations: number): this
+
+  strength(): (
+    link: LinkDatum,
+    i: number,
+    links: LinkDatum[]
+  ) => number | [number, number]
+  strength(
+    strength:
+      | number
+      | ((
+          link: LinkDatum,
+          i: number,
+          links: LinkDatum[]
+        ) => number | [number, number])
+  ): this
+
+  distance(): (link: LinkDatum, i: number, links: LinkDatum[]) => number
+  distance(
+    distance:
+      | number
+      | ((link: LinkDatum, i: number, links: LinkDatum[]) => number)
+  ): this
+}
+
+// Helper functions
+function constant<T>(x: T): () => T {
   return function () {
     return x
   }
 }
 
-function jiggle(random) {
+function jiggle(random: () => number): number {
   return (random() - 0.5) * 1e-6
 }
 
-function index(d) {
-  return d.index
+function index<NodeDatum extends SimulationNodeDatum>(
+  d: NodeDatum
+): string | number {
+  return d.index!
 }
 
-function find(nodeById, nodeId) {
-  var node = nodeById.get(nodeId)
+function find<NodeDatum extends SimulationNodeDatum>(
+  nodeById: Map<string | number, NodeDatum>,
+  nodeId: string | number
+): NodeDatum {
+  const node = nodeById.get(nodeId)
   if (!node) throw new Error("node not found: " + nodeId)
   return node
 }
 
-export function asymmetricLinks(links) {
-  var id = index,
-    strength = defaultStrength,
-    strengths,
-    distance = constant(30),
-    distances,
-    nodes,
-    count,
-    bias,
-    random,
-    iterations = 1
+// Main force function
+export function asymmetricLinks<
+  NodeDatum extends SimulationNodeDatum = SimulationNodeDatum,
+  LinkDatum extends AsymmetricLink<NodeDatum> = AsymmetricLink<NodeDatum>,
+>(links?: LinkDatum[]): AsymmetricLinkForce<NodeDatum, LinkDatum> {
+  let id: (node: NodeDatum, i: number, nodes: NodeDatum[]) => string | number =
+    index
+  let strength: (
+    link: LinkDatum,
+    i: number,
+    links: LinkDatum[]
+  ) => number | [number, number] = defaultStrength
+  let strengths: (number | [number, number])[]
+  let distance: (link: LinkDatum, i: number, links: LinkDatum[]) => number =
+    constant(30)
+  let distances: number[]
+  let nodes: NodeDatum[] | undefined
+  let count: number[]
+  let bias: number[]
+  let random: (() => number) | undefined
+  let iterations = 1
 
   if (links == null) links = []
 
-  function defaultStrength(link) {
-    return 1 / Math.min(count[link.source.index], count[link.target.index])
+  function defaultStrength(link: LinkDatum): number {
+    return (
+      1 /
+      Math.min(
+        count[(link.source as NodeDatum).index!],
+        count[(link.target as NodeDatum).index!]
+      )
+    )
   }
 
-  function force(alpha) {
-    for (var k = 0, n = links.length; k < iterations; ++k) {
-      for (var i = 0, link, source, target, x, y, l, b, _s, s; i < n; ++i) {
-        ;(link = links[i]), (source = link.source), (target = link.target)
-        x = target.x + target.vx - source.x - source.vx || jiggle(random)
-        y = target.y + target.vy - source.y - source.vy || jiggle(random)
-        l = Math.sqrt(x * x + y * y)
+  function force(alpha: number): void {
+    for (let k = 0, n = links!.length; k < iterations; ++k) {
+      for (let i = 0; i < n; ++i) {
+        const link = links![i]
+        const source = link.source as NodeDatum
+        const target = link.target as NodeDatum
+
+        let x =
+          target.x! + target.vx! - source.x! - source.vx! || jiggle(random!)
+        let y =
+          target.y! + target.vy! - source.y! - source.vy! || jiggle(random!)
+        let l = Math.sqrt(x * x + y * y)
 
         l = ((l - distances[i]) / l) * alpha
         x *= l
         y *= l
 
-        target.vx -= x * (b = bias[i]) * (s = (_s = strengths[i])[0])
-        target.vy -= y * b * s
-        source.vx += x * (b = 1 - b) * (s = _s[1])
-        source.vy += y * b * s
+        const b = bias[i]
+        const strengthValue = strengths[i]
+        let s0: number, s1: number
+
+        if (Array.isArray(strengthValue)) {
+          ;[s0, s1] = strengthValue
+        } else {
+          s0 = s1 = strengthValue
+        }
+
+        target.vx! -= x * b * s0
+        target.vy! -= y * b * s0
+        source.vx! += x * (1 - b) * s1
+        source.vy! += y * (1 - b) * s1
       }
     }
   }
 
-  function initialize() {
+  function initialize(): void {
     if (!nodes) return
 
-    var i,
-      n = nodes.length,
-      m = links.length,
-      nodeById = new Map(nodes.map((d, i) => [id(d, i, nodes), d])),
-      link
+    const n = nodes.length
+    const m = links!.length
+    const nodeById = new Map(nodes.map((d, i) => [id(d, i, nodes!), d]))
 
-    for (i = 0, count = new Array(n); i < m; ++i) {
-      ;(link = links[i]), (link.index = i)
-      if (typeof link.source !== "object")
+    count = new Array(n).fill(0)
+
+    for (let i = 0; i < m; ++i) {
+      const link = links![i]
+      link.index = i
+
+      if (typeof link.source !== "object") {
         link.source = find(nodeById, link.source)
-      if (typeof link.target !== "object")
+      }
+      if (typeof link.target !== "object") {
         link.target = find(nodeById, link.target)
-      count[link.source.index] = (count[link.source.index] || 0) + 1
-      count[link.target.index] = (count[link.target.index] || 0) + 1
+      }
+
+      count[(link.source as NodeDatum).index!]++
+      count[(link.target as NodeDatum).index!]++
     }
 
-    for (i = 0, bias = new Array(m); i < m; ++i) {
-      ;(link = links[i]),
-        (bias[i] =
-          count[link.source.index] /
-          (count[link.source.index] + count[link.target.index]))
+    bias = new Array(m)
+    for (let i = 0; i < m; ++i) {
+      const link = links![i]
+      const sourceCount = count[(link.source as NodeDatum).index!]
+      const targetCount = count[(link.target as NodeDatum).index!]
+      bias[i] = sourceCount / (sourceCount + targetCount)
     }
 
-    ;(strengths = new Array(m)), initializeStrength()
-    ;(distances = new Array(m)), initializeDistance()
+    strengths = new Array(m)
+    initializeStrength()
+    distances = new Array(m)
+    initializeDistance()
   }
 
-  function initializeStrength() {
+  function initializeStrength(): void {
     if (!nodes) return
 
-    for (var i = 0, n = links.length; i < n; ++i) {
-      strengths[i] = strength(links[i], i, links)
+    for (let i = 0, n = links!.length; i < n; ++i) {
+      strengths[i] = strength(links![i], i, links!)
     }
   }
 
-  function initializeDistance() {
+  function initializeDistance(): void {
     if (!nodes) return
 
-    for (var i = 0, n = links.length; i < n; ++i) {
-      distances[i] = +distance(links[i], i, links)
+    for (let i = 0, n = links!.length; i < n; ++i) {
+      distances[i] = +distance(links![i], i, links!)
     }
   }
 
-  force.initialize = function (_nodes, _random) {
+  force.initialize = function (
+    _nodes: NodeDatum[],
+    _random: () => number
+  ): void {
     nodes = _nodes
     random = _random
     initialize()
   }
 
-  force.links = function (_) {
-    return arguments.length ? ((links = _), initialize(), force) : links
+  force.links = function (_?: LinkDatum[]): any {
+    return arguments.length ? ((links = _!), initialize(), force) : links
   }
 
-  force.id = function (_) {
-    return arguments.length ? ((id = _), force) : id
+  force.id = function (
+    _?: (node: NodeDatum, i: number, nodes: NodeDatum[]) => string | number
+  ): any {
+    return arguments.length ? ((id = _!), force) : id
   }
 
-  force.iterations = function (_) {
-    return arguments.length ? ((iterations = +_), force) : iterations
+  force.iterations = function (_?: number): any {
+    return arguments.length ? ((iterations = +_!), force) : iterations
   }
 
-  force.strength = function (_) {
+  force.strength = function (
+    _?:
+      | number
+      | ((
+          link: LinkDatum,
+          i: number,
+          links: LinkDatum[]
+        ) => number | [number, number])
+  ): any {
     return arguments.length
-      ? ((strength = typeof _ === "function" ? _ : constant(+_)),
+      ? ((strength = typeof _ === "function" ? _ : constant(+_!)),
         initializeStrength(),
         force)
       : strength
   }
 
-  force.distance = function (_) {
+  force.distance = function (
+    _?: number | ((link: LinkDatum, i: number, links: LinkDatum[]) => number)
+  ): any {
     return arguments.length
-      ? ((distance = typeof _ === "function" ? _ : constant(+_)),
+      ? ((distance = typeof _ === "function" ? _ : constant(+_!)),
         initializeDistance(),
         force)
       : distance
   }
 
-  return force
+  return force as AsymmetricLinkForce<NodeDatum, LinkDatum>
 }
