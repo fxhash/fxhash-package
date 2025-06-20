@@ -375,6 +375,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         y: this.center.y,
       })
     }
+    const circlePos = getRadialPoint(getRadius(1), this.center.x, this.center.y)
 
     // We create a VOID_DETACH_ID node to allow connecting new mints to it
     // this will detach the new mints on the root from the rest of the root
@@ -384,8 +385,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       state: { collapsed: false, image: undefined },
       depth: -1,
       clusterSize: 1,
-      x: this.center.x,
-      y: this.center.y,
+      x: this.detachNode?.x || circlePos.x,
+      y: this.detachNode?.y || circlePos.y,
     })
 
     _links.push({
@@ -600,9 +601,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       }
     })
     this.renderLayers.nodes.highlighted.sort((a, b) => {
-      if (a.id === this.selectedNode?.id) return 1
-      if (b.id === this.selectedNode?.id) return -1
-      return 0
+      const highlightA = this.highlights.find(h => h.id === a.id)
+      const highlightB = this.highlights.find(h => h.id === b.id)
+      if (a.id === this.selectedNode?.id || b.id === this.selectedNode?.id)
+        return 1
+      if (highlightA?.onTop || highlightB?.onTop) return 1
+      return -1
     })
   }
 
@@ -666,7 +670,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       transform: Transform
     }
   ) {
-    if (node.id === VOID_DETACH_ID) return
+    if (node.id === VOID_DETACH_ID) {
+      return
+    }
 
     const x = node.x || 0
     const y = node.y || 0
