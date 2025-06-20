@@ -1,9 +1,9 @@
-import { config } from "@fxhash/config"
+import fxhashConfig, { config } from "@fxhash/config"
 import { Client, type ClientOptions, fetchExchange } from "@urql/core"
 import deepmerge from "deepmerge"
 
 const defaultClientOptions: ClientOptions = {
-  url: config.apis.hasuraGql,
+  url: fxhashConfig.envs.dev.apis.hasuraGql,
   exchanges: [fetchExchange],
   fetchOptions: {
     headers: {},

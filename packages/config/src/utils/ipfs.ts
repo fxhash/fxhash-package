@@ -1,4 +1,4 @@
-import { config } from "../config.js"
+import { config, fxhashConfig } from "../config.js"
 
 export enum EGatewayIpfs {
   FXHASH = "FXHASH",
@@ -14,9 +14,9 @@ export const ipfsRegex: RegExp = new RegExp("^ipfs://")
 export function ipfsGatewayRoot(gateway: EGatewayIpfs): string {
   switch (gateway) {
     case EGatewayIpfs.FXHASH:
-      return config.apis.ipfsGateway
+      return fxhashConfig.envs.dev.apis.ipfsGateway
     case EGatewayIpfs.FXHASH_SAFE:
-      return config.apis.ipfsGatewaySafe
+      return fxhashConfig.envs.dev.apis.ipfsGatewaySafe
     case EGatewayIpfs.IPFSIO:
     default:
       return "https://ipfs.io"
@@ -59,9 +59,9 @@ export function proxyUrl(uri: string): string {
     case "https":
       return uri
     case "temp":
-      return `${config.apis.fsEmulator}/resolve/${cid}`
+      return `${fxhashConfig.envs.dev.apis.fsEmulator}/resolve/${cid}`
     case "onchfs":
-      return `${config.apis.onchfsProxy}/${cid}`
+      return `${fxhashConfig.envs.dev.apis.onchfsProxy}/${cid}`
     default:
       return ipfsGatewayUrl(uri)
   }

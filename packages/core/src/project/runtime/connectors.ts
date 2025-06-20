@@ -1,5 +1,5 @@
 import { ProjectState } from "./_types.js"
-import { config, proxyUrl } from "@fxhash/config"
+import fxhashConfig, { config, proxyUrl } from "@fxhash/config"
 import { fxParamsAsQueryParams, quickHash } from "./utils.js"
 import { IRuntimeConnector } from "./_interfaces.js"
 
@@ -109,7 +109,7 @@ export const proxyConnector: IRuntimeConnector = {
 export const fsEmulatorConnector: IRuntimeConnector = {
   getUrl: (state: ProjectState, urlParams?: URLSearchParams) =>
     getProjectUrl(
-      `${config.apis.fsEmulator}/resolve/${state.cid}`,
+      `${fxhashConfig.envs.dev.apis.fsEmulator}/resolve/${state.cid}`,
       state,
       urlParams
     ),
