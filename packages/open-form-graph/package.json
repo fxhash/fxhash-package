@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
+    "@fxhash/utils": "workspace:*",
     "d3-force": "3.0.0",
     "d3-scale": "4.0.2",
     "d3-scale-chromatic": "3.1.0",
