@@ -37,6 +37,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     hideThumbnails,
     setHoveredNode,
     setSelectedNode,
+    lockedNodeId,
   } = useOpenFormGraph()
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -50,6 +51,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       loadNodeImage,
       theme,
       translate,
+      lockedNodeId,
     })
     simulation.current.emitter.on("selected-node-changed", setSelectedNode)
     simulation.current.emitter.on("hovered-node-changed", setHoveredNode)
@@ -103,6 +105,12 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     if (!translate) return
     simulation.current.setTranslate(translate)
+  }, [translate?.y, translate?.x])
+
+  useEffect(() => {
+    if (!simulation.current) return
+    if (simulation.current.lockedNodeId === lockedNodeId) return
+    simulation.current.setLockedNodeId(lockedNodeId)
   }, [translate?.y, translate?.x])
 
   const dpi = devicePixelRatio || 1

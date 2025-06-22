@@ -58,6 +58,7 @@ interface OpenGraphSimulationProps {
   theme?: ThemeMode
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
+  lockedNodeId?: string
 }
 
 interface RenderLayer<T> {
@@ -95,6 +96,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private hideThumbnails: boolean = false
   private noInteraction: boolean = false
 
+  public lockedNodeId?: string
   public selectedNode: SimNode | null = null
   public hoveredNode: SimNode | null = null
 
@@ -117,6 +119,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.config = props.config || DEFAULT_GRAPH_CONFIG
     this.rootImageSources = props.rootImageSources || []
     this.canvas = props.canvas
+
+    this.lockedNodeId = props.lockedNodeId
 
     this.loadNodeImage = props.loadNodeImage
 
@@ -209,7 +213,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   handleClick = (x: number, y: number) => {
-    const node = this.getNodeAtPosition(x, y)
+    let node = this.getNodeAtPosition(x, y)
+    // when we have lockedNodeId, we will always select that node
+    // instead of deselection
+    if (this.lockedNodeId && !node) {
+      node = this.getNodeById(this.lockedNodeId)
+    }
     this.handleClickNode(node)
   }
 
@@ -286,7 +295,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (node) {
       this.restart(wasOpened ? 0.05 : 0)
     } else if (!node && this.selectedNode) {
-      // Handle deselection
+      // handle deselection
       this.selectedNode = null
       this.emitter.emit("selected-node-changed", null)
       this.subGraph = {
@@ -449,7 +458,14 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         noToggle: true,
       })
     } else {
-      this.setSelectedNode(null)
+      if (this.lockedNodeId) {
+        const lockedNode = this.getNodeById(this.lockedNodeId)
+        if (lockedNode) {
+          this.handleClickNode(lockedNode)
+        }
+      } else {
+        this.setSelectedNode(null)
+      }
     }
   }
 
@@ -1065,5 +1081,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   getNodeById = (nodeId: string): SimNode | null => {
     return this.data.nodes.find(n => n.id === nodeId) || null
+  }
+
+  setLockedNodeId = (nodeId?: string | null) => {
+    this.lockedNodeId = nodeId || undefined
   }
 }
