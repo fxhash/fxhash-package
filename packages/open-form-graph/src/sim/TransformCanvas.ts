@@ -9,7 +9,7 @@ import {
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
 const CLICK_THRESHOLD = 5
-const ANIMATION_SPEED = 0.05
+const ANIMATION_SPEED = 0.099
 const ANIMATION_THRESHOLD = { x: 0.5, y: 0.5, scale: 0.001 }
 const MOMENTUM_DAMPING = 0.92
 const MIN_VELOCITY = 0.5
