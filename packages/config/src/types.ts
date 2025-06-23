@@ -19,6 +19,7 @@ export interface IFxhashApis {
   fsEmulator: string
   extract: string
   extractInternal: string
+  gateway: string
   media: string
   ethMetadata: string
   ipfsInternal: string
