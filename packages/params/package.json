@@ -9,7 +9,6 @@
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@types/lodash.debounce": "4.0.7",
     "@types/sha1": "1.1.3",
     "tsdown": "0.12.2",
     "typescript": "5.8.2"
