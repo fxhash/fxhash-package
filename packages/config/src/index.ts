@@ -65,4 +65,4 @@ export { isAppMetadataValid } from "./config/metadata.js"
 
 export default fxhashConfig
 
-export { FXH_TOKEN_IMAGE } from "./constants";
+export { FXH_TOKEN_IMAGE } from "./constants"

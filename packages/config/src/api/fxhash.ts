@@ -17,7 +17,7 @@ export const fxhashDevApis: IFxhashApis = {
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
     "http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
-    gateway: "https://gateway.fxhash.xyz",
+  gateway: "https://gateway.fxhash.xyz",
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsInternal:

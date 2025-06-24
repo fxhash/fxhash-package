@@ -18,4 +18,5 @@ NkT5zOaAJARzl69hEMQAv9qUkokwPSHlcG+LakhTGYAyMe3w/KHXVRkWjuCUgUJf
 JwIDAQAB
 -----END PUBLIC KEY-----`
 
-export const FXH_TOKEN_IMAGE = "https://gateway.fxhash.xyz/ipfs/QmbrVtVfm1RQxdLkkKhubNdBF6BmPEAE2oZmF6dopJKGxg";
+export const FXH_TOKEN_IMAGE =
+  "https://gateway.fxhash.xyz/ipfs/QmbrVtVfm1RQxdLkkKhubNdBF6BmPEAE2oZmF6dopJKGxg"
