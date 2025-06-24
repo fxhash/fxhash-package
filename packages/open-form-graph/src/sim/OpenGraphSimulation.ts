@@ -270,8 +270,22 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
                   }
                 )
                 if (dist > 10) {
-                  childNode.x = (node.x || this.center.x) + Math.random() * 50
-                  childNode.y = (node.y || this.center.y) + Math.random() * 50
+                  const parentAngle = getAngle(
+                    this.center.x,
+                    this.center.y,
+                    node.x!,
+                    node.y!
+                  )
+
+                  const circlePos = getRadialPoint(
+                    distance(this.center, { x: node.x!, y: node.y! }) +
+                      Math.random() * 50,
+                    this.center.x,
+                    this.center.y,
+                    parentAngle
+                  )
+                  childNode.x = circlePos.x
+                  childNode.y = circlePos.y
                 }
               }
             })
@@ -1079,7 +1093,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   setSelectedNode = (node: SimNode | null) => {
-    console.log("Setting selected node", node?.id || "null")
     this.selectedNode = node
     this.updateRenderLayers()
     this.updateScene()
