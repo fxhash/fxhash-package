@@ -33,7 +33,7 @@ import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData } from "@/util/data"
-import { Transform, HighlightStyle } from "./_types"
+import { Transform, HighlightStyle, Point } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
@@ -151,9 +151,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   private get origin() {
+    const dpi = devicePixelRatio || 1
     return {
-      x: this.translate.x + this.width / 2,
-      y: this.translate.y + this.height / 2,
+      x: (this.translate.x + this.width / 2) * dpi,
+      y: (this.translate.y + this.height / 2) * dpi,
     }
   }
 
@@ -220,6 +221,39 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     return { x, y }
   }
 
+  public screenToWorld(_x: number, _y: number) {
+    const transform = this.transformCanvas.getTransform()
+    const { x: tx, y: ty, scale } = transform
+    const dpi = devicePixelRatio || 1
+
+    const canvasX = _x * dpi
+    const canvasY = _y * dpi
+
+    const scaledX = (canvasX - tx) / scale
+    const scaledY = (canvasY - ty) / scale
+
+    const x = scaledX - this.origin.x
+    const y = scaledY - this.origin.y
+    return { x, y }
+  }
+
+  public worldToScreen(worldX: number, worldY: number) {
+    const transform = this.transformCanvas.getTransform()
+    const { x: tx, y: ty, scale } = transform
+    const dpi = devicePixelRatio || 1
+
+    const scaledX = (worldX + this.origin.x) * scale
+    const scaledY = (worldY + this.origin.y) * scale
+
+    const canvasX = scaledX + tx
+    const canvasY = scaledY + ty
+
+    const screenX = canvasX / dpi
+    const screenY = canvasY / dpi
+
+    return { x: screenX, y: screenY }
+  }
+
   handleClick = (x: number, y: number) => {
     let node = this.getNodeAtPosition(x, y)
     // when we have lockedNodeId, we will always select that node
@@ -259,20 +293,32 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             node.state.collapsed = !node.state.collapsed
           }
           if (!node.state.collapsed) {
+            // distance from parent to cluster center
+            const clusterDistance = 100
+            const clusterRadius = 50
+
+            const parentX = node.x || this.center.x
+            const parentY = node.y || this.center.y
+
+            const dirX = parentX - this.center.x
+            const dirY = parentY - this.center.y
+            const length = Math.sqrt(dirX * dirX + dirY * dirY) || 1
+
+            const normX = dirX / length
+            const normY = dirY / length
+
+            const clusterX = parentX + normX * clusterDistance
+            const clusterY = parentY + normY * clusterDistance
+
+            // we place the children in a circle around the cluster center
+            // which is n units away from the parent
             children.forEach(childId => {
               const childNode = this.data.nodes.find(n => n.id === childId)
               if (childNode && isSimNode(childNode)) {
-                const dist = distance(
-                  { x: node.x || this.center.x, y: node.y || this.center.y },
-                  {
-                    x: childNode.x || this.center.x,
-                    y: childNode.y || this.center.y,
-                  }
-                )
-                if (dist > 10) {
-                  childNode.x = (node.x || this.center.x) + Math.random() * 50
-                  childNode.y = (node.y || this.center.y) + Math.random() * 50
-                }
+                const angle = Math.random() * 2 * Math.PI
+                const radius = Math.random() * clusterRadius
+                childNode.x = clusterX + Math.cos(angle) * radius
+                childNode.y = clusterY + Math.sin(angle) * radius
               }
             })
           }
@@ -302,6 +348,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
     if (node) {
       this.restart(wasOpened ? 0.05 : 0)
+      if (wasOpened) {
+        this.transformCanvas.focusOn(() => {
+          const t = this.transformCanvas.getTransform()
+          const _node = this.getNodeById(node.id)
+          return { x: node.x!, y: node.y!, scale: t.scale }
+        })
+      }
     } else if (!node && this.selectedNode) {
       // handle deselection
       this.selectedNode = null
@@ -575,6 +628,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   setTranslate({ x, y }: { x: number; y: number }) {
     this.translate = { x, y }
+    this.transformCanvas.setOffset(this.translate)
   }
 
   get visiblityScale() {
@@ -1004,7 +1058,22 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     context.restore()
     context.restore()
+    // this.drawDebug(context)
     this.transformCanvas.trackCursor()
+  }
+
+  private drawDebug(context: CanvasRenderingContext2D) {
+    const transform = this.transformCanvas.getTransform()
+    context.font = `${14}px Sans-Serif`
+    context.textAlign = "left"
+    context.fillStyle = "#000000"
+    context.fillText(
+      `${transform.x}, ${transform.y}, ${transform.scale}`,
+      0,
+      15
+    )
+    const center = this.worldToScreen(this.rootNode?.x!, this.rootNode?.y!)
+    context.fillText(`${center.x}, ${center.y}`, 0, 30)
   }
 
   private drawDebugDepthCircles(context: CanvasRenderingContext2D) {
@@ -1103,5 +1172,61 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   setLockedNodeId = (nodeId?: string | null) => {
     this.lockedNodeId = nodeId || undefined
+  }
+
+  // DEBUG
+  handleClickDebug = (x: number, y: number) => {
+    const p = this.screenToWorld(x, y)
+    this.circles.push(p)
+    //    this.transformCanvas.transformToWorld(p.x, p.y)
+
+    this.transformCanvas.focusOn(() => {
+      const circle = this.circles[this.circles.length - 1]
+      return {
+        x: circle.x,
+        y: circle.y,
+        scale: this.transformCanvas.getTransform().scale,
+      }
+    })
+    this.updateScene()
+  }
+
+  circles: Array<Point> = []
+
+  onDrawDebug = () => {
+    const context = this.canvas?.getContext("2d")
+    const transform = this.transformCanvas.getTransform()
+    if (!context) return
+
+    const dpi = devicePixelRatio || 1
+    context.save()
+    context.scale(dpi, dpi)
+    context.clearRect(0, 0, this.width, this.height)
+    context.setTransform(
+      transform.scale,
+      0,
+      0,
+      transform.scale,
+      transform.x,
+      transform.y
+    )
+    context.translate(this.origin.x, this.origin.y)
+    context.save()
+
+    this.circles.map(c => {
+      circle(context, c.x, c.y, 5, {
+        fill: true,
+        fillStyle: "#ff0000",
+        stroke: false,
+      })
+    })
+    circle(context, 0, 0, 5, {
+      fill: true,
+      fillStyle: "#ff0000",
+      stroke: false,
+    })
+
+    context.restore()
+    context.restore()
   }
 }
