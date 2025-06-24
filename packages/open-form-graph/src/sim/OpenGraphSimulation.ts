@@ -494,6 +494,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         ],
         [Infinity, -Infinity] as [number, number]
       )
+    if (this.simulation) {
+      this.simulation.stop()
+      this.simulation.on("tick", null)
+      this.simulation.on("end", null)
+    }
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
       .alpha(this.simulation ? alpha : 0.5)
       .force(
