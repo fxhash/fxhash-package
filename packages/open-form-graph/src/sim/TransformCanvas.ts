@@ -509,14 +509,14 @@ export class TransformCanvas {
 
     const x =
       this.canvas.width / 2 +
-      this.offset.x -
+      this.offset.x * this.dpr -
       worldX * scale -
-      (this.canvas.width / 2 + this.offset.x) * scale
+      (this.canvas.width / 2 + this.offset.x * this.dpr) * scale
     const y =
       this.canvas.height / 2 +
-      this.offset.y -
+      this.offset.y * this.dpr -
       worldY * scale -
-      (this.canvas.height / 2 + this.offset.y) * scale
+      (this.canvas.height / 2 + this.offset.y * this.dpr) * scale
 
     return { x, y, scale }
   }
