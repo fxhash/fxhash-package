@@ -151,9 +151,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   private get origin() {
+    const dpi = devicePixelRatio || 1
     return {
-      x: this.translate.x + this.width / 2,
-      y: this.translate.y + this.height / 2,
+      x: (this.translate.x + this.width / 2) * dpi,
+      y: (this.translate.y + this.height / 2) * dpi,
     }
   }
 
