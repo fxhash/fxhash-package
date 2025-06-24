@@ -4,6 +4,7 @@ import {
   forceManyBody,
   forceCenter,
   forceRadial,
+  forceCollide,
 } from "d3-force"
 import {
   GraphData,
@@ -502,6 +503,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
       .alpha(this.simulation ? alpha : 0.5)
       .force(
+        "collide",
+        forceCollide(n => this.getNodeSize(n.id) / 2)
+      )
+      .force(
         "link",
         asymmetricLinks<SimNode, SimLink>(this.prunedData.links)
           .id(d => d.id)
@@ -523,6 +528,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
+
     if (RADIAL_FORCES) {
       for (let i = 0; i < this.maxDepth; i++) {
         const depth = i
