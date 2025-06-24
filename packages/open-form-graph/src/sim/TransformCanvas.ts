@@ -21,6 +21,7 @@ export class TransformCanvas {
   private isAnimating = false
   private animationFrame: number | null = null
   private focus: Focus | null = null
+  private offset: Point = { x: 0, y: 0 }
 
   private isDragging = false
   private dragStart: Point | null = null
@@ -51,12 +52,14 @@ export class TransformCanvas {
       onUpdate?: TransformListener
       onClick?: MouseListener
       onMove?: MouseListener
+      offset?: Point
     }
   ) {
     this.canvas = canvas
     this.onUpdate = options?.onUpdate
     this.onClick = options?.onClick
     this.onMove = options?.onMove
+    this.offset = options?.offset || { x: 0, y: 0 }
     this.dpr = window.devicePixelRatio || 1
 
     this.bindEventHandlers()
@@ -153,7 +156,7 @@ export class TransformCanvas {
     }
   }
 
-  private toCanvasCoords(clientX: number, clientY: number): Point {
+  public toCanvasCoords(clientX: number, clientY: number): Point {
     const rect = this.canvas.getBoundingClientRect()
     return {
       x: (clientX - rect.left) * this.dpr,
@@ -272,6 +275,7 @@ export class TransformCanvas {
     }
 
     if (this.focus) {
+      this.interruptAnimation()
       this.focus = null
     }
 
@@ -495,6 +499,32 @@ export class TransformCanvas {
     this.startAnimation()
   }
 
+  public getTransformationFromWorld(
+    worldX: number,
+    worldY: number,
+    newScale?: number
+  ) {
+    const scale = newScale ?? this.transform.scale
+
+    const x =
+      this.canvas.width / 2 +
+      this.offset.x -
+      worldX * scale -
+      (this.canvas.width / 2 + this.offset.x) * scale
+    const y =
+      this.canvas.height / 2 +
+      this.offset.y -
+      worldY * scale -
+      (this.canvas.height / 2 + this.offset.y) * scale
+
+    return { x, y, scale }
+  }
+
+  public transformToWorld(worldX: number, worldY: number, newScale?: number) {
+    const transform = this.getTransformationFromWorld(worldX, worldY, newScale)
+    this.transformTo(transform)
+  }
+
   trackCursor() {
     const cssCoords = this.toCSSCoords(this.lastMovePos.x, this.lastMovePos.y)
     this.onMove?.(cssCoords.x, cssCoords.y)
@@ -511,6 +541,16 @@ export class TransformCanvas {
   focusOn(focus: Focus | null) {
     this.focus = focus
     if (focus) {
+      const _focus = focus
+      this.focus = () => {
+        const worldFocus = _focus()
+        const transform = this.getTransformationFromWorld(
+          worldFocus?.x!,
+          worldFocus?.y!,
+          worldFocus?.scale
+        )
+        return transform
+      }
       this.startAnimation()
     }
   }
@@ -562,5 +602,8 @@ export class TransformCanvas {
   }
   getFocus(): Readonly<Focus | null> {
     return this.focus ? { ...this.focus } : null
+  }
+  setOffset(offset: Point) {
+    this.offset = offset
   }
 }
