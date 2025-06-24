@@ -320,12 +320,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
                 childNode.y = clusterY + Math.sin(angle) * radius
               }
             })
-
-            this.transformCanvas.focusOn(() => {
-              const t = this.transformCanvas.getTransform()
-              const _node = this.getNodeById(node.id)
-              return { x: node.x!, y: node.y!, scale: t.scale }
-            })
           }
         }
       }
@@ -353,6 +347,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
     if (node) {
       this.restart(wasOpened ? 0.05 : 0)
+      if (wasOpened) {
+        this.transformCanvas.focusOn(() => {
+          const t = this.transformCanvas.getTransform()
+          const _node = this.getNodeById(node.id)
+          return { x: node.x!, y: node.y!, scale: t.scale }
+        })
+      }
     } else if (!node && this.selectedNode) {
       // handle deselection
       this.selectedNode = null
