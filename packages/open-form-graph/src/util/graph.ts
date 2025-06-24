@@ -32,6 +32,29 @@ export function getClusterSize(id: string, links: RawLink[]): number {
   }, children.length || 0)
 }
 
+export function getNodeDepth(id: string, links: RawLink[]): number {
+  function getDepth(id: string, depth: number): number {
+    const parents = getParents(id, links)
+    if (parents.length === 0) return depth
+    return getDepth(parents[0], depth + 1)
+  }
+  return getDepth(id, 0)
+}
+
+export function getRootParent(
+  id: string,
+  links: RawLink[],
+  stop?: string
+): string | null {
+  let currentId = id
+  while (true) {
+    const parents = getParents(currentId, links)
+    if (stop && parents.includes(stop)) return currentId
+    if (parents.length === 0) return currentId
+    currentId = parents[0]
+  }
+}
+
 export function hasOnlyLeafs(id: string, links: RawLink[]): boolean {
   const children = getChildren(id, links)
   return children.every(childId => getChildren(childId, links).length === 0)
