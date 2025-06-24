@@ -324,7 +324,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             this.transformCanvas.focusOn(() => {
               const t = this.transformCanvas.getTransform()
               const _node = this.getNodeById(node.id)
-              return { x: node.x, y: node.y, scale: t.scale }
+              return { x: node.x!, y: node.y!, scale: t.scale }
             })
           }
         }
