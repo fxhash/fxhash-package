@@ -251,9 +251,9 @@ export class TransformCanvas {
   }
 
   private interruptAnimation() {
+    this.targetTransform = { ...this.transform }
     if (this.isAnimating) {
       this.stopAnimation()
-      this.targetTransform = { ...this.transform }
     }
     if (this.momentumFrame) {
       cancelAnimationFrame(this.momentumFrame)
@@ -504,7 +504,7 @@ export class TransformCanvas {
     worldY: number,
     newScale?: number
   ) {
-    const scale = newScale ?? this.transform.scale
+    const scale = newScale ?? this.targetTransform.scale
 
     const x =
       this.canvas.width / 2 +
