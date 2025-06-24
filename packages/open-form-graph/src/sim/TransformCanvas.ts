@@ -184,8 +184,8 @@ export class TransformCanvas {
   }
 
   private applyMomentum = () => {
-    this.transform.x += this.velocity.x
-    this.transform.y += this.velocity.y
+    this.transform.x += this.velocity.x * this.dpr
+    this.transform.y += this.velocity.y * this.dpr
     this.targetTransform.x = this.transform.x
     this.targetTransform.y = this.transform.y
 
@@ -403,11 +403,11 @@ export class TransformCanvas {
       if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
         this.hasMoved = true
 
-        const deltaX = (touch.clientX - this.lastPointerPos.x) * this.dpr
-        const deltaY = (touch.clientY - this.lastPointerPos.y) * this.dpr
+        const deltaX = touch.clientX - this.lastPointerPos.x
+        const deltaY = touch.clientY - this.lastPointerPos.y
 
-        this.transform.x += deltaX
-        this.transform.y += deltaY
+        this.transform.x += deltaX * this.dpr
+        this.transform.y += deltaY * this.dpr
         this.targetTransform.x = this.transform.x
         this.targetTransform.y = this.transform.y
 
@@ -428,30 +428,38 @@ export class TransformCanvas {
         this.onMove?.(cssCoords.x, cssCoords.y)
       }
     } else if (e.touches.length === 2 && this.pinchStartDist != null) {
+      if (this.momentumFrame) {
+        cancelAnimationFrame(this.momentumFrame)
+        this.momentumFrame = null
+        this.velocity = { x: 0, y: 0 }
+      }
+
       const [t1, t2] = Array.from(e.touches)
       const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
-      let scale = (dist / this.pinchStartDist) * this.pinchStartScale
-      scale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, scale))
+
+      let newScale = (dist / this.pinchStartDist) * this.pinchStartScale
+      newScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newScale))
 
       const centerX = (t1.clientX + t2.clientX) / 2
       const centerY = (t1.clientY + t2.clientY) / 2
       const canvasCenter = this.toCanvasCoords(centerX, centerY)
 
-      const {
-        x: targetX,
-        y: targetY,
-        scale: targetScale,
-      } = this.targetTransform
-      const worldX = (canvasCenter.x - targetX) / targetScale
-      const worldY = (canvasCenter.y - targetY) / targetScale
+      const { x: currentX, y: currentY, scale: currentScale } = this.transform
 
-      const newX = canvasCenter.x - worldX * scale
-      const newY = canvasCenter.y - worldY * scale
+      const worldX =
+        (canvasCenter.x - currentX - this.offset.x * currentScale) /
+        currentScale
+      const worldY =
+        (canvasCenter.y - currentY - this.offset.y * currentScale) /
+        currentScale
+
+      const newX = canvasCenter.x - worldX * newScale - this.offset.x * newScale
+      const newY = canvasCenter.y - worldY * newScale - this.offset.y * newScale
 
       this.targetTransform = {
         x: newX,
         y: newY,
-        scale,
+        scale: newScale,
       }
 
       this.startAnimation()
@@ -473,11 +481,11 @@ export class TransformCanvas {
         const cssCoords = this.toCSSCoords(this.touchStart.x, this.touchStart.y)
         this.onClick(cssCoords.x, cssCoords.y)
       }
+
       this.isDragging = false
       this.touchStart = null
       this.hasMoved = false
       this.pinchStartDist = null
-      this.velocity = { x: 0, y: 0 }
     } else if (e.touches.length === 1) {
       const touch = e.touches[0]
       this.isDragging = true
