@@ -266,7 +266,6 @@ export class TransformCanvas {
     e.preventDefault()
     e.stopPropagation()
     if (this.noInteraction) return
-    e.preventDefault()
 
     if (this.momentumFrame) {
       cancelAnimationFrame(this.momentumFrame)
@@ -287,13 +286,15 @@ export class TransformCanvas {
       Math.min(MAX_ZOOM, this.targetTransform.scale * scaleFactor)
     )
 
-    const { x: targetX, y: targetY, scale: targetScale } = this.targetTransform
+    const { x: currentX, y: currentY, scale: currentScale } = this.transform
 
-    const worldX = (canvasCoords.x - targetX) / targetScale
-    const worldY = (canvasCoords.y - targetY) / targetScale
+    const worldX =
+      (canvasCoords.x - currentX - this.offset.x * currentScale) / currentScale
+    const worldY =
+      (canvasCoords.y - currentY - this.offset.y * currentScale) / currentScale
 
-    const newX = canvasCoords.x - worldX * newScale
-    const newY = canvasCoords.y - worldY * newScale
+    const newX = canvasCoords.x - worldX * newScale - this.offset.x * newScale
+    const newY = canvasCoords.y - worldY * newScale - this.offset.y * newScale
 
     this.targetTransform = {
       x: newX,
@@ -504,7 +505,7 @@ export class TransformCanvas {
     worldY: number,
     newScale?: number
   ) {
-    const scale = newScale ?? this.targetTransform.scale
+    const scale = newScale ?? this.transform.scale
 
     const x =
       this.canvas.width / 2 +
