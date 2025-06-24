@@ -4,6 +4,7 @@ import {
   forceManyBody,
   forceCenter,
   forceRadial,
+  forceCollide,
 } from "d3-force"
 import {
   GraphData,
@@ -144,27 +145,39 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   private get center() {
     return {
-      x: this.width / 2,
-      y: this.height / 2,
+      x: 0,
+      y: 0,
+    }
+  }
+
+  private get origin() {
+    return {
+      x: this.translate.x + this.width / 2,
+      y: this.translate.y + this.height / 2,
     }
   }
 
   private getNodeAtPosition = (cx: number, cy: number): SimNode | null => {
-    const dpi = devicePixelRatio || 1
-    const realX = cx * dpi
-    const realY = cy * dpi
     const transform = this.transformCanvas.getTransform()
     const { x: tx, y: ty, scale } = transform
-    const x = (realX - tx) / scale - this.translate.x
-    const y = (realY - ty) / scale - this.translate.y
+    const dpi = devicePixelRatio || 1
+
+    const canvasX = cx * dpi
+    const canvasY = cy * dpi
+
+    const scaledX = (canvasX - tx) / scale
+    const scaledY = (canvasY - ty) / scale
+
+    const graphX = scaledX - this.origin.x
+    const graphY = scaledY - this.origin.y
 
     const candidates: SimNode[] = []
 
     for (let node of this.data.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
-      const dx = node.x - x
-      const dy = node.y - y
+      const dx = node.x - graphX
+      const dy = node.y - graphY
       if (dx * dx + dy * dy < r * r) {
         // only consider nodes that are in the pruned data (visible)
         if (!this.prunedData.nodes.find(n => n.id === node.id)) continue
@@ -173,7 +186,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
 
     if (candidates.length === 0) return null
-
     if (candidates.length === 1) return candidates[0]
 
     for (let i = this.renderLayers.nodes.highlighted.length - 1; i >= 0; i--) {
@@ -194,21 +206,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   public getNodeScreenPosition = (node: SimNode): { x: number; y: number } => {
     const transform = this.transformCanvas.getTransform()
-    const scale = transform.scale
-    const x = this.translate.x + transform.x + (node.x || 0) * scale
-    const y = this.translate.y + transform.y + (node.y || 0) * scale
-    return {
-      x,
-      y,
-    }
+    const x = transform.x + (node.x || 0 + this.origin.x) * transform.scale
+    const y = transform.y + (node.y || 0 + this.origin.y) * transform.scale
+    return { x, y }
   }
 
   public getNodeCanvasPosition = (node: SimNode): { x: number; y: number } => {
     const _x = node.x || 0
     const _y = node.y || 0
     const transform = this.transformCanvas.getTransform()
-    const x = this.center.x - _x * transform.scale
-    const y = this.center.y - _y * transform.scale
+    const x = this.origin.x - _x * transform.scale
+    const y = this.origin.y - _y * transform.scale
     return { x, y }
   }
 
@@ -487,8 +495,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         ],
         [Infinity, -Infinity] as [number, number]
       )
+    if (this.simulation) {
+      this.simulation.stop()
+      this.simulation.on("tick", null)
+      this.simulation.on("end", null)
+    }
     this.simulation = forceSimulation<SimNode, SimLink>(this.prunedData.nodes)
       .alpha(this.simulation ? alpha : 0.5)
+      .force(
+        "collide",
+        forceCollide(n => this.getNodeSize(n.id) / 2)
+      )
       .force(
         "link",
         asymmetricLinks<SimNode, SimLink>(this.prunedData.links)
@@ -511,6 +528,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
+
     if (RADIAL_FORCES) {
       for (let i = 0; i < this.maxDepth; i++) {
         const depth = i
@@ -929,7 +947,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       transform.x,
       transform.y
     )
-    context.translate(this.translate.x, this.translate.y)
+    context.translate(this.origin.x, this.origin.y)
     context.save()
 
     const hasSelection = !!this.selectedNode
