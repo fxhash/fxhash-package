@@ -9,7 +9,7 @@ import {
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
 const CLICK_THRESHOLD = 5
-const ANIMATION_SPEED = 0.05
+const ANIMATION_SPEED = 0.07
 const ANIMATION_THRESHOLD = { x: 0.5, y: 0.5, scale: 0.001 }
 const MOMENTUM_DAMPING = 0.92
 const MIN_VELOCITY = 0.5
@@ -21,6 +21,7 @@ export class TransformCanvas {
   private isAnimating = false
   private animationFrame: number | null = null
   private focus: Focus | null = null
+  private offset: Point = { x: 0, y: 0 }
 
   private isDragging = false
   private dragStart: Point | null = null
@@ -51,12 +52,14 @@ export class TransformCanvas {
       onUpdate?: TransformListener
       onClick?: MouseListener
       onMove?: MouseListener
+      offset?: Point
     }
   ) {
     this.canvas = canvas
     this.onUpdate = options?.onUpdate
     this.onClick = options?.onClick
     this.onMove = options?.onMove
+    this.offset = options?.offset || { x: 0, y: 0 }
     this.dpr = window.devicePixelRatio || 1
 
     this.bindEventHandlers()
@@ -153,7 +156,7 @@ export class TransformCanvas {
     }
   }
 
-  private toCanvasCoords(clientX: number, clientY: number): Point {
+  public toCanvasCoords(clientX: number, clientY: number): Point {
     const rect = this.canvas.getBoundingClientRect()
     return {
       x: (clientX - rect.left) * this.dpr,
@@ -181,8 +184,8 @@ export class TransformCanvas {
   }
 
   private applyMomentum = () => {
-    this.transform.x += this.velocity.x
-    this.transform.y += this.velocity.y
+    this.transform.x += this.velocity.x * this.dpr
+    this.transform.y += this.velocity.y * this.dpr
     this.targetTransform.x = this.transform.x
     this.targetTransform.y = this.transform.y
 
@@ -211,9 +214,9 @@ export class TransformCanvas {
     const prev = this.transform
 
     const next: Transform = {
-      x: this.lerp(prev.x, target.x, ANIMATION_SPEED),
-      y: this.lerp(prev.y, target.y, ANIMATION_SPEED),
-      scale: this.lerp(prev.scale, target.scale, ANIMATION_SPEED),
+      x: this.lerp(prev.x, target.x, ANIMATION_SPEED / this.dpr),
+      y: this.lerp(prev.y, target.y, ANIMATION_SPEED / this.dpr),
+      scale: this.lerp(prev.scale, target.scale, ANIMATION_SPEED / this.dpr),
     }
 
     const done =
@@ -248,9 +251,9 @@ export class TransformCanvas {
   }
 
   private interruptAnimation() {
+    this.targetTransform = { ...this.transform }
     if (this.isAnimating) {
       this.stopAnimation()
-      this.targetTransform = { ...this.transform }
     }
     if (this.momentumFrame) {
       cancelAnimationFrame(this.momentumFrame)
@@ -263,7 +266,6 @@ export class TransformCanvas {
     e.preventDefault()
     e.stopPropagation()
     if (this.noInteraction) return
-    e.preventDefault()
 
     if (this.momentumFrame) {
       cancelAnimationFrame(this.momentumFrame)
@@ -272,6 +274,7 @@ export class TransformCanvas {
     }
 
     if (this.focus) {
+      this.interruptAnimation()
       this.focus = null
     }
 
@@ -283,13 +286,15 @@ export class TransformCanvas {
       Math.min(MAX_ZOOM, this.targetTransform.scale * scaleFactor)
     )
 
-    const { x: targetX, y: targetY, scale: targetScale } = this.targetTransform
+    const { x: currentX, y: currentY, scale: currentScale } = this.transform
 
-    const worldX = (canvasCoords.x - targetX) / targetScale
-    const worldY = (canvasCoords.y - targetY) / targetScale
+    const worldX =
+      (canvasCoords.x - currentX - this.offset.x * currentScale) / currentScale
+    const worldY =
+      (canvasCoords.y - currentY - this.offset.y * currentScale) / currentScale
 
-    const newX = canvasCoords.x - worldX * newScale
-    const newY = canvasCoords.y - worldY * newScale
+    const newX = canvasCoords.x - worldX * newScale - this.offset.x * newScale
+    const newY = canvasCoords.y - worldY * newScale - this.offset.y * newScale
 
     this.targetTransform = {
       x: newX,
@@ -398,11 +403,11 @@ export class TransformCanvas {
       if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
         this.hasMoved = true
 
-        const deltaX = (touch.clientX - this.lastPointerPos.x) * this.dpr
-        const deltaY = (touch.clientY - this.lastPointerPos.y) * this.dpr
+        const deltaX = touch.clientX - this.lastPointerPos.x
+        const deltaY = touch.clientY - this.lastPointerPos.y
 
-        this.transform.x += deltaX
-        this.transform.y += deltaY
+        this.transform.x += deltaX * this.dpr
+        this.transform.y += deltaY * this.dpr
         this.targetTransform.x = this.transform.x
         this.targetTransform.y = this.transform.y
 
@@ -423,30 +428,38 @@ export class TransformCanvas {
         this.onMove?.(cssCoords.x, cssCoords.y)
       }
     } else if (e.touches.length === 2 && this.pinchStartDist != null) {
+      if (this.momentumFrame) {
+        cancelAnimationFrame(this.momentumFrame)
+        this.momentumFrame = null
+        this.velocity = { x: 0, y: 0 }
+      }
+
       const [t1, t2] = Array.from(e.touches)
       const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
-      let scale = (dist / this.pinchStartDist) * this.pinchStartScale
-      scale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, scale))
+
+      let newScale = (dist / this.pinchStartDist) * this.pinchStartScale
+      newScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newScale))
 
       const centerX = (t1.clientX + t2.clientX) / 2
       const centerY = (t1.clientY + t2.clientY) / 2
       const canvasCenter = this.toCanvasCoords(centerX, centerY)
 
-      const {
-        x: targetX,
-        y: targetY,
-        scale: targetScale,
-      } = this.targetTransform
-      const worldX = (canvasCenter.x - targetX) / targetScale
-      const worldY = (canvasCenter.y - targetY) / targetScale
+      const { x: currentX, y: currentY, scale: currentScale } = this.transform
 
-      const newX = canvasCenter.x - worldX * scale
-      const newY = canvasCenter.y - worldY * scale
+      const worldX =
+        (canvasCenter.x - currentX - this.offset.x * currentScale) /
+        currentScale
+      const worldY =
+        (canvasCenter.y - currentY - this.offset.y * currentScale) /
+        currentScale
+
+      const newX = canvasCenter.x - worldX * newScale - this.offset.x * newScale
+      const newY = canvasCenter.y - worldY * newScale - this.offset.y * newScale
 
       this.targetTransform = {
         x: newX,
         y: newY,
-        scale,
+        scale: newScale,
       }
 
       this.startAnimation()
@@ -468,11 +481,11 @@ export class TransformCanvas {
         const cssCoords = this.toCSSCoords(this.touchStart.x, this.touchStart.y)
         this.onClick(cssCoords.x, cssCoords.y)
       }
+
       this.isDragging = false
       this.touchStart = null
       this.hasMoved = false
       this.pinchStartDist = null
-      this.velocity = { x: 0, y: 0 }
     } else if (e.touches.length === 1) {
       const touch = e.touches[0]
       this.isDragging = true
@@ -495,6 +508,32 @@ export class TransformCanvas {
     this.startAnimation()
   }
 
+  public getTransformationFromWorld(
+    worldX: number,
+    worldY: number,
+    newScale?: number
+  ) {
+    const scale = newScale ?? this.transform.scale
+
+    const x =
+      this.canvas.width / 2 +
+      this.offset.x * this.dpr -
+      worldX * scale -
+      (this.canvas.width / 2 + this.offset.x * this.dpr) * scale
+    const y =
+      this.canvas.height / 2 +
+      this.offset.y * this.dpr -
+      worldY * scale -
+      (this.canvas.height / 2 + this.offset.y * this.dpr) * scale
+
+    return { x, y, scale }
+  }
+
+  public transformToWorld(worldX: number, worldY: number, newScale?: number) {
+    const transform = this.getTransformationFromWorld(worldX, worldY, newScale)
+    this.transformTo(transform)
+  }
+
   trackCursor() {
     const cssCoords = this.toCSSCoords(this.lastMovePos.x, this.lastMovePos.y)
     this.onMove?.(cssCoords.x, cssCoords.y)
@@ -511,6 +550,16 @@ export class TransformCanvas {
   focusOn(focus: Focus | null) {
     this.focus = focus
     if (focus) {
+      const _focus = focus
+      this.focus = () => {
+        const worldFocus = _focus()
+        const transform = this.getTransformationFromWorld(
+          worldFocus?.x!,
+          worldFocus?.y!,
+          worldFocus?.scale
+        )
+        return transform
+      }
       this.startAnimation()
     }
   }
@@ -562,5 +611,8 @@ export class TransformCanvas {
   }
   getFocus(): Readonly<Focus | null> {
     return this.focus ? { ...this.focus } : null
+  }
+  setOffset(offset: Point) {
+    this.offset = offset
   }
 }
