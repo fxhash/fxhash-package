@@ -807,7 +807,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       return scale(node.clusterSize || 1)
     }
     const isSelected = this.selectedNode?.id === nodeId
-    const isLiquidated = node?.status === "LIQUIDATED"
+    const isLiquidated =
+      node?.status === "LIQUIDATED" || node?.status === "REGENERATED"
     const _size = isLiquidated ? nodeSize * 0.2 : nodeSize
     return isSelected ? _size * 2 : _size * sizeScale
   }
@@ -952,7 +953,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const isSelected = this.selectedNode?.id === node.id
     const isHovered = this.hoveredNode?.id === node.id
     const isCollapsed = !!node.state?.collapsed
-    const isLiquidated = node.status === "LIQUIDATED"
+    const isLiquidated =
+      node.status === "LIQUIDATED" || node.status === "REGENERATED"
     const isLight = this.theme === "light"
     const { dim: _dim, transform } = options
 
