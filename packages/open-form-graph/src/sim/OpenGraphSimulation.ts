@@ -403,6 +403,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private _highlightHash = ""
 
   updateHighlights = () => {
+    this.transformCanvas.resetFocus()
     const hash = quickHash(JSON.stringify(this.highlights))
     if (hash === this._highlightHash) return
     this._highlightHash = hash

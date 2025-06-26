@@ -552,15 +552,20 @@ export class TransformCanvas {
       const _focus = focus
       this.focus = () => {
         const worldFocus = _focus()
+        if (!worldFocus) return null
         const transform = this.getTransformationFromWorld(
-          worldFocus?.x!,
-          worldFocus?.y!,
-          worldFocus?.scale
+          worldFocus.x,
+          worldFocus.y,
+          worldFocus.scale
         )
         return transform
       }
       this.startAnimation()
     }
+  }
+
+  resetFocus() {
+    this.focus = null
   }
 
   destroy() {
