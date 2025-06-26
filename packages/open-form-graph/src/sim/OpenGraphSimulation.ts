@@ -125,7 +125,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.config = props.config || DEFAULT_GRAPH_CONFIG
     this.rootImageSources = props.rootImageSources || []
     this.canvas = props.canvas
-    this.highlights = props.highlights || []
 
     this.lockedNodeId = props.lockedNodeId
 
@@ -400,13 +399,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.updateScene()
   }
 
-  private _highlightHash = ""
-
   updateHighlights = () => {
     this.transformCanvas.resetFocus()
-    const hash = quickHash(JSON.stringify(this.highlights))
-    if (hash === this._highlightHash) return
-    this._highlightHash = hash
     // for detached highlights we need to create the session nodes and
     // links accordingly
     const detachedHighlights = this.highlights.filter(h => h.isDetached)
@@ -1341,7 +1335,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.updateScene()
   }
 
+  private _highlightHash?: string
+
   setHighlights = (highlights: HighlightStyle[]) => {
+    const hash = quickHash(JSON.stringify(highlights))
+    if (hash === this._highlightHash) return
+    this._highlightHash = hash
     this.highlights = highlights
     this.updateHighlights()
     // this.triggerSelected()
