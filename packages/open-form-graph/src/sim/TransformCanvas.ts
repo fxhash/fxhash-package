@@ -10,8 +10,9 @@ const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
 const CLICK_THRESHOLD = 5
 const ANIMATION_SPEED = 0.07
+const DRAG_ANIMATION_SPEED = 0.5
 const ANIMATION_THRESHOLD = { x: 0.5, y: 0.5, scale: 0.001 }
-const MOMENTUM_DAMPING = 0.92
+const MOMENTUM_DAMPING = 0.91
 const MIN_VELOCITY = 0.5
 
 export class TransformCanvas {
@@ -184,10 +185,8 @@ export class TransformCanvas {
   }
 
   private applyMomentum = () => {
-    this.transform.x += this.velocity.x * this.dpr
-    this.transform.y += this.velocity.y * this.dpr
-    this.targetTransform.x = this.transform.x
-    this.targetTransform.y = this.transform.y
+    this.targetTransform.x += this.velocity.x * this.dpr
+    this.targetTransform.y += this.velocity.y * this.dpr
 
     this.velocity.x *= MOMENTUM_DAMPING
     this.velocity.y *= MOMENTUM_DAMPING
@@ -196,12 +195,11 @@ export class TransformCanvas {
       Math.abs(this.velocity.x) > MIN_VELOCITY ||
       Math.abs(this.velocity.y) > MIN_VELOCITY
     ) {
-      this.onUpdate?.(this.transform)
+      this.startAnimation()
       this.momentumFrame = requestAnimationFrame(this.applyMomentum)
     } else {
       this.velocity = { x: 0, y: 0 }
       this.momentumFrame = null
-      this.targetTransform = { ...this.transform }
     }
   }
 
@@ -213,10 +211,14 @@ export class TransformCanvas {
     const target = this.focus?.() || this.targetTransform
     const prev = this.transform
 
+    const animationSpeed = this.isDragging
+      ? DRAG_ANIMATION_SPEED
+      : ANIMATION_SPEED
+
     const next: Transform = {
-      x: this.lerp(prev.x, target.x, ANIMATION_SPEED / this.dpr),
-      y: this.lerp(prev.y, target.y, ANIMATION_SPEED / this.dpr),
-      scale: this.lerp(prev.scale, target.scale, ANIMATION_SPEED / this.dpr),
+      x: this.lerp(prev.x, target.x, animationSpeed / this.dpr),
+      y: this.lerp(prev.y, target.y, animationSpeed / this.dpr),
+      scale: this.lerp(prev.scale, target.scale, animationSpeed / this.dpr),
     }
 
     const done =
@@ -334,10 +336,8 @@ export class TransformCanvas {
       const deltaX = (e.clientX - this.lastPointerPos.x) * this.dpr
       const deltaY = (e.clientY - this.lastPointerPos.y) * this.dpr
 
-      this.transform.x += deltaX
-      this.transform.y += deltaY
-      this.targetTransform.x = this.transform.x
-      this.targetTransform.y = this.transform.y
+      this.targetTransform.x += deltaX
+      this.targetTransform.y += deltaY
 
       const now = Date.now()
       const dt = now - this.lastDragTime
@@ -348,7 +348,8 @@ export class TransformCanvas {
 
       this.lastPointerPos = { x: e.clientX, y: e.clientY }
       this.lastDragTime = now
-      this.onUpdate?.(this.transform)
+
+      this.startAnimation()
     }
   }
 
@@ -406,10 +407,8 @@ export class TransformCanvas {
         const deltaX = touch.clientX - this.lastPointerPos.x
         const deltaY = touch.clientY - this.lastPointerPos.y
 
-        this.transform.x += deltaX * this.dpr
-        this.transform.y += deltaY * this.dpr
-        this.targetTransform.x = this.transform.x
-        this.targetTransform.y = this.transform.y
+        this.targetTransform.x += deltaX * this.dpr
+        this.targetTransform.y += deltaY * this.dpr
 
         const now = Date.now()
         const dt = now - this.lastDragTime
@@ -422,7 +421,7 @@ export class TransformCanvas {
         this.lastMovePos = { x: touch.clientX, y: touch.clientY }
         this.lastDragTime = now
 
-        this.onUpdate?.(this.transform)
+        this.startAnimation()
 
         const cssCoords = this.toCSSCoords(touch.clientX, touch.clientY)
         this.onMove?.(cssCoords.x, cssCoords.y)
@@ -553,15 +552,20 @@ export class TransformCanvas {
       const _focus = focus
       this.focus = () => {
         const worldFocus = _focus()
+        if (!worldFocus) return null
         const transform = this.getTransformationFromWorld(
-          worldFocus?.x!,
-          worldFocus?.y!,
-          worldFocus?.scale
+          worldFocus.x,
+          worldFocus.y,
+          worldFocus.scale
         )
         return transform
       }
       this.startAnimation()
     }
+  }
+
+  resetFocus() {
+    this.focus = null
   }
 
   destroy() {
