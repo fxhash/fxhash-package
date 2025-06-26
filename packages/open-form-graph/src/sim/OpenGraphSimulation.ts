@@ -410,7 +410,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     // links accordingly
     const detachedHighlights = this.highlights.filter(h => h.isDetached)
     const validSessionIds = new Set<string>()
-
+    let focusSessionNode: null | SimNode = null
     detachedHighlights.forEach(h => {
       const highlightedNode = this.data.nodes.find(n => n.id === h.id)
       if (!highlightedNode) return
@@ -485,6 +485,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       if (highlightedNode.state) {
         highlightedNode.state.collapsed = false
       }
+      // We focus on the first session node we find
+      if (!focusSessionNode) {
+        focusSessionNode = sessionNode
+      }
     })
 
     // we need to cleanup the session nodes if they are not part of
@@ -526,7 +530,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       if (index !== -1) this.data.nodes.splice(index, 1)
     })
 
-    // since we are modifing the grap in case there is a selection we need
+    // since we are modifing the graph, in case there is a selection we need
     // to recalculate the subgraph
     if (this.selectedNode) {
       this.subGraph = getNodeSubgraph(
@@ -537,6 +541,17 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       )
     }
     this.restart()
+    // when there is no selectio we focus on the first session node we found
+    // TODO: We could calcluate a point between all session nodes to focus the
+    // camera on
+    if (!this.selectedNode && focusSessionNode) {
+      this.transformCanvas.focusOn(() => {
+        if (!focusSessionNode) return null
+        const t = this.transformCanvas.getTransform()
+        const _node = this.getNodeById(focusSessionNode.id)
+        return { x: _node?.x!, y: _node?.y!, scale: t.scale }
+      })
+    }
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
@@ -639,25 +654,24 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.loadNodeImages()
     //  this.restart()
     this.updateHighlights()
-    this.triggerSelected()
+  }
+
+  get lockedNode() {
+    return this.lockedNodeId ? this.getNodeById(this.lockedNodeId) : null
   }
 
   triggerSelected(triggerFocus: boolean = false) {
-    const selectedNode = this.selectedNode
-    if (selectedNode && this.getNodeById(selectedNode.id)) {
-      this.handleClickNode(this.getNodeById(selectedNode.id), {
+    if (this.selectedNode) {
+      this.handleClickNode(this.selectedNode, {
         noToggle: true,
         triggerFocus,
       })
+    } else if (this.highlights.filter(h => h.isDetached).length > 0) {
+      // if there are detached highlights, we will select the first one
+    } else if (this.lockedNode) {
+      this.handleClickNode(this.lockedNode, { noToggle: true })
     } else {
-      if (this.lockedNodeId) {
-        const lockedNode = this.getNodeById(this.lockedNodeId)
-        if (lockedNode) {
-          this.handleClickNode(lockedNode)
-        }
-      } else {
-        this.setSelectedNode(null)
-      }
+      this.setSelectedNode(null)
     }
   }
 
@@ -856,7 +870,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.prunedData.links.forEach(link => {
       const inSubgraph = isLinkInSubgraph(link)
       const inHighlights = isLinkInHighlights(link)
-      console.log(this.selectedNode, inSubgraph, inHighlights)
       if (inSubgraph || inHighlights) {
         this.renderLayers.links.highlighted.push(link)
       } else {
@@ -1330,6 +1343,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   setHighlights = (highlights: HighlightStyle[]) => {
     this.highlights = highlights
     this.updateHighlights()
+    // this.triggerSelected()
   }
 
   setNoInteraction = (noInteraction: boolean) => {
