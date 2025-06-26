@@ -16,7 +16,7 @@ export class Highlight {
     return {
       id,
       linkTo: id,
-      scale: 6.0,
+      scale: 4.0,
       strokeColor: redred,
       linkColor: redred,
       onTop: true,

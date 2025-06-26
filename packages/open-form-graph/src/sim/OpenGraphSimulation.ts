@@ -539,7 +539,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     // when there is no selectio we focus on the first session node we found
     // TODO: We could calcluate a point between all session nodes to focus the
     // camera on
-    if (!this.selectedNode && focusSessionNode) {
+    if (focusSessionNode) {
       this.transformCanvas.focusOn(() => {
         if (!focusSessionNode) return null
         const t = this.transformCanvas.getTransform()
@@ -810,7 +810,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const isLiquidated =
       node?.status === "LIQUIDATED" || node?.status === "REGENERATED"
     const _size = isLiquidated ? nodeSize * 0.2 : nodeSize
-    return isSelected ? _size * 2 : _size * sizeScale
+    return isSelected ? _size * 4 : _size * sizeScale
   }
 
   private updateRenderLayers() {
