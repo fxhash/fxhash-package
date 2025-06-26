@@ -12,6 +12,17 @@ export class Highlight {
       strokeColor: red,
     }
   }
+  static primary = (id: string): CustomHighlight => {
+    return {
+      id,
+      linkTo: id,
+      scale: 6.0,
+      strokeColor: redred,
+      linkColor: redred,
+      onTop: true,
+      isDetached: true,
+    }
+  }
   static evolved = (id: string): CustomHighlight => {
     return {
       id,
