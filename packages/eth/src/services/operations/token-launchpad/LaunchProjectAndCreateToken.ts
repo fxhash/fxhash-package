@@ -27,6 +27,8 @@ export type TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams = {
   tagIds: bigint[]
   // The amount of FxTokens used to create liquidity
   purchaseAmount: bigint
+  // The public trading time of the coin
+  publicTradingTime: bigint
 }
 
 export class TokenLaunchpadLaunchProjectAndCreateTokenEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams> {
@@ -51,6 +53,7 @@ export class TokenLaunchpadLaunchProjectAndCreateTokenEthOperation extends Ether
         this.params.purchaseAmount,
         this.params.mintFee,
         this.params.contractURI,
+        this.params.publicTradingTime,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
