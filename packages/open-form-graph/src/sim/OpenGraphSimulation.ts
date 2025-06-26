@@ -400,7 +400,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   updateHighlights = () => {
-    this.transformCanvas.resetFocus()
+    //this.transformCanvas.resetFocus()
     // for detached highlights we need to create the session nodes and
     // links accordingly
     const detachedHighlights = this.highlights.filter(h => h.isDetached)
@@ -544,6 +544,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         if (!focusSessionNode) return null
         const t = this.transformCanvas.getTransform()
         const _node = this.getNodeById(focusSessionNode.id)
+        if (!_node) return null
         return { x: _node?.x!, y: _node?.y!, scale: t.scale }
       })
     }
@@ -649,22 +650,21 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     this.loadNodeImages()
     //  this.restart()
     this.updateHighlights()
+    this.triggerSelected(true)
   }
 
   get lockedNode() {
     return this.lockedNodeId ? this.getNodeById(this.lockedNodeId) : null
   }
 
-  triggerSelected(triggerFocus: boolean = false) {
+  triggerSelected = (triggerFocus: boolean = false) => {
     if (this.selectedNode) {
       this.handleClickNode(this.selectedNode, {
         noToggle: true,
         triggerFocus,
       })
-    } else if (this.highlights.filter(h => h.isDetached).length > 0) {
-      // if there are detached highlights, we will select the first one
     } else if (this.lockedNode) {
-      this.handleClickNode(this.lockedNode, { noToggle: true })
+      this.handleClickNode(this.lockedNode, { noToggle: true, triggerFocus })
     } else {
       this.setSelectedNode(null)
     }

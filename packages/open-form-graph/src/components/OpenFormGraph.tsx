@@ -41,8 +41,6 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
   } = useOpenFormGraph()
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  console.log(data)
-
   useEffect(() => {
     if (!canvasRef.current) return
     simulation.current = new OpenGraphSimulation({
