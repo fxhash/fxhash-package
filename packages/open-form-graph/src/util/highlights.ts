@@ -20,6 +20,7 @@ export class Highlight {
       strokeColor: redred,
       linkColor: redred,
       onTop: true,
+      isDetached: true,
     }
   }
   static minted = (id: string): CustomHighlight => {
