@@ -106,12 +106,15 @@ export function eip1193WalletSource({
           () => {
             if (steps++ < 5) return
             // if not reconnecting after 3 steps, move forward
-            if (wagmiConfig.state.status !== "reconnecting") return true
+            if (
+              !["connecting", "reconnecting"].includes(wagmiConfig.state.status)
+            )
+              return true
             return
           },
           {
             delay: 50,
-            maxSteps: 20,
+            maxSteps: 50,
           }
         )
 

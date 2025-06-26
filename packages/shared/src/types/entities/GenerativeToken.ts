@@ -22,6 +22,11 @@ export enum GenTokFlag {
   HIDDEN = "HIDDEN",
 }
 
+export enum GenerativeTokenFormat {
+  LONG_FORM = "LONG_FORM",
+  OPEN_FORM = "OPEN_FORM",
+}
+
 export enum GenTokPricing {
   FIXED = "FIXED",
   DUTCH_AUCTION = "DUTCH_AUCTION",

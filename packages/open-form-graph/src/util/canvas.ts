@@ -156,6 +156,7 @@ export function img(
 ) {
   ctx.save()
   ctx.beginPath()
+  ctx.globalAlpha = 1.0
   if (borderRadius > 0) {
     const r = Math.min(borderRadius, width / 2, height / 2)
     ctx.moveTo(x + r, y)
@@ -171,10 +172,9 @@ export function img(
     ctx.rect(x, y, width, height)
   }
   ctx.closePath()
-  if (bgColor) {
+  if (bgColor && opacity < 1) {
     ctx.save()
     ctx.fillStyle = bgColor
-    ctx.globalAlpha = 1.0
     ctx.fill()
     ctx.restore()
   }

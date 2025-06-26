@@ -28,6 +28,7 @@ interface OpenFormGraphProviderProps {
   data: RawGraphData
   onSelectedNodeChange?: (node: SimNode | null) => void
   onHoveredNodeChange?: (node: SimNode | null) => void
+  lockedNodeId?: string
 }
 
 export interface OpenFormGraphApi {
@@ -44,6 +45,7 @@ export interface OpenFormGraphApi {
   selectedNode: SimNode | null
   hoveredNode: SimNode | null
   setSelectedNodeById: (nodeId: string) => void
+  lockedNodeId?: string
 }
 
 const OpenFormGraphContext = createContext<OpenFormGraphApi>({
@@ -69,6 +71,7 @@ export function OpenFormGraphProvider({
   rootImageSources = [],
   config = DEFAULT_GRAPH_CONFIG,
   data,
+  lockedNodeId,
 }: OpenFormGraphProviderProps) {
   const simulation = useRef<OpenGraphSimulation | null>(null)
   const [selectedNode, _setSelectedNode] = useState<SimNode | null>(null)
@@ -108,6 +111,7 @@ export function OpenFormGraphProvider({
       config,
       data,
       simulation,
+      lockedNodeId,
     }
   }, [
     rootId,
@@ -122,6 +126,7 @@ export function OpenFormGraphProvider({
     config,
     data,
     simulation,
+    lockedNodeId,
   ])
 
   return (

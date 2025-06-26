@@ -4,6 +4,6 @@
     "./tsconfig.compiler.options.json"
   ],
   "compilerOptions": {
-    "target": "ES2017"
+    "target": "ES2022"
   }
 }
