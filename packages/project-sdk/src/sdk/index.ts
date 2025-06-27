@@ -41,7 +41,6 @@ export function createFxhashSdk(window: Window): FxHashApi {
         detail: { isLastFrame: isLastFrame },
       })
     )
-    setTimeout(() => captureFrame(isLastFrame), 500)
   }
   // get the byte params from the URL
   const { params, lineage: _lineage } = parseHashParams(window.location.href)
