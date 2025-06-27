@@ -16,6 +16,20 @@ export function getParents(id: string, links: SimLink[]): string[] {
     )
 }
 
+export function getAllParentsUntil(
+  nodeId: string,
+  links: SimLink[],
+  stopAtId: string
+): string[] {
+  const parent = getParents(nodeId, links)[0]
+
+  if (!parent || parent === stopAtId) {
+    return []
+  }
+
+  return [parent, ...getAllParentsUntil(parent, links, stopAtId)]
+}
+
 export function getChildren(id: string, links: SimLink[]): string[] {
   return links
     .filter(l => {

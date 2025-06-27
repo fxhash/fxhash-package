@@ -14,6 +14,7 @@ export type CustomHighlight = {
   linkColor?: RGB
   scale?: number
   isDetached?: boolean
+  sessionId?: string
   onTop?: boolean
 }
 export type HighlightStyle = CustomHighlight
