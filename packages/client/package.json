@@ -5,20 +5,19 @@
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.3.1",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/core": "workspace:*",
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@tanstack/react-query": "5.69.0",
     "@taquito/beacon-wallet": "20.1.2",
-    "@taquito/taquito": "20.1.2"
+    "@taquito/taquito": "20.1.2",
+    "@fxhash/config": "0.0.9",
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/core": "0.0.1",
+    "@fxhash/eth": "0.0.9",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/tez": "0.0.0",
+    "@fxhash/utils": "0.0.2",
+    "@fxhash/utils-browser": "0.0.0"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@wagmi/connectors": "5.8.5",
@@ -27,7 +26,8 @@
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
     "viem": "2.31.0",
-    "wagmi": "2.15.6"
+    "wagmi": "2.15.6",
+    "@fxhash/tsconfig": "0.0.0"
   },
   "exports": {
     ".": {
@@ -50,9 +50,9 @@
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  },
-  "type": "module"
+  }
 }
