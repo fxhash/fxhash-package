@@ -1,0 +1,16 @@
+{
+  "name": "root",
+  "devDependencies": {
+    "@changesets/cli": "2.26.2",
+    "glob": "11.0.3",
+    "turbo": "1.10.15"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@10.10.0",
+  "private": true,
+  "scripts": {
+    "update-workspace": "node ./update-workspace-versions.mjs",
+    "release": "pnpm turbo run build && pnpm changeset publish",
+    "version": "pnpm changeset version && pnpm install --lockfile-only"
+  }
+}
