@@ -1,5 +1,14 @@
 # @fxhash/client-react
 
+## 0.0.4
+
+### Patch Changes
+
+- 886dff18: release sdk with capture frame fix
+- Updated dependencies [886dff18]
+  - @fxhash/utils-browser@0.0.3
+  - @fxhash/sdk@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fxhash/fxhash-snippet
 
+## 0.0.11
+
+### Patch Changes
+
+- 886dff18: release sdk with capture frame fix
+
 ## 0.0.10
 
 ### Patch Changes

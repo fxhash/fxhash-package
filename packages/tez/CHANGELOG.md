@@ -1,5 +1,16 @@
 # @fxhash/contracts
 
+## 0.0.4
+
+### Patch Changes
+
+- 886dff18: release sdk with capture frame fix
+- Updated dependencies [886dff18]
+  - @fxhash/config@0.0.12
+  - @fxhash/shared@0.0.3
+  - @fxhash/utils@0.0.5
+  - @fxhash/gql@0.0.12
+
 ## 0.0.3
 
 ### Patch Changes

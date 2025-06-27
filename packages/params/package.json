@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/params",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
     "zod": "3.24.3"
