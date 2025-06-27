@@ -17,6 +17,8 @@ export type TTokenLaunchpadLaunchEthOperationParams = {
   purchaseAmount: bigint
   // The metadataUri of the art coin
   contractURI: string
+  // The public trading time
+  publicTradingTime: bigint
 }
 
 export class TokenLaunchpadLaunchEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchEthOperationParams> {
@@ -36,6 +38,7 @@ export class TokenLaunchpadLaunchEthOperation extends EthereumContractOperation<
         this.params.symbol,
         this.params.purchaseAmount,
         this.params.contractURI,
+        this.params.publicTradingTime,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),

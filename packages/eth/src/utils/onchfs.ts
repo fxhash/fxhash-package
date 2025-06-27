@@ -4,9 +4,9 @@ import {
   ONCHFS_FILE_SYSTEM_ABI,
   getConfigForChain,
 } from "../index.js"
-import { Inscription } from "onchfs"
-import { CallData } from "@0xsplits/splits-sdk"
-import { BlockchainType } from "@fxhash/shared"
+import type { Inscription } from "onchfs"
+import type { CallData } from "@0xsplits/splits-sdk"
+import type { BlockchainType } from "@fxhash/shared"
 
 /**
  * Checks if an inode exists by querying the ONCHFS File System contract.

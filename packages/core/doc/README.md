@@ -65,7 +65,6 @@ This package was designed following some key principles:
 fxhash core doc
 
 - index
-
   - intro
     - overview of different modules
     - limitations warning
@@ -74,7 +73,6 @@ fxhash core doc
   - list of other pages
 
 - User sources
-
   - Wallets
   - Accounts
     - How to link multiple wallets to the same account

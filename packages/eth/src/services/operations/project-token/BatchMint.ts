@@ -4,15 +4,7 @@ import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 import { projectTokenAbi } from "@/__generated__/wagmi.js"
 import { zeroAddress } from "viem"
-
-interface ApprovalParams {
-  approval?: {
-    tokenAddress: `0x${string}`
-    spenderAddress: `0x${string}`
-    amount: bigint
-    useSmartAccount: boolean
-  }
-}
+import { ApprovalParams } from "@/types/approval"
 
 export interface TProjectTokenBatchMintEthOperationParams
   extends ApprovalParams {
@@ -26,6 +18,8 @@ export interface TProjectTokenBatchMintEthOperationParams
   mintFeeAmount?: bigint
   // The optional mint fee currency
   mintFeeCurrency?: string
+  // Additional operations to add to the batched transaction
+  additionalOperations?: any[]
 }
 
 export class ProjectTokenBatchMintEthOperation extends EthereumContractOperation<TProjectTokenBatchMintEthOperationParams> {
@@ -50,7 +44,8 @@ export class ProjectTokenBatchMintEthOperation extends EthereumContractOperation
             ? this.params.mintFeeAmount
             : undefined,
       },
-      this.params.approval
+      this.params.approval,
+      this.params.additionalOperations
     )
     return {
       type: TransactionType.ONCHAIN,

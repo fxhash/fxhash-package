@@ -4,8 +4,6 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
-    // FIXME: resolve type errors when removing the following lines
-    "noUnusedParameters": false
+    "outDir": "dist"
   }
 }

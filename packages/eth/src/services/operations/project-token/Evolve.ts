@@ -1,14 +1,15 @@
 import { EthereumContractOperation } from "@/services/operations/contractOperation.js"
 import {
-  simulateAndExecuteContract,
+  simulateAndExecuteContractWithApproval,
   type SimulateAndExecuteContractRequest,
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
 import { projectTokenAbi } from "@/__generated__/wagmi.js"
 import { zeroAddress } from "viem"
+import { ApprovalParams } from "@/types/approval"
 
-export type TProjectTokenEvolveEthOperationParams = {
+export interface TProjectTokenEvolveEthOperationParams extends ApprovalParams {
   // The address of the project token
   projectToken: `0x${string}`
   // The parent id iteration to evolve
@@ -21,6 +22,8 @@ export type TProjectTokenEvolveEthOperationParams = {
   mintFeeAmount?: bigint
   // The optional mint fee currency
   mintFeeCurrency?: string
+  // Additional operations to add to the batched transaction
+  additionalOperations?: any[]
 }
 
 export class ProjectTokenEvolveOperation extends EthereumContractOperation<TProjectTokenEvolveEthOperationParams> {
@@ -43,7 +46,12 @@ export class ProjectTokenEvolveOperation extends EthereumContractOperation<TProj
           ? this.params.mintFeeAmount
           : undefined,
     }
-    const transactionHash = await simulateAndExecuteContract(this.manager, args)
+    const transactionHash = await simulateAndExecuteContractWithApproval(
+      this.manager,
+      args,
+      this.params.approval,
+      this.params.additionalOperations
+    )
     return {
       type: TransactionType.ONCHAIN,
       hash: transactionHash,
