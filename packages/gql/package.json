@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/gql",
   "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
-  "version": "0.0.8",
+  "version": "0.0.11",
   "author": "fxhash",
   "dependencies": {
     "tslib": "2.6.2"
@@ -20,7 +20,7 @@
     "graphql": "16.10.0",
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {

@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth",
-  "version": "0.0.9",
+  "version": "0.0.12",
   "dependencies": {
     "@0xsplits/splits-sdk": "5.1.0",
     "@openzeppelin/merkle-tree": "1.0.5",
@@ -13,13 +13,13 @@
     "dotenv": "16.3.1",
     "ethers": "6.13.4",
     "multiformats": "13.1.0",
+    "onchfs": "0.0.0",
     "path": "0.12.7",
     "viem": "2.31.0",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/shared": "0.0.0",
-    "onchfs": "0.0.0",
-    "@fxhash/gql": "0.0.8"
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/gql": "workspace:*"
   },
   "devDependencies": {
     "@swc/core": "1.5.25",
@@ -34,8 +34,8 @@
     "tsup": "8.4.0",
     "typescript": "5.8.2",
     "vitest": "3.1.1",
-    "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -48,7 +48,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@fxhash/config": "0.0.9"
+    "@fxhash/config": "workspace:*"
   },
   "private": true,
   "type": "module",

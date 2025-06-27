@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/params",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "author": "fxhash",
   "dependencies": {
     "zod": "3.24.3"
@@ -8,8 +8,8 @@
   "devDependencies": {
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
