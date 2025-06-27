@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "dependencies": {
     "@0xsplits/splits-sdk": "5.1.0",
     "@openzeppelin/merkle-tree": "1.0.5",

@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/tsconfig",
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "",
   "dependencies": {
     "@tsconfig/create-react-app": "2.0.5",
@@ -25,4 +25,3 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
-
