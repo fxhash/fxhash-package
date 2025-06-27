@@ -383,6 +383,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   handleMove = (x: number, y: number) => {
+    if (this.transformCanvas.getIsDragging()) return
     const world = this.screenToWorld(x, y)
     // TODO: Implement custom find node?
     const node = this.simulation?.find(world.x, world.y, 10) || null

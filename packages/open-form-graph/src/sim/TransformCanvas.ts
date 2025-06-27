@@ -616,6 +616,9 @@ export class TransformCanvas {
   getFocus(): Readonly<Focus | null> {
     return this.focus ? { ...this.focus } : null
   }
+  getIsDragging(): Readonly<boolean> {
+    return this.isDragging
+  }
   setOffset(offset: Point) {
     this.offset = offset
   }
