@@ -51,7 +51,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.5.2",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",

@@ -12,7 +12,7 @@
     "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
-    "@airgap/beacon-sdk": "4.5.2",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
@@ -36,7 +36,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.5.2",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@taquito/beacon-wallet": "20.1.2",

@@ -4,7 +4,7 @@
   "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
-    "@airgap/beacon-sdk": "4.5.2",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/core": "workspace:*",
     "@fxhash/errors": "workspace:*",
