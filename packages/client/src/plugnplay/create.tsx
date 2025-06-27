@@ -48,6 +48,11 @@ const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
     getDefaultConfig({
       coinbaseWalletPreference: "all",
       chains: supportedEvmChains,
+      batch: {
+        multicall: {
+          wait: 100,
+        },
+      },
       transports: viemSimpleTransports,
       walletConnectProjectId: projectId,
       ssr: true,

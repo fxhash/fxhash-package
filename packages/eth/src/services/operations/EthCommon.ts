@@ -167,15 +167,39 @@ export const onchainConfig: ConfigInfo = {
   defaultMetadataURI: config.apis.ethMetadata,
 }
 
+// Error codes for insufficient allowance
+const INSUFFICIENT_ALLOWANCE_ERROR = "ERC20InsufficientAllowance"
+const INSUFFICIENT_ALLOWANCE_ERROR_CODE = "0xfb8f41b2"
+
 /**
  * `handleContractError`
  * The function `handleContractError` handles contract errors by checking if the error is an instance
  * of `BaseError` and if it is, it checks if it is an instance of `ContractFunctionRevertedError` and
  * throws an error message based on the error name.
  * @param {any} error - The `error` parameter from the simulation of the contract function call.
- * object.
+ * @param {object} options - Optional object that can contain property `ignoreInsufficientAllowance`.
+ * If set to `true`, it will not rethrow if the error is an insufficient allowance error.
+ * @returns a Promise that resolves to a string.
  */
-export async function handleContractError(error: any): Promise<string> {
+export async function handleContractError(
+  error: any,
+  options?: { ignoreInsufficientAllowance?: boolean }
+): Promise<string> {
+  if (options?.ignoreInsufficientAllowance && error instanceof BaseError) {
+    const revertError = error.walk(
+      err => err instanceof ContractFunctionRevertedError
+    )
+    if (revertError instanceof ContractFunctionRevertedError) {
+      const errorName = revertError.data?.errorName ?? revertError.signature
+      if (
+        [INSUFFICIENT_ALLOWANCE_ERROR, INSUFFICIENT_ALLOWANCE_ERROR_CODE].some(
+          e => e === errorName
+        )
+      )
+        return INSUFFICIENT_ALLOWANCE_ERROR // Return without throwing
+    }
+  }
+
   // This can be thrown by the simulateContract function
   if (error instanceof ContractFunctionExecutionError) {
     const isInsufficientFundsError = error.walk(
@@ -261,7 +285,8 @@ export async function simulateAndExecuteContractWithApproval<
 >(
   walletManager: EthereumWalletManager,
   args: SimulateAndExecuteContractRequest<abi, functionName>,
-  approvalArgs?: ApprovalArgs
+  approvalArgs?: ApprovalArgs,
+  additionalOperations?: any[]
 ): Promise<string> {
   if (!approvalArgs) return simulateAndExecuteContract(walletManager, args)
 
@@ -285,26 +310,30 @@ export async function simulateAndExecuteContractWithApproval<
       },
     ]
 
+    if (additionalOperations) {
+      calls.unshift(...additionalOperations)
+    }
+
     // First, simulate each call individually to catch errors early
-    for (const call of calls) {
-      try {
-        await walletManager.publicClient.simulateContract({
-          address: call.to,
-          abi: call.abi,
-          functionName: call.functionName,
-          args: call.args,
-          account,
-          chain: args.chain,
-          value: call.value,
-        } as any)
-      } catch (error) {
-        // TODO: cleanup this horrible mess???
+    // We don't simulate additional operations as they will fail without throwing
+    if (!additionalOperations || additionalOperations.length === 0) {
+      for (const call of calls) {
         try {
-          const errorMessage = await handleContractError(error)
-          throw new Error(errorMessage)
+          await walletManager.publicClient.simulateContract({
+            address: call.to,
+            abi: call.abi,
+            functionName: call.functionName,
+            args: call.args,
+            account,
+            chain: args.chain,
+            value: call.value,
+          } as any)
         } catch (error) {
-          // skip this error - it will happen every time an approval is required
-          if (!error.message.includes("ERC20InsufficientAllowance")) throw error
+          const errorMessage = await handleContractError(error, {
+            ignoreInsufficientAllowance: true,
+          })
+          if (errorMessage === INSUFFICIENT_ALLOWANCE_ERROR) continue
+          throw new Error(errorMessage)
         }
       }
     }
@@ -319,6 +348,10 @@ export async function simulateAndExecuteContractWithApproval<
         functionName: call.functionName,
         args: call.args,
         value: call.value,
+        data: (call as any).data,
+        gas: (call as any).gas,
+        maxFeePerGas: (call as any).maxFeePerGas,
+        maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
       })),
       experimental_fallback: true,
     })
@@ -336,8 +369,8 @@ export async function simulateAndExecuteContractWithApproval<
       }
     }
 
-    // return the hash of the first transaction
-    return status.receipts[0].transactionHash
+    // return the hash of the last transaction, we assume that the last tx will always be the action we index
+    return status.receipts[status.receipts.length - 1].transactionHash
   }
 
   // otherwise, we approve + execute sequentially

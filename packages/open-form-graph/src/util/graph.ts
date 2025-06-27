@@ -16,6 +16,20 @@ export function getParents(id: string, links: SimLink[]): string[] {
     )
 }
 
+export function getAllParentsUntil(
+  nodeId: string,
+  links: SimLink[],
+  stopAtId: string
+): string[] {
+  const parent = getParents(nodeId, links)[0]
+
+  if (!parent || parent === stopAtId) {
+    return []
+  }
+
+  return [parent, ...getAllParentsUntil(parent, links, stopAtId)]
+}
+
 export function getChildren(id: string, links: SimLink[]): string[] {
   return links
     .filter(l => {
@@ -30,6 +44,29 @@ export function getClusterSize(id: string, links: RawLink[]): number {
   return children.reduce((acc, childId) => {
     return acc + getClusterSize(childId, links)
   }, children.length || 0)
+}
+
+export function getNodeDepth(id: string, links: RawLink[]): number {
+  function getDepth(id: string, depth: number): number {
+    const parents = getParents(id, links)
+    if (parents.length === 0) return depth
+    return getDepth(parents[0], depth + 1)
+  }
+  return getDepth(id, 0)
+}
+
+export function getRootParent(
+  id: string,
+  links: RawLink[],
+  stop?: string
+): string | null {
+  let currentId = id
+  while (true) {
+    const parents = getParents(currentId, links)
+    if (stop && parents.includes(stop)) return currentId
+    if (parents.length === 0) return currentId
+    currentId = parents[0]
+  }
 }
 
 export function hasOnlyLeafs(id: string, links: RawLink[]): boolean {

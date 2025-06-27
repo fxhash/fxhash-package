@@ -1,40 +1,51 @@
+import {
+  Transform,
+  Point,
+  TransformListener,
+  MouseListener,
+  Focus,
+} from "./_types"
+
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 10
 const CLICK_THRESHOLD = 5
-
-type Transform = { x: number; y: number; scale: number }
-type Point = { x: number; y: number }
-type TransformListener = (t: Transform) => void
-type MouseListener = (x: number, y: number) => void
-
-type Focus = () => Transform
+const ANIMATION_SPEED = 0.07
+const DRAG_ANIMATION_SPEED = 0.5
+const ANIMATION_THRESHOLD = { x: 0.5, y: 0.5, scale: 0.001 }
+const MOMENTUM_DAMPING = 0.91
+const MIN_VELOCITY = 0.5
 
 export class TransformCanvas {
-  canvas: HTMLCanvasElement
-  transform: Transform = { x: 0, y: 0, scale: 1 }
-  targetTransform: Transform = { x: 0, y: 0, scale: 1 }
-  isAnimating = false
-  animationFrame: number | null = null
+  private canvas: HTMLCanvasElement
+  private transform: Transform = { x: 0, y: 0, scale: 1 }
+  private targetTransform: Transform = { x: 0, y: 0, scale: 1 }
+  private isAnimating = false
+  private animationFrame: number | null = null
+  private focus: Focus | null = null
+  private offset: Point = { x: 0, y: 0 }
 
-  isDragging = false
-  dragStart: Point | null = null
-  moved = false
-  lastMousePos: Point = { x: 0, y: 0 }
-  lastMoveMousePos: Point = { x: 0, y: 0 }
-  zoomFocus: Point = { x: 0, y: 0 }
+  private isDragging = false
+  private dragStart: Point | null = null
+  private hasMoved = false
+  private lastPointerPos: Point = { x: 0, y: 0 }
+  private lastMovePos: Point = { x: 0, y: 0 }
+
+  private velocity: Point = { x: 0, y: 0 }
+  private lastDragTime: number = 0
+  private momentumFrame: number | null = null
+
+  private touchStart: Point | null = null
+  private pinchStartDist: number | null = null
+  private pinchStartScale: number = 1
+
+  private noInteraction: boolean = false
+  private dpr: number = 1
+  private resizeObserver: ResizeObserver | null = null
+  private mediaQueryList: MediaQueryList | null = null
 
   onUpdate?: TransformListener
   onClick?: MouseListener
   onMove?: MouseListener
-
-  noInteraction: boolean = false
-
-  touchStart: Point | null = null
-  lastTouchPos: Point = { x: 0, y: 0 }
-  pinchStartDist: number | null = null
-  pinchStartScale: number = 1
-
-  focus: Focus | null = null
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -42,317 +53,197 @@ export class TransformCanvas {
       onUpdate?: TransformListener
       onClick?: MouseListener
       onMove?: MouseListener
+      offset?: Point
     }
   ) {
     this.canvas = canvas
     this.onUpdate = options?.onUpdate
     this.onClick = options?.onClick
     this.onMove = options?.onMove
+    this.offset = options?.offset || { x: 0, y: 0 }
+    this.dpr = window.devicePixelRatio || 1
 
+    this.bindEventHandlers()
+    this.attachEventListeners()
+    this.setupDPRMonitoring()
+  }
+
+  private bindEventHandlers() {
     this.handleWheel = this.handleWheel.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseUp = this.handleMouseUp.bind(this)
-    this.handleMouseUpCanvas = this.handleMouseUpCanvas.bind(this)
-
-    // Attach events
-    canvas.addEventListener("wheel", this.handleWheel, { passive: false })
-    canvas.addEventListener("mousedown", this.handleMouseDown)
-    window.addEventListener("mousemove", this.handleMouseMove)
-    window.addEventListener("mouseup", this.handleMouseUp)
-    canvas.addEventListener("mouseup", this.handleMouseUpCanvas)
-
+    this.handleCanvasClick = this.handleCanvasClick.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
     this.handleTouchEnd = this.handleTouchEnd.bind(this)
+  }
 
-    canvas.addEventListener("touchstart", this.handleTouchStart, {
+  private attachEventListeners() {
+    this.canvas.addEventListener("wheel", this.handleWheel, { passive: false })
+    this.canvas.addEventListener("mousedown", this.handleMouseDown)
+    this.canvas.addEventListener("click", this.handleCanvasClick)
+    window.addEventListener("mousemove", this.handleMouseMove)
+    window.addEventListener("mouseup", this.handleMouseUp)
+
+    this.canvas.addEventListener("touchstart", this.handleTouchStart, {
       passive: false,
     })
-    canvas.addEventListener("touchmove", this.handleTouchMove, {
+    this.canvas.addEventListener("touchmove", this.handleTouchMove, {
       passive: false,
     })
-    canvas.addEventListener("touchend", this.handleTouchEnd, { passive: false })
-    canvas.addEventListener("touchcancel", this.handleTouchEnd, {
+    this.canvas.addEventListener("touchend", this.handleTouchEnd, {
+      passive: false,
+    })
+    this.canvas.addEventListener("touchcancel", this.handleTouchEnd, {
       passive: false,
     })
   }
 
-  lerp(a: number, b: number, t: number) {
+  private setupDPRMonitoring() {
+    if (typeof ResizeObserver !== "undefined") {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.updateDPR()
+      })
+      this.resizeObserver.observe(this.canvas)
+    }
+
+    const updateDPRFromMediaQuery = () => {
+      this.updateDPR()
+    }
+
+    const dpr = window.devicePixelRatio || 1
+    this.mediaQueryList = window.matchMedia(`(resolution: ${dpr}dppx)`)
+
+    if (this.mediaQueryList.addEventListener) {
+      this.mediaQueryList.addEventListener("change", updateDPRFromMediaQuery)
+    }
+  }
+
+  private updateDPR() {
+    const newDPR = window.devicePixelRatio || 1
+    if (newDPR !== this.dpr) {
+      const oldDPR = this.dpr
+      this.dpr = newDPR
+
+      const scale = newDPR / oldDPR
+      this.transform.x *= scale
+      this.transform.y *= scale
+      this.targetTransform.x *= scale
+      this.targetTransform.y *= scale
+
+      this.onUpdate?.(this.transform)
+
+      if (this.mediaQueryList) {
+        const updateDPRFromMediaQuery = () => {
+          this.updateDPR()
+        }
+
+        if (this.mediaQueryList.removeEventListener) {
+          this.mediaQueryList.removeEventListener(
+            "change",
+            updateDPRFromMediaQuery
+          )
+        }
+        this.mediaQueryList = window.matchMedia(`(resolution: ${newDPR}dppx)`)
+
+        if (this.mediaQueryList.addEventListener) {
+          this.mediaQueryList.addEventListener(
+            "change",
+            updateDPRFromMediaQuery
+          )
+        }
+      }
+    }
+  }
+
+  public toCanvasCoords(clientX: number, clientY: number): Point {
+    const rect = this.canvas.getBoundingClientRect()
+    return {
+      x: (clientX - rect.left) * this.dpr,
+      y: (clientY - rect.top) * this.dpr,
+    }
+  }
+
+  private toCSSCoords(clientX: number, clientY: number): Point {
+    const rect = this.canvas.getBoundingClientRect()
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    }
+  }
+
+  private startMomentum() {
+    if (
+      Math.abs(this.velocity.x) > MIN_VELOCITY ||
+      Math.abs(this.velocity.y) > MIN_VELOCITY
+    ) {
+      if (!this.momentumFrame) {
+        this.momentumFrame = requestAnimationFrame(this.applyMomentum)
+      }
+    }
+  }
+
+  private applyMomentum = () => {
+    this.targetTransform.x += this.velocity.x * this.dpr
+    this.targetTransform.y += this.velocity.y * this.dpr
+
+    this.velocity.x *= MOMENTUM_DAMPING
+    this.velocity.y *= MOMENTUM_DAMPING
+
+    if (
+      Math.abs(this.velocity.x) > MIN_VELOCITY ||
+      Math.abs(this.velocity.y) > MIN_VELOCITY
+    ) {
+      this.startAnimation()
+      this.momentumFrame = requestAnimationFrame(this.applyMomentum)
+    } else {
+      this.velocity = { x: 0, y: 0 }
+      this.momentumFrame = null
+    }
+  }
+
+  private lerp(a: number, b: number, t: number): number {
     return a + (b - a) * t
   }
 
-  animateTransform = () => {
-    const speed = 0.05
-    const prev = this.transform
+  private animateTransform = () => {
     const target = this.focus?.() || this.targetTransform
+    const prev = this.transform
+
+    const animationSpeed = this.isDragging
+      ? DRAG_ANIMATION_SPEED
+      : ANIMATION_SPEED
 
     const next: Transform = {
-      x: this.lerp(prev.x, target.x, speed),
-      y: this.lerp(prev.y, target.y, speed),
-      scale: this.lerp(prev.scale, target.scale, speed),
+      x: this.lerp(prev.x, target.x, animationSpeed / this.dpr),
+      y: this.lerp(prev.y, target.y, animationSpeed / this.dpr),
+      scale: this.lerp(prev.scale, target.scale, animationSpeed / this.dpr),
     }
 
     const done =
-      Math.abs(next.x - target.x) < 0.5 &&
-      Math.abs(next.y - target.y) < 0.5 &&
-      Math.abs(next.scale - target.scale) < 0.001
+      Math.abs(next.x - target.x) < ANIMATION_THRESHOLD.x &&
+      Math.abs(next.y - target.y) < ANIMATION_THRESHOLD.y &&
+      Math.abs(next.scale - target.scale) < ANIMATION_THRESHOLD.scale
 
     if (done) {
       this.transform = { ...target }
-      this.isAnimating = false
-      this.focus = null
+      this.stopAnimation()
     } else {
       this.transform = next
-      this.isAnimating = true
-    }
-
-    this.onUpdate?.(this.transform)
-
-    if (this.isAnimating) {
-      this.animationFrame = requestAnimationFrame(this.animateTransform)
-    } else {
-      if (this.animationFrame) {
-        cancelAnimationFrame(this.animationFrame)
-        this.animationFrame = null
-      }
-    }
-  }
-
-  handleWheel(e: WheelEvent) {
-    if (this.noInteraction) return
-    if (this.isAnimating) {
-      this.isAnimating = false
-      this.focus = null
-      if (this.animationFrame) {
-        cancelAnimationFrame(this.animationFrame)
-        this.animationFrame = null
-      }
-    }
-    e.preventDefault()
-    const rect = this.canvas.getBoundingClientRect()
-    const mouseX = e.clientX - rect.left
-    const mouseY = e.clientY - rect.top
-    this.zoomFocus = { x: mouseX, y: mouseY }
-
-    const scaleFactor = e.deltaY > 0 ? 0.95 : 1.05
-    const newScale = Math.max(
-      MIN_ZOOM,
-      Math.min(MAX_ZOOM, this.targetTransform.scale * scaleFactor)
-    )
-
-    const { x, y, scale } = this.transform
-    const dx = mouseX - x
-    const dy = mouseY - y
-    const scaleChange = newScale / scale
-
-    const newX = mouseX - dx * scaleChange
-    const newY = mouseY - dy * scaleChange
-
-    this.targetTransform = { x: newX, y: newY, scale: newScale }
-
-    if (!this.isAnimating) {
-      this.isAnimating = true
-      this.animationFrame = requestAnimationFrame(this.animateTransform)
-    }
-  }
-
-  handleMouseDown(e: MouseEvent) {
-    if (this.noInteraction) return
-    if (this.isAnimating) {
-      this.isAnimating = false
-      this.focus = null
-      if (this.animationFrame) {
-        cancelAnimationFrame(this.animationFrame)
-        this.animationFrame = null
-      }
-    }
-    this.isDragging = true
-    this.moved = false
-    this.dragStart = { x: e.clientX, y: e.clientY }
-    this.lastMousePos = { x: e.clientX, y: e.clientY }
-  }
-
-  handleMouseMove(e: MouseEvent) {
-    if (this.noInteraction) return
-    const rect = this.canvas.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    this.lastMoveMousePos = { x: e.clientX, y: e.clientY }
-    this.onMove?.(x, y)
-
-    if (!this.isDragging || !this.dragStart) return
-
-    const dx = e.clientX - this.dragStart.x
-    const dy = e.clientY - this.dragStart.y
-
-    if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
-      this.moved = true
-
-      const deltaX = e.clientX - this.lastMousePos.x
-      const deltaY = e.clientY - this.lastMousePos.y
-
-      this.transform.x += deltaX
-      this.transform.y += deltaY
-      this.targetTransform.x += deltaX
-      this.targetTransform.y += deltaY
-
-      this.lastMousePos = { x: e.clientX, y: e.clientY }
-
       this.onUpdate?.(this.transform)
+      this.animationFrame = requestAnimationFrame(this.animateTransform)
     }
   }
 
-  handleMouseUpCanvas(e: MouseEvent) {
-    if (this.noInteraction) return
-    if (!this.moved && this.onClick) {
-      const rect = this.canvas.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      this.onClick(x, y)
-    }
-  }
-
-  handleMouseUp(e: MouseEvent) {
-    this.isDragging = false
-    this.dragStart = null
-    this.moved = false
-  }
-
-  handleTouchStart(e: TouchEvent) {
-    if (this.noInteraction) return
-    if (this.isAnimating) {
-      this.isAnimating = false
-      this.focus = null
-      if (this.animationFrame) {
-        cancelAnimationFrame(this.animationFrame)
-        this.animationFrame = null
-      }
-    }
-    if (e.touches.length === 1) {
-      const rect = this.canvas.getBoundingClientRect()
-      const touch = e.touches[0]
-      this.isDragging = true
-      this.moved = false
-      this.touchStart = { x: touch.clientX, y: touch.clientY }
-      this.lastTouchPos = { x: touch.clientX, y: touch.clientY }
-      this.lastMoveMousePos = { x: touch.clientX, y: touch.clientY }
-    } else if (e.touches.length === 2) {
-      this.isDragging = false
-      const [t1, t2] = [e.touches[0], e.touches[1]]
-      this.pinchStartDist = Math.hypot(
-        t2.clientX - t1.clientX,
-        t2.clientY - t1.clientY
-      )
-      this.pinchStartScale = this.targetTransform.scale
-      const rect = this.canvas.getBoundingClientRect()
-      this.zoomFocus = {
-        x: (t1.clientX + t2.clientX) / 2 - rect.left,
-        y: (t1.clientY + t2.clientY) / 2 - rect.top,
-      }
-    }
-  }
-
-  handleTouchMove(e: TouchEvent) {
-    if (this.noInteraction) return
-    e.preventDefault()
-    const rect = this.canvas.getBoundingClientRect()
-    if (e.touches.length === 1 && this.touchStart) {
-      const touch = e.touches[0]
-      const dx = touch.clientX - this.touchStart.x
-      const dy = touch.clientY - this.touchStart.y
-
-      if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
-        this.moved = true
-
-        const deltaX = touch.clientX - this.lastTouchPos.x
-        const deltaY = touch.clientY - this.lastTouchPos.y
-
-        this.transform.x += deltaX
-        this.transform.y += deltaY
-        this.targetTransform.x += deltaX
-        this.targetTransform.y += deltaY
-
-        this.lastTouchPos = { x: touch.clientX, y: touch.clientY }
-        this.lastMoveMousePos = { x: touch.clientX, y: touch.clientY }
-        this.onUpdate?.(this.transform)
-        this.onMove?.(touch.clientX - rect.left, touch.clientY - rect.top)
-      }
-    } else if (e.touches.length === 2 && this.pinchStartDist != null) {
-      const [t1, t2] = [e.touches[0], e.touches[1]]
-      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
-      let scale = (dist / this.pinchStartDist) * this.pinchStartScale
-      scale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, scale))
-
-      const { x, y, scale: prevScale } = this.transform
-      const dx = this.zoomFocus.x - x
-      const dy = this.zoomFocus.y - y
-      const scaleChange = scale / prevScale
-      const newX = this.zoomFocus.x - dx * scaleChange
-      const newY = this.zoomFocus.y - dy * scaleChange
-
-      this.targetTransform = { x: newX, y: newY, scale }
-      if (!this.isAnimating) {
-        this.isAnimating = true
-        this.animationFrame = requestAnimationFrame(this.animateTransform)
-      }
-    }
-  }
-
-  handleTouchEnd(e: TouchEvent) {
-    if (this.noInteraction) return
-    if (e.touches.length === 0) {
-      if (this.isDragging && !this.moved && this.onClick && this.touchStart) {
-        const rect = this.canvas.getBoundingClientRect()
-        this.onClick(
-          this.touchStart.x - rect.left,
-          this.touchStart.y - rect.top
-        )
-      }
-      this.isDragging = false
-      this.touchStart = null
-      this.moved = false
-      this.pinchStartDist = null
-    } else if (e.touches.length === 1) {
-      const touch = e.touches[0]
-      this.isDragging = true
-      this.touchStart = { x: touch.clientX, y: touch.clientY }
-      this.lastTouchPos = { x: touch.clientX, y: touch.clientY }
-      this.pinchStartDist = null
-    }
-  }
-
-  resetZoom() {
-    this.transform = { x: 0, y: 0, scale: 1 }
-    this.targetTransform = { x: 0, y: 0, scale: 1 }
-    this.onUpdate?.(this.transform)
-  }
-
-  transformTo(update: Partial<Transform>) {
-    this.targetTransform = { ...this.transform, ...update }
+  private startAnimation() {
     if (!this.isAnimating) {
       this.isAnimating = true
       this.animationFrame = requestAnimationFrame(this.animateTransform)
     }
   }
 
-  trackCursor() {
-    const rect = this.canvas.getBoundingClientRect()
-    const x = this.lastMoveMousePos.x - rect.left
-    const y = this.lastMoveMousePos.y - rect.top
-    this.onMove?.(x, y)
-  }
-
-  destroy() {
-    this.canvas.removeEventListener("wheel", this.handleWheel)
-    this.canvas.removeEventListener("mousedown", this.handleMouseDown)
-    this.canvas.removeEventListener("touchstart", this.handleTouchStart)
-    this.canvas.removeEventListener("touchmove", this.handleTouchMove)
-    this.canvas.removeEventListener("touchend", this.handleTouchEnd)
-    this.canvas.removeEventListener("touchcancel", this.handleTouchEnd)
-    this.canvas.removeEventListener("mouseup", this.handleMouseUpCanvas)
-    window.removeEventListener("mousemove", this.handleMouseMove)
-    window.removeEventListener("mouseup", this.handleMouseUp)
+  private stopAnimation() {
     this.isAnimating = false
     this.focus = null
     if (this.animationFrame) {
@@ -361,11 +252,371 @@ export class TransformCanvas {
     }
   }
 
-  setNoInteraction = (noInteraction: boolean) => {
-    this.noInteraction = noInteraction
+  private interruptAnimation() {
+    this.targetTransform = { ...this.transform }
+    if (this.isAnimating) {
+      this.stopAnimation()
+    }
+    if (this.momentumFrame) {
+      cancelAnimationFrame(this.momentumFrame)
+      this.momentumFrame = null
+      this.velocity = { x: 0, y: 0 }
+    }
   }
 
-  focusOn = (focus: Focus | null) => {
+  private handleWheel(e: WheelEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (this.noInteraction) return
+
+    if (this.momentumFrame) {
+      cancelAnimationFrame(this.momentumFrame)
+      this.momentumFrame = null
+      this.velocity = { x: 0, y: 0 }
+    }
+
+    if (this.focus) {
+      this.interruptAnimation()
+      this.focus = null
+    }
+
+    const canvasCoords = this.toCanvasCoords(e.clientX, e.clientY)
+    const scaleFactor = e.deltaY > 0 ? 0.95 : 1.05
+
+    const newScale = Math.max(
+      MIN_ZOOM,
+      Math.min(MAX_ZOOM, this.targetTransform.scale * scaleFactor)
+    )
+
+    const { x: currentX, y: currentY, scale: currentScale } = this.transform
+
+    const worldX =
+      (canvasCoords.x - currentX - this.offset.x * currentScale) / currentScale
+    const worldY =
+      (canvasCoords.y - currentY - this.offset.y * currentScale) / currentScale
+
+    const newX = canvasCoords.x - worldX * newScale - this.offset.x * newScale
+    const newY = canvasCoords.y - worldY * newScale - this.offset.y * newScale
+
+    this.targetTransform = {
+      x: newX,
+      y: newY,
+      scale: newScale,
+    }
+
+    this.startAnimation()
+  }
+
+  private handleMouseDown(e: MouseEvent) {
+    if (this.noInteraction) return
+
+    this.interruptAnimation()
+    this.isDragging = true
+    this.hasMoved = false
+    this.dragStart = { x: e.clientX, y: e.clientY }
+    this.lastPointerPos = { x: e.clientX, y: e.clientY }
+  }
+
+  private handleMouseMove(e: MouseEvent) {
+    if (this.noInteraction) return
+
+    this.lastMovePos = { x: e.clientX, y: e.clientY }
+
+    const cssCoords = this.toCSSCoords(e.clientX, e.clientY)
+    this.onMove?.(cssCoords.x, cssCoords.y)
+
+    if (!this.isDragging || !this.dragStart) return
+
+    const dx = e.clientX - this.dragStart.x
+    const dy = e.clientY - this.dragStart.y
+
+    if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
+      this.hasMoved = true
+
+      const deltaX = (e.clientX - this.lastPointerPos.x) * this.dpr
+      const deltaY = (e.clientY - this.lastPointerPos.y) * this.dpr
+
+      this.targetTransform.x += deltaX
+      this.targetTransform.y += deltaY
+
+      const now = Date.now()
+      const dt = now - this.lastDragTime
+      if (dt > 0 && dt < 100) {
+        this.velocity.x = (deltaX / dt) * 16
+        this.velocity.y = (deltaY / dt) * 16
+      }
+
+      this.lastPointerPos = { x: e.clientX, y: e.clientY }
+      this.lastDragTime = now
+
+      this.startAnimation()
+    }
+  }
+
+  private handleMouseUp(e: MouseEvent) {
+    if (this.isDragging && this.hasMoved) {
+      this.startMomentum()
+    }
+    this.isDragging = false
+    this.dragStart = null
+  }
+
+  private handleCanvasClick(e: MouseEvent) {
+    if (this.noInteraction || this.hasMoved) return
+
+    const cssCoords = this.toCSSCoords(e.clientX, e.clientY)
+    this.onClick?.(cssCoords.x, cssCoords.y)
+  }
+
+  private handleTouchStart(e: TouchEvent) {
+    if (this.noInteraction) return
+    e.preventDefault()
+
+    this.interruptAnimation()
+
+    if (e.touches.length === 1) {
+      const touch = e.touches[0]
+      this.isDragging = true
+      this.hasMoved = false
+      this.touchStart = { x: touch.clientX, y: touch.clientY }
+      this.lastPointerPos = { x: touch.clientX, y: touch.clientY }
+      this.lastMovePos = { x: touch.clientX, y: touch.clientY }
+    } else if (e.touches.length === 2) {
+      this.isDragging = false
+      const [t1, t2] = Array.from(e.touches)
+      this.pinchStartDist = Math.hypot(
+        t2.clientX - t1.clientX,
+        t2.clientY - t1.clientY
+      )
+      this.pinchStartScale = this.targetTransform.scale
+    }
+  }
+
+  private handleTouchMove(e: TouchEvent) {
+    if (this.noInteraction) return
+    e.preventDefault()
+
+    if (e.touches.length === 1 && this.isDragging && this.touchStart) {
+      const touch = e.touches[0]
+      const dx = touch.clientX - this.touchStart.x
+      const dy = touch.clientY - this.touchStart.y
+
+      if (Math.abs(dx) > CLICK_THRESHOLD || Math.abs(dy) > CLICK_THRESHOLD) {
+        this.hasMoved = true
+
+        const deltaX = touch.clientX - this.lastPointerPos.x
+        const deltaY = touch.clientY - this.lastPointerPos.y
+
+        this.targetTransform.x += deltaX * this.dpr
+        this.targetTransform.y += deltaY * this.dpr
+
+        const now = Date.now()
+        const dt = now - this.lastDragTime
+        if (dt > 0 && dt < 100) {
+          this.velocity.x = (deltaX / dt) * 16
+          this.velocity.y = (deltaY / dt) * 16
+        }
+
+        this.lastPointerPos = { x: touch.clientX, y: touch.clientY }
+        this.lastMovePos = { x: touch.clientX, y: touch.clientY }
+        this.lastDragTime = now
+
+        this.startAnimation()
+
+        const cssCoords = this.toCSSCoords(touch.clientX, touch.clientY)
+        this.onMove?.(cssCoords.x, cssCoords.y)
+      }
+    } else if (e.touches.length === 2 && this.pinchStartDist != null) {
+      if (this.momentumFrame) {
+        cancelAnimationFrame(this.momentumFrame)
+        this.momentumFrame = null
+        this.velocity = { x: 0, y: 0 }
+      }
+
+      const [t1, t2] = Array.from(e.touches)
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
+
+      let newScale = (dist / this.pinchStartDist) * this.pinchStartScale
+      newScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newScale))
+
+      const centerX = (t1.clientX + t2.clientX) / 2
+      const centerY = (t1.clientY + t2.clientY) / 2
+      const canvasCenter = this.toCanvasCoords(centerX, centerY)
+
+      const { x: currentX, y: currentY, scale: currentScale } = this.transform
+
+      const worldX =
+        (canvasCenter.x - currentX - this.offset.x * currentScale) /
+        currentScale
+      const worldY =
+        (canvasCenter.y - currentY - this.offset.y * currentScale) /
+        currentScale
+
+      const newX = canvasCenter.x - worldX * newScale - this.offset.x * newScale
+      const newY = canvasCenter.y - worldY * newScale - this.offset.y * newScale
+
+      this.targetTransform = {
+        x: newX,
+        y: newY,
+        scale: newScale,
+      }
+
+      this.startAnimation()
+    }
+  }
+
+  private handleTouchEnd(e: TouchEvent) {
+    if (this.noInteraction) return
+
+    if (e.touches.length === 0) {
+      if (this.isDragging && this.hasMoved) {
+        this.startMomentum()
+      } else if (
+        this.isDragging &&
+        !this.hasMoved &&
+        this.onClick &&
+        this.touchStart
+      ) {
+        const cssCoords = this.toCSSCoords(this.touchStart.x, this.touchStart.y)
+        this.onClick(cssCoords.x, cssCoords.y)
+      }
+
+      this.isDragging = false
+      this.touchStart = null
+      this.hasMoved = false
+      this.pinchStartDist = null
+    } else if (e.touches.length === 1) {
+      const touch = e.touches[0]
+      this.isDragging = true
+      this.hasMoved = false
+      this.touchStart = { x: touch.clientX, y: touch.clientY }
+      this.lastPointerPos = { x: touch.clientX, y: touch.clientY }
+      this.pinchStartDist = null
+      this.velocity = { x: 0, y: 0 }
+      this.lastDragTime = Date.now()
+    }
+  }
+
+  resetZoom() {
+    this.targetTransform = { x: 0, y: 0, scale: 1 }
+    this.startAnimation()
+  }
+
+  transformTo(update: Partial<Transform>) {
+    this.targetTransform = { ...this.targetTransform, ...update }
+    this.startAnimation()
+  }
+
+  public getTransformationFromWorld(
+    worldX: number,
+    worldY: number,
+    newScale?: number
+  ) {
+    const scale = newScale ?? this.transform.scale
+
+    const x =
+      this.canvas.width / 2 +
+      this.offset.x * this.dpr -
+      worldX * scale -
+      (this.canvas.width / 2 + this.offset.x * this.dpr) * scale
+    const y =
+      this.canvas.height / 2 +
+      this.offset.y * this.dpr -
+      worldY * scale -
+      (this.canvas.height / 2 + this.offset.y * this.dpr) * scale
+
+    return { x, y, scale }
+  }
+
+  public transformToWorld(worldX: number, worldY: number, newScale?: number) {
+    const transform = this.getTransformationFromWorld(worldX, worldY, newScale)
+    this.transformTo(transform)
+  }
+
+  trackCursor() {
+    const cssCoords = this.toCSSCoords(this.lastMovePos.x, this.lastMovePos.y)
+    this.onMove?.(cssCoords.x, cssCoords.y)
+  }
+
+  setNoInteraction(noInteraction: boolean) {
+    this.noInteraction = noInteraction
+    if (noInteraction) {
+      this.isDragging = false
+      this.dragStart = null
+    }
+  }
+
+  focusOn(focus: Focus | null) {
     this.focus = focus
+    if (focus) {
+      const _focus = focus
+      this.focus = () => {
+        const worldFocus = _focus()
+        if (!worldFocus) return null
+        const transform = this.getTransformationFromWorld(
+          worldFocus.x,
+          worldFocus.y,
+          worldFocus.scale
+        )
+        return transform
+      }
+      this.startAnimation()
+    }
+  }
+
+  resetFocus() {
+    this.focus = null
+  }
+
+  destroy() {
+    this.stopAnimation()
+
+    if (this.momentumFrame) {
+      cancelAnimationFrame(this.momentumFrame)
+      this.momentumFrame = null
+    }
+
+    this.canvas.removeEventListener("wheel", this.handleWheel)
+    this.canvas.removeEventListener("mousedown", this.handleMouseDown)
+    this.canvas.removeEventListener("click", this.handleCanvasClick)
+    this.canvas.removeEventListener("touchstart", this.handleTouchStart)
+    this.canvas.removeEventListener("touchmove", this.handleTouchMove)
+    this.canvas.removeEventListener("touchend", this.handleTouchEnd)
+    this.canvas.removeEventListener("touchcancel", this.handleTouchEnd)
+    window.removeEventListener("mousemove", this.handleMouseMove)
+    window.removeEventListener("mouseup", this.handleMouseUp)
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+      this.resizeObserver = null
+    }
+
+    if (this.mediaQueryList) {
+      const updateDPRFromMediaQuery = () => {
+        this.updateDPR()
+      }
+
+      if (this.mediaQueryList.removeEventListener) {
+        this.mediaQueryList.removeEventListener(
+          "change",
+          updateDPRFromMediaQuery
+        )
+      }
+      this.mediaQueryList = null
+    }
+  }
+
+  getTransform(): Readonly<Transform> {
+    return { ...this.transform }
+  }
+
+  getTargetTransform(): Readonly<Transform> {
+    return { ...this.targetTransform }
+  }
+  getFocus(): Readonly<Focus | null> {
+    return this.focus ? { ...this.focus } : null
+  }
+  setOffset(offset: Point) {
+    this.offset = offset
   }
 }

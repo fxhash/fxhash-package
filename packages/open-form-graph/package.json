@@ -9,11 +9,9 @@
     "d3-scale-chromatic": "3.1.0",
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
-    "three": "0.176.0",
-    "three-spritetext": "1.9.6"
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/d3-force": "3.0.10",
     "@types/d3-scale": "4.0.9",
     "@types/d3-scale-chromatic": "3.1.0",
@@ -22,9 +20,9 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@types/three": "0.176.0",
-    "esbuild-css-modules-plugin": "2.7.1",
     "tsdown": "0.12.2",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -52,10 +50,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "sideEffects": false,
+  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  },
-  "sideEffects": false,
-  "type": "module"
+  }
 }

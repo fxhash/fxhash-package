@@ -2,11 +2,7 @@
   "name": "@fxhash/eth",
   "version": "0.0.12",
   "dependencies": {
-    "@0xsplits/splits-sdk": "4.0.3",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/utils": "workspace:*",
+    "@0xsplits/splits-sdk": "5.1.0",
     "@openzeppelin/merkle-tree": "1.0.5",
     "@reservoir0x/reservoir-sdk": "1.9.0",
     "@safe-global/api-kit": "2.1.0",
@@ -19,11 +15,13 @@
     "multiformats": "13.1.0",
     "onchfs": "0.0.0",
     "path": "0.12.7",
-    "viem": "2.31.0"
+    "viem": "2.31.0",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/gql": "workspace:*"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@swc/core": "1.5.25",
     "@types/dotenv": "8.2.0",
     "@types/react": "18.3.12",
@@ -35,7 +33,9 @@
     "tslib": "2.6.2",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.1.1"
+    "vitest": "3.1.1",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -51,12 +51,12 @@
     "@fxhash/config": "workspace:*"
   },
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist",
     "codegen": "wagmi generate",
     "dev": "tsup --watch",
     "test": "vitest"
-  },
-  "type": "module"
+  }
 }

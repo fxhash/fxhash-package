@@ -1,9 +1,8 @@
-import { defineConfig, Options } from "tsup"
+import { defineConfig, type Options } from "tsdown"
 
 export default defineConfig((options: Options) => ({
   entry: ["src/index.ts"],
   outDir: "dist",
-  format: "esm",
   jsx: "react",
   sourcemap: true,
   clean: !options.watch,

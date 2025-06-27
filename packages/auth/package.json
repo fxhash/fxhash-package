@@ -9,15 +9,14 @@
     "jsonwebtoken": "9.0.0"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@types/cookie": "0.5.1",
     "@types/express": "4.17.17",
     "@types/jsonwebtoken": "9.0.4",
     "@types/node": "18.7.13",
-    "tslib": "2.6.2",
-    "tsup": "8.4.0",
-    "typescript": "5.8.2"
+    "tsdown": "0.12.2",
+    "typescript": "5.8.2",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -31,9 +30,10 @@
   "license": "MIT",
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "sideEffects": false,
+  "type": "module",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "type": "module"
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
+  }
 }

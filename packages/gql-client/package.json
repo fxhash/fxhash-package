@@ -3,16 +3,16 @@
   "version": "0.0.2",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
-    "graphql": "16.10.0"
+    "graphql": "16.10.0",
+    "@fxhash/config": "workspace:*"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "20.11.30",
     "tsdown": "0.12.2",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -28,10 +28,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "sideEffects": false,
+  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  },
-  "sideEffects": false,
-  "type": "module"
+  }
 }

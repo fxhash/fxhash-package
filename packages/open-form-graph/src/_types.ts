@@ -6,6 +6,8 @@ export type RawNode = {
   id: string
   label?: string
   imgSrc?: string
+  status?: string
+  signed?: boolean
 }
 
 export type NestedRawNode<N extends RawNode> = {
@@ -41,11 +43,13 @@ export type ColorTransform = (rgb: RGB) => RGB
 export type NodeState = {
   collapsed?: boolean
   image?: HTMLImageElement
+  sessionNode?: boolean
 }
 
 export type SimNode = {
   state?: NodeState
   clusterSize?: number
+  depth?: number
 } & RawNode &
   SimulationNodeDatum
 

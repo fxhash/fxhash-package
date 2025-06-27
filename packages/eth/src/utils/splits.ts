@@ -1,7 +1,10 @@
 import { getCurrentChain } from "@/services/Wallet.js"
-import { ReceiverEntry, prepareReceivers } from "@/services/operations/index.js"
-import { Split, SplitsClient } from "@0xsplits/splits-sdk"
-import { BlockchainType } from "@fxhash/shared"
+import {
+  type ReceiverEntry,
+  prepareReceivers,
+} from "@/services/operations/index.js"
+import type { Split, SplitsClient } from "@0xsplits/splits-sdk"
+import type { BlockchainType } from "@fxhash/shared"
 
 function sortAndNormalizeReceivers(
   chain: BlockchainType,

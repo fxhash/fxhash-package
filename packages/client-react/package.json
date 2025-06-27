@@ -8,10 +8,6 @@
     "input-otp": "1.2.4"
   },
   "devDependencies": {
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/sdk": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@wagmi/connectors": "5.8.5",
@@ -19,7 +15,11 @@
     "esbuild-css-modules-plugin": "2.7.1",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "viem": "2.31.0"
+    "viem": "2.31.0",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
+    "@fxhash/sdk": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@fxhash/sdk": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@react-oauth/google": "0.12.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-otp-input": "3.1.1",
-    "solid-js": "^1.9.3"
+    "solid-js": "^1.9.3",
+    "@fxhash/sdk": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  },
-  "type": "module"
+  }
 }

@@ -6,24 +6,20 @@
   "dependencies": {
     "@fxhash/client": "workspace:*",
     "@fxhash/config": "workspace:*",
-    "@fxhash/core": "workspace:*",
     "@fxhash/errors": "workspace:*",
     "@fxhash/eth": "workspace:*",
+    "@fxhash/core": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
+    "@fxhash/tez": "workspace:*",
     "@fxhash/params": "workspace:*",
     "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
-    "@types/eslint": "8.44.0",
-    "eslint": "8.57.0",
-    "tsup": "8.4.0",
+    "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "unplugin-isolated-decl": "0.13.6"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -37,9 +33,9 @@
   "license": "MIT",
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
-    "build": "tsup && tsc --noEmit",
-    "dev": "tsup --watch"
-  },
-  "type": "module"
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
+  }
 }
