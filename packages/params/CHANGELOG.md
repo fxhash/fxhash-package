@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- 0b2f1e9d: Release capture frame update
+
+## 0.0.13
+
+### Patch Changes
+
 - 886dff18: release sdk with capture frame fix
 
 ## 0.0.12

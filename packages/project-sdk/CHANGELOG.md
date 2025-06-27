@@ -4,6 +4,15 @@
 
 ### Patch Changes
 
+- 0b2f1e9d: Release capture frame update
+- Updated dependencies [0b2f1e9d]
+  - @fxhash/params@0.0.13
+  - @fxhash/utils@0.0.5
+
+## 0.0.16
+
+### Patch Changes
+
 - 886dff18: release sdk with capture frame fix
 - Updated dependencies [886dff18]
   - @fxhash/params@0.0.13

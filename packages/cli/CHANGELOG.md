@@ -4,6 +4,18 @@
 
 ### Patch Changes
 
+- 0b2f1e9d: Release capture frame update
+- Updated dependencies [0b2f1e9d]
+  - @fxhash/project-sdk@0.0.16
+  - @fxhash/gql-client@0.0.3
+  - @fxhash/snippet@0.0.11
+  - @fxhash/config@0.0.12
+  - @fxhash/gql@0.0.12
+
+## 0.0.21
+
+### Patch Changes
+
 - 886dff18: release sdk with capture frame fix
 - Updated dependencies [886dff18]
   - @fxhash/project-sdk@0.0.16

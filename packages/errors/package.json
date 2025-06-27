@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/errors",
   "description": "Application-wide errors which are exposed and used by different parts of our stack.",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": "fxhash",
   "dependencies": {
     "@urql/core": "4.1.4",
