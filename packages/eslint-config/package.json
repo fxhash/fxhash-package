@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eslint-config",
-  "version": "1.0.5",
+  "version": "1.0.4",
   "author": "fxhash",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "8.22.0",
@@ -13,3 +13,4 @@
     "access": "public"
   }
 }
+
