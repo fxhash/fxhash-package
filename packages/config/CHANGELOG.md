@@ -1,5 +1,14 @@
 # @fxhash/config
 
+## 0.0.12
+
+### Patch Changes
+
+- 886dff18: release sdk with capture frame fix
+- Updated dependencies [886dff18]
+  - @fxhash/errors@0.0.12
+  - @fxhash/utils@0.0.5
+
 ## 0.0.11
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fxhash/prettier-config
 
+## 1.0.5
+
+### Patch Changes
+
+- 886dff18: release sdk with capture frame fix
+
 ## 1.0.4
 
 ### Patch Changes
