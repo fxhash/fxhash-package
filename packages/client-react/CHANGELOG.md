@@ -4,6 +4,15 @@
 
 ### Patch Changes
 
+- 616d6020: release frame capture
+- Updated dependencies [616d6020]
+  - @fxhash/utils-browser@0.0.3
+  - @fxhash/sdk@0.0.4
+
+## 0.0.4
+
+### Patch Changes
+
 - 0b2f1e9d: Release capture frame update
 - Updated dependencies [0b2f1e9d]
   - @fxhash/utils-browser@0.0.3

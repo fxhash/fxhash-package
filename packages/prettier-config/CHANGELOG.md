@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- 616d6020: release frame capture
+
+## 1.0.5
+
+### Patch Changes
+
 - 0b2f1e9d: Release capture frame update
 
 ## 1.0.5
