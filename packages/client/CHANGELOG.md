@@ -4,6 +4,21 @@
 
 ### Patch Changes
 
+- 616d6020: release frame capture
+- Updated dependencies [616d6020]
+  - @fxhash/utils-browser@0.0.3
+  - @fxhash/config@0.0.12
+  - @fxhash/errors@0.0.12
+  - @fxhash/shared@0.0.3
+  - @fxhash/utils@0.0.5
+  - @fxhash/core@0.0.5
+  - @fxhash/eth@0.0.13
+  - @fxhash/tez@0.0.4
+
+## 0.0.4
+
+### Patch Changes
+
 - 0b2f1e9d: Release capture frame update
 - Updated dependencies [0b2f1e9d]
   - @fxhash/utils-browser@0.0.3

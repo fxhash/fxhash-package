@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- 616d6020: release frame capture
+- Updated dependencies [616d6020]
+  - @fxhash/cli@0.0.21
+
+## 0.0.15
+
+### Patch Changes
+
 - 0b2f1e9d: Release capture frame update
 - Updated dependencies [0b2f1e9d]
   - @fxhash/cli@0.0.21

@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/sdk",
   "description": "Bundle of all the fxhash low & medium level packages exported as one.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/client": "workspace:*",
