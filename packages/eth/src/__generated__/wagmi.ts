@@ -904,6 +904,7 @@ export const projectFactoryAbi = [
       { name: "_admin", internalType: "address", type: "address" },
       { name: "_renderer", internalType: "address", type: "address" },
       { name: "_tokenLaunchpad", internalType: "address", type: "address" },
+      { name: "_versionManager", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
@@ -967,6 +968,7 @@ export const projectFactoryAbi = [
       { name: "_fxAmount", internalType: "uint256", type: "uint256" },
       { name: "_mintFee", internalType: "uint256", type: "uint256" },
       { name: "_contractURI", internalType: "string", type: "string" },
+      { name: "_publicTradingTime", internalType: "uint256", type: "uint256" },
     ],
     name: "launchTokenAndCreateProject",
     outputs: [
@@ -1063,6 +1065,15 @@ export const projectFactoryAbi = [
   },
   {
     type: "function",
+    inputs: [
+      { name: "_versionManager", internalType: "address", type: "address" },
+    ],
+    name: "setVersionManager",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "tokenLaunchpad",
     outputs: [{ name: "", internalType: "address", type: "address" }],
@@ -1088,6 +1099,13 @@ export const projectFactoryAbi = [
     name: "unpauseSelector",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "versionManager",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -1256,6 +1274,25 @@ export const projectFactoryAbi = [
     ],
     name: "Unpaused",
   },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "oldVersionManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newVersionManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "VersionManagerUpdated",
+  },
   { type: "error", inputs: [], name: "EnforcedPause" },
   { type: "error", inputs: [], name: "ExpectedPause" },
   {
@@ -1301,19 +1338,6 @@ export const projectTokenAbi = [
       { name: "_weth", internalType: "address", type: "address" },
       { name: "_admin", internalType: "address", type: "address" },
       { name: "_owner", internalType: "address", type: "address" },
-      { name: "_baseURI", internalType: "string", type: "string" },
-      { name: "_renderer", internalType: "address", type: "address" },
-      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
-      {
-        name: "_mintInfo",
-        internalType: "struct IProjectToken.MintInfo",
-        type: "tuple",
-        components: [
-          { name: "price", internalType: "uint256", type: "uint256" },
-          { name: "maxSupply", internalType: "uint256", type: "uint256" },
-        ],
-      },
-      { name: "_mintFee", internalType: "uint256", type: "uint256" },
     ],
     stateMutability: "nonpayable",
   },
@@ -1361,7 +1385,10 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "_currency", internalType: "address", type: "address" }],
+    inputs: [
+      { name: "_currency", internalType: "address", type: "address" },
+      { name: "_minFeeAmount", internalType: "uint256", type: "uint256" },
+    ],
     name: "addSupportedCurrency",
     outputs: [],
     stateMutability: "nonpayable",
@@ -1575,6 +1602,28 @@ export const projectTokenAbi = [
   {
     type: "function",
     inputs: [
+      { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_renderer", internalType: "address", type: "address" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_versionManager", internalType: "address", type: "address" },
+    ],
+    name: "initialize",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "_tokenId", internalType: "uint256", type: "uint256" },
       { name: "_user", internalType: "address", type: "address" },
     ],
@@ -1639,8 +1688,8 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
-    inputs: [],
-    name: "minFeeAmount",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "minFeeAmounts",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
@@ -1765,6 +1814,19 @@ export const projectTokenAbi = [
   {
     type: "function",
     inputs: [
+      { name: "tokenId", internalType: "uint256", type: "uint256" },
+      { name: "salePrice", internalType: "uint256", type: "uint256" },
+    ],
+    name: "royaltyInfo",
+    outputs: [
+      { name: "receiver", internalType: "address", type: "address" },
+      { name: "amount", internalType: "uint256", type: "uint256" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "from", internalType: "address", type: "address" },
       { name: "to", internalType: "address", type: "address" },
       { name: "tokenId", internalType: "uint256", type: "uint256" },
@@ -1830,6 +1892,16 @@ export const projectTokenAbi = [
   {
     type: "function",
     inputs: [
+      { name: "_receiver", internalType: "address", type: "address" },
+      { name: "_feeNumerator", internalType: "uint96", type: "uint96" },
+    ],
+    name: "setDefaultRoyalty",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "_tokenId", internalType: "uint256", type: "uint256" },
       { name: "_user", internalType: "address", type: "address" },
       { name: "_canEvolve", internalType: "bool", type: "bool" },
@@ -1884,7 +1956,10 @@ export const projectTokenAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "_minFee", internalType: "uint256", type: "uint256" }],
+    inputs: [
+      { name: "_currency", internalType: "address", type: "address" },
+      { name: "_minFeeAmount", internalType: "uint256", type: "uint256" },
+    ],
     name: "setMinFeeAmount",
     outputs: [],
     stateMutability: "nonpayable",
@@ -1924,6 +1999,13 @@ export const projectTokenAbi = [
       { name: "_onchainData", internalType: "bytes", type: "bytes" },
     ],
     name: "setVersionInfo",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_newManager", internalType: "address", type: "address" }],
+    name: "setVersionManager",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -2046,6 +2128,13 @@ export const projectTokenAbi = [
   {
     type: "function",
     inputs: [],
+    name: "versionManager",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
     name: "weth",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
@@ -2094,6 +2183,25 @@ export const projectTokenAbi = [
       { name: "approved", internalType: "bool", type: "bool", indexed: false },
     ],
     name: "ApprovalForAll",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "_fromTokenId",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "_toTokenId",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "BatchMetadataUpdate",
   },
   { type: "event", anonymous: false, inputs: [], name: "ContractURIUpdated" },
   {
@@ -2159,6 +2267,25 @@ export const projectTokenAbi = [
       },
     ],
     name: "CurrentVersionUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "receiver",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "feeNumerator",
+        internalType: "uint96",
+        type: "uint96",
+        indexed: false,
+      },
+    ],
+    name: "DefaultRoyaltyUpdated",
   },
   {
     type: "event",
@@ -2319,6 +2446,19 @@ export const projectTokenAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "version",
+        internalType: "uint64",
+        type: "uint64",
+        indexed: false,
+      },
+    ],
+    name: "Initialized",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "maxLineageDepth",
         internalType: "uint256",
         type: "uint256",
@@ -2365,7 +2505,26 @@ export const projectTokenAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "mintFeeAmount",
+        name: "_tokenId",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "MetadataUpdate",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "currency",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "minFeeAmount",
         internalType: "uint256",
         type: "uint256",
         indexed: false,
@@ -2707,12 +2866,55 @@ export const projectTokenAbi = [
     name: "VersionInfoUpdated",
   },
   {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "newManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "VersionManagerUpdated",
+  },
+  {
     type: "error",
     inputs: [
       { name: "admin", internalType: "address", type: "address" },
       { name: "caller", internalType: "address", type: "address" },
     ],
     name: "AdminableUnauthorizedAccount",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "numerator", internalType: "uint256", type: "uint256" },
+      { name: "denominator", internalType: "uint256", type: "uint256" },
+    ],
+    name: "ERC2981InvalidDefaultRoyalty",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "receiver", internalType: "address", type: "address" }],
+    name: "ERC2981InvalidDefaultRoyaltyReceiver",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "tokenId", internalType: "uint256", type: "uint256" },
+      { name: "numerator", internalType: "uint256", type: "uint256" },
+      { name: "denominator", internalType: "uint256", type: "uint256" },
+    ],
+    name: "ERC2981InvalidTokenRoyalty",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "tokenId", internalType: "uint256", type: "uint256" },
+      { name: "receiver", internalType: "address", type: "address" },
+    ],
+    name: "ERC2981InvalidTokenRoyaltyReceiver",
   },
   { type: "error", inputs: [], name: "ERC721EnumerableForbiddenBatchMint" },
   {
@@ -2772,6 +2974,8 @@ export const projectTokenAbi = [
   },
   { type: "error", inputs: [], name: "EnforcedPause" },
   { type: "error", inputs: [], name: "ExpectedPause" },
+  { type: "error", inputs: [], name: "InvalidInitialization" },
+  { type: "error", inputs: [], name: "NotInitializing" },
   {
     type: "error",
     inputs: [{ name: "owner", internalType: "address", type: "address" }],
@@ -2823,6 +3027,7 @@ export const projectTokenAbi = [
     inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
     name: "ProjectToken__MetadataNotLocked",
   },
+  { type: "error", inputs: [], name: "ProjectToken__NotVersionManager" },
   { type: "error", inputs: [], name: "ProjectToken__UnexpectedETH" },
   { type: "error", inputs: [], name: "ProjectToken__ZeroAddress" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
@@ -3236,6 +3441,7 @@ export const tokenLaunchpadAbi = [
       { name: "supply", internalType: "uint256", type: "uint256" },
       { name: "tradingEnabled", internalType: "bool", type: "bool" },
       { name: "isGraduated", internalType: "bool", type: "bool" },
+      { name: "publicTradingTime", internalType: "uint256", type: "uint256" },
     ],
     stateMutability: "view",
   },
@@ -3443,6 +3649,7 @@ export const tokenLaunchpadAbi = [
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
       { name: "_contractURI", internalType: "string", type: "string" },
+      { name: "_publicTradingTime", internalType: "uint256", type: "uint256" },
     ],
     name: "launch",
     outputs: [
@@ -3458,6 +3665,7 @@ export const tokenLaunchpadAbi = [
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_totalFxAmountIn", internalType: "uint256", type: "uint256" },
       { name: "_contractURI", internalType: "string", type: "string" },
+      { name: "_publicTradingTime", internalType: "uint256", type: "uint256" },
     ],
     name: "launchFor",
     outputs: [
@@ -3848,7 +4056,6 @@ export const tokenLaunchpadAbi = [
         type: "address",
         indexed: true,
       },
-      { name: "id", internalType: "uint256", type: "uint256", indexed: false },
       { name: "name", internalType: "string", type: "string", indexed: false },
       {
         name: "symbol",
@@ -4286,6 +4493,11 @@ export const tokenLaunchpadAbi = [
     name: "TokenLaunchpad__InvalidGraduationReserve",
   },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidK" },
+  {
+    type: "error",
+    inputs: [],
+    name: "TokenLaunchpad__InvalidPublicTradingTime",
+  },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidPurchaseAmount" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidRate" },
   { type: "error", inputs: [], name: "TokenLaunchpad__InvalidSeedAmount" },
@@ -4294,6 +4506,7 @@ export const tokenLaunchpadAbi = [
   { type: "error", inputs: [], name: "TokenLaunchpad__TokenNotGraduated" },
   { type: "error", inputs: [], name: "TokenLaunchpad__TokenNotLaunched" },
   { type: "error", inputs: [], name: "TokenLaunchpad__TradingNotEnabled" },
+  { type: "error", inputs: [], name: "TokenLaunchpad__TradingNotStartedYet" },
   { type: "error", inputs: [], name: "TokenLaunchpad__ZeroAddress" },
   { type: "error", inputs: [], name: "TokenLaunchpad__ZeroAmountIn" },
 ] as const
