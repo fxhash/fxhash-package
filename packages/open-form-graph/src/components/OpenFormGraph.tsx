@@ -111,7 +111,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     if (simulation.current.lockedNodeId === lockedNodeId) return
     simulation.current.setLockedNodeId(lockedNodeId)
-  }, [translate?.y, translate?.x])
+  }, [lockedNodeId])
 
   const dpi = devicePixelRatio || 1
 
