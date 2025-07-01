@@ -84,7 +84,7 @@ export function OpenFormGraphProvider({
       _setSelectedNode(node)
       simulation.current?.setSelectedNode(node)
     },
-    [_setSelectedNode, hoveredNode]
+    [_setSelectedNode, selectedNode]
   )
 
   const setSelectedNodeById = useCallback(
@@ -95,7 +95,7 @@ export function OpenFormGraphProvider({
         simulation.current?.handleClickNode(node)
       }
     },
-    [setSelectedNode]
+    [setSelectedNode, selectedNode]
   )
 
   const setHoveredNode = useCallback(
