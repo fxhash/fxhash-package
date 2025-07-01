@@ -267,6 +267,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (this.lockedNodeId && !node) {
       node = this.getNodeById(this.lockedNodeId)
     }
+    if (node === this.selectedNode) return
     this.handleClickNode(node)
   }
 
