@@ -52,15 +52,22 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       theme,
       translate,
       lockedNodeId,
+      highlights,
     })
+    return () => {
+      simulation.current?.destroy()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!simulation.current) return
     simulation.current.emitter.on("selected-node-changed", setSelectedNode)
     simulation.current.emitter.on("hovered-node-changed", setHoveredNode)
     return () => {
       simulation.current?.emitter.off("selected-node-changed", setSelectedNode)
       simulation.current?.emitter.off("hovered-node-changed", setHoveredNode)
-      simulation.current?.destroy()
     }
-  }, [])
+  }, [setSelectedNode, setHoveredNode])
 
   useEffect(() => {
     if (!simulation.current) return
