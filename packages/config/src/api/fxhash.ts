@@ -17,7 +17,6 @@ export const fxhashDevApis: IFxhashApis = {
   extract: "https://extract.fxhash-dev.xyz",
   extractInternal:
     "http://fxhash-dev-testnet-extract-balancer.fxhash-dev-testnet.svc.cluster.local:4017",
-  gateway: "https://gateway.fxhash.xyz",
   media: "https://media.dev.fxhash-dev.xyz",
   ethMetadata: "https://media.dev.fxhash-dev.xyz/metadata/ethereum/",
   ipfsInternal:
@@ -91,7 +90,6 @@ export const fxhashPrdApis: IFxhashApis = {
   extract: "https://extract.fxhash.xyz",
   extractInternal:
     "http://fxhash-prd-extract-balancer.fxhash-prd.svc.cluster.local:4017",
-  gateway: "https://gateway.fxhash.xyz",
   media: "https://media.fxhash.xyz",
   ethMetadata: "https://media.fxhash.xyz/metadata/ethereum/",
   ipfsInternal:

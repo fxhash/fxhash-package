@@ -75,25 +75,35 @@ export function OpenFormGraphProvider({
 }: OpenFormGraphProviderProps) {
   const simulation = useRef<OpenGraphSimulation | null>(null)
   const [selectedNode, _setSelectedNode] = useState<SimNode | null>(null)
-  const [hoveredNode, setHoveredNode] = useState<SimNode | null>(null)
+  const [hoveredNode, _setHoveredNode] = useState<SimNode | null>(null)
   const [hideThumbnails, setHideThumbnails] = useState(false)
 
   const setSelectedNode = useCallback(
     (node: SimNode | null) => {
+      if (node === selectedNode) return
       _setSelectedNode(node)
       simulation.current?.setSelectedNode(node)
     },
-    [_setSelectedNode]
+    [_setSelectedNode, selectedNode]
   )
 
   const setSelectedNodeById = useCallback(
     (nodeId: string) => {
+      if (nodeId === selectedNode?.id) return
       const node = simulation.current?.getNodeById(nodeId)
       if (node) {
         simulation.current?.handleClickNode(node)
       }
     },
-    [setSelectedNode]
+    [setSelectedNode, selectedNode]
+  )
+
+  const setHoveredNode = useCallback(
+    (node: SimNode | null) => {
+      if (node === hoveredNode) return
+      _setHoveredNode(node)
+    },
+    [_setHoveredNode, hoveredNode]
   )
 
   const contextValue: OpenFormGraphApi = useMemo(() => {
