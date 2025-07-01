@@ -350,13 +350,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.data.links,
         this.rootId
       )
-    }
-    if (this.selectedNode?.id !== node?.id) {
-      this.selectedNode = node
-      this.emitter.emit("selected-node-changed", node)
-      this.updateRenderLayers()
-    }
-    if (node) {
+      if (this.selectedNode?.id !== node?.id) {
+        this.selectedNode = node
+        this.emitter.emit("selected-node-changed", node)
+        this.updateRenderLayers()
+      }
       this.restart(wasOpened ? 0.05 : 0)
       if (wasOpened || options?.triggerFocus) {
         this.transformCanvas.focusOn(() => {
