@@ -10,6 +10,8 @@ import { VOID_ROOT_ID } from "@/context/constants"
 import { isSimNode } from "./types"
 import { HighlightStyle } from "@/sim/_types"
 
+export type NodeVisibility = "all" | "mine"
+
 const images: string[] = []
 
 export function generateTree(
@@ -56,16 +58,34 @@ export function generateTree(
   return { nodes, links }
 }
 
+function isSpecialNode(node: SimNode): boolean {
+  const state = node.state
+  return !!(state?.emitterNode || state?.sessionNode || state?.rootNode)
+}
+
 export function getPrunedData(
   startId: string,
   nodes: SimNode[],
   links: SimLink[],
-  highlights: HighlightStyle[] = []
+  highlights: HighlightStyle[] = [],
+  options: { nodeVisibility?: NodeVisibility; emittedNodes: Array<string> } = {
+    nodeVisibility: "all",
+    emittedNodes: [],
+  }
 ) {
+  const visiblityModeFilter =
+    highlights.length > 0 && options.nodeVisibility === "mine"
   const nodesById = Object.fromEntries(nodes.map(node => [node.id, node]))
   const visibleNodes = []
   const visibleLinks = []
   const visited = new Set()
+
+  const mineFilter = (node: SimNode) =>
+    !options.emittedNodes.includes(node.id) &&
+    !isSpecialNode(node) &&
+    !highlights.find(h => h.id === node.id)
+  const liquidatedFilter = (node: SimNode) =>
+    node.status === "LIQUIDATED" && !highlights.find(h => h.id === node.id)
 
   ;(function traverseTree(node = nodesById[startId]) {
     // avoid circles
@@ -73,11 +93,14 @@ export function getPrunedData(
     visited.add(node.id)
 
     // Skip liquidated nodes unless they are highlighted
-    if (
-      node.status === "LIQUIDATED" &&
-      !highlights.find(h => h.id === node.id)
-    ) {
+    if (liquidatedFilter(node)) {
       return
+    }
+    // when mine mode is activated we use mineFilter to skip nodes
+    if (visiblityModeFilter) {
+      if (mineFilter(node)) {
+        return
+      }
     }
 
     visibleNodes.push(node)
@@ -93,11 +116,14 @@ export function getPrunedData(
         : nodesById[link.target.toString()]
 
       // Check whether child should be included before adding link
-      if (
-        targetNode?.status === "LIQUIDATED" &&
-        !highlights.find(h => h.id === targetNode.id)
-      ) {
+      if (liquidatedFilter(targetNode)) {
         continue // skip adding link to liquidated non-highlighted child
+      }
+      // when mine mode is activated we use mineFilter to skip nodes
+      if (visiblityModeFilter) {
+        if (mineFilter(targetNode)) {
+          continue
+        }
       }
 
       visibleLinks.push(link)

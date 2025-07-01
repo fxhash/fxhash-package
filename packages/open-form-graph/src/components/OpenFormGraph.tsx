@@ -2,6 +2,7 @@ import { SimNode } from "@/_types"
 import { useOpenFormGraph } from "@/provider"
 import { HighlightStyle, Transform } from "@/sim/_types"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
+import { NodeVisibility } from "@/util/data"
 import { MouseEventHandler, useEffect, useRef } from "react"
 
 interface OpenFormGraphProps {
@@ -15,6 +16,7 @@ interface OpenFormGraphProps {
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
   onTransform?: (transform: Transform) => void
+  nodeVisibility?: NodeVisibility
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -27,6 +29,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     loadNodeImage,
     translate,
     onTransform,
+    nodeVisibility = "all",
   } = props
   const {
     simulation,
@@ -52,6 +55,8 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       theme,
       translate,
       lockedNodeId,
+      nodeVisibility,
+      highlights,
     })
     simulation.current.emitter.on("selected-node-changed", setSelectedNode)
     simulation.current.emitter.on("hovered-node-changed", setHoveredNode)
@@ -88,8 +93,9 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
 
   useEffect(() => {
     if (!simulation.current) return
+    simulation.current.setNodeVisibility(nodeVisibility)
     simulation.current.setHighlights(highlights)
-  }, [highlights])
+  }, [highlights, nodeVisibility])
 
   useEffect(() => {
     if (!simulation.current) return
@@ -99,7 +105,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
   useEffect(() => {
     if (!simulation.current) return
     simulation.current.initialize(data, rootId)
-  }, [data])
+  }, [data, rootId])
 
   useEffect(() => {
     if (!simulation.current) return

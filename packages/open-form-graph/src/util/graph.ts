@@ -19,7 +19,7 @@ export function getParents(id: string, links: SimLink[]): string[] {
 export function getAllParentsUntil(
   nodeId: string,
   links: SimLink[],
-  stopAtId: string
+  stopAtId?: string
 ): string[] {
   const parent = getParents(nodeId, links)[0]
 

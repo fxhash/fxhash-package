@@ -7,6 +7,7 @@ import {
   forceCollide,
 } from "d3-force"
 import {
+  Dictionary,
   GraphData,
   NodeState,
   RawGraphData,
@@ -26,20 +27,21 @@ import {
   getAllParentsUntil,
 } from "@/util/graph"
 import { GraphConfig } from "@/_interfaces"
-import { DEFAULT_GRAPH_CONFIG, VOID_DETACH_ID } from "@/provider"
+import { DEFAULT_GRAPH_CONFIG, VOID_DETACH_ID, VOID_EMIT_ID } from "@/provider"
 import { isSimNode } from "@/util/types"
 import { loadHTMLImageElement } from "@/util/img"
 import { TransformCanvas } from "./TransformCanvas"
 import { circle, img, rect } from "@/util/canvas"
 import { color, dim } from "@/util/color"
 import { scaleLinear, scaleLog } from "d3-scale"
-import { getPrunedData } from "@/util/data"
+import { getPrunedData, NodeVisibility } from "@/util/data"
 import { Transform, HighlightStyle, Point } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
 import { distance, getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
 import { asymmetricLinks } from "./asymmetric-link"
 import { quickHash } from "@/util/hash"
+import groupBy from "lodash.groupby"
 
 const RADIAL_FORCES = false
 
@@ -63,6 +65,7 @@ interface OpenGraphSimulationProps {
   translate?: { x: number; y: number }
   lockedNodeId?: string
   highlights?: HighlightStyle[]
+  nodeVisibility?: NodeVisibility
 }
 
 interface RenderLayer<T> {
@@ -91,6 +94,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private rootId: string = ""
   private simulation: Simulation<SimNode, SimLink> | null = null
   private clusterSizeRange: [number, number] = [0, 1]
+  private emitterClusterSizeRange: [number, number] = [0, 1]
   private maxDepth: number = 0
 
   private isTicking: boolean = false
@@ -107,6 +111,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   public hoveredNode: SimNode | null = null
 
   public highlights: HighlightStyle[] = []
+
+  nodeVisibility: NodeVisibility = "all"
+  private secondaryNodes: Dictionary = new Map()
+  private emittedNodes: Array<string> = []
 
   private renderLayers: {
     links: RenderLayer<SimLink>
@@ -146,6 +154,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       }
     })
+
+    this.nodeVisibility = props.nodeVisibility || "all"
+    this.highlights = props.highlights || []
   }
 
   private get center() {
@@ -268,7 +279,43 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       node = this.getNodeById(this.lockedNodeId)
     }
     if (node === this.selectedNode) return
-    this.handleClickNode(node)
+    if (node?.state?.emitterNode) {
+      this.emitNodeAt(node.depth || 0)
+    } else {
+      this.handleClickNode(node)
+    }
+  }
+
+  emitNodeAt = (depth: number) => {
+    const nodes =
+      this.secondaryNodes[depth].filter(
+        (n: SimNode) => !this.emittedNodes.includes(n.id)
+      ) || []
+    const randomIndex = Math.floor(Math.random() * nodes.length)
+    if (randomIndex < 0 || randomIndex >= nodes.length) return
+    const depthNode = this.emitterNodes[depth]
+    const node = nodes[randomIndex]
+    node.x = depthNode.x
+    node.y = depthNode.y
+
+    const parents = getAllParentsUntil(node.id, this.data.links, this.rootId)
+
+    // add to emitted nodes
+    this.emittedNodes.push(node.id)
+    node.state.collapsed = false
+    if (parents.length > 0) {
+      parents.forEach(parentId => {
+        const parentNode = this.data.nodes.find(n => n.id === parentId)
+        if (parentNode) {
+          if (parentNode.state) {
+            parentNode.state.collapsed = false
+          }
+        }
+      })
+      this.emittedNodes.push(...parents)
+    }
+    console.log("Emitting node at depth", depth, ":", node.id)
+    this.updateHighlights()
   }
 
   handleClickNode = (
@@ -378,6 +425,30 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
+  updateEmitterNodes() {
+    this.emitterNodes.forEach((node, depth) => {
+      const notEmittedNodes = (this.secondaryNodes[depth] || []).filter(
+        (n: SimNode) => this.emittedNodes.indexOf(n.id) === -1
+      )
+      node.clusterSize = notEmittedNodes.length
+    })
+    this.emitterClusterSizeRange = this.emitterNodes.reduce(
+      (acc, node) => [
+        Math.min(acc[0], node.clusterSize || 1),
+        Math.max(acc[1], node.clusterSize || 1),
+      ],
+      [Infinity, -Infinity] as [number, number]
+    )
+  }
+
+  get emitterNodes() {
+    return (
+      this.data.nodes
+        .filter(n => n.state?.emitterNode)
+        .sort((a, b) => (a.depth || 0) - (b.depth || 0)) || []
+    )
+  }
+
   updateScene = () => {
     if (this.isTicking) return
     this.onDraw()
@@ -430,15 +501,15 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       if (!sessionNode) {
         const depth = (highlightedNode?.depth || 1) + 1
         const angle = getAngle(
-          this.center.x,
-          this.center.y,
+          this.rootNode?.x!,
+          this.rootNode?.y!,
           parentNode?.x!,
           parentNode?.y!
         )
         const circlePos = getRadialPoint(
           getRadius(depth),
-          this.center.x,
-          this.center.y,
+          this.rootNode?.x!,
+          this.rootNode?.y!,
           angle
         )
         sessionNode = {
@@ -527,6 +598,18 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       if (index !== -1) this.data.nodes.splice(index, 1)
     })
 
+    /* CREATE EMITTER NODES for VISIBLITY MODE "MINE"*/
+
+    const nodesWithoutHighlight = this.data.nodes.filter(n => {
+      if (n.state?.sessionNode) return false
+      if (n.id === this.rootId) return false
+      if (n.state?.emitterNode) return false
+      if (this.highlights.find(h => h.id === n.id)) return false
+      return true
+    })
+
+    this.secondaryNodes = groupBy(nodesWithoutHighlight, n => n.depth || 0)
+
     // since we are modifing the graph, in case there is a selection we need
     // to recalculate the subgraph
     if (this.selectedNode) {
@@ -537,6 +620,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.rootId
       )
     }
+    // update the cluster size of the emitter nodes
+    this.updateEmitterNodes()
     this.restart()
     // when there is no selectio we focus on the first session node we found
     // TODO: We could calcluate a point between all session nodes to focus the
@@ -552,7 +637,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
+  setNodeVisibility = (visibility: NodeVisibility) => {
+    this.nodeVisibility = visibility
+  }
+
   initialize = (data: RawGraphData, rootId: string) => {
+    this.emittedNodes = []
     this.rawData = data
     this.rootId = rootId
     const _links = data.links.map(l => ({ ...l }))
@@ -626,10 +716,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     })
 
     // if rootId is not in the nodes, add it
+    // TODO: also if the root not is not created it should be flagged
+    // in the state with rootNode: true
     if (!data.nodes.find(n => n.id === this.rootId)) {
       _nodes.push({
         id: this.rootId,
-        state: { collapsed: false, image: undefined },
+        state: { collapsed: false, image: undefined, rootNode: true },
         depth: -1,
         clusterSize: 1,
         x: this.center.x,
@@ -648,6 +740,46 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
 
     this.maxDepth = Math.max(..._nodes.map(n => n.depth || 0))
+    // create emitter nodes for each depth
+    for (let i = 0; i <= this.maxDepth; i++) {
+      const parentId = i === 0 ? this.rootId : `${VOID_EMIT_ID}-${i - 1}`
+      const emitterId = `${VOID_EMIT_ID}-${i}`
+
+      let pos = this.center
+
+      if (i > 0) {
+        const parentNode = _nodes.find(n => n.id === parentId)
+        const parentAngle = getAngle(
+          this.center.x,
+          this.center.y,
+          parentNode?.x!,
+          parentNode?.y!
+        )
+
+        pos = getRadialPoint(
+          getRadius(i),
+          this.center.x,
+          this.center.y,
+          parentAngle
+        )
+      }
+
+      _nodes.push({
+        id: emitterId,
+        state: { collapsed: false, emitterNode: true },
+        depth: i,
+        clusterSize: 1,
+        x: pos.x,
+        y: pos.y,
+      })
+      if (i < this.maxDepth) {
+        _links.push({
+          source: parentId,
+          target: emitterId,
+        })
+      }
+    }
+
     this.data = { nodes: _nodes as SimNode[], links: _links }
     this.loadNodeImages()
     //  this.restart()
@@ -678,7 +810,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.rootId,
       this.data.nodes,
       this.data.links,
-      this.highlights
+      this.highlights,
+      { nodeVisibility: this.nodeVisibility, emittedNodes: this.emittedNodes }
     )
     this.updateRenderLayers()
     this.clusterSizeRange = this.prunedData.nodes
@@ -711,6 +844,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             )
             if (isSimNode(l.target)) {
               const state = l.target?.state
+              if (state?.emitterNode) {
+                if (isSimNode(l.source) && l.source.id === this.rootId) {
+                  // TODO: potentially use a different distance for root emitter nodes
+                  return 100
+                }
+                return 1
+              }
               if (!state?.collapsed) {
                 return size
               }
@@ -801,8 +941,18 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (nodeId === this.rootId) return nodeSize * 2 * sizeScale
     const node = this.data.nodes.find(n => n.id === nodeId)
     if (node?.state?.sessionNode) return 5
+    const isEmitterNode = node?.state?.emitterNode
+    if (isEmitterNode) {
+      if (node.clusterSize === 0) {
+        return 5
+      }
+      const scale = scaleLinear()
+        .domain(this.emitterClusterSizeRange)
+        .range([nodeSize, nodeSize * 3])
+      return scale(node.clusterSize || 1)
+    }
     const isCollapsed = !!node?.state?.collapsed
-    if (isCollapsed) {
+    if (isCollapsed || isEmitterNode) {
       const scale = scaleLinear()
         .domain(this.clusterSizeRange)
         .range([nodeSize, nodeSize * 3])
@@ -909,6 +1059,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     let sourceNode = this.data.nodes.find(n => n.id === sourceId)
 
+    if (isSimNode(link.target)) {
+      if (link.target.state?.emitterNode && link.target.clusterSize === 0) {
+        return
+      }
+    }
+
     const isLight = this.theme === "light"
     const { dim: _dim, hasSelection, highlight } = options
 
@@ -979,6 +1135,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     if (node.id === this.rootId) {
       this.renderRootNode(ctx, x, y, nodeSize, _dim, isLight)
+    } else if (node.state?.emitterNode) {
+      this.renderEmitterNode(ctx, x, y, nodeSize, node)
     } else if (node.state?.sessionNode) {
       this.renderSessionNode(ctx, x, y, nodeSize)
     } else if (isCollapsed) {
@@ -1005,6 +1163,24 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         image: node.state?.image,
       })
     }
+  }
+
+  private renderEmitterNode(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    size: number,
+    node: SimNode
+  ) {
+    if (node.clusterSize === 0) return
+    const isLight = this.theme === "light"
+    circle(ctx, x, y, size / 2, {
+      stroke: true,
+      strokeStyle: this.colorContrast(),
+      lineWidth: 0.2,
+      fill: true,
+      fillStyle: "#0000ff", // this.color(dim(0.18, isLight))(),
+    })
   }
 
   private renderSessionNode(
@@ -1149,7 +1325,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     rect(ctx, x - _size / 2, y - _size / 2, _size, _size, {
       stroke: highlighted || isHovered,
       strokeStyle: isHovered ? fill : highlightedStroke,
-      lineWidth: 0.5,
+      lineWidth: 1,
       fill: this.hideThumbnails || isLiquidated || !image,
       fillStyle: fill,
       borderRadius: 1,
