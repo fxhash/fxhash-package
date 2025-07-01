@@ -100,8 +100,12 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
   useEffect(() => {
     if (!simulation.current) return
     simulation.current.setNodeVisibility(nodeVisibility)
+  }, [nodeVisibility])
+
+  useEffect(() => {
+    if (!simulation.current) return
     simulation.current.setHighlights(highlights)
-  }, [highlights, nodeVisibility])
+  }, [highlights])
 
   useEffect(() => {
     if (!simulation.current) return

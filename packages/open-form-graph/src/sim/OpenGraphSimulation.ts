@@ -37,13 +37,14 @@ import { scaleLinear, scaleLog } from "d3-scale"
 import { getPrunedData, NodeVisibility } from "@/util/data"
 import { Transform, HighlightStyle, Point } from "./_types"
 import { IOpenGraphSimulation, OpenGraphEventEmitter } from "./_interfaces"
-import { distance, getAngle, getRadialPoint } from "@/util/math"
+import { getAngle, getRadialPoint } from "@/util/math"
 import { red } from "@/util/highlights"
 import { asymmetricLinks } from "./asymmetric-link"
 import { quickHash } from "@/util/hash"
 import groupBy from "lodash.groupby"
 
 const RADIAL_FORCES = false
+const RENDER_EMITTER_NODES = false
 
 // TODO: potentially implement strategy to retrieve radius based
 // on number of nodes per depth
@@ -281,6 +282,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (node === this.selectedNode) return
     if (node?.state?.emitterNode) {
       this.emitNodeAt(node.depth || 0)
+      this.transformCanvas.focusOn(() => {
+        const t = this.transformCanvas.getTransform()
+        const _node = this.getNodeById(node.id)
+        return { x: _node?.x!, y: _node?.y!, scale: t.scale }
+      })
     } else {
       this.handleClickNode(node)
     }
@@ -636,7 +642,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   setNodeVisibility = (visibility: NodeVisibility) => {
+    if (this.nodeVisibility === visibility) return
     this.nodeVisibility = visibility
+    this.updateHighlights()
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
@@ -830,7 +838,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .alpha(this.simulation ? alpha : 0.5)
       .force(
         "collide",
-        forceCollide(n => this.getNodeSize(n.id) / 2)
+        forceCollide(n => {
+          if (n.state?.emitterNode && this.nodeVisibility === "all") return 0
+          return this.getNodeSize(n.id) / 2
+        })
       )
       .force(
         "link",
@@ -863,10 +874,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
+          if (isSimNode(node) && node.state?.emitterNode) return -80
           return -150
         })
       )
-      .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.05))
       .restart()
 
     if (RADIAL_FORCES) {
@@ -1058,7 +1070,25 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     let sourceNode = this.data.nodes.find(n => n.id === sourceId)
 
     if (isSimNode(link.target)) {
-      if (link.target.state?.emitterNode && link.target.clusterSize === 0) {
+      if (this.nodeVisibility === "all" || !RENDER_EMITTER_NODES) {
+        if (
+          link.target.state?.emitterNode ||
+          (isSimNode(link.source) && link.source.state?.emitterNode)
+        ) {
+          return
+        }
+      }
+      const isSourceNode = this.data.links.some(
+        l =>
+          isSimNode(l.source) &&
+          isSimNode(link.target) &&
+          l.source.id === link.target.id
+      )
+      if (
+        link.target.state?.emitterNode &&
+        link.target.clusterSize === 0 &&
+        !isSourceNode
+      ) {
         return
       }
     }
@@ -1134,7 +1164,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     if (node.id === this.rootId) {
       this.renderRootNode(ctx, x, y, nodeSize, _dim, isLight)
     } else if (node.state?.emitterNode) {
-      this.renderEmitterNode(ctx, x, y, nodeSize, node)
+      if (!RENDER_EMITTER_NODES) return
+      this.renderEmitterNode(ctx, x, y, nodeSize, node, _dim)
     } else if (node.state?.sessionNode) {
       this.renderSessionNode(ctx, x, y, nodeSize)
     } else if (isCollapsed) {
@@ -1168,8 +1199,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     x: number,
     y: number,
     size: number,
-    node: SimNode
+    node: SimNode,
+    dimmed: boolean
   ) {
+    if (this.nodeVisibility === "all") return
     if (node.clusterSize === 0) return
     const isLight = this.theme === "light"
     circle(ctx, x, y, size / 2, {
@@ -1179,6 +1212,19 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       fill: true,
       fillStyle: "#0000ff", // this.color(dim(0.18, isLight))(),
     })
+    const transform = this.transformCanvas.getTransform()
+    const clusterSize = node.clusterSize || 1
+    const showLabel =
+      transform.scale - 0.5 >= this.visiblityScale(clusterSize) ? 1 : 0
+    if (showLabel) {
+      ctx.font = `${14 / transform.scale}px Sans-Serif`
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle"
+      ctx.fillStyle = this.colorContrast()
+      ctx.fillText(clusterSize.toString(), x, y)
+      ctx.font = `${10 / transform.scale}px Sans-Serif`
+      ctx.fillText("click to emit", x, y + 5)
+    }
   }
 
   private renderSessionNode(
