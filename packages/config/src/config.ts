@@ -1,21 +1,22 @@
 import { baseMainnetApis, baseTestnetApis } from "./api/base.js"
 import { ethMainnetApis, ethTestnetApis } from "./api/eth.js"
-import { tezosMainnetApis, tezosTestnetApis } from "./api/tezos.js"
 import {
   fxhashDevApis,
   fxhashLocalApis,
   fxhashLocalDockerApis,
   fxhashPrdApis,
 } from "./api/fxhash.js"
-import { fxAppEnvMetadata } from "./config/metadata.js"
+import { tezosMainnetApis, tezosTestnetApis } from "./api/tezos.js"
 import { algoliaConfigDev, algoliaConfigProd } from "./config/algolia.js"
 import { gpuRenderingConfigDev, gpuRenderingConfigProd } from "./config/gpu.js"
+import { fxAppEnvMetadata } from "./config/metadata.js"
+import { AUTH_JWT_PK_DEV, AUTH_JWT_PK_PRD } from "./constants.js"
+import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
+import { ethMainnetContracts, ethTestnetContracts } from "./contracts/eth.js"
 import {
   tezosMainnetContracts,
   tezosTestnetContracts,
 } from "./contracts/tezos.js"
-import { ethMainnetContracts, ethTestnetContracts } from "./contracts/eth.js"
-import { baseMainnetContracts, baseTestnetContracts } from "./contracts/base.js"
 import { getEnv } from "./helpers.js"
 import {
   BlockchainIdentifiers,
@@ -24,7 +25,6 @@ import {
   type TBlockchainNetwork,
   type TEnv,
 } from "./types.js"
-import { AUTH_JWT_PK_DEV, AUTH_JWT_PK_PRD } from "./constants.js"
 
 /**
  * ! Beware ! Changing these values will result in current
@@ -253,4 +253,4 @@ function setConfig(
   return config
 }
 
-export { fxhashConfig, config, setConfig }
+export { config, fxhashConfig, setConfig }
