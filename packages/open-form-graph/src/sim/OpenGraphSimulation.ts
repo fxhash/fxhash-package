@@ -428,15 +428,15 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       if (!sessionNode) {
         const depth = (highlightedNode?.depth || 1) + 1
         const angle = getAngle(
-          this.center.x,
-          this.center.y,
+          this.rootNode?.x!,
+          this.rootNode?.y!,
           parentNode?.x!,
           parentNode?.y!
         )
         const circlePos = getRadialPoint(
           getRadius(depth),
-          this.center.x,
-          this.center.y,
+          this.rootNode?.x!,
+          this.rootNode?.y!,
           angle
         )
         sessionNode = {
