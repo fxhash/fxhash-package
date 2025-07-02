@@ -293,13 +293,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       }
       if (node.state) {
         const children = getChildren(node.id, this.data.links)
-        if (children.length > 0 && !options?.noToggle) {
+        if (children.length > 0) {
           if (this.selectedNode?.id !== node.id) {
             if (node.state.collapsed) {
               wasOpened = true
             }
             node.state.collapsed = false
-          } else {
+          } else if (!options.noToggle) {
             node.state.collapsed = !node.state.collapsed
           }
           if (!node.state.collapsed) {
@@ -428,15 +428,15 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       if (!sessionNode) {
         const depth = (highlightedNode?.depth || 1) + 1
         const angle = getAngle(
-          this.center.x,
-          this.center.y,
+          this.rootNode?.x!,
+          this.rootNode?.y!,
           parentNode?.x!,
           parentNode?.y!
         )
         const circlePos = getRadialPoint(
           getRadius(depth),
-          this.center.x,
-          this.center.y,
+          this.rootNode?.x!,
+          this.rootNode?.y!,
           angle
         )
         sessionNode = {
