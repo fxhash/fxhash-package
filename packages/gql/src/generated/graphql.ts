@@ -26,14 +26,18 @@ export type Scalars = {
   action_type_enum: { input: any; output: any; }
   art_coin_bonding_trade_type_enum: { input: any; output: any; }
   art_coin_flag_enum: { input: any; output: any; }
+  art_coin_market_stats_history_interval_enum: { input: any; output: any; }
+  art_coin_migrate_state_enum: { input: any; output: any; }
   article_flag_enum: { input: any; output: any; }
   bigint: { input: any; output: any; }
   bpchar: { input: any; output: any; }
   codex_type_enum: { input: any; output: any; }
   codex_update_request_status_enum: { input: any; output: any; }
   collection_offer_status_enum: { input: any; output: any; }
+  currency_conversion_crypto_code_enum: { input: any; output: any; }
   float8: { input: any; output: any; }
   generative_token_flag_enum: { input: any; output: any; }
+  generative_token_format_enum: { input: any; output: any; }
   generative_token_version: { input: any; output: any; }
   gentk_assign_state_enum: { input: any; output: any; }
   indexing_target_type_enum: { input: any; output: any; }
@@ -851,16 +855,6 @@ export type AccountsRoles_Stream_Cursor_Input = {
 export type AccountsRoles_Stream_Cursor_Value_Input = {
   accountId?: InputMaybe<Scalars['uuid']['input']>;
   roleValue?: InputMaybe<AccountRole_Enum>;
-};
-
-export type AirdropTezClaimInput = {
-  publicKey: Scalars['String']['input'];
-  signature: Scalars['String']['input'];
-};
-
-export type AirdropTezClaimResult = {
-  __typename?: 'AirdropTezClaimResult';
-  signature: Scalars['String']['output'];
 };
 
 export type AuthenticationInput = {
@@ -1917,6 +1911,19 @@ export type LinkWalletInput = {
   signature: Scalars['String']['input'];
 };
 
+export type ListingOrderBy = {
+  created_at?: InputMaybe<OrderBy>;
+  price?: InputMaybe<OrderBy>;
+};
+
+export type ListingResult = {
+  __typename?: 'ListingResult';
+  id: Scalars['String']['output'];
+  listing?: Maybe<Listing>;
+  objkt_id: Scalars['String']['output'];
+  version: Scalars['Int']['output'];
+};
+
 export type LogoutInput = {
   refreshToken?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2365,7 +2372,9 @@ export type OpenFormGraphLink = {
 
 export type OpenFormGraphNode = {
   __typename?: 'OpenFormGraphNode';
+  assigned: Scalars['Boolean']['output'];
   id: Scalars['String']['output'];
+  state: Scalars['String']['output'];
   thumbnail_uri?: Maybe<Scalars['String']['output']>;
 };
 
@@ -2375,6 +2384,34 @@ export type OpenFormGraphResponse = {
   nodes: Array<OpenFormGraphNode>;
   rootId: Scalars['String']['output'];
 };
+
+export enum OrderBy {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
+export type PoolTrade = {
+  __typename?: 'PoolTrade';
+  amount_in: Scalars['String']['output'];
+  amount_in_eth: Scalars['String']['output'];
+  amount_in_usd: Scalars['String']['output'];
+  amount_out: Scalars['String']['output'];
+  amount_out_eth: Scalars['String']['output'];
+  amount_out_usd: Scalars['String']['output'];
+  art_coin?: Maybe<Art_Coin>;
+  art_coin_id: Scalars['String']['output'];
+  created_at: Scalars['String']['output'];
+  op_hash: Scalars['String']['output'];
+  type: PoolTradeType;
+  user?: Maybe<User>;
+  user_id: Scalars['String']['output'];
+  volume_usd: Scalars['String']['output'];
+};
+
+export enum PoolTradeType {
+  Buy = 'BUY',
+  Sell = 'SELL'
+}
 
 export type PrepareRedemptionInput = {
   payload: Scalars['String']['input'];
@@ -3453,8 +3490,8 @@ export type String_Comparison_Exp = {
 
 export type TransferWalletInput = {
   id: Scalars['String']['input'];
-  signature: Scalars['String']['input'];
   publicKey?: InputMaybe<Scalars['String']['input']>;
+  signature: Scalars['String']['input'];
 };
 
 export type UnlinkWalletInput = {
@@ -4780,7 +4817,7 @@ export type Art_Coin = {
   capture_media_id?: Maybe<Scalars['bpchar']['output']>;
   created_at: Scalars['timestamptz']['output'];
   description: Scalars['String']['output'];
-  display_uri: Scalars['String']['output'];
+  display_uri?: Maybe<Scalars['String']['output']>;
   flag: Scalars['art_coin_flag_enum']['output'];
   graduated_address: Scalars['String']['output'];
   graduated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -4790,6 +4827,8 @@ export type Art_Coin = {
   metadata_uri: Scalars['String']['output'];
   name: Scalars['String']['output'];
   opens_at: Scalars['timestamptz']['output'];
+  pair_address?: Maybe<Scalars['String']['output']>;
+  pool_trades: Array<PoolTrade>;
   /** An array relationship */
   projects: Array<Generative_Token>;
   /** An aggregate relationship */
@@ -5137,6 +5176,7 @@ export type Art_Coin_Bool_Exp = {
   metadata_uri?: InputMaybe<String_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   opens_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  pair_address?: InputMaybe<String_Comparison_Exp>;
   projects?: InputMaybe<Generative_Token_Bool_Exp>;
   projects_aggregate?: InputMaybe<Generative_Token_Aggregate_Bool_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
@@ -5162,6 +5202,8 @@ export type Art_Coin_Flag_Enum_Comparison_Exp = {
 export type Art_Coin_Holding = {
   __typename?: 'art_coin_holding';
   amount: Scalars['numeric']['output'];
+  /** An object relationship */
+  art_coin: Art_Coin;
   art_coin_id: Scalars['String']['output'];
   holder_id: Scalars['String']['output'];
   id: Scalars['String']['output'];
@@ -5242,6 +5284,7 @@ export type Art_Coin_Holding_Bool_Exp = {
   _not?: InputMaybe<Art_Coin_Holding_Bool_Exp>;
   _or?: InputMaybe<Array<Art_Coin_Holding_Bool_Exp>>;
   amount?: InputMaybe<Numeric_Comparison_Exp>;
+  art_coin?: InputMaybe<Art_Coin_Bool_Exp>;
   art_coin_id?: InputMaybe<String_Comparison_Exp>;
   holder_id?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
@@ -5285,6 +5328,7 @@ export type Art_Coin_Holding_Min_Order_By = {
 /** Ordering options when selecting data from "art_coin_holding". */
 export type Art_Coin_Holding_Order_By = {
   amount?: InputMaybe<Order_By>;
+  art_coin?: InputMaybe<Art_Coin_Order_By>;
   art_coin_id?: InputMaybe<Order_By>;
   holder_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -5400,7 +5444,10 @@ export type Art_Coin_Holding_Variance_Order_By = {
 export type Art_Coin_Market_Stats = {
   __typename?: 'art_coin_market_stats';
   art_coin_id: Scalars['String']['output'];
+  fees_generated?: Maybe<Scalars['numeric']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['numeric']['output']>;
   from?: Maybe<Scalars['timestamptz']['output']>;
+  holders?: Maybe<Scalars['Int']['output']>;
   market_cap?: Maybe<Scalars['numeric']['output']>;
   price?: Maybe<Scalars['numeric']['output']>;
   to?: Maybe<Scalars['timestamptz']['output']>;
@@ -5413,7 +5460,10 @@ export type Art_Coin_Market_Stats_Bool_Exp = {
   _not?: InputMaybe<Art_Coin_Market_Stats_Bool_Exp>;
   _or?: InputMaybe<Array<Art_Coin_Market_Stats_Bool_Exp>>;
   art_coin_id?: InputMaybe<String_Comparison_Exp>;
+  fees_generated?: InputMaybe<Numeric_Comparison_Exp>;
+  fees_generated_fiat?: InputMaybe<Numeric_Comparison_Exp>;
   from?: InputMaybe<Timestamptz_Comparison_Exp>;
+  holders?: InputMaybe<Int_Comparison_Exp>;
   market_cap?: InputMaybe<Numeric_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -5426,6 +5476,7 @@ export type Art_Coin_Market_Stats_History = {
   art_coin_id: Scalars['String']['output'];
   from: Scalars['timestamptz']['output'];
   id: Scalars['Int']['output'];
+  interval: Scalars['art_coin_market_stats_history_interval_enum']['output'];
   market_cap?: Maybe<Scalars['numeric']['output']>;
   price?: Maybe<Scalars['numeric']['output']>;
   to: Scalars['timestamptz']['output'];
@@ -5440,72 +5491,24 @@ export type Art_Coin_Market_Stats_History_Bool_Exp = {
   art_coin_id?: InputMaybe<String_Comparison_Exp>;
   from?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  interval?: InputMaybe<Art_Coin_Market_Stats_History_Interval_Enum_Comparison_Exp>;
   market_cap?: InputMaybe<Numeric_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   to?: InputMaybe<Timestamptz_Comparison_Exp>;
   volume24?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
-/** columns and relationships of "art_coin_market_stats_history_hourly" */
-export type Art_Coin_Market_Stats_History_Hourly = {
-  __typename?: 'art_coin_market_stats_history_hourly';
-  art_coin_id?: Maybe<Scalars['String']['output']>;
-  market_cap?: Maybe<Scalars['numeric']['output']>;
-  price?: Maybe<Scalars['numeric']['output']>;
-  timestamp?: Maybe<Scalars['timestamptz']['output']>;
-  volume24?: Maybe<Scalars['numeric']['output']>;
-};
-
-/** Boolean expression to filter rows from the table "art_coin_market_stats_history_hourly". All fields are combined with a logical 'AND'. */
-export type Art_Coin_Market_Stats_History_Hourly_Bool_Exp = {
-  _and?: InputMaybe<Array<Art_Coin_Market_Stats_History_Hourly_Bool_Exp>>;
-  _not?: InputMaybe<Art_Coin_Market_Stats_History_Hourly_Bool_Exp>;
-  _or?: InputMaybe<Array<Art_Coin_Market_Stats_History_Hourly_Bool_Exp>>;
-  art_coin_id?: InputMaybe<String_Comparison_Exp>;
-  market_cap?: InputMaybe<Numeric_Comparison_Exp>;
-  price?: InputMaybe<Numeric_Comparison_Exp>;
-  timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
-  volume24?: InputMaybe<Numeric_Comparison_Exp>;
-};
-
-/** Ordering options when selecting data from "art_coin_market_stats_history_hourly". */
-export type Art_Coin_Market_Stats_History_Hourly_Order_By = {
-  art_coin_id?: InputMaybe<Order_By>;
-  market_cap?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  timestamp?: InputMaybe<Order_By>;
-  volume24?: InputMaybe<Order_By>;
-};
-
-/** select columns of table "art_coin_market_stats_history_hourly" */
-export enum Art_Coin_Market_Stats_History_Hourly_Select_Column {
-  /** column name */
-  ArtCoinId = 'art_coin_id',
-  /** column name */
-  MarketCap = 'market_cap',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Timestamp = 'timestamp',
-  /** column name */
-  Volume24 = 'volume24'
-}
-
-/** Streaming cursor of the table "art_coin_market_stats_history_hourly" */
-export type Art_Coin_Market_Stats_History_Hourly_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Art_Coin_Market_Stats_History_Hourly_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Art_Coin_Market_Stats_History_Hourly_Stream_Cursor_Value_Input = {
-  art_coin_id?: InputMaybe<Scalars['String']['input']>;
-  market_cap?: InputMaybe<Scalars['numeric']['input']>;
-  price?: InputMaybe<Scalars['numeric']['input']>;
-  timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
-  volume24?: InputMaybe<Scalars['numeric']['input']>;
+/** Boolean expression to compare columns of type "art_coin_market_stats_history_interval_enum". All fields are combined with logical 'AND'. */
+export type Art_Coin_Market_Stats_History_Interval_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
+  _gt?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
+  _gte?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
+  _in?: InputMaybe<Array<Scalars['art_coin_market_stats_history_interval_enum']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
+  _lte?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
+  _neq?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
+  _nin?: InputMaybe<Array<Scalars['art_coin_market_stats_history_interval_enum']['input']>>;
 };
 
 /** Ordering options when selecting data from "art_coin_market_stats_history". */
@@ -5513,6 +5516,7 @@ export type Art_Coin_Market_Stats_History_Order_By = {
   art_coin_id?: InputMaybe<Order_By>;
   from?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  interval?: InputMaybe<Order_By>;
   market_cap?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
@@ -5527,6 +5531,8 @@ export enum Art_Coin_Market_Stats_History_Select_Column {
   From = 'from',
   /** column name */
   Id = 'id',
+  /** column name */
+  Interval = 'interval',
   /** column name */
   MarketCap = 'market_cap',
   /** column name */
@@ -5550,6 +5556,7 @@ export type Art_Coin_Market_Stats_History_Stream_Cursor_Value_Input = {
   art_coin_id?: InputMaybe<Scalars['String']['input']>;
   from?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
+  interval?: InputMaybe<Scalars['art_coin_market_stats_history_interval_enum']['input']>;
   market_cap?: InputMaybe<Scalars['numeric']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
@@ -5559,7 +5566,10 @@ export type Art_Coin_Market_Stats_History_Stream_Cursor_Value_Input = {
 /** Ordering options when selecting data from "art_coin_market_stats". */
 export type Art_Coin_Market_Stats_Order_By = {
   art_coin_id?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   from?: InputMaybe<Order_By>;
+  holders?: InputMaybe<Order_By>;
   market_cap?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
@@ -5571,7 +5581,13 @@ export enum Art_Coin_Market_Stats_Select_Column {
   /** column name */
   ArtCoinId = 'art_coin_id',
   /** column name */
+  FeesGenerated = 'fees_generated',
+  /** column name */
+  FeesGeneratedFiat = 'fees_generated_fiat',
+  /** column name */
   From = 'from',
+  /** column name */
+  Holders = 'holders',
   /** column name */
   MarketCap = 'market_cap',
   /** column name */
@@ -5593,7 +5609,10 @@ export type Art_Coin_Market_Stats_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Art_Coin_Market_Stats_Stream_Cursor_Value_Input = {
   art_coin_id?: InputMaybe<Scalars['String']['input']>;
+  fees_generated?: InputMaybe<Scalars['numeric']['input']>;
+  fees_generated_fiat?: InputMaybe<Scalars['numeric']['input']>;
   from?: InputMaybe<Scalars['timestamptz']['input']>;
+  holders?: InputMaybe<Scalars['Int']['input']>;
   market_cap?: InputMaybe<Scalars['numeric']['input']>;
   price?: InputMaybe<Scalars['numeric']['input']>;
   to?: InputMaybe<Scalars['timestamptz']['input']>;
@@ -5616,9 +5635,67 @@ export type Art_Coin_Max_Fields = {
   metadata_uri?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
+  pair_address?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   supply?: Maybe<Scalars['numeric']['output']>;
   ticker?: Maybe<Scalars['String']['output']>;
+};
+
+/** columns and relationships of "art_coin_migrate" */
+export type Art_Coin_Migrate = {
+  __typename?: 'art_coin_migrate';
+  id: Scalars['String']['output'];
+  state: Scalars['art_coin_migrate_state_enum']['output'];
+};
+
+/** Boolean expression to filter rows from the table "art_coin_migrate". All fields are combined with a logical 'AND'. */
+export type Art_Coin_Migrate_Bool_Exp = {
+  _and?: InputMaybe<Array<Art_Coin_Migrate_Bool_Exp>>;
+  _not?: InputMaybe<Art_Coin_Migrate_Bool_Exp>;
+  _or?: InputMaybe<Array<Art_Coin_Migrate_Bool_Exp>>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  state?: InputMaybe<Art_Coin_Migrate_State_Enum_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "art_coin_migrate". */
+export type Art_Coin_Migrate_Order_By = {
+  id?: InputMaybe<Order_By>;
+  state?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "art_coin_migrate" */
+export enum Art_Coin_Migrate_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  State = 'state'
+}
+
+/** Boolean expression to compare columns of type "art_coin_migrate_state_enum". All fields are combined with logical 'AND'. */
+export type Art_Coin_Migrate_State_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
+  _gt?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
+  _gte?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
+  _in?: InputMaybe<Array<Scalars['art_coin_migrate_state_enum']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
+  _lte?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
+  _neq?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
+  _nin?: InputMaybe<Array<Scalars['art_coin_migrate_state_enum']['input']>>;
+};
+
+/** Streaming cursor of the table "art_coin_migrate" */
+export type Art_Coin_Migrate_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Art_Coin_Migrate_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Art_Coin_Migrate_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['art_coin_migrate_state_enum']['input']>;
 };
 
 /** aggregate min on columns */
@@ -5637,6 +5714,7 @@ export type Art_Coin_Min_Fields = {
   metadata_uri?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   opens_at?: Maybe<Scalars['timestamptz']['output']>;
+  pair_address?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   supply?: Maybe<Scalars['numeric']['output']>;
   ticker?: Maybe<Scalars['String']['output']>;
@@ -5660,6 +5738,7 @@ export type Art_Coin_Order_By = {
   metadata_uri?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
+  pair_address?: InputMaybe<Order_By>;
   projects_aggregate?: InputMaybe<Generative_Token_Aggregate_Order_By>;
   slug?: InputMaybe<Order_By>;
   supply?: InputMaybe<Order_By>;
@@ -5695,6 +5774,8 @@ export enum Art_Coin_Select_Column {
   Name = 'name',
   /** column name */
   OpensAt = 'opens_at',
+  /** column name */
+  PairAddress = 'pair_address',
   /** column name */
   Slug = 'slug',
   /** column name */
@@ -5747,6 +5828,7 @@ export type Art_Coin_Stream_Cursor_Value_Input = {
   metadata_uri?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   opens_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  pair_address?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   supply?: InputMaybe<Scalars['numeric']['input']>;
   ticker?: InputMaybe<Scalars['String']['input']>;
@@ -7856,6 +7938,7 @@ export type Collaboration = {
   collaborator_id: Scalars['String']['output'];
   /** An object relationship */
   contract: User;
+  id: Scalars['String']['output'];
   /** An object relationship */
   user: User;
   /** An object relationship */
@@ -7880,6 +7963,7 @@ export type Collaboration_Bool_Exp = {
   collaborator?: InputMaybe<User_Bool_Exp>;
   collaborator_id?: InputMaybe<String_Comparison_Exp>;
   contract?: InputMaybe<User_Bool_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   userByCollaboratorId?: InputMaybe<User_Bool_Exp>;
   wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
@@ -7889,12 +7973,14 @@ export type Collaboration_Bool_Exp = {
 export type Collaboration_Max_Order_By = {
   collaboration_contract_id?: InputMaybe<Order_By>;
   collaborator_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
 };
 
 /** order by min() on columns of table "collaboration" */
 export type Collaboration_Min_Order_By = {
   collaboration_contract_id?: InputMaybe<Order_By>;
   collaborator_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "collaboration". */
@@ -7903,6 +7989,7 @@ export type Collaboration_Order_By = {
   collaborator?: InputMaybe<User_Order_By>;
   collaborator_id?: InputMaybe<Order_By>;
   contract?: InputMaybe<User_Order_By>;
+  id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   userByCollaboratorId?: InputMaybe<User_Order_By>;
   wallet_account?: InputMaybe<Wallet_Account_Order_By>;
@@ -7913,7 +8000,9 @@ export enum Collaboration_Select_Column {
   /** column name */
   CollaborationContractId = 'collaboration_contract_id',
   /** column name */
-  CollaboratorId = 'collaborator_id'
+  CollaboratorId = 'collaborator_id',
+  /** column name */
+  Id = 'id'
 }
 
 /** Streaming cursor of the table "collaboration" */
@@ -7928,6 +8017,7 @@ export type Collaboration_Stream_Cursor_Input = {
 export type Collaboration_Stream_Cursor_Value_Input = {
   collaboration_contract_id?: InputMaybe<Scalars['String']['input']>;
   collaborator_id?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** columns and relationships of "collection_offer" */
@@ -8174,6 +8264,187 @@ export type Collection_Offer_Variance_Order_By = {
   initial_amount?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   version?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "currency_conversion" */
+export type Currency_Conversion = {
+  __typename?: 'currency_conversion';
+  crypto_code: Scalars['currency_conversion_crypto_code_enum']['output'];
+  eur?: Maybe<Scalars['numeric']['output']>;
+  id: Scalars['uuid']['output'];
+  timestamp: Scalars['timestamptz']['output'];
+  usd: Scalars['numeric']['output'];
+};
+
+/** aggregated selection of "currency_conversion" */
+export type Currency_Conversion_Aggregate = {
+  __typename?: 'currency_conversion_aggregate';
+  aggregate?: Maybe<Currency_Conversion_Aggregate_Fields>;
+  nodes: Array<Currency_Conversion>;
+};
+
+/** aggregate fields of "currency_conversion" */
+export type Currency_Conversion_Aggregate_Fields = {
+  __typename?: 'currency_conversion_aggregate_fields';
+  avg?: Maybe<Currency_Conversion_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Currency_Conversion_Max_Fields>;
+  min?: Maybe<Currency_Conversion_Min_Fields>;
+  stddev?: Maybe<Currency_Conversion_Stddev_Fields>;
+  stddev_pop?: Maybe<Currency_Conversion_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Currency_Conversion_Stddev_Samp_Fields>;
+  sum?: Maybe<Currency_Conversion_Sum_Fields>;
+  var_pop?: Maybe<Currency_Conversion_Var_Pop_Fields>;
+  var_samp?: Maybe<Currency_Conversion_Var_Samp_Fields>;
+  variance?: Maybe<Currency_Conversion_Variance_Fields>;
+};
+
+
+/** aggregate fields of "currency_conversion" */
+export type Currency_Conversion_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Currency_Conversion_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Currency_Conversion_Avg_Fields = {
+  __typename?: 'currency_conversion_avg_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "currency_conversion". All fields are combined with a logical 'AND'. */
+export type Currency_Conversion_Bool_Exp = {
+  _and?: InputMaybe<Array<Currency_Conversion_Bool_Exp>>;
+  _not?: InputMaybe<Currency_Conversion_Bool_Exp>;
+  _or?: InputMaybe<Array<Currency_Conversion_Bool_Exp>>;
+  crypto_code?: InputMaybe<Currency_Conversion_Crypto_Code_Enum_Comparison_Exp>;
+  eur?: InputMaybe<Numeric_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  timestamp?: InputMaybe<Timestamptz_Comparison_Exp>;
+  usd?: InputMaybe<Numeric_Comparison_Exp>;
+};
+
+/** Boolean expression to compare columns of type "currency_conversion_crypto_code_enum". All fields are combined with logical 'AND'. */
+export type Currency_Conversion_Crypto_Code_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  _gt?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  _gte?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  _in?: InputMaybe<Array<Scalars['currency_conversion_crypto_code_enum']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  _lte?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  _neq?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  _nin?: InputMaybe<Array<Scalars['currency_conversion_crypto_code_enum']['input']>>;
+};
+
+/** aggregate max on columns */
+export type Currency_Conversion_Max_Fields = {
+  __typename?: 'currency_conversion_max_fields';
+  crypto_code?: Maybe<Scalars['currency_conversion_crypto_code_enum']['output']>;
+  eur?: Maybe<Scalars['numeric']['output']>;
+  id?: Maybe<Scalars['uuid']['output']>;
+  timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  usd?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregate min on columns */
+export type Currency_Conversion_Min_Fields = {
+  __typename?: 'currency_conversion_min_fields';
+  crypto_code?: Maybe<Scalars['currency_conversion_crypto_code_enum']['output']>;
+  eur?: Maybe<Scalars['numeric']['output']>;
+  id?: Maybe<Scalars['uuid']['output']>;
+  timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  usd?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** Ordering options when selecting data from "currency_conversion". */
+export type Currency_Conversion_Order_By = {
+  crypto_code?: InputMaybe<Order_By>;
+  eur?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+  usd?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "currency_conversion" */
+export enum Currency_Conversion_Select_Column {
+  /** column name */
+  CryptoCode = 'crypto_code',
+  /** column name */
+  Eur = 'eur',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Timestamp = 'timestamp',
+  /** column name */
+  Usd = 'usd'
+}
+
+/** aggregate stddev on columns */
+export type Currency_Conversion_Stddev_Fields = {
+  __typename?: 'currency_conversion_stddev_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Currency_Conversion_Stddev_Pop_Fields = {
+  __typename?: 'currency_conversion_stddev_pop_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Currency_Conversion_Stddev_Samp_Fields = {
+  __typename?: 'currency_conversion_stddev_samp_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "currency_conversion" */
+export type Currency_Conversion_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Currency_Conversion_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Currency_Conversion_Stream_Cursor_Value_Input = {
+  crypto_code?: InputMaybe<Scalars['currency_conversion_crypto_code_enum']['input']>;
+  eur?: InputMaybe<Scalars['numeric']['input']>;
+  id?: InputMaybe<Scalars['uuid']['input']>;
+  timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
+  usd?: InputMaybe<Scalars['numeric']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Currency_Conversion_Sum_Fields = {
+  __typename?: 'currency_conversion_sum_fields';
+  eur?: Maybe<Scalars['numeric']['output']>;
+  usd?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** aggregate var_pop on columns */
+export type Currency_Conversion_Var_Pop_Fields = {
+  __typename?: 'currency_conversion_var_pop_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Currency_Conversion_Var_Samp_Fields = {
+  __typename?: 'currency_conversion_var_samp_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Currency_Conversion_Variance_Fields = {
+  __typename?: 'currency_conversion_variance_fields';
+  eur?: Maybe<Scalars['Float']['output']>;
+  usd?: Maybe<Scalars['Float']['output']>;
 };
 
 /** ordering argument of a cursor */
@@ -8650,6 +8921,7 @@ export type Generative_Token = {
   /** A computed field, executes function "get_features_for_generative_token" */
   features?: Maybe<Scalars['jsonb']['output']>;
   flag: Scalars['generative_token_flag_enum']['output'];
+  format: Scalars['generative_token_format_enum']['output'];
   /** An object relationship */
   frame_settings?: Maybe<Eth_Frame_Data>;
   /** An array relationship */
@@ -9086,6 +9358,7 @@ export type Generative_Token_Bool_Exp = {
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
   features?: InputMaybe<Jsonb_Comparison_Exp>;
   flag?: InputMaybe<Generative_Token_Flag_Enum_Comparison_Exp>;
+  format?: InputMaybe<Generative_Token_Format_Enum_Comparison_Exp>;
   frame_settings?: InputMaybe<Eth_Frame_Data_Bool_Exp>;
   generative_token_articles?: InputMaybe<Article_Generative_Token_Bool_Exp>;
   generative_uri?: InputMaybe<String_Comparison_Exp>;
@@ -9376,6 +9649,19 @@ export type Generative_Token_Flag_Enum_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['generative_token_flag_enum']['input']>>;
 };
 
+/** Boolean expression to compare columns of type "generative_token_format_enum". All fields are combined with logical 'AND'. */
+export type Generative_Token_Format_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
+  _gt?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
+  _gte?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
+  _in?: InputMaybe<Array<Scalars['generative_token_format_enum']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
+  _lte?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
+  _neq?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
+  _nin?: InputMaybe<Array<Scalars['generative_token_format_enum']['input']>>;
+};
+
 /** aggregate max on columns */
 export type Generative_Token_Max_Fields = {
   __typename?: 'generative_token_max_fields';
@@ -9390,6 +9676,7 @@ export type Generative_Token_Max_Fields = {
   display_still_uri?: Maybe<Scalars['String']['output']>;
   display_uri?: Maybe<Scalars['String']['output']>;
   flag?: Maybe<Scalars['generative_token_flag_enum']['output']>;
+  format?: Maybe<Scalars['generative_token_format_enum']['output']>;
   generative_uri?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   input_bytes_size?: Maybe<Scalars['Int']['output']>;
@@ -9426,6 +9713,7 @@ export type Generative_Token_Max_Order_By = {
   display_still_uri?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
+  format?: InputMaybe<Order_By>;
   generative_uri?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   input_bytes_size?: InputMaybe<Order_By>;
@@ -9463,6 +9751,7 @@ export type Generative_Token_Min_Fields = {
   display_still_uri?: Maybe<Scalars['String']['output']>;
   display_uri?: Maybe<Scalars['String']['output']>;
   flag?: Maybe<Scalars['generative_token_flag_enum']['output']>;
+  format?: Maybe<Scalars['generative_token_format_enum']['output']>;
   generative_uri?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   input_bytes_size?: Maybe<Scalars['Int']['output']>;
@@ -9499,6 +9788,7 @@ export type Generative_Token_Min_Order_By = {
   display_still_uri?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
+  format?: InputMaybe<Order_By>;
   generative_uri?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   input_bytes_size?: InputMaybe<Order_By>;
@@ -9544,6 +9834,7 @@ export type Generative_Token_Order_By = {
   enabled?: InputMaybe<Order_By>;
   features?: InputMaybe<Order_By>;
   flag?: InputMaybe<Order_By>;
+  format?: InputMaybe<Order_By>;
   frame_settings?: InputMaybe<Eth_Frame_Data_Order_By>;
   generative_token_articles_aggregate?: InputMaybe<Article_Generative_Token_Aggregate_Order_By>;
   generative_uri?: InputMaybe<Order_By>;
@@ -9613,6 +9904,8 @@ export enum Generative_Token_Select_Column {
   Enabled = 'enabled',
   /** column name */
   Flag = 'flag',
+  /** column name */
+  Format = 'format',
   /** column name */
   GenerativeUri = 'generative_uri',
   /** column name */
@@ -9786,6 +10079,7 @@ export type Generative_Token_Stream_Cursor_Value_Input = {
   display_uri?: InputMaybe<Scalars['String']['input']>;
   enabled?: InputMaybe<Scalars['Boolean']['input']>;
   flag?: InputMaybe<Scalars['generative_token_flag_enum']['input']>;
+  format?: InputMaybe<Scalars['generative_token_format_enum']['input']>;
   generative_uri?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes_size?: InputMaybe<Scalars['Int']['input']>;
@@ -10506,6 +10800,316 @@ export type Listing_Order_By = {
   version?: InputMaybe<Order_By>;
 };
 
+/** columns and relationships of "listing_search" */
+export type Listing_Search = {
+  __typename?: 'listing_search';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  artist_flag?: Maybe<Scalars['user_flag_enum']['output']>;
+  artist_username?: Maybe<Scalars['String']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  chain?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  is_inactive?: Maybe<Scalars['Boolean']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['jsonb']['output']>;
+  /** An object relationship */
+  objkt?: Maybe<Objkt>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  project_name?: Maybe<Scalars['String']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+
+/** columns and relationships of "listing_search" */
+export type Listing_SearchMetadataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** aggregated selection of "listing_search" */
+export type Listing_Search_Aggregate = {
+  __typename?: 'listing_search_aggregate';
+  aggregate?: Maybe<Listing_Search_Aggregate_Fields>;
+  nodes: Array<Listing_Search>;
+};
+
+/** aggregate fields of "listing_search" */
+export type Listing_Search_Aggregate_Fields = {
+  __typename?: 'listing_search_aggregate_fields';
+  avg?: Maybe<Listing_Search_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Listing_Search_Max_Fields>;
+  min?: Maybe<Listing_Search_Min_Fields>;
+  stddev?: Maybe<Listing_Search_Stddev_Fields>;
+  stddev_pop?: Maybe<Listing_Search_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Listing_Search_Stddev_Samp_Fields>;
+  sum?: Maybe<Listing_Search_Sum_Fields>;
+  var_pop?: Maybe<Listing_Search_Var_Pop_Fields>;
+  var_samp?: Maybe<Listing_Search_Var_Samp_Fields>;
+  variance?: Maybe<Listing_Search_Variance_Fields>;
+};
+
+
+/** aggregate fields of "listing_search" */
+export type Listing_Search_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Listing_Search_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Listing_Search_Avg_Fields = {
+  __typename?: 'listing_search_avg_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "listing_search". All fields are combined with a logical 'AND'. */
+export type Listing_Search_Bool_Exp = {
+  _and?: InputMaybe<Array<Listing_Search_Bool_Exp>>;
+  _not?: InputMaybe<Listing_Search_Bool_Exp>;
+  _or?: InputMaybe<Array<Listing_Search_Bool_Exp>>;
+  accepted_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  accepted_by_id?: InputMaybe<String_Comparison_Exp>;
+  amount?: InputMaybe<Numeric_Comparison_Exp>;
+  article_id?: InputMaybe<Int_Comparison_Exp>;
+  artist_flag?: InputMaybe<User_Flag_Enum_Comparison_Exp>;
+  artist_username?: InputMaybe<String_Comparison_Exp>;
+  cancelled_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  chain?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  is_inactive?: InputMaybe<Boolean_Comparison_Exp>;
+  issuer_id?: InputMaybe<String_Comparison_Exp>;
+  metadata?: InputMaybe<Jsonb_Comparison_Exp>;
+  objkt?: InputMaybe<Objkt_Bool_Exp>;
+  objkt_id?: InputMaybe<String_Comparison_Exp>;
+  price?: InputMaybe<Numeric_Comparison_Exp>;
+  project_name?: InputMaybe<String_Comparison_Exp>;
+  royalties?: InputMaybe<Int_Comparison_Exp>;
+  status?: InputMaybe<Listing_Status_Enum_Comparison_Exp>;
+  version?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Listing_Search_Max_Fields = {
+  __typename?: 'listing_search_max_fields';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  artist_flag?: Maybe<Scalars['user_flag_enum']['output']>;
+  artist_username?: Maybe<Scalars['String']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  chain?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  project_name?: Maybe<Scalars['String']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate min on columns */
+export type Listing_Search_Min_Fields = {
+  __typename?: 'listing_search_min_fields';
+  accepted_at?: Maybe<Scalars['timestamptz']['output']>;
+  accepted_by_id?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  artist_flag?: Maybe<Scalars['user_flag_enum']['output']>;
+  artist_username?: Maybe<Scalars['String']['output']>;
+  cancelled_at?: Maybe<Scalars['timestamptz']['output']>;
+  chain?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  issuer_id?: Maybe<Scalars['String']['output']>;
+  objkt_id?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  project_name?: Maybe<Scalars['String']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['listing_status_enum']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+/** Ordering options when selecting data from "listing_search". */
+export type Listing_Search_Order_By = {
+  accepted_at?: InputMaybe<Order_By>;
+  accepted_by_id?: InputMaybe<Order_By>;
+  amount?: InputMaybe<Order_By>;
+  article_id?: InputMaybe<Order_By>;
+  artist_flag?: InputMaybe<Order_By>;
+  artist_username?: InputMaybe<Order_By>;
+  cancelled_at?: InputMaybe<Order_By>;
+  chain?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  is_inactive?: InputMaybe<Order_By>;
+  issuer_id?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
+  objkt?: InputMaybe<Objkt_Order_By>;
+  objkt_id?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  project_name?: InputMaybe<Order_By>;
+  royalties?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "listing_search" */
+export enum Listing_Search_Select_Column {
+  /** column name */
+  AcceptedAt = 'accepted_at',
+  /** column name */
+  AcceptedById = 'accepted_by_id',
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  ArticleId = 'article_id',
+  /** column name */
+  ArtistFlag = 'artist_flag',
+  /** column name */
+  ArtistUsername = 'artist_username',
+  /** column name */
+  CancelledAt = 'cancelled_at',
+  /** column name */
+  Chain = 'chain',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsInactive = 'is_inactive',
+  /** column name */
+  IssuerId = 'issuer_id',
+  /** column name */
+  Metadata = 'metadata',
+  /** column name */
+  ObjktId = 'objkt_id',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  ProjectName = 'project_name',
+  /** column name */
+  Royalties = 'royalties',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  Version = 'version'
+}
+
+/** aggregate stddev on columns */
+export type Listing_Search_Stddev_Fields = {
+  __typename?: 'listing_search_stddev_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Listing_Search_Stddev_Pop_Fields = {
+  __typename?: 'listing_search_stddev_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Listing_Search_Stddev_Samp_Fields = {
+  __typename?: 'listing_search_stddev_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "listing_search" */
+export type Listing_Search_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Listing_Search_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Listing_Search_Stream_Cursor_Value_Input = {
+  accepted_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  accepted_by_id?: InputMaybe<Scalars['String']['input']>;
+  amount?: InputMaybe<Scalars['numeric']['input']>;
+  article_id?: InputMaybe<Scalars['Int']['input']>;
+  artist_flag?: InputMaybe<Scalars['user_flag_enum']['input']>;
+  artist_username?: InputMaybe<Scalars['String']['input']>;
+  cancelled_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  chain?: InputMaybe<Scalars['String']['input']>;
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  is_inactive?: InputMaybe<Scalars['Boolean']['input']>;
+  issuer_id?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['jsonb']['input']>;
+  objkt_id?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['numeric']['input']>;
+  project_name?: InputMaybe<Scalars['String']['input']>;
+  royalties?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<Scalars['listing_status_enum']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Listing_Search_Sum_Fields = {
+  __typename?: 'listing_search_sum_fields';
+  amount?: Maybe<Scalars['numeric']['output']>;
+  article_id?: Maybe<Scalars['Int']['output']>;
+  price?: Maybe<Scalars['numeric']['output']>;
+  royalties?: Maybe<Scalars['Int']['output']>;
+  version?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate var_pop on columns */
+export type Listing_Search_Var_Pop_Fields = {
+  __typename?: 'listing_search_var_pop_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Listing_Search_Var_Samp_Fields = {
+  __typename?: 'listing_search_var_samp_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Listing_Search_Variance_Fields = {
+  __typename?: 'listing_search_variance_fields';
+  amount?: Maybe<Scalars['Float']['output']>;
+  article_id?: Maybe<Scalars['Float']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  royalties?: Maybe<Scalars['Float']['output']>;
+  version?: Maybe<Scalars['Float']['output']>;
+};
+
 /** select columns of table "listing" */
 export enum Listing_Select_Column {
   /** column name */
@@ -10738,6 +11342,7 @@ export type Market_Stats = {
   generative_token: Generative_Token;
   highest_sold?: Maybe<Scalars['numeric']['output']>;
   highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  holders?: Maybe<Scalars['Int']['output']>;
   listed?: Maybe<Scalars['Int']['output']>;
   lowest_sold?: Maybe<Scalars['numeric']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
@@ -10816,6 +11421,7 @@ export type Market_Stats_Avg_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -10866,6 +11472,7 @@ export type Market_Stats_Bool_Exp = {
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   highest_sold?: InputMaybe<Numeric_Comparison_Exp>;
   highest_sold_fiat?: InputMaybe<Numeric_Comparison_Exp>;
+  holders?: InputMaybe<Int_Comparison_Exp>;
   listed?: InputMaybe<Int_Comparison_Exp>;
   lowest_sold?: InputMaybe<Numeric_Comparison_Exp>;
   lowest_sold_fiat?: InputMaybe<Numeric_Comparison_Exp>;
@@ -11382,6 +11989,7 @@ export type Market_Stats_Max_Fields = {
   from?: Maybe<Scalars['timestamptz']['output']>;
   highest_sold?: Maybe<Scalars['numeric']['output']>;
   highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  holders?: Maybe<Scalars['Int']['output']>;
   listed?: Maybe<Scalars['Int']['output']>;
   lowest_sold?: Maybe<Scalars['numeric']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
@@ -11431,6 +12039,7 @@ export type Market_Stats_Min_Fields = {
   from?: Maybe<Scalars['timestamptz']['output']>;
   highest_sold?: Maybe<Scalars['numeric']['output']>;
   highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  holders?: Maybe<Scalars['Int']['output']>;
   listed?: Maybe<Scalars['Int']['output']>;
   lowest_sold?: Maybe<Scalars['numeric']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
@@ -11480,6 +12089,7 @@ export type Market_Stats_Order_By = {
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   highest_sold?: InputMaybe<Order_By>;
   highest_sold_fiat?: InputMaybe<Order_By>;
+  holders?: InputMaybe<Order_By>;
   listed?: InputMaybe<Order_By>;
   lowest_sold?: InputMaybe<Order_By>;
   lowest_sold_fiat?: InputMaybe<Order_By>;
@@ -11536,6 +12146,8 @@ export enum Market_Stats_Select_Column {
   HighestSold = 'highest_sold',
   /** column name */
   HighestSoldFiat = 'highest_sold_fiat',
+  /** column name */
+  Holders = 'holders',
   /** column name */
   Listed = 'listed',
   /** column name */
@@ -11620,6 +12232,7 @@ export type Market_Stats_Stddev_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -11666,6 +12279,7 @@ export type Market_Stats_Stddev_Pop_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -11712,6 +12326,7 @@ export type Market_Stats_Stddev_Samp_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -11766,6 +12381,7 @@ export type Market_Stats_Stream_Cursor_Value_Input = {
   from?: InputMaybe<Scalars['timestamptz']['input']>;
   highest_sold?: InputMaybe<Scalars['numeric']['input']>;
   highest_sold_fiat?: InputMaybe<Scalars['numeric']['input']>;
+  holders?: InputMaybe<Scalars['Int']['input']>;
   listed?: InputMaybe<Scalars['Int']['input']>;
   lowest_sold?: InputMaybe<Scalars['numeric']['input']>;
   lowest_sold_fiat?: InputMaybe<Scalars['numeric']['input']>;
@@ -11814,6 +12430,7 @@ export type Market_Stats_Sum_Fields = {
   floor_fiat?: Maybe<Scalars['numeric']['output']>;
   highest_sold?: Maybe<Scalars['numeric']['output']>;
   highest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
+  holders?: Maybe<Scalars['Int']['output']>;
   listed?: Maybe<Scalars['Int']['output']>;
   lowest_sold?: Maybe<Scalars['numeric']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['numeric']['output']>;
@@ -11860,6 +12477,7 @@ export type Market_Stats_Var_Pop_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -11906,6 +12524,7 @@ export type Market_Stats_Var_Samp_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -11952,6 +12571,7 @@ export type Market_Stats_Variance_Fields = {
   floor_fiat?: Maybe<Scalars['Float']['output']>;
   highest_sold?: Maybe<Scalars['Float']['output']>;
   highest_sold_fiat?: Maybe<Scalars['Float']['output']>;
+  holders?: Maybe<Scalars['Float']['output']>;
   listed?: Maybe<Scalars['Float']['output']>;
   lowest_sold?: Maybe<Scalars['Float']['output']>;
   lowest_sold_fiat?: Maybe<Scalars['Float']['output']>;
@@ -12145,6 +12765,8 @@ export type Mint_Ticket = {
   token_id: Scalars['String']['output'];
   /** An object relationship */
   user: User;
+  /** An object relationship */
+  wallet_account?: Maybe<Wallet_Account>;
 };
 
 /** aggregated selection of "mint_ticket" */
@@ -12231,6 +12853,7 @@ export type Mint_Ticket_Bool_Exp = {
   taxation_start?: InputMaybe<Timestamptz_Comparison_Exp>;
   token_id?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
+  wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
 /** aggregate max on columns */
@@ -12295,6 +12918,7 @@ export type Mint_Ticket_Order_By = {
   taxation_start?: InputMaybe<Order_By>;
   token_id?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
+  wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
 /** select columns of table "mint_ticket" */
@@ -12704,7 +13328,6 @@ export type Moderation_Reason_Stream_Cursor_Value_Input = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
-  airdrop_tez_claim?: Maybe<AirdropTezClaimResult>;
   authenticate?: Maybe<AuthenticationResult>;
   /** Authenticate using a Web3Auth idToken */
   authenticate_web3auth?: Maybe<AuthenticationResult>;
@@ -12731,12 +13354,6 @@ export type Mutation_Root = {
   web3auth_email_request_otp?: Maybe<Web3AuthEmailRequestOtpOutput>;
   /** Use a provider oauth id token to issue a JWT for web3auth custom provider validation */
   web3auth_oauth?: Maybe<Web3AuthOAuthOutput>;
-};
-
-
-/** mutation root */
-export type Mutation_RootAirdrop_Tez_ClaimArgs = {
-  input?: InputMaybe<AirdropTezClaimInput>;
 };
 
 
@@ -12896,6 +13513,9 @@ export type Objkt = {
   display_uri?: Maybe<Scalars['bpchar']['output']>;
   duplicate?: Maybe<Scalars['Boolean']['output']>;
   features?: Maybe<Scalars['jsonb']['output']>;
+  fees_generated?: Maybe<Scalars['numeric']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['numeric']['output']>;
+  generated_from_id?: Maybe<Scalars['String']['output']>;
   generation_hash?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   generative_token: Generative_Token;
@@ -12933,6 +13553,10 @@ export type Objkt = {
   rarity?: Maybe<Scalars['float8']['output']>;
   /** An array relationship */
   redemptions: Array<Redemption>;
+  /** An object relationship */
+  regenerated_from?: Maybe<Objkt>;
+  /** An object relationship */
+  regenerated_to?: Maybe<Objkt>;
   royalties: Scalars['Int']['output'];
   /** An array relationship */
   secondary_splits: Array<Split>;
@@ -13249,6 +13873,8 @@ export type Objkt_Avg_Fields = {
   __typename?: 'objkt_avg_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13261,6 +13887,8 @@ export type Objkt_Avg_Fields = {
 export type Objkt_Avg_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13288,6 +13916,9 @@ export type Objkt_Bool_Exp = {
   display_uri?: InputMaybe<Bpchar_Comparison_Exp>;
   duplicate?: InputMaybe<Boolean_Comparison_Exp>;
   features?: InputMaybe<Jsonb_Comparison_Exp>;
+  fees_generated?: InputMaybe<Numeric_Comparison_Exp>;
+  fees_generated_fiat?: InputMaybe<Numeric_Comparison_Exp>;
+  generated_from_id?: InputMaybe<String_Comparison_Exp>;
   generation_hash?: InputMaybe<String_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   gentk_assign?: InputMaybe<Gentk_Assign_Bool_Exp>;
@@ -13313,6 +13944,8 @@ export type Objkt_Bool_Exp = {
   parent_id?: InputMaybe<String_Comparison_Exp>;
   rarity?: InputMaybe<Float8_Comparison_Exp>;
   redemptions?: InputMaybe<Redemption_Bool_Exp>;
+  regenerated_from?: InputMaybe<Objkt_Bool_Exp>;
+  regenerated_to?: InputMaybe<Objkt_Bool_Exp>;
   royalties?: InputMaybe<Int_Comparison_Exp>;
   secondary_splits?: InputMaybe<Split_Bool_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
@@ -13336,6 +13969,9 @@ export type Objkt_Max_Fields = {
   depth?: Maybe<Scalars['Int']['output']>;
   display_still_uri?: Maybe<Scalars['bpchar']['output']>;
   display_uri?: Maybe<Scalars['bpchar']['output']>;
+  fees_generated?: Maybe<Scalars['numeric']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['numeric']['output']>;
+  generated_from_id?: Maybe<Scalars['String']['output']>;
   generation_hash?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   input_bytes?: Maybe<Scalars['String']['output']>;
@@ -13367,6 +14003,9 @@ export type Objkt_Max_Order_By = {
   depth?: InputMaybe<Order_By>;
   display_still_uri?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
+  generated_from_id?: InputMaybe<Order_By>;
   generation_hash?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   input_bytes?: InputMaybe<Order_By>;
@@ -13397,6 +14036,9 @@ export type Objkt_Min_Fields = {
   depth?: Maybe<Scalars['Int']['output']>;
   display_still_uri?: Maybe<Scalars['bpchar']['output']>;
   display_uri?: Maybe<Scalars['bpchar']['output']>;
+  fees_generated?: Maybe<Scalars['numeric']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['numeric']['output']>;
+  generated_from_id?: Maybe<Scalars['String']['output']>;
   generation_hash?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   input_bytes?: Maybe<Scalars['String']['output']>;
@@ -13428,6 +14070,9 @@ export type Objkt_Min_Order_By = {
   depth?: InputMaybe<Order_By>;
   display_still_uri?: InputMaybe<Order_By>;
   display_uri?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
+  generated_from_id?: InputMaybe<Order_By>;
   generation_hash?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   input_bytes?: InputMaybe<Order_By>;
@@ -13464,6 +14109,9 @@ export type Objkt_Order_By = {
   display_uri?: InputMaybe<Order_By>;
   duplicate?: InputMaybe<Order_By>;
   features?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
+  generated_from_id?: InputMaybe<Order_By>;
   generation_hash?: InputMaybe<Order_By>;
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   gentk_assign?: InputMaybe<Gentk_Assign_Order_By>;
@@ -13487,6 +14135,8 @@ export type Objkt_Order_By = {
   parent_id?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   redemptions_aggregate?: InputMaybe<Redemption_Aggregate_Order_By>;
+  regenerated_from?: InputMaybe<Objkt_Order_By>;
+  regenerated_to?: InputMaybe<Objkt_Order_By>;
   royalties?: InputMaybe<Order_By>;
   secondary_splits_aggregate?: InputMaybe<Split_Aggregate_Order_By>;
   slug?: InputMaybe<Order_By>;
@@ -13522,6 +14172,12 @@ export enum Objkt_Select_Column {
   Duplicate = 'duplicate',
   /** column name */
   Features = 'features',
+  /** column name */
+  FeesGenerated = 'fees_generated',
+  /** column name */
+  FeesGeneratedFiat = 'fees_generated_fiat',
+  /** column name */
+  GeneratedFromId = 'generated_from_id',
   /** column name */
   GenerationHash = 'generation_hash',
   /** column name */
@@ -13633,6 +14289,8 @@ export type Objkt_Stddev_Fields = {
   __typename?: 'objkt_stddev_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13645,6 +14303,8 @@ export type Objkt_Stddev_Fields = {
 export type Objkt_Stddev_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13656,6 +14316,8 @@ export type Objkt_Stddev_Pop_Fields = {
   __typename?: 'objkt_stddev_pop_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13668,6 +14330,8 @@ export type Objkt_Stddev_Pop_Fields = {
 export type Objkt_Stddev_Pop_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13679,6 +14343,8 @@ export type Objkt_Stddev_Samp_Fields = {
   __typename?: 'objkt_stddev_samp_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13691,6 +14357,8 @@ export type Objkt_Stddev_Samp_Fields = {
 export type Objkt_Stddev_Samp_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13717,6 +14385,9 @@ export type Objkt_Stream_Cursor_Value_Input = {
   display_uri?: InputMaybe<Scalars['bpchar']['input']>;
   duplicate?: InputMaybe<Scalars['Boolean']['input']>;
   features?: InputMaybe<Scalars['jsonb']['input']>;
+  fees_generated?: InputMaybe<Scalars['numeric']['input']>;
+  fees_generated_fiat?: InputMaybe<Scalars['numeric']['input']>;
+  generated_from_id?: InputMaybe<Scalars['String']['input']>;
   generation_hash?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   input_bytes?: InputMaybe<Scalars['String']['input']>;
@@ -13744,6 +14415,8 @@ export type Objkt_Sum_Fields = {
   __typename?: 'objkt_sum_fields';
   children_count?: Maybe<Scalars['Int']['output']>;
   depth?: Maybe<Scalars['Int']['output']>;
+  fees_generated?: Maybe<Scalars['numeric']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['numeric']['output']>;
   iteration?: Maybe<Scalars['numeric']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13756,6 +14429,8 @@ export type Objkt_Sum_Fields = {
 export type Objkt_Sum_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13767,6 +14442,8 @@ export type Objkt_Var_Pop_Fields = {
   __typename?: 'objkt_var_pop_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13779,6 +14456,8 @@ export type Objkt_Var_Pop_Fields = {
 export type Objkt_Var_Pop_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13790,6 +14469,8 @@ export type Objkt_Var_Samp_Fields = {
   __typename?: 'objkt_var_samp_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13802,6 +14483,8 @@ export type Objkt_Var_Samp_Fields = {
 export type Objkt_Var_Samp_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -13813,6 +14496,8 @@ export type Objkt_Variance_Fields = {
   __typename?: 'objkt_variance_fields';
   children_count?: Maybe<Scalars['Float']['output']>;
   depth?: Maybe<Scalars['Float']['output']>;
+  fees_generated?: Maybe<Scalars['Float']['output']>;
+  fees_generated_fiat?: Maybe<Scalars['Float']['output']>;
   iteration?: Maybe<Scalars['Float']['output']>;
   /** A computed field, executes function "objkt_minted_price" */
   minted_price?: Maybe<Scalars['numeric']['output']>;
@@ -13825,6 +14510,8 @@ export type Objkt_Variance_Fields = {
 export type Objkt_Variance_Order_By = {
   children_count?: InputMaybe<Order_By>;
   depth?: InputMaybe<Order_By>;
+  fees_generated?: InputMaybe<Order_By>;
+  fees_generated_fiat?: InputMaybe<Order_By>;
   iteration?: InputMaybe<Order_By>;
   rarity?: InputMaybe<Order_By>;
   royalties?: InputMaybe<Order_By>;
@@ -15595,8 +16282,10 @@ export type Onchain_Query = {
   art_coin_market_stats_history: Array<Art_Coin_Market_Stats_History>;
   /** fetch data from the table: "art_coin_market_stats_history" using primary key columns */
   art_coin_market_stats_history_by_pk?: Maybe<Art_Coin_Market_Stats_History>;
-  /** fetch data from the table: "art_coin_market_stats_history_hourly" */
-  art_coin_market_stats_history_hourly: Array<Art_Coin_Market_Stats_History_Hourly>;
+  /** fetch data from the table: "art_coin_migrate" */
+  art_coin_migrate: Array<Art_Coin_Migrate>;
+  /** fetch data from the table: "art_coin_migrate" using primary key columns */
+  art_coin_migrate_by_pk?: Maybe<Art_Coin_Migrate>;
   /** fetch data from the table: "art_coin_transfer" */
   art_coin_transfer: Array<Art_Coin_Transfer>;
   /** fetch data from the table: "art_coin_transfer" using primary key columns */
@@ -15647,10 +16336,18 @@ export type Onchain_Query = {
   codex_update_request_by_pk?: Maybe<Codex_Update_Request>;
   /** fetch data from the table: "collaboration" */
   collaboration: Array<Collaboration>;
+  /** fetch data from the table: "collaboration" using primary key columns */
+  collaboration_by_pk?: Maybe<Collaboration>;
   /** fetch data from the table: "collection_offer" */
   collection_offer: Array<Collection_Offer>;
   /** fetch data from the table: "collection_offer" using primary key columns */
   collection_offer_by_pk?: Maybe<Collection_Offer>;
+  /** fetch data from the table: "currency_conversion" */
+  currency_conversion: Array<Currency_Conversion>;
+  /** fetch aggregated fields from the table: "currency_conversion" */
+  currency_conversion_aggregate: Currency_Conversion_Aggregate;
+  /** fetch data from the table: "currency_conversion" using primary key columns */
+  currency_conversion_by_pk?: Maybe<Currency_Conversion>;
   /** fetch data from the table: "eth_frame_data" */
   eth_frame_data: Array<Eth_Frame_Data>;
   /** fetch data from the table: "eth_frame_data" using primary key columns */
@@ -15713,6 +16410,10 @@ export type Onchain_Query = {
   listing_aggregate: Listing_Aggregate;
   /** fetch data from the table: "listing" using primary key columns */
   listing_by_pk?: Maybe<Listing>;
+  /** fetch data from the table: "listing_search" */
+  listing_search: Array<Listing_Search>;
+  /** fetch aggregated fields from the table: "listing_search" */
+  listing_search_aggregate: Listing_Search_Aggregate;
   /** fetch data from the table: "market_stats" */
   market_stats: Array<Market_Stats>;
   /** fetch aggregated fields from the table: "market_stats" */
@@ -15978,12 +16679,17 @@ export type Onchain_QueryArt_Coin_Market_Stats_History_By_PkArgs = {
 };
 
 
-export type Onchain_QueryArt_Coin_Market_Stats_History_HourlyArgs = {
-  distinct_on?: InputMaybe<Array<Art_Coin_Market_Stats_History_Hourly_Select_Column>>;
+export type Onchain_QueryArt_Coin_MigrateArgs = {
+  distinct_on?: InputMaybe<Array<Art_Coin_Migrate_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Art_Coin_Market_Stats_History_Hourly_Order_By>>;
-  where?: InputMaybe<Art_Coin_Market_Stats_History_Hourly_Bool_Exp>;
+  order_by?: InputMaybe<Array<Art_Coin_Migrate_Order_By>>;
+  where?: InputMaybe<Art_Coin_Migrate_Bool_Exp>;
+};
+
+
+export type Onchain_QueryArt_Coin_Migrate_By_PkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -16175,6 +16881,11 @@ export type Onchain_QueryCollaborationArgs = {
 };
 
 
+export type Onchain_QueryCollaboration_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type Onchain_QueryCollection_OfferArgs = {
   distinct_on?: InputMaybe<Array<Collection_Offer_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -16187,6 +16898,29 @@ export type Onchain_QueryCollection_OfferArgs = {
 export type Onchain_QueryCollection_Offer_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
+};
+
+
+export type Onchain_QueryCurrency_ConversionArgs = {
+  distinct_on?: InputMaybe<Array<Currency_Conversion_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Currency_Conversion_Order_By>>;
+  where?: InputMaybe<Currency_Conversion_Bool_Exp>;
+};
+
+
+export type Onchain_QueryCurrency_Conversion_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Currency_Conversion_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Currency_Conversion_Order_By>>;
+  where?: InputMaybe<Currency_Conversion_Bool_Exp>;
+};
+
+
+export type Onchain_QueryCurrency_Conversion_By_PkArgs = {
+  id: Scalars['uuid']['input'];
 };
 
 
@@ -16415,6 +17149,24 @@ export type Onchain_QueryListing_AggregateArgs = {
 export type Onchain_QueryListing_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
+};
+
+
+export type Onchain_QueryListing_SearchArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Search_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Search_Order_By>>;
+  where?: InputMaybe<Listing_Search_Bool_Exp>;
+};
+
+
+export type Onchain_QueryListing_Search_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Search_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Search_Order_By>>;
+  where?: InputMaybe<Listing_Search_Bool_Exp>;
 };
 
 
@@ -16810,14 +17562,16 @@ export type Onchain_Subscription = {
   art_coin_market_stats_history: Array<Art_Coin_Market_Stats_History>;
   /** fetch data from the table: "art_coin_market_stats_history" using primary key columns */
   art_coin_market_stats_history_by_pk?: Maybe<Art_Coin_Market_Stats_History>;
-  /** fetch data from the table: "art_coin_market_stats_history_hourly" */
-  art_coin_market_stats_history_hourly: Array<Art_Coin_Market_Stats_History_Hourly>;
-  /** fetch data from the table in a streaming manner: "art_coin_market_stats_history_hourly" */
-  art_coin_market_stats_history_hourly_stream: Array<Art_Coin_Market_Stats_History_Hourly>;
   /** fetch data from the table in a streaming manner: "art_coin_market_stats_history" */
   art_coin_market_stats_history_stream: Array<Art_Coin_Market_Stats_History>;
   /** fetch data from the table in a streaming manner: "art_coin_market_stats" */
   art_coin_market_stats_stream: Array<Art_Coin_Market_Stats>;
+  /** fetch data from the table: "art_coin_migrate" */
+  art_coin_migrate: Array<Art_Coin_Migrate>;
+  /** fetch data from the table: "art_coin_migrate" using primary key columns */
+  art_coin_migrate_by_pk?: Maybe<Art_Coin_Migrate>;
+  /** fetch data from the table in a streaming manner: "art_coin_migrate" */
+  art_coin_migrate_stream: Array<Art_Coin_Migrate>;
   /** fetch data from the table in a streaming manner: "art_coin" */
   art_coin_stream: Array<Art_Coin>;
   /** fetch data from the table: "art_coin_transfer" */
@@ -16892,6 +17646,8 @@ export type Onchain_Subscription = {
   codex_update_request_stream: Array<Codex_Update_Request>;
   /** fetch data from the table: "collaboration" */
   collaboration: Array<Collaboration>;
+  /** fetch data from the table: "collaboration" using primary key columns */
+  collaboration_by_pk?: Maybe<Collaboration>;
   /** fetch data from the table in a streaming manner: "collaboration" */
   collaboration_stream: Array<Collaboration>;
   /** fetch data from the table: "collection_offer" */
@@ -16900,6 +17656,14 @@ export type Onchain_Subscription = {
   collection_offer_by_pk?: Maybe<Collection_Offer>;
   /** fetch data from the table in a streaming manner: "collection_offer" */
   collection_offer_stream: Array<Collection_Offer>;
+  /** fetch data from the table: "currency_conversion" */
+  currency_conversion: Array<Currency_Conversion>;
+  /** fetch aggregated fields from the table: "currency_conversion" */
+  currency_conversion_aggregate: Currency_Conversion_Aggregate;
+  /** fetch data from the table: "currency_conversion" using primary key columns */
+  currency_conversion_by_pk?: Maybe<Currency_Conversion>;
+  /** fetch data from the table in a streaming manner: "currency_conversion" */
+  currency_conversion_stream: Array<Currency_Conversion>;
   /** fetch data from the table: "eth_frame_data" */
   eth_frame_data: Array<Eth_Frame_Data>;
   /** fetch data from the table: "eth_frame_data" using primary key columns */
@@ -16990,6 +17754,12 @@ export type Onchain_Subscription = {
   listing_aggregate: Listing_Aggregate;
   /** fetch data from the table: "listing" using primary key columns */
   listing_by_pk?: Maybe<Listing>;
+  /** fetch data from the table: "listing_search" */
+  listing_search: Array<Listing_Search>;
+  /** fetch aggregated fields from the table: "listing_search" */
+  listing_search_aggregate: Listing_Search_Aggregate;
+  /** fetch data from the table in a streaming manner: "listing_search" */
+  listing_search_stream: Array<Listing_Search>;
   /** fetch data from the table in a streaming manner: "listing" */
   listing_stream: Array<Listing>;
   /** fetch data from the table: "market_stats" */
@@ -17343,22 +18113,6 @@ export type Onchain_SubscriptionArt_Coin_Market_Stats_History_By_PkArgs = {
 };
 
 
-export type Onchain_SubscriptionArt_Coin_Market_Stats_History_HourlyArgs = {
-  distinct_on?: InputMaybe<Array<Art_Coin_Market_Stats_History_Hourly_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Art_Coin_Market_Stats_History_Hourly_Order_By>>;
-  where?: InputMaybe<Art_Coin_Market_Stats_History_Hourly_Bool_Exp>;
-};
-
-
-export type Onchain_SubscriptionArt_Coin_Market_Stats_History_Hourly_StreamArgs = {
-  batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Art_Coin_Market_Stats_History_Hourly_Stream_Cursor_Input>>;
-  where?: InputMaybe<Art_Coin_Market_Stats_History_Hourly_Bool_Exp>;
-};
-
-
 export type Onchain_SubscriptionArt_Coin_Market_Stats_History_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Art_Coin_Market_Stats_History_Stream_Cursor_Input>>;
@@ -17370,6 +18124,27 @@ export type Onchain_SubscriptionArt_Coin_Market_Stats_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Art_Coin_Market_Stats_Stream_Cursor_Input>>;
   where?: InputMaybe<Art_Coin_Market_Stats_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionArt_Coin_MigrateArgs = {
+  distinct_on?: InputMaybe<Array<Art_Coin_Migrate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Art_Coin_Migrate_Order_By>>;
+  where?: InputMaybe<Art_Coin_Migrate_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionArt_Coin_Migrate_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Onchain_SubscriptionArt_Coin_Migrate_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Art_Coin_Migrate_Stream_Cursor_Input>>;
+  where?: InputMaybe<Art_Coin_Migrate_Bool_Exp>;
 };
 
 
@@ -17645,6 +18420,11 @@ export type Onchain_SubscriptionCollaborationArgs = {
 };
 
 
+export type Onchain_SubscriptionCollaboration_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type Onchain_SubscriptionCollaboration_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Collaboration_Stream_Cursor_Input>>;
@@ -17671,6 +18451,36 @@ export type Onchain_SubscriptionCollection_Offer_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Collection_Offer_Stream_Cursor_Input>>;
   where?: InputMaybe<Collection_Offer_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionCurrency_ConversionArgs = {
+  distinct_on?: InputMaybe<Array<Currency_Conversion_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Currency_Conversion_Order_By>>;
+  where?: InputMaybe<Currency_Conversion_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionCurrency_Conversion_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Currency_Conversion_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Currency_Conversion_Order_By>>;
+  where?: InputMaybe<Currency_Conversion_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionCurrency_Conversion_By_PkArgs = {
+  id: Scalars['uuid']['input'];
+};
+
+
+export type Onchain_SubscriptionCurrency_Conversion_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Currency_Conversion_Stream_Cursor_Input>>;
+  where?: InputMaybe<Currency_Conversion_Bool_Exp>;
 };
 
 
@@ -17997,6 +18807,31 @@ export type Onchain_SubscriptionListing_AggregateArgs = {
 export type Onchain_SubscriptionListing_By_PkArgs = {
   id: Scalars['String']['input'];
   version: Scalars['Int']['input'];
+};
+
+
+export type Onchain_SubscriptionListing_SearchArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Search_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Search_Order_By>>;
+  where?: InputMaybe<Listing_Search_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionListing_Search_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Listing_Search_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Listing_Search_Order_By>>;
+  where?: InputMaybe<Listing_Search_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionListing_Search_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Listing_Search_Stream_Cursor_Input>>;
+  where?: InputMaybe<Listing_Search_Bool_Exp>;
 };
 
 
@@ -18684,6 +19519,7 @@ export type Pricing_Dutch_Auction_Variance_Order_By = {
 export type Pricing_Fixed = {
   __typename?: 'pricing_fixed';
   fee_currency?: Maybe<Scalars['String']['output']>;
+  fee_growth_rate?: Maybe<Scalars['numeric']['output']>;
   /** An object relationship */
   generative_token?: Maybe<Generative_Token>;
   id: Scalars['String']['output'];
@@ -18710,6 +19546,7 @@ export type Pricing_Fixed_Aggregate_Order_By = {
 
 /** order by avg() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Avg_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
@@ -18720,6 +19557,7 @@ export type Pricing_Fixed_Bool_Exp = {
   _not?: InputMaybe<Pricing_Fixed_Bool_Exp>;
   _or?: InputMaybe<Array<Pricing_Fixed_Bool_Exp>>;
   fee_currency?: InputMaybe<String_Comparison_Exp>;
+  fee_growth_rate?: InputMaybe<Numeric_Comparison_Exp>;
   generative_token?: InputMaybe<Generative_Token_Bool_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
   mint_fee?: InputMaybe<Numeric_Comparison_Exp>;
@@ -18731,6 +19569,7 @@ export type Pricing_Fixed_Bool_Exp = {
 /** order by max() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Max_Order_By = {
   fee_currency?: InputMaybe<Order_By>;
+  fee_growth_rate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
@@ -18741,6 +19580,7 @@ export type Pricing_Fixed_Max_Order_By = {
 /** order by min() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Min_Order_By = {
   fee_currency?: InputMaybe<Order_By>;
+  fee_growth_rate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   opens_at?: InputMaybe<Order_By>;
@@ -18751,6 +19591,7 @@ export type Pricing_Fixed_Min_Order_By = {
 /** Ordering options when selecting data from "pricing_fixed". */
 export type Pricing_Fixed_Order_By = {
   fee_currency?: InputMaybe<Order_By>;
+  fee_growth_rate?: InputMaybe<Order_By>;
   generative_token?: InputMaybe<Generative_Token_Order_By>;
   id?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
@@ -18763,6 +19604,8 @@ export type Pricing_Fixed_Order_By = {
 export enum Pricing_Fixed_Select_Column {
   /** column name */
   FeeCurrency = 'fee_currency',
+  /** column name */
+  FeeGrowthRate = 'fee_growth_rate',
   /** column name */
   Id = 'id',
   /** column name */
@@ -18777,18 +19620,21 @@ export enum Pricing_Fixed_Select_Column {
 
 /** order by stddev() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Stddev_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
 
 /** order by stddev_pop() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Stddev_Pop_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
 
 /** order by stddev_samp() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Stddev_Samp_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
@@ -18804,6 +19650,7 @@ export type Pricing_Fixed_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Pricing_Fixed_Stream_Cursor_Value_Input = {
   fee_currency?: InputMaybe<Scalars['String']['input']>;
+  fee_growth_rate?: InputMaybe<Scalars['numeric']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   mint_fee?: InputMaybe<Scalars['numeric']['input']>;
   opens_at?: InputMaybe<Scalars['timestamptz']['input']>;
@@ -18813,24 +19660,28 @@ export type Pricing_Fixed_Stream_Cursor_Value_Input = {
 
 /** order by sum() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Sum_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
 
 /** order by var_pop() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Var_Pop_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
 
 /** order by var_samp() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Var_Samp_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
 
 /** order by variance() on columns of table "pricing_fixed" */
 export type Pricing_Fixed_Variance_Order_By = {
+  fee_growth_rate?: InputMaybe<Order_By>;
   mint_fee?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
 };
@@ -18845,9 +19696,11 @@ export type Query_Root = {
   offchain?: Maybe<Offchain_Query>;
   onchain?: Maybe<Onchain_Query>;
   open_form_graph?: Maybe<OpenFormGraphResponse>;
+  poolTrades: Array<PoolTrade>;
   projectReserves: Array<ProjectReserves>;
   search: SearchOutput;
   searchAccounts: SearchAccountsOutput;
+  searchListings: Array<ListingResult>;
   walletRpcs?: Maybe<Array<WalletRpc>>;
 };
 
@@ -18872,6 +19725,11 @@ export type Query_RootOpen_Form_GraphArgs = {
 };
 
 
+export type Query_RootPoolTradesArgs = {
+  poolAddress: Scalars['String']['input'];
+};
+
+
 export type Query_RootProjectReservesArgs = {
   projectId: Scalars['String']['input'];
 };
@@ -18884,6 +19742,14 @@ export type Query_RootSearchArgs = {
 
 export type Query_RootSearchAccountsArgs = {
   input: SearchInput;
+};
+
+
+export type Query_RootSearchListingsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ListingOrderBy>;
+  query: Scalars['String']['input'];
 };
 
 export type Random_Objkts_Generative_Token_Args = {
@@ -20955,13 +21821,6 @@ export type SetFarcasterHandleMutationVariables = Exact<{
 
 export type SetFarcasterHandleMutation = { __typename?: 'mutation_root', set_farcaster_handle?: { __typename?: 'SetFarcasterHandleResult', handle: string } | null };
 
-export type AirdropTezClaimMutationVariables = Exact<{
-  input: AirdropTezClaimInput;
-}>;
-
-
-export type AirdropTezClaimMutation = { __typename?: 'mutation_root', airdrop_tez_claim?: { __typename?: 'AirdropTezClaimResult', signature: string } | null };
-
 export type Get_LibrariesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -21173,7 +22032,6 @@ export const DeleteAccountDocument = {"kind":"Document","definitions":[{"kind":"
 export const RequestTransferWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestTransferWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestTransferWalletInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"request_transfer_wallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]} as unknown as DocumentNode<RequestTransferWalletMutation, RequestTransferWalletMutationVariables>;
 export const TransferWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"TransferWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TransferWalletInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"transfer_wallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<TransferWalletMutation, TransferWalletMutationVariables>;
 export const SetFarcasterHandleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SetFarcasterHandle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SetFarcasterHandleInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"set_farcaster_handle"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]} as unknown as DocumentNode<SetFarcasterHandleMutation, SetFarcasterHandleMutationVariables>;
-export const AirdropTezClaimDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AirdropTezClaim"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AirdropTezClaimInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airdrop_tez_claim"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signature"}}]}}]}}]} as unknown as DocumentNode<AirdropTezClaimMutation, AirdropTezClaimMutationVariables>;
 export const Get_LibrariesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Get_Libraries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Library"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"license"}},{"kind":"Field","name":{"kind":"Name","value":"versions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"onchfsPointer"}},{"kind":"Field","name":{"kind":"Name","value":"content"}}]}},{"kind":"Field","name":{"kind":"Name","value":"authors"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"docUrl"}}]}}]}}]}}]} as unknown as DocumentNode<Get_LibrariesQuery, Get_LibrariesQueryVariables>;
 export const GetAllProjectsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllProjects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllProjectsQuery, GetAllProjectsQueryVariables>;
 export const GetAllProjectsAfterDateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllProjectsAfterDate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterDate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"timestamptz"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"releaseAt"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_gte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterDate"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Project_BaseDetails"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Wallet_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Wallet"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"network"}},{"kind":"Field","name":{"kind":"Name","value":"accountId"}},{"kind":"Field","name":{"kind":"Name","value":"walletUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Account_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Account"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"picture"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Project_BaseDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}},{"kind":"Field","name":{"kind":"Name","value":"blockchain"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}},{"kind":"Field","name":{"kind":"Name","value":"pricing"}},{"kind":"Field","name":{"kind":"Name","value":"curator"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"wallets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Wallet_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Account_BaseDetails"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllProjectsAfterDateQuery, GetAllProjectsAfterDateQueryVariables>;
