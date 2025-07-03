@@ -273,9 +273,14 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   handleClickNode = (
     node: SimNode | null,
-    options: { noToggle?: boolean; triggerFocus?: boolean } = {
+    options: {
+      noToggle?: boolean
+      triggerFocus?: boolean
+      triggerRestart?: boolean
+    } = {
       noToggle: false,
       triggerFocus: false,
+      triggerRestart: false,
     }
   ) => {
     let wasOpened = false
@@ -355,7 +360,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.emitter.emit("selected-node-changed", node)
         this.updateRenderLayers()
       }
-      this.restart(wasOpened ? 0.05 : 0)
+      this.restart(wasOpened || options.triggerRestart ? 0.05 : 0)
       if (wasOpened || options?.triggerFocus) {
         this.transformCanvas.focusOn(() => {
           const t = this.transformCanvas.getTransform()
@@ -664,7 +669,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         triggerFocus,
       })
     } else if (this.lockedNode) {
-      this.handleClickNode(this.lockedNode, { noToggle: true, triggerFocus })
+      this.handleClickNode(this.lockedNode, {
+        noToggle: true,
+        triggerFocus,
+        triggerRestart: true,
+      })
     } else {
       this.setSelectedNode(null)
     }
