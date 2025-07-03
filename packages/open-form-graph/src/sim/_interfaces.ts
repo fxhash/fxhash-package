@@ -30,6 +30,7 @@ export interface IOpenGraphSimulation {
   setSelectedNode(node: SimNode | null): void
   setHighlights(highlights: HighlightStyle[]): void
   setNoInteraction(noInteraction: boolean): void
+  setNodeImage(nodeId: string, imageSrc: string | null): void
   getNodeById(nodeId: string): SimNode | null
   getNodeScreenPosition(node: SimNode): { x: number; y: number }
   getNodeSize(nodeId: string): number
