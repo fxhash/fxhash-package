@@ -33,7 +33,7 @@ export function fxParamsAsQueryParams(
 export function isValidSnippetVersionInVersion(
   snippetVersion: string
 ): boolean {
-  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.0.1")
+  return !!semver.valid(snippetVersion) && semver.eq(snippetVersion, "3.0.1")
 }
 
 /**
