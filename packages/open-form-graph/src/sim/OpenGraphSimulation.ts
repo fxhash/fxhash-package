@@ -707,7 +707,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .alpha(this.simulation ? alpha : 0.5)
       .force(
         "collide",
-        forceCollide(n => this.getNodeSize(n.id) / 2)
+        forceCollide(n => this.getNodeSize(n.id) / 2 + 2)
       )
       .force(
         "link",
@@ -720,7 +720,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             if (isSimNode(l.target)) {
               const state = l.target?.state
               if (!state?.collapsed) {
-                return size
+                return size * 0.8
               }
             }
 
@@ -733,10 +733,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
-          return -150
+          return -250
         })
       )
-      .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.5))
       .restart()
 
     if (RADIAL_FORCES) {
