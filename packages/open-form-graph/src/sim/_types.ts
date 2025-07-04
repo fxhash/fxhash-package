@@ -6,8 +6,15 @@ export type TransformListener = (t: Transform) => void
 export type MouseListener = (x: number, y: number) => void
 export type Focus = () => Transform | null
 export type SimpleHighlight = string
+export type HighlightType =
+  | "owner"
+  | "primary"
+  | "evolved"
+  | "minted"
+  | "on-sale"
 export type CustomHighlight = {
   id: string
+  type: HighlightType
   linkFrom?: string
   linkTo?: string
   strokeColor?: RGB

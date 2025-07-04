@@ -10,7 +10,7 @@ import { VOID_ROOT_ID } from "@/context/constants"
 import { isSimNode } from "./types"
 import { HighlightStyle } from "@/sim/_types"
 
-export type NodeVisibility = "all" | "mine" | "locked" | "for-sale"
+export type NodeVisibility = "all" | "mine" | "locked" | "on-sale"
 
 const images: string[] = []
 
@@ -80,10 +80,31 @@ export function getPrunedData(
   const visibleLinks = []
   const visited = new Set()
 
-  const mineFilter = (node: SimNode) =>
-    !options.emittedNodes.includes(node.id) &&
-    !isSpecialNode(node) &&
-    !highlights.find(h => h.id === node.id)
+  const isLocked = (node: SimNode) =>
+    node.status === "LOCKED" || node.status === "EVOLVED"
+  const isEmitted = (node: SimNode) => options.emittedNodes.includes(node.id)
+  const isOwnedHighlight = (node: SimNode) =>
+    highlights.find(h => h.id === node.id && h.type === "owner")
+  const isOnSale = (node: SimNode) =>
+    highlights.find(h => h.id === node.id && h.type === "on-sale")
+
+  function visbilityFilter() {
+    switch (options.nodeVisibility) {
+      case "on-sale":
+        return (node: SimNode) =>
+          !isEmitted(node) && !isSpecialNode(node) && !isOnSale(node)
+      case "locked":
+        return (node: SimNode) =>
+          !isEmitted(node) && !isSpecialNode(node) && !isLocked(node)
+      case "mine":
+        return (node: SimNode) =>
+          !isEmitted(node) && !isSpecialNode(node) && !isOwnedHighlight(node)
+      case "all":
+      default:
+        return () => false
+    }
+  }
+
   const liquidatedFilter = (node: SimNode) =>
     node.status === "LIQUIDATED" && !highlights.find(h => h.id === node.id)
 
@@ -96,11 +117,8 @@ export function getPrunedData(
     if (liquidatedFilter(node)) {
       return
     }
-    // when mine mode is activated we use mineFilter to skip nodes
-    if (useMineFilter) {
-      if (mineFilter(node)) {
-        return
-      }
+    if (visbilityFilter()(node)) {
+      return
     }
 
     visibleNodes.push(node)
@@ -120,10 +138,8 @@ export function getPrunedData(
         continue // skip adding link to liquidated non-highlighted child
       }
       // when mine mode is activated we use mineFilter to skip nodes
-      if (useMineFilter) {
-        if (mineFilter(targetNode)) {
-          continue
-        }
+      if (visbilityFilter()(targetNode)) {
+        continue
       }
 
       visibleLinks.push(link)
