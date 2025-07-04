@@ -33,7 +33,6 @@ type Documents = {
     "\n  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {\n    request_transfer_wallet(input: $input) {\n      id\n      text\n    }\n  }\n": typeof types.RequestTransferWalletDocument,
     "\n  mutation TransferWallet($input: TransferWalletInput!) {\n    transfer_wallet(input: $input)\n  }\n": typeof types.TransferWalletDocument,
     "\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n": typeof types.SetFarcasterHandleDocument,
-    "\n  mutation AirdropTezClaim($input: AirdropTezClaimInput!) {\n    airdrop_tez_claim(input: $input) {\n      signature\n    }\n  }\n": typeof types.AirdropTezClaimDocument,
     "\n  query Get_Libraries {\n    offchain {\n      Library {\n        id\n        name\n        license\n        versions {\n          filename\n          id\n          onchfsPointer\n          content\n        }\n        authors\n        createdAt\n        description\n        docUrl\n      }\n    }\n  }\n": typeof types.Get_LibrariesDocument,
     "\n  fragment Project_BaseDetails on Project {\n    id\n    title\n    description\n    tokenId\n    releaseAt\n    blockchain\n    storage\n    pricing\n    curator {\n      id\n      status\n      username\n      wallets {\n        ...Wallet_BaseDetails\n      }\n    }\n    author {\n      ...Account_BaseDetails\n    }\n    collaborators {\n      account {\n        ...Account_BaseDetails\n      }\n    }\n    collaborators {\n      account {\n        ...Account_BaseDetails\n      }\n    }\n    projectMedias {\n      index\n      media {\n        id\n        url\n      }\n    }\n  }\n": typeof types.Project_BaseDetailsFragmentDoc,
     "\n  fragment Project_UserSecrets on Project {\n    state\n  }\n": typeof types.Project_UserSecretsFragmentDoc,
@@ -87,7 +86,6 @@ const documents: Documents = {
     "\n  mutation RequestTransferWallet($input: RequestTransferWalletInput!) {\n    request_transfer_wallet(input: $input) {\n      id\n      text\n    }\n  }\n": types.RequestTransferWalletDocument,
     "\n  mutation TransferWallet($input: TransferWalletInput!) {\n    transfer_wallet(input: $input)\n  }\n": types.TransferWalletDocument,
     "\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n": types.SetFarcasterHandleDocument,
-    "\n  mutation AirdropTezClaim($input: AirdropTezClaimInput!) {\n    airdrop_tez_claim(input: $input) {\n      signature\n    }\n  }\n": types.AirdropTezClaimDocument,
     "\n  query Get_Libraries {\n    offchain {\n      Library {\n        id\n        name\n        license\n        versions {\n          filename\n          id\n          onchfsPointer\n          content\n        }\n        authors\n        createdAt\n        description\n        docUrl\n      }\n    }\n  }\n": types.Get_LibrariesDocument,
     "\n  fragment Project_BaseDetails on Project {\n    id\n    title\n    description\n    tokenId\n    releaseAt\n    blockchain\n    storage\n    pricing\n    curator {\n      id\n      status\n      username\n      wallets {\n        ...Wallet_BaseDetails\n      }\n    }\n    author {\n      ...Account_BaseDetails\n    }\n    collaborators {\n      account {\n        ...Account_BaseDetails\n      }\n    }\n    collaborators {\n      account {\n        ...Account_BaseDetails\n      }\n    }\n    projectMedias {\n      index\n      media {\n        id\n        url\n      }\n    }\n  }\n": types.Project_BaseDetailsFragmentDoc,
     "\n  fragment Project_UserSecrets on Project {\n    state\n  }\n": types.Project_UserSecretsFragmentDoc,
@@ -212,10 +210,6 @@ export function graphql(source: "\n  mutation TransferWallet($input: TransferWal
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n"): (typeof documents)["\n  mutation SetFarcasterHandle($input: SetFarcasterHandleInput!) {\n    set_farcaster_handle(input: $input) {\n      handle\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation AirdropTezClaim($input: AirdropTezClaimInput!) {\n    airdrop_tez_claim(input: $input) {\n      signature\n    }\n  }\n"): (typeof documents)["\n  mutation AirdropTezClaim($input: AirdropTezClaimInput!) {\n    airdrop_tez_claim(input: $input) {\n      signature\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

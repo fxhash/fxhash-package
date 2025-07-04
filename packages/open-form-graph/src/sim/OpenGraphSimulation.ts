@@ -99,6 +99,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   private maxDepth: number = 0
 
   private isTicking: boolean = false
+  private isDrawing: boolean = false
   private tickCount = 0
 
   private loadNodeImage?: (node: SimNode) => Promise<string | undefined>
@@ -326,9 +327,14 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   handleClickNode = (
     node: SimNode | null,
-    options: { noToggle?: boolean; triggerFocus?: boolean } = {
+    options: {
+      noToggle?: boolean
+      triggerFocus?: boolean
+      triggerRestart?: boolean
+    } = {
       noToggle: false,
       triggerFocus: false,
+      triggerRestart: false,
     }
   ) => {
     let wasOpened = false
@@ -408,7 +414,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         this.emitter.emit("selected-node-changed", node)
         this.updateRenderLayers()
       }
-      this.restart(wasOpened ? 0.05 : 0)
+      this.restart(wasOpened || options.triggerRestart ? 0.05 : 0)
       if (wasOpened || options?.triggerFocus) {
         this.transformCanvas.focusOn(() => {
           const t = this.transformCanvas.getTransform()
@@ -804,7 +810,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         triggerFocus,
       })
     } else if (this.lockedNode) {
-      this.handleClickNode(this.lockedNode, { noToggle: true, triggerFocus })
+      this.handleClickNode(this.lockedNode, {
+        noToggle: true,
+        triggerFocus,
+        triggerRestart: true,
+      })
     } else {
       this.setSelectedNode(null)
     }
@@ -1391,9 +1401,13 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   onDraw = () => {
+    this.isDrawing = true
     const context = this.canvas?.getContext("2d")
     const transform = this.transformCanvas.getTransform()
-    if (!context) return
+    if (!context) {
+      this.isDrawing = false
+      return
+    }
 
     const dpi = devicePixelRatio || 1
     context.save()
@@ -1466,6 +1480,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     context.restore()
     // this.drawDebug(context)
     this.transformCanvas.trackCursor()
+    this.isDrawing = false
   }
 
   private drawDebug(context: CanvasRenderingContext2D) {
@@ -1511,8 +1526,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       // root node images are loaded separately
       if (node.id === this.rootId) return
       if (node.imgSrc && this.imageCache.get(node.imgSrc)) {
+        const html = this.imageCache.get(node.imgSrc)
         node.state = node.state || {}
-        node.state.image = this.imageCache.get(node.imgSrc)
+        node.state.image = html
         return
       }
       const loadImage = async () => {
@@ -1546,6 +1562,21 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   setTheme = (theme: ThemeMode) => {
     this.theme = theme
     this.updateScene()
+  }
+
+  setNodeImage = (nodeId: string, src: string) => {
+    const node = this.getNodeById(nodeId)
+    if (!node) return
+    const load = async () => {
+      const html = this.imageCache.get(src) || (await loadHTMLImageElement(src))
+      this.imageCache.set(src, html)
+      node.state = node.state || {}
+      node.state.image = html
+      if (!this.isTicking && !this.isDrawing) {
+        this.updateScene()
+      }
+    }
+    load()
   }
 
   setHideThumbnails = (hide: boolean) => {

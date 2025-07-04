@@ -10,7 +10,7 @@ import { VOID_ROOT_ID } from "@/context/constants"
 import { isSimNode } from "./types"
 import { HighlightStyle } from "@/sim/_types"
 
-export type NodeVisibility = "all" | "mine"
+export type NodeVisibility = "all" | "mine" | "locked" | "for-sale"
 
 const images: string[] = []
 
@@ -73,7 +73,7 @@ export function getPrunedData(
     emittedNodes: [],
   }
 ) {
-  const visiblityModeFilter =
+  const useMineFilter =
     highlights.length > 0 && options.nodeVisibility === "mine"
   const nodesById = Object.fromEntries(nodes.map(node => [node.id, node]))
   const visibleNodes = []
@@ -97,7 +97,7 @@ export function getPrunedData(
       return
     }
     // when mine mode is activated we use mineFilter to skip nodes
-    if (visiblityModeFilter) {
+    if (useMineFilter) {
       if (mineFilter(node)) {
         return
       }
@@ -120,7 +120,7 @@ export function getPrunedData(
         continue // skip adding link to liquidated non-highlighted child
       }
       // when mine mode is activated we use mineFilter to skip nodes
-      if (visiblityModeFilter) {
+      if (useMineFilter) {
         if (mineFilter(targetNode)) {
           continue
         }

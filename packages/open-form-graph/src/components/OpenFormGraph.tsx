@@ -17,6 +17,7 @@ interface OpenFormGraphProps {
   translate?: { x: number; y: number }
   onTransform?: (transform: Transform) => void
   nodeVisibility?: NodeVisibility
+  children?: React.ReactNode
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -30,6 +31,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     translate,
     onTransform,
     nodeVisibility = "all",
+    children,
   } = props
   const {
     simulation,
@@ -132,17 +134,20 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
   const dpi = devicePixelRatio || 1
 
   return (
-    <canvas
-      onMouseEnter={props.onMouseEnter}
-      onMouseLeave={props.onMouseLeave}
-      ref={canvasRef}
-      className={className}
-      width={`${width * dpi}px`}
-      height={`${height * dpi}px`}
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
-    />
+    <>
+      <canvas
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
+        ref={canvasRef}
+        className={className}
+        width={`${width * dpi}px`}
+        height={`${height * dpi}px`}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+        }}
+      />
+      {children}
+    </>
   )
 }
