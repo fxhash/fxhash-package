@@ -281,7 +281,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       node = this.getNodeById(this.lockedNodeId)
     }
     if (node === this.selectedNode) return
-    if (node?.state?.emitterNode) {
+    if (node?.state?.emitterNode && RENDER_EMITTER_NODES) {
       this.emitNodeAt(node.depth || 0)
       this.transformCanvas.focusOn(() => {
         const t = this.transformCanvas.getTransform()
@@ -610,11 +610,25 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     /* CREATE EMITTER NODES for VISIBLITY MODE "MINE"*/
 
-    const nodesWithoutHighlight = this.data.nodes.filter(n => {
+    const isHighlighted = (nodeId: string) =>
+      this.highlights.find(h => h.id === nodeId)
+
+    const isChildHighlighted = (nodeId: string) => {
+      const children = getChildren(nodeId, this.data.links)
+      const _highlighted = children.some(isHighlighted)
+      if (_highlighted) {
+        return true
+      } else {
+        return children.some(isHighlighted)
+      }
+    }
+
+    const nodesWithoutHighlight = [...this.data.nodes].filter(n => {
       if (n.state?.sessionNode) return false
       if (n.id === this.rootId) return false
       if (n.state?.emitterNode) return false
-      if (this.highlights.find(h => h.id === n.id)) return false
+      if (isHighlighted(n.id)) return false
+      if (isChildHighlighted(n.id)) return false
       return true
     })
 
@@ -643,6 +657,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         const _node = this.getNodeById(focusSessionNode.id)
         if (!_node) return null
         return { x: _node?.x!, y: _node?.y!, scale: t.scale }
+      })
+    } else {
+      this.transformCanvas.focusOn(() => {
+        if (!this.rootNode) return null
+        const t = this.transformCanvas.getTransform()
+        return { x: this.rootNode.x!, y: this.rootNode.y!, scale: t.scale }
       })
     }
   }
@@ -682,7 +702,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             // also influence this state
             collapsed:
               hasOnlyLeafs(n.id, _links) &&
-              getChildren(n.id, _links).length > 1,
+              getChildren(n.id, _links).length > 30,
             ...existingData?.state,
           } as NodeState,
           clusterSize,
@@ -849,7 +869,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "collide",
         forceCollide(n => {
-          if (n.state?.emitterNode && this.nodeVisibility === "all") return 0
+          if (
+            (n.state?.emitterNode && this.nodeVisibility === "all") ||
+            !RENDER_EMITTER_NODES
+          )
+            return 0
           return this.getNodeSize(n.id) / 2
         })
       )
@@ -1424,41 +1448,60 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     context.translate(this.origin.x, this.origin.y)
     context.save()
 
+    const dimmedByHighlights = (nodeId: string) => {
+      if (this.nodeVisibility === "all") return false
+      if (nodeId === this.rootId) return false
+      if (this.nodeVisibility === "locked") {
+        const node = this.getNodeById(nodeId)
+        return !(node?.status === "LOCKED" || node?.status === "EVOLVED")
+      }
+      return !this.highlights.find(n => n.id === nodeId)
+    }
+
     const hasSelection = !!this.selectedNode
 
     this.renderLayers.links.regular.forEach(link => {
-      const sourceId = isSimNode(link.source) ? link.source.id : link.source
-      const targetId = isSimNode(link.target) ? link.target.id : link.target
+      const sourceId = isSimNode(link.source)
+        ? link.source.id
+        : link.source.toString()
+      const targetId = isSimNode(link.target)
+        ? link.target.id
+        : link.target.toString()
 
-      const _dim =
-        hasSelection &&
-        !this.subGraph.links.find(
-          sl =>
-            getNodeId(sl.source) === sourceId &&
-            getNodeId(sl.target) === targetId
-        )
+      const _dim = hasSelection
+        ? !this.subGraph.links.find(
+            sl =>
+              getNodeId(sl.source) === sourceId &&
+              getNodeId(sl.target) === targetId
+          )
+        : dimmedByHighlights(sourceId) || dimmedByHighlights(targetId)
 
       this.renderLink(context, link, { dim: _dim, hasSelection })
     })
 
     context.globalAlpha = 1
     this.renderLayers.nodes.regular.forEach(node => {
-      const _dim =
-        hasSelection && !this.subGraph.nodes.some(n => n.id === node.id)
+      const _dim = hasSelection
+        ? !this.subGraph.nodes.some(n => n.id === node.id)
+        : dimmedByHighlights(node.id)
       this.renderNode(context, node, { dim: _dim, transform })
     })
 
     this.renderLayers.links.highlighted.forEach(link => {
-      const sourceId = isSimNode(link.source) ? link.source.id : link.source
-      const targetId = isSimNode(link.target) ? link.target.id : link.target
+      const sourceId = isSimNode(link.source)
+        ? link.source.id
+        : link.source.toString()
+      const targetId = isSimNode(link.target)
+        ? link.target.id
+        : link.target.toString()
 
-      const _dim =
-        hasSelection &&
-        !this.subGraph.links.find(
-          sl =>
-            getNodeId(sl.source) === sourceId &&
-            getNodeId(sl.target) === targetId
-        )
+      const _dim = hasSelection
+        ? !this.subGraph.links.find(
+            sl =>
+              getNodeId(sl.source) === sourceId &&
+              getNodeId(sl.target) === targetId
+          )
+        : dimmedByHighlights(sourceId) || dimmedByHighlights(targetId)
 
       const highlight = this.highlights.find(
         h => h.id === sourceId || h.id === targetId
@@ -1469,8 +1512,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     context.globalAlpha = 1
     this.renderLayers.nodes.highlighted.forEach(node => {
-      const _dim =
-        hasSelection && !this.subGraph.nodes.some(n => n.id === node.id)
+      const _dim = hasSelection
+        ? !this.subGraph.nodes.some(n => n.id === node.id)
+        : dimmedByHighlights(node.id)
       this.renderNode(context, node, { dim: _dim, transform })
     })
 

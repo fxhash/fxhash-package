@@ -36,7 +36,9 @@ export function getChildren(id: string, links: SimLink[]): string[] {
       const sourceId = isSimNode(l.source) ? l.source.id : l.source
       return sourceId === id
     })
-    .map(link => link.target.toString())
+    .map(link =>
+      isSimNode(link.target) ? link.target.id : link.target.toString()
+    )
 }
 
 export function getClusterSize(id: string, links: RawLink[]): number {
