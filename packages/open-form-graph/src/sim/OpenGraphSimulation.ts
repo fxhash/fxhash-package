@@ -361,6 +361,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           } else if (!options.noToggle) {
             node.state.collapsed = !node.state.collapsed
           }
+          /*
           if (!node.state.collapsed) {
             // distance from parent to cluster center
             const clusterDistance = 100
@@ -391,6 +392,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
               }
             })
           }
+          */
         }
       }
       // if the node is not collapsed, we need to expand its parents
