@@ -67,6 +67,7 @@ interface OpenGraphSimulationProps {
   lockedNodeId?: string
   highlights?: HighlightStyle[]
   nodeVisibility?: NodeVisibility
+  groupRootOrphans?: boolean
 }
 
 interface RenderLayer<T> {
@@ -83,6 +84,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   transformCanvas: TransformCanvas
   theme: ThemeMode
 
+  private groupRootOrphans: boolean = false
   private rawData?: RawGraphData
 
   public emitter: OpenGraphEventEmitter
@@ -157,6 +159,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       }
     })
 
+    this.groupRootOrphans = props.groupRootOrphans || false
     this.nodeVisibility = props.nodeVisibility || "all"
     this.highlights = props.highlights || []
   }
@@ -361,8 +364,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           } else if (!options.noToggle) {
             node.state.collapsed = !node.state.collapsed
           }
-          /*
-          if (!node.state.collapsed) {
+          if (!node.state.collapsed && wasOpened) {
             // distance from parent to cluster center
             const clusterDistance = 100
             const clusterRadius = 50
@@ -392,7 +394,6 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
               }
             })
           }
-          */
         }
       }
       // if the node is not collapsed, we need to expand its parents
@@ -669,8 +670,16 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  setNodeVisibility = (visibility: NodeVisibility) => {
-    if (this.nodeVisibility === visibility) return
+  setNodeVisibility = (
+    visibility: NodeVisibility,
+    groupRootOrphans: boolean
+  ) => {
+    if (
+      this.nodeVisibility === visibility &&
+      groupRootOrphans === this.groupRootOrphans
+    )
+      return
+    this.groupRootOrphans = groupRootOrphans
     this.nodeVisibility = visibility
     this.updateHighlights()
   }
@@ -872,11 +881,11 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         "collide",
         forceCollide(n => {
           if (
-            (n.state?.emitterNode && this.nodeVisibility === "all") ||
-            !RENDER_EMITTER_NODES
+            n.state?.emitterNode &&
+            (this.nodeVisibility === "all" || !RENDER_EMITTER_NODES)
           )
             return 0
-          return this.getNodeSize(n.id) / 2 + 2
+          return this.getNodeSize(n.id) / 2 + 4
         })
       )
       .force(
@@ -911,7 +920,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         "charge",
         forceManyBody<SimNode>().strength(node => {
           if (isSimNode(node) && node.state?.emitterNode) return -80
-          return -150
+          return -250
         })
       )
       .force("center", forceCenter(this.center.x, this.center.y).strength(0.3))

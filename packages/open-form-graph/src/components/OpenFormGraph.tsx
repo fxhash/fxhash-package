@@ -18,6 +18,7 @@ interface OpenFormGraphProps {
   onTransform?: (transform: Transform) => void
   nodeVisibility?: NodeVisibility
   children?: React.ReactNode
+  groupRootOrphans?: boolean
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -32,6 +33,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     onTransform,
     nodeVisibility = "all",
     children,
+    groupRootOrphans = false,
   } = props
   const {
     simulation,
@@ -59,6 +61,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       lockedNodeId,
       nodeVisibility,
       highlights,
+      groupRootOrphans,
     })
     return () => {
       simulation.current?.destroy()
@@ -101,8 +104,8 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
 
   useEffect(() => {
     if (!simulation.current) return
-    simulation.current.setNodeVisibility(nodeVisibility)
-  }, [nodeVisibility])
+    simulation.current.setNodeVisibility(nodeVisibility, groupRootOrphans)
+  }, [nodeVisibility, groupRootOrphans])
 
   useEffect(() => {
     if (!simulation.current) return

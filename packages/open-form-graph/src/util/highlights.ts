@@ -11,7 +11,7 @@ export class Highlight {
       id,
       type: "mine",
       strokeColor: red,
-      scale: 1.5,
+      //      scale: 1.5,
     }
   }
   static onSale = (id: string): CustomHighlight => {
