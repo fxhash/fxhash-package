@@ -914,7 +914,14 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           return -150
         })
       )
-      .force("center", forceCenter(this.center.x, this.center.y).strength(0.5))
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.3))
+      .force("rootCentering", (alpha: number) => {
+        const strength = 0.5
+        const root = this.prunedData.nodes.find(n => n.id === this.rootId)
+        if (!root || !root.x || !root.y || !root.vx || !root.vy) return
+        root.vx += (this.center.x - root.x) * strength * alpha
+        root.vy += (this.center.y - root.y) * strength * alpha
+      })
       .restart()
 
     if (RADIAL_FORCES) {
