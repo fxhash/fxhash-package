@@ -268,7 +268,7 @@ interface ApprovalArgs {
   useSmartAccount: boolean
 }
 
-type BatchedCall = {
+export type BatchedCall = {
   to: `0x${string}`
   abi: any
   functionName: string
