@@ -29,6 +29,7 @@ interface OpenFormGraphProviderProps {
   onSelectedNodeChange?: (node: SimNode | null) => void
   onHoveredNodeChange?: (node: SimNode | null) => void
   lockedNodeId?: string
+  hideThumbnails?: boolean
 }
 
 export interface OpenFormGraphApi {
@@ -72,11 +73,12 @@ export function OpenFormGraphProvider({
   config = DEFAULT_GRAPH_CONFIG,
   data,
   lockedNodeId,
+  hideThumbnails: _hideThumbnails = false,
 }: OpenFormGraphProviderProps) {
   const simulation = useRef<OpenGraphSimulation | null>(null)
   const [selectedNode, _setSelectedNode] = useState<SimNode | null>(null)
   const [hoveredNode, _setHoveredNode] = useState<SimNode | null>(null)
-  const [hideThumbnails, setHideThumbnails] = useState(false)
+  const [hideThumbnails, setHideThumbnails] = useState(_hideThumbnails)
 
   const setSelectedNode = useCallback(
     (node: SimNode | null) => {
