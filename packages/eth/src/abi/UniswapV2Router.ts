@@ -353,4 +353,4 @@ export const UNISWAP_V2_ROUTER_ABI = [
     type: "function",
   },
   { stateMutability: "payable", type: "receive" },
-]
+] as const

@@ -432,4 +432,4 @@ export const UNISWAP_V2_POOL_ABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
-]
+] as const
