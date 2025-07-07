@@ -6,7 +6,7 @@ export const VOID_EMIT_ID = "void-emit"
 
 export const DEFAULT_GRAPH_CONFIG: GraphConfig = {
   debug: false,
-  nodeSize: 20,
+  nodeSize: 30,
   minClusterSize: 10,
   maxClusterSize: 20,
   minZoom: 0.1,

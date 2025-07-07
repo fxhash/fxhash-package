@@ -876,7 +876,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             !RENDER_EMITTER_NODES
           )
             return 0
-          return this.getNodeSize(n.id) / 2
+          return this.getNodeSize(n.id) / 2 + 2
         })
       )
       .force(
@@ -897,7 +897,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
                 return 1
               }
               if (!state?.collapsed) {
-                return size
+                return size * 0.8
               }
             }
 
@@ -914,7 +914,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           return -150
         })
       )
-      .force("center", forceCenter(this.center.x, this.center.y).strength(0.05))
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.5))
       .restart()
 
     if (RADIAL_FORCES) {
