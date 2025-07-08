@@ -715,7 +715,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         const clusterSize = getClusterSize(n.id, _links)
         const depth = getNodeDepth(n.id, _links)
         const circlePos = getRadialPoint(
-          getRadius(depth),
+          getRadius(Math.max(depth, 2)),
           this.center.x,
           this.center.y
         )
@@ -745,7 +745,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       const existingData = _nodes.find(x => x.id === n.id)
       const parents = getParents(n.id, _links)
       const parentNode = _nodes.find(p => p.id === parents[0])
-      const depth = n.depth
+      const depth = Math.max(2, n.depth)
       const parentAngle =
         depth > 0
           ? getAngle(
@@ -876,6 +876,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   restart = (alpha: number = 0.3) => {
     this.tickCount = 0
+    console.log("Restarting simulation with alpha:", this.groupNodes)
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
@@ -933,7 +934,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
                 return size
               }
               if (state.groupNode) {
-                return 10
+                return 5
               }
             }
 
@@ -949,6 +950,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           return -150
         })
       )
+      .force("center", forceCenter(this.center.x, this.center.y).strength(0.1))
       .restart()
 
     if (RADIAL_FORCES) {
