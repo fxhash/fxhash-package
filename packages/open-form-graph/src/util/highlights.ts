@@ -9,25 +9,24 @@ export class Highlight {
   static owner = (id: string): CustomHighlight => {
     return {
       id,
+      type: "mine",
       strokeColor: red,
+      //      scale: 1.5,
+    }
+  }
+  static onSale = (id: string): CustomHighlight => {
+    return {
+      id,
+      type: "on-sale",
+      strokeColor: blue,
     }
   }
   static primary = (id: string): CustomHighlight => {
     return {
       id,
+      type: "any",
       linkTo: id,
       scale: 4.0,
-      strokeColor: redred,
-      linkColor: redred,
-      onTop: true,
-      isDetached: true,
-    }
-  }
-  static evolved = (id: string): CustomHighlight => {
-    return {
-      id,
-      linkTo: id,
-      scale: 2.1,
       strokeColor: redred,
       linkColor: redred,
       onTop: true,
@@ -37,6 +36,7 @@ export class Highlight {
   static minted = (id: string): CustomHighlight => {
     return {
       id,
+      type: "any",
       linkTo: id,
       scale: 1.5,
       strokeColor: redred,

@@ -1,4 +1,7 @@
 import { SimulationNodeDatum, SimulationLinkDatum } from "d3-force"
+import groupBy from "lodash.groupby"
+
+export type Dictionary = ReturnType<typeof groupBy>
 
 export type RootNodeImageSources = [string?, string?]
 
@@ -43,7 +46,10 @@ export type ColorTransform = (rgb: RGB) => RGB
 export type NodeState = {
   collapsed?: boolean
   image?: HTMLImageElement
+  // TODO: Node state should get a type instead of those boolean flags
   sessionNode?: boolean
+  emitterNode?: boolean
+  rootNode?: boolean
 }
 
 export type SimNode = {

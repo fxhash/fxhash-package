@@ -8,6 +8,7 @@ import {
 } from "@/_types"
 import { GraphConfig } from "@/_interfaces"
 import { TransformCanvas } from "./TransformCanvas"
+import { NodeVisibility } from "@/util/data"
 
 export interface IOpenGraphSimulation {
   width: number
@@ -21,7 +22,7 @@ export interface IOpenGraphSimulation {
   hoveredNode: SimNode | null
   highlights: HighlightStyle[]
   transformCanvas: TransformCanvas
-
+  nodeVisibility: NodeVisibility
   initialize(data: RawGraphData, rootId: string): void
   restart(): void
   resize(width: number, height: number): void
@@ -30,6 +31,7 @@ export interface IOpenGraphSimulation {
   setSelectedNode(node: SimNode | null): void
   setHighlights(highlights: HighlightStyle[]): void
   setNoInteraction(noInteraction: boolean): void
+  setNodeImage(nodeId: string, imageSrc: string | null): void
   getNodeById(nodeId: string): SimNode | null
   getNodeScreenPosition(node: SimNode): { x: number; y: number }
   getNodeSize(nodeId: string): number
