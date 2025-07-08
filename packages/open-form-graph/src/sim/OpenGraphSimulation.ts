@@ -17,7 +17,6 @@ import {
   ThemeMode,
 } from "@/_types"
 import {
-  hasOnlyLeafs,
   getChildren,
   getClusterSize,
   getNodeSubgraph,
@@ -119,6 +118,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   nodeVisibility: NodeVisibility = "all"
   private secondaryNodes: Dictionary = new Map()
   private emittedNodes: Array<string> = []
+  private openedGroups: string[] = []
 
   private renderLayers: {
     links: RenderLayer<SimLink>
@@ -195,7 +195,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     const candidates: SimNode[] = []
 
-    for (let node of this.data.nodes) {
+    for (let node of this.prunedData.nodes) {
       const r = this.getNodeSize(node.id) / 2
       if (node.x == null || node.y == null) continue
       const dx = node.x - graphX
@@ -278,6 +278,22 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   handleClick = (x: number, y: number) => {
     let node = this.getNodeAtPosition(x, y)
     if (node?.state?.sessionNode) return
+    if (node?.state?.groupNode) {
+      this.data.nodes.forEach(n => {
+        if (node?.state?.groupContent?.includes(n.id)) {
+          const circlePos = getRadialPoint(
+            getRadius(0),
+            this.rootNode?.x!,
+            this.rootNode?.y!
+          )
+          n.x = circlePos.x
+          n.y = circlePos.y
+        }
+      })
+      this.openedGroups.push(node.id)
+      this.updateHighlights()
+      return
+    }
     // when we have lockedNodeId, we will always select that node
     // instead of deselection
     if (this.lockedNodeId && !node) {
@@ -386,11 +402,12 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
             // which is n units away from the parent
             children.forEach(childId => {
               const childNode = this.data.nodes.find(n => n.id === childId)
+              if (childNode?.state?.groupNode) return
               if (childNode && isSimNode(childNode)) {
                 const angle = Math.random() * 2 * Math.PI
                 const radius = Math.random() * clusterRadius
-                childNode.x = clusterX + Math.cos(angle) * radius
-                childNode.y = clusterY + Math.sin(angle) * radius
+                //childNode.x = clusterX + Math.cos(angle) * radius
+                // childNode.y = clusterY + Math.sin(angle) * radius
               }
             })
           }
@@ -402,22 +419,23 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         parents.forEach(parentId => {
           const parentNode = this.data.nodes.find(n => n.id === parentId)
           if (parentNode && isSimNode(parentNode) && parentNode.state) {
-            parentNode.state.collapsed = false
+            //            parentNode.state.collapsed = false
           }
         })
       }
       this.subGraph = getNodeSubgraph(
         node.id,
-        this.data.nodes,
-        this.data.links,
+        this.prunedData.nodes,
+        this.prunedData.links,
         this.rootId
       )
       if (this.selectedNode?.id !== node?.id) {
         this.selectedNode = node
         this.emitter.emit("selected-node-changed", node)
-        this.updateRenderLayers()
+        //this.updateRenderLayers()
       }
-      this.restart(wasOpened || options.triggerRestart ? 0.05 : 0)
+      // this.restart(wasOpened || options.triggerRestart ? 0.05 : 0)
+      //      this.simulation?.restart()
       if (wasOpened || options?.triggerFocus) {
         this.transformCanvas.focusOn(() => {
           const t = this.transformCanvas.getTransform()
@@ -486,7 +504,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   updateHighlights = () => {
-    //this.transformCanvas.resetFocus()
+    // this.transformCanvas.resetFocus()
     // for detached highlights we need to create the session nodes and
     // links accordingly
     const detachedHighlights = this.highlights.filter(h => h.isDetached)
@@ -560,7 +578,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       parents.forEach(parentId => {
         const node = this.data.nodes.find(n => n.id === parentId)
         if (node?.state) {
-          node.state.collapsed = false
+          //          node.state.collapsed = false
         }
       })
       if (highlightedNode.state) {
@@ -711,9 +729,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           state: {
             // TODO: this should maybe be centralized since highlights
             // also influence this state
-            collapsed:
-              hasOnlyLeafs(n.id, _links) &&
-              getChildren(n.id, _links).length > 30,
+            // WE DONT COLLAPSE ANYMORE IN FAVOUR OF GROUPING
+            collapsed: false,
             ...existingData?.state,
           } as NodeState,
           clusterSize,
@@ -783,6 +800,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
 
     this.maxDepth = Math.max(..._nodes.map(n => n.depth || 0))
+    /*
     // create emitter nodes for each depth
     for (let i = 0; i <= this.maxDepth; i++) {
       const parentId = i === 0 ? this.rootId : `${VOID_EMIT_ID}-${i - 1}`
@@ -822,6 +840,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         })
       }
     }
+    */
 
     this.data = { nodes: _nodes as SimNode[], links: _links }
     this.loadNodeImages()
@@ -851,14 +870,24 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   }
 
-  restart = (alpha: number = 0.1) => {
+  get groupNodes() {
+    return this.prunedData.nodes.filter(n => n.state?.groupNode)
+  }
+
+  restart = (alpha: number = 0.3) => {
     this.tickCount = 0
     this.prunedData = getPrunedData(
       this.rootId,
       this.data.nodes,
       this.data.links,
       this.highlights,
-      { nodeVisibility: this.nodeVisibility, emittedNodes: this.emittedNodes }
+      {
+        nodeVisibility: this.nodeVisibility,
+        emittedNodes: this.emittedNodes,
+        groupNodes: this.groupNodes,
+        skipGrouping: !this.groupRootOrphans,
+        openedGroups: this.openedGroups,
+      }
     )
     this.updateRenderLayers()
     this.clusterSizeRange = this.prunedData.nodes
@@ -880,12 +909,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "collide",
         forceCollide(n => {
-          if (
-            n.state?.emitterNode &&
-            (this.nodeVisibility === "all" || !RENDER_EMITTER_NODES)
-          )
-            return 0
-          return this.getNodeSize(n.id) / 2 + 4
+          return this.getNodeSize(n.id) / 2 + 2
         })
       )
       .force(
@@ -906,7 +930,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
                 return 1
               }
               if (!state?.collapsed) {
-                return size * 0.8
+                return size
+              }
+              if (state.groupNode) {
+                return 10
               }
             }
 
@@ -919,18 +946,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       .force(
         "charge",
         forceManyBody<SimNode>().strength(node => {
-          if (isSimNode(node) && node.state?.emitterNode) return -80
-          return -250
+          return -150
         })
       )
-      .force("center", forceCenter(this.center.x, this.center.y).strength(0.3))
-      .force("rootCentering", (alpha: number) => {
-        const strength = 0.5
-        const root = this.prunedData.nodes.find(n => n.id === this.rootId)
-        if (!root || !root.x || !root.y || !root.vx || !root.vy) return
-        root.vx += (this.center.x - root.x) * strength * alpha
-        root.vy += (this.center.y - root.y) * strength * alpha
-      })
       .restart()
 
     if (RADIAL_FORCES) {
@@ -969,6 +987,10 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   handleTick = () => {
     this.isTicking = true
+    if (this.rootNode) {
+      this.rootNode.vx = 0
+      this.rootNode.vy = 0
+    }
     this.onDraw()
     this.tickCount++
   }
@@ -1001,7 +1023,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const highlight = this.highlights.find(h => h.id === nodeId)
     const sizeScale = highlight?.scale || 1
     if (nodeId === this.rootId) return nodeSize * 2 * sizeScale
-    const node = this.data.nodes.find(n => n.id === nodeId)
+    const node = this.prunedData.nodes.find(n => n.id === nodeId)
     if (node?.state?.sessionNode) return 5
     const isEmitterNode = node?.state?.emitterNode
     if (isEmitterNode) {
@@ -1014,7 +1036,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       return scale(node.clusterSize || 1)
     }
     const isCollapsed = !!node?.state?.collapsed
-    if (isCollapsed || isEmitterNode) {
+    const isGroupNode = !!node?.state?.groupNode
+    if (isCollapsed || isEmitterNode || isGroupNode) {
       const scale = scaleLinear()
         .domain(this.clusterSizeRange)
         .range([nodeSize, nodeSize * 3])
@@ -1119,7 +1142,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const sourceId = isSimNode(link.source) ? link.source.id : link.source
     const targetId = isSimNode(link.target) ? link.target.id : link.target
 
-    let sourceNode = this.data.nodes.find(n => n.id === sourceId)
+    let sourceNode = this.prunedData.nodes.find(n => n.id === sourceId)
 
     if (isSimNode(link.target)) {
       if (this.nodeVisibility === "all" || !RENDER_EMITTER_NODES) {
@@ -1130,7 +1153,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           return
         }
       }
-      const isSourceNode = this.data.links.some(
+      const isSourceNode = this.prunedData.links.some(
         l =>
           isSimNode(l.source) &&
           isSimNode(link.target) &&
@@ -1220,7 +1243,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
       this.renderEmitterNode(ctx, x, y, nodeSize, node, _dim)
     } else if (node.state?.sessionNode) {
       this.renderSessionNode(ctx, x, y, nodeSize)
-    } else if (isCollapsed) {
+    } else if (isCollapsed || node.state?.groupNode) {
       this.renderCollapsedNode(ctx, x, y, nodeSize, {
         fill,
         stroke,
@@ -1469,6 +1492,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     const dimmedByHighlights = (nodeId: string) => {
       if (this.nodeVisibility === "all") return false
       if (nodeId === this.rootId) return false
+      const node = this.prunedData.nodes.find(n => n.id === nodeId)
+      if (node?.state?.groupNode) return false
       if (this.nodeVisibility === "locked") {
         const node = this.getNodeById(nodeId)
         return !(node?.status === "LOCKED" || node?.status === "EVOLVED")

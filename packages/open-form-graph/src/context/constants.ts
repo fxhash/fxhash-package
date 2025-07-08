@@ -3,6 +3,7 @@ import { GraphConfig } from "@/_interfaces"
 export const VOID_ROOT_ID = "void-root"
 export const VOID_DETACH_ID = "void-detach"
 export const VOID_EMIT_ID = "void-emit"
+export const VOID_GROUP_ID = "void-group"
 
 export const DEFAULT_GRAPH_CONFIG: GraphConfig = {
   debug: false,
