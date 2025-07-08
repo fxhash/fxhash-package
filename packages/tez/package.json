@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@apollo/client": "3.8.1",
+    "@apollo/client": "3.12.11",
     "@fxhash/shared": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@taquito/michel-codec": "17.3.1",
