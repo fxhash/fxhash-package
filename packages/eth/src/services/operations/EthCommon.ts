@@ -339,38 +339,44 @@ export async function simulateAndExecuteContractWithApproval<
     }
 
     // if all simulations pass, execute the batch
-    const { id } = await walletManager.walletClient.sendCalls({
-      account,
-      chain: args.chain,
-      calls: calls.map(call => ({
-        to: call.to,
-        abi: call.abi,
-        functionName: call.functionName,
-        args: call.args,
-        value: call.value,
-        data: (call as any).data,
-        gas: (call as any).gas,
-        maxFeePerGas: (call as any).maxFeePerGas,
-        maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
-      })),
-      experimental_fallback: true,
-    })
+    try {
+      const { id } = await walletManager.walletClient.sendCalls({
+        account,
+        chain: args.chain,
+        calls: calls.map(call => ({
+          to: call.to,
+          abi: call.abi,
+          functionName: call.functionName,
+          args: call.args,
+          value: call.value,
+          data: (call as any).data,
+          gas: (call as any).gas,
+          maxFeePerGas: (call as any).maxFeePerGas,
+          maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
+        })),
+        experimental_fallback: true,
+      })
 
-    // wait for the batch to complete
-    const status = await waitForCallsStatus(walletManager.walletClient, {
-      id,
-    })
+      // wait for the batch to complete
+      const status = await waitForCallsStatus(walletManager.walletClient, {
+        id,
+      })
 
-    // check if any transaction in the batch failed
-    if (!status.receipts) throw new Error("failed to get batch status")
-    for (const receipt of status.receipts || []) {
-      if (receipt.status === "reverted") {
-        throw new TransactionRevertedError("Batched transaction reverted")
+      // check if any transaction in the batch failed
+      if (!status.receipts) throw new Error("failed to get batch status")
+      for (const receipt of status.receipts || []) {
+        if (receipt.status === "reverted") {
+          throw new TransactionRevertedError("Batched transaction reverted")
+        }
       }
-    }
 
-    // return the hash of the last transaction, we assume that the last tx will always be the action we index
-    return status.receipts[status.receipts.length - 1].transactionHash
+      // return the hash of the last transaction, we assume that the last tx will always be the action we index
+      return status.receipts[status.receipts.length - 1].transactionHash
+    } catch (err: any) {
+      console.log("error when executing batch call")
+      console.log(err)
+      throw err
+    }
   }
 
   // otherwise, we approve + execute sequentially
