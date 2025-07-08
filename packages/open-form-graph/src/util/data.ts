@@ -8,6 +8,10 @@ import {
 } from "@/_types"
 import { VOID_ROOT_ID } from "@/context/constants"
 import { isSimNode } from "./types"
+import { HighlightStyle } from "@/sim/_types"
+import { getChildren } from "./graph"
+
+export type NodeVisibility = "all" | "mine" | "locked" | "on-sale"
 
 const images: string[] = []
 
@@ -55,20 +59,98 @@ export function generateTree(
   return { nodes, links }
 }
 
+function isSpecialNode(node: SimNode): boolean {
+  const state = node.state
+  return !!(state?.emitterNode || state?.sessionNode || state?.rootNode)
+}
+
 export function getPrunedData(
   startId: string,
   nodes: SimNode[],
-  links: SimLink[]
+  links: SimLink[],
+  highlights: HighlightStyle[] = [],
+  options: { nodeVisibility?: NodeVisibility; emittedNodes: Array<string> } = {
+    nodeVisibility: "all",
+    emittedNodes: [],
+  }
 ) {
   const nodesById = Object.fromEntries(nodes.map(node => [node.id, node]))
   const visibleNodes = []
   const visibleLinks = []
   const visited = new Set()
 
+  const isLocked = (node: SimNode) =>
+    node.status === "LOCKED" || node.status === "EVOLVED"
+  const isEmitted = (node: SimNode) => options.emittedNodes.includes(node.id)
+  const isOwnedHighlight = (nodeId: string) =>
+    highlights.find(h => h.id === nodeId && h.type === "mine")
+  const isOnSale = (node: SimNode) =>
+    highlights.find(h => h.id === node.id && h.type === "on-sale")
+  const isHighlighted = (nodeId: string, type?: NodeVisibility) =>
+    highlights.some(h =>
+      type ? h.id === nodeId && h.type === type : h.id === nodeId
+    )
+
+  const isChildHighlighted = (
+    nodeId: string,
+    type: NodeVisibility
+  ): boolean => {
+    const children = getChildren(nodeId, links)
+    const _owned = children.some(h => isHighlighted(h, type))
+    if (_owned) {
+      return true
+    } else {
+      return children.some(c => isChildHighlighted(c, type))
+    }
+  }
+
+  function visbilityFilter() {
+    switch (options.nodeVisibility) {
+      case "on-sale":
+        return (node: SimNode) =>
+          !isEmitted(node) &&
+          !isSpecialNode(node) &&
+          !isOnSale(node) &&
+          !isChildHighlighted(node.id, "on-sale")
+      case "locked":
+        return (node: SimNode) =>
+          !isEmitted(node) &&
+          !isSpecialNode(node) &&
+          !isLocked(node) &&
+          !isChildHighlighted(node.id, "locked")
+      case "mine":
+        return (node: SimNode) => {
+          const cond =
+            !isEmitted(node) &&
+            !isSpecialNode(node) &&
+            !isOwnedHighlight(node.id) &&
+            !isChildHighlighted(node.id, "mine")
+          return cond
+        }
+      case "all":
+      default:
+        return () => false
+    }
+  }
+
+  const liquidatedFilter = (node: SimNode) => {
+    const cond =
+      node.status === "LIQUIDATED" && !highlights.find(h => h.id === node.id)
+    return cond
+  }
+
   ;(function traverseTree(node = nodesById[startId]) {
     // avoid circles
     if (!node || visited.has(node.id)) return
     visited.add(node.id)
+
+    // Skip liquidated nodes unless they are highlighted
+    if (liquidatedFilter(node)) {
+      return
+    }
+    if (visbilityFilter()(node)) {
+      return
+    }
 
     visibleNodes.push(node)
     if (node?.state?.collapsed) return
@@ -76,11 +158,24 @@ export function getPrunedData(
     const childLinks = links.filter(
       l => (isSimNode(l.source) ? l.source.id : l.source) === node.id
     )
-    visibleLinks.push(...childLinks)
 
-    childLinks
-      .map(link => link.target)
-      .forEach(n => traverseTree(isSimNode(n) ? n : nodesById[n.toString()]))
+    for (const link of childLinks) {
+      const targetNode = isSimNode(link.target)
+        ? link.target
+        : nodesById[link.target.toString()]
+
+      // Check whether child should be included before adding link
+      if (liquidatedFilter(targetNode)) {
+        continue // skip adding link to liquidated non-highlighted child
+      }
+      // when mine mode is activated we use mineFilter to skip nodes
+      if (visbilityFilter()(targetNode)) {
+        continue
+      }
+
+      visibleLinks.push(link)
+      traverseTree(targetNode)
+    }
   })()
 
   return {

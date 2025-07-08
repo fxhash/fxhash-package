@@ -28,6 +28,8 @@ interface OpenFormGraphProviderProps {
   data: RawGraphData
   onSelectedNodeChange?: (node: SimNode | null) => void
   onHoveredNodeChange?: (node: SimNode | null) => void
+  lockedNodeId?: string
+  hideThumbnails?: boolean
 }
 
 export interface OpenFormGraphApi {
@@ -44,6 +46,7 @@ export interface OpenFormGraphApi {
   selectedNode: SimNode | null
   hoveredNode: SimNode | null
   setSelectedNodeById: (nodeId: string) => void
+  lockedNodeId?: string
 }
 
 const OpenFormGraphContext = createContext<OpenFormGraphApi>({
@@ -69,28 +72,40 @@ export function OpenFormGraphProvider({
   rootImageSources = [],
   config = DEFAULT_GRAPH_CONFIG,
   data,
+  lockedNodeId,
+  hideThumbnails: _hideThumbnails = false,
 }: OpenFormGraphProviderProps) {
   const simulation = useRef<OpenGraphSimulation | null>(null)
   const [selectedNode, _setSelectedNode] = useState<SimNode | null>(null)
-  const [hoveredNode, setHoveredNode] = useState<SimNode | null>(null)
-  const [hideThumbnails, setHideThumbnails] = useState(false)
+  const [hoveredNode, _setHoveredNode] = useState<SimNode | null>(null)
+  const [hideThumbnails, setHideThumbnails] = useState(_hideThumbnails)
 
   const setSelectedNode = useCallback(
     (node: SimNode | null) => {
+      if (node === selectedNode) return
       _setSelectedNode(node)
       simulation.current?.setSelectedNode(node)
     },
-    [_setSelectedNode]
+    [_setSelectedNode, selectedNode]
   )
 
   const setSelectedNodeById = useCallback(
     (nodeId: string) => {
+      if (nodeId === selectedNode?.id) return
       const node = simulation.current?.getNodeById(nodeId)
       if (node) {
         simulation.current?.handleClickNode(node)
       }
     },
-    [setSelectedNode]
+    [setSelectedNode, selectedNode]
+  )
+
+  const setHoveredNode = useCallback(
+    (node: SimNode | null) => {
+      if (node === hoveredNode) return
+      _setHoveredNode(node)
+    },
+    [_setHoveredNode, hoveredNode]
   )
 
   const contextValue: OpenFormGraphApi = useMemo(() => {
@@ -108,6 +123,7 @@ export function OpenFormGraphProvider({
       config,
       data,
       simulation,
+      lockedNodeId,
     }
   }, [
     rootId,
@@ -122,6 +138,7 @@ export function OpenFormGraphProvider({
     config,
     data,
     simulation,
+    lockedNodeId,
   ])
 
   return (

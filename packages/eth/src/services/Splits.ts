@@ -1,8 +1,14 @@
 import { SplitsClient } from "@0xsplits/splits-sdk"
-import { BlockchainType } from "@fxhash/shared"
-import { Account, Chain, PublicClient, Transport, WalletClient } from "viem"
-import { getChainIdForChain } from "./Wallet.js"
 import { config } from "@fxhash/config"
+import type { BlockchainType } from "@fxhash/shared"
+import type {
+  Account,
+  Chain,
+  PublicClient,
+  Transport,
+  WalletClient,
+} from "viem"
+import { getChainIdForChain } from "./Wallet.js"
 
 export const SPLITS_ETHER_TOKEN = "0x0000000000000000000000000000000000000000"
 

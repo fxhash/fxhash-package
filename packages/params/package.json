@@ -3,16 +3,12 @@
   "version": "0.0.10",
   "author": "fxhash",
   "dependencies": {
-    "sha1": "1.1.1",
-    "zod": "3.24.3"
+    "zod": "3.25.67"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@types/lodash.debounce": "4.0.7",
-    "@types/sha1": "1.1.3",
-    "tslib": "2.6.2",
-    "tsup": "8.4.0",
+    "tsdown": "0.12.2",
     "typescript": "5.8.2"
   },
   "exports": {
@@ -36,9 +32,10 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
   },
+  "sideEffects": false,
   "type": "module",
   "types": "dist/index.d.ts",
   "typesVersions": {

@@ -53,8 +53,8 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_token: "0xd89fdcB6c8D107f27CEe4452Ccfb70Dc4F9768a7",
   fx_airdrop: "0x1e4e821216582f0771528b848b4a51c8474be2c7",
   fx_tez_airdrop: "0x3c2b4c38d37affb023a1d2327af428909eb8a134",
-  fx_token_launchpad: "0x0bfF434B9C7543546EFfa42f654bBbBdD0dCCff8",
-  fx_project_factory: "0xD9F9e11D1C2bEa044562Ce9D2590AC032bA87FcF",
+  fx_token_launchpad: "0x2f949f7cD46F4D79d4FD6b234DB302cAeEe552e2",
+  fx_project_factory: "0xcA9486e54FbBD6aCe6eB6AA0102ee97dd90A8a86",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
@@ -83,6 +83,6 @@ export const baseMainnetContracts: IBaseContracts = {
   fx_token: "0x5Fc2843838e65eb0B5d33654628F446d54602791",
   fx_airdrop: "0x45BB9DF166Fda4afD7e533DE42B11579a1F09d43",
   fx_tez_airdrop: "0x5021910a5762F9C872Bf7D6CD5F09127aE8cCA84",
-  fx_token_launchpad: "0xTODO",
-  fx_project_factory: "0xTODO",
+  fx_token_launchpad: "0x6FE49c842dAEE3C709772e5727Fd863ad858f1F5",
+  fx_project_factory: "0x0612ec1A199617A5b3DF627755A34F69469AEA25",
 }

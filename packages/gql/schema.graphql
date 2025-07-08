@@ -1120,15 +1120,6 @@ input AccountsRoles_stream_cursor_value_input {
   roleValue: AccountRole_enum
 }
 
-input AirdropTezClaimInput {
-  publicKey: String!
-  signature: String!
-}
-
-type AirdropTezClaimResult {
-  signature: String!
-}
-
 input AuthenticationInput {
   id: String!
   publicKey: String
@@ -2612,6 +2603,18 @@ input LinkWalletInput {
   signature: String!
 }
 
+input ListingOrderBy {
+  created_at: OrderBy
+  price: OrderBy
+}
+
+type ListingResult {
+  id: String!
+  listing: listing
+  objkt_id: String!
+  version: Int!
+}
+
 input LogoutInput {
   refreshToken: String
 }
@@ -3244,7 +3247,9 @@ type OpenFormGraphLink {
 }
 
 type OpenFormGraphNode {
+  assigned: Boolean!
   id: String!
+  state: String!
   thumbnail_uri: String
 }
 
@@ -3252,6 +3257,33 @@ type OpenFormGraphResponse {
   links: [OpenFormGraphLink!]!
   nodes: [OpenFormGraphNode!]!
   rootId: String!
+}
+
+enum OrderBy {
+  asc
+  desc
+}
+
+type PoolTrade {
+  amount_in: String!
+  amount_in_eth: String!
+  amount_in_usd: String!
+  amount_out: String!
+  amount_out_eth: String!
+  amount_out_usd: String!
+  art_coin: art_coin
+  art_coin_id: String!
+  created_at: String!
+  op_hash: String!
+  type: PoolTradeType!
+  user: user
+  user_id: String!
+  volume_usd: String!
+}
+
+enum PoolTradeType {
+  BUY
+  SELL
 }
 
 input PrepareRedemptionInput {
@@ -4818,8 +4850,8 @@ input String_comparison_exp {
 
 input TransferWalletInput {
   id: String!
-  signature: String!
   publicKey: String
+  signature: String!
 }
 
 input UnlinkWalletInput {
@@ -6622,7 +6654,7 @@ type art_coin {
   capture_media_id: bpchar
   created_at: timestamptz!
   description: String!
-  display_uri: String!
+  display_uri: String
   flag: art_coin_flag_enum!
   graduated_address: String!
   graduated_at: timestamptz
@@ -6635,6 +6667,8 @@ type art_coin {
   metadata_uri: String!
   name: String!
   opens_at: timestamptz!
+  pair_address: String
+  pool_trades: [PoolTrade!]!
 
   """
   An array relationship
@@ -7059,6 +7093,7 @@ input art_coin_bool_exp {
   metadata_uri: String_comparison_exp
   name: String_comparison_exp
   opens_at: timestamptz_comparison_exp
+  pair_address: String_comparison_exp
   projects: generative_token_bool_exp
   projects_aggregate: generative_token_aggregate_bool_exp
   slug: String_comparison_exp
@@ -7089,6 +7124,11 @@ columns and relationships of "art_coin_holding"
 """
 type art_coin_holding {
   amount: numeric!
+
+  """
+  An object relationship
+  """
+  art_coin: art_coin!
   art_coin_id: String!
   holder_id: String!
   id: String!
@@ -7174,6 +7214,7 @@ input art_coin_holding_bool_exp {
   _not: art_coin_holding_bool_exp
   _or: [art_coin_holding_bool_exp!]
   amount: numeric_comparison_exp
+  art_coin: art_coin_bool_exp
   art_coin_id: String_comparison_exp
   holder_id: String_comparison_exp
   id: String_comparison_exp
@@ -7225,6 +7266,7 @@ Ordering options when selecting data from "art_coin_holding".
 """
 input art_coin_holding_order_by {
   amount: order_by
+  art_coin: art_coin_order_by
   art_coin_id: order_by
   holder_id: order_by
   id: order_by
@@ -7384,7 +7426,10 @@ columns and relationships of "art_coin_market_stats"
 """
 type art_coin_market_stats {
   art_coin_id: String!
+  fees_generated: numeric
+  fees_generated_fiat: numeric
   from: timestamptz
+  holders: Int
   market_cap: numeric
   price: numeric
   to: timestamptz
@@ -7399,7 +7444,10 @@ input art_coin_market_stats_bool_exp {
   _not: art_coin_market_stats_bool_exp
   _or: [art_coin_market_stats_bool_exp!]
   art_coin_id: String_comparison_exp
+  fees_generated: numeric_comparison_exp
+  fees_generated_fiat: numeric_comparison_exp
   from: timestamptz_comparison_exp
+  holders: Int_comparison_exp
   market_cap: numeric_comparison_exp
   price: numeric_comparison_exp
   to: timestamptz_comparison_exp
@@ -7413,6 +7461,7 @@ type art_coin_market_stats_history {
   art_coin_id: String!
   from: timestamptz!
   id: Int!
+  interval: art_coin_market_stats_history_interval_enum!
   market_cap: numeric
   price: numeric
   to: timestamptz!
@@ -7429,102 +7478,28 @@ input art_coin_market_stats_history_bool_exp {
   art_coin_id: String_comparison_exp
   from: timestamptz_comparison_exp
   id: Int_comparison_exp
+  interval: art_coin_market_stats_history_interval_enum_comparison_exp
   market_cap: numeric_comparison_exp
   price: numeric_comparison_exp
   to: timestamptz_comparison_exp
   volume24: numeric_comparison_exp
 }
 
-"""
-columns and relationships of "art_coin_market_stats_history_hourly"
-"""
-type art_coin_market_stats_history_hourly {
-  art_coin_id: String
-  market_cap: numeric
-  price: numeric
-  timestamp: timestamptz
-  volume24: numeric
-}
+scalar art_coin_market_stats_history_interval_enum
 
 """
-Boolean expression to filter rows from the table "art_coin_market_stats_history_hourly". All fields are combined with a logical 'AND'.
+Boolean expression to compare columns of type "art_coin_market_stats_history_interval_enum". All fields are combined with logical 'AND'.
 """
-input art_coin_market_stats_history_hourly_bool_exp {
-  _and: [art_coin_market_stats_history_hourly_bool_exp!]
-  _not: art_coin_market_stats_history_hourly_bool_exp
-  _or: [art_coin_market_stats_history_hourly_bool_exp!]
-  art_coin_id: String_comparison_exp
-  market_cap: numeric_comparison_exp
-  price: numeric_comparison_exp
-  timestamp: timestamptz_comparison_exp
-  volume24: numeric_comparison_exp
-}
-
-"""
-Ordering options when selecting data from "art_coin_market_stats_history_hourly".
-"""
-input art_coin_market_stats_history_hourly_order_by {
-  art_coin_id: order_by
-  market_cap: order_by
-  price: order_by
-  timestamp: order_by
-  volume24: order_by
-}
-
-"""
-select columns of table "art_coin_market_stats_history_hourly"
-"""
-enum art_coin_market_stats_history_hourly_select_column {
-  """
-  column name
-  """
-  art_coin_id
-
-  """
-  column name
-  """
-  market_cap
-
-  """
-  column name
-  """
-  price
-
-  """
-  column name
-  """
-  timestamp
-
-  """
-  column name
-  """
-  volume24
-}
-
-"""
-Streaming cursor of the table "art_coin_market_stats_history_hourly"
-"""
-input art_coin_market_stats_history_hourly_stream_cursor_input {
-  """
-  Stream column input with initial value
-  """
-  initial_value: art_coin_market_stats_history_hourly_stream_cursor_value_input!
-
-  """
-  cursor ordering
-  """
-  ordering: cursor_ordering
-}
-
-"""
-Initial value of the column from where the streaming should start
-"""
-input art_coin_market_stats_history_hourly_stream_cursor_value_input {
-  art_coin_id: String
-  market_cap: numeric
-  price: numeric
-  timestamp: timestamptz
-  volume24: numeric
+input art_coin_market_stats_history_interval_enum_comparison_exp {
+  _eq: art_coin_market_stats_history_interval_enum
+  _gt: art_coin_market_stats_history_interval_enum
+  _gte: art_coin_market_stats_history_interval_enum
+  _in: [art_coin_market_stats_history_interval_enum!]
+  _is_null: Boolean
+  _lt: art_coin_market_stats_history_interval_enum
+  _lte: art_coin_market_stats_history_interval_enum
+  _neq: art_coin_market_stats_history_interval_enum
+  _nin: [art_coin_market_stats_history_interval_enum!]
 }
 
 """
@@ -7534,6 +7509,7 @@ input art_coin_market_stats_history_order_by {
   art_coin_id: order_by
   from: order_by
   id: order_by
+  interval: order_by
   market_cap: order_by
   price: order_by
   to: order_by
@@ -7558,6 +7534,11 @@ enum art_coin_market_stats_history_select_column {
   column name
   """
   id
+
+  """
+  column name
+  """
+  interval
 
   """
   column name
@@ -7602,6 +7583,7 @@ input art_coin_market_stats_history_stream_cursor_value_input {
   art_coin_id: String
   from: timestamptz
   id: Int
+  interval: art_coin_market_stats_history_interval_enum
   market_cap: numeric
   price: numeric
   to: timestamptz
@@ -7613,7 +7595,10 @@ Ordering options when selecting data from "art_coin_market_stats".
 """
 input art_coin_market_stats_order_by {
   art_coin_id: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   from: order_by
+  holders: order_by
   market_cap: order_by
   price: order_by
   to: order_by
@@ -7632,7 +7617,22 @@ enum art_coin_market_stats_select_column {
   """
   column name
   """
+  fees_generated
+
+  """
+  column name
+  """
+  fees_generated_fiat
+
+  """
+  column name
+  """
   from
+
+  """
+  column name
+  """
+  holders
 
   """
   column name
@@ -7675,7 +7675,10 @@ Initial value of the column from where the streaming should start
 """
 input art_coin_market_stats_stream_cursor_value_input {
   art_coin_id: String
+  fees_generated: numeric
+  fees_generated_fiat: numeric
   from: timestamptz
+  holders: Int
   market_cap: numeric
   price: numeric
   to: timestamptz
@@ -7699,9 +7702,92 @@ type art_coin_max_fields {
   metadata_uri: String
   name: String
   opens_at: timestamptz
+  pair_address: String
   slug: String
   supply: numeric
   ticker: String
+}
+
+"""
+columns and relationships of "art_coin_migrate"
+"""
+type art_coin_migrate {
+  id: String!
+  state: art_coin_migrate_state_enum!
+}
+
+"""
+Boolean expression to filter rows from the table "art_coin_migrate". All fields are combined with a logical 'AND'.
+"""
+input art_coin_migrate_bool_exp {
+  _and: [art_coin_migrate_bool_exp!]
+  _not: art_coin_migrate_bool_exp
+  _or: [art_coin_migrate_bool_exp!]
+  id: String_comparison_exp
+  state: art_coin_migrate_state_enum_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "art_coin_migrate".
+"""
+input art_coin_migrate_order_by {
+  id: order_by
+  state: order_by
+}
+
+"""
+select columns of table "art_coin_migrate"
+"""
+enum art_coin_migrate_select_column {
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  state
+}
+
+scalar art_coin_migrate_state_enum
+
+"""
+Boolean expression to compare columns of type "art_coin_migrate_state_enum". All fields are combined with logical 'AND'.
+"""
+input art_coin_migrate_state_enum_comparison_exp {
+  _eq: art_coin_migrate_state_enum
+  _gt: art_coin_migrate_state_enum
+  _gte: art_coin_migrate_state_enum
+  _in: [art_coin_migrate_state_enum!]
+  _is_null: Boolean
+  _lt: art_coin_migrate_state_enum
+  _lte: art_coin_migrate_state_enum
+  _neq: art_coin_migrate_state_enum
+  _nin: [art_coin_migrate_state_enum!]
+}
+
+"""
+Streaming cursor of the table "art_coin_migrate"
+"""
+input art_coin_migrate_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: art_coin_migrate_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input art_coin_migrate_stream_cursor_value_input {
+  id: String
+  state: art_coin_migrate_state_enum
 }
 
 """
@@ -7721,6 +7807,7 @@ type art_coin_min_fields {
   metadata_uri: String
   name: String
   opens_at: timestamptz
+  pair_address: String
   slug: String
   supply: numeric
   ticker: String
@@ -7746,6 +7833,7 @@ input art_coin_order_by {
   metadata_uri: order_by
   name: order_by
   opens_at: order_by
+  pair_address: order_by
   projects_aggregate: generative_token_aggregate_order_by
   slug: order_by
   supply: order_by
@@ -7825,6 +7913,11 @@ enum art_coin_select_column {
   """
   column name
   """
+  pair_address
+
+  """
+  column name
+  """
   slug
 
   """
@@ -7894,6 +7987,7 @@ input art_coin_stream_cursor_value_input {
   metadata_uri: String
   name: String
   opens_at: timestamptz
+  pair_address: String
   slug: String
   supply: numeric
   ticker: String
@@ -10903,6 +10997,7 @@ type collaboration {
   An object relationship
   """
   contract: user!
+  id: String!
 
   """
   An object relationship
@@ -10940,6 +11035,7 @@ input collaboration_bool_exp {
   collaborator: user_bool_exp
   collaborator_id: String_comparison_exp
   contract: user_bool_exp
+  id: String_comparison_exp
   user: user_bool_exp
   userByCollaboratorId: user_bool_exp
   wallet_account: wallet_account_bool_exp
@@ -10951,6 +11047,7 @@ order by max() on columns of table "collaboration"
 input collaboration_max_order_by {
   collaboration_contract_id: order_by
   collaborator_id: order_by
+  id: order_by
 }
 
 """
@@ -10959,6 +11056,7 @@ order by min() on columns of table "collaboration"
 input collaboration_min_order_by {
   collaboration_contract_id: order_by
   collaborator_id: order_by
+  id: order_by
 }
 
 """
@@ -10969,6 +11067,7 @@ input collaboration_order_by {
   collaborator: user_order_by
   collaborator_id: order_by
   contract: user_order_by
+  id: order_by
   user: user_order_by
   userByCollaboratorId: user_order_by
   wallet_account: wallet_account_order_by
@@ -10987,6 +11086,11 @@ enum collaboration_select_column {
   column name
   """
   collaborator_id
+
+  """
+  column name
+  """
+  id
 }
 
 """
@@ -11010,6 +11114,7 @@ Initial value of the column from where the streaming should start
 input collaboration_stream_cursor_value_input {
   collaboration_contract_id: String
   collaborator_id: String
+  id: String
 }
 
 """
@@ -11341,6 +11446,226 @@ input collection_offer_variance_order_by {
   initial_amount: order_by
   price: order_by
   version: order_by
+}
+
+"""
+columns and relationships of "currency_conversion"
+"""
+type currency_conversion {
+  crypto_code: currency_conversion_crypto_code_enum!
+  eur: numeric
+  id: uuid!
+  timestamp: timestamptz!
+  usd: numeric!
+}
+
+"""
+aggregated selection of "currency_conversion"
+"""
+type currency_conversion_aggregate {
+  aggregate: currency_conversion_aggregate_fields
+  nodes: [currency_conversion!]!
+}
+
+"""
+aggregate fields of "currency_conversion"
+"""
+type currency_conversion_aggregate_fields {
+  avg: currency_conversion_avg_fields
+  count(columns: [currency_conversion_select_column!], distinct: Boolean): Int!
+  max: currency_conversion_max_fields
+  min: currency_conversion_min_fields
+  stddev: currency_conversion_stddev_fields
+  stddev_pop: currency_conversion_stddev_pop_fields
+  stddev_samp: currency_conversion_stddev_samp_fields
+  sum: currency_conversion_sum_fields
+  var_pop: currency_conversion_var_pop_fields
+  var_samp: currency_conversion_var_samp_fields
+  variance: currency_conversion_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type currency_conversion_avg_fields {
+  eur: Float
+  usd: Float
+}
+
+"""
+Boolean expression to filter rows from the table "currency_conversion". All fields are combined with a logical 'AND'.
+"""
+input currency_conversion_bool_exp {
+  _and: [currency_conversion_bool_exp!]
+  _not: currency_conversion_bool_exp
+  _or: [currency_conversion_bool_exp!]
+  crypto_code: currency_conversion_crypto_code_enum_comparison_exp
+  eur: numeric_comparison_exp
+  id: uuid_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  usd: numeric_comparison_exp
+}
+
+scalar currency_conversion_crypto_code_enum
+
+"""
+Boolean expression to compare columns of type "currency_conversion_crypto_code_enum". All fields are combined with logical 'AND'.
+"""
+input currency_conversion_crypto_code_enum_comparison_exp {
+  _eq: currency_conversion_crypto_code_enum
+  _gt: currency_conversion_crypto_code_enum
+  _gte: currency_conversion_crypto_code_enum
+  _in: [currency_conversion_crypto_code_enum!]
+  _is_null: Boolean
+  _lt: currency_conversion_crypto_code_enum
+  _lte: currency_conversion_crypto_code_enum
+  _neq: currency_conversion_crypto_code_enum
+  _nin: [currency_conversion_crypto_code_enum!]
+}
+
+"""
+aggregate max on columns
+"""
+type currency_conversion_max_fields {
+  crypto_code: currency_conversion_crypto_code_enum
+  eur: numeric
+  id: uuid
+  timestamp: timestamptz
+  usd: numeric
+}
+
+"""
+aggregate min on columns
+"""
+type currency_conversion_min_fields {
+  crypto_code: currency_conversion_crypto_code_enum
+  eur: numeric
+  id: uuid
+  timestamp: timestamptz
+  usd: numeric
+}
+
+"""
+Ordering options when selecting data from "currency_conversion".
+"""
+input currency_conversion_order_by {
+  crypto_code: order_by
+  eur: order_by
+  id: order_by
+  timestamp: order_by
+  usd: order_by
+}
+
+"""
+select columns of table "currency_conversion"
+"""
+enum currency_conversion_select_column {
+  """
+  column name
+  """
+  crypto_code
+
+  """
+  column name
+  """
+  eur
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  timestamp
+
+  """
+  column name
+  """
+  usd
+}
+
+"""
+aggregate stddev on columns
+"""
+type currency_conversion_stddev_fields {
+  eur: Float
+  usd: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type currency_conversion_stddev_pop_fields {
+  eur: Float
+  usd: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type currency_conversion_stddev_samp_fields {
+  eur: Float
+  usd: Float
+}
+
+"""
+Streaming cursor of the table "currency_conversion"
+"""
+input currency_conversion_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: currency_conversion_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input currency_conversion_stream_cursor_value_input {
+  crypto_code: currency_conversion_crypto_code_enum
+  eur: numeric
+  id: uuid
+  timestamp: timestamptz
+  usd: numeric
+}
+
+"""
+aggregate sum on columns
+"""
+type currency_conversion_sum_fields {
+  eur: numeric
+  usd: numeric
+}
+
+"""
+aggregate var_pop on columns
+"""
+type currency_conversion_var_pop_fields {
+  eur: Float
+  usd: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type currency_conversion_var_samp_fields {
+  eur: Float
+  usd: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type currency_conversion_variance_fields {
+  eur: Float
+  usd: Float
 }
 
 """
@@ -12241,6 +12566,7 @@ type generative_token {
     path: String
   ): jsonb
   flag: generative_token_flag_enum!
+  format: generative_token_format_enum!
 
   """
   An object relationship
@@ -12899,6 +13225,7 @@ input generative_token_bool_exp {
   enabled: Boolean_comparison_exp
   features: jsonb_comparison_exp
   flag: generative_token_flag_enum_comparison_exp
+  format: generative_token_format_enum_comparison_exp
   frame_settings: eth_frame_data_bool_exp
   generative_token_articles: article_generative_token_bool_exp
   generative_uri: String_comparison_exp
@@ -13250,6 +13577,23 @@ input generative_token_flag_enum_comparison_exp {
   _nin: [generative_token_flag_enum!]
 }
 
+scalar generative_token_format_enum
+
+"""
+Boolean expression to compare columns of type "generative_token_format_enum". All fields are combined with logical 'AND'.
+"""
+input generative_token_format_enum_comparison_exp {
+  _eq: generative_token_format_enum
+  _gt: generative_token_format_enum
+  _gte: generative_token_format_enum
+  _in: [generative_token_format_enum!]
+  _is_null: Boolean
+  _lt: generative_token_format_enum
+  _lte: generative_token_format_enum
+  _neq: generative_token_format_enum
+  _nin: [generative_token_format_enum!]
+}
+
 """
 aggregate max on columns
 """
@@ -13268,6 +13612,7 @@ type generative_token_max_fields {
   display_still_uri: String
   display_uri: String
   flag: generative_token_flag_enum
+  format: generative_token_format_enum
   generative_uri: String
   id: String
   input_bytes_size: Int
@@ -13309,6 +13654,7 @@ input generative_token_max_order_by {
   display_still_uri: order_by
   display_uri: order_by
   flag: order_by
+  format: order_by
   generative_uri: order_by
   id: order_by
   input_bytes_size: order_by
@@ -13350,6 +13696,7 @@ type generative_token_min_fields {
   display_still_uri: String
   display_uri: String
   flag: generative_token_flag_enum
+  format: generative_token_format_enum
   generative_uri: String
   id: String
   input_bytes_size: Int
@@ -13391,6 +13738,7 @@ input generative_token_min_order_by {
   display_still_uri: order_by
   display_uri: order_by
   flag: order_by
+  format: order_by
   generative_uri: order_by
   id: order_by
   input_bytes_size: order_by
@@ -13438,6 +13786,7 @@ input generative_token_order_by {
   enabled: order_by
   features: order_by
   flag: order_by
+  format: order_by
   frame_settings: eth_frame_data_order_by
   generative_token_articles_aggregate: article_generative_token_aggregate_order_by
   generative_uri: order_by
@@ -13538,6 +13887,11 @@ enum generative_token_select_column {
   column name
   """
   flag
+
+  """
+  column name
+  """
+  format
 
   """
   column name
@@ -13842,6 +14196,7 @@ input generative_token_stream_cursor_value_input {
   display_uri: String
   enabled: Boolean
   flag: generative_token_flag_enum
+  format: generative_token_format_enum
   generative_uri: String
   id: String
   input_bytes_size: Int
@@ -14776,6 +15131,395 @@ input listing_order_by {
 }
 
 """
+columns and relationships of "listing_search"
+"""
+type listing_search {
+  accepted_at: timestamptz
+  accepted_by_id: String
+  amount: numeric
+  article_id: Int
+  artist_flag: user_flag_enum
+  artist_username: String
+  cancelled_at: timestamptz
+  chain: String
+  created_at: timestamptz
+  id: String
+  is_inactive: Boolean
+  issuer_id: String
+  metadata(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb
+
+  """
+  An object relationship
+  """
+  objkt: objkt
+  objkt_id: String
+  price: numeric
+  project_name: String
+  royalties: Int
+  status: listing_status_enum
+  version: Int
+}
+
+"""
+aggregated selection of "listing_search"
+"""
+type listing_search_aggregate {
+  aggregate: listing_search_aggregate_fields
+  nodes: [listing_search!]!
+}
+
+"""
+aggregate fields of "listing_search"
+"""
+type listing_search_aggregate_fields {
+  avg: listing_search_avg_fields
+  count(columns: [listing_search_select_column!], distinct: Boolean): Int!
+  max: listing_search_max_fields
+  min: listing_search_min_fields
+  stddev: listing_search_stddev_fields
+  stddev_pop: listing_search_stddev_pop_fields
+  stddev_samp: listing_search_stddev_samp_fields
+  sum: listing_search_sum_fields
+  var_pop: listing_search_var_pop_fields
+  var_samp: listing_search_var_samp_fields
+  variance: listing_search_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type listing_search_avg_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
+Boolean expression to filter rows from the table "listing_search". All fields are combined with a logical 'AND'.
+"""
+input listing_search_bool_exp {
+  _and: [listing_search_bool_exp!]
+  _not: listing_search_bool_exp
+  _or: [listing_search_bool_exp!]
+  accepted_at: timestamptz_comparison_exp
+  accepted_by_id: String_comparison_exp
+  amount: numeric_comparison_exp
+  article_id: Int_comparison_exp
+  artist_flag: user_flag_enum_comparison_exp
+  artist_username: String_comparison_exp
+  cancelled_at: timestamptz_comparison_exp
+  chain: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: String_comparison_exp
+  is_inactive: Boolean_comparison_exp
+  issuer_id: String_comparison_exp
+  metadata: jsonb_comparison_exp
+  objkt: objkt_bool_exp
+  objkt_id: String_comparison_exp
+  price: numeric_comparison_exp
+  project_name: String_comparison_exp
+  royalties: Int_comparison_exp
+  status: listing_status_enum_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""
+aggregate max on columns
+"""
+type listing_search_max_fields {
+  accepted_at: timestamptz
+  accepted_by_id: String
+  amount: numeric
+  article_id: Int
+  artist_flag: user_flag_enum
+  artist_username: String
+  cancelled_at: timestamptz
+  chain: String
+  created_at: timestamptz
+  id: String
+  issuer_id: String
+  objkt_id: String
+  price: numeric
+  project_name: String
+  royalties: Int
+  status: listing_status_enum
+  version: Int
+}
+
+"""
+aggregate min on columns
+"""
+type listing_search_min_fields {
+  accepted_at: timestamptz
+  accepted_by_id: String
+  amount: numeric
+  article_id: Int
+  artist_flag: user_flag_enum
+  artist_username: String
+  cancelled_at: timestamptz
+  chain: String
+  created_at: timestamptz
+  id: String
+  issuer_id: String
+  objkt_id: String
+  price: numeric
+  project_name: String
+  royalties: Int
+  status: listing_status_enum
+  version: Int
+}
+
+"""
+Ordering options when selecting data from "listing_search".
+"""
+input listing_search_order_by {
+  accepted_at: order_by
+  accepted_by_id: order_by
+  amount: order_by
+  article_id: order_by
+  artist_flag: order_by
+  artist_username: order_by
+  cancelled_at: order_by
+  chain: order_by
+  created_at: order_by
+  id: order_by
+  is_inactive: order_by
+  issuer_id: order_by
+  metadata: order_by
+  objkt: objkt_order_by
+  objkt_id: order_by
+  price: order_by
+  project_name: order_by
+  royalties: order_by
+  status: order_by
+  version: order_by
+}
+
+"""
+select columns of table "listing_search"
+"""
+enum listing_search_select_column {
+  """
+  column name
+  """
+  accepted_at
+
+  """
+  column name
+  """
+  accepted_by_id
+
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  article_id
+
+  """
+  column name
+  """
+  artist_flag
+
+  """
+  column name
+  """
+  artist_username
+
+  """
+  column name
+  """
+  cancelled_at
+
+  """
+  column name
+  """
+  chain
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  is_inactive
+
+  """
+  column name
+  """
+  issuer_id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  objkt_id
+
+  """
+  column name
+  """
+  price
+
+  """
+  column name
+  """
+  project_name
+
+  """
+  column name
+  """
+  royalties
+
+  """
+  column name
+  """
+  status
+
+  """
+  column name
+  """
+  version
+}
+
+"""
+aggregate stddev on columns
+"""
+type listing_search_stddev_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type listing_search_stddev_pop_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type listing_search_stddev_samp_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
+Streaming cursor of the table "listing_search"
+"""
+input listing_search_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: listing_search_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input listing_search_stream_cursor_value_input {
+  accepted_at: timestamptz
+  accepted_by_id: String
+  amount: numeric
+  article_id: Int
+  artist_flag: user_flag_enum
+  artist_username: String
+  cancelled_at: timestamptz
+  chain: String
+  created_at: timestamptz
+  id: String
+  is_inactive: Boolean
+  issuer_id: String
+  metadata: jsonb
+  objkt_id: String
+  price: numeric
+  project_name: String
+  royalties: Int
+  status: listing_status_enum
+  version: Int
+}
+
+"""
+aggregate sum on columns
+"""
+type listing_search_sum_fields {
+  amount: numeric
+  article_id: Int
+  price: numeric
+  royalties: Int
+  version: Int
+}
+
+"""
+aggregate var_pop on columns
+"""
+type listing_search_var_pop_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type listing_search_var_samp_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type listing_search_variance_fields {
+  amount: Float
+  article_id: Float
+  price: Float
+  royalties: Float
+  version: Float
+}
+
+"""
 select columns of table "listing"
 """
 enum listing_select_column {
@@ -15099,6 +15843,7 @@ type market_stats {
   generative_token: generative_token!
   highest_sold: numeric
   highest_sold_fiat: numeric
+  holders: Int
   listed: Int
   lowest_sold: numeric
   lowest_sold_fiat: numeric
@@ -15173,6 +15918,7 @@ type market_stats_avg_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -15225,6 +15971,7 @@ input market_stats_bool_exp {
   generative_token: generative_token_bool_exp
   highest_sold: numeric_comparison_exp
   highest_sold_fiat: numeric_comparison_exp
+  holders: Int_comparison_exp
   listed: Int_comparison_exp
   lowest_sold: numeric_comparison_exp
   lowest_sold_fiat: numeric_comparison_exp
@@ -15890,6 +16637,7 @@ type market_stats_max_fields {
   from: timestamptz
   highest_sold: numeric
   highest_sold_fiat: numeric
+  holders: Int
   listed: Int
   lowest_sold: numeric
   lowest_sold_fiat: numeric
@@ -15940,6 +16688,7 @@ type market_stats_min_fields {
   from: timestamptz
   highest_sold: numeric
   highest_sold_fiat: numeric
+  holders: Int
   listed: Int
   lowest_sold: numeric
   lowest_sold_fiat: numeric
@@ -15991,6 +16740,7 @@ input market_stats_order_by {
   generative_token: generative_token_order_by
   highest_sold: order_by
   highest_sold_fiat: order_by
+  holders: order_by
   listed: order_by
   lowest_sold: order_by
   lowest_sold_fiat: order_by
@@ -16072,6 +16822,11 @@ enum market_stats_select_column {
   column name
   """
   highest_sold_fiat
+
+  """
+  column name
+  """
+  holders
 
   """
   column name
@@ -16265,6 +17020,7 @@ type market_stats_stddev_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -16312,6 +17068,7 @@ type market_stats_stddev_pop_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -16359,6 +17116,7 @@ type market_stats_stddev_samp_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -16422,6 +17180,7 @@ input market_stats_stream_cursor_value_input {
   from: timestamptz
   highest_sold: numeric
   highest_sold_fiat: numeric
+  holders: Int
   listed: Int
   lowest_sold: numeric
   lowest_sold_fiat: numeric
@@ -16471,6 +17230,7 @@ type market_stats_sum_fields {
   floor_fiat: numeric
   highest_sold: numeric
   highest_sold_fiat: numeric
+  holders: Int
   listed: Int
   lowest_sold: numeric
   lowest_sold_fiat: numeric
@@ -16518,6 +17278,7 @@ type market_stats_var_pop_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -16565,6 +17326,7 @@ type market_stats_var_samp_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -16612,6 +17374,7 @@ type market_stats_variance_fields {
   floor_fiat: Float
   highest_sold: Float
   highest_sold_fiat: Float
+  holders: Float
   listed: Float
   lowest_sold: Float
   lowest_sold_fiat: Float
@@ -16877,6 +17640,11 @@ type mint_ticket {
   An object relationship
   """
   user: user!
+
+  """
+  An object relationship
+  """
+  wallet_account: wallet_account
 }
 
 """
@@ -16965,6 +17733,7 @@ input mint_ticket_bool_exp {
   taxation_start: timestamptz_comparison_exp
   token_id: String_comparison_exp
   user: user_bool_exp
+  wallet_account: wallet_account_bool_exp
 }
 
 """
@@ -17037,6 +17806,7 @@ input mint_ticket_order_by {
   taxation_start: order_by
   token_id: order_by
   user: user_order_by
+  wallet_account: wallet_account_order_by
 }
 
 """
@@ -17687,7 +18457,6 @@ input moderation_reason_stream_cursor_value_input {
 mutation root
 """
 type mutation_root {
-  airdrop_tez_claim(input: AirdropTezClaimInput): AirdropTezClaimResult
   authenticate(input: AuthenticationInput!): AuthenticationResult
 
   """
@@ -17959,6 +18728,9 @@ type objkt {
     """
     path: String
   ): jsonb
+  fees_generated: numeric
+  fees_generated_fiat: numeric
+  generated_from_id: String
   generation_hash: String
 
   """
@@ -18167,6 +18939,16 @@ type objkt {
     """
     where: redemption_bool_exp
   ): [redemption!]!
+
+  """
+  An object relationship
+  """
+  regenerated_from: objkt
+
+  """
+  An object relationship
+  """
+  regenerated_to: objkt
   royalties: Int!
 
   """
@@ -18420,6 +19202,8 @@ aggregate avg on columns
 type objkt_avg_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -18437,6 +19221,8 @@ order by avg() on columns of table "objkt"
 input objkt_avg_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -18466,6 +19252,9 @@ input objkt_bool_exp {
   display_uri: bpchar_comparison_exp
   duplicate: Boolean_comparison_exp
   features: jsonb_comparison_exp
+  fees_generated: numeric_comparison_exp
+  fees_generated_fiat: numeric_comparison_exp
+  generated_from_id: String_comparison_exp
   generation_hash: String_comparison_exp
   generative_token: generative_token_bool_exp
   gentk_assign: gentk_assign_bool_exp
@@ -18491,6 +19280,8 @@ input objkt_bool_exp {
   parent_id: String_comparison_exp
   rarity: float8_comparison_exp
   redemptions: redemption_bool_exp
+  regenerated_from: objkt_bool_exp
+  regenerated_to: objkt_bool_exp
   royalties: Int_comparison_exp
   secondary_splits: split_bool_exp
   slug: String_comparison_exp
@@ -18515,6 +19306,9 @@ type objkt_max_fields {
   depth: Int
   display_still_uri: bpchar
   display_uri: bpchar
+  fees_generated: numeric
+  fees_generated_fiat: numeric
+  generated_from_id: String
   generation_hash: String
   id: String
   input_bytes: String
@@ -18551,6 +19345,9 @@ input objkt_max_order_by {
   depth: order_by
   display_still_uri: order_by
   display_uri: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
+  generated_from_id: order_by
   generation_hash: order_by
   id: order_by
   input_bytes: order_by
@@ -18582,6 +19379,9 @@ type objkt_min_fields {
   depth: Int
   display_still_uri: bpchar
   display_uri: bpchar
+  fees_generated: numeric
+  fees_generated_fiat: numeric
+  generated_from_id: String
   generation_hash: String
   id: String
   input_bytes: String
@@ -18618,6 +19418,9 @@ input objkt_min_order_by {
   depth: order_by
   display_still_uri: order_by
   display_uri: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
+  generated_from_id: order_by
   generation_hash: order_by
   id: order_by
   input_bytes: order_by
@@ -18656,6 +19459,9 @@ input objkt_order_by {
   display_uri: order_by
   duplicate: order_by
   features: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
+  generated_from_id: order_by
   generation_hash: order_by
   generative_token: generative_token_order_by
   gentk_assign: gentk_assign_order_by
@@ -18679,6 +19485,8 @@ input objkt_order_by {
   parent_id: order_by
   rarity: order_by
   redemptions_aggregate: redemption_aggregate_order_by
+  regenerated_from: objkt_order_by
+  regenerated_to: objkt_order_by
   royalties: order_by
   secondary_splits_aggregate: split_aggregate_order_by
   slug: order_by
@@ -18745,6 +19553,21 @@ enum objkt_select_column {
   column name
   """
   features
+
+  """
+  column name
+  """
+  fees_generated
+
+  """
+  column name
+  """
+  fees_generated_fiat
+
+  """
+  column name
+  """
+  generated_from_id
 
   """
   column name
@@ -18963,6 +19786,8 @@ aggregate stddev on columns
 type objkt_stddev_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -18980,6 +19805,8 @@ order by stddev() on columns of table "objkt"
 input objkt_stddev_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -18992,6 +19819,8 @@ aggregate stddev_pop on columns
 type objkt_stddev_pop_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -19009,6 +19838,8 @@ order by stddev_pop() on columns of table "objkt"
 input objkt_stddev_pop_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -19021,6 +19852,8 @@ aggregate stddev_samp on columns
 type objkt_stddev_samp_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -19038,6 +19871,8 @@ order by stddev_samp() on columns of table "objkt"
 input objkt_stddev_samp_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -19073,6 +19908,9 @@ input objkt_stream_cursor_value_input {
   display_uri: bpchar
   duplicate: Boolean
   features: jsonb
+  fees_generated: numeric
+  fees_generated_fiat: numeric
+  generated_from_id: String
   generation_hash: String
   id: String
   input_bytes: String
@@ -19101,6 +19939,8 @@ aggregate sum on columns
 type objkt_sum_fields {
   children_count: Int
   depth: Int
+  fees_generated: numeric
+  fees_generated_fiat: numeric
   iteration: numeric
 
   """
@@ -19118,6 +19958,8 @@ order by sum() on columns of table "objkt"
 input objkt_sum_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -19130,6 +19972,8 @@ aggregate var_pop on columns
 type objkt_var_pop_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -19147,6 +19991,8 @@ order by var_pop() on columns of table "objkt"
 input objkt_var_pop_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -19159,6 +20005,8 @@ aggregate var_samp on columns
 type objkt_var_samp_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -19176,6 +20024,8 @@ order by var_samp() on columns of table "objkt"
 input objkt_var_samp_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -19188,6 +20038,8 @@ aggregate variance on columns
 type objkt_variance_fields {
   children_count: Float
   depth: Float
+  fees_generated: Float
+  fees_generated_fiat: Float
   iteration: Float
 
   """
@@ -19205,6 +20057,8 @@ order by variance() on columns of table "objkt"
 input objkt_variance_order_by {
   children_count: order_by
   depth: order_by
+  fees_generated: order_by
+  fees_generated_fiat: order_by
   iteration: order_by
   rarity: order_by
   royalties: order_by
@@ -23005,13 +23859,13 @@ type onchain_query {
   art_coin_market_stats_history_by_pk(id: Int!): art_coin_market_stats_history
 
   """
-  fetch data from the table: "art_coin_market_stats_history_hourly"
+  fetch data from the table: "art_coin_migrate"
   """
-  art_coin_market_stats_history_hourly(
+  art_coin_migrate(
     """
     distinct select on columns
     """
-    distinct_on: [art_coin_market_stats_history_hourly_select_column!]
+    distinct_on: [art_coin_migrate_select_column!]
 
     """
     limit the number of rows returned
@@ -23026,13 +23880,18 @@ type onchain_query {
     """
     sort the rows by one or more columns
     """
-    order_by: [art_coin_market_stats_history_hourly_order_by!]
+    order_by: [art_coin_migrate_order_by!]
 
     """
     filter the rows returned
     """
-    where: art_coin_market_stats_history_hourly_bool_exp
-  ): [art_coin_market_stats_history_hourly!]!
+    where: art_coin_migrate_bool_exp
+  ): [art_coin_migrate!]!
+
+  """
+  fetch data from the table: "art_coin_migrate" using primary key columns
+  """
+  art_coin_migrate_by_pk(id: String!): art_coin_migrate
 
   """
   fetch data from the table: "art_coin_transfer"
@@ -23520,6 +24379,11 @@ type onchain_query {
   ): [collaboration!]!
 
   """
+  fetch data from the table: "collaboration" using primary key columns
+  """
+  collaboration_by_pk(id: String!): collaboration
+
+  """
   fetch data from the table: "collection_offer"
   """
   collection_offer(
@@ -23553,6 +24417,71 @@ type onchain_query {
   fetch data from the table: "collection_offer" using primary key columns
   """
   collection_offer_by_pk(id: String!, version: Int!): collection_offer
+
+  """
+  fetch data from the table: "currency_conversion"
+  """
+  currency_conversion(
+    """
+    distinct select on columns
+    """
+    distinct_on: [currency_conversion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [currency_conversion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: currency_conversion_bool_exp
+  ): [currency_conversion!]!
+
+  """
+  fetch aggregated fields from the table: "currency_conversion"
+  """
+  currency_conversion_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [currency_conversion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [currency_conversion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: currency_conversion_bool_exp
+  ): currency_conversion_aggregate!
+
+  """
+  fetch data from the table: "currency_conversion" using primary key columns
+  """
+  currency_conversion_by_pk(id: uuid!): currency_conversion
 
   """
   fetch data from the table: "eth_frame_data"
@@ -24158,6 +25087,66 @@ type onchain_query {
   fetch data from the table: "listing" using primary key columns
   """
   listing_by_pk(id: String!, version: Int!): listing
+
+  """
+  fetch data from the table: "listing_search"
+  """
+  listing_search(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_search_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_search_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_search_bool_exp
+  ): [listing_search!]!
+
+  """
+  fetch aggregated fields from the table: "listing_search"
+  """
+  listing_search_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_search_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_search_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_search_bool_exp
+  ): listing_search_aggregate!
 
   """
   fetch data from the table: "market_stats"
@@ -25647,56 +26636,6 @@ type onchain_subscription {
   art_coin_market_stats_history_by_pk(id: Int!): art_coin_market_stats_history
 
   """
-  fetch data from the table: "art_coin_market_stats_history_hourly"
-  """
-  art_coin_market_stats_history_hourly(
-    """
-    distinct select on columns
-    """
-    distinct_on: [art_coin_market_stats_history_hourly_select_column!]
-
-    """
-    limit the number of rows returned
-    """
-    limit: Int
-
-    """
-    skip the first n rows. Use only with order_by
-    """
-    offset: Int
-
-    """
-    sort the rows by one or more columns
-    """
-    order_by: [art_coin_market_stats_history_hourly_order_by!]
-
-    """
-    filter the rows returned
-    """
-    where: art_coin_market_stats_history_hourly_bool_exp
-  ): [art_coin_market_stats_history_hourly!]!
-
-  """
-  fetch data from the table in a streaming manner: "art_coin_market_stats_history_hourly"
-  """
-  art_coin_market_stats_history_hourly_stream(
-    """
-    maximum number of rows returned in a single batch
-    """
-    batch_size: Int!
-
-    """
-    cursor to stream the results returned by the query
-    """
-    cursor: [art_coin_market_stats_history_hourly_stream_cursor_input]!
-
-    """
-    filter the rows returned
-    """
-    where: art_coin_market_stats_history_hourly_bool_exp
-  ): [art_coin_market_stats_history_hourly!]!
-
-  """
   fetch data from the table in a streaming manner: "art_coin_market_stats_history"
   """
   art_coin_market_stats_history_stream(
@@ -25735,6 +26674,61 @@ type onchain_subscription {
     """
     where: art_coin_market_stats_bool_exp
   ): [art_coin_market_stats!]!
+
+  """
+  fetch data from the table: "art_coin_migrate"
+  """
+  art_coin_migrate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [art_coin_migrate_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [art_coin_migrate_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_migrate_bool_exp
+  ): [art_coin_migrate!]!
+
+  """
+  fetch data from the table: "art_coin_migrate" using primary key columns
+  """
+  art_coin_migrate_by_pk(id: String!): art_coin_migrate
+
+  """
+  fetch data from the table in a streaming manner: "art_coin_migrate"
+  """
+  art_coin_migrate_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [art_coin_migrate_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: art_coin_migrate_bool_exp
+  ): [art_coin_migrate!]!
 
   """
   fetch data from the table in a streaming manner: "art_coin"
@@ -26462,6 +27456,11 @@ type onchain_subscription {
   ): [collaboration!]!
 
   """
+  fetch data from the table: "collaboration" using primary key columns
+  """
+  collaboration_by_pk(id: String!): collaboration
+
+  """
   fetch data from the table in a streaming manner: "collaboration"
   """
   collaboration_stream(
@@ -26535,6 +27534,91 @@ type onchain_subscription {
     """
     where: collection_offer_bool_exp
   ): [collection_offer!]!
+
+  """
+  fetch data from the table: "currency_conversion"
+  """
+  currency_conversion(
+    """
+    distinct select on columns
+    """
+    distinct_on: [currency_conversion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [currency_conversion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: currency_conversion_bool_exp
+  ): [currency_conversion!]!
+
+  """
+  fetch aggregated fields from the table: "currency_conversion"
+  """
+  currency_conversion_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [currency_conversion_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [currency_conversion_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: currency_conversion_bool_exp
+  ): currency_conversion_aggregate!
+
+  """
+  fetch data from the table: "currency_conversion" using primary key columns
+  """
+  currency_conversion_by_pk(id: uuid!): currency_conversion
+
+  """
+  fetch data from the table in a streaming manner: "currency_conversion"
+  """
+  currency_conversion_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [currency_conversion_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: currency_conversion_bool_exp
+  ): [currency_conversion!]!
 
   """
   fetch data from the table: "eth_frame_data"
@@ -27420,6 +28504,86 @@ type onchain_subscription {
   fetch data from the table: "listing" using primary key columns
   """
   listing_by_pk(id: String!, version: Int!): listing
+
+  """
+  fetch data from the table: "listing_search"
+  """
+  listing_search(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_search_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_search_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_search_bool_exp
+  ): [listing_search!]!
+
+  """
+  fetch aggregated fields from the table: "listing_search"
+  """
+  listing_search_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [listing_search_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [listing_search_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: listing_search_bool_exp
+  ): listing_search_aggregate!
+
+  """
+  fetch data from the table in a streaming manner: "listing_search"
+  """
+  listing_search_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [listing_search_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: listing_search_bool_exp
+  ): [listing_search!]!
 
   """
   fetch data from the table in a streaming manner: "listing"
@@ -29035,6 +30199,7 @@ columns and relationships of "pricing_fixed"
 """
 type pricing_fixed {
   fee_currency: String
+  fee_growth_rate: numeric
 
   """
   An object relationship
@@ -29068,6 +30233,7 @@ input pricing_fixed_aggregate_order_by {
 order by avg() on columns of table "pricing_fixed"
 """
 input pricing_fixed_avg_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29080,6 +30246,7 @@ input pricing_fixed_bool_exp {
   _not: pricing_fixed_bool_exp
   _or: [pricing_fixed_bool_exp!]
   fee_currency: String_comparison_exp
+  fee_growth_rate: numeric_comparison_exp
   generative_token: generative_token_bool_exp
   id: String_comparison_exp
   mint_fee: numeric_comparison_exp
@@ -29093,6 +30260,7 @@ order by max() on columns of table "pricing_fixed"
 """
 input pricing_fixed_max_order_by {
   fee_currency: order_by
+  fee_growth_rate: order_by
   id: order_by
   mint_fee: order_by
   opens_at: order_by
@@ -29105,6 +30273,7 @@ order by min() on columns of table "pricing_fixed"
 """
 input pricing_fixed_min_order_by {
   fee_currency: order_by
+  fee_growth_rate: order_by
   id: order_by
   mint_fee: order_by
   opens_at: order_by
@@ -29117,6 +30286,7 @@ Ordering options when selecting data from "pricing_fixed".
 """
 input pricing_fixed_order_by {
   fee_currency: order_by
+  fee_growth_rate: order_by
   generative_token: generative_token_order_by
   id: order_by
   mint_fee: order_by
@@ -29133,6 +30303,11 @@ enum pricing_fixed_select_column {
   column name
   """
   fee_currency
+
+  """
+  column name
+  """
+  fee_growth_rate
 
   """
   column name
@@ -29164,6 +30339,7 @@ enum pricing_fixed_select_column {
 order by stddev() on columns of table "pricing_fixed"
 """
 input pricing_fixed_stddev_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29172,6 +30348,7 @@ input pricing_fixed_stddev_order_by {
 order by stddev_pop() on columns of table "pricing_fixed"
 """
 input pricing_fixed_stddev_pop_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29180,6 +30357,7 @@ input pricing_fixed_stddev_pop_order_by {
 order by stddev_samp() on columns of table "pricing_fixed"
 """
 input pricing_fixed_stddev_samp_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29204,6 +30382,7 @@ Initial value of the column from where the streaming should start
 """
 input pricing_fixed_stream_cursor_value_input {
   fee_currency: String
+  fee_growth_rate: numeric
   id: String
   mint_fee: numeric
   opens_at: timestamptz
@@ -29215,6 +30394,7 @@ input pricing_fixed_stream_cursor_value_input {
 order by sum() on columns of table "pricing_fixed"
 """
 input pricing_fixed_sum_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29223,6 +30403,7 @@ input pricing_fixed_sum_order_by {
 order by var_pop() on columns of table "pricing_fixed"
 """
 input pricing_fixed_var_pop_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29231,6 +30412,7 @@ input pricing_fixed_var_pop_order_by {
 order by var_samp() on columns of table "pricing_fixed"
 """
 input pricing_fixed_var_samp_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29239,6 +30421,7 @@ input pricing_fixed_var_samp_order_by {
 order by variance() on columns of table "pricing_fixed"
 """
 input pricing_fixed_variance_order_by {
+  fee_growth_rate: order_by
   mint_fee: order_by
   price: order_by
 }
@@ -29256,9 +30439,16 @@ type query_root {
   offchain: offchain_query
   onchain: onchain_query
   open_form_graph(input: OpenFormGraphInput): OpenFormGraphResponse
+  poolTrades(poolAddress: String!): [PoolTrade!]!
   projectReserves(projectId: String!): [ProjectReserves!]!
   search(input: SearchInput!): SearchOutput!
   searchAccounts(input: SearchInput!): SearchAccountsOutput!
+  searchListings(
+    limit: Int
+    offset: Int
+    orderBy: ListingOrderBy
+    query: String!
+  ): [ListingResult!]!
   walletRpcs: [WalletRpc!]
 }
 
