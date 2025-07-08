@@ -13,7 +13,6 @@
     "fxhash-update": "./dist/update.js"
   },
   "dependencies": {
-    "@apollo/client": "3.12.11",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
