@@ -50,6 +50,8 @@ export type NodeState = {
   sessionNode?: boolean
   emitterNode?: boolean
   rootNode?: boolean
+  groupNode?: boolean
+  groupContent?: string[]
 }
 
 export type SimNode = {
