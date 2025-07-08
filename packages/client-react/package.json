@@ -5,7 +5,7 @@
   "author": "fxhash",
   "dependencies": {
     "connectkit": "1.8.2",
-    "input-otp": "1.2.4"
+    "input-otp": "1.4.2"
   },
   "devDependencies": {
     "@fxhash/errors": "workspace:*",
