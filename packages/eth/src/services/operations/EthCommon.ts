@@ -288,12 +288,13 @@ export async function simulateAndExecuteContractWithApproval<
   approvalArgs?: ApprovalArgs,
   additionalOperations?: any[]
 ): Promise<string> {
-  if (!approvalArgs) return simulateAndExecuteContract(walletManager, args)
+  if (!approvalArgs && !additionalOperations)
+    return simulateAndExecuteContract(walletManager, args)
 
   const account = walletManager.walletClient.account
 
   // if the consumer wants to use a smart account, we can batch the calls
-  if (approvalArgs.useSmartAccount) {
+  if (approvalArgs?.useSmartAccount) {
     const calls: BatchedCall[] = [
       {
         to: approvalArgs.tokenAddress,
@@ -388,18 +389,21 @@ export async function simulateAndExecuteContractWithApproval<
     }
   }
 
-  // otherwise, we approve + execute sequentially
-  const approvalTxHash = await simulateAndExecuteContract(walletManager, {
-    address: approvalArgs.tokenAddress,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [approvalArgs.spenderAddress, approvalArgs.amount],
-    account: args.account,
-    chain: args.chain,
-  })
+  if (approvalArgs) {
+    // otherwise, we approve + execute sequentially
+    const approvalTxHash = await simulateAndExecuteContract(walletManager, {
+      address: approvalArgs.tokenAddress,
+      abi: erc20Abi,
+      functionName: "approve",
+      args: [approvalArgs.spenderAddress, approvalArgs.amount],
+      account: args.account,
+      chain: args.chain,
+    })
 
-  // wait for the approval before executing the main transaction
-  await walletManager.waitForTransaction({ hash: approvalTxHash })
+    // wait for the approval before executing the main transaction
+    await walletManager.waitForTransaction({ hash: approvalTxHash })
+  }
+
   return simulateAndExecuteContract(walletManager, args)
 }
 
