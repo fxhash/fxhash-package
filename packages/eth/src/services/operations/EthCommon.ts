@@ -379,6 +379,15 @@ export async function simulateAndExecuteContractWithApproval<
     }
   }
 
+  // todo: this a temporary fix for non-smart account wallets. We definitely
+  //       need to clean the architecture cause this is fetting spaghetti
+  if (additionalOperations && additionalOperations.length > 0) {
+    for (const op of additionalOperations) {
+      const txHash = await walletManager.walletClient.sendTransaction(op)
+      await walletManager.waitForTransaction({ hash: txHash })
+    }
+  }
+
   // otherwise, we approve + execute sequentially
   const approvalTxHash = await simulateAndExecuteContract(walletManager, {
     address: approvalArgs.tokenAddress,
