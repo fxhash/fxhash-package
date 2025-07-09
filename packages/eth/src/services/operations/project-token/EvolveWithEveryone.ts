@@ -24,6 +24,8 @@ export interface TProjectTokenEvolveWithEveryoneEthOperationParams
   mintFeeAmount?: bigint
   // The optional mint fee currency
   mintFeeCurrency?: string
+  // Additional operations to add to the batched transaction
+  additionalOperations?: any[]
 }
 
 export class ProjectTokenEvolveWithEveryoneOperation extends EthereumContractOperation<TProjectTokenEvolveWithEveryoneEthOperationParams> {
@@ -49,7 +51,8 @@ export class ProjectTokenEvolveWithEveryoneOperation extends EthereumContractOpe
     const transactionHash = await simulateAndExecuteContractWithApproval(
       this.manager,
       args,
-      this.params.approval
+      this.params.approval,
+      this.params.additionalOperations
     )
     return {
       type: TransactionType.ONCHAIN,
