@@ -1,5 +1,18 @@
 # @fxhash/client
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [48342533]
+  - @fxhash/errors@0.0.13
+  - @fxhash/eth@0.0.1
+  - @fxhash/core@0.0.6
+  - @fxhash/config@0.0.13
+  - @fxhash/utils-browser@0.0.4
+  - @fxhash/tez@0.0.5
+  - @fxhash/shared@0.0.4
+
 ## 0.0.4
 
 ### Patch Changes

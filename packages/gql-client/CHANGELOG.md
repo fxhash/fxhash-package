@@ -1,5 +1,12 @@
 # @fxhash/gql-client
 
+## 0.0.4
+
+### Patch Changes
+
+- 48342533: Release @fxhash/eth
+  - @fxhash/config@0.0.13
+
 ## 0.0.3
 
 ### Patch Changes

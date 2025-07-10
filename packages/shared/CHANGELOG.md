@@ -1,5 +1,11 @@
 # @fxhash/shared
 
+## 0.0.4
+
+### Patch Changes
+
+- @fxhash/config@0.0.13
+
 ## 0.0.3
 
 ### Patch Changes

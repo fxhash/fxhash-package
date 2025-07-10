@@ -1,5 +1,14 @@
 # @fxhash/cli
 
+## 0.0.22
+
+### Patch Changes
+
+- Updated dependencies [48342533]
+  - @fxhash/gql-client@0.0.4
+  - @fxhash/gql@0.0.13
+  - @fxhash/config@0.0.13
+
 ## 0.0.21
 
 ### Patch Changes
