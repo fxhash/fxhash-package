@@ -14,6 +14,11 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.17",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/project-sdk": "workspace:*",
+    "@fxhash/snippet": "workspace:*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
@@ -41,14 +46,11 @@
     "terser-webpack-plugin": "5.3.9",
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
-    "yargs": "17.7.2",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/project-sdk": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/snippet": "workspace:*"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/adm-zip": "0.5.0",
     "@types/chalk": "2.2.0",
     "@types/ejs": "3.1.2",
@@ -75,9 +77,7 @@
     "tsc-alias": "1.8.5",
     "tslib": "2.6.2",
     "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*"
+    "typescript": "5.8.2"
   },
   "engines": {
     "npm": ">=9.0.0",
@@ -102,11 +102,11 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  },
+  "type": "module",
+  "types": "dist/index.d.ts"
 }

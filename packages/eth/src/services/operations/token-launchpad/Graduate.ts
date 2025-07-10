@@ -5,38 +5,27 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { tezAirdropAbi } from "@/__generated__/wagmi.js"
+import { tokenLaunchpadAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TClaimAirdropTezOperationParams = {
-  // Amount of tokens to claim
-  amount: bigint
-  // Tezos wallet address
-  wallet: string
-  // EIP712 signature proving Tezos wallet ownership
-  signature: `0x${string}`
-  // Array of hashes forming the merkle proof
-  merkleProof: `0x${string}`[]
+export interface TTokenLaunchpadGraduateEthOperationParams {
+  // The address of the creator token
+  creatorToken: `0x${string}`
 }
 
-export class ClaimAirdropTezOperation extends EthereumContractOperation<TClaimAirdropTezOperationParams> {
+export class TokenLaunchpadGraduateEthOperation extends EthereumContractOperation<TTokenLaunchpadGraduateEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<
-      typeof tezAirdropAbi,
-      "claim"
+      typeof tokenLaunchpadAbi,
+      "graduate"
     > = {
-      address: config.base.contracts.fx_tez_airdrop,
-      abi: tezAirdropAbi,
-      functionName: "claim",
-      args: [
-        this.params.amount,
-        this.params.wallet,
-        this.params.signature,
-        this.params.merkleProof,
-      ],
+      address: config.base.contracts.fx_token_launchpad,
+      abi: tokenLaunchpadAbi,
+      functionName: "graduate",
+      args: [this.params.creatorToken],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
     }
@@ -48,6 +37,6 @@ export class ClaimAirdropTezOperation extends EthereumContractOperation<TClaimAi
   }
 
   success(): string {
-    return "Successfully claimed tokens"
+    return "Successfully graduated token"
   }
 }

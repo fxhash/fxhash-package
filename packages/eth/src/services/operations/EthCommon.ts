@@ -268,7 +268,7 @@ interface ApprovalArgs {
   useSmartAccount: boolean
 }
 
-type BatchedCall = {
+export type BatchedCall = {
   to: `0x${string}`
   abi: any
   functionName: string
@@ -288,12 +288,13 @@ export async function simulateAndExecuteContractWithApproval<
   approvalArgs?: ApprovalArgs,
   additionalOperations?: any[]
 ): Promise<string> {
-  if (!approvalArgs) return simulateAndExecuteContract(walletManager, args)
+  if (!approvalArgs && !additionalOperations)
+    return simulateAndExecuteContract(walletManager, args)
 
   const account = walletManager.walletClient.account
 
   // if the consumer wants to use a smart account, we can batch the calls
-  if (approvalArgs.useSmartAccount) {
+  if (approvalArgs?.useSmartAccount) {
     const calls: BatchedCall[] = [
       {
         to: approvalArgs.tokenAddress,
@@ -339,52 +340,70 @@ export async function simulateAndExecuteContractWithApproval<
     }
 
     // if all simulations pass, execute the batch
-    const { id } = await walletManager.walletClient.sendCalls({
-      account,
-      chain: args.chain,
-      calls: calls.map(call => ({
-        to: call.to,
-        abi: call.abi,
-        functionName: call.functionName,
-        args: call.args,
-        value: call.value,
-        data: (call as any).data,
-        gas: (call as any).gas,
-        maxFeePerGas: (call as any).maxFeePerGas,
-        maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
-      })),
-      experimental_fallback: true,
-    })
+    try {
+      const { id } = await walletManager.walletClient.sendCalls({
+        account,
+        chain: args.chain,
+        calls: calls.map(call => ({
+          to: call.to,
+          abi: call.abi,
+          functionName: call.functionName,
+          args: call.args,
+          value: call.value,
+          data: (call as any).data,
+          gas: (call as any).gas,
+          maxFeePerGas: (call as any).maxFeePerGas,
+          maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
+        })),
+        experimental_fallback: true,
+      })
 
-    // wait for the batch to complete
-    const status = await waitForCallsStatus(walletManager.walletClient, {
-      id,
-    })
+      // wait for the batch to complete
+      const status = await waitForCallsStatus(walletManager.walletClient, {
+        id,
+      })
 
-    // check if any transaction in the batch failed
-    if (!status.receipts) throw new Error("failed to get batch status")
-    for (const receipt of status.receipts || []) {
-      if (receipt.status === "reverted") {
-        throw new TransactionRevertedError("Batched transaction reverted")
+      // check if any transaction in the batch failed
+      if (!status.receipts) throw new Error("failed to get batch status")
+      for (const receipt of status.receipts || []) {
+        if (receipt.status === "reverted") {
+          throw new TransactionRevertedError("Batched transaction reverted")
+        }
       }
-    }
 
-    // return the hash of the last transaction, we assume that the last tx will always be the action we index
-    return status.receipts[status.receipts.length - 1].transactionHash
+      // return the hash of the last transaction, we assume that the last tx will always be the action we index
+      return status.receipts[status.receipts.length - 1].transactionHash
+    } catch (err: any) {
+      console.log("error when executing batch call")
+      console.log(err)
+      throw err
+    }
   }
 
-  // otherwise, we approve + execute sequentially
-  const approvalTxHash = await simulateAndExecuteContract(walletManager, {
-    address: approvalArgs.tokenAddress,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [approvalArgs.spenderAddress, approvalArgs.amount],
-    account: args.account,
-    chain: args.chain,
-  })
+  // todo: this a temporary fix for non-smart account wallets. We definitely
+  //       need to clean the architecture cause this is fetting spaghetti
+  if (additionalOperations && additionalOperations.length > 0) {
+    for (const op of additionalOperations) {
+      const txHash = await walletManager.walletClient.sendTransaction(op)
+      await walletManager.waitForTransaction({ hash: txHash })
+    }
+  }
 
-  // wait for the approval before executing the main transaction
-  await walletManager.waitForTransaction({ hash: approvalTxHash })
+  if (approvalArgs) {
+    // otherwise, we approve + execute sequentially
+    const approvalTxHash = await simulateAndExecuteContract(walletManager, {
+      address: approvalArgs.tokenAddress,
+      abi: erc20Abi,
+      functionName: "approve",
+      args: [approvalArgs.spenderAddress, approvalArgs.amount],
+      account: args.account,
+      chain: args.chain,
+    })
+
+    // wait for the approval before executing the main transaction
+    await walletManager.waitForTransaction({ hash: approvalTxHash })
+  }
+
   return simulateAndExecuteContract(walletManager, args)
 }
 

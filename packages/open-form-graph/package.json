@@ -4,25 +4,27 @@
   "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
+    "@fxhash/utils": "workspace:*",
     "d3-force": "3.0.0",
     "d3-scale": "4.0.2",
     "d3-scale-chromatic": "3.1.0",
     "lodash.debounce": "4.0.8",
-    "lodash.throttle": "4.1.1",
-    "@fxhash/utils": "workspace:*"
+    "lodash.groupby": "4.6.0",
+    "lodash.throttle": "4.1.1"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@types/d3-force": "3.0.10",
     "@types/d3-scale": "4.0.9",
     "@types/d3-scale-chromatic": "3.1.0",
     "@types/lodash.debounce": "4.0.9",
+    "@types/lodash.groupby": "4.6.9",
     "@types/lodash.throttle": "4.1.1",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@types/three": "0.176.0",
     "tsdown": "0.12.2",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "workspace:*"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -50,10 +52,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "sideEffects": false,
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

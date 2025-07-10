@@ -7,12 +7,12 @@
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tsc-alias": "1.8.5",
     "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "workspace:*",
-    "@fxhash/eslint-config": "workspace:*"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -31,10 +31,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
-  }
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

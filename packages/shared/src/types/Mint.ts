@@ -18,6 +18,7 @@ export interface GenerativeTokenInformations {
 export enum CaptureTriggerMode {
   DELAY = "DELAY",
   FN_TRIGGER = "FN_TRIGGER",
+  FN_TRIGGER_GIF = "FN_TRIGGER_GIF",
 }
 export const CaptureTriggerModeList = Object.values(CaptureTriggerMode)
 

@@ -4,6 +4,11 @@
   "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*",
     "gray-matter": "4.0.3",
     "hast": "1.0.0",
     "hast-util-sanitize": "5.0.2",
@@ -26,14 +31,11 @@
     "remark-rehype": "11.1.1",
     "unified": "11.0.5",
     "unist-builder": "4.0.0",
-    "unist-util-visit": "5.0.0",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*"
+    "unist-util-visit": "5.0.0"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/eslint": "8.44.0",
     "@types/mdast": "4.0.0",
     "@types/react": "18.3.12",
@@ -41,9 +43,7 @@
     "esbuild-css-modules-plugin": "2.7.1",
     "eslint": "8.57.0",
     "tsdown": "0.12.2",
-    "typescript": "5.8.2",
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -64,12 +64,11 @@
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
-  "sideEffects": false,
-  "type": "module",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
-    "dev": "tsdown --watch",
-    "test:local": "FXHASH_ENV=local vitest"
-  }
+    "dev": "tsdown --watch"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

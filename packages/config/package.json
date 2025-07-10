@@ -3,14 +3,14 @@
   "version": "0.0.12",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/errors": "workspace:*"
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "workspace:*",
     "unplugin-isolated-decl": "0.13.6"
   },
   "exports": {
@@ -27,10 +27,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "sideEffects": false,
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

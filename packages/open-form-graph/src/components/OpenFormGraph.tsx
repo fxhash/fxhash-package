@@ -2,6 +2,7 @@ import { SimNode } from "@/_types"
 import { useOpenFormGraph } from "@/provider"
 import { HighlightStyle, Transform } from "@/sim/_types"
 import { OpenGraphSimulation } from "@/sim/OpenGraphSimulation"
+import { NodeVisibility } from "@/util/data"
 import { MouseEventHandler, useEffect, useRef } from "react"
 
 interface OpenFormGraphProps {
@@ -15,6 +16,9 @@ interface OpenFormGraphProps {
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
   onTransform?: (transform: Transform) => void
+  nodeVisibility?: NodeVisibility
+  children?: React.ReactNode
+  groupRootOrphans?: boolean
 }
 
 export function OpenFormGraph(props: OpenFormGraphProps) {
@@ -27,6 +31,9 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     loadNodeImage,
     translate,
     onTransform,
+    nodeVisibility = "all",
+    children,
+    groupRootOrphans = false,
   } = props
   const {
     simulation,
@@ -52,15 +59,24 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       theme,
       translate,
       lockedNodeId,
+      nodeVisibility,
+      highlights,
+      groupRootOrphans,
     })
+    return () => {
+      simulation.current?.destroy()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!simulation.current) return
     simulation.current.emitter.on("selected-node-changed", setSelectedNode)
     simulation.current.emitter.on("hovered-node-changed", setHoveredNode)
     return () => {
       simulation.current?.emitter.off("selected-node-changed", setSelectedNode)
       simulation.current?.emitter.off("hovered-node-changed", setHoveredNode)
-      simulation.current?.destroy()
     }
-  }, [])
+  }, [setSelectedNode, setHoveredNode])
 
   useEffect(() => {
     if (!simulation.current) return
@@ -88,6 +104,11 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
 
   useEffect(() => {
     if (!simulation.current) return
+    simulation.current.setNodeVisibility(nodeVisibility, groupRootOrphans)
+  }, [nodeVisibility, groupRootOrphans])
+
+  useEffect(() => {
+    if (!simulation.current) return
     simulation.current.setHighlights(highlights)
   }, [highlights])
 
@@ -99,7 +120,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
   useEffect(() => {
     if (!simulation.current) return
     simulation.current.initialize(data, rootId)
-  }, [data])
+  }, [data, rootId])
 
   useEffect(() => {
     if (!simulation.current) return
@@ -111,22 +132,25 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     if (!simulation.current) return
     if (simulation.current.lockedNodeId === lockedNodeId) return
     simulation.current.setLockedNodeId(lockedNodeId)
-  }, [translate?.y, translate?.x])
+  }, [lockedNodeId])
 
   const dpi = devicePixelRatio || 1
 
   return (
-    <canvas
-      onMouseEnter={props.onMouseEnter}
-      onMouseLeave={props.onMouseLeave}
-      ref={canvasRef}
-      className={className}
-      width={`${width * dpi}px`}
-      height={`${height * dpi}px`}
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
-    />
+    <>
+      <canvas
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
+        ref={canvasRef}
+        className={className}
+        width={`${width * dpi}px`}
+        height={`${height * dpi}px`}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+        }}
+      />
+      {children}
+    </>
   )
 }

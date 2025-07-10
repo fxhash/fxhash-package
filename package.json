@@ -9,8 +9,8 @@
   "packageManager": "pnpm@10.10.0",
   "private": true,
   "scripts": {
-    "update-workspace": "node ./update-workspace-versions.mjs",
     "release": "pnpm turbo run build && pnpm changeset publish",
+    "update-workspace": "node ./update-workspace-versions.mjs",
     "version": "pnpm changeset version && pnpm install --lockfile-only"
   }
 }
