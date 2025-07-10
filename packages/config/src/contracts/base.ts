@@ -7,6 +7,7 @@ export interface IBaseContracts {
   mint_ticket_factory_v1: `0x${string}`
   ticket_redeemer_v1: `0x${string}`
   ipfs_renderer_v1: `0x${string}`
+  ipfs_renderer_v2: `0x${string}`
   onchfs_renderer_v1: `0x${string}`
   randomizer_v1: `0x${string}`
   role_registry_v1: `0x${string}`
@@ -36,6 +37,7 @@ export const baseTestnetContracts: IBaseContracts = {
   fixed_price_minter_v1: "0x29159d2DFbF93E991d39Dc080a5f8dcc5C90ebb8",
   ticket_redeemer_v1: "0xFfbC4F51AB33E14380893213d7C969e0626c4C43",
   ipfs_renderer_v1: "0x7657C31078d8bfB8d1BC127fC04dAd23B3f451ed",
+  ipfs_renderer_v2: "0x1c5CD479C85C1Debc49109E8f284D5AB3353043F",
   onchfs_renderer_v1: "0xf23C64BA846557c24E6F5086376047b0CE70d1cC",
   randomizer_v1: "0xCA6323f03B5113471BA3b7B2F4Ba0AA2D45aE257",
   role_registry_v1: "0x179f5B8FE1c270D7fC1807355F3fd981A30e21A6",
@@ -66,6 +68,7 @@ export const baseMainnetContracts: IBaseContracts = {
   fixed_price_minter_v1: "0x4bDcaC532143d8d35ed759189EE22E3704580b9D",
   ticket_redeemer_v1: "0x972502Bc75A780D76495Ffa84Cf8DA301F162Df6",
   ipfs_renderer_v1: "0x9c4cC8403bE33B89a46794Ae409ce634ca567956",
+  ipfs_renderer_v2: "0xTODO",
   onchfs_renderer_v1: "0x4180D747e984C9CFEEfaF23944AE0C20c0742341",
   randomizer_v1: "0x6754E97b8eaeC13Fa24480E9d1240176Dd0f2911",
   role_registry_v1: "0x8d3C748e99066e15425BA1620cdD066d85D6d918",
