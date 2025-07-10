@@ -50,7 +50,9 @@
   "peerDependencies": {
     "@fxhash/config": "workspace:*"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist",
