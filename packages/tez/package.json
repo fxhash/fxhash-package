@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@apollo/client": "3.8.1",
+    "@apollo/client": "3.12.11",
     "@fxhash/shared": "workspace:*",
     "@fxhash/utils": "workspace:*",
     "@taquito/michel-codec": "17.3.1",
@@ -23,7 +23,7 @@
     "tslib": "2.6.2",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.1.1"
+    "vitest": "3.2.4"
   },
   "exports": {
     ".": {
