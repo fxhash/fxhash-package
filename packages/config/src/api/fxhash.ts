@@ -11,6 +11,8 @@ export const fxhashDevApis: IFxhashApis = {
   file: "https://file-api.fxhash-dev.xyz",
   fileInternal:
     "http://fxhash-multichain-dev-testnet-file-api.fxhash-multichain-dev-testnet.svc.cluster.local:4004",
+  baseIndexerInternal:
+    "http://fxhash-multichain-dev-testnet-base-indexer.fxhash-multichain-dev-testnet.svc.cluster.local:3000",
   walletInternal:
     "http://fxhash-multichain-dev-testnet-wallet-api.fxhash-multichain-dev-testnet.svc.cluster.local:3208",
   fsEmulator: "https://file-api.fxhash-dev.xyz/fs",
@@ -84,6 +86,8 @@ export const fxhashPrdApis: IFxhashApis = {
   file: "https://file-api.fxhash.xyz",
   fileInternal:
     "http://fxhash-multichain-prd-file-api.fxhash-multichain-prd.svc.cluster.local:4004",
+  baseIndexerInternal:
+    "http://fxhash-multichain-prd-base-indexer.fxhash-multichain-prd.svc.cluster.local:3000",
   walletInternal:
     "http://fxhash-multichain-prd-wallet-api.fxhash-multichain-prd.svc.cluster.local:3208",
   fsEmulator: "https://file-api.fxhash.xyz/fs",

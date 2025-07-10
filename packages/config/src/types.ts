@@ -16,6 +16,7 @@ export interface IFxhashApis {
   file: string
   fileInternal: string
   walletInternal: string
+  baseIndexerInternal: string
   fsEmulator: string
   extract: string
   extractInternal: string
