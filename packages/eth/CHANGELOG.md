@@ -1,5 +1,16 @@
 # @fxhash/evm-sdk
 
+## 0.0.1
+
+### Patch Changes
+
+- 48342533: Release @fxhash/eth
+- Updated dependencies [48342533]
+  - @fxhash/gql-client@0.0.4
+  - @fxhash/gql@0.0.13
+  - @fxhash/config@0.0.13
+  - @fxhash/shared@0.0.4
+
 ## 0.0.13
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @fxhash/text
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [48342533]
+  - @fxhash/errors@0.0.13
+  - @fxhash/config@0.0.13
+  - @fxhash/utils-browser@0.0.4
+  - @fxhash/shared@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes

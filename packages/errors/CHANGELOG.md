@@ -1,5 +1,11 @@
 # @fxhash/errors
 
+## 0.0.13
+
+### Patch Changes
+
+- 48342533: Release @fxhash/eth
+
 ## 0.0.12
 
 ### Patch Changes
