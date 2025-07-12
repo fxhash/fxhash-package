@@ -155,3 +155,9 @@ export const Mu_updateProject = graphql(`
     }
   }
 `)
+
+export const Mu_updateProjectMetadata = graphql(`
+  mutation UpdateProjectMetadata($input: UpdateProjectInput!) {
+    update_project(input: $input)
+  }
+`)
