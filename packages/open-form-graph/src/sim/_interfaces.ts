@@ -9,6 +9,7 @@ import {
 import { GraphConfig } from "@/_interfaces"
 import { TransformCanvas } from "./TransformCanvas"
 import { NodeVisibility } from "@/util/data"
+import { OpenGraphSimulation } from ".."
 
 export interface IOpenGraphSimulation {
   width: number
@@ -39,6 +40,7 @@ export interface IOpenGraphSimulation {
 }
 
 export type OpenGraphEventsTypemap = {
+  "simulation:ended": OpenGraphSimulation
   "transform-changed": Transform
   "hovered-node-changed": SimNode | null
   "selected-node-changed": SimNode | null

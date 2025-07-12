@@ -41,6 +41,7 @@ import { red } from "@/util/highlights"
 import { asymmetricLinks } from "./asymmetric-link"
 import { quickHash } from "@/util/hash"
 import groupBy from "lodash.groupby"
+import { Measure } from "./measurements"
 
 const RADIAL_FORCES = false
 const RENDER_EMITTER_NODES = false
@@ -703,6 +704,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   initialize = (data: RawGraphData, rootId: string) => {
+    Measure.start("initialize")
     this.emittedNodes = []
     this.rawData = data
     this.rootId = rootId
@@ -847,6 +849,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     //  this.restart()
     this.updateHighlights()
     this.triggerSelected(true)
+
+    Measure.end("initialize")
   }
 
   get lockedNode() {
@@ -979,8 +983,19 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         )
       }
     }
-    this.simulation.on("tick", this.handleTick)
-    this.simulation.on("end", this.onEnd)
+
+    this.simulation.restart()
+
+    Measure.start("simulation")
+    this.simulation.on("tick", () => {
+      Measure.end("tick", true)
+      this.handleTick()
+      Measure.start("tick")
+    })
+    this.simulation.on("end", () => {
+      Measure.end("simulation")
+      this.onEnd()
+    })
   }
 
   get rootNode() {
@@ -1468,6 +1483,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
   }
 
   onDraw = () => {
+    Measure.start("draw")
+
     this.isDrawing = true
     const context = this.canvas?.getContext("2d")
     const transform = this.transformCanvas.getTransform()
@@ -1570,6 +1587,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     // this.drawDebug(context)
     this.transformCanvas.trackCursor()
     this.isDrawing = false
+
+    Measure.end("draw")
   }
 
   private drawDebug(context: CanvasRenderingContext2D) {
@@ -1608,6 +1627,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
   private onEnd = () => {
     this.isTicking = false
+    this.emitter.emit("simulation:ended", this)
   }
 
   private loadNodeImages = () => {
@@ -1758,5 +1778,9 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
 
     context.restore()
     context.restore()
+  }
+
+  public get measures() {
+    return Measure.getSamples()
   }
 }
