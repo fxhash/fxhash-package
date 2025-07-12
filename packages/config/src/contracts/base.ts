@@ -68,7 +68,7 @@ export const baseMainnetContracts: IBaseContracts = {
   fixed_price_minter_v1: "0x4bDcaC532143d8d35ed759189EE22E3704580b9D",
   ticket_redeemer_v1: "0x972502Bc75A780D76495Ffa84Cf8DA301F162Df6",
   ipfs_renderer_v1: "0x9c4cC8403bE33B89a46794Ae409ce634ca567956",
-  ipfs_renderer_v2: "0xTODO",
+  ipfs_renderer_v2: "0xb2E2938C6cB1e3c06d22634c7cb8171DfF689e1B",
   onchfs_renderer_v1: "0x4180D747e984C9CFEEfaF23944AE0C20c0742341",
   randomizer_v1: "0x6754E97b8eaeC13Fa24480E9d1240176Dd0f2911",
   role_registry_v1: "0x8d3C748e99066e15425BA1620cdD066d85D6d918",
