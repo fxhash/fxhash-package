@@ -1,4 +1,4 @@
-import { EventEmitter } from "@fxhash/utils"
+import { EventEmitter, MappedArray } from "@fxhash/utils"
 import { HighlightStyle, Transform } from "./_types"
 import {
   RawGraphData,
@@ -21,7 +21,7 @@ export interface IOpenGraphSimulation {
   emitter: OpenGraphEventEmitter
   selectedNode: SimNode | null
   hoveredNode: SimNode | null
-  highlights: HighlightStyle[]
+  highlights: MappedArray<HighlightStyle, "nodeId", "detached">
   transformCanvas: TransformCanvas
   nodeVisibility: NodeVisibility
   initialize(data: RawGraphData, rootId: string): void

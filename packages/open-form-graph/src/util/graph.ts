@@ -1,116 +1,93 @@
-import { SimLink, RawLink, SimNode } from "@/_types"
-import { isSimNode } from "./types"
+import { SimLink, GraphData, newGraphData } from "@/_types"
+import { getNodeId } from "./types"
 
-export function getNodeId(n: any) {
-  return typeof n === "object" && n !== null && "id" in n ? n.id : n
-}
-
-export function getParents(id: string, links: SimLink[]): string[] {
-  return links
-    .filter(l => {
-      const targetId = isSimNode(l.target) ? l.target.id : l.target
-      return targetId === id
-    })
-    .map(link =>
-      isSimNode(link.source) ? link.source.id : link.source.toString()
-    )
+export function getParent(
+  id: string,
+  links: GraphData["links"]
+): string | null {
+  const linkToParent = links.maps.targetId.get(id)
+  if (!linkToParent) return null
+  return getNodeId(linkToParent.source)
 }
 
 export function getAllParentsUntil(
   nodeId: string,
-  links: SimLink[],
+  links: GraphData["links"],
   stopAtId?: string
 ): string[] {
-  const parent = getParents(nodeId, links)[0]
-
-  if (!parent || parent === stopAtId) {
-    return []
-  }
-
+  const parent = getParent(nodeId, links)
+  if (parent === null || parent === stopAtId) return []
   return [parent, ...getAllParentsUntil(parent, links, stopAtId)]
 }
 
-export function getChildren(id: string, links: SimLink[]): string[] {
-  return links
-    .filter(l => {
-      const sourceId = isSimNode(l.source) ? l.source.id : l.source
-      return sourceId === id
-    })
-    .map(link =>
-      isSimNode(link.target) ? link.target.id : link.target.toString()
-    )
+export function getChildren(id: string, links: GraphData["links"]): string[] {
+  return (links.maps.sourceId.get(id) || []).map(link => getNodeId(link.target))
 }
 
-export function getClusterSize(id: string, links: RawLink[]): number {
+export function getClusterSize(id: string, links: GraphData["links"]): number {
   const children = getChildren(id, links)
   return children.reduce((acc, childId) => {
     return acc + getClusterSize(childId, links)
   }, children.length || 0)
 }
 
-export function getNodeDepth(id: string, links: RawLink[]): number {
+export function getNodeDepth(id: string, links: GraphData["links"]): number {
   function getDepth(id: string, depth: number): number {
-    const parents = getParents(id, links)
-    if (parents.length === 0) return depth
-    return getDepth(parents[0], depth + 1)
+    const parent = getParent(id, links)
+    if (parent === null) return depth
+    return getDepth(parent, depth + 1)
   }
   return getDepth(id, 0)
 }
 
 export function getRootParent(
   id: string,
-  links: RawLink[],
+  links: GraphData["links"],
   stop?: string
 ): string | null {
   let currentId = id
   while (true) {
-    const parents = getParents(currentId, links)
-    if (stop && parents.includes(stop)) return currentId
-    if (parents.length === 0) return currentId
-    currentId = parents[0]
+    const parent = getParent(currentId, links)
+    if (stop && parent === stop) return currentId
+    if (parent === null) return currentId
+    currentId = parent
   }
 }
 
-export function hasOnlyLeafs(id: string, links: RawLink[]): boolean {
+export function hasOnlyLeafs(id: string, links: GraphData["links"]): boolean {
   const children = getChildren(id, links)
   return children.every(childId => getChildren(childId, links).length === 0)
 }
 
 export function getNodeSubgraph(
   nodeId: string,
-  nodes: SimNode[],
-  links: SimLink[],
+  nodes: GraphData["nodes"],
+  links: GraphData["links"],
   rootId: string
-): { nodes: SimNode[]; links: SimLink[] } {
-  const nodesById = Object.fromEntries(nodes.map(n => [n.id, n]))
+): GraphData {
   const parentSet = new Set<string>()
   const childSet = new Set<string>()
   const subLinks = new Set<SimLink>()
 
   let currentId = nodeId
   while (currentId !== rootId) {
-    const parentLink = links.find(l => {
-      const targetId = isSimNode(l.target) ? l.target.id : l.target
-      return targetId === currentId
-    })
+    const parentLink = links.maps.targetId.get(currentId)
     if (!parentLink) break
-    const parentId = isSimNode(parentLink.source)
-      ? parentLink.source.id
-      : parentLink.source
-    if (parentSet.has(parentId.toString())) break
-    parentSet.add(parentId.toString())
+    const parentId = getNodeId(parentLink.source)
+    if (parentSet.has(parentId)) break
+    parentSet.add(parentId)
     subLinks.add(parentLink)
-    currentId = parentId.toString()
+    currentId = parentId
   }
 
   function collectChildren(id: string) {
-    for (const link of links) {
-      const sourceId = isSimNode(link.source) ? link.source.id : link.source
-      const targetId = isSimNode(link.target) ? link.target.id : link.target
-      if (sourceId === id && !childSet.has(targetId.toString())) {
-        childSet.add(targetId.toString())
+    for (const link of links.values) {
+      const sourceId = getNodeId(link.source)
+      const targetId = getNodeId(link.target)
+      if (sourceId === id && !childSet.has(targetId)) {
+        childSet.add(targetId)
         subLinks.add(link)
-        collectChildren(targetId.toString())
+        collectChildren(targetId)
       }
     }
   }
@@ -118,15 +95,15 @@ export function getNodeSubgraph(
 
   const validIds = new Set<string>([...parentSet, nodeId, ...childSet])
   const filteredLinks = Array.from(subLinks).filter(link => {
-    const sourceId = isSimNode(link.source) ? link.source.id : link.source
-    const targetId = isSimNode(link.target) ? link.target.id : link.target
+    const sourceId = getNodeId(link.source)
+    const targetId = getNodeId(link.target)
     return (
       validIds.has(sourceId.toString()) && validIds.has(targetId.toString())
     )
   })
 
   const allNodeIds = Array.from(validIds)
-  const subNodes = allNodeIds.map(id => nodesById[id]).filter(Boolean)
+  const subNodes = allNodeIds.map(id => nodes.maps.id.get(id)!).filter(Boolean)
 
-  return { nodes: subNodes, links: filteredLinks }
+  return newGraphData({ nodes: subNodes, links: filteredLinks })
 }
