@@ -35,12 +35,7 @@ export const Measure = {
     downloadAsCsvFile("samples.csv", rows.join("\n"))
   },
   getSamples() {
-    return Object.fromEntries(
-      Object.entries(Measure.samples).map(([name, samples]) => [
-        name,
-        arr.avg(samples),
-      ])
-    )
+    return this.samples
   },
 }
 
