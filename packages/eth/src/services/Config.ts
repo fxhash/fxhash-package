@@ -16,7 +16,14 @@ export const viemTransports = [transports.ETHEREUM, transports.BASE] as const
 export const viemSimpleTransports = Object.fromEntries(
   supportedEvmChains.map(chain => [
     chain.id,
-    fallback([http(), http(config.base.apis.alchemy.rpc)]),
+    fallback([
+      http(),
+      http(
+        chain.id === chains.ETHEREUM.id
+          ? config.eth.apis.alchemy.rpc
+          : config.base.apis.alchemy.rpc
+      ),
+    ]),
   ])
 )
 
