@@ -1162,9 +1162,7 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
     }
   ) {
     const sourceId = isSimNode(link.source) ? link.source.id : link.source
-    const targetId = isSimNode(link.target) ? link.target.id : link.target
-
-    let sourceNode = this.prunedData.nodes.maps.id.get(sourceId as string)
+    const sourceNode = this.prunedData.nodes.maps.id.get(sourceId.toString())
 
     if (isSimNode(link.target)) {
       if (this.nodeVisibility === "all" || !RENDER_EMITTER_NODES) {
@@ -1175,12 +1173,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
           return
         }
       }
-      // todo: optimize? not sure about this one, why are we testing isSimNode?
-      const isSourceNode = this.prunedData.links.values.some(
-        l =>
-          isSimNode(l.source) &&
-          isSimNode(link.target) &&
-          l.source.id === link.target.id
+      const isSourceNode = this.prunedData.links.maps.sourceId.has(
+        getNodeId(link.target)
       )
       if (
         link.target.state?.emitterNode &&
