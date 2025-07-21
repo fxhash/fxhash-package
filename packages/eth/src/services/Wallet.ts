@@ -44,6 +44,7 @@ import {
   JsonRpcProvider,
 } from "ethers"
 import { privateKeyToAccount } from "viem/accounts"
+import { getTransportWithFallback } from "./Config.js"
 /* Temp remove until package is esm compatible
 import {
   fallback,
@@ -458,9 +459,9 @@ export class EthereumWalletManager extends WalletManager {
   ): PromiseResult<void, WalletConnectionError> {
     try {
       await this.walletClient.switchChain({ id: chain.id })
-      this.publicClient = createPublicClient<HttpTransport, Chain>({
+      this.publicClient = createPublicClient<Transport, Chain>({
         chain: chain,
-        transport: http(),
+        transport: getTransportWithFallback(chain),
       })
       return success()
     } catch (error) {
@@ -503,7 +504,7 @@ export class EthereumWalletManager extends WalletManager {
 
   static async fromPrivateKey(privateKey: `0x${string}`) {
     const chain = chains[BlockchainType.ETHEREUM]
-    const transport = http(config.eth.apis.rpcs[0])
+    const transport = getTransportWithFallback(chain)
     const publicClient = createPublicClient({
       chain,
       transport,
