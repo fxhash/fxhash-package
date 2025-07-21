@@ -16,7 +16,6 @@ import { PromiseResult, failure, success, invariant } from "@fxhash/utils"
 import {
   Account,
   Chain,
-  HttpTransport,
   PublicClient,
   TransactionNotFoundError,
   TransactionReceipt,
@@ -28,6 +27,7 @@ import {
   Client,
   createWalletClient,
   PrivateKeyAccount,
+  fallback,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe, { EthersAdapter } from "@safe-global/protocol-kit"
@@ -44,7 +44,6 @@ import {
   JsonRpcProvider,
 } from "ethers"
 import { privateKeyToAccount } from "viem/accounts"
-import { getTransportWithFallback } from "./Config.js"
 /* Temp remove until package is esm compatible
 import {
   fallback,
@@ -130,6 +129,18 @@ export function getCurrentChain(chain: BlockchainType): Chain {
         : baseSepolia
   ) as Chain
 }
+
+export const getTransportWithFallback = (chain: Chain) => {
+  return fallback([
+    http(),
+    http(
+      chain.id === chains.ETHEREUM.id
+        ? config.eth.apis.alchemy.rpc
+        : config.base.apis.alchemy.rpc
+    ),
+  ])
+}
+
 /* Temp remove until package is esm compatible
 export const defaultTransports = [
   unstable_connector(metaMask),
