@@ -5,11 +5,14 @@ import {
   SimLink,
   SimNode,
   NestedRawNode,
+  GraphData,
+  newGraphData,
 } from "@/_types"
 import { VOID_ROOT_ID } from "@/context/constants"
 import { isSimNode } from "./types"
 import { HighlightStyle } from "@/sim/_types"
 import { getChildren } from "./graph"
+import groupBy from "lodash.groupby"
 
 export type NodeVisibility = "all" | "mine" | "locked" | "on-sale"
 
@@ -61,20 +64,148 @@ export function generateTree(
 
 function isSpecialNode(node: SimNode): boolean {
   const state = node.state
-  return !!(state?.emitterNode || state?.sessionNode || state?.rootNode)
+  return !!(
+    state?.emitterNode ||
+    state?.sessionNode ||
+    state?.rootNode ||
+    state?.groupNode
+  )
+}
+
+export function groupGraphNodes(
+  startId: string,
+  nodes: GraphData["nodes"],
+  links: GraphData["links"],
+  options: {
+    skip: boolean
+    existingGroups?: SimNode[]
+    openedGroups?: string[]
+  } = { skip: false, existingGroups: [], openedGroups: [] } // skip grouping if true
+) {
+  if (options.skip) {
+    return { nodes, links }
+  }
+  const visited = new Set<string>()
+  const nodesToRemove = new Set<string>()
+
+  function markRemovableNodes(id: string) {
+    if (visited.has(id)) return
+    visited.add(id)
+
+    const children = getChildren(id, links)
+
+    let removableChildren: string[] = []
+
+    for (const childId of children) {
+      //      markRemovableNodes(childId)
+
+      const child = nodes.maps.id.get(childId)
+      if (!child) continue
+
+      const clusterSize = child.clusterSize || 0
+      const isRemovable = clusterSize < 1 && !isSpecialNode(child)
+
+      if (isRemovable) {
+        removableChildren.push(childId)
+      }
+    }
+
+    // if we have more than one removable child, mark them all.
+    // if we have more than N, skip it to keep the last N nodes in the branch.
+    if (removableChildren.length > 3) {
+      removableChildren.forEach(id => nodesToRemove.add(id))
+    }
+  }
+
+  markRemovableNodes(startId)
+
+  const groupedNodesToRemove = groupBy(Array.from(nodesToRemove), id => {
+    const sourceLink = links.maps.targetId.get(id)
+    const sourceId = isSimNode(sourceLink?.source!)
+      ? sourceLink?.source.id
+      : sourceLink?.source.toString()
+    return sourceId
+  })
+
+  const GROUP_CHUNK_SIZE = 100
+  const groupNodesToAdd: SimNode[] = []
+  const groupLinksToAdd: SimLink[] = []
+
+  function createGroupChunkNodes(
+    groupSourceId: string,
+    groupContent: string[]
+  ) {
+    const chunks = []
+    for (let i = 0; i < groupContent.length; i += GROUP_CHUNK_SIZE) {
+      chunks.push(groupContent.slice(i, i + GROUP_CHUNK_SIZE))
+    }
+    chunks.forEach((chunk, index) => {
+      const chunkId = `${groupSourceId}-group-${index}`
+      if (options.openedGroups?.includes(chunkId)) {
+        chunk.forEach(id => {
+          nodesToRemove.delete(id)
+        })
+        return
+      }
+      const existingGroup = options.existingGroups?.find(n => n.id === chunkId)
+      const originNode = nodes.maps.id.get(groupSourceId)
+      const groupNode: SimNode = {
+        ...existingGroup,
+        x: existingGroup?.x || originNode?.x || 0,
+        y: existingGroup?.y || originNode?.y || 0,
+        id: chunkId,
+        clusterSize: chunk.length,
+        state: {
+          ...existingGroup?.state,
+          groupNode: true,
+          groupContent: chunk,
+          collapsed: true,
+        },
+      }
+      groupNodesToAdd.push(groupNode)
+      groupLinksToAdd.push({
+        source: nodes.maps.id.get(groupSourceId)!,
+        target: groupNode,
+      })
+    })
+  }
+
+  Object.keys(groupedNodesToRemove).forEach(groupSourceId => {
+    const groupContent = groupedNodesToRemove[groupSourceId]
+    createGroupChunkNodes(groupSourceId, groupContent)
+  })
+
+  const _nodes = nodes.values.filter(n => !nodesToRemove.has(n.id))
+  const _links = links.values.filter(l => {
+    const targetId = isSimNode(l.target) ? l.target.id : l.target.toString()
+    return !nodesToRemove.has(targetId)
+  })
+
+  return newGraphData({
+    nodes: [..._nodes, ...groupNodesToAdd],
+    links: [..._links, ...groupLinksToAdd],
+  })
 }
 
 export function getPrunedData(
   startId: string,
-  nodes: SimNode[],
-  links: SimLink[],
-  highlights: HighlightStyle[] = [],
-  options: { nodeVisibility?: NodeVisibility; emittedNodes: Array<string> } = {
+  nodes: GraphData["nodes"],
+  links: GraphData["links"],
+  highlights: Readonly<HighlightStyle[]> = [],
+  options: {
+    nodeVisibility?: NodeVisibility
+    emittedNodes: Array<string>
+    groupNodes?: SimNode[]
+    skipGrouping?: boolean
+    openedGroups?: string[]
+  } = {
     nodeVisibility: "all",
     emittedNodes: [],
+    groupNodes: [],
+    skipGrouping: false,
+    openedGroups: [],
   }
 ) {
-  const nodesById = Object.fromEntries(nodes.map(node => [node.id, node]))
   const visibleNodes = []
   const visibleLinks = []
   const visited = new Set()
@@ -139,30 +270,25 @@ export function getPrunedData(
     return cond
   }
 
-  ;(function traverseTree(node = nodesById[startId]) {
+  ;(function traverseTree(node = nodes.maps.id.get(startId)!) {
     // avoid circles
     if (!node || visited.has(node.id)) return
     visited.add(node.id)
 
     // Skip liquidated nodes unless they are highlighted
-    if (liquidatedFilter(node)) {
-      return
-    }
-    if (visbilityFilter()(node)) {
-      return
-    }
+    if (liquidatedFilter(node)) return
+    if (visbilityFilter()(node)) return
 
     visibleNodes.push(node)
     if (node?.state?.collapsed) return
 
-    const childLinks = links.filter(
-      l => (isSimNode(l.source) ? l.source.id : l.source) === node.id
-    )
+    const childLinks = links.maps.sourceId.get(node.id) || []
 
     for (const link of childLinks) {
       const targetNode = isSimNode(link.target)
         ? link.target
-        : nodesById[link.target.toString()]
+        : nodes.maps.id.get(link.target.toString())
+      if (!targetNode) continue
 
       // Check whether child should be included before adding link
       if (liquidatedFilter(targetNode)) {
@@ -178,10 +304,16 @@ export function getPrunedData(
     }
   })()
 
-  return {
+  const visible = newGraphData({
     nodes: visibleNodes,
     links: visibleLinks,
-  }
+  })
+
+  return groupGraphNodes(startId, visible.nodes, visible.links, {
+    skip: options.skipGrouping || false,
+    existingGroups: options.groupNodes,
+    openedGroups: options.openedGroups,
+  })
 }
 
 /**

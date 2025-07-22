@@ -19,8 +19,7 @@
 export function xorshiftString(str: string): number {
   let x = 0x0
   for (let i = 0; i < str.length; i++) {
-    const c = str.charCodeAt(i)
-    x ^= c
+    x ^= str.charCodeAt(i)
     x ^= x << 13
     x ^= x >> 7
     x ^= x << 17

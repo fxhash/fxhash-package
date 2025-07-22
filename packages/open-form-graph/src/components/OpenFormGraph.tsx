@@ -16,6 +16,7 @@ interface OpenFormGraphProps {
   loadNodeImage?: (node: SimNode) => Promise<string | undefined>
   translate?: { x: number; y: number }
   onTransform?: (transform: Transform) => void
+  onSimulationEnded?: (simulation: OpenGraphSimulation) => void
   nodeVisibility?: NodeVisibility
   children?: React.ReactNode
   groupRootOrphans?: boolean
@@ -31,6 +32,7 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
     loadNodeImage,
     translate,
     onTransform,
+    onSimulationEnded,
     nodeVisibility = "all",
     children,
     groupRootOrphans = false,
@@ -86,6 +88,11 @@ export function OpenFormGraph(props: OpenFormGraphProps) {
       simulation.current?.emitter.off("transform-changed", onTransform)
     }
   }, [onTransform])
+
+  useEffect(() => {
+    if (!simulation.current || !onSimulationEnded) return
+    return simulation.current.emitter.on("simulation:ended", onSimulationEnded)
+  }, [onSimulationEnded])
 
   useEffect(() => {
     if (!simulation.current) return
