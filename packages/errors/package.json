@@ -4,11 +4,11 @@
   "version": "0.0.9",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/utils": "0.0.2",
+    "@fxhash/utils": "workspace:*",
     "@urql/core": "4.1.4"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
     "tslib": "2.6.2",
     "tsup": "8.4.0",

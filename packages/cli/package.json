@@ -13,11 +13,11 @@
     "fxhash-update": "./dist/update.js"
   },
   "dependencies": {
-    "@fxhash/config": "0.0.9",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/project-sdk": "0.0.14",
-    "@fxhash/snippet": "0.0.8",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/project-sdk": "workspace:*",
+    "@fxhash/snippet": "workspace:*",
     "@octokit/rest": "20.0.1",
     "adm-zip": "0.5.10",
     "axios": "1.5.0",
@@ -48,8 +48,8 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/adm-zip": "0.5.0",
     "@types/chalk": "2.2.0",
     "@types/ejs": "3.1.2",

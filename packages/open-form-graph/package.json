@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/utils": "0.0.2",
+    "@fxhash/utils": "workspace:*",
     "d3-force": "3.0.0",
     "d3-scale": "4.0.2",
     "d3-scale-chromatic": "3.1.0",
@@ -13,7 +13,7 @@
     "lodash.throttle": "4.1.1"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/tsconfig": "workspace:*",
     "@types/d3-force": "3.0.10",
     "@types/d3-scale": "4.0.9",
     "@types/d3-scale-chromatic": "3.1.0",

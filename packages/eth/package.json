@@ -3,10 +3,10 @@
   "version": "0.0.9",
   "dependencies": {
     "@0xsplits/splits-sdk": "5.1.0",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/utils": "0.0.2",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@openzeppelin/merkle-tree": "1.0.5",
     "@reservoir0x/reservoir-sdk": "1.9.0",
     "@safe-global/api-kit": "2.1.0",
@@ -22,8 +22,8 @@
     "viem": "2.31.0"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "1.0.2",
-    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@swc/core": "1.12.11",
     "@types/dotenv": "8.2.0",
     "@types/react": "18.3.12",
@@ -48,7 +48,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@fxhash/config": "0.0.9"
+    "@fxhash/config": "workspace:*"
   },
   "private": true,
   "scripts": {
