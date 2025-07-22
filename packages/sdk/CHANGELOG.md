@@ -1,5 +1,15 @@
 # @fxhash/sdk
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [63c580f3]
+  - @fxhash/client@0.0.1
+  - @fxhash/core@0.0.1
+  - @fxhash/eth@0.0.2
+  - @fxhash/tez@0.0.1
+
 ## 0.0.5
 
 ### Patch Changes

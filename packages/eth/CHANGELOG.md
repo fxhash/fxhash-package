@@ -1,5 +1,11 @@
 # @fxhash/evm-sdk
 
+## 0.0.2
+
+### Patch Changes
+
+- 63c580f3: Release update on eth + core, client and client-react
+
 ## 0.0.1
 
 ### Patch Changes
