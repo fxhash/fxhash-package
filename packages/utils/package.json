@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/utils",
   "description": "A general-purpose nodejs/browser compatible utility package related to fxhash applications.",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "author": "fxhash",
   "dependencies": {
     "bs58check": "4.0.0"

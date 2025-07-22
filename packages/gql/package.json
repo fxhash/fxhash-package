@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/gql",
   "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
-  "version": "0.0.8",
+  "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
     "tslib": "2.6.2"

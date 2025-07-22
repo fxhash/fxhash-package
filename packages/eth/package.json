@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth",
-  "version": "0.0.9",
+  "version": "0.0.1",
   "dependencies": {
     "@0xsplits/splits-sdk": "5.1.0",
     "@fxhash/gql": "workspace:*",
@@ -50,7 +50,9 @@
   "peerDependencies": {
     "@fxhash/config": "workspace:*"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist",

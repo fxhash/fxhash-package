@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/core",
   "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
-  "version": "0.0.1",
+  "version": "0.0.6",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/errors": "workspace:*",
@@ -51,7 +51,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/eth": "workspace:*",
     "@fxhash/gql": "workspace:*",

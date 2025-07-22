@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/errors",
   "description": "Application-wide errors which are exposed and used by different parts of our stack.",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/utils": "workspace:*",

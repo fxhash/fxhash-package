@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/auth",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "author": "fxhash",
   "dependencies": {
     "@taquito/utils": "17.3.1",

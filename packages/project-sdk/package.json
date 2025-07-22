@@ -1,10 +1,10 @@
 {
   "name": "@fxhash/project-sdk",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/params": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@fxhash/params": "0.0.10",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",

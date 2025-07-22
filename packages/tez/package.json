@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/tez",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.12.11",
@@ -12,7 +12,7 @@
     "@taquito/utils": "17.3.1"
   },
   "devDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
@@ -36,7 +36,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.6.0",
     "@fxhash/config": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@taquito/beacon-wallet": "20.1.2",
