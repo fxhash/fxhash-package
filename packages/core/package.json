@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/core",
   "description": "Low-level building blocks to compose a fxhash client application. Should only be used directly for advanced use cases.",
-  "version": "0.0.6",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/errors": "workspace:*",
@@ -71,7 +71,9 @@
     "viem": "2.31.0",
     "wagmi": "2.15.6"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
@@ -81,3 +83,4 @@
   },
   "type": "module"
 }
+
