@@ -16,7 +16,6 @@ import { PromiseResult, failure, success, invariant } from "@fxhash/utils"
 import {
   Account,
   Chain,
-  HttpTransport,
   PublicClient,
   TransactionNotFoundError,
   TransactionReceipt,
@@ -28,6 +27,7 @@ import {
   Client,
   createWalletClient,
   PrivateKeyAccount,
+  fallback,
 } from "viem"
 import { mainnet, base, baseSepolia, sepolia } from "viem/chains"
 import Safe, { EthersAdapter } from "@safe-global/protocol-kit"
@@ -129,6 +129,18 @@ export function getCurrentChain(chain: BlockchainType): Chain {
         : baseSepolia
   ) as Chain
 }
+
+export const getTransportWithFallback = (chain: Chain) => {
+  return fallback([
+    http(),
+    http(
+      chain.id === chains.ETHEREUM.id
+        ? config.eth.apis.alchemy.rpc
+        : config.base.apis.alchemy.rpc
+    ),
+  ])
+}
+
 /* Temp remove until package is esm compatible
 export const defaultTransports = [
   unstable_connector(metaMask),
@@ -458,9 +470,9 @@ export class EthereumWalletManager extends WalletManager {
   ): PromiseResult<void, WalletConnectionError> {
     try {
       await this.walletClient.switchChain({ id: chain.id })
-      this.publicClient = createPublicClient<HttpTransport, Chain>({
+      this.publicClient = createPublicClient<Transport, Chain>({
         chain: chain,
-        transport: http(),
+        transport: getTransportWithFallback(chain),
       })
       return success()
     } catch (error) {
@@ -503,7 +515,7 @@ export class EthereumWalletManager extends WalletManager {
 
   static async fromPrivateKey(privateKey: `0x${string}`) {
     const chain = chains[BlockchainType.ETHEREUM]
-    const transport = http(config.eth.apis.rpcs[0])
+    const transport = getTransportWithFallback(chain)
     const publicClient = createPublicClient({
       chain,
       transport,

@@ -40,4 +40,3 @@
     "watch": "tsx ./scripts/watch.ts"
   }
 }
-

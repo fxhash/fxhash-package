@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/tez",
-  "version": "0.0.5",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.12.11",
@@ -44,7 +44,9 @@
     "@taquito/taquito": "20.1.2",
     "onchfs": "0.0.0"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsup",
@@ -53,3 +55,4 @@
   },
   "type": "module"
 }
+

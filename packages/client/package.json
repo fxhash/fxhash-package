@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/client",
   "description": "Medium-level APIs to instanciate low-level @fxhash/core modules easily.",
-  "version": "0.0.5",
+  "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.6.0",
@@ -23,7 +23,7 @@
     "@types/react-dom": "18.3.1",
     "@wagmi/connectors": "5.8.5",
     "@wagmi/core": "2.17.3",
-    "connectkit": "1.8.2",
+    "connectkit": "1.9.1",
     "tsdown": "0.12.2",
     "typescript": "5.8.2",
     "viem": "2.31.0",
@@ -42,13 +42,15 @@
   "peerDependencies": {
     "@wagmi/connectors": "5.8.5",
     "@wagmi/core": "2.17.3",
-    "connectkit": "1.8.2",
+    "connectkit": "1.9.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "viem": "2.31.0",
     "wagmi": "2.15.6"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
@@ -56,3 +58,4 @@
   },
   "type": "module"
 }
+

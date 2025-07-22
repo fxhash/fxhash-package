@@ -61,6 +61,8 @@ const createWagmiConfig = ({ metadata, projectId }: EvmConfigOptions) => {
       appDescription: metadata.description,
       appUrl: metadata.url,
       appIcon: metadata.icon,
+      // Keep disabled for now until it's more widely adopted
+      enableFamily: false,
     })
   ) as Config
 }
