@@ -6,18 +6,14 @@
  * as some factory function to generate configs for various providers.
  */
 
-import { chains } from "./Wallet.js"
-import { createConfig, fallback, http } from "@wagmi/core"
+import { chains, getTransportWithFallback } from "./Wallet.js"
+import { createConfig } from "@wagmi/core"
 import { transports } from "./_unstable.js"
-import { config } from "@fxhash/config"
 
 export const supportedEvmChains = [chains.ETHEREUM, chains.BASE] as const
 export const viemTransports = [transports.ETHEREUM, transports.BASE] as const
 export const viemSimpleTransports = Object.fromEntries(
-  supportedEvmChains.map(chain => [
-    chain.id,
-    fallback([http(), http(config.base.apis.alchemy.rpc)]),
-  ])
+  supportedEvmChains.map(chain => [chain.id, getTransportWithFallback(chain)])
 )
 
 export const fxCreateWagmiConfig = () => {
