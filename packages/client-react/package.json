@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/client-react",
   "description": "A react wrapper on @fxhash/client-plugnplay, implementing React providers & hooks for ease-of-use.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "connectkit": "1.9.1",
@@ -50,4 +50,3 @@
   },
   "type": "module"
 }
-

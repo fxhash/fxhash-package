@@ -1,5 +1,15 @@
 # @fxhash/client
 
+## 0.0.1
+
+### Patch Changes
+
+- 63c580f3: Release update on eth + core, client and client-react
+- Updated dependencies [63c580f3]
+  - @fxhash/core@0.0.1
+  - @fxhash/eth@0.0.2
+  - @fxhash/tez@0.0.1
+
 ## 0.0.5
 
 ### Patch Changes
