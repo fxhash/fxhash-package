@@ -13,13 +13,13 @@
     "@fxhash/gql-client": "0.0.0",
     "@fxhash/params": "0.0.10",
     "@fxhash/shared": "0.0.0",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/tez": "0.0.0"
+    "@fxhash/tez": "0.0.0",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "0.0.0",
     "tsdown": "0.12.2",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -33,9 +33,9 @@
   "license": "MIT",
   "private": true,
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "type": "module"
 }
