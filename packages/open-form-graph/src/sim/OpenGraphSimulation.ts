@@ -901,7 +901,8 @@ export class OpenGraphSimulation implements IOpenGraphSimulation {
         nodeVisibility: this.nodeVisibility,
         emittedNodes: this.emittedNodes,
         groupNodes: this.groupNodes,
-        skipGrouping: !this.groupRootOrphans,
+        skipGrouping:
+          !this.groupRootOrphans || this.data.nodes.values.length < 200,
         openedGroups: this.openedGroups,
       }
     )
