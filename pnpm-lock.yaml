@@ -62,7 +62,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.7.17
-        version: 3.7.17(graphql@16.10.0)(react-dom@18.3.1)(react@18.3.1)
+        version: 3.7.17(graphql@16.10.0)
       '@fxhash/config':
         specifier: workspace:*
         version: link:../config
@@ -695,8 +695,8 @@ importers:
   packages/fxhash:
     dependencies:
       '@fxhash/cli':
-        specifier: 0.0.16
-        version: 0.0.16(@fortawesome/fontawesome-svg-core@6.7.2)(graphql@16.10.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 0.0.23
+        version: link:../cli
 
   packages/gql:
     dependencies:
@@ -1692,7 +1692,7 @@ packages:
       - '@types/react'
     dev: false
 
-  /@apollo/client@3.7.17(graphql@16.10.0)(react-dom@18.3.1)(react@18.3.1):
+  /@apollo/client@3.7.17(graphql@16.10.0):
     resolution: {integrity: sha512-0EErSHEtKPNl5wgWikHJbKFAzJ/k11O0WO2QyqZSHpdxdAnw7UWHY4YiLbHCFG7lhrD+NTQ3Z/H9Jn4rcikoJA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -1719,8 +1719,6 @@ packages:
       hoist-non-react-statics: 3.3.2
       optimism: 0.16.2
       prop-types: 15.8.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
       response-iterator: 0.2.25
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -2953,71 +2951,8 @@ packages:
       react: 18.3.1
     dev: false
 
-  /@fxhash/cli@0.0.16(@fortawesome/fontawesome-svg-core@6.7.2)(graphql@16.10.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-5LOpXKIHTJMxLzEJvp3xyYQdRmtMlXL4sa/VOODgV1DCmqKZ8scKbsYY8w35VYtvf1VG3Z5iNn5U5lR3a99yOA==}
-    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
-    hasBin: true
-    dependencies:
-      '@apollo/client': 3.7.17(graphql@16.10.0)(react-dom@18.3.1)(react@18.3.1)
-      '@fxhash/config': 0.0.9
-      '@fxhash/fxhash-snippet': 0.0.8
-      '@fxhash/project-sdk': 0.0.13(@fortawesome/fontawesome-svg-core@6.7.2)(react-dom@18.3.1)(react@18.3.1)
-      '@octokit/rest': 20.0.1
-      adm-zip: 0.5.10
-      axios: 1.5.0
-      boxen: 7.1.1
-      chalk: 4.1.2
-      copy-webpack-plugin: 11.0.0(webpack@5.88.1)
-      dotenv: 16.3.1
-      ejs: 3.1.9
-      express: 4.18.2
-      github-download-directory: 3.0.0
-      glob: 10.3.10
-      jsdom: 22.1.0
-      keypress: 0.2.1
-      keyv: 4.5.3
-      lodash: 4.17.21
-      minimatch: 9.0.3
-      node-html-parser: 6.1.9
-      open: 8.4.2
-      prettier: 2.8.8
-      readline: 1.3.0
-      semver: 7.5.4
-      sha1: 1.1.1
-      style-loader: 3.3.3(webpack@5.88.1)
-      tar: 6.2.0
-      terser-webpack-plugin: 5.3.9(webpack@5.88.1)
-      webpack: 5.88.1
-      webpack-dev-server: 4.15.1(webpack@5.88.1)
-      yargs: 17.7.2
-      yesno: 0.4.0
-    transitivePeerDependencies:
-      - '@fortawesome/fontawesome-svg-core'
-      - '@swc/core'
-      - bufferutil
-      - canvas
-      - debug
-      - encoding
-      - esbuild
-      - graphql
-      - graphql-ws
-      - react
-      - react-dom
-      - subscriptions-transport-ws
-      - supports-color
-      - uglify-js
-      - utf-8-validate
-      - webpack-cli
-    dev: false
-
   /@fxhash/config@0.0.9:
     resolution: {integrity: sha512-sKBVOH1O2F4Fybtfcxwx7v1zS9ozwP8KnU+k6kmobtmMHBR1d+LHr3mtF9vRi4QAjtXy/D4DXcLrgwEgTBXs5g==}
-    dev: false
-
-  /@fxhash/fxhash-snippet@0.0.8:
-    resolution: {integrity: sha512-8tY/AWu9Agx7tTaEOv5xIhYzG6ObcOSTW/6A4LqZ4do+iPaxfDpoFeK/DrIgAwjIJDoHZIHFN8NKsX1Vv65P8Q==}
-    dependencies:
-      node-html-parser: 6.1.5
     dev: false
 
   /@fxhash/params@0.0.10(@fortawesome/fontawesome-svg-core@6.7.2)(react-dom@18.3.1)(react@18.3.1):
@@ -3037,18 +2972,6 @@ packages:
       zod: 3.21.4
     transitivePeerDependencies:
       - '@fortawesome/fontawesome-svg-core'
-    dev: false
-
-  /@fxhash/project-sdk@0.0.13(@fortawesome/fontawesome-svg-core@6.7.2)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-Z2zwvTBW09EsqquzZ0p9wKRGf35uYbg9oCfjaubi/H7UC+MucdI7M1u81XylT76Xf+FxE0Fu9IuqwsaroV0+vg==}
-    dependencies:
-      '@fxhash/params': 0.0.10(@fortawesome/fontawesome-svg-core@6.7.2)(react-dom@18.3.1)(react@18.3.1)
-      '@fxhash/utils': 0.0.2
-      node-html-parser: 6.1.5
-    transitivePeerDependencies:
-      - '@fortawesome/fontawesome-svg-core'
-      - react
-      - react-dom
     dev: false
 
   /@fxhash/utils@0.0.2:
@@ -14113,13 +14036,6 @@ packages:
     resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
     hasBin: true
 
-  /node-html-parser@6.1.5:
-    resolution: {integrity: sha512-fAaM511feX++/Chnhe475a0NHD8M7AxDInsqQpz6x63GRF7xYNdS8Vo5dKsIVPgsOvG7eioRRTZQnWBrhDHBSg==}
-    dependencies:
-      css-select: 5.2.2
-      he: 1.2.0
-    dev: false
-
   /node-html-parser@6.1.9:
     resolution: {integrity: sha512-nQ+MRf0PmRTLcMalVqMsWvceSaBydBCBlnQSL78HVk/E8e0Aazyao4SI9aB67XAAgOgHMsw7q5dJBUPPt9XE3g==}
     dependencies:
@@ -14930,6 +14846,7 @@ packages:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
+    dev: true
 
   /prettier@3.6.0:
     resolution: {integrity: sha512-ujSB9uXHJKzM/2GBuE0hBOUgC77CN3Bnpqa+g80bkv3T3A93wL/xlzDATHhnhkzifz/UE2SNOvmbTz5hSkDlHw==}
@@ -15889,14 +15806,6 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  /semver@7.5.4:
-    resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: false
-
   /semver@7.6.0:
     resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
     engines: {node: '>=10'}
@@ -16804,30 +16713,6 @@ packages:
       serialize-javascript: 6.0.2
       terser: 5.43.1
       webpack: 5.88.1(esbuild@0.25.8)
-
-  /terser-webpack-plugin@5.3.9(webpack@5.88.1):
-    resolution: {integrity: sha512-ZuXsqE07EcggTWQjXUj+Aot/OMcD0bMKGgF63f7UxYcu5/AJF53aIpK1YoP5xR9l6s/Hy2b+t1AM0bLNPRuhwA==}
-    engines: {node: '>= 10.13.0'}
-    peerDependencies:
-      '@swc/core': '*'
-      esbuild: '*'
-      uglify-js: '*'
-      webpack: ^5.1.0
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      esbuild:
-        optional: true
-      uglify-js:
-        optional: true
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.29
-      jest-worker: 27.5.1
-      schema-utils: 3.3.0
-      serialize-javascript: 6.0.2
-      terser: 5.43.1
-      webpack: 5.88.1
-    dev: false
 
   /terser@5.43.1:
     resolution: {integrity: sha512-+6erLbBm0+LROX2sPXlUYx/ux5PyE9K/a92Wrt6oA+WDAoFTdpHE5tCYCI5PNzq2y8df4rA+QgHLJuR4jNymsg==}
@@ -18582,46 +18467,6 @@ packages:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
     dev: true
 
-  /webpack@5.88.1:
-    resolution: {integrity: sha512-FROX3TxQnC/ox4N+3xQoWZzvGXSuscxR32rbzjpXgEzWudJFEJBpdlkkob2ylrv5yzzufD1zph1OoFsLtm6stQ==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    peerDependencies:
-      webpack-cli: '*'
-    peerDependenciesMeta:
-      webpack-cli:
-        optional: true
-    dependencies:
-      '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.8
-      '@webassemblyjs/ast': 1.14.1
-      '@webassemblyjs/wasm-edit': 1.14.1
-      '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.15.0
-      acorn-import-assertions: 1.9.0(acorn@8.15.0)
-      browserslist: 4.25.1
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.18.2
-      es-module-lexer: 1.7.0
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.2
-      terser-webpack-plugin: 5.3.9(webpack@5.88.1)
-      watchpack: 2.4.4
-      webpack-sources: 3.3.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-    dev: false
-
   /webpack@5.88.1(esbuild@0.25.8):
     resolution: {integrity: sha512-FROX3TxQnC/ox4N+3xQoWZzvGXSuscxR32rbzjpXgEzWudJFEJBpdlkkob2ylrv5yzzufD1zph1OoFsLtm6stQ==}
     engines: {node: '>=10.13.0'}
@@ -19077,10 +18922,6 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
-
-  /yesno@0.4.0:
-    resolution: {integrity: sha512-tdBxmHvbXPBKYIg81bMCB7bVeDmHkRzk5rVJyYYXurwKkHq/MCd8rz4HSJUP7hW0H2NlXiq8IFiWvYKEHhlotA==}
-    dev: false
 
   /yn@3.1.1:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}

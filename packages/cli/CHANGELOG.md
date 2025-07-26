@@ -1,5 +1,11 @@
 # @fxhash/cli
 
+## 0.0.23
+
+### Patch Changes
+
+- b234ef02: updaet assets in cli
+
 ## 0.0.22
 
 ### Patch Changes
