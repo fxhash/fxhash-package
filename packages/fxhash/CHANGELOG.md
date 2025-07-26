@@ -1,5 +1,13 @@
 # fxhash
 
+## 0.0.16
+
+### Patch Changes
+
+- b234ef02: updaet assets in cli
+- Updated dependencies [b234ef02]
+  - @fxhash/cli@0.0.23
+
 ## 0.0.15
 
 ### Patch Changes
