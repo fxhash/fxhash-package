@@ -1,5 +1,12 @@
 # @fxhash/client-react
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [258b1789]
+  - @fxhash/sdk@0.0.1
+
 ## 0.0.2
 
 ### Patch Changes
