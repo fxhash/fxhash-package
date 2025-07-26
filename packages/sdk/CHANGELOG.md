@@ -1,5 +1,12 @@
 # @fxhash/sdk
 
+## 0.0.7
+
+### Patch Changes
+
+- @fxhash/client@0.0.2
+- @fxhash/core@0.0.2
+
 ## 0.0.6
 
 ### Patch Changes

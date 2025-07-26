@@ -1,5 +1,13 @@
 # @fxhash/client
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [24d302ca]
+  - @fxhash/utils-browser@0.0.4
+  - @fxhash/core@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
