@@ -1,5 +1,11 @@
 # @fxhash/sdk
 
+## 0.0.1
+
+### Patch Changes
+
+- 258b1789: Release @fxhash/sdk
+
 ## 0.0.7
 
 ### Patch Changes
