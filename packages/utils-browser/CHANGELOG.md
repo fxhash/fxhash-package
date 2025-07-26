@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- 24d302ca: Release browser utils
+
+## 0.0.4
+
+### Patch Changes
+
 - Updated dependencies [48342533]
   - @fxhash/errors@0.0.13
 

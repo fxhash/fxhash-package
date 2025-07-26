@@ -1,5 +1,13 @@
 # @fxhash/client-react
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [24d302ca]
+  - @fxhash/utils-browser@0.0.4
+  - @fxhash/sdk@0.0.7
+
 ## 0.0.1
 
 ### Patch Changes
