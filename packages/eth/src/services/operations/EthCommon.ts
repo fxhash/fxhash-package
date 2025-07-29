@@ -383,13 +383,18 @@ export async function simulateAndExecuteContractWithApproval<
   // todo: this a temporary fix for non-smart account wallets. We definitely
   //       need to clean the architecture cause this is fetting spaghetti
   if (additionalOperations && additionalOperations.length > 0) {
+    console.log("executing additional operations")
     for (const op of additionalOperations) {
+      console.log("executing additional operation", op)
       const txHash = await walletManager.walletClient.sendTransaction(op)
+      console.log("waiting for additional operation", txHash)
       await walletManager.waitForTransaction({ hash: txHash })
     }
+    console.log("additional operations executed")
   }
 
   if (approvalArgs) {
+    console.log("approving and executing", approvalArgs)
     // otherwise, we approve + execute sequentially
     const approvalTxHash = await simulateAndExecuteContract(walletManager, {
       address: approvalArgs.tokenAddress,
@@ -400,10 +405,13 @@ export async function simulateAndExecuteContractWithApproval<
       chain: args.chain,
     })
 
+    console.log("waiting for approval", approvalTxHash)
     // wait for the approval before executing the main transaction
     await walletManager.waitForTransaction({ hash: approvalTxHash })
+    console.log("approval executed")
   }
 
+  console.log("executing", args)
   return simulateAndExecuteContract(walletManager, args)
 }
 
