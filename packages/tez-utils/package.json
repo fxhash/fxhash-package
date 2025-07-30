@@ -10,7 +10,7 @@
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "tslib": "2.6.2",
-    "tsup": "8.4.0",
+    "tsdown": "0.13.0",
     "typescript": "5.8.2"
   },
   "exports": {
@@ -26,8 +26,8 @@
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "build": "tsdown",
+    "dev": "tsdown --watch"
   },
   "type": "module"
 }
