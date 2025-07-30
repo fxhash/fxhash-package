@@ -5,52 +5,55 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { projectFactoryAbi } from "@/__generated__/wagmi.js"
+import { projectFactoryV2Abi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams = {
-  // The metadataUri of the art coin
-  contractURI: string
-  // The name of the project
+export type TLaunchTokenAndCreateProjectEthOperationParams = {
+  // Name of both the project and creator tokens
   name: string
-  // The symbol of the project
+  // Symbol for both the project and creator tokens
   symbol: string
-  // The initial owner address
-  initialOwner: `0x${string}`
-  // The base URI for the project
+  // Address that will own the project token contract
+  owner: `0x${string}`
+  // Base URI for token metadata
   baseURI: string
-  mintFee: bigint
+  // Minting configuration (price and max supply)
   mintInfo: {
     price: bigint
     maxSupply: bigint
   }
+  // Array of tag IDs for the project
   tagIds: bigint[]
-  // The amount of FxTokens used to create liquidity
-  purchaseAmount: bigint
+  // Amount of FX tokens to stake for creator token launch
+  fxAmount: bigint
+  // Initial mint fee for the project
+  mintFee: bigint
+  // URI for creator token contract metadata
+  contractURI: string
   // The public trading time of the coin
   publicTradingTime: bigint
 }
 
-export class TokenLaunchpadLaunchProjectAndCreateTokenEthOperation extends EthereumContractOperation<TTokenLaunchpadLaunchProjectAndCreateTokenEthOperationParams> {
+export class LaunchTokenAndCreateProjectEthOperation extends EthereumContractOperation<TLaunchTokenAndCreateProjectEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<
-      typeof projectFactoryAbi,
+      typeof projectFactoryV2Abi,
       "launchTokenAndCreateProject"
     > = {
       address: config.base.contracts.fx_project_factory,
-      abi: projectFactoryAbi,
+      abi: projectFactoryV2Abi,
       functionName: "launchTokenAndCreateProject",
       args: [
         this.params.name,
         this.params.symbol,
-        this.params.initialOwner,
+        this.params.owner,
         this.params.baseURI,
         this.params.mintInfo,
         this.params.tagIds,
-        this.params.purchaseAmount,
+        this.params.fxAmount,
         this.params.mintFee,
         this.params.contractURI,
         this.params.publicTradingTime,

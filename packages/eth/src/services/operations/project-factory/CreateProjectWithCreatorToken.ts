@@ -5,45 +5,49 @@ import {
 } from "@/services/operations/EthCommon.js"
 import { TransactionType } from "@fxhash/shared"
 import { getCurrentChain } from "@/services/Wallet.js"
-import { projectFactoryAbi } from "@/__generated__/wagmi.js"
+import { projectFactoryV2Abi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
-export type TTokenLaunchpadCreateProjectEthOperationParams = {
-  // The name of the project
+// Creates a new project using an existing creator token
+export type TTokenLaunchpadCreateProjectWithCreatorTokenEthOperationParams = {
+  // Name of the project token
   name: string
-  // The symbol of the project
+  // Symbol of the project token
   symbol: string
-  // The creator token address
+  // Address of the existing creator token
   creatorToken: `0x${string}`
-  // The initial owner address
-  initialOwner: `0x${string}`
-  // The base URI for the project
+  // Address that will own the project token contract
+  owner: `0x${string}`
+  // Base URI for token metadata
   baseURI: string
-  mintFee: bigint
+  // Minting configuration (price and max supply)
   mintInfo: {
     price: bigint
     maxSupply: bigint
   }
+  // Array of tag IDs for the project
   tagIds: bigint[]
+  // Initial mint fee for the project
+  mintFee: bigint
 }
 
-export class TokenLaunchpadCreateProjectEthOperation extends EthereumContractOperation<TTokenLaunchpadCreateProjectEthOperationParams> {
+export class TokenLaunchpadCreateProjectWithCreatorTokenEthOperation extends EthereumContractOperation<TTokenLaunchpadCreateProjectWithCreatorTokenEthOperationParams> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-function-return-type
   async prepare() {}
 
   async call(): Promise<{ type: TransactionType; hash: string }> {
     const args: SimulateAndExecuteContractRequest<
-      typeof projectFactoryAbi,
-      "createProject"
+      typeof projectFactoryV2Abi,
+      "createProjectWithCreatorToken"
     > = {
       address: config.base.contracts.fx_project_factory,
-      abi: projectFactoryAbi,
-      functionName: "createProject",
+      abi: projectFactoryV2Abi,
+      functionName: "createProjectWithCreatorToken",
       args: [
         this.params.name,
         this.params.symbol,
         this.params.creatorToken,
-        this.params.initialOwner,
+        this.params.owner,
         this.params.baseURI,
         this.params.mintInfo,
         this.params.tagIds,
