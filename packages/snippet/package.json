@@ -32,7 +32,7 @@
   },
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
   },
   "type": "module",
