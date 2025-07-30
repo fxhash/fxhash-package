@@ -1,4 +1,5 @@
 import { IStorageDriver } from "@/index.js"
+import { expect, it } from "vitest"
 
 export function expectValidStorageDriverInterface(target: IStorageDriver) {
   expect(target).toBeTypeOf("object")

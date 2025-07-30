@@ -1,5 +1,6 @@
 import { IWalletsSource } from "@/index.js"
 import { expectValidUserSourceInterface } from "../common.js"
+import { expect } from "vitest"
 
 export function expectValidWalletSourceInterface(target: IWalletsSource) {
   expectValidUserSourceInterface(target)
