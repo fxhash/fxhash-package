@@ -32,8 +32,8 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "ts-node": "10.9.1",
+    "tsdown": "0.13.0",
     "tslib": "2.6.2",
-    "tsup": "8.4.0",
     "typescript": "5.8.2",
     "vitest": "3.2.4"
   },
@@ -52,10 +52,10 @@
   },
   "private": true,
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "clean": "rm -rf dist",
     "codegen": "wagmi generate",
-    "dev": "tsup --watch",
+    "dev": "tsdown --watch",
     "test": "vitest"
   },
   "type": "module"

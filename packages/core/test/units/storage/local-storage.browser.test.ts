@@ -4,6 +4,7 @@
 
 import { localStorageDriver } from "@/index.js"
 import { expectValidStorageDriver } from "./common.js"
+import { beforeEach, describe, expect, it } from "vitest"
 
 beforeEach(() => {
   localStorage.clear()

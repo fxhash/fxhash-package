@@ -14,9 +14,10 @@ import {
   MOCKED_SHA1,
   PROJECT_STATE,
 } from "./constants.js"
+import { describe, expect, test, vitest } from "vitest"
 
 // Mock external dependencies
-vi.mock("@fxhash/config", async importOriginal => {
+vitest.mock("@fxhash/config", async importOriginal => {
   const mod = await importOriginal<typeof import("@fxhash/config")>()
   return {
     ...mod,
@@ -24,14 +25,16 @@ vi.mock("@fxhash/config", async importOriginal => {
       ...mod.config,
       apis: { ...mod.config.apis, fsEmulator: "http://fsemulator.test" },
     },
-    proxyUrl: vi.fn(cid => `http://proxy.test/${cid}`),
+    proxyUrl: vitest.fn(cid => `http://proxy.test/${cid}`),
   }
 })
 
-vi.mock("sha1", () => ({ default: vi.fn(input => `${MOCKED_SHA1}-${input}`) }))
+vitest.mock("sha1", () => ({
+  default: vitest.fn(input => `${MOCKED_SHA1}-${input}`),
+}))
 
-vi.mock("./utils", () => ({
-  fxParamsAsQueryParams: vi.fn(version => version === "old"),
+vitest.mock("./utils", () => ({
+  fxParamsAsQueryParams: vitest.fn(version => version === "old"),
 }))
 
 describe("getURLSearchParams", () => {

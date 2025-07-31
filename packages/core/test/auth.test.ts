@@ -1,6 +1,6 @@
 import { localConfig } from "@fxhash/config"
 import { BlockchainNetwork } from "@fxhash/shared"
-import { vi } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import {
   GraphqlWrapper,
   authWallets,
