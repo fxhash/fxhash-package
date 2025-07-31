@@ -4,6 +4,7 @@ import {
   PARAMS_VALUES_A,
   PARAMS_VALUES_B,
 } from "./constants.js"
+import { describe, expect, test, vitest } from "vitest"
 
 describe("runtimeControls", () => {
   test("initializes with default state when no initial state provided", () => {
@@ -74,7 +75,7 @@ describe("runtimeControls", () => {
       },
     }
     const controls = runtimeControls(initialState)
-    const mockFn = vi.fn()
+    const mockFn = vitest.fn()
     controls.emitter.on("controls-changed", mockFn)
     controls.update(PARAMS_VALUES_B)
     expect(mockFn).toHaveBeenCalledTimes(1)
