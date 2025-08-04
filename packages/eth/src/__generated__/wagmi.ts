@@ -1352,11 +1352,39 @@ export const projectFactoryV2Abi = [
   {
     type: "function",
     inputs: [
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "string", type: "string" },
+      {
+        name: "",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      { name: "", internalType: "uint256[]", type: "uint256[]" },
+      { name: "", internalType: "uint256", type: "uint256" },
+    ],
+    name: "createProject",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_creatorToken", internalType: "address", type: "address" },
       { name: "_owner", internalType: "address", type: "address" },
       { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
         internalType: "struct IProjectToken.MintInfo",
@@ -1366,8 +1394,6 @@ export const projectFactoryV2Abi = [
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
         ],
       },
-      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
-      { name: "_mintFee", internalType: "uint256", type: "uint256" },
     ],
     name: "createProjectWithCreatorToken",
     outputs: [
@@ -1380,9 +1406,13 @@ export const projectFactoryV2Abi = [
     inputs: [
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
-      { name: "_customToken", internalType: "address", type: "address" },
+      { name: "_customERC20", internalType: "address", type: "address" },
       { name: "_owner", internalType: "address", type: "address" },
       { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
         internalType: "struct IProjectToken.MintInfo",
@@ -1392,10 +1422,8 @@ export const projectFactoryV2Abi = [
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
         ],
       },
-      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
-      { name: "_mintFee", internalType: "uint256", type: "uint256" },
     ],
-    name: "createProjectWithCustomToken",
+    name: "createProjectWithCustomERC20",
     outputs: [
       { name: "projectToken", internalType: "address", type: "address" },
     ],
@@ -1408,6 +1436,10 @@ export const projectFactoryV2Abi = [
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_owner", internalType: "address", type: "address" },
       { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
         internalType: "struct IProjectToken.MintInfo",
@@ -1417,8 +1449,6 @@ export const projectFactoryV2Abi = [
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
         ],
       },
-      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
-      { name: "_mintFee", internalType: "uint256", type: "uint256" },
     ],
     name: "createProjectWithFXH",
     outputs: [
@@ -1436,10 +1466,43 @@ export const projectFactoryV2Abi = [
   {
     type: "function",
     inputs: [
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "string", type: "string" },
+      {
+        name: "",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      { name: "", internalType: "uint256[]", type: "uint256[]" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "uint256", type: "uint256" },
+    ],
+    name: "launchTokenAndCreateProject",
+    outputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
       { name: "_name", internalType: "string", type: "string" },
       { name: "_symbol", internalType: "string", type: "string" },
       { name: "_owner", internalType: "address", type: "address" },
       { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
         internalType: "struct IProjectToken.MintInfo",
@@ -1449,11 +1512,22 @@ export const projectFactoryV2Abi = [
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
         ],
       },
-      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
-      { name: "_fxAmount", internalType: "uint256", type: "uint256" },
-      { name: "_mintFee", internalType: "uint256", type: "uint256" },
-      { name: "_contractURI", internalType: "string", type: "string" },
-      { name: "_publicTradingTime", internalType: "uint256", type: "uint256" },
+      {
+        name: "_launchParams",
+        internalType: "struct IProjectFactoryV2.LaunchParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "contractURI", internalType: "string", type: "string" },
+          { name: "fxAmount", internalType: "uint256", type: "uint256" },
+          {
+            name: "publicTradingTime",
+            internalType: "uint256",
+            type: "uint256",
+          },
+        ],
+      },
     ],
     name: "launchTokenAndCreateProject",
     outputs: [
@@ -1790,6 +1864,7 @@ export const projectFactoryV2Abi = [
     inputs: [{ name: "account", internalType: "address", type: "address" }],
     name: "OwnableUnauthorizedAccount",
   },
+  { type: "error", inputs: [], name: "ProjectFactoryV2__FunctionDeprecated" },
   { type: "error", inputs: [], name: "ProjectFactory__NotCreator" },
   { type: "error", inputs: [], name: "ProjectFactory__ZeroAddress" },
   {
