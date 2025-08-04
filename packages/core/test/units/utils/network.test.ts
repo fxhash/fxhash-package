@@ -3,6 +3,7 @@ import { localConfig } from "@fxhash/config"
 import { parse as parseGql } from "graphql/language"
 import { hasuraMockClient, mockServer } from "../../mock/handlers.js"
 import { HttpResponse } from "msw"
+import { describe, expect, it } from "vitest"
 
 function wrapper() {
   return new GraphqlWrapper({

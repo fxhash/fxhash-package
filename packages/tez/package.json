@@ -20,8 +20,8 @@
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
     "onchfs": "workspace:*",
+    "tsdown": "0.13.0",
     "tslib": "2.6.2",
-    "tsup": "8.4.0",
     "typescript": "5.8.2",
     "vitest": "3.2.4"
   },
@@ -47,8 +47,8 @@
   "private": true,
   "repository": "fxhash/fxhash-package",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "test": "vitest"
   },
   "type": "module"
