@@ -12,6 +12,8 @@ import {
   type ContractFunctionArgs,
   type ContractFunctionParameters,
   erc20Abi,
+  createPublicClient,
+  http,
 } from "viem"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
@@ -22,6 +24,7 @@ import {
 import {
   type EthereumWalletManager,
   getConfigForChain,
+  getCurrentChain,
 } from "@/services/Wallet.js"
 import { getOpenChainError } from "@/services/Openchain.js"
 import { FX_ISSUER_FACTORY_ABI } from "@/abi/index.js"
@@ -32,7 +35,12 @@ import {
   UserRejectedError,
 } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
-import { waitForCallsStatus } from "viem/actions"
+import {
+  waitForCallsStatus,
+  simulateCalls,
+  readContract,
+  simulateContract,
+} from "viem/actions"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -155,6 +163,13 @@ export interface ConfigInfo {
   defaultMetadataURI: string
 }
 
+const getPublicAlchemyClient = (blockchainType: BlockchainType) => {
+  return createPublicClient({
+    chain: getCurrentChain(blockchainType),
+    transport: http(getConfigForChain(blockchainType).apis.alchemy.rpc),
+  })
+}
+
 /**
  * Defines a set of constant variables used by the Ethereum stack. There are
  * static and instanciated at runtime from the config.
@@ -269,6 +284,7 @@ export async function simulateAndExecuteContractWithApproval<
 >(
   walletManager: EthereumWalletManager,
   args: SimulateAndExecuteContractRequest<abi, functionName>,
+  blockchainType: BlockchainType,
   approvalArgs?: ApprovalArgs,
   additionalOperations?: any[]
 ): Promise<string> {
@@ -299,15 +315,30 @@ export async function simulateAndExecuteContractWithApproval<
       calls.unshift(...additionalOperations)
     }
 
-    const { results } = await walletManager.publicClient.simulateCalls({
-      account: walletManager.walletClient.account,
-      calls: calls,
-    })
-    for (const result of results) {
-      if (result.status === "failure") {
-        const errorMessage = await handleContractError(result.error)
-        throw new Error(errorMessage)
+    // On base, simulateCalls is not enabbled in the public RPC nodes so we fallback to Alchemy as they support it
+    // Once it's enabled on base, we can remove this fallback
+    const publicClient =
+      blockchainType === BlockchainType.BASE
+        ? getPublicAlchemyClient(blockchainType)
+        : walletManager.publicClient
+
+    try {
+      const { results } = await simulateCalls(publicClient, {
+        account: walletManager.walletClient.account,
+        calls: calls,
+      })
+      for (const result of results) {
+        if (result.status === "failure") {
+          const errorMessage = await handleContractError(result.error)
+          throw new Error(errorMessage)
+        }
       }
+    } catch (error) {
+      console.log("error when simulating batch call", error)
+      if (error.message.includes("lack of funds")) {
+        throw new InsufficientFundsError(error.message)
+      }
+      throw error
     }
 
     // if all simulations pass, execute the batch
@@ -408,7 +439,8 @@ export async function simulateAndExecuteContract<
 
   try {
     //simulate the contract call
-    const { request } = await walletManager.publicClient.simulateContract(
+    const { request } = await simulateContract(
+      walletManager.publicClient,
       args as any
     )
 
@@ -461,7 +493,7 @@ export async function predictFxContractAddress(
   const chainConfig =
     blockchainType === BlockchainType.ETHEREUM ? config.eth : config.base
   await walletManager.prepareSigner({ blockchainType: blockchainType })
-  const address = await walletManager.publicClient.readContract({
+  const address = await readContract(walletManager.publicClient, {
     address:
       factoryType === "ticket"
         ? chainConfig.contracts.mint_ticket_factory_v1

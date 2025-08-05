@@ -44,6 +44,7 @@ export class ProjectTokenBatchMintEthOperation extends EthereumContractOperation
             ? this.params.mintFeeAmount
             : undefined,
       },
+      this.chain,
       this.params.approval,
       this.params.additionalOperations
     )
