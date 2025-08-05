@@ -315,7 +315,7 @@ export async function simulateAndExecuteContractWithApproval<
       calls.unshift(...additionalOperations)
     }
 
-    // On base, simulateCalls is not enabbled in the public RPC nodes so we fallback to Alchemy as they support it
+    // On base, simulateCalls is not enabled in the public RPC nodes so we fallback to Alchemy as they support it
     // Once it's enabled on base, we can remove this fallback
     const publicClient =
       blockchainType === BlockchainType.BASE
