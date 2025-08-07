@@ -12,6 +12,8 @@ import {
   type ContractFunctionArgs,
   type ContractFunctionParameters,
   erc20Abi,
+  createPublicClient,
+  http,
 } from "viem"
 import { FX_TICKETS_FACTORY_ABI } from "@/abi/FxTicketFactory.js"
 import {
@@ -22,9 +24,10 @@ import {
 import {
   type EthereumWalletManager,
   getConfigForChain,
+  getCurrentChain,
 } from "@/services/Wallet.js"
 import { getOpenChainError } from "@/services/Openchain.js"
-import { FX_GEN_ART_721_ABI, FX_ISSUER_FACTORY_ABI } from "@/abi/index.js"
+import { FX_ISSUER_FACTORY_ABI } from "@/abi/index.js"
 import {
   BlockchainType,
   InsufficientFundsError,
@@ -32,7 +35,12 @@ import {
   UserRejectedError,
 } from "@fxhash/shared"
 import { invariant } from "@fxhash/utils"
-import { waitForCallsStatus } from "viem/actions"
+import {
+  waitForCallsStatus,
+  simulateCalls,
+  readContract,
+  simulateContract,
+} from "viem/actions"
 
 export enum MintTypes {
   FIXED_PRICE,
@@ -155,6 +163,13 @@ export interface ConfigInfo {
   defaultMetadataURI: string
 }
 
+const getPublicAlchemyClient = (blockchainType: BlockchainType) => {
+  return createPublicClient({
+    chain: getCurrentChain(blockchainType),
+    transport: http(getConfigForChain(blockchainType).apis.alchemy.rpc),
+  })
+}
+
 /**
  * Defines a set of constant variables used by the Ethereum stack. There are
  * static and instanciated at runtime from the config.
@@ -167,10 +182,6 @@ export const onchainConfig: ConfigInfo = {
   defaultMetadataURI: config.apis.ethMetadata,
 }
 
-// Error codes for insufficient allowance
-const INSUFFICIENT_ALLOWANCE_ERROR = "ERC20InsufficientAllowance"
-const INSUFFICIENT_ALLOWANCE_ERROR_CODE = "0xfb8f41b2"
-
 /**
  * `handleContractError`
  * The function `handleContractError` handles contract errors by checking if the error is an instance
@@ -181,25 +192,7 @@ const INSUFFICIENT_ALLOWANCE_ERROR_CODE = "0xfb8f41b2"
  * If set to `true`, it will not rethrow if the error is an insufficient allowance error.
  * @returns a Promise that resolves to a string.
  */
-export async function handleContractError(
-  error: any,
-  options?: { ignoreInsufficientAllowance?: boolean }
-): Promise<string> {
-  if (options?.ignoreInsufficientAllowance && error instanceof BaseError) {
-    const revertError = error.walk(
-      err => err instanceof ContractFunctionRevertedError
-    )
-    if (revertError instanceof ContractFunctionRevertedError) {
-      const errorName = revertError.data?.errorName ?? revertError.signature
-      if (
-        [INSUFFICIENT_ALLOWANCE_ERROR, INSUFFICIENT_ALLOWANCE_ERROR_CODE].some(
-          e => e === errorName
-        )
-      )
-        return INSUFFICIENT_ALLOWANCE_ERROR // Return without throwing
-    }
-  }
-
+export async function handleContractError(error: any): Promise<string> {
   // This can be thrown by the simulateContract function
   if (error instanceof ContractFunctionExecutionError) {
     const isInsufficientFundsError = error.walk(
@@ -268,13 +261,19 @@ interface ApprovalArgs {
   useSmartAccount: boolean
 }
 
-export type BatchedCall = {
-  to: `0x${string}`
-  abi: any
-  functionName: string
-  args: any[]
-  value?: bigint
-}
+export type BatchedCall =
+  | {
+      to: `0x${string}`
+      abi: any
+      functionName: string
+      args: any[]
+      value?: bigint
+    }
+  | {
+      to: `0x${string}`
+      data: `0x${string}`
+      value?: bigint
+    }
 
 export async function simulateAndExecuteContractWithApproval<
   abi extends Abi | readonly unknown[] = Abi,
@@ -285,6 +284,7 @@ export async function simulateAndExecuteContractWithApproval<
 >(
   walletManager: EthereumWalletManager,
   args: SimulateAndExecuteContractRequest<abi, functionName>,
+  blockchainType: BlockchainType,
   approvalArgs?: ApprovalArgs,
   additionalOperations?: any[]
 ): Promise<string> {
@@ -315,28 +315,30 @@ export async function simulateAndExecuteContractWithApproval<
       calls.unshift(...additionalOperations)
     }
 
-    // First, simulate each call individually to catch errors early
-    // We don't simulate additional operations as they will fail without throwing
-    if (!additionalOperations || additionalOperations.length === 0) {
-      for (const call of calls) {
-        try {
-          await walletManager.publicClient.simulateContract({
-            address: call.to,
-            abi: call.abi,
-            functionName: call.functionName,
-            args: call.args,
-            account,
-            chain: args.chain,
-            value: call.value,
-          } as any)
-        } catch (error) {
-          const errorMessage = await handleContractError(error, {
-            ignoreInsufficientAllowance: true,
-          })
-          if (errorMessage === INSUFFICIENT_ALLOWANCE_ERROR) continue
+    // On base, simulateCalls is not enabled in the public RPC nodes so we fallback to Alchemy as they support it
+    // Once it's enabled on base, we can remove this fallback
+    const publicClient =
+      blockchainType === BlockchainType.BASE
+        ? getPublicAlchemyClient(blockchainType)
+        : walletManager.publicClient
+
+    try {
+      const { results } = await simulateCalls(publicClient, {
+        account: walletManager.walletClient.account,
+        calls: calls,
+      })
+      for (const result of results) {
+        if (result.status === "failure") {
+          const errorMessage = await handleContractError(result.error)
           throw new Error(errorMessage)
         }
       }
+    } catch (error) {
+      console.log("error when simulating batch call", error)
+      if (error.message.includes("lack of funds")) {
+        throw new InsufficientFundsError(error.message)
+      }
+      throw error
     }
 
     // if all simulations pass, execute the batch
@@ -344,17 +346,7 @@ export async function simulateAndExecuteContractWithApproval<
       const { id } = await walletManager.walletClient.sendCalls({
         account,
         chain: args.chain,
-        calls: calls.map(call => ({
-          to: call.to,
-          abi: call.abi,
-          functionName: call.functionName,
-          args: call.args,
-          value: call.value,
-          data: (call as any).data,
-          gas: (call as any).gas,
-          maxFeePerGas: (call as any).maxFeePerGas,
-          maxPriorityFeePerGas: (call as any).maxPriorityFeePerGas,
-        })),
+        calls: calls,
         experimental_fallback: true,
       })
 
@@ -447,7 +439,8 @@ export async function simulateAndExecuteContract<
 
   try {
     //simulate the contract call
-    const { request } = await walletManager.publicClient.simulateContract(
+    const { request } = await simulateContract(
+      walletManager.publicClient,
       args as any
     )
 
@@ -500,7 +493,7 @@ export async function predictFxContractAddress(
   const chainConfig =
     blockchainType === BlockchainType.ETHEREUM ? config.eth : config.base
   await walletManager.prepareSigner({ blockchainType: blockchainType })
-  const address = await walletManager.publicClient.readContract({
+  const address = await readContract(walletManager.publicClient, {
     address:
       factoryType === "ticket"
         ? chainConfig.contracts.mint_ticket_factory_v1
