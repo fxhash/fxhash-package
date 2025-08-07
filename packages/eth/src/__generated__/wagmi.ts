@@ -1376,10 +1376,18 @@ export const projectFactoryV2Abi = [
   {
     type: "function",
     inputs: [
-      { name: "_name", internalType: "string", type: "string" },
-      { name: "_symbol", internalType: "string", type: "string" },
-      { name: "_creatorToken", internalType: "address", type: "address" },
-      { name: "_owner", internalType: "address", type: "address" },
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
       { name: "_baseURI", internalType: "string", type: "string" },
       { name: "_mintFee", internalType: "uint256", type: "uint256" },
       { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
@@ -1387,11 +1395,12 @@ export const projectFactoryV2Abi = [
       { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
-        internalType: "struct IProjectToken.MintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
         type: "tuple",
         components: [
           { name: "price", internalType: "uint256", type: "uint256" },
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
         ],
       },
     ],
@@ -1404,10 +1413,18 @@ export const projectFactoryV2Abi = [
   {
     type: "function",
     inputs: [
-      { name: "_name", internalType: "string", type: "string" },
-      { name: "_symbol", internalType: "string", type: "string" },
-      { name: "_customERC20", internalType: "address", type: "address" },
-      { name: "_owner", internalType: "address", type: "address" },
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
       { name: "_baseURI", internalType: "string", type: "string" },
       { name: "_mintFee", internalType: "uint256", type: "uint256" },
       { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
@@ -1415,11 +1432,12 @@ export const projectFactoryV2Abi = [
       { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
-        internalType: "struct IProjectToken.MintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
         type: "tuple",
         components: [
           { name: "price", internalType: "uint256", type: "uint256" },
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
         ],
       },
     ],
@@ -1432,9 +1450,18 @@ export const projectFactoryV2Abi = [
   {
     type: "function",
     inputs: [
-      { name: "_name", internalType: "string", type: "string" },
-      { name: "_symbol", internalType: "string", type: "string" },
-      { name: "_owner", internalType: "address", type: "address" },
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
       { name: "_baseURI", internalType: "string", type: "string" },
       { name: "_mintFee", internalType: "uint256", type: "uint256" },
       { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
@@ -1442,11 +1469,12 @@ export const projectFactoryV2Abi = [
       { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
       {
         name: "_mintInfo",
-        internalType: "struct IProjectToken.MintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
         type: "tuple",
         components: [
           { name: "price", internalType: "uint256", type: "uint256" },
           { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
         ],
       },
     ],
@@ -1495,23 +1523,6 @@ export const projectFactoryV2Abi = [
   {
     type: "function",
     inputs: [
-      { name: "_name", internalType: "string", type: "string" },
-      { name: "_symbol", internalType: "string", type: "string" },
-      { name: "_owner", internalType: "address", type: "address" },
-      { name: "_baseURI", internalType: "string", type: "string" },
-      { name: "_mintFee", internalType: "uint256", type: "uint256" },
-      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
-      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
-      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
-      {
-        name: "_mintInfo",
-        internalType: "struct IProjectToken.MintInfo",
-        type: "tuple",
-        components: [
-          { name: "price", internalType: "uint256", type: "uint256" },
-          { name: "maxSupply", internalType: "uint256", type: "uint256" },
-        ],
-      },
       {
         name: "_launchParams",
         internalType: "struct IProjectFactoryV2.LaunchParams",
@@ -1528,11 +1539,39 @@ export const projectFactoryV2Abi = [
           },
         ],
       },
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
+      { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
+        ],
+      },
     ],
     name: "launchTokenAndCreateProject",
     outputs: [
-      { name: "projectToken", internalType: "address", type: "address" },
       { name: "creatorToken", internalType: "address", type: "address" },
+      { name: "graduatedToken", internalType: "address", type: "address" },
+      { name: "projectToken", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
