@@ -1325,6 +1325,605 @@ export const projectFactoryAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ProjectFactoryV2
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const projectFactoryV2Abi = [
+  {
+    type: "constructor",
+    inputs: [
+      { name: "_owner", internalType: "address", type: "address" },
+      { name: "_fxToken", internalType: "address", type: "address" },
+      { name: "_weth", internalType: "address", type: "address" },
+      { name: "_admin", internalType: "address", type: "address" },
+      { name: "_renderer", internalType: "address", type: "address" },
+      { name: "_tokenLaunchpad", internalType: "address", type: "address" },
+      { name: "_versionManager", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "admin",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "string", type: "string" },
+      {
+        name: "",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      { name: "", internalType: "uint256[]", type: "uint256[]" },
+      { name: "", internalType: "uint256", type: "uint256" },
+    ],
+    name: "createProject",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
+      { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
+        ],
+      },
+    ],
+    name: "createProjectWithCreatorToken",
+    outputs: [
+      { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
+      { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
+        ],
+      },
+    ],
+    name: "createProjectWithCustomERC20",
+    outputs: [
+      { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
+      { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
+        ],
+      },
+    ],
+    name: "createProjectWithFXH",
+    outputs: [
+      { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "fxToken",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "string", type: "string" },
+      {
+        name: "",
+        internalType: "struct IProjectToken.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+        ],
+      },
+      { name: "", internalType: "uint256[]", type: "uint256[]" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "string", type: "string" },
+      { name: "", internalType: "uint256", type: "uint256" },
+    ],
+    name: "launchTokenAndCreateProject",
+    outputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "_launchParams",
+        internalType: "struct IProjectFactoryV2.LaunchParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "contractURI", internalType: "string", type: "string" },
+          { name: "fxAmount", internalType: "uint256", type: "uint256" },
+          {
+            name: "publicTradingTime",
+            internalType: "uint256",
+            type: "uint256",
+          },
+        ],
+      },
+      {
+        name: "_projectParams",
+        internalType: "struct IProjectFactoryV2.ProjectParams",
+        type: "tuple",
+        components: [
+          { name: "name", internalType: "string", type: "string" },
+          { name: "symbol", internalType: "string", type: "string" },
+          { name: "owner", internalType: "address", type: "address" },
+          { name: "paymentToken", internalType: "address", type: "address" },
+          { name: "longForm", internalType: "bool", type: "bool" },
+        ],
+      },
+      { name: "_baseURI", internalType: "string", type: "string" },
+      { name: "_mintFee", internalType: "uint256", type: "uint256" },
+      { name: "_feeGrowthRate", internalType: "uint256", type: "uint256" },
+      { name: "_tagIds", internalType: "uint256[]", type: "uint256[]" },
+      { name: "_selectors", internalType: "bytes4[]", type: "bytes4[]" },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
+        ],
+      },
+    ],
+    name: "launchTokenAndCreateProject",
+    outputs: [
+      { name: "creatorToken", internalType: "address", type: "address" },
+      { name: "graduatedToken", internalType: "address", type: "address" },
+      { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "pauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    name: "pausedSelectors",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "projectId",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "projects",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "renderer",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_admin", internalType: "address", type: "address" }],
+    name: "setAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_renderer", internalType: "address", type: "address" }],
+    name: "setRenderer",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_tokenLaunchpad", internalType: "address", type: "address" },
+    ],
+    name: "setTokenLaunchpad",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_versionManager", internalType: "address", type: "address" },
+    ],
+    name: "setVersionManager",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "tokenLaunchpad",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "_selector", internalType: "bytes4", type: "bytes4" }],
+    name: "unpauseSelector",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "versionManager",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "weth",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "oldAdmin",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newAdmin",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "AdminUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "previousOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "OwnershipTransferred",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "projectId",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: true,
+      },
+      {
+        name: "projectToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "creatorToken",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "creator",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      { name: "name", internalType: "string", type: "string", indexed: false },
+    ],
+    name: "ProjectCreated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "oldRenderer",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newRenderer",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "RendererUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorPaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "selector",
+        internalType: "bytes4",
+        type: "bytes4",
+        indexed: true,
+      },
+    ],
+    name: "SelectorUnpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "oldTokenLaunchpad",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newTokenLaunchpad",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "TokenLaunchpadUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "oldVersionManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newVersionManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "VersionManagerUpdated",
+  },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
+  {
+    type: "error",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "account", internalType: "address", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+  },
+  { type: "error", inputs: [], name: "ProjectFactoryV2__FunctionDeprecated" },
+  { type: "error", inputs: [], name: "ProjectFactory__NotCreator" },
+  { type: "error", inputs: [], name: "ProjectFactory__ZeroAddress" },
+  {
+    type: "error",
+    inputs: [{ name: "token", internalType: "address", type: "address" }],
+    name: "SafeERC20FailedOperation",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorNotPausedError",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "selector", internalType: "bytes4", type: "bytes4" }],
+    name: "SelectorPausedError",
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ProjectToken
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
