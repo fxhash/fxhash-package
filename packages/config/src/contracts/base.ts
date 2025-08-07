@@ -26,7 +26,6 @@ export interface IBaseContracts {
   fx_tez_airdrop: `0x${string}`
   fx_token_launchpad: `0x${string}`
   fx_project_factory: `0x${string}`
-  fx_project_factory_v2: `0x${string}`
 }
 
 export const baseTestnetContracts: IBaseContracts = {
@@ -58,7 +57,6 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_tez_airdrop: "0x3c2b4c38d37affb023a1d2327af428909eb8a134",
   fx_token_launchpad: "0x2f949f7cD46F4D79d4FD6b234DB302cAeEe552e2",
   fx_project_factory: "0xcA9486e54FbBD6aCe6eB6AA0102ee97dd90A8a86",
-  fx_project_factory_v2: "0x49311d537A89d940BBf29dCF81e5b6156F8DDE27",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
@@ -90,5 +88,4 @@ export const baseMainnetContracts: IBaseContracts = {
   fx_tez_airdrop: "0x5021910a5762F9C872Bf7D6CD5F09127aE8cCA84",
   fx_token_launchpad: "0x6FE49c842dAEE3C709772e5727Fd863ad858f1F5",
   fx_project_factory: "0x0612ec1A199617A5b3DF627755A34F69469AEA25",
-  fx_project_factory_v2: "0xTODO",
 }
