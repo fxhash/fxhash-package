@@ -51,6 +51,7 @@ export class ProjectTokenEvolveWithEveryoneOperation extends EthereumContractOpe
     const transactionHash = await simulateAndExecuteContractWithApproval(
       this.manager,
       args,
+      this.chain,
       this.params.approval,
       this.params.additionalOperations
     )

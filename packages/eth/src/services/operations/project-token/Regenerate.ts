@@ -46,6 +46,7 @@ export class ProjectTokenRegenerateEthOperation extends EthereumContractOperatio
     const transactionHash = await simulateAndExecuteContractWithApproval(
       this.manager,
       args,
+      this.chain,
       this.params.approval
     )
     return {
