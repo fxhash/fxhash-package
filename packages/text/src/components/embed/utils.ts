@@ -1,4 +1,4 @@
-export const getYoutubeCodeFromUrl = (url: string) => {
+export const getYoutubeCodeFromUrl = (url: string): string | null => {
   const regexExtractCode =
     /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]+).*/
   const regexIsValidCode = /^[a-zA-Z0-9\-_]+$/
@@ -6,13 +6,18 @@ export const getYoutubeCodeFromUrl = (url: string) => {
   const youtubeCode = match?.[1]
   return youtubeCode && youtubeCode.match(regexIsValidCode) ? youtubeCode : null
 }
-export const getTweetIdFromUrl = (url: string) => {
+export const getTweetIdFromUrl = (url: string): string | null => {
   const regexExtractCode =
     /(?:https?:\/\/)?(?:www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/
   const match = url.match(regexExtractCode)
   return match?.[2] || null
 }
-export const getCodepenFromUrl = (url: string) => {
+export const getCodepenFromUrl = (
+  url: string
+): {
+  author: string
+  id: string
+} | null => {
   const regexExtractCode =
     /(?:https?:\/\/)?(?:www\.)?codepen\.io\/(?:#!\/)?(\w+)\/pen\/(\w+)/
   const match = url.match(regexExtractCode)
@@ -23,7 +28,7 @@ export const getCodepenFromUrl = (url: string) => {
       }
     : null
 }
-export const getOpenProcessingIdFromUrl = (url: string) => {
+export const getOpenProcessingIdFromUrl = (url: string): string | null => {
   const regexExtractCode =
     /(?:https?:\/\/)?(?:www\.)?openprocessing\.org\/sketch\/(\d+)(?:\/embed)?/
   const match = url.match(regexExtractCode)
