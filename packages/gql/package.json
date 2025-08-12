@@ -18,7 +18,7 @@
     "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "2.5.1",
     "chokidar-cli": "3.0.0",
-    "graphql": "16.10.0",
+    "graphql": "16.11.0",
     "tsdown": "0.14.1",
     "typescript": "5.8.2"
   },
@@ -34,7 +34,7 @@
   "keywords": [],
   "license": "MIT",
   "peerDependencies": {
-    "graphql": "16.10.0"
+    "graphql": "16.11.0"
   },
   "publishConfig": {
     "access": "public"
