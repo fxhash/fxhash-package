@@ -12,8 +12,5 @@ export default defineConfig((options: Options) => ({
   format: "esm" as const,
   sourcemap: true,
   clean: !options.watch,
-  dts: {
-    // We can't use this flag until https://github.com/oxc-project/oxc/issues/11186 is fixed
-    oxc: false,
-  },
+  dts: true,
 }))

@@ -34,7 +34,7 @@ export function remarkUnwrapImages() {
    * @param  tree
    *   Tree.
    */
-  return function (tree: Root) {
+  return function (tree: Root): void {
     visit(tree, "paragraph", function (node, index, parent) {
       if (
         parent &&
