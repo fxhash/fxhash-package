@@ -1,73 +1,8 @@
-@import "tailwindcss";
-@config "../../tailwind.config.ts";
-
-@layer base {
-  :root {
-    --color-white: #ffffff;
-    --color-black: #000000;
-
-    --color-grey-50: #fafafa;
-    --color-grey-100: #f9f9f9;
-    --color-grey-200: #f5f5f5;
-    --color-grey-300: #e1e1e1;
-    --color-grey-400: #b5b5b5;
-    --color-grey-500: #7b7b7b;
-    --color-grey-600: #2b2b2b;
-    --color-grey-700: #1a1a1a;
-    --color-grey-800: #151515;
-    --color-grey-900: #111111;
-
-    --color-violet-100: #f1ebfe;
-    --color-violet-200: #e3d8fe;
-    --color-violet-300: #c7b1fc;
-    --color-violet-400: #b99dfb;
-    --color-violet-500: #ab89fb;
-    --color-violet-600: #9d75fa;
-    --color-violet-700: #8f62f9;
-    --color-violet-800: #814ef9;
-    --color-violet-900: #733af8;
-
-    --color-red-100: #ffebeb;
-    --color-red-200: #ffd6d6;
-    --color-red-300: #ffc2c2;
-    --color-red-400: #ff9999;
-    --color-red-500: #ff8585;
-    --color-red-600: #ff7070;
-    --color-red-700: #ff5c5c;
-    --color-red-800: #ff4747;
-    --color-red-900: #ff3333;
-
-    --color-green-100: #dafceb;
-    --color-green-200: #b5f8d8;
-    --color-green-300: #7df2bc;
-    --color-green-400: #6af0b2;
-    --color-green-500: #58eea8;
-    --color-green-600: #33eb95;
-    --color-green-700: #20e98b;
-    --color-green-800: #16df81;
-    --color-green-900: #14cc76;
-
-    --color-orange-100: #fff8eb;
-    --color-orange-200: #fee9c2;
-    --color-orange-300: #fee2ae;
-    --color-orange-400: #fedb9a;
-    --color-orange-500: #fed485;
-    --color-orange-600: #fecd72;
-    --color-orange-700: #fdc55d;
-    --color-orange-800: #fdbe49;
-    --color-orange-900: #fdb021;
-
-    --color-pink-100: #ffebf2;
-    --color-pink-200: #ffc2d8;
-    --color-pink-300: #ffadcb;
-    --color-pink-400: #ff85b1;
-    --color-pink-500: #ff70a5;
-    --color-pink-600: #ff5c98;
-    --color-pink-700: #ff337e;
-    --color-pink-800: #ff1f71;
-    --color-pink-900: #ff005c;
-
-    /* DESIGN TOKEN COLORS */
-    --border: var(--color-grey-300);
+html {
+  background-color: var(--color-white);
+  color: var(--color-grey-900);
+  @variant dark {
+    background-color: var(--color-grey-900);
+    color: var(--color-white);
   }
 }

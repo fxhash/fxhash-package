@@ -1,0 +1,15 @@
+@import "./color.css";
+@import "./typography.css";
+@import "./background.css";
+@import "./animation.css";
+
+@theme {
+  --spacing-15: "60px";
+  --spacing-19: "76px";
+  --spacing-25: "100px";
+  --spacing-30: "120px";
+
+  --transition-delay-2000: 2000ms;
+
+  --z-index-100: 100;
+}
