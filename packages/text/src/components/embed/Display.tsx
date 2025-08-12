@@ -8,7 +8,7 @@ export interface EmbedProps {
   slateElement?: any
 }
 
-export function EmbedDisplay(props: EmbedProps) {
+export function EmbedDisplay(props: EmbedProps): JSX.Element {
   const { href, children } = props
   return (
     <figure>
