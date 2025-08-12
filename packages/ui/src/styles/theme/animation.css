@@ -1,10 +1,6 @@
 @theme {
   --animate-collapsible-down: collapsible-down 0.2s ease-out;
-  --animate-collapsible-up: collapsible-up 0.2s ease-out;
-  --animate-gradient-loader: gradient-loader 2s infinite ease-out forwards;
-  --animate-ticker-left: ticker-left 60s linear infinite;
 
-  /* keyframes */
   @keyframes collapsible-down {
     from {
       height: 0;
@@ -14,6 +10,7 @@
     }
   }
 
+  --animate-collapsible-up: collapsible-up 0.2s ease-out;
   @keyframes collapsible-up {
     from {
       height: var(--radix-collapsible-content-height);
@@ -23,6 +20,7 @@
     }
   }
 
+  --animate-gradient-loader: gradient-loader 2s infinite ease-out forwards;
   @keyframes gradient-loader {
     0% {
       background-position: 0 100%;
@@ -32,6 +30,7 @@
     }
   }
 
+  --animate-ticker-left: ticker-left 60s linear infinite;
   @keyframes ticker-left {
     0% {
       transform: translateX(0);

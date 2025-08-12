@@ -20,18 +20,13 @@
   --leading-8: "44px";
   --leading-9: "52px";
   --leading-10: "64px";
+}
 
+/*
+ * https://tailwindcss.com/docs/theme#referencing-other-variables
+ */
+@theme inline {
   --font-sans: var(--font-dwight), ui-sans-serif, system-ui, sans-serif;
   --font-instrument-serif:
     var(--font-instrument-serif), ui-serif, Georgia, serif;
-
-  --font-vertex-sans:
-    HelveticaNeue, "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
-    sans-serif;
-  --font-vertex-sans-2:
-    var(--font-inter), HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
-    "Lucida Grande", sans-serif;
-  --font-vertex-mono:
-    var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
 }

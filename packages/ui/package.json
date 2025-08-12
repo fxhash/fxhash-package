@@ -5,9 +5,7 @@
   "private": true,
   "scripts": {
     "build": "tsdown src/index.ts --format esm,cjs --dts --clean",
-    "dev": "tsdown src/index.ts --format esm,cjs --dts --watch",
-    "build:css": "postcss src/styles/globals.css -o dist/styles/globals.css --env production",
-    "build:all": "npm run build && npm run build:css"
+    "dev": "tsdown src/index.ts --format esm,cjs --dts --watch"
   },
   "dependencies": {
     "@radix-ui/react-aspect-ratio": "1.1.7",
@@ -18,10 +16,7 @@
     "@tabler/icons-react": "3.31.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
-    "date-fns": "4.1.0",
     "next-themes": "0.4.6",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
     "sonner": "2.0.6",
     "tailwind-merge": "3.3.1",
     "tailwindcss-animate": "1.0.7",
@@ -39,14 +34,18 @@
     "postcss-cli": "11.0.1",
     "tailwindcss": "4.1.11",
     "tailwindcss-animate": "1.0.7",
-    "tsdown": "0.13.0",
+    "tsdown": "0.14.0",
     "typescript": "5.8.2"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./styles": "./src/styles/index.css"
+    "./styles.css": "./src/styles/index.css"
   }
 }
