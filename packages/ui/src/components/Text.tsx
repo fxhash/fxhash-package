@@ -44,7 +44,7 @@ const textVariants = cva("", {
 })
 
 export type TextElement = React.ElementRef<"span">
-interface TextOwnProps extends VariantProps<typeof textVariants> {}
+type TextOwnProps = VariantProps<typeof textVariants>
 type TextAsChildProps = {
   asChild?: boolean
   as?: never
