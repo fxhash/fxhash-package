@@ -2,32 +2,32 @@
   "name": "@fxhash/eslint-config",
   "version": "2.0.0",
   "author": "fxhash",
-  "type": "module",
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "exports": {
     ".": "./src/legacy.js",
     "./next": "./src/index.js"
-  },
-  "peerDependencies": {
-    "eslint": "^8.57.0 || ^9.25.1",
-    "@eslint/js": "9.25.1",
-    "typescript-eslint": "8.39.1",
-    "typescript": "5.8.2",
-    "eslint-plugin-better-tailwindcss": "3.4.4"
-  },
-  "peerDependenciesMeta": {
-    "eslint-plugin-better-tailwindcss": {
-      "optional": true
-    }
-  },
-  "engines": {
-    "node": ">=18.18.0"
   },
   "keywords": [
     "eslint",
     "eslintconfig"
   ],
   "license": "MIT",
+  "peerDependencies": {
+    "@eslint/js": "9.25.1",
+    "eslint": "^8.57.0 || ^9.25.1",
+    "eslint-plugin-better-tailwindcss": "3.4.4",
+    "typescript": "5.8.2",
+    "typescript-eslint": "8.39.1"
+  },
+  "peerDependenciesMeta": {
+    "eslint-plugin-better-tailwindcss": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "type": "module"
 }
