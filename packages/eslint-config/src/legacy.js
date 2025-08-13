@@ -1,3 +1,4 @@
+// Legacy ESLintRC-style shareable config for extends: ["@fxhash/eslint-config/legacy"]
 module.exports = {
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   parser: "@typescript-eslint/parser",
@@ -8,6 +9,6 @@ module.exports = {
   },
   rules: {
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-extra-semi": ["off"],
+    "@typescript-eslint/no-extra-semi": "off",
   },
 }

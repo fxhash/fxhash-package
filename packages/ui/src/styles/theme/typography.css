@@ -1,0 +1,32 @@
+@theme {
+  --text-1: "14px";
+  --text-2: "15px";
+  --text-3: "16px";
+  --text-4: "20px";
+  --text-5: "24px";
+  --text-6: "28px";
+  --text-7: "32px";
+  --text-8: "38px";
+  --text-9: "40px";
+  --text-10: "48px";
+
+  --leading-1: "16px";
+  --leading-2: "20px";
+  --leading-3: "24px";
+  --leading-4: "28px";
+  --leading-5: "32px";
+  --leading-6: "36px";
+  --leading-7: "40px";
+  --leading-8: "44px";
+  --leading-9: "52px";
+  --leading-10: "64px";
+}
+
+/*
+ * https://tailwindcss.com/docs/theme#referencing-other-variables
+ */
+@theme inline {
+  --font-sans: var(--font-dwight), ui-sans-serif, system-ui, sans-serif;
+  --font-instrument-serif:
+    var(--font-instrument-serif), ui-serif, Georgia, serif;
+}
