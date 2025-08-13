@@ -1,18 +1,12 @@
 import js from "@eslint/js"
-import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss"
 import tseslint from "typescript-eslint"
+import { createRequire } from "node:module"
 
 export default tseslint.config(
-  // ESLint's JS recommended rules
   js.configs.recommended,
-  // typescript-eslint's recommended rules (no type-checking)
   tseslint.configs.recommended,
-  // your custom tweaks
   {
-    languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: "module",
-    },
+    languageOptions: { ecmaVersion: 2020, sourceType: "module" },
     rules: {
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-extra-semi": "off",
@@ -26,25 +20,29 @@ export function withTailwind({ entryPoint }) {
       "You must provide an entryPoint for the Tailwind CSS plugin"
     )
   }
+
+  const require = createRequire(import.meta.url)
+  let plugin
+  try {
+    // load only if the caller opts in
+    plugin = require("eslint-plugin-better-tailwindcss")
+  } catch {
+    throw new Error(
+      'Missing peer "eslint-plugin-better-tailwindcss". Install it in your project: npm i -D eslint-plugin-better-tailwindcss'
+    )
+  }
+
   return {
-    plugins: {
-      "better-tailwindcss": eslintPluginBetterTailwindcss,
-    },
+    plugins: { "better-tailwindcss": plugin },
     settings: {
-      "better-tailwindcss": {
-        entryPoint,
-      },
+      "better-tailwindcss": { entryPoint },
     },
     rules: {
-      ...eslintPluginBetterTailwindcss.configs["recommended-error"].rules,
+      ...plugin.configs["recommended-error"].rules,
       "better-tailwindcss/enforce-consistent-line-wrapping": "off",
       "better-tailwindcss/no-unregistered-classes": [
-        // TODO do a pass at all the classes that thrown an error as they should be removed
-        // Once this is done, we can enable this rule
         "off",
-        {
-          ignore: ["not-prose", "prose-legal"],
-        },
+        { ignore: ["not-prose", "prose-legal"] },
       ],
     },
   }
