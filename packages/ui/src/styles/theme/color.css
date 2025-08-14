@@ -71,9 +71,8 @@
   --color-black: var(--color-grey-900);
 }
 
-@variant dark {
-  @theme {
-    /* DESIGN TOKEN COLORS */
+@layer base {
+  @variant dark {
     --color-border: var(--color-grey-600);
   }
 }
