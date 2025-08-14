@@ -1,7 +1,7 @@
 /* Base container styles */
 @utility container {
   margin-inline: auto; /* center horizontally */
-  padding-inline: 1rem; /* 24px left/right padding */
+  padding-inline: 1.5rem; /* 24px left/right padding */
   max-width: 1920px; /* default max width */
 }
 
