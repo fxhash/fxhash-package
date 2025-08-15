@@ -63,14 +63,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./components": {
-      "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js"
-    },
-    "./components/*": {
-      "types": "./dist/components/*.d.ts",
-      "import": "./dist/components/*.js"
-    },
     "./styles.css": "./src/styles/index.css"
   },
   "peerDependencies": {
@@ -83,6 +75,7 @@
       "optional": false
     }
   },
+  "sideEffects": false,
   "private": true,
   "scripts": {
     "build": "tsdown",
