@@ -75,11 +75,11 @@
       "optional": false
     }
   },
-  "sideEffects": false,
   "private": true,
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown"
   },
+  "sideEffects": false,
   "type": "module"
 }
