@@ -3532,6 +3532,7 @@ export type UpdateProfileOutput = {
 export type UpdateProjectInput = {
   cidMetadata: Scalars['String']['input'];
   projectId: Scalars['String']['input'];
+  replace?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** columns and relationships of "UserAccount" */

@@ -4062,6 +4062,7 @@ type UpdateProfileOutput {
 input UpdateProjectInput {
   cidMetadata: String!
   projectId: String!
+  replace: Boolean
 }
 
 """
