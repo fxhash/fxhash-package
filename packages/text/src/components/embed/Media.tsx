@@ -52,7 +52,7 @@ export const EmbedMediaDisplay = ({
   href,
   children,
   showNotFound,
-}: EmbedMediaProps) => {
+}: EmbedMediaProps): JSX.Element => {
   const player = Object.values(mediaPlayers).find(player => {
     return player.check(href)
   })

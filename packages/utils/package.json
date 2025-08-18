@@ -9,7 +9,7 @@
   "devDependencies": {
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "tsdown": "0.13.0",
+    "tsdown": "0.14.1",
     "typescript": "5.8.2",
     "vitest": "3.2.4"
   },
