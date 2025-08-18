@@ -4886,6 +4886,7 @@ type UpdateProfileOutput {
 input UpdateProjectInput {
   cidMetadata: String!
   projectId: String!
+  replace: Boolean
 }
 
 """
@@ -13096,6 +13097,36 @@ type generative_token {
   version: generative_token_version!
 
   """
+  An array relationship
+  """
+  version_history(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_version_history_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_version_history_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_version_history_bool_exp
+  ): [generative_token_version_history!]!
+
+  """
   An object relationship
   """
   wallet_account: wallet_account
@@ -13277,6 +13308,7 @@ input generative_token_bool_exp {
   updated_at: timestamptz_comparison_exp
   user: user_bool_exp
   version: generative_token_version_comparison_exp
+  version_history: generative_token_version_history_bool_exp
   wallet_account: wallet_account_bool_exp
 }
 
@@ -13836,6 +13868,7 @@ input generative_token_order_by {
   updated_at: order_by
   user: user_order_by
   version: order_by
+  version_history_aggregate: generative_token_version_history_aggregate_order_by
   wallet_account: wallet_account_order_by
 }
 
@@ -14369,6 +14402,220 @@ input generative_token_version_comparison_exp {
   _lte: generative_token_version
   _neq: generative_token_version
   _nin: [generative_token_version!]
+}
+
+"""
+columns and relationships of "generative_token_version_history"
+"""
+type generative_token_version_history {
+  created_at: timestamptz!
+  id: Int!
+  last_iteration: Int!
+  metadata_uri: String!
+  token_id: String!
+  version: Int!
+}
+
+"""
+order by aggregate values of table "generative_token_version_history"
+"""
+input generative_token_version_history_aggregate_order_by {
+  avg: generative_token_version_history_avg_order_by
+  count: order_by
+  max: generative_token_version_history_max_order_by
+  min: generative_token_version_history_min_order_by
+  stddev: generative_token_version_history_stddev_order_by
+  stddev_pop: generative_token_version_history_stddev_pop_order_by
+  stddev_samp: generative_token_version_history_stddev_samp_order_by
+  sum: generative_token_version_history_sum_order_by
+  var_pop: generative_token_version_history_var_pop_order_by
+  var_samp: generative_token_version_history_var_samp_order_by
+  variance: generative_token_version_history_variance_order_by
+}
+
+"""
+order by avg() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_avg_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "generative_token_version_history". All fields are combined with a logical 'AND'.
+"""
+input generative_token_version_history_bool_exp {
+  _and: [generative_token_version_history_bool_exp!]
+  _not: generative_token_version_history_bool_exp
+  _or: [generative_token_version_history_bool_exp!]
+  created_at: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  last_iteration: Int_comparison_exp
+  metadata_uri: String_comparison_exp
+  token_id: String_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""
+order by max() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_max_order_by {
+  created_at: order_by
+  id: order_by
+  last_iteration: order_by
+  metadata_uri: order_by
+  token_id: order_by
+  version: order_by
+}
+
+"""
+order by min() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_min_order_by {
+  created_at: order_by
+  id: order_by
+  last_iteration: order_by
+  metadata_uri: order_by
+  token_id: order_by
+  version: order_by
+}
+
+"""
+Ordering options when selecting data from "generative_token_version_history".
+"""
+input generative_token_version_history_order_by {
+  created_at: order_by
+  id: order_by
+  last_iteration: order_by
+  metadata_uri: order_by
+  token_id: order_by
+  version: order_by
+}
+
+"""
+select columns of table "generative_token_version_history"
+"""
+enum generative_token_version_history_select_column {
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  last_iteration
+
+  """
+  column name
+  """
+  metadata_uri
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  version
+}
+
+"""
+order by stddev() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_stddev_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_stddev_pop_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_stddev_samp_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+Streaming cursor of the table "generative_token_version_history"
+"""
+input generative_token_version_history_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: generative_token_version_history_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input generative_token_version_history_stream_cursor_value_input {
+  created_at: timestamptz
+  id: Int
+  last_iteration: Int
+  metadata_uri: String
+  token_id: String
+  version: Int
+}
+
+"""
+order by sum() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_sum_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+order by var_pop() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_var_pop_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+order by var_samp() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_var_samp_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
+}
+
+"""
+order by variance() on columns of table "generative_token_version_history"
+"""
+input generative_token_version_history_variance_order_by {
+  id: order_by
+  last_iteration: order_by
+  version: order_by
 }
 
 """
@@ -24855,6 +25102,43 @@ type onchain_query {
   ): generative_token_collected_aggregate!
 
   """
+  fetch data from the table: "generative_token_version_history"
+  """
+  generative_token_version_history(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_version_history_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_version_history_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_version_history_bool_exp
+  ): [generative_token_version_history!]!
+
+  """
+  fetch data from the table: "generative_token_version_history" using primary key columns
+  """
+  generative_token_version_history_by_pk(
+    id: Int!
+  ): generative_token_version_history
+
+  """
   fetch data from the table: "gentk_assign"
   """
   gentk_assign(
@@ -28170,6 +28454,63 @@ type onchain_subscription {
     """
     where: generative_token_bool_exp
   ): [generative_token!]!
+
+  """
+  fetch data from the table: "generative_token_version_history"
+  """
+  generative_token_version_history(
+    """
+    distinct select on columns
+    """
+    distinct_on: [generative_token_version_history_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [generative_token_version_history_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_version_history_bool_exp
+  ): [generative_token_version_history!]!
+
+  """
+  fetch data from the table: "generative_token_version_history" using primary key columns
+  """
+  generative_token_version_history_by_pk(
+    id: Int!
+  ): generative_token_version_history
+
+  """
+  fetch data from the table in a streaming manner: "generative_token_version_history"
+  """
+  generative_token_version_history_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [generative_token_version_history_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: generative_token_version_history_bool_exp
+  ): [generative_token_version_history!]!
 
   """
   fetch data from the table: "gentk_assign"
