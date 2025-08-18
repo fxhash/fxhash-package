@@ -18,13 +18,14 @@
     "@taquito/taquito": "20.1.2"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@wagmi/connectors": "5.9.1",
     "@wagmi/core": "2.18.1",
     "connectkit": "1.9.1",
-    "tsdown": "0.13.0",
+    "tsdown": "0.14.1",
     "typescript": "5.8.2",
     "viem": "2.33.2",
     "wagmi": "2.16.1"

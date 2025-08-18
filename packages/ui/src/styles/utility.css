@@ -1,0 +1,18 @@
+/* Base container styles */
+@utility container {
+  margin-inline: auto; /* center horizontally */
+  padding-inline: 1.5rem; /* 24px left/right padding */
+  max-width: 1920px; /* default max width */
+}
+
+/* Dark theme via class */
+@custom-variant dark (&:where(.dark, .dark *));
+/* Helpers for data classes */
+@custom-variant data-vertical (&[data-orientation~="vertical"]);
+@custom-variant data-horizontal (&[data-orientation~="horizontal"]);
+@custom-variant data-active (&[data-state~="active"]);
+@custom-variant data-open (&[data-state~="open"]);
+@custom-variant data-close (&[data-state~="close"]);
+@custom-variant data-checked (&[data-state~="checked"]);
+@custom-variant data-unchecked (&[data-state~="unchecked"]);
+@custom-variant data-disabled (&[data-state~="disabled"]);

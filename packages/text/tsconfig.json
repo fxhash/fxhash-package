@@ -7,6 +7,9 @@
       "@/*": ["./src/*"]
     },
     "outDir": "dist",
-    "stripInternal": true
+    "stripInternal": true,
+    "allowJs": false,
+    "declaration": true,
+    "isolatedDeclarations": true
   }
 }

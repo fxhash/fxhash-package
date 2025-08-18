@@ -6,12 +6,12 @@
     "@fxhash/config": "workspace:*",
     "@urql/core": "4.1.4",
     "deepmerge": "4.3.1",
-    "graphql": "16.10.0"
+    "graphql": "16.11.0"
   },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",
     "@types/node": "20.11.30",
-    "tsdown": "0.13.0",
+    "tsdown": "0.14.1",
     "typescript": "5.8.2"
   },
   "exports": {
