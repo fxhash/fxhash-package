@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 import { ComponentPropsWithout, RemovedProps } from "./helpers"
-import { cn } from "@/lib/cn"
+import { cn } from "@/lib"
 
 const Tabs = TabsPrimitive.Root
 
@@ -37,7 +37,8 @@ const TabsTrigger = React.forwardRef<TabsTriggerElement, TabsTriggerProps>(
         asChild={false}
         ref={forwardedRef}
         className={cn(
-          "ring-offset-background relative inline-flex items-center justify-center py-1 text-2 whitespace-nowrap text-grey-500 uppercase transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+          "ring-offset-background relative inline-flex items-center justify-center py-1 text-2 whitespace-nowrap text-grey-500 transition-all focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
+          "border-b border-b-border data-[state=active]:border-b-grey-300",
           "data-[state=active]:text-grey-900 dark:data-[state=active]:text-white",
           className
         )}
@@ -58,10 +59,7 @@ const TabsContent = React.forwardRef<TabsContentElement, TabsContentProps>(
       <TabsPrimitive.Content
         {...contentProps}
         ref={forwardedRef}
-        className={cn(
-          "focus-visible:outline-2 focus-visible:outline-grey-400",
-          className
-        )}
+        className={cn("", className)}
       />
     )
   }
