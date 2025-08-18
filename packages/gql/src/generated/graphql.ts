@@ -3165,6 +3165,10 @@ export type Project_Updates = {
   where: Project_Bool_Exp;
 };
 
+export type ReassignIterationInput = {
+  iterationId: Scalars['String']['input'];
+};
+
 export type RefreshInput = {
   refreshToken: Scalars['String']['input'];
 };
@@ -8996,6 +9000,8 @@ export type Generative_Token = {
   /** An object relationship */
   user?: Maybe<User>;
   version: Scalars['generative_token_version']['output'];
+  /** An array relationship */
+  version_history: Array<Generative_Token_Version_History>;
   /** An object relationship */
   wallet_account?: Maybe<Wallet_Account>;
 };
@@ -9239,6 +9245,16 @@ export type Generative_TokenTransactionsArgs = {
   where?: InputMaybe<Transaction_Bool_Exp>;
 };
 
+
+/** columns and relationships of "generative_token" */
+export type Generative_TokenVersion_HistoryArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Version_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Version_History_Order_By>>;
+  where?: InputMaybe<Generative_Token_Version_History_Bool_Exp>;
+};
+
 /** aggregated selection of "generative_token" */
 export type Generative_Token_Aggregate = {
   __typename?: 'generative_token_aggregate';
@@ -9410,6 +9426,7 @@ export type Generative_Token_Bool_Exp = {
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Generative_Token_Version_Comparison_Exp>;
+  version_history?: InputMaybe<Generative_Token_Version_History_Bool_Exp>;
   wallet_account?: InputMaybe<Wallet_Account_Bool_Exp>;
 };
 
@@ -9884,6 +9901,7 @@ export type Generative_Token_Order_By = {
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
+  version_history_aggregate?: InputMaybe<Generative_Token_Version_History_Aggregate_Order_By>;
   wallet_account?: InputMaybe<Wallet_Account_Order_By>;
 };
 
@@ -10224,6 +10242,165 @@ export type Generative_Token_Version_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['generative_token_version']['input']>;
   _neq?: InputMaybe<Scalars['generative_token_version']['input']>;
   _nin?: InputMaybe<Array<Scalars['generative_token_version']['input']>>;
+};
+
+/** columns and relationships of "generative_token_version_history" */
+export type Generative_Token_Version_History = {
+  __typename?: 'generative_token_version_history';
+  created_at: Scalars['timestamptz']['output'];
+  id: Scalars['Int']['output'];
+  last_iteration: Scalars['Int']['output'];
+  metadata_uri: Scalars['String']['output'];
+  token_id: Scalars['String']['output'];
+  version: Scalars['Int']['output'];
+};
+
+/** order by aggregate values of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Aggregate_Order_By = {
+  avg?: InputMaybe<Generative_Token_Version_History_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Generative_Token_Version_History_Max_Order_By>;
+  min?: InputMaybe<Generative_Token_Version_History_Min_Order_By>;
+  stddev?: InputMaybe<Generative_Token_Version_History_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Generative_Token_Version_History_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Generative_Token_Version_History_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Generative_Token_Version_History_Sum_Order_By>;
+  var_pop?: InputMaybe<Generative_Token_Version_History_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Generative_Token_Version_History_Var_Samp_Order_By>;
+  variance?: InputMaybe<Generative_Token_Version_History_Variance_Order_By>;
+};
+
+/** order by avg() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Avg_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "generative_token_version_history". All fields are combined with a logical 'AND'. */
+export type Generative_Token_Version_History_Bool_Exp = {
+  _and?: InputMaybe<Array<Generative_Token_Version_History_Bool_Exp>>;
+  _not?: InputMaybe<Generative_Token_Version_History_Bool_Exp>;
+  _or?: InputMaybe<Array<Generative_Token_Version_History_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  last_iteration?: InputMaybe<Int_Comparison_Exp>;
+  metadata_uri?: InputMaybe<String_Comparison_Exp>;
+  token_id?: InputMaybe<String_Comparison_Exp>;
+  version?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** order by max() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  metadata_uri?: InputMaybe<Order_By>;
+  token_id?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** order by min() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  metadata_uri?: InputMaybe<Order_By>;
+  token_id?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "generative_token_version_history". */
+export type Generative_Token_Version_History_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  metadata_uri?: InputMaybe<Order_By>;
+  token_id?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "generative_token_version_history" */
+export enum Generative_Token_Version_History_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LastIteration = 'last_iteration',
+  /** column name */
+  MetadataUri = 'metadata_uri',
+  /** column name */
+  TokenId = 'token_id',
+  /** column name */
+  Version = 'version'
+}
+
+/** order by stddev() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Stddev_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Stddev_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Stddev_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "generative_token_version_history" */
+export type Generative_Token_Version_History_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Generative_Token_Version_History_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Generative_Token_Version_History_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  last_iteration?: InputMaybe<Scalars['Int']['input']>;
+  metadata_uri?: InputMaybe<Scalars['String']['input']>;
+  token_id?: InputMaybe<Scalars['String']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** order by sum() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Sum_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Var_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Var_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
+};
+
+/** order by variance() on columns of table "generative_token_version_history" */
+export type Generative_Token_Version_History_Variance_Order_By = {
+  id?: InputMaybe<Order_By>;
+  last_iteration?: InputMaybe<Order_By>;
+  version?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "gentk_assign" */
@@ -13343,6 +13520,7 @@ export type Mutation_Root = {
   logout?: Maybe<LogoutResult>;
   offchain?: Maybe<Offchain_Mutation_Frontend>;
   prepare_redemption: PrepareRedemptionOutput;
+  reassign_iteration: Scalars['Boolean']['output'];
   refresh?: Maybe<AuthenticationResult>;
   request_mint?: Maybe<Array<RequestMintResult>>;
   request_transfer_wallet: RequestTransferWalletOutput;
@@ -13396,6 +13574,12 @@ export type Mutation_RootLogoutArgs = {
 /** mutation root */
 export type Mutation_RootPrepare_RedemptionArgs = {
   input: PrepareRedemptionInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootReassign_IterationArgs = {
+  input: ReassignIterationInput;
 };
 
 
@@ -16396,6 +16580,10 @@ export type Onchain_Query = {
   generative_token_collected: Array<Generative_Token_Collected>;
   /** fetch aggregated fields from the table: "generative_token_collected" */
   generative_token_collected_aggregate: Generative_Token_Collected_Aggregate;
+  /** fetch data from the table: "generative_token_version_history" */
+  generative_token_version_history: Array<Generative_Token_Version_History>;
+  /** fetch data from the table: "generative_token_version_history" using primary key columns */
+  generative_token_version_history_by_pk?: Maybe<Generative_Token_Version_History>;
   /** fetch data from the table: "gentk_assign" */
   gentk_assign: Array<Gentk_Assign>;
   /** fetch data from the table: "gentk_assign" using primary key columns */
@@ -17070,6 +17258,20 @@ export type Onchain_QueryGenerative_Token_Collected_AggregateArgs = {
 };
 
 
+export type Onchain_QueryGenerative_Token_Version_HistoryArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Version_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Version_History_Order_By>>;
+  where?: InputMaybe<Generative_Token_Version_History_Bool_Exp>;
+};
+
+
+export type Onchain_QueryGenerative_Token_Version_History_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type Onchain_QueryGentk_AssignArgs = {
   distinct_on?: InputMaybe<Array<Gentk_Assign_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -17730,6 +17932,12 @@ export type Onchain_Subscription = {
   generative_token_collected_stream: Array<Generative_Token_Collected>;
   /** fetch data from the table in a streaming manner: "generative_token" */
   generative_token_stream: Array<Generative_Token>;
+  /** fetch data from the table: "generative_token_version_history" */
+  generative_token_version_history: Array<Generative_Token_Version_History>;
+  /** fetch data from the table: "generative_token_version_history" using primary key columns */
+  generative_token_version_history_by_pk?: Maybe<Generative_Token_Version_History>;
+  /** fetch data from the table in a streaming manner: "generative_token_version_history" */
+  generative_token_version_history_stream: Array<Generative_Token_Version_History>;
   /** fetch data from the table: "gentk_assign" */
   gentk_assign: Array<Gentk_Assign>;
   /** fetch data from the table: "gentk_assign" using primary key columns */
@@ -18690,6 +18898,27 @@ export type Onchain_SubscriptionGenerative_Token_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Generative_Token_Stream_Cursor_Input>>;
   where?: InputMaybe<Generative_Token_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionGenerative_Token_Version_HistoryArgs = {
+  distinct_on?: InputMaybe<Array<Generative_Token_Version_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Generative_Token_Version_History_Order_By>>;
+  where?: InputMaybe<Generative_Token_Version_History_Bool_Exp>;
+};
+
+
+export type Onchain_SubscriptionGenerative_Token_Version_History_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Onchain_SubscriptionGenerative_Token_Version_History_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Generative_Token_Version_History_Stream_Cursor_Input>>;
+  where?: InputMaybe<Generative_Token_Version_History_Bool_Exp>;
 };
 
 
@@ -21885,6 +22114,13 @@ export type UpdateProjectMetadataMutationVariables = Exact<{
 
 export type UpdateProjectMetadataMutation = { __typename?: 'mutation_root', update_project: boolean };
 
+export type ReassignIterationMutationVariables = Exact<{
+  input: ReassignIterationInput;
+}>;
+
+
+export type ReassignIterationMutation = { __typename?: 'mutation_root', reassign_iteration: boolean };
+
 export type PrepareRedemptionMutationVariables = Exact<{
   input: PrepareRedemptionInput;
 }>;
@@ -22058,6 +22294,7 @@ export const GetUserSubmissionsDocument = {"kind":"Document","definitions":[{"ki
 export const CreateProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateProject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"object"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Project_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_Project_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"object"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"projectMedias"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"releaseAt"}}]}}]}}]}}]} as unknown as DocumentNode<CreateProjectMutation, CreateProjectMutationVariables>;
 export const Update_ProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Update_Project"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Project_set_input"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectMedia_insert_input"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProjectCollaborator_insert_input"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offchain"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"delete_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"projectId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"update_Project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectData"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectMedia"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectMedias"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}},{"kind":"Field","name":{"kind":"Name","value":"insert_ProjectCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectCollaborators"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"affected_rows"}}]}}]}}]}}]} as unknown as DocumentNode<Update_ProjectMutation, Update_ProjectMutationVariables>;
 export const UpdateProjectMetadataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateProjectMetadata"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateProjectInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<UpdateProjectMetadataMutation, UpdateProjectMetadataMutationVariables>;
+export const ReassignIterationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ReassignIteration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ReassignIterationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reassign_iteration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<ReassignIterationMutation, ReassignIterationMutationVariables>;
 export const PrepareRedemptionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PrepareRedemption"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PrepareRedemptionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"prepare_redemption"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"payload"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"consumer"}},{"kind":"Field","name":{"kind":"Name","value":"token_id"}},{"kind":"Field","name":{"kind":"Name","value":"options"}},{"kind":"Field","name":{"kind":"Name","value":"salt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"signature"}}]}}]}}]} as unknown as DocumentNode<PrepareRedemptionMutation, PrepareRedemptionMutationVariables>;
 export const LinkWalletToAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LinkWalletToAccount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LinkWalletInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"link_wallet_to_account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<LinkWalletToAccountMutation, LinkWalletToAccountMutationVariables>;
 export const UnlinkWalletFromAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnlinkWalletFromAccount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UnlinkWalletInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unlink_wallet_from_account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<UnlinkWalletFromAccountMutation, UnlinkWalletFromAccountMutationVariables>;
