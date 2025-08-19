@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react"
 import { Link } from "./Link"
-import { cn } from "@/lib"
+import { cn, nl2br as _nl2br } from "@/lib"
 
 interface TruncatedTextProps {
   maxLines: number
@@ -11,6 +11,7 @@ interface TruncatedTextProps {
   openClassName?: string
   lineHeight?: number
   expandable?: boolean
+  nl2br?: boolean
 }
 
 export const TruncatedText = ({
@@ -19,6 +20,7 @@ export const TruncatedText = ({
   maxLines,
   lineHeight = 1.5,
   expandable = true,
+  nl2br,
   children,
 }: TruncatedTextProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -52,7 +54,7 @@ export const TruncatedText = ({
           WebkitBoxOrient: "vertical",
         }}
       >
-        {children}
+        {nl2br && typeof children === "string" ? _nl2br(children) : children}
       </div>
       {expandable && isTruncated && (
         <Link color="grey-light" className="mt-2 underline" asChild>
