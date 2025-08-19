@@ -47,6 +47,7 @@ export const useRuntimeController: UseRuntimeController = ({
       state.inputBytes,
       state.definition,
       state.parentHashes,
+      state.legacy,
       options?.autoRefresh,
       options?.connector,
     ]
