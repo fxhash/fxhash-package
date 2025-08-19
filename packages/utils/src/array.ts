@@ -63,3 +63,26 @@ export function arrayRemoveDuplicates<T = any>(
   }
   return ret
 }
+
+export function extendedRange(
+  arr: number[],
+  total: number,
+  before: number = 5,
+  after: number = 5
+): number[] {
+  if (!arr.length) return []
+
+  const start = Math.max(Math.min(...arr) - before, 0)
+  const end = Math.min(Math.max(...arr) + after, total - 1)
+
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+}
+
+export function mapToIndex(value: number, arrayLength: number): number {
+  if (arrayLength <= 0) {
+    throw new Error("Array length must be greater than 0.")
+  }
+  const clamped = Math.max(0, Math.min(1, value))
+  const index = Math.floor(clamped * arrayLength)
+  return Math.min(index, arrayLength - 1)
+}

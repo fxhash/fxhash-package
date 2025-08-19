@@ -5,7 +5,8 @@
   "dependencies": {
     "@fxhash/config": "workspace:*",
     "@fxhash/utils": "workspace:*",
-    "jwt-decode": "4.0.0"
+    "jwt-decode": "4.0.0",
+    "viem": "2.33.2"
   },
   "devDependencies": {
     "@fxhash/tsconfig": "workspace:*",

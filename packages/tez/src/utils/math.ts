@@ -1,9 +1,5 @@
 import { config } from "@fxhash/config"
 
-// clamps a value x in the range [min, max]
-export const clamp = (x: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, x))
-
 export const lerp = (a: number, b: number, t: number) => (b - a) * t + a
 
 export function getMutezDecimalsNb(x: number): number {
