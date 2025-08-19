@@ -1,4 +1,3 @@
-
 import { SVGProps } from "react"
 
 export function IconFxhashFrame(props: SVGProps<SVGSVGElement>) {
