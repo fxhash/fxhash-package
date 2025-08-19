@@ -113,6 +113,7 @@ export function createRuntimeController(
         )) ||
       {},
     parentHashes: _initial.parentHashes,
+    legacy: _initial.legacy,
   }
 
   const _runtime = runtimeContext({
@@ -267,6 +268,7 @@ export function createRuntimeController(
       snippetVersion: runtimeDefinition.version || "",
       chain: runtimeState.chain,
       parentHashes: runtimeState.parentHashes,
+      legacy: runtimeState.legacy,
     })
   }
 
