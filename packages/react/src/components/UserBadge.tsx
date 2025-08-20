@@ -1,6 +1,11 @@
 "use client"
 
-import { type FragmentType, gql, useFragment } from "@/__generated__"
+import {
+  type FragmentType,
+  gql,
+  useFragment,
+  useFragment as getFragment,
+} from "@/__generated__"
 import { Tag, Text } from "@fxhash/ui"
 import { UserFlag } from "@fxhash/shared"
 import { Fragment, useMemo } from "react"
@@ -23,6 +28,11 @@ export const UserBadgeFragment = gql(/* GraphQL */ `
   }
 `)
 
+type UserHrefData = {
+  username?: string
+  address: string
+}
+
 interface UserBadgeProps {
   className?: string
   user: FragmentType<typeof UserBadgeFragment>
@@ -31,13 +41,13 @@ interface UserBadgeProps {
    * Default is 2.
    */
   maxCollaborators?: number
-  link?: boolean
+  getHref?: (user: UserHrefData) => string
 }
 
 export const UserBadge = ({
   className,
   maxCollaborators = Infinity,
-  link = true,
+  getHref,
   ...props
 }: UserBadgeProps) => {
   const user = useFragment(UserBadgeFragment, props.user)
@@ -65,19 +75,38 @@ export const UserBadge = ({
 
   // override for fxhash user
   if (wallet?.account.username === "fxhash")
-    return <UserDisplay user={user} link={link} className={className} />
+    return (
+      <UserDisplay
+        user={user}
+        href={
+          getHref &&
+          getHref({ address: user.id, username: wallet.account.username })
+        }
+        className={className}
+      />
+    )
 
   const nbCollaborators = user.collaborations.length || 1
   const remainingCollaborators = nbCollaborators - usersToDisplay.length
 
   return (
     <>
-      {usersToDisplay.map((user, i) => (
-        <Fragment key={user.id}>
-          {i > 0 && ", "}
-          <UserDisplay user={user} link={link} className={className} />
-        </Fragment>
-      ))}
+      {usersToDisplay.map((user, i) => {
+        const u = getFragment(UserDisplayFragment, user)
+        return (
+          <Fragment key={user.id}>
+            {i > 0 && ", "}
+            <UserDisplay
+              user={user}
+              href={
+                getHref &&
+                getHref({ address: u.id, username: u.wallet?.account.username })
+              }
+              className={className}
+            />
+          </Fragment>
+        )
+      })}
       {remainingCollaborators > 0 ? (
         <Tag variant="filled" radius="full" className="ml-2">
           <Text>+{remainingCollaborators}</Text>

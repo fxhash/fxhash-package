@@ -25,13 +25,13 @@ export const UserDisplayFragment = gql(/* GraphQL */ `
 interface UserDisplayProps {
   className?: string
   user: FragmentType<typeof UserDisplayFragment>
-  link?: boolean
+  href?: string
 }
 
 export const UserDisplay = ({
   className,
   user: userProps,
-  link = true,
+  href,
 }: UserDisplayProps) => {
   const user = useFragment(UserDisplayFragment, userProps)
 
@@ -52,14 +52,12 @@ export const UserDisplay = ({
     </>
   )
 
-  return link ? (
+  return href ? (
     <Link
       className={cn("inline-flex items-center gap-1 italic", className)}
       asChild
     >
-      <NextLink href={Routes.userProfile({ username: username || address })}>
-        {content}
-      </NextLink>
+      <NextLink href={href}>{content}</NextLink>
     </Link>
   ) : (
     <p className="inline-flex items-center gap-1 italic">{content}</p>
