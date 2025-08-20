@@ -4,8 +4,8 @@
   "dependencies": {
     "@apollo/client": "3.12.11",
     "@fxhash/config": "workspace:*",
-    "@fxhash/eth": "workspace:*",
     "@fxhash/errors": "workspace:*",
+    "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/ui": "workspace:*",
     "@fxhash/utils": "workspace:*",
@@ -32,11 +32,11 @@
   },
   "devDependencies": {
     "@eslint/js": "9.25.1",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "4.8.0",
     "@graphql-typed-document-node/core": "3.2.0",
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "4.1.11",
     "@tailwindcss/typography": "0.5.16",
     "@types/node": "22.14.1",
@@ -68,9 +68,9 @@
   },
   "private": true,
   "scripts": {
+    "build": "tsdown && pnpm generate",
     "dev": "concurrently \"tsdown\" \"pnpm generate --watch\"",
-    "generate": "graphql-codegen --config codegen/codegen.ts",
-    "build": "tsdown && pnpm generate"
+    "generate": "graphql-codegen --config codegen/codegen.ts"
   },
   "sideEffects": false,
   "type": "module"
