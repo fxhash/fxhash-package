@@ -1,3 +1,5 @@
+export * from "./__generated__/index"
+export * from "./__generated__/graphql"
 export * from "./components"
 export * from "./lib"
 export * from "./hooks"
