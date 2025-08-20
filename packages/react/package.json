@@ -4,9 +4,19 @@
   "dependencies": {
     "@apollo/client": "3.12.11",
     "@fxhash/config": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/errors": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/ui": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@tabler/icons-react": "3.31.0",
+    "@tanstack/react-query": "5.69.0",
+    "@uniswap/sdk-core": "7.7.2",
+    "@uniswap/v2-sdk": "4.15.2",
+    "@uniswap/v3-sdk": "3.25.2",
+    "@uniswap/v4-sdk": "1.21.4",
+    "@wagmi/core": "2.18.1",
+    "bignumber.js": "9.3.1",
     "date-fns": "2.30.0",
     "lightweight-charts": "5.0.6",
     "next": "15.4.4",
@@ -14,10 +24,17 @@
     "react-hook-form": "7.51.1",
     "react-plock": "3.5.1",
     "recharts": "2.15.3",
-    "tailwindcss": "4.1.11"
+    "sonner": "2.0.6",
+    "tailwindcss": "4.1.11",
+    "viem": "2.33.2",
+    "wagmi": "2.16.1",
+    "zustand": "4.5.2"
   },
   "devDependencies": {
     "@eslint/js": "9.25.1",
+    "@graphql-codegen/cli": "5.0.5",
+    "@graphql-codegen/client-preset": "4.8.0",
+    "@graphql-typed-document-node/core": "3.2.0",
     "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "4.1.11",
@@ -25,6 +42,7 @@
     "@types/node": "22.14.1",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
+    "concurrently": "9.2.0",
     "eslint": "9.25.1",
     "eslint-plugin-better-tailwindcss": "3.4.4",
     "tsdown": "0.14.1",
@@ -50,8 +68,9 @@
   },
   "private": true,
   "scripts": {
-    "build": "tsdown",
-    "dev": "tsdown"
+    "dev": "concurrently \"tsdown\" \"pnpm generate --watch\"",
+    "generate": "graphql-codegen --config codegen/codegen.ts",
+    "build": "tsdown && pnpm generate"
   },
   "sideEffects": false,
   "type": "module"

@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@fxhash/ui"
 import { TypedDocumentNode, useQuery } from "@apollo/client"
 import {
