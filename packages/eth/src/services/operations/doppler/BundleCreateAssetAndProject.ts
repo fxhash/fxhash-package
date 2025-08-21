@@ -8,6 +8,13 @@ import { getCurrentChain } from "@/services/Wallet.js"
 import { fxDopplerFactoryAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
+export type PausedFunctions =
+  | "evolve"
+  | "mint"
+  | "liquidate"
+  | "lockMetadata"
+  | "regenerate"
+
 export type TBundleCreateAssetAndProjectEthOperationParams = {
   // Creation data to pass to the Airlock contract
   createData: {
@@ -41,7 +48,7 @@ export type TBundleCreateAssetAndProjectEthOperationParams = {
     mintFee: bigint
     feeGrowthRate: bigint
     tagIds: bigint[]
-    pausedFunctions: string[]
+    pausedFunctions: PausedFunctions[]
   }
   // Minting configuration
   mintInfo: {
