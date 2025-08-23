@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
+import { cva, type VariantProps } from "class-variance-authority"
 import { ComponentPropsWithout, RemovedProps } from "./helpers"
 import { cn } from "@/lib"
 
@@ -26,22 +27,37 @@ const TabsList = React.forwardRef<TabsListElement, TabsListProps>(
 )
 TabsList.displayName = "Tabs.List"
 
+const tabsTriggerVariants = cva(
+  cn(
+    "ring-offset-background relative inline-flex items-center justify-center py-1 text-2 whitespace-nowrap text-grey-500 transition-all focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
+    "data-[state=active]:text-grey-900 dark:data-[state=active]:text-white"
+  ),
+  {
+    variants: {
+      variant: {
+        default: "",
+        underlined:
+          "border-b border-b-border data-[state=active]:border-b-grey-300",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
 type TabsTriggerElement = React.ElementRef<typeof TabsPrimitive.Trigger>
 interface TabsTriggerProps
-  extends ComponentPropsWithout<typeof TabsPrimitive.Trigger, RemovedProps> {}
+  extends ComponentPropsWithout<typeof TabsPrimitive.Trigger, RemovedProps>,
+    VariantProps<typeof tabsTriggerVariants> {}
 const TabsTrigger = React.forwardRef<TabsTriggerElement, TabsTriggerProps>(
-  ({ className, ...triggerProps }, forwardedRef) => {
+  ({ className, variant, ...triggerProps }, forwardedRef) => {
     return (
       <TabsPrimitive.Trigger
         {...triggerProps}
         asChild={false}
         ref={forwardedRef}
-        className={cn(
-          "ring-offset-background relative inline-flex items-center justify-center py-1 text-2 whitespace-nowrap text-grey-500 transition-all focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
-          "border-b border-b-border data-[state=active]:border-b-grey-300",
-          "data-[state=active]:text-grey-900 dark:data-[state=active]:text-white",
-          className
-        )}
+        className={cn(tabsTriggerVariants({ variant }), className)}
       />
     )
   }
