@@ -1056,8 +1056,6 @@ export const fxDopplerFactoryAbi = [
         type: "tuple",
         components: [
           { name: "baseURI", internalType: "string", type: "string" },
-          { name: "renderer", internalType: "address", type: "address" },
-          { name: "versionManager", internalType: "address", type: "address" },
           { name: "feeCurrency", internalType: "address", type: "address" },
           { name: "mintFee", internalType: "uint256", type: "uint256" },
           { name: "feeGrowthRate", internalType: "uint256", type: "uint256" },
@@ -1081,6 +1079,83 @@ export const fxDopplerFactoryAbi = [
       },
       { name: "_commands", internalType: "bytes", type: "bytes" },
       { name: "_inputs", internalType: "bytes[]", type: "bytes[]" },
+    ],
+    name: "bundleCreateAssetAndProject",
+    outputs: [
+      { name: "asset", internalType: "address", type: "address" },
+      { name: "projectToken", internalType: "address", type: "address" },
+    ],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "_createData",
+        internalType: "struct Airlock.CreateParams",
+        type: "tuple",
+        components: [
+          { name: "initialSupply", internalType: "uint256", type: "uint256" },
+          { name: "numTokensToSell", internalType: "uint256", type: "uint256" },
+          { name: "numeraire", internalType: "address", type: "address" },
+          { name: "tokenFactory", internalType: "address", type: "address" },
+          { name: "tokenFactoryData", internalType: "bytes", type: "bytes" },
+          {
+            name: "governanceFactory",
+            internalType: "address",
+            type: "address",
+          },
+          {
+            name: "governanceFactoryData",
+            internalType: "bytes",
+            type: "bytes",
+          },
+          { name: "poolInitializer", internalType: "address", type: "address" },
+          { name: "poolInitializerData", internalType: "bytes", type: "bytes" },
+          {
+            name: "liquidityMigrator",
+            internalType: "address",
+            type: "address",
+          },
+          {
+            name: "liquidityMigratorData",
+            internalType: "bytes",
+            type: "bytes",
+          },
+          { name: "integrator", internalType: "address", type: "address" },
+          { name: "salt", internalType: "bytes32", type: "bytes32" },
+        ],
+      },
+      { name: "_name", internalType: "string", type: "string" },
+      { name: "_symbol", internalType: "string", type: "string" },
+      { name: "_owner", internalType: "address", type: "address" },
+      {
+        name: "_initParams",
+        internalType: "struct IProjectTokenV2.InitParams",
+        type: "tuple",
+        components: [
+          { name: "baseURI", internalType: "string", type: "string" },
+          { name: "feeCurrency", internalType: "address", type: "address" },
+          { name: "mintFee", internalType: "uint256", type: "uint256" },
+          { name: "feeGrowthRate", internalType: "uint256", type: "uint256" },
+          { name: "tagIds", internalType: "uint256[]", type: "uint256[]" },
+          {
+            name: "pausedFunctions",
+            internalType: "string[]",
+            type: "string[]",
+          },
+        ],
+      },
+      {
+        name: "_mintInfo",
+        internalType: "struct IProjectTokenV2.MintInfo",
+        type: "tuple",
+        components: [
+          { name: "price", internalType: "uint256", type: "uint256" },
+          { name: "maxSupply", internalType: "uint256", type: "uint256" },
+          { name: "startTime", internalType: "uint256", type: "uint256" },
+        ],
+      },
     ],
     name: "bundleCreateAssetAndProject",
     outputs: [
@@ -1121,6 +1196,8 @@ export const fxDopplerFactoryAbi = [
       { name: "_fxToken", internalType: "address", type: "address" },
       { name: "_weth", internalType: "address", type: "address" },
       { name: "_admin", internalType: "address", type: "address" },
+      { name: "_renderer", internalType: "address", type: "address" },
+      { name: "_versionManager", internalType: "address", type: "address" },
     ],
     name: "initialize",
     outputs: [],
@@ -1164,6 +1241,13 @@ export const fxDopplerFactoryAbi = [
     name: "recoverToken",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "renderer",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -1220,12 +1304,35 @@ export const fxDopplerFactoryAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "_renderer", internalType: "address", type: "address" }],
+    name: "updateRenderer",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [
       { name: "_newUniversalRouter", internalType: "address", type: "address" },
     ],
     name: "updateUniversalRouter",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_versionManager", internalType: "address", type: "address" },
+    ],
+    name: "updateVersionManager",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "versionManager",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -1360,25 +1467,6 @@ export const fxDopplerFactoryAbi = [
     type: "event",
     anonymous: false,
     inputs: [
-      {
-        name: "oldProjectFactoryV2",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-      {
-        name: "newProjectFactoryV2",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "ProjectFactoryV2Updated",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
       { name: "user", internalType: "address", type: "address", indexed: true },
       {
         name: "projectToken",
@@ -1452,6 +1540,25 @@ export const fxDopplerFactoryAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "oldRenderer",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newRenderer",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "RendererUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "oldUniversalRouter",
         internalType: "address",
         type: "address",
@@ -1478,6 +1585,25 @@ export const fxDopplerFactoryAbi = [
       },
     ],
     name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "oldVersionManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newVersionManager",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "VersionManagerUpdated",
   },
   {
     type: "event",

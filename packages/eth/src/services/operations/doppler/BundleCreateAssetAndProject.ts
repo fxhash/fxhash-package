@@ -42,8 +42,6 @@ export type TBundleCreateAssetAndProjectEthOperationParams = {
   initParams: {
     // The base URI for the project
     baseURI: string
-    renderer: `0x${string}`
-    versionManager: `0x${string}`
     feeCurrency: `0x${string}`
     mintFee: bigint
     feeGrowthRate: bigint
@@ -56,10 +54,11 @@ export type TBundleCreateAssetAndProjectEthOperationParams = {
     price: bigint
     maxSupply: bigint
   }
-  // Universal Router commands for token purchase
-  commands: `0x${string}`
-  // Universal Router inputs for token purchase
-  inputs: `0x${string}`[]
+  // TODO
+  // // Universal Router commands for token purchase
+  // commands: `0x${string}`
+  // // Universal Router inputs for token purchase
+  // inputs: `0x${string}`[]
 }
 
 export class BundleCreateAssetAndProjectEthOperation extends EthereumContractOperation<TBundleCreateAssetAndProjectEthOperationParams> {
@@ -71,7 +70,7 @@ export class BundleCreateAssetAndProjectEthOperation extends EthereumContractOpe
       typeof fxDopplerFactoryAbi,
       "bundleCreateAssetAndProject"
     > = {
-      address: config.base.contracts.fx_project_factory,
+      address: config.base.contracts.fx_doppler_factory,
       abi: fxDopplerFactoryAbi,
       functionName: "bundleCreateAssetAndProject",
       args: [
@@ -81,8 +80,6 @@ export class BundleCreateAssetAndProjectEthOperation extends EthereumContractOpe
         this.params.owner,
         this.params.initParams,
         this.params.mintInfo,
-        this.params.commands,
-        this.params.inputs,
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
