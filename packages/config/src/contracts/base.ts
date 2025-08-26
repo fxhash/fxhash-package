@@ -64,7 +64,7 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_project_factory_v2: "0xa5A552f86f8Fd14F73Fc18Cc4DbFB04341896260",
   fx_renderer: "0x1c5CD479C85C1Debc49109E8f284D5AB3353043F",
   fx_version_manager: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
-  fx_doppler_factory: "0xTODO",
+  fx_doppler_factory: "0x426217d2AeE7793352eB059830d1C752D1327f84",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
