@@ -27,6 +27,7 @@ export interface IBaseContracts {
   fx_token_launchpad: `0x${string}`
   fx_project_factory: `0x${string}`
   fx_project_factory_v2: `0x${string}`
+  // TODO remove fx_renderer and fx_version_manager
   fx_renderer: `0x${string}`
   fx_version_manager: `0x${string}`
   fx_doppler_factory: `0x${string}`
