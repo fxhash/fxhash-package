@@ -27,9 +27,6 @@ export interface IBaseContracts {
   fx_token_launchpad: `0x${string}`
   fx_project_factory: `0x${string}`
   fx_project_factory_v2: `0x${string}`
-  // TODO remove fx_renderer and fx_version_manager
-  fx_renderer: `0x${string}`
-  fx_version_manager: `0x${string}`
   fx_doppler_factory: `0x${string}`
 }
 
@@ -63,8 +60,6 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_token_launchpad: "0x2f949f7cD46F4D79d4FD6b234DB302cAeEe552e2",
   fx_project_factory: "0xcA9486e54FbBD6aCe6eB6AA0102ee97dd90A8a86",
   fx_project_factory_v2: "0xa5A552f86f8Fd14F73Fc18Cc4DbFB04341896260",
-  fx_renderer: "0x1c5CD479C85C1Debc49109E8f284D5AB3353043F",
-  fx_version_manager: "0x8a4f6e1ae6Bb77EFE7646f9649Bfd519fA638871",
   fx_doppler_factory: "0x426217d2AeE7793352eB059830d1C752D1327f84",
 }
 
@@ -98,7 +93,5 @@ export const baseMainnetContracts: IBaseContracts = {
   fx_token_launchpad: "0x6FE49c842dAEE3C709772e5727Fd863ad858f1F5",
   fx_project_factory: "0x0612ec1A199617A5b3DF627755A34F69469AEA25",
   fx_project_factory_v2: "0xTODO",
-  fx_renderer: "0xb2E2938C6cB1e3c06d22634c7cb8171DfF689e1B",
-  fx_version_manager: "0x38D3a2F9c63D4a580f100B051ba137fa6d8e2560",
   fx_doppler_factory: "0xTODO",
 }
