@@ -71,7 +71,7 @@ export class BundleCreateAssetAndProjectEthOperation extends EthereumContractOpe
       typeof fxDopplerFactoryAbi,
       "bundleCreateAssetAndProject"
     > = {
-      address: config.base.contracts.fx_project_factory,
+      address: config.base.contracts.fx_doppler_factory,
       abi: fxDopplerFactoryAbi,
       functionName: "bundleCreateAssetAndProject",
       args: [
