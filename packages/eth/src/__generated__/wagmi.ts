@@ -1226,6 +1226,18 @@ export const fxDopplerFactoryAbi = [
   },
   {
     type: "function",
+    inputs: [
+      { name: "_tokenFactory", internalType: "address", type: "address" },
+      { name: "_salt", internalType: "bytes32", type: "bytes32" },
+      { name: "_initialSupply", internalType: "uint256", type: "uint256" },
+      { name: "_factoryData", internalType: "bytes", type: "bytes" },
+    ],
+    name: "predictDERC20Address",
+    outputs: [{ name: "predicted", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "quoterV2",
     outputs: [{ name: "", internalType: "address", type: "address" }],
@@ -1378,6 +1390,56 @@ export const fxDopplerFactoryAbi = [
       },
     ],
     name: "AirlockUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "user", internalType: "address", type: "address", indexed: true },
+      {
+        name: "asset",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "numeraire",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "pool",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "governance",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "timelock",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "migrationPool",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "poolInitializer",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "AssetCreated",
   },
   {
     type: "event",
