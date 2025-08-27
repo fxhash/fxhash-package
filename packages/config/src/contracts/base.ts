@@ -60,7 +60,7 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_token_launchpad: "0x2f949f7cD46F4D79d4FD6b234DB302cAeEe552e2",
   fx_project_factory: "0xcA9486e54FbBD6aCe6eB6AA0102ee97dd90A8a86",
   fx_project_factory_v2: "0xa5A552f86f8Fd14F73Fc18Cc4DbFB04341896260",
-  fx_doppler_factory: "0x426217d2AeE7793352eB059830d1C752D1327f84",
+  fx_doppler_factory: "0xE0Ebfb5b8A0A67856e98422BaA3f3ac2a51D5e7F",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
