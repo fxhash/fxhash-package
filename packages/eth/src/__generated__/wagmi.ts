@@ -1233,7 +1233,7 @@ export const fxDopplerFactoryAbi = [
       { name: "_factoryData", internalType: "bytes", type: "bytes" },
     ],
     name: "predictDERC20Address",
-    outputs: [{ name: "predicted", internalType: "address", type: "address" }],
+    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
