@@ -7,6 +7,7 @@ const creatorTokenContractFilesToInclude: string[] = [
   "TokenLaunchpad",
   "ProjectFactory",
   "ProjectToken",
+  "FxDopplerFactory",
 ]
 
 export default defineConfig({
