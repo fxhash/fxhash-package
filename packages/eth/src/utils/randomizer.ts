@@ -1,7 +1,7 @@
 import { FX_GEN_ART_721_ABI } from "@/abi/index.js"
-import { tokenLaunchpadAbi as FX_TOKEN_LAUNCHPAD_ABI } from "@/__generated__/wagmi"
+import { fxDopplerFactoryAbi } from "@/__generated__/wagmi"
 import { Interface, type TransactionReceipt } from "ethers"
-import { Hash } from "viem"
+import { Hash, parseEventLogs } from "viem"
 
 const genArtInterface = new Interface(FX_GEN_ART_721_ABI)
 
@@ -36,18 +36,17 @@ export function getOutputsFromMintTransaction(
   return Array.from(outputs.values())
 }
 
-const tokenLaunchpadInterface = new Interface(FX_TOKEN_LAUNCHPAD_ABI)
-
 export function getCreatorTokenFromLaunchTransaction(
   transactionReceipt: Readonly<TransactionReceipt>
 ): string {
-  for (const log of transactionReceipt.logs) {
-    const desc = tokenLaunchpadInterface.parseLog({
-      topics: log.topics as string[],
-      data: log.data,
-    })
-    if (desc?.name === "Launched") {
-      const id = desc.args.getValue("creatorToken")
+  const logs = parseEventLogs({
+    abi: fxDopplerFactoryAbi,
+    eventName: "ProjectWithTokenCreated",
+    logs: transactionReceipt.logs as any,
+  })
+  for (const log of logs) {
+    if (log.eventName === "ProjectWithTokenCreated") {
+      const id = log.args.creatorToken
       return id
     }
   }
