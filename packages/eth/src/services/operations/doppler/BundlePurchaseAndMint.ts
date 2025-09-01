@@ -9,8 +9,8 @@ import { fxDopplerFactoryAbi } from "@/__generated__/wagmi.js"
 import { config } from "@fxhash/config"
 
 export type TBundlePurchaseAndMintEthOperationParams = {
-  // The optional mint fee amount
-  mintFeeAmount: bigint
+  // The ETH amount of the quote
+  ethAmount: bigint
   // Address of the project token contract
   projectToken: `0x${string}`
   // Address to mint tokens to
@@ -44,7 +44,7 @@ export class BundlePurchaseAndMintEthOperation extends EthereumContractOperation
       ],
       account: this.manager.address as `0x${string}`,
       chain: getCurrentChain(this.chain),
-      value: this.params.mintFeeAmount,
+      value: this.params.ethAmount,
     }
     const transactionHash = await simulateAndExecuteContract(this.manager, args)
     return {
