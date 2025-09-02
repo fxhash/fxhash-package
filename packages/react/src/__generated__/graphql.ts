@@ -36,6 +36,7 @@ export type Scalars = {
   art_coin_flag_enum: { input: any; output: any; }
   art_coin_market_stats_history_interval_enum: { input: any; output: any; }
   art_coin_migrate_state_enum: { input: any; output: any; }
+  art_coin_version_enum: { input: any; output: any; }
   article_flag_enum: { input: any; output: any; }
   bigint: { input: any; output: any; }
   bpchar: { input: any; output: any; }
@@ -4445,6 +4446,7 @@ export type Art_Coin = {
   ticker: Scalars['String']['output'];
   /** An object relationship */
   user: User;
+  version: Scalars['art_coin_version_enum']['output'];
 };
 
 
@@ -4790,6 +4792,7 @@ export type Art_Coin_Bool_Exp = {
   supply?: InputMaybe<Numeric_Comparison_Exp>;
   ticker?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
+  version?: InputMaybe<Art_Coin_Version_Enum_Comparison_Exp>;
 };
 
 /** Boolean expression to compare columns of type "art_coin_flag_enum". All fields are combined with logical 'AND'. */
@@ -5246,6 +5249,7 @@ export type Art_Coin_Max_Fields = {
   slug: Maybe<Scalars['String']['output']>;
   supply: Maybe<Scalars['numeric']['output']>;
   ticker: Maybe<Scalars['String']['output']>;
+  version: Maybe<Scalars['art_coin_version_enum']['output']>;
 };
 
 /** columns and relationships of "art_coin_migrate" */
@@ -5325,6 +5329,7 @@ export type Art_Coin_Min_Fields = {
   slug: Maybe<Scalars['String']['output']>;
   supply: Maybe<Scalars['numeric']['output']>;
   ticker: Maybe<Scalars['String']['output']>;
+  version: Maybe<Scalars['art_coin_version_enum']['output']>;
 };
 
 /** Ordering options when selecting data from "art_coin". */
@@ -5351,6 +5356,7 @@ export type Art_Coin_Order_By = {
   supply?: InputMaybe<Order_By>;
   ticker?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
+  version?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "art_coin" */
@@ -5388,7 +5394,9 @@ export enum Art_Coin_Select_Column {
   /** column name */
   Supply = 'supply',
   /** column name */
-  Ticker = 'ticker'
+  Ticker = 'ticker',
+  /** column name */
+  Version = 'version'
 }
 
 /** aggregate stddev on columns */
@@ -5439,6 +5447,7 @@ export type Art_Coin_Stream_Cursor_Value_Input = {
   slug?: InputMaybe<Scalars['String']['input']>;
   supply?: InputMaybe<Scalars['numeric']['input']>;
   ticker?: InputMaybe<Scalars['String']['input']>;
+  version?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
 };
 
 /** aggregate sum on columns */
@@ -5541,6 +5550,19 @@ export type Art_Coin_Variance_Fields = {
   __typename?: 'art_coin_variance_fields';
   ascension_progress: Maybe<Scalars['Float']['output']>;
   supply: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to compare columns of type "art_coin_version_enum". All fields are combined with logical 'AND'. */
+export type Art_Coin_Version_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
+  _gt?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
+  _gte?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
+  _in?: InputMaybe<Array<Scalars['art_coin_version_enum']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
+  _lte?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
+  _neq?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
+  _nin?: InputMaybe<Array<Scalars['art_coin_version_enum']['input']>>;
 };
 
 /** columns and relationships of "article" */
