@@ -21,6 +21,8 @@ export interface TProjectTokenRegenerateEthOperationParams
   mintFeeAmount?: bigint
   // The optional mint fee currency
   mintFeeCurrency?: string
+  // Additional operations to add to the batched transaction
+  additionalOperations?: any[]
 }
 
 export class ProjectTokenRegenerateEthOperation extends EthereumContractOperation<TProjectTokenRegenerateEthOperationParams> {
@@ -47,7 +49,8 @@ export class ProjectTokenRegenerateEthOperation extends EthereumContractOperatio
       this.manager,
       args,
       this.chain,
-      this.params.approval
+      this.params.approval,
+      this.params.additionalOperations
     )
     return {
       type: TransactionType.ONCHAIN,
