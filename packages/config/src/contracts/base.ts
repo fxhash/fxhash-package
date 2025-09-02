@@ -29,6 +29,7 @@ export interface IBaseContracts {
   fx_project_factory_v2: `0x${string}`
   fx_doppler_factory: `0x${string}`
   uniswap_v2_migrator: `0x${string}`
+  uniswap_v3_factory: `0x${string}`
 }
 
 export const baseTestnetContracts: IBaseContracts = {
@@ -63,6 +64,7 @@ export const baseTestnetContracts: IBaseContracts = {
   fx_project_factory_v2: "0xa5A552f86f8Fd14F73Fc18Cc4DbFB04341896260",
   fx_doppler_factory: "0xE0Ebfb5b8A0A67856e98422BaA3f3ac2a51D5e7F",
   uniswap_v2_migrator: "0xE657164Ed47BD1Bdb9025cfB60Ed1CfB8E89fd63",
+  uniswap_v3_factory: "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
 }
 
 export const baseMainnetContracts: IBaseContracts = {
@@ -97,4 +99,5 @@ export const baseMainnetContracts: IBaseContracts = {
   fx_project_factory_v2: "0xTODO",
   fx_doppler_factory: "0xTODO",
   uniswap_v2_migrator: "0x6a0732ddC968EeF5795f567640577dd49DD47349",
+  uniswap_v3_factory: "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
 }
