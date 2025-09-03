@@ -25,14 +25,11 @@
     "unified": "11.0.5"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
-    "@types/eslint": "8.44.0",
     "@types/is-hotkey": "0.1.7",
     "@types/lodash.mergewith": "4.6.9",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "eslint": "8.57.0",
     "tsdown": "0.14.2",
     "typescript": "5.8.2",
     "vitest": "3.2.4"
