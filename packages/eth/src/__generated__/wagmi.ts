@@ -895,6 +895,7 @@ export const fxAirdropAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const fxDopplerFactoryAbi = [
+  { type: "constructor", inputs: [], stateMutability: "nonpayable" },
   { type: "fallback", stateMutability: "payable" },
   { type: "receive", stateMutability: "payable" },
   {
@@ -1395,7 +1396,6 @@ export const fxDopplerFactoryAbi = [
     type: "event",
     anonymous: false,
     inputs: [
-      { name: "user", internalType: "address", type: "address", indexed: true },
       {
         name: "asset",
         internalType: "address",
@@ -1403,37 +1403,7 @@ export const fxDopplerFactoryAbi = [
         indexed: true,
       },
       {
-        name: "numeraire",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-      {
-        name: "pool",
-        internalType: "address",
-        type: "address",
-        indexed: false,
-      },
-      {
-        name: "governance",
-        internalType: "address",
-        type: "address",
-        indexed: false,
-      },
-      {
-        name: "timelock",
-        internalType: "address",
-        type: "address",
-        indexed: false,
-      },
-      {
-        name: "migrationPool",
-        internalType: "address",
-        type: "address",
-        indexed: false,
-      },
-      {
-        name: "poolInitializer",
+        name: "poolOrHook",
         internalType: "address",
         type: "address",
         indexed: false,
