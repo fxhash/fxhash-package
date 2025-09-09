@@ -65,7 +65,7 @@
     "@wagmi/core": "2.18.1",
     "ethers": "6.13.4",
     "jwt-decode": "4.0.0",
-    "viem": "2.33.2",
+    "viem": "2.37.2",
     "wagmi": "2.16.1"
   },
   "private": true,
