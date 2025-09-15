@@ -1,0 +1,12 @@
+{
+  "extends": "@fxhash/tsconfig/react",
+  "include": ["src/**/*", "test/**/*", "./declaration.d.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "dist",
+    "stripInternal": true
+  }
+}
