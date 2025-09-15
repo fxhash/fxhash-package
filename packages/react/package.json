@@ -23,12 +23,12 @@
     "viem": "2.37.2",
     "wagmi": "2.16.1",
     "zustand": "4.5.2",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/eth": "0.0.9",
-    "@fxhash/ui": "0.0.0",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/ui": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "@eslint/js": "9.34.0",
@@ -47,8 +47,8 @@
     "tw-animate-css": "1.3.5",
     "typescript": "5.8.2",
     "typescript-eslint": "8.42.0",
-    "@fxhash/eslint-config": "2.0.0",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {

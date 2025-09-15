@@ -10,7 +10,7 @@
     "lodash.debounce": "4.0.8",
     "lodash.groupby": "4.6.0",
     "lodash.throttle": "4.1.1",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "@types/d3-force": "3.0.10",
@@ -24,7 +24,7 @@
     "@types/three": "0.176.0",
     "tsdown": "0.14.2",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {

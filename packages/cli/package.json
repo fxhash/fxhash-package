@@ -41,11 +41,11 @@
     "webpack": "5.88.1",
     "webpack-dev-server": "4.15.1",
     "yargs": "17.7.2",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/project-sdk": "0.0.14",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/snippet": "0.0.8",
-    "@fxhash/gql": "0.0.8"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/project-sdk": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/snippet": "workspace:*",
+    "@fxhash/gql": "workspace:*"
   },
   "devDependencies": {
     "@types/adm-zip": "0.5.0",
@@ -71,7 +71,7 @@
     "tslib": "2.6.2",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "engines": {
     "npm": ">=9.0.0",

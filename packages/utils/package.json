@@ -10,8 +10,8 @@
     "tsdown": "0.14.2",
     "typescript": "5.8.2",
     "vitest": "3.2.4",
-    "@fxhash/tsconfig": "0.0.0",
-    "@fxhash/eslint-config": "2.0.0"
+    "@fxhash/tsconfig": "workspace:*",
+    "@fxhash/eslint-config": "workspace:*"
   },
   "exports": {
     ".": {

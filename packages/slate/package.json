@@ -17,12 +17,12 @@
     "slate-history": "0.110.3",
     "slate-react": "0.111.0",
     "unified": "11.0.5",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/text": "0.0.0",
-    "@fxhash/utils-browser": "0.0.0"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/text": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*"
   },
   "devDependencies": {
     "@types/is-hotkey": "0.1.7",
@@ -32,7 +32,7 @@
     "tsdown": "0.14.2",
     "typescript": "5.8.2",
     "vitest": "3.2.4",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {

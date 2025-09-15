@@ -27,11 +27,11 @@
     "unified": "11.0.5",
     "unist-builder": "4.0.0",
     "unist-util-visit": "5.0.0",
-    "@fxhash/config": "0.0.9",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/utils": "0.0.2",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/utils-browser": "0.0.0"
+    "@fxhash/config": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils-browser": "workspace:*"
   },
   "devDependencies": {
     "@types/mdast": "4.0.0",
@@ -40,7 +40,7 @@
     "esbuild-css-modules-plugin": "2.7.1",
     "tsdown": "0.14.2",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
