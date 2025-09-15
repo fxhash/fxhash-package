@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./utility.css";
+@import "./theme/index.css";
+@import "./globals.css";
+@config "../../tailwind.config.ts";
