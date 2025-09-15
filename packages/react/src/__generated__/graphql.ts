@@ -36,6 +36,7 @@ export type Scalars = {
   art_coin_flag_enum: { input: any; output: any; }
   art_coin_market_stats_history_interval_enum: { input: any; output: any; }
   art_coin_migrate_state_enum: { input: any; output: any; }
+  art_coin_uniswap_pool_version_enum: { input: any; output: any; }
   art_coin_version_enum: { input: any; output: any; }
   article_flag_enum: { input: any; output: any; }
   bigint: { input: any; output: any; }
@@ -4444,6 +4445,7 @@ export type Art_Coin = {
   slug: Scalars['String']['output'];
   supply: Scalars['numeric']['output'];
   ticker: Scalars['String']['output'];
+  uniswap_pool_version: Scalars['art_coin_uniswap_pool_version_enum']['output'];
   /** An object relationship */
   user: User;
   version: Scalars['art_coin_version_enum']['output'];
@@ -4791,6 +4793,7 @@ export type Art_Coin_Bool_Exp = {
   slug?: InputMaybe<String_Comparison_Exp>;
   supply?: InputMaybe<Numeric_Comparison_Exp>;
   ticker?: InputMaybe<String_Comparison_Exp>;
+  uniswap_pool_version?: InputMaybe<Art_Coin_Uniswap_Pool_Version_Enum_Comparison_Exp>;
   user?: InputMaybe<User_Bool_Exp>;
   version?: InputMaybe<Art_Coin_Version_Enum_Comparison_Exp>;
 };
@@ -5249,6 +5252,7 @@ export type Art_Coin_Max_Fields = {
   slug: Maybe<Scalars['String']['output']>;
   supply: Maybe<Scalars['numeric']['output']>;
   ticker: Maybe<Scalars['String']['output']>;
+  uniswap_pool_version: Maybe<Scalars['art_coin_uniswap_pool_version_enum']['output']>;
   version: Maybe<Scalars['art_coin_version_enum']['output']>;
 };
 
@@ -5329,6 +5333,7 @@ export type Art_Coin_Min_Fields = {
   slug: Maybe<Scalars['String']['output']>;
   supply: Maybe<Scalars['numeric']['output']>;
   ticker: Maybe<Scalars['String']['output']>;
+  uniswap_pool_version: Maybe<Scalars['art_coin_uniswap_pool_version_enum']['output']>;
   version: Maybe<Scalars['art_coin_version_enum']['output']>;
 };
 
@@ -5355,6 +5360,7 @@ export type Art_Coin_Order_By = {
   slug?: InputMaybe<Order_By>;
   supply?: InputMaybe<Order_By>;
   ticker?: InputMaybe<Order_By>;
+  uniswap_pool_version?: InputMaybe<Order_By>;
   user?: InputMaybe<User_Order_By>;
   version?: InputMaybe<Order_By>;
 };
@@ -5395,6 +5401,8 @@ export enum Art_Coin_Select_Column {
   Supply = 'supply',
   /** column name */
   Ticker = 'ticker',
+  /** column name */
+  UniswapPoolVersion = 'uniswap_pool_version',
   /** column name */
   Version = 'version'
 }
@@ -5447,6 +5455,7 @@ export type Art_Coin_Stream_Cursor_Value_Input = {
   slug?: InputMaybe<Scalars['String']['input']>;
   supply?: InputMaybe<Scalars['numeric']['input']>;
   ticker?: InputMaybe<Scalars['String']['input']>;
+  uniswap_pool_version?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
   version?: InputMaybe<Scalars['art_coin_version_enum']['input']>;
 };
 
@@ -5529,6 +5538,19 @@ export type Art_Coin_Transfer_Stream_Cursor_Value_Input = {
   op_hash?: InputMaybe<Scalars['String']['input']>;
   sender_id?: InputMaybe<Scalars['String']['input']>;
   target_id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Boolean expression to compare columns of type "art_coin_uniswap_pool_version_enum". All fields are combined with logical 'AND'. */
+export type Art_Coin_Uniswap_Pool_Version_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
+  _gt?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
+  _gte?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
+  _in?: InputMaybe<Array<Scalars['art_coin_uniswap_pool_version_enum']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
+  _lte?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
+  _neq?: InputMaybe<Scalars['art_coin_uniswap_pool_version_enum']['input']>;
+  _nin?: InputMaybe<Array<Scalars['art_coin_uniswap_pool_version_enum']['input']>>;
 };
 
 /** aggregate var_pop on columns */
