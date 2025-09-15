@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- a25fd0fa: Fix build
+- Updated dependencies [a25fd0fa]
+  - @fxhash/ui@0.0.1
+
+## 0.0.1
+
+### Patch Changes
+
 - e3434654: Up node@22
 - Updated dependencies [e3434654]
   - @fxhash/ui@0.0.1

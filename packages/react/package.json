@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/react",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "dependencies": {
     "@apollo/client": "3.12.11",
     "@tabler/icons-react": "3.31.0",
