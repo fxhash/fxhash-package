@@ -1,0 +1,19 @@
+"""
+This file is used to generate type safe client code from hasura JSON lose types.
+To add a new scalar:
+1. define it here and extends the hasura type
+2. add the typescript type to override-types.ts
+3. link the scalar in the codegen.ts config
+"""
+scalar MarketplaceMetadataEvm
+
+extend type listing {
+  metadata: MarketplaceMetadataEvm
+}
+
+# All fields of views are nullable in hasura
+# This is a workaround to make the fields non-nullable in the typescript types
+extend type any_offer {
+  id: String!
+  original_id: String!
+}

@@ -1,0 +1,38 @@
+import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
+import { FxhashContracts } from "../../types/Contracts"
+import { displayMutez } from "../../utils/units"
+import { TezosContractOperation } from "./ContractOperation"
+import { Listing, NFTArticle } from "@fxhash/shared"
+
+export type TListingV3CancelOperationParams = {
+  listing: Listing
+  article: NFTArticle
+}
+
+/**
+ * List a gentk on the Marketplace
+ */
+export class TezosListingV3CancelOperation extends TezosContractOperation<TListingV3CancelOperationParams> {
+  contract: ContractAbstraction<Wallet> | null = null
+  ep = ""
+
+  async prepare() {
+    this.contract = await this.manager.getContract(
+      FxhashContracts.MARKETPLACE_V3
+    )
+  }
+
+  async call(): Promise<WalletOperation> {
+    return this.contract!.methodsObject.listing_cancel(
+      this.params.listing.id
+    ).send()
+  }
+
+  success(): string {
+    return `You have cancelled your listing of ${
+      this.params.listing.amount
+    } editions for ${displayMutez(this.params.listing.price)} tez each on ${
+      this.params.article.title
+    }`
+  }
+}
