@@ -1,0 +1,14 @@
+{
+  "extends": "@fxhash/tsconfig/base",
+  "include": ["src/**/*", "test"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "strict": true,
+    "useUnknownInCatchVariables": false
+  }
+}

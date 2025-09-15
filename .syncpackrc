@@ -1,0 +1,82 @@
+
+{
+  "dependencyTypes": ["prod", "dev", "peer"],
+  "semverGroups": [
+    {
+      "label": "use exact version numbers in production",
+      "packages": ["**"],
+      "dependencyTypes": ["prod"],
+      "dependencies": ["**"],
+      "range": ""
+    }
+  ],
+  "versionGroups": [
+    {
+      "label": "Pin ethers@6.13.4",
+      "dependencies": ["ethers"],
+      "dependencyTypes": ["prod", "dev", "peer"],
+      "pinVersion": "6.13.4"
+    },
+    {
+      "label": "Pin connectkit@1.8.2",
+      "dependencies": ["connectkit"],
+      "dependencyTypes": ["prod", "dev"],
+      "pinVersion": "1.8.2"
+    },
+    {
+      "label": "Pin react + react-dom",
+      "dependencies": ["react", "react-dom"],
+      "dependencyTypes": ["prod", "dev"],
+      "pinVersion": "18.3.1"
+    },
+    {
+      "label": "Peer react@18.3.1 + react-dom@18.3.1",
+      "dependencies": ["react", "react-dom"],
+      "dependencyTypes": ["peer"],
+      "pinVersion": "^18.3.1"
+    },
+    {
+      "label": "Pin eslint",
+      "dependencies": ["eslint"],
+      "packages": ["!@fxhash/website-v2"],
+      "pinVersion": "8.57.0"
+    },
+    {
+      "label": "Pin @types/react@18.3.12",
+      "dependencies": ["@types/react"],
+      "pinVersion": "18.3.12"
+    },
+    {
+      "label": "Pin @types/react-dom@18.3.1",
+      "dependencies": ["@types/react-dom"],
+      "pinVersion": "18.3.1"
+    },
+    {
+      "label": "@types packages should only be under devDependencies",
+      "dependencies": ["@types/**"],
+      "dependencyTypes": ["!dev"],
+      "isBanned": true
+    },
+    {
+      "label": "Ignore breaking changes",
+      "packages": ["**"],
+      "dependencies": ["boxen", "chalk", "@babel/core", "prisma"],
+      "dependencyTypes": ["prod", "dev", "peer"],
+      "isIgnored": true
+    },
+    {
+      "label": "Ignore double check",
+      "packages": ["**"],
+      "dependencies": ["@taquito/**", "graphql", "date-fns", "ethers", "dotenv", "axios", "@apollo/client", "@reservoir0x/reservoir-sdk", "@safe-global/api-kit", "sotez", "typeorm", "@prisma/client"],
+      "dependencyTypes": ["prod", "dev", "peer"],
+      "isIgnored": true
+    },
+    {
+      "label": "Ignore other mismatches for now",
+      "packages": ["**"],
+      "dependencies": ["@types/**", "dotenv", "algoliasearch", "ioredis","react-simple-code-editor", "remark-stringify"],
+      "dependencyTypes": ["prod", "dev", "peer"],
+      "isIgnored": true
+    }
+  ]
+}

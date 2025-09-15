@@ -1,0 +1,33 @@
+{
+  "name": "@fxhash/tez-utils",
+  "description": "Cross-platform tezos utilities.",
+  "version": "0.0.3",
+  "author": "fxhash",
+  "dependencies": {
+    "@taquito/utils": "17.3.1",
+    "@fxhash/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "0.14.2",
+    "tslib": "2.6.2",
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "private": true,
+  "repository": "fxhash/fxhash-package",
+  "type": "module",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch"
+  }
+}
