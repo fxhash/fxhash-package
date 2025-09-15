@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/gql-client",
-  "version": "0.0.0",
+  "version": "0.0.4",
   "author": "fxhash",
   "dependencies": {
     "@urql/core": "4.1.4",
@@ -33,5 +33,7 @@
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

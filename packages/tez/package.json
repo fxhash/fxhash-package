@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/tez",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.12.11",
@@ -12,11 +12,14 @@
     "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.6.0",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
-    "tsdown": "0.14.2",
+    "onchfs": "0.0.0",
     "tslib": "2.6.2",
     "typescript": "5.8.2",
     "vitest": "3.2.4",
@@ -36,15 +39,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@airgap/beacon-sdk": "4.3.1",
+    "@airgap/beacon-sdk": "4.6.0",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
-    "@fxhash/gql": "workspace:*",
-    "onchfs": "0.0.0",
-    "@fxhash/config": "workspace:*"
+    "onchfs": "0.0.0"
   },
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
   "type": "module",
   "scripts": {

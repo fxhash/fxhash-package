@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/config",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/errors": "workspace:*",
@@ -8,9 +8,9 @@
   },
   "devDependencies": {
     "@types/node": "18.7.13",
-    "tsdown": "0.14.2",
+    "tsdown": "0.12.2",
     "typescript": "5.8.2",
-    "@fxhash/tsconfig": "workspace:*"
+    "unplugin-isolated-decl": "0.13.6"
   },
   "exports": {
     ".": {
@@ -31,5 +31,7 @@
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/utils-browser",
   "description": "A general-purpose package for browser-only compatible utilities.",
-  "version": "0.0.0",
+  "version": "0.0.4",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/errors": "workspace:*",
@@ -23,7 +23,6 @@
     "dist"
   ],
   "license": "MIT",
-  "private": true,
   "publishConfig": {
     "access": "public"
   },

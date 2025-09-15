@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/slate",
   "description": "Slate implementation for fx(text) article editor",
-  "version": "0.0.0",
+  "version": "0.0.5",
   "author": "fxhash",
   "dependencies": {
     "gray-matter": "4.0.3",
@@ -56,5 +56,8 @@
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch",
     "test:local": "FXHASH_ENV=local vitest"
-  }
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

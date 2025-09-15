@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/snippet",
-  "version": "0.0.8",
+  "version": "0.0.11",
   "author": "fxhash",
   "dependencies": {
     "node-html-parser": "6.1.9"
@@ -32,9 +32,5 @@
   },
   "repository": "fxhash/fxhash-package",
   "type": "module",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsdown && tsc --noEmit",
-    "dev": "tsdown --watch"
-  }
+  "types": "./dist/index.d.ts"
 }

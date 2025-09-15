@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/tsconfig",
   "description": "",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "author": "",
   "dependencies": {
     "@tsconfig/create-react-app": "2.0.5",

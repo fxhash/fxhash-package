@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/tez-utils",
   "description": "Cross-platform tezos utilities.",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
     "@taquito/utils": "17.3.1",
@@ -27,7 +27,8 @@
   "repository": "fxhash/fxhash-package",
   "type": "module",
   "scripts": {
-    "build": "tsdown && tsc --noEmit",
-    "dev": "tsdown --watch"
-  }
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "type": "module"
 }
