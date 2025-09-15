@@ -1,0 +1,9 @@
+{
+  "extends": "@fxhash/tsconfig/node",
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "src/static/**"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  }
+}
