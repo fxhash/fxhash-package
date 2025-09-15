@@ -48,6 +48,5 @@
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch",
     "test": "vitest"
-  },
-  "type": "module"
+  }
 }
