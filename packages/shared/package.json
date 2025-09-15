@@ -30,7 +30,7 @@
   "repository": "fxhash/fxhash-package",
   "type": "module",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "build": "tsdown",
+    "dev": "tsdown --watch"
   }
 }

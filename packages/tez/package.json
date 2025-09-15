@@ -20,6 +20,7 @@
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
     "onchfs": "0.0.0",
+    "tsdown": "0.14.2",
     "tslib": "2.6.2",
     "typescript": "5.8.2",
     "vitest": "3.2.4"

@@ -12,7 +12,10 @@
     "@fxhash/shared": "workspace:*",
     "@fxhash/tez": "workspace:*",
     "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*"
+    "@fxhash/utils-browser": "workspace:*",
+    "@tanstack/react-query": "5.69.0",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/taquito": "20.1.2"
   },
   "devDependencies": {
     "@types/react": "18.3.12",
