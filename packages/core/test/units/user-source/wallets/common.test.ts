@@ -11,6 +11,7 @@ import {
   deriveManagersMap,
   walletsNetworks,
 } from "@/user-source/wallets/common/utils.js"
+import { describe, expect, it, test } from "vitest"
 
 function newWalletSource<Net extends BlockchainNetwork>({
   network,

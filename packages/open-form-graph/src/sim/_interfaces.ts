@@ -1,4 +1,4 @@
-import { EventEmitter } from "@fxhash/utils"
+import { EventEmitter, MappedArray } from "@fxhash/utils"
 import { HighlightStyle, Transform } from "./_types"
 import {
   RawGraphData,
@@ -9,6 +9,7 @@ import {
 import { GraphConfig } from "@/_interfaces"
 import { TransformCanvas } from "./TransformCanvas"
 import { NodeVisibility } from "@/util/data"
+import { OpenGraphSimulation } from ".."
 
 export interface IOpenGraphSimulation {
   width: number
@@ -20,7 +21,7 @@ export interface IOpenGraphSimulation {
   emitter: OpenGraphEventEmitter
   selectedNode: SimNode | null
   hoveredNode: SimNode | null
-  highlights: HighlightStyle[]
+  highlights: MappedArray<HighlightStyle, "nodeId", "detached">
   transformCanvas: TransformCanvas
   nodeVisibility: NodeVisibility
   initialize(data: RawGraphData, rootId: string): void
@@ -39,6 +40,7 @@ export interface IOpenGraphSimulation {
 }
 
 export type OpenGraphEventsTypemap = {
+  "simulation:ended": OpenGraphSimulation
   "transform-changed": Transform
   "hovered-node-changed": SimNode | null
   "selected-node-changed": SimNode | null

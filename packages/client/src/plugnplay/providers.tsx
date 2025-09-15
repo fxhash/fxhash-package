@@ -22,7 +22,7 @@ export function DependencyProviders({
   wagmiConfig,
   queryClient,
   children,
-}: Props) {
+}: Props): JSX.Element {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>

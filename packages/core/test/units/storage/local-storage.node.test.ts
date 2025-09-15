@@ -3,6 +3,7 @@
  */
 
 import { localStorageDriver } from "@/index.js"
+import { describe, expect, it } from "vitest"
 
 describe("localStorageDriver in node context", () => {
   it("cannot be instanciated", () => {

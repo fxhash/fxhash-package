@@ -9,6 +9,7 @@ import {
   INVALID_CHALLENGE_ID,
   INVALID_SIGNATURE,
 } from "./mock/constants.js"
+import { describe, expect, it, test } from "vitest"
 
 const gqlClient = createGqlClient({ url: localConfig.apis.hasuraGql })
 

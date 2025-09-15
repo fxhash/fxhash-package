@@ -4,12 +4,12 @@
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.12.11",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/utils": "workspace:*",
     "@taquito/michel-codec": "17.3.1",
     "@taquito/michelson-encoder": "17.3.1",
     "@taquito/rpc": "17.3.1",
-    "@taquito/utils": "17.3.1"
+    "@taquito/utils": "17.3.1",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
     "@airgap/beacon-sdk": "4.6.0",
@@ -21,7 +21,6 @@
     "@taquito/taquito": "20.1.2",
     "onchfs": "0.0.0",
     "tslib": "2.6.2",
-    "tsup": "8.4.0",
     "typescript": "5.8.2",
     "vitest": "3.2.4"
   },
@@ -48,10 +47,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "test": "vitest"
-  },
-  "type": "module"
+  }
 }

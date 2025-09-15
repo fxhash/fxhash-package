@@ -1,4 +1,5 @@
 import { IUserSource, UserSourceEventEmitter } from "@/index.js"
+import { expect } from "vitest"
 
 export function expectValidUserSourceInterface(target: IUserSource) {
   expect(target).toBeTypeOf("object")

@@ -5,7 +5,6 @@ import {
   MOCKED_HASH,
   MOCKED_MINTER,
   PARAMS_DEFINITION,
-  PARAMS_VALUES_A,
   PROJECT_STATE,
 } from "./constants.js"
 

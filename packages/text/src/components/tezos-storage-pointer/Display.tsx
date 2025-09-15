@@ -5,7 +5,7 @@ import { ITezosStoragePointerProps } from "./_types.js"
 export function TezosStoragePointerDisplay({
   contract,
   path,
-}: ITezosStoragePointerProps) {
+}: ITezosStoragePointerProps): JSX.Element {
   const pointer: ITezosStoragePointer = {
     contract,
     path,

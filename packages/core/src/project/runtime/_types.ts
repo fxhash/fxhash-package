@@ -28,6 +28,7 @@ export type ProjectState = {
   inputBytes?: string
   definition?: FxParamDefinitions
   parentHashes?: string[]
+  legacy?: boolean
 }
 
 /**

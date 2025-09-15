@@ -12,14 +12,14 @@
     "@fxhash/gql": "workspace:*",
     "@fxhash/gql-client": "workspace:*",
     "@fxhash/params": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@fxhash/tez": "workspace:*"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
-    "tsdown": "0.12.2",
-    "typescript": "5.8.2"
+    "tsdown": "0.14.2",
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -35,9 +35,9 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  },
-  "type": "module"
+  }
 }
