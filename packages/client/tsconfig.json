@@ -8,6 +8,9 @@
       "@/*": ["./src/*"]
     },
     "outDir": "dist",
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "allowJs": false,
+    "declaration": true,
+    "isolatedDeclarations": true
   }
 }

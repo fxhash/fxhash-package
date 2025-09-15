@@ -99,8 +99,12 @@ export const getProjectUrl = (
  * A connector for the proxy environment.
  */
 export const proxyConnector: IRuntimeConnector = {
-  getUrl: (state: ProjectState, urlParams?: URLSearchParams) =>
-    getProjectUrl(proxyUrl(state.cid), state, urlParams),
+  getUrl: (state: ProjectState, urlParams?: URLSearchParams) => {
+    const baseUrl = state.legacy
+      ? `${config.apis.file}/legacy-snippet?url=${proxyUrl(state.cid)}`
+      : proxyUrl(state.cid)
+    return getProjectUrl(baseUrl, state, urlParams)
+  },
 }
 
 /**

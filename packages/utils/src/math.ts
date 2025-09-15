@@ -60,3 +60,22 @@ export function createFxRandom(hash: string): ResettableRandFunction {
   const seed = getSeedFromHash(hash)
   return sfc32(seed)
 }
+
+export function getDecimalsNb(x: number, exponent: number): number {
+  const mu = Math.floor(Math.abs(x))
+  const st = (mu / Math.pow(10, exponent)).toString()
+  const split = st.split(".")
+  return split.length > 1 ? split.pop()?.length || 0 : 0
+}
+
+export function bigIntPow(base: bigint, exponent: number): bigint {
+  let out = BigInt(1)
+  for (let i = 0; i < exponent; i++) {
+    out = out * base
+  }
+  return out
+}
+
+// clamps a value x in the range [min, max]
+export const clamp = (x: number, min: number, max: number): number =>
+  Math.max(min, Math.min(max, x))

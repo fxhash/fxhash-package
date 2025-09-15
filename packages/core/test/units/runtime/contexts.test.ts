@@ -7,6 +7,7 @@ import {
   RUNTIME_STATE_B,
   SNIPPET_VERSION,
 } from "./constants.js"
+import { beforeEach, describe, expect, test, vitest } from "vitest"
 
 const INITIAL: RuntimeParams = {
   state: RUNTIME_STATE,
@@ -116,7 +117,7 @@ describe("param serialization", () => {
 describe("event emission", () => {
   test("emits event after state update", () => {
     const context = runtimeContext({})
-    const mockFn = vi.fn()
+    const mockFn = vitest.fn()
     context.emitter.on("context-changed", mockFn)
 
     context.updateState({ iteration: 2 })

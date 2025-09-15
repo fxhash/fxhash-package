@@ -4,16 +4,15 @@
   "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/utils": "workspace:*",
-    "@urql/core": "4.1.4"
+    "@urql/core": "4.1.4",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/node": "18.7.13",
+    "tsdown": "0.14.2",
     "tslib": "2.6.2",
-    "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "unplugin-isolated-decl": "0.13.6"
+    "@fxhash/tsconfig": "workspace:*"
   },
   "exports": {
     ".": {
@@ -29,9 +28,9 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsup && tsc --noEmit",
     "dev": "tsup --watch"
-  },
-  "type": "module"
+  }
 }

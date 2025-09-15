@@ -41,6 +41,7 @@ export class TokenLaunchpadSellEthOperation extends EthereumContractOperation<TT
     const transactionHash = await simulateAndExecuteContractWithApproval(
       this.manager,
       args,
+      this.chain,
       this.params.approval
     )
     return {

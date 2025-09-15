@@ -1,5 +1,5 @@
-import { clamp } from "./math"
 import { GenerativeToken } from "@fxhash/shared"
+import { clamp } from "@fxhash/utils"
 
 const differenceInSeconds = (d1: Date, d2: Date) => {
   const diffInMilliseconds = d1.getTime() - d2.getTime()

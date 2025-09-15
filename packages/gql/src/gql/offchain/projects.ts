@@ -161,3 +161,9 @@ export const Mu_updateProjectMetadata = graphql(`
     update_project(input: $input)
   }
 `)
+
+export const Mu_reassignIteration = graphql(`
+  mutation ReassignIteration($input: ReassignIterationInput!) {
+    reassign_iteration(input: $input)
+  }
+`)

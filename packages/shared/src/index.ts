@@ -1,3 +1,5 @@
 export * from "./types/_index"
 export * from "./wallet/ContractOperation"
 export * from "./wallet/WalletManager"
+export * from "./lib/currencies"
+export * from "./lib/units"

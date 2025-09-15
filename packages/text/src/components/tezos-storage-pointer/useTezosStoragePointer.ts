@@ -22,7 +22,7 @@ import { TezosStorageType } from "./_types.js"
  *  isIterationPointer(pointer)
  *  ```
  */
-export function isIterationPointer(pointer: ITezosStoragePointer) {
+export function isIterationPointer(pointer: ITezosStoragePointer): boolean {
   if (!pointer?.contract) {
     return false
   }

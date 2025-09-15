@@ -1,4 +1,4 @@
-import { defineConfig, Options } from "tsdown"
+import { defineConfig, type Options } from "tsdown"
 
 export default defineConfig((options: Options) => ({
   entry: ["src/index.ts"],

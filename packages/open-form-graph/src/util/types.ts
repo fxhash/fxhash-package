@@ -5,6 +5,14 @@ export function isSimNode(node: SimNode | string | number): node is SimNode {
   return typeof node === "object" && "id" in node
 }
 
+export function getNodeId(node: SimNode | string | number) {
+  return isSimNode(node) ? node.id : node.toString()
+}
+
+export function getLinkId(link: SimLink): string {
+  return `${getNodeId(link.target)}-${getNodeId(link.source)}`
+}
+
 export function isSimLink(link: SimLink): link is SimLink {
   return (
     typeof link === "object" &&
