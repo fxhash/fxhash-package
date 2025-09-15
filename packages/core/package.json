@@ -66,15 +66,7 @@
     "ethers": "6.13.4",
     "jwt-decode": "4.0.0",
     "viem": "2.37.2",
-    "wagmi": "2.16.1",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*"
+    "wagmi": "2.16.1"
   },
   "publishConfig": {
     "access": "public"

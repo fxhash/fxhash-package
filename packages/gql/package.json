@@ -48,7 +48,5 @@
     "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
     "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
     "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent"
-  },
-  "sideEffects": false,
-  "type": "module"
+  }
 }

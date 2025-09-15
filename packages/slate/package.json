@@ -56,8 +56,5 @@
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch",
     "test:local": "FXHASH_ENV=local vitest"
-  },
-  "sideEffects": false,
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

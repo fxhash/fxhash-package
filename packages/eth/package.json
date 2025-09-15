@@ -19,8 +19,7 @@
     "@fxhash/gql-client": "workspace:*",
     "@fxhash/gql": "workspace:*",
     "@fxhash/utils": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "onchfs": "0.0.0"
+    "@fxhash/shared": "workspace:*"
   },
   "devDependencies": {
     "@swc/core": "1.12.11",
