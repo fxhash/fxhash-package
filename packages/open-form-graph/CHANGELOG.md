@@ -1,5 +1,12 @@
 # @fxhash/open-form-graph
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [74c44e27]
+  - @fxhash/utils@0.0.6
+
 ## 0.0.3
 
 ### Patch Changes
