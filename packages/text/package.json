@@ -4,11 +4,6 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "gray-matter": "4.0.3",
     "hast": "1.0.0",
     "hast-util-sanitize": "5.0.2",
@@ -31,16 +26,21 @@
     "remark-rehype": "11.1.1",
     "unified": "11.0.5",
     "unist-builder": "4.0.0",
-    "unist-util-visit": "5.0.0"
+    "unist-util-visit": "5.0.0",
+    "@fxhash/config": "0.0.9",
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/utils-browser": "0.0.0",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "@types/mdast": "4.0.0",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "esbuild-css-modules-plugin": "2.7.1",
     "tsdown": "0.14.2",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "0.0.0"
   },
   "exports": {
     ".": {
@@ -61,11 +61,11 @@
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  },
-  "sideEffects": false,
-  "type": "module",
-  "types": "./dist/index.d.ts"
+  }
 }

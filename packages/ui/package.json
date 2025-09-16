@@ -44,8 +44,6 @@
   },
   "devDependencies": {
     "@eslint/js": "9.34.0",
-    "@fxhash/eslint-config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "4.1.11",
     "@tailwindcss/typography": "0.5.16",
     "@types/node": "22.14.1",
@@ -56,7 +54,9 @@
     "tsdown": "0.14.2",
     "tw-animate-css": "1.3.5",
     "typescript": "5.8.2",
-    "typescript-eslint": "8.42.0"
+    "typescript-eslint": "8.42.0",
+    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/eslint-config": "2.0.0"
   },
   "exports": {
     ".": {
@@ -76,10 +76,10 @@
     }
   },
   "private": true,
+  "sideEffects": false,
+  "type": "module",
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown"
-  },
-  "sideEffects": false,
-  "type": "module"
+  }
 }
