@@ -3,16 +3,16 @@
   "version": "0.0.0",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "workspace:*",
-    "@fxhash/utils": "workspace:*",
     "jwt-decode": "4.0.0",
-    "viem": "2.37.2"
+    "viem": "2.37.2",
+    "@fxhash/config": "0.0.9",
+    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
-    "@fxhash/tsconfig": "workspace:*",
     "tsdown": "0.14.2",
     "tslib": "2.6.2",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "@fxhash/tsconfig": "0.0.0"
   },
   "exports": {
     ".": {
@@ -28,9 +28,9 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  },
-  "type": "module"
+  }
 }

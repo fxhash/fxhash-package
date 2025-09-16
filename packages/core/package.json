@@ -4,23 +4,21 @@
   "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/errors": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/params": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "lodash.clonedeep": "4.5.0",
     "lodash.debounce": "4.0.8",
     "lodash.mergewith": "4.6.2",
-    "semver": "7.6.0"
+    "semver": "7.6.0",
+    "@fxhash/errors": "0.0.9",
+    "@fxhash/eth": "0.0.9",
+    "@fxhash/gql": "0.0.8",
+    "@fxhash/params": "0.0.10",
+    "@fxhash/gql-client": "0.0.0",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/tez": "0.0.0",
+    "@fxhash/utils": "0.0.2",
+    "@fxhash/utils-browser": "0.0.0"
   },
   "devDependencies": {
-    "@fxhash/config": "workspace:*",
-    "@fxhash/tsconfig": "workspace:*",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/lodash.debounce": "4.0.9",
     "@types/lodash.mergewith": "4.6.9",
@@ -35,7 +33,9 @@
     "react-dom": "18.3.1",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.2.4"
+    "vitest": "3.2.4",
+    "@fxhash/tsconfig": "0.0.0",
+    "@fxhash/config": "0.0.9"
   },
   "exports": {
     ".": {
@@ -49,14 +49,6 @@
   "license": "MIT",
   "peerDependencies": {
     "@airgap/beacon-sdk": "4.3.1",
-    "@fxhash/config": "workspace:*",
-    "@fxhash/eth": "workspace:*",
-    "@fxhash/gql": "workspace:*",
-    "@fxhash/gql-client": "workspace:*",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/tez": "workspace:*",
-    "@fxhash/utils": "workspace:*",
-    "@fxhash/utils-browser": "workspace:*",
     "@taquito/beacon-wallet": "20.1.2",
     "@taquito/signer": "20.1.2",
     "@taquito/taquito": "20.1.2",
@@ -66,15 +58,23 @@
     "ethers": "6.13.4",
     "jwt-decode": "4.0.0",
     "viem": "2.37.2",
-    "wagmi": "2.16.1"
+    "wagmi": "2.16.1",
+    "@fxhash/config": "0.0.9",
+    "@fxhash/gql": "0.0.8",
+    "@fxhash/eth": "0.0.9",
+    "@fxhash/shared": "0.0.0",
+    "@fxhash/gql-client": "0.0.0",
+    "@fxhash/tez": "0.0.0",
+    "@fxhash/utils": "0.0.2",
+    "@fxhash/utils-browser": "0.0.0"
   },
   "private": true,
   "repository": "fxhash/fxhash-package",
+  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:local": "FXHASH_ENV=local vitest"
-  },
-  "type": "module"
+  }
 }
