@@ -1,5 +1,19 @@
 # @fxhash/core
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [74c44e27]
+  - @fxhash/utils@0.0.6
+  - @fxhash/config@0.0.14
+  - @fxhash/errors@0.0.14
+  - @fxhash/eth@0.0.3
+  - @fxhash/shared@0.0.5
+  - @fxhash/tez@0.0.2
+  - @fxhash/utils-browser@0.0.5
+  - @fxhash/gql-client@0.0.5
+
 ## 0.0.2
 
 ### Patch Changes

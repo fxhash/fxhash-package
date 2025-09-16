@@ -1,5 +1,11 @@
 # @fxhash/gql-client
 
+## 0.0.5
+
+### Patch Changes
+
+- @fxhash/config@0.0.14
+
 ## 0.0.4
 
 ### Patch Changes
