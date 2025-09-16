@@ -1,0 +1,57 @@
+{
+  "name": "@fxhash/tez",
+  "version": "0.0.1",
+  "author": "fxhash",
+  "dependencies": {
+    "@apollo/client": "3.12.11",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@taquito/michel-codec": "17.3.1",
+    "@taquito/michelson-encoder": "17.3.1",
+    "@taquito/rpc": "17.3.1",
+    "@taquito/utils": "17.3.1"
+  },
+  "devDependencies": {
+    "@airgap/beacon-sdk": "4.6.0",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/signer": "20.1.2",
+    "@taquito/taquito": "20.1.2",
+    "onchfs": "0.0.0",
+    "tsdown": "0.14.2",
+    "tslib": "2.6.2",
+    "typescript": "5.8.2",
+    "vitest": "3.2.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@airgap/beacon-sdk": "4.6.0",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@taquito/beacon-wallet": "20.1.2",
+    "@taquito/signer": "20.1.2",
+    "@taquito/taquito": "20.1.2",
+    "onchfs": "0.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest"
+  },
+  "type": "module"
+}

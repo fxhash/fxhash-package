@@ -1,0 +1,64 @@
+{
+  "name": "@fxhash/eth",
+  "version": "0.0.2",
+  "dependencies": {
+    "@0xsplits/splits-sdk": "5.1.0",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "@openzeppelin/merkle-tree": "1.0.5",
+    "@reservoir0x/reservoir-sdk": "1.9.0",
+    "@safe-global/api-kit": "2.1.0",
+    "@safe-global/protocol-kit": "3.0.0",
+    "@safe-global/safe-core-sdk-types": "4.0.0",
+    "@wagmi/connectors": "5.9.1",
+    "@wagmi/core": "2.18.1",
+    "dotenv": "16.3.1",
+    "ethers": "6.13.4",
+    "multiformats": "13.1.0",
+    "onchfs": "0.0.0",
+    "path": "0.12.7",
+    "viem": "2.37.2"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@swc/core": "1.12.11",
+    "@types/dotenv": "8.2.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@wagmi/cli": "2.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "ts-node": "10.9.1",
+    "tsdown": "0.14.2",
+    "tslib": "2.6.2",
+    "typescript": "5.8.2",
+    "vitest": "3.2.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@fxhash/config": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rm -rf dist",
+    "codegen": "wagmi generate",
+    "dev": "tsdown --watch",
+    "test": "vitest"
+  },
+  "type": "module"
+}
