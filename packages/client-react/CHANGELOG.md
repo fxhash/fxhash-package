@@ -1,5 +1,12 @@
 # @fxhash/client-react
 
+## 0.0.4
+
+### Patch Changes
+
+- @fxhash/sdk@0.0.2
+- @fxhash/utils-browser@0.0.5
+
 ## 0.0.3
 
 ### Patch Changes

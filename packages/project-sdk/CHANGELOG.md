@@ -1,5 +1,13 @@
 # @fxhash/project-sdk
 
+## 0.0.17
+
+### Patch Changes
+
+- Updated dependencies [74c44e27]
+- Updated dependencies [0db2a53b]
+  - @fxhash/utils@0.0.6
+
 ## 0.0.16
 
 ### Patch Changes
