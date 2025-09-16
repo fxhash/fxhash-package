@@ -1,5 +1,11 @@
 # @fxhash/libraries
 
+## 0.0.13
+
+### Patch Changes
+
+- @fxhash/config@0.0.14
+
 ## 0.0.12
 
 ### Patch Changes

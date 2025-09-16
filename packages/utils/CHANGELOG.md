@@ -1,5 +1,12 @@
 # @fxhash/utils
 
+## 0.0.6
+
+### Patch Changes
+
+- 74c44e27: Release ui and react
+- 0db2a53b: Relase ui + react
+
 ## 0.0.5
 
 ### Patch Changes
