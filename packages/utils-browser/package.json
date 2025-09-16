@@ -1,17 +1,17 @@
 {
   "name": "@fxhash/utils-browser",
   "description": "A general-purpose package for browser-only compatible utilities.",
-  "version": "0.0.0",
+  "version": "0.0.4",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "tsdown": "0.14.2",
-    "typescript": "5.8.2",
-    "@fxhash/eslint-config": "2.0.0",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -23,15 +23,14 @@
     "dist"
   ],
   "license": "MIT",
-  "private": true,
   "publishConfig": {
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "sideEffects": false,
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

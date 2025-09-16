@@ -1,25 +1,25 @@
 {
   "name": "@fxhash/sdk",
   "description": "Bundle of all the fxhash low & medium level packages exported as one.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "fxhash",
   "dependencies": {
-    "@fxhash/config": "0.0.9",
-    "@fxhash/core": "0.0.1",
-    "@fxhash/errors": "0.0.9",
-    "@fxhash/client": "0.0.0",
-    "@fxhash/eth": "0.0.9",
-    "@fxhash/gql": "0.0.8",
-    "@fxhash/gql-client": "0.0.0",
-    "@fxhash/params": "0.0.10",
-    "@fxhash/shared": "0.0.0",
-    "@fxhash/tez": "0.0.0",
-    "@fxhash/utils": "0.0.2"
+    "@fxhash/client": "workspace:*",
+    "@fxhash/config": "workspace:*",
+    "@fxhash/core": "workspace:*",
+    "@fxhash/errors": "workspace:*",
+    "@fxhash/eth": "workspace:*",
+    "@fxhash/gql": "workspace:*",
+    "@fxhash/gql-client": "workspace:*",
+    "@fxhash/params": "workspace:*",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/tez": "workspace:*",
+    "@fxhash/utils": "workspace:*"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "tsdown": "0.14.2",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -31,11 +31,13 @@
     "dist"
   ],
   "license": "MIT",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "dev": "tsdown --watch"
-  }
+  },
+  "type": "module"
 }

@@ -1,12 +1,13 @@
 {
   "name": "@fxhash/gql",
   "description": "fxhash unopiniated typed GraphQL client & common queries ready for consumption",
-  "version": "0.0.8",
+  "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
     "tslib": "2.6.2"
   },
   "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
     "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "4.8.0",
     "@graphql-codegen/introspection": "4.0.3",
@@ -19,8 +20,7 @@
     "chokidar-cli": "3.0.0",
     "graphql": "16.11.0",
     "tsdown": "0.14.2",
-    "typescript": "5.8.2",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -39,8 +39,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": false,
-  "type": "module",
   "scripts": {
     "build": "tsdown && tsc --noEmit",
     "codegen": "npm run codegen:schema && npm run codegen:typescript",
@@ -48,5 +46,7 @@
     "codegen:schema": "graphql-codegen --config .config/codegen/schema.ts",
     "codegen:typescript": "graphql-codegen --config .config/codegen/typescript.ts",
     "dev": "npm run codegen:dev && chokidar \"src/gql/**/*.ts\" \"schema.graphql\" -c \"npm run codegen:dev\" --silent"
-  }
+  },
+  "sideEffects": false,
+  "type": "module"
 }

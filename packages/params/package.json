@@ -1,15 +1,15 @@
 {
   "name": "@fxhash/params",
-  "version": "0.0.10",
+  "version": "0.0.13",
   "author": "fxhash",
   "dependencies": {
     "zod": "3.25.67"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
     "tsdown": "0.14.2",
-    "typescript": "5.8.2",
-    "@fxhash/eslint-config": "2.0.0",
-    "@fxhash/tsconfig": "0.0.0"
+    "typescript": "5.8.2"
   },
   "exports": {
     ".": {
@@ -31,6 +31,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
+  },
   "sideEffects": false,
   "type": "module",
   "types": "dist/index.d.ts",
@@ -40,9 +44,5 @@
         "./dist/*"
       ]
     }
-  },
-  "scripts": {
-    "build": "tsdown && tsc --noEmit",
-    "dev": "tsdown --watch"
   }
 }
