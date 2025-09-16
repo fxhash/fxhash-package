@@ -4,12 +4,12 @@
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.12.11",
+    "@fxhash/shared": "workspace:*",
+    "@fxhash/utils": "workspace:*",
     "@taquito/michel-codec": "17.3.1",
     "@taquito/michelson-encoder": "17.3.1",
     "@taquito/rpc": "17.3.1",
-    "@taquito/utils": "17.3.1",
-    "@fxhash/shared": "workspace:*",
-    "@fxhash/utils": "workspace:*"
+    "@taquito/utils": "17.3.1"
   },
   "devDependencies": {
     "@airgap/beacon-sdk": "4.6.0",
@@ -48,10 +48,10 @@
     "access": "public"
   },
   "repository": "fxhash/fxhash-package",
-  "type": "module",
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
     "test": "vitest"
-  }
+  },
+  "type": "module"
 }

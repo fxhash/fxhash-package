@@ -1,4 +1,3 @@
-
 {
   "dependencyTypes": ["prod", "dev", "peer"],
   "semverGroups": [
@@ -12,16 +11,17 @@
   ],
   "versionGroups": [
     {
+      "label": "Allow dual eslint peer range in @fxhash/eslint-config",
+      "packages": ["@fxhash/eslint-config"],
+      "dependencies": ["eslint"],
+      "dependencyTypes": ["peer"],
+      "isIgnored": true
+    },
+    {
       "label": "Pin ethers@6.13.4",
       "dependencies": ["ethers"],
       "dependencyTypes": ["prod", "dev", "peer"],
       "pinVersion": "6.13.4"
-    },
-    {
-      "label": "Pin connectkit@1.8.2",
-      "dependencies": ["connectkit"],
-      "dependencyTypes": ["prod", "dev"],
-      "pinVersion": "1.8.2"
     },
     {
       "label": "Pin react + react-dom",
@@ -34,12 +34,6 @@
       "dependencies": ["react", "react-dom"],
       "dependencyTypes": ["peer"],
       "pinVersion": "^18.3.1"
-    },
-    {
-      "label": "Pin eslint",
-      "dependencies": ["eslint"],
-      "packages": ["!@fxhash/website-v2"],
-      "pinVersion": "8.57.0"
     },
     {
       "label": "Pin @types/react@18.3.12",
