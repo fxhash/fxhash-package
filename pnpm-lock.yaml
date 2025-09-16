@@ -106,8 +106,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 11.0.3
+        version: 11.0.3
       jsdom:
         specifier: 22.1.0
         version: 22.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
