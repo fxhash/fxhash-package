@@ -1,0 +1,5 @@
+dist
+node_modules
+project
+static/tmp/
+static/fxhash-lock.json

@@ -1,0 +1,47 @@
+{
+  "name": "@fxhash/project-sdk",
+  "version": "0.0.16",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/params": "workspace:*",
+    "@fxhash/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-modules-polyfill": "0.2.2",
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/node": "18.7.13",
+    "tsc-alias": "1.8.5",
+    "tslib": "2.6.2",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/fxhash.d.ts",
+      "import": "./dist/fxhash.min.js",
+      "require": "./dist/fxhash.min.js"
+    },
+    "./version": {
+      "types": "./dist/version.d.ts",
+      "import": "./dist/version.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/fxhash.min.js",
+  "module": "./dist/fxhash.min.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsup --config tsup.config.version.ts",
+    "build-sdk": "pnpm run build && tsup --config tsup.config.sdk.ts",
+    "dev-sdk": "tsup --watch"
+  },
+  "type": "module",
+  "types": "./dist/fxhash.d.ts"
+}
