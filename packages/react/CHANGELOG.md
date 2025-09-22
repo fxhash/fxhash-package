@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- 82dea906: Initial release ui + react
+- Updated dependencies [82dea906]
+  - @fxhash/ui@0.0.1
+
+## 0.0.1
+
+### Patch Changes
+
 - 74c44e27: Release ui and react
 - 0db2a53b: Relase ui + react
 - Updated dependencies [74c44e27]

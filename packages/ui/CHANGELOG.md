@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- 82dea906: Initial release ui + react
+
+## 0.0.1
+
+### Patch Changes
+
 - 74c44e27: Release ui and react
 - 0db2a53b: Relase ui + react
 
