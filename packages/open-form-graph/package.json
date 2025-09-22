@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/open-form-graph",
   "description": "A react-force-graph visualizer for open form collections",
-  "version": "0.0.4",
+  "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
     "@fxhash/utils": "workspace:*",
