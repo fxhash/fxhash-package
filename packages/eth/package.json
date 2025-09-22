@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/eth",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "dependencies": {
     "@0xsplits/splits-sdk": "5.1.0",
     "@fxhash/gql": "workspace:*",

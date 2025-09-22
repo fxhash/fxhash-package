@@ -1,7 +1,7 @@
 {
   "name": "@fxhash/client",
   "description": "Medium-level APIs to instanciate low-level @fxhash/core modules easily.",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "author": "fxhash",
   "dependencies": {
     "@airgap/beacon-sdk": "4.6.0",
