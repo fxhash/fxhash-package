@@ -29,6 +29,7 @@ export type Scalars = {
    * 3. link the scalar in the codegen.ts config
    */
   MarketplaceMetadataEvm: { input: MarketplaceMetadataEvm; output: MarketplaceMetadataEvm; }
+  MarketplaceOrderType: { input: any; output: any; }
   Storage: { input: any; output: any; }
   _text: { input: any; output: any; }
   action_type_enum: { input: any; output: any; }
@@ -1909,6 +1910,93 @@ export type MailTemplate = {
   __typename?: 'MailTemplate';
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+/** columns and relationships of "MarketplaceOrder" */
+export type MarketplaceOrder = {
+  __typename?: 'MarketplaceOrder';
+  createdAt: Scalars['timestamp']['output'];
+  hash: Scalars['String']['output'];
+  parameters: Scalars['jsonb']['output'];
+  signature: Scalars['String']['output'];
+  type: Scalars['MarketplaceOrderType']['output'];
+  updatedAt: Scalars['timestamp']['output'];
+};
+
+
+/** columns and relationships of "MarketplaceOrder" */
+export type MarketplaceOrderParametersArgs = {
+  path: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Boolean expression to compare columns of type "MarketplaceOrderType". All fields are combined with logical 'AND'. */
+export type MarketplaceOrderType_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  _gt?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  _gte?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  _in?: InputMaybe<Array<Scalars['MarketplaceOrderType']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  _lte?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  _neq?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  _nin?: InputMaybe<Array<Scalars['MarketplaceOrderType']['input']>>;
+};
+
+/** Boolean expression to filter rows from the table "MarketplaceOrder". All fields are combined with a logical 'AND'. */
+export type MarketplaceOrder_Bool_Exp = {
+  _and?: InputMaybe<Array<MarketplaceOrder_Bool_Exp>>;
+  _not?: InputMaybe<MarketplaceOrder_Bool_Exp>;
+  _or?: InputMaybe<Array<MarketplaceOrder_Bool_Exp>>;
+  createdAt?: InputMaybe<Timestamp_Comparison_Exp>;
+  hash?: InputMaybe<String_Comparison_Exp>;
+  parameters?: InputMaybe<Jsonb_Comparison_Exp>;
+  signature?: InputMaybe<String_Comparison_Exp>;
+  type?: InputMaybe<MarketplaceOrderType_Comparison_Exp>;
+  updatedAt?: InputMaybe<Timestamp_Comparison_Exp>;
+};
+
+/** Ordering options when selecting data from "MarketplaceOrder". */
+export type MarketplaceOrder_Order_By = {
+  createdAt?: InputMaybe<Order_By>;
+  hash?: InputMaybe<Order_By>;
+  parameters?: InputMaybe<Order_By>;
+  signature?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "MarketplaceOrder" */
+export enum MarketplaceOrder_Select_Column {
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Hash = 'hash',
+  /** column name */
+  Parameters = 'parameters',
+  /** column name */
+  Signature = 'signature',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UpdatedAt = 'updatedAt'
+}
+
+/** Streaming cursor of the table "MarketplaceOrder" */
+export type MarketplaceOrder_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: MarketplaceOrder_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type MarketplaceOrder_Stream_Cursor_Value_Input = {
+  createdAt?: InputMaybe<Scalars['timestamp']['input']>;
+  hash?: InputMaybe<Scalars['String']['input']>;
+  parameters?: InputMaybe<Scalars['jsonb']['input']>;
+  signature?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['MarketplaceOrderType']['input']>;
+  updatedAt?: InputMaybe<Scalars['timestamp']['input']>;
 };
 
 /** columns and relationships of "Media" */
@@ -14318,6 +14406,10 @@ export type Offchain_Query = {
   LibraryVersion: Array<LibraryVersion>;
   /** fetch data from the table: "Library" using primary key columns */
   Library_by_pk: Maybe<Library>;
+  /** fetch data from the table: "MarketplaceOrder" */
+  MarketplaceOrder: Array<MarketplaceOrder>;
+  /** fetch data from the table: "MarketplaceOrder" using primary key columns */
+  MarketplaceOrder_by_pk: Maybe<MarketplaceOrder>;
   /** fetch data from the table: "Media" */
   Media: Array<Media>;
   /** fetch data from the table: "Media" using primary key columns */
@@ -14572,6 +14664,20 @@ export type Offchain_QueryLibrary_By_PkArgs = {
 };
 
 
+export type Offchain_QueryMarketplaceOrderArgs = {
+  distinct_on: InputMaybe<Array<MarketplaceOrder_Select_Column>>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  order_by: InputMaybe<Array<MarketplaceOrder_Order_By>>;
+  where: InputMaybe<MarketplaceOrder_Bool_Exp>;
+};
+
+
+export type Offchain_QueryMarketplaceOrder_By_PkArgs = {
+  hash: Scalars['String']['input'];
+};
+
+
 export type Offchain_QueryMediaArgs = {
   distinct_on: InputMaybe<Array<Media_Select_Column>>;
   limit: InputMaybe<Scalars['Int']['input']>;
@@ -14822,6 +14928,12 @@ export type Offchain_Subscription = {
   Library_by_pk: Maybe<Library>;
   /** fetch data from the table in a streaming manner: "Library" */
   Library_stream: Array<Library>;
+  /** fetch data from the table: "MarketplaceOrder" */
+  MarketplaceOrder: Array<MarketplaceOrder>;
+  /** fetch data from the table: "MarketplaceOrder" using primary key columns */
+  MarketplaceOrder_by_pk: Maybe<MarketplaceOrder>;
+  /** fetch data from the table in a streaming manner: "MarketplaceOrder" */
+  MarketplaceOrder_stream: Array<MarketplaceOrder>;
   /** fetch data from the table: "Media" */
   Media: Array<Media>;
   /** fetch data from the table: "Media" using primary key columns */
@@ -15190,6 +15302,27 @@ export type Offchain_SubscriptionLibrary_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Library_Stream_Cursor_Input>>;
   where: InputMaybe<Library_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionMarketplaceOrderArgs = {
+  distinct_on: InputMaybe<Array<MarketplaceOrder_Select_Column>>;
+  limit: InputMaybe<Scalars['Int']['input']>;
+  offset: InputMaybe<Scalars['Int']['input']>;
+  order_by: InputMaybe<Array<MarketplaceOrder_Order_By>>;
+  where: InputMaybe<MarketplaceOrder_Bool_Exp>;
+};
+
+
+export type Offchain_SubscriptionMarketplaceOrder_By_PkArgs = {
+  hash: Scalars['String']['input'];
+};
+
+
+export type Offchain_SubscriptionMarketplaceOrder_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<MarketplaceOrder_Stream_Cursor_Input>>;
+  where: InputMaybe<MarketplaceOrder_Bool_Exp>;
 };
 
 
