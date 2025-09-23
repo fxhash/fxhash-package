@@ -1,0 +1,36 @@
+{
+  "name": "@fxhash/shared",
+  "version": "0.0.6",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/config": "workspace:*",
+    "@fxhash/utils": "workspace:*",
+    "jwt-decode": "4.0.0",
+    "viem": "2.37.2"
+  },
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "tsdown": "0.14.2",
+    "tslib": "2.6.2",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch"
+  },
+  "type": "module"
+}
