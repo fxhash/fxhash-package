@@ -4,6 +4,16 @@
 
 ### Patch Changes
 
+- Updated dependencies [c1db2e8c]
+  - @fxhash/shared@0.0.5
+  - @fxhash/core@0.0.3
+  - @fxhash/eth@0.0.3
+  - @fxhash/tez@0.0.2
+
+## 0.0.3
+
+### Patch Changes
+
 - Updated dependencies [74c44e27]
 - Updated dependencies [0db2a53b]
   - @fxhash/utils@0.0.6

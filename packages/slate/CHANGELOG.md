@@ -1,5 +1,13 @@
 # @fxhash/slate
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies [c1db2e8c]
+  - @fxhash/shared@0.0.5
+  - @fxhash/text@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes
