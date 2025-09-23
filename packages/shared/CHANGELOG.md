@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- c1db2e8c: Add currency and unit helpers
+
+## 0.0.5
+
+### Patch Changes
+
 - Updated dependencies [74c44e27]
 - Updated dependencies [0db2a53b]
   - @fxhash/utils@0.0.6

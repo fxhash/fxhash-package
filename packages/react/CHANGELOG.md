@@ -1,5 +1,14 @@
 # @fxhash/react
 
+## 0.0.2
+
+### Patch Changes
+
+- 0a206a23: Fix missing @fxhash/shared exports
+- Updated dependencies [c1db2e8c]
+  - @fxhash/shared@0.0.5
+  - @fxhash/eth@0.0.3
+
 ## 0.0.1
 
 ### Patch Changes
