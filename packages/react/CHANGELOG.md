@@ -1,5 +1,11 @@
 # @fxhash/react
 
+## 0.0.4
+
+### Patch Changes
+
+- 23f0030f: Make @fxhash/eth package peer dependency
+
 ## 0.0.3
 
 ### Patch Changes

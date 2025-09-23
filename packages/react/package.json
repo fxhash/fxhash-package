@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/react",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "@apollo/client": "3.12.11",
     "@fxhash/config": "workspace:*",
