@@ -1,0 +1,52 @@
+{
+  "name": "@fxhash/utils",
+  "description": "A general-purpose nodejs/browser compatible utility package related to fxhash applications.",
+  "version": "0.0.6",
+  "author": "fxhash",
+  "dependencies": {
+    "bs58check": "4.0.0"
+  },
+  "devDependencies": {
+    "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/tsconfig": "workspace:*",
+    "tsdown": "0.14.2",
+    "typescript": "5.8.2",
+    "vitest": "3.2.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./hash": {
+      "types": "./dist/hash.d.ts",
+      "default": "./dist/hash.js"
+    },
+    "./url": {
+      "types": "./dist/url.d.ts",
+      "default": "./dist/url.js"
+    },
+    "./math": {
+      "types": "./dist/math.d.ts",
+      "default": "./dist/math.js"
+    },
+    "./address": {
+      "types": "./dist/address.d.ts",
+      "default": "./dist/address.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch",
+    "test": "vitest"
+  },
+  "type": "module"
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@fxhash/gql-client",
+  "version": "0.0.5",
+  "author": "fxhash",
+  "dependencies": {
+    "@fxhash/config": "workspace:*",
+    "@urql/core": "4.1.4",
+    "deepmerge": "4.3.1",
+    "graphql": "16.11.0"
+  },
+  "devDependencies": {
+    "@fxhash/tsconfig": "workspace:*",
+    "@types/node": "20.11.30",
+    "tsdown": "0.14.2",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "fxhash/fxhash-package",
+  "scripts": {
+    "build": "tsdown && tsc --noEmit",
+    "dev": "tsdown --watch"
+  },
+  "sideEffects": false,
+  "type": "module"
+}
