@@ -6,6 +6,12 @@
 
 - @fxhash/cli@0.0.24
 
+## 0.0.17
+
+### Patch Changes
+
+- @fxhash/cli@0.0.24
+
 ## 0.0.16
 
 ### Patch Changes

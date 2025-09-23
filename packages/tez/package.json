@@ -1,6 +1,6 @@
 {
   "name": "@fxhash/tez",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "fxhash",
   "dependencies": {
     "@apollo/client": "3.12.11",

@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- Updated dependencies [dc470d70]
+  - @fxhash/utils@0.0.6
+  - @fxhash/errors@0.0.14
+
+## 0.0.5
+
+### Patch Changes
+
 - Updated dependencies [74c44e27]
 - Updated dependencies [0db2a53b]
   - @fxhash/utils@0.0.6
