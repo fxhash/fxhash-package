@@ -1,5 +1,14 @@
 # @fxhash/contracts
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [dc470d70]
+  - @fxhash/shared@0.0.6
+  - @fxhash/utils@0.0.6
+  - @fxhash/config@0.0.14
+
 ## 0.0.2
 
 ### Patch Changes

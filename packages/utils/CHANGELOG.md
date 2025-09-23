@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- dc470d70: Release bigIntPow utils
+
+## 0.0.6
+
+### Patch Changes
+
 - 74c44e27: Release ui and react
 - 0db2a53b: Relase ui + react
 

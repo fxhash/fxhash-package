@@ -8,6 +8,14 @@
 - @fxhash/project-sdk@0.0.17
 - @fxhash/gql-client@0.0.5
 
+## 0.0.24
+
+### Patch Changes
+
+- @fxhash/config@0.0.14
+- @fxhash/project-sdk@0.0.17
+- @fxhash/gql-client@0.0.5
+
 ## 0.0.23
 
 ### Patch Changes

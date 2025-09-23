@@ -1,5 +1,17 @@
 # @fxhash/react
 
+## 0.0.3
+
+### Patch Changes
+
+- dc470d70: Release bigIntPow utils
+- Updated dependencies [dc470d70]
+  - @fxhash/shared@0.0.6
+  - @fxhash/utils@0.0.6
+  - @fxhash/eth@0.0.4
+  - @fxhash/config@0.0.14
+  - @fxhash/errors@0.0.14
+
 ## 0.0.2
 
 ### Patch Changes

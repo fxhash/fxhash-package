@@ -1,5 +1,16 @@
 # @fxhash/text
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [dc470d70]
+  - @fxhash/shared@0.0.6
+  - @fxhash/utils@0.0.6
+  - @fxhash/config@0.0.14
+  - @fxhash/errors@0.0.14
+  - @fxhash/utils-browser@0.0.5
+
 ## 0.0.7
 
 ### Patch Changes

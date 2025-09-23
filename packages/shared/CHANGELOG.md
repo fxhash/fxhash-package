@@ -1,5 +1,14 @@
 # @fxhash/shared
 
+## 0.0.6
+
+### Patch Changes
+
+- dc470d70: Release bigIntPow utils
+- Updated dependencies [dc470d70]
+  - @fxhash/utils@0.0.6
+  - @fxhash/config@0.0.14
+
 ## 0.0.5
 
 ### Patch Changes
