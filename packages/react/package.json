@@ -5,7 +5,6 @@
     "@apollo/client": "3.12.11",
     "@fxhash/config": "workspace:*",
     "@fxhash/errors": "workspace:*",
-    "@fxhash/eth": "workspace:*",
     "@fxhash/shared": "workspace:*",
     "@fxhash/ui": "workspace:*",
     "@fxhash/utils": "workspace:*",
@@ -33,6 +32,7 @@
   "devDependencies": {
     "@eslint/js": "9.34.0",
     "@fxhash/eslint-config": "workspace:*",
+    "@fxhash/eth": "workspace:*",
     "@fxhash/tsconfig": "workspace:*",
     "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "4.8.0",
@@ -57,6 +57,7 @@
     }
   },
   "peerDependencies": {
+    "@fxhash/eth": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwindcss": "4.1.11"
